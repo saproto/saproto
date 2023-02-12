@@ -10,11 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mail;
 use PDF;
+use Proto\Http\Requests\MP3Request;
 use Proto\Mail\MembershipEnded;
 use Proto\Mail\MembershipEndSet;
 use Proto\Mail\MembershipStarted;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
+use Proto\Models\StorageEntry;
 use Proto\Models\User;
 use Redirect;
 use Session;
@@ -351,6 +353,36 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+        return Redirect::back();
+    }
+
+    public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+
+        $file = new StorageEntry();
+        $file->createFromFile($request->file('sound'));
+
+        $user->member->customOmnomcomSound()->associate($file);
+        $user->member->save();
+        Session::flash('flash_message', 'Sound uploaded!');
+        return Redirect::back();
+    }
+
+    public function deleteOmnomcomSound(int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+        Session::flash('flash_message', 'Sound deleted');
         return Redirect::back();
     }
 

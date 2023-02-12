@@ -86,6 +86,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('end_in_september', ['as' => 'endinseptember', 'uses' => 'UserAdminController@EndMembershipInSeptember']);
             Route::post('remove_end', ['as' => 'removeend', 'uses' => 'UserAdminController@removeMembershipEnd']);
             Route::post('settype', ['as' => 'settype', 'uses' => 'UserAdminController@setMembershipType']);
+
+            /* Routes related to the custom omnomcom sound. */
+            Route::group(['prefix' => 'omnomcomsound', 'as' => 'omnomcomsound::', 'middleware' => ['auth', 'permission:board']], function () {
+                Route::post('update', ['as' => 'update', 'uses' => 'UserAdminController@uploadOmnomcomSound']);
+                Route::get('delete', ['as' => 'delete', 'uses' => 'UserAdminController@deleteOmnomcomSound']);
+            });
         });
 
         Route::group(['prefix' => 'memberprofile', 'as' => 'memberprofile::', 'middleware' => ['auth']], function () {
@@ -133,12 +139,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /* Routes related to diet. */
         Route::group(['prefix' => 'diet', 'as' => 'diet::'], function () {
             Route::post('edit', ['as' => 'edit', 'uses' => 'UserDashboardController@editDiet']);
-        });
-
-        /* Routes related to the custom omnomcom sound. */
-        Route::group(['prefix' => 'omnomcomsound', 'as' => 'omnomcomsound::'], function () {
-            Route::post('update', ['as' => 'update', 'uses' => 'UserDashboardController@uploadOmnomcomSound']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'UserDashboardController@deleteOmnomcomSound']);
         });
 
         /* Routes related to bank accounts. */
