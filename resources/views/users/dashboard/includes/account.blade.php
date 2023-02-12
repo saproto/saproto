@@ -13,6 +13,7 @@
             <p>
                 Here you can change your e-mail address. You'll receive an e-mail on both the old and new address for
                 confirmation. You need your password to change your e-mail address.
+                <br><i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
             </p>
 
             <table class="table table-borderless table-sm mb-0">
@@ -293,13 +294,6 @@
                         <small class="form-text text-muted">
                             This feature was requested by pretty much everyone.
                         </small>
-
-                        @if(Carbon::now()->month===Carbon::DECEMBER)
-                        <br>
-                        <a href="{{route('advent::toggle')}}">
-                        <button type="button" class="btn btn-warning">{{Cookie::get('disable-december')==='disabled'?'enable':'disable'}} december theme</button>
-                        </a>
-                            @endif
 
                     </td>
                 </tr>

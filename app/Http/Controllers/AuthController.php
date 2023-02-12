@@ -28,6 +28,7 @@ use Proto\Models\PasswordReset;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use Proto\Models\WelcomeMessage;
+use Proto\Rules\NotUtwenteEmail;
 use Redirect;
 use Session;
 
@@ -124,7 +125,7 @@ class AuthController extends Controller
 
         Session::flash('register_persist', $request->all());
         $this->validate($request, [
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'unique:users', 'email', new NotUtwenteEmail()],
             'name' => 'required|string',
             'calling_name' => 'required|string',
             'g-recaptcha-response' => 'required|recaptcha',

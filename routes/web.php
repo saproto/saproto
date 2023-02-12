@@ -83,6 +83,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
             Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+            Route::post('end_in_september', ['as' => 'endinseptember', 'uses' => 'UserAdminController@EndMembershipInSeptember']);
+            Route::post('remove_end', ['as' => 'removeend', 'uses' => 'UserAdminController@removeMembershipEnd']);
             Route::post('settype', ['as' => 'settype', 'uses' => 'UserAdminController@setMembershipType']);
         });
 
@@ -189,6 +191,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
             Route::get('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembershipForm']);
             Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
+            Route::get('end/{committee}/{edition}', ['as' => 'endedition', 'uses' => 'CommitteeController@endEdition']);
         });
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
@@ -839,12 +842,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
-    });
-
-    /*Routes related to the advent calender*/
-    Route::group(['prefix' => 'advent', 'as' => 'advent::'], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'AdventController@index']);
-        Route::get('toggle', ['as' => 'toggle', 'uses' => 'AdventController@toggleDecember']);
     });
 
     /* Routes related to the Minisites */

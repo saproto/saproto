@@ -17,6 +17,16 @@
                             @endif
                         </td>
                     </tr>
+                    @if($user->member->until)
+                        <tr>
+                            <th><b>Member until</b></th>
+                            <td>
+                                <span class="badge rounded-pill bg-danger">
+                                {{Carbon::createFromTimestamp($user->member->until)->format('d-m-Y')}}
+                                </span>
+                            </td>
+                        </tr>
+                        @endif
                     <tr>
                         <th>Proto username</th>
                         <td>{{ $user->member->proto_username }}</td>
