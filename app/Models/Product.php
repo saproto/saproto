@@ -116,8 +116,8 @@ class Product extends Model
     }
 
     public function omnomcomPrice() {
-        $active= WallstreetController::active();
-        if (!$active){
+        $active = WallstreetController::active();
+        if (! $active){
             return $this->price;
         }
         return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
