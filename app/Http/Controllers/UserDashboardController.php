@@ -402,12 +402,12 @@ class UserDashboardController extends Controller
 
     public function deleteOmnomcomSound(int $id): RedirectResponse
     {
-        if(!Auth::user()->can('admin') && Auth::user()->id!=$id) {
+        if(! Auth::user()->can('admin') && Auth::user()->id != $id) {
             Session::flash('flash_message', 'You are not authorized to delete this persons sound!');
             return Redirect::back();
         }
 
-        $user=User::findOrFail($id);
+        $user = User::findOrFail($id);
         if($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound->delete();
             $user->member->omnomcom_sound_id = null;
