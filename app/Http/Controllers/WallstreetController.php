@@ -101,14 +101,14 @@ class WallstreetController extends Controller
     }
 
     public function getUpdatedPrices($drinkID) {
-        $drink= WallstreetDrink::findOrFail($drinkID);
+        $drink = WallstreetDrink::findOrFail($drinkID);
         if(is_null($drink)) {
             return Response::json(['products' => []]);
         }
         $products = $drink->products()->select('name','price', 'id', 'image_id')->get();
         foreach($products as $product) {
-            $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first()->price??0;
-            $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first()->price??1;
+            $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first()->price ?? 0;
+            $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first()->price ?? 1;
             $product->price = $newPrice;
             $product->diff = ($newPrice - $oldPrice) / $oldPrice * 100;
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
