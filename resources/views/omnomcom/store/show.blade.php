@@ -245,7 +245,7 @@
                     })
                     .then(data => {
                         if (data.status === 'OK') {
-                            finishPurchase(data.message)
+                            finishPurchase(data.message, data.sound??null)
                         } else {
                             purchaseInitiate(
                                 false, false,
@@ -291,13 +291,19 @@
                     })
             }
 
-            function finishPurchase(display_message = null) {
+            function finishPurchase(display_message = null, sound = null) {
                 Object.values(modals).forEach(modal => modal.hide())
                 if (display_message) document.getElementById('finished-modal-message').innerHTML = `<span>${display_message}</span>`
                 document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
                 modals['finished-modal'].show()
                 const movie = document.getElementById('purchase-movie')
+                const audio = document.getElementById('purchase-audio')
                 movie.addEventListener('ended', _ => window.location.reload())
+                if(sound) {
+                    audio.src = sound
+                    movie.muted = true
+                    audio.play()
+                }
                 movie.play()
             }
 

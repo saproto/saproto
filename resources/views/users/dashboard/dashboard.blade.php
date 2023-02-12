@@ -18,6 +18,8 @@
 
             @include('users.dashboard.includes.cardinfo')
 
+            @include('users.dashboard.includes.omnomcomsound')
+
         </div>
 
         <div class="col-xl-3 col-md-12">

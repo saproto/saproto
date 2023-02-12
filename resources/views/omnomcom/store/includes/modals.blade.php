@@ -8,6 +8,7 @@
                 <video id="purchase-movie" width="473" height="260">
                     <source src="{{ asset('videos/omnomcom.webm') }}" type="video/webm">
                 </video>
+                <audio id="purchase-audio" src="{{-- Content inserted by JavaScript --}}" type="audio/mpeg"></audio>
             </div>
         </div>
     </div>

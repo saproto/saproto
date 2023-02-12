@@ -12,6 +12,7 @@ use Illuminate\View\View;
 use Mail;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
+use Proto\Http\Requests\MP3Request;
 use Proto\Mail\UserMailChange;
 use Proto\Models\Member;
 use Proto\Models\StorageEntry;
@@ -379,6 +380,41 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Profile cleared.');
         return Redirect::route('user::dashboard');
+    }
+
+    public function uploadOmnomcomSound(MP3Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+
+        $file = new StorageEntry();
+        $file->createFromFile($request->file('sound'));
+
+        $user->member->customOmnomcomSound()->associate($file);
+        $user->member->save();
+        Session::flash('flash_message', 'Sound uploaded!');
+        return Redirect::back();
+    }
+
+    public function deleteOmnomcomSound(int $id): RedirectResponse
+    {
+        if(!Auth::user()->can('admin') && Auth::user()->id!=$id) {
+            Session::flash('flash_message', 'You are not authorized to delete this persons sound!');
+            return Redirect::back();
+        }
+
+        $user=User::findOrFail($id);
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+        Session::flash('flash_message', 'Sound deleted');
+        return Redirect::back();
     }
 
     /** @return RedirectResponse */

@@ -135,6 +135,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('edit', ['as' => 'edit', 'uses' => 'UserDashboardController@editDiet']);
         });
 
+        /* Routes related to the custom omnomcom sound. */
+        Route::group(['prefix' => 'omnomcomsound', 'as' => 'omnomcomsound::'], function () {
+            Route::post('update', ['as' => 'update', 'uses' => 'UserDashboardController@uploadOmnomcomSound']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'UserDashboardController@deleteOmnomcomSound']);
+        });
+
         /* Routes related to bank accounts. */
         Route::group(['prefix' => 'bank', 'as' => 'bank::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'BankController@add']);
