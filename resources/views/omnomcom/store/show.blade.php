@@ -97,7 +97,11 @@
             let price = []
 
             initializeOmNomCom()
-            initializeWallstreetDrink()
+
+            if("{{$store_slug}}"==="tipcie"){
+                initializeWallstreetDrink()
+            }
+
 
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
