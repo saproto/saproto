@@ -5,9 +5,11 @@
         </div>
         @if($user->member->customOmnomcomSound)
             <div class="card-body">
-                <div class="d-inline-flex justify-content-around w-100">
-              {{$user->calling_name}}'s custom sound:
-                    <audio controls>
+                <div class="d-inline-flex flex-wrap justify-content-around mb-2 w-100">
+                    <div class="d-flex align-items-center">
+                        {{$user->calling_name}}'s custom sound:
+                    </div>
+                    <audio controls class="mw-100">
                         <source src="{{ $user->member->customOmnomcomSound->generatePath() }}" type="audio/mpeg">
                         Your browser does not support the audio element.
                     </audio>
@@ -27,7 +29,7 @@
             {!! csrf_field() !!}
                 <div class="card-footer">
                     <div class="row">
-                            <div class="input-group">
+                            <div class="input-group flex-nowrap">
                                 <div class="custom-file">
                                     <input id="sound" type="file" class="form-control" name="sound">
                                 </div>

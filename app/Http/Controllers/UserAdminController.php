@@ -360,7 +360,7 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
         if($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound->delete();
+            $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
@@ -378,7 +378,7 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
         if($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound->delete();
+            $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
