@@ -163,6 +163,10 @@ class OmNomController extends Controller
             return json_encode($result);
         }
 
+        if($user->member->customOmnomcomSound){
+            $result->sound = $user->member->customOmnomcomSound->generatePath();
+        }
+
         if ($user->disable_omnomcom) {
             $result->message = "You've disabled the OmNomCom for yourself. Contact the board to enable it again.";
             return json_encode($result);
