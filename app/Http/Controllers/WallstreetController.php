@@ -24,6 +24,12 @@ class WallstreetController extends Controller
         return view('wallstreet.price-history', ['id'=>$id]);
     }
 
+    public function swiper(){
+        $activeDrink = WallstreetController::active();
+        $prices = $this->getLatestPrices($activeDrink);
+        return view('wallstreet.swiper', ['activeDrink' => $activeDrink, 'prices' => $prices]);
+    }
+
     public function edit($id) {
         $currentDrink = WallstreetDrink::find($id);
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
@@ -100,11 +106,7 @@ class WallstreetController extends Controller
         return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
     }
 
-    public function getUpdatedPrices($drinkID) {
-        $drink = WallstreetDrink::findOrFail($drinkID);
-        if(is_null($drink)) {
-            return Response::json(['products' => []]);
-        }
+    public function getLatestPrices($drink) {
         $products = $drink->products()->select('name','price', 'id', 'image_id')->get();
         foreach($products as $product) {
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first()->price ?? 0;
@@ -113,8 +115,14 @@ class WallstreetController extends Controller
             $product->diff = ($newPrice - $oldPrice) / $oldPrice * 100;
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
         }
-        $json = ['products' => $products];
-        return Response::json($json);
+        return $products;
+    }
+
+    public function getUpdatedPricesJSON($drinkID) {
+        $drink = WallstreetDrink::findOrFail($drinkID);
+        $prices = $this->getLatestPrices($drink);
+        $wrapped = ['products' => $prices];
+        return Response::json($wrapped);
     }
 
     public function getAllPrices($drinkID) {
