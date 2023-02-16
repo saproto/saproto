@@ -24,7 +24,7 @@ class WallstreetController extends Controller
         return view('wallstreet.price-history', ['id'=>$id]);
     }
 
-    public function swiper(){
+    public function swiper() {
         $activeDrink = WallstreetController::active();
         $prices = $this->getLatestPrices($activeDrink);
         return view('wallstreet.swiper', ['activeDrink' => $activeDrink, 'prices' => $prices]);
