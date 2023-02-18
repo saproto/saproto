@@ -68,8 +68,8 @@ class OrderLineController extends Controller
             $query->where('user_id', Auth::user()->id);
         })->where('closed', false);
 
-        $outstandingAmount=$outstanding->sum('price');
-        $outstanding=$outstanding->select('event_id', 'price')->with('Event', function($q){
+        $outstandingAmount = $outstanding->sum('price');
+        $outstanding = $outstanding->select('event_id', 'price')->with('Event', function ($q) {
             $q->select('id', 'title');
         })->where('price', '>', 0)->get();
 
