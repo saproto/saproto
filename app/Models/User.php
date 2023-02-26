@@ -154,7 +154,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return string|null */
     public function getPublicId()

@@ -50,7 +50,10 @@ class Dinnerform extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $dates = ['start', 'end'];
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+    ];
 
     /** @return BelongsTo */
     public function event()
