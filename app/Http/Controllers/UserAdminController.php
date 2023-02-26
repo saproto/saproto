@@ -10,10 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mail;
 use PDF;
+use Proto\Http\Requests\MP3Request;
 use Proto\Mail\MembershipEnded;
+use Proto\Mail\MembershipEndSet;
 use Proto\Mail\MembershipStarted;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
+use Proto\Models\StorageEntry;
 use Proto\Models\User;
 use Redirect;
 use Session;
@@ -25,7 +28,7 @@ class UserAdminController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $search = $request->input('query');
         $filter = $request->input('filter');
@@ -198,7 +201,7 @@ class UserAdminController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function endMembership($id)
+    public function endMembership($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -211,12 +214,40 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
+    public function EndMembershipInSeptember($id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if(! $user->is_member) {
+            Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+            return Redirect::back();
+        }
+
+        $user->member->until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->save();
+        Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
+        Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
+        return Redirect::back();
+    }
+
+    public function removeMembershipEnd($id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if(! $user->is_member) {
+            Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+            return Redirect::back();
+        }
+        $user->member->until = null;
+        $user->member->save();
+        Session::flash('flash_message', "End date for membership of $user->name removed!");
+        return Redirect::back();
+    }
+
     /**
      * @param Request $request
      * @param int $id
      * @return RedirectResponse
      */
-    public function setMembershipType(Request $request, $id)
+    public function setMembershipType(Request $request, $id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
@@ -240,7 +271,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleNda($id)
+    public function toggleNda($id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
@@ -259,7 +290,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function unblockOmnomcom($id)
+    public function unblockOmnomcom($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -274,7 +305,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleStudiedCreate($id)
+    public function toggleStudiedCreate($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -289,7 +320,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleStudiedITech($id)
+    public function toggleStudiedITech($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -300,11 +331,41 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
+    public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound()->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+
+        $file = new StorageEntry();
+        $file->createFromFile($request->file('sound'));
+
+        $user->member->customOmnomcomSound()->associate($file);
+        $user->member->save();
+        Session::flash('flash_message', 'Sound uploaded!');
+        return Redirect::back();
+    }
+
+    public function deleteOmnomcomSound(int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        if($user->member->customOmnomcomSound) {
+            $user->member->customOmnomcomSound()->delete();
+            $user->member->omnomcom_sound_id = null;
+            $user->member->save();
+        }
+        Session::flash('flash_message', 'Sound deleted');
+        return Redirect::back();
+    }
+
     /**
      * @param int $id
      * @return RedirectResponse
      */
-    public function getSignedMemberForm($id)
+    public function getSignedMemberForm(int $id): RedirectResponse
     {
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();

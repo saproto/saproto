@@ -258,14 +258,48 @@
                     document.querySelector('#purchase-modal .modal-status').innerHTML = `<span class="badge bg-danger text-white">${data.message}</span>`
                     purchaseProcessing = null
                 }
-            })
-            .catch(err => {
-                const status = document.querySelector('#purchase-modal .modal-status')
-                purchaseProcessing = null
-                if (err.status === 503) status.innerHTML = 'The website is currently in maintenance. Please try again in 30 seconds.'
-                else status.innerHTML = 'There is something wrong with the website, call someone to help!'
-            })
-    }
+                actionStatus = 'purchase'
+                document.querySelector('#purchase-modal .modal-status').innerHTML = '<span class="modal-status">Authenticate using the QR code above.</span>'
+                document.querySelector('#purchase-modal h1').innerHTML = title
+                if (payedCard) document.getElementById('purchase-bank-card').classList.add('modal-toggle-true')
+                payedCash = _payedCard
+                payedCard = _payedCard
+
+            }
+
+            function purchase(credentials, type) {
+                if (purchaseProcessing != null) return
+                else purchaseProcessing = true
+
+                post(
+                    '{{ route('omnomcom::store::buy', ['store' => $store_slug]) }}', {
+                        credential_type: type,
+                        credentials: credentials,
+                        cash: payedCash && {{ $store->cash_allowed ? 'true' : 'false' }},
+                        bank_card: payedCard && {{ $store->bank_card_allowed ? 'true' : 'false' }},
+                        cart: cart_to_object(cart)
+                    })
+                    .then(data => {
+                        if (data.status === 'OK') {
+                            finishPurchase(data.message, data.sound??null)
+                        } else {
+                            purchaseInitiate(
+                                false, false,
+                                'Payment of €' + document.getElementById('total').innerHTML + ' for purchases in Omnomcom',
+                                'Complete purchase using your <i class="fas fa-cookie-bite"></i> OmNomCom bill.'
+                            )
+                            modals['purchase-modal'].show()
+                            document.querySelector('#purchase-modal .modal-status').innerHTML = `<span class="badge bg-danger text-white">${data.message}</span>`
+                            purchaseProcessing = null
+                        }
+                    })
+                    .catch(err => {
+                        const status = document.querySelector('#purchase-modal .modal-status')
+                        purchaseProcessing = null
+                        if (err.status === 503) status.innerHTML = 'The website is currently in maintenance. Please try again in 30 seconds.'
+                        else status.innerHTML = 'There is something wrong with the website, call someone to help!'
+                    })
+            }
 
             function doQrAuth(element, description, onComplete) {
                 let authToken = null
@@ -293,108 +327,20 @@
                     })
             }
 
-    function finishPurchase(display_message = null) {
-        Object.values(modals).forEach(modal => modal.hide())
-        if (display_message) document.getElementById('finished-modal-message').innerHTML = `<span>${display_message}</span>`
-        document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
-        modals['finished-modal'].show()
-        const movie = document.getElementById('purchase-movie')
-        movie.addEventListener('ended', _ => window.location.reload())
-        movie.play()
-    }
-
-    function createCartElement(index, id, amount, image) {
-        return `<div class="cart-product stretched-link" data-id="${id}" style="left: ${cartOverflowVisible * index * 110}px">` +
-            '<div class="cart-product-image">' +
-            `<div class="cart-product-image-inner" style="background-image: url(${image});"></div>` +
-            '</div>' +
-            `<div class="cart-product-count">${amount}x</div>` +
-            '</div>'
-    }
-
-    async function update(context = null) {
-        const cartEl = document.getElementById('cart')
-
-        Array.from(document.getElementsByClassName('cart-product')).forEach(el => el.parentNode.removeChild(el))
-
-        let uniqueItems = 0
-        let totalItems = 0
-        let orderTotal = 0
-
-        await cart.forEach((amount, id) => {
-            if (amount === 0) return
-            uniqueItems += 1
-            totalItems += amount
-            orderTotal += price[id] * cart[id]
-            cartEl.innerHTML += createCartElement(uniqueItems, id, amount, images[id])
-        })
-
-        document.querySelector('#cart-overflow .cart-product-count').innerHTML = totalItems + " x"
-        if (uniqueItems === cartOverflowMinimum && !cartOverflowFirstClosed && context !== 'remove') {
-            cartOverflowVisible = false
-            cartOverflowFirstClosed = true
-            Array.from(document.getElementsByClassName('cart-product')).forEach(el => el.style.left = '0')
-        }
-
-        stock.forEach((amount, id) => {
-            if (amount < 1000)
-                document.querySelector(`[data-id="${id}"] .product-stock`).innerHTML = amount + ' x'
-        })
-
-        const purchaseEls = Array.from(document.getElementsByClassName('purchase-button'))
-        if (anythingInCart()) purchaseEls.forEach(el => el.disabled = false)
-        else purchaseEls.forEach(el => el.disabled = true)
-        document.getElementById('total').innerHTML = orderTotal.toFixed(2)
-
-        let lists = document.getElementsByClassName('random')
-        for (let i = 0; i < lists.length; i++) {
-            let count = 0
-            let products = Array.from(lists[i].parentNode.children)
-            products.splice(products.indexOf(lists[i]), 1)
-            products.forEach(el => {
-                if (stock[el.getAttribute('data-id')] > 0) count++
-            })
-            lists[i].setAttribute('data-stock', count.toString())
-        }
-    }
-
-    function establishNfcConnection() {
-        const status = document.getElementById('status')
-        let server
-
-        try {
-            status.classList.add('inactive')
-            status.innerHTML = 'RFID Service: Connecting...'
-            server = new WebSocket('ws://localhost:3000')
-        } catch (error) {
-            if (error.message.split('/\s+/').contains('insecure')) {
-                status.classList.add('inactive')
-                status.innerHTML = 'RFID Service: Not Supported'
-            } else {
-                console.error('Unexpected error: ' + error.message)
-            }
-        }
-
-        server.onopen = _ => {
-            status.classList.remove('inactive')
-            status.innerHTML = 'RFID Service: Connected'
-        }
-
-        server.onclose = _ => {
-            status.classList.add('inactive')
-            status.innerHTML = 'RFID Service: Disconnected'
-            setTimeout(establishNfcConnection, 5000)
-        }
-
-        server.onmessage = raw => {
-            let data = JSON.parse(raw.data).uid
-            console.log('Received card input: ' + data)
-
-            if (data === '') {
-                Object.values(modals).forEach(el => el.hide())
-                modals['badcard-modal'].show()
-                actionStatus = 'badcard'
-                return
+            function finishPurchase(display_message = null, sound = null) {
+                Object.values(modals).forEach(modal => modal.hide())
+                if (display_message) document.getElementById('finished-modal-message').innerHTML = `<span>${display_message}</span>`
+                document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
+                modals['finished-modal'].show()
+                const movie = document.getElementById('purchase-movie')
+                const audio = document.getElementById('purchase-audio')
+                movie.addEventListener('ended', _ => window.location.reload())
+                if(sound) {
+                    audio.src = sound
+                    movie.muted = true
+                    audio.play()
+                }
+                movie.play()
             }
 
             if (data.startsWith('08')) {

@@ -309,6 +309,8 @@ class EventController extends Controller
             return Redirect::back();
         }
 
+        $activity->attendees = $request->input('attendees');
+
         $account = Account::findOrFail($request->input('account'));
 
         if (count($activity->users) == 0 || $activity->price == 0) {
@@ -558,7 +560,10 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->isOnBackupList($user)){
+                        $status = 'On back-up list';
+                        $info_text .= ' You are on the back-up list for this activity';
+                    }elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }
