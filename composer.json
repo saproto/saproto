@@ -73,8 +73,7 @@
     "spipu/html2pdf": "^5.2",
     "vinkla/hashids": "^10.0",
     "willvincent/feeds": "^2.4",
-    "laravel/legacy-factories": "^1.3",
-    "fruitcake/laravel-cors": "^3.0"
+    "laravel/legacy-factories": "^1.3"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",
