@@ -71,7 +71,7 @@
 
                         @if(! $withdrawal->closed)
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-warning btn-block mt-2',
                                'text' => 'E-mail Users',
@@ -80,7 +80,7 @@
                                'confirm' => 'Send',
                             ])
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-danger btn-block mt-2',
                                'text' => 'Close Withdrawal',
@@ -89,7 +89,7 @@
                                'confirm' => 'Close',
                             ])
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-danger btn-block mt-2',
                                'text' => 'Delete',
@@ -182,7 +182,7 @@
 
                                             |
 
-                                            @include('website.layouts.macros.confirm-modal', [
+                                            @include('components.modals.confirm-modal', [
                                                'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
                                                'text' => 'Loss',
                                                'title' => 'Confirm Marking Loss',

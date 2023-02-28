@@ -5,7 +5,7 @@
         {!! $title !!}
 
         @if(Auth::user()->can('board') && isset($edition) && isset($edit))
-            @include('website.layouts.macros.confirm-modal', [
+            @include('components.modals.confirm-modal', [
                 'action' => route("committee::membership::endedition", ['edition'=>$edition, 'committee'=>$committee->id]),
                 'text' => "Delete <i class='fas fa-trash'></i>",
                 'title' => 'Confirm the ending of this edition',
