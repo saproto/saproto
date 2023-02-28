@@ -16,7 +16,7 @@ class Utwente
      */
     public function handle($request, $next)
     {
-        if (Auth::check() && Auth::user()->utwente_username != null) {
+        if (Auth::user()?->utwente_username != null) {
             return $next($request);
         }
         abort(403, 'You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.');

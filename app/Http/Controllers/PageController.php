@@ -83,7 +83,7 @@ class PageController extends Controller
             abort(404, 'Page not found.');
         }
 
-        if ($page->is_member_only && ! (Auth::check() && Auth::user()->is_member)) {
+        if ($page->is_member_only && ! Auth::user()?->is_member) {
             abort(403, 'You need to be a member of S.A. Proto to see this page.');
         }
 
