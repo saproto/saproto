@@ -50,7 +50,7 @@ class NewsController extends Controller
         $newsitem = Newsitem::findOrFail($id);
 
         if (! $newsitem->isPublished()) {
-            if (Auth::check() && Auth::user()->can('board')) {
+            if (Auth::user()?->can('board')) {
                 $preview = true;
             } else {
                 abort(404);

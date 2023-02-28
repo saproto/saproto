@@ -232,7 +232,7 @@ class Activity extends Validatable
      */
     public function isOrganising(User $user)
     {
-        return $this->event->committee != null && $this->event->committee->isMember($user);
+        return $this->event?->committee?->isMember($user);
     }
 
     /**

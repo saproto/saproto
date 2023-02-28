@@ -12,14 +12,14 @@
 
             @if($user->is_member)
                 @if(!$user->member->until)
-                    @include('website.layouts.macros.confirm-modal', [
+                    @include('components.modals.confirm-modal', [
                              'action' => route("user::member::endinseptember", ['id'=>$user->id]),
                              'method' => 'POST',
                              'classes' => 'list-group-item text-warning',
                              'text' => 'End membership at the end of September',
                              'message' => "Are you sure you want to end the membership of $user->name at the end of September?"
                          ])
-                    @include('website.layouts.macros.confirm-modal', [
+                    @include('components.modals.confirm-modal', [
                             'action' => route("user::member::remove", ['id'=>$user->id]),
                             'method' => 'POST',
                             'classes' => 'list-group-item text-danger',
@@ -35,7 +35,7 @@
                 </a>
 
                 @else
-                    @include('website.layouts.macros.confirm-modal', [
+                    @include('components.modals.confirm-modal', [
                            'action' => route("user::member::removeend", ['id'=>$user->id]),
                            'method' => 'POST',
                            'classes' => 'list-group-item text-danger',
@@ -44,7 +44,7 @@
                        ])
                 @endif
 
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                     'action' => route("membercard::print", ['id'=>$user->id]),
                     'method' => 'POST',
                     'classes' => 'list-group-item',

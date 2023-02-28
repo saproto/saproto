@@ -23,7 +23,7 @@
             @endif
 
             {{-- Participating --}}
-            @if($event->activity && Auth::check() && $event->activity->isParticipating(Auth::user()))
+            @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
                     @if($event->activity->isOnBackupList(Auth::user()))
                         <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                            data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
@@ -44,7 +44,7 @@
             @endif
 
             {{-- Helper --}}
-            @if (Auth::check() && Auth::user()->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
+            @if (Auth::user()?->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
                 <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif

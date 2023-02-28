@@ -1,4 +1,4 @@
-@if($event->activity && Auth::check() && Auth::user()->is_member && $event->activity->withParticipants())
+@if($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
 
     <div class="card mb-3">
 

@@ -43,11 +43,11 @@
 
         @endif
 
-        @if($event->activity && Auth::check() && Auth::user()->is_member && count($event->activity->helpingCommitteeInstances) > 0 ||$event->dinnerforms()->count())
+        @if(Auth::user()?->is_member && count($event->activity?->helpingCommitteeInstances) > 0 ||$event->dinnerforms()->count())
 
             <div class="col-md-4">
                 <div class="card mb-3">
-                @if($event->activity && $event->activity->helpingCommitteeInstances && count($event->activity->helpingCommitteeInstances) > 0 )
+                @if($event->activity?->helpingCommitteeInstances && count($event->activity->helpingCommitteeInstances) > 0 )
                     @include('event.display_includes.helpers', [
                         'event' => $event
                     ])

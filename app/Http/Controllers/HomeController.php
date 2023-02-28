@@ -52,7 +52,7 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        if (Auth::check() && Auth::user()->is_member) {
+        if (Auth::user()?->is_member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
             return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, ]);
         } else {

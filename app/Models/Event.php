@@ -342,7 +342,7 @@ class Event extends Model
         $yearStart = strtotime('January 1, '.$year);
         $yearEnd = strtotime('January 1, '.($year + 1));
         $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::check() || ! Auth::user()->can('board')) {
+        if (! Auth::user()?->can('board')) {
             $events = $events->where('secret', 0);
         }
 
