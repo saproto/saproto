@@ -600,10 +600,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->member?->membershipForm !== null;
     }
 
-    /** @return bool */
-    public function getIsProtubeAdminAttribute()
+    /** @return int|bool */
+    public function getIsProtubeAdminUntil()
     {
-        return $this->can('protube') || $this->isTempadmin();
+        if($this->can('protube')) return Carbon::now()->addYear()->unix();
+        foreach ($this->tempadmin as $tempadmin) {
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return Carbon::parse($tempadmin->end_at)->unix();
+            }
+        }
+        return false;
     }
 
     /** @return string */

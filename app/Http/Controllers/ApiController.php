@@ -67,7 +67,7 @@ class ApiController extends Controller
             return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
-                'admin' => $user->can('protube') || $user->isTempadmin(),
+                'admin_until' => $user->getIsProtubeAdminUntil(),
                 'id' => $user->id,
             ]);
         }
