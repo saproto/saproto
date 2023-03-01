@@ -24,10 +24,10 @@ class WallstreetController extends Controller
         return view('wallstreet.price-history', ['id'=>$id]);
     }
 
-    public function swiper() {
+    public function marquee() {
         $activeDrink = WallstreetController::active();
         $prices = $this->getLatestPrices($activeDrink);
-        return view('wallstreet.swiper', ['activeDrink' => $activeDrink, 'prices' => $prices]);
+        return view('wallstreet.marquee', ['activeDrink' => $activeDrink, 'prices' => $prices]);
     }
 
     public function edit($id) {
@@ -109,11 +109,16 @@ class WallstreetController extends Controller
     public function getLatestPrices($drink) {
         $products = $drink->products()->select('name','price', 'id', 'image_id')->get();
         foreach($products as $product) {
-            $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first()->price ?? 0;
-            $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first()->price ?? 1;
-            $product->price = $newPrice;
-            $product->diff = ($newPrice - $oldPrice) / $oldPrice * 100;
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
+
+            $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
+            $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first();
+            if(!$newPrice || !$oldPrice || $oldPrice->created_at->timestamp < Carbon::now()->addMinutes(-1.5)->timestamp||$oldPrice->price==0) {
+                $product->price = $newPrice->price ?? $product->price;
+                $product->diff = 0;
+                continue;
+            }
+            $product->diff = ($newPrice->price - $oldPrice->price) / $oldPrice->price * 100;
         }
         return $products;
     }

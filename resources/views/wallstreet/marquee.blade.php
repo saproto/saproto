@@ -70,7 +70,8 @@
                     card.querySelector("#diff").className.replace(product.diff < 0 ? "text-danger":"text-green", product.diff < 0 ? "text-green" : "text-danger");
                 })
             } else {
-                console.log(el.name.replace(/[^a-zA-Z0-9]+/g, ""))
+                //a new product has been added, reload the page
+                window.location.reload(true);
             }
         }
         function updatePrices() {

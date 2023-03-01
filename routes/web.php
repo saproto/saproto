@@ -316,7 +316,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /* routes related to the wallstreet drink system */
     Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
         Route::get('', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
-        Route::get('swiper', ['as' => 'swiper', 'uses' => 'WallstreetController@swiper']);
+        Route::get('marquee', ['as' => 'marquee', 'uses' => 'WallstreetController@marquee']);
         Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
         Route::get('close/{id}', ['as' => 'close', 'uses' => 'WallstreetController@close']);
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
