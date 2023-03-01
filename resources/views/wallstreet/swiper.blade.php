@@ -78,8 +78,7 @@
                 }
             )
         }
-
-        setInterval(updatePrices, 1000);
+        setInterval(updatePrices, 5000);
     </script>
     <style nonce='{{ csp_nonce() }}'>
         .swiper-container-free-mode > .swiper-wrapper{

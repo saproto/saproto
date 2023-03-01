@@ -1,7 +1,12 @@
 <div class="card mb-3">
 
-    <div class="card-header bg-dark text-white mb-1">
-        WallstreetDrink overview
+    <div class="card-header bg-dark mb-1 justify-content-between d-inline-flex">
+        <div>WallstreetDrink overview</div>
+        <div>
+            <a class="btn btn-info badge" href="{{ route('wallstreet::swiper') }}">
+                View Marquee Screen!
+            </a>
+        </div>
     </div>
 
     @if(count($allDrinks) > 0)
