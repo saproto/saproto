@@ -47,7 +47,6 @@
             autoplay: {
                 delay: 1,
                 disableOnInteraction: false,
-                reverseDirection:true,
             },
             slidesPerView: 'auto',
             speed: 5000,
@@ -56,24 +55,30 @@
         const swiper = new Swiper("#swiper-container", swiperOptions);
 
         const el = document.getElementById("swiper-container").cloneNode(true);
-        el.id = "swiper-container2"
+        el.id = "reverse-swiper-container"
         document.getElementById("swipers-container").appendChild(el);
 
-        const secondSwiperOptions = {...swiperOptions};
-        secondSwiperOptions.autoplay.reverseDirection = false;
-        const swiper2 = new Swiper("#swiper-container2", secondSwiperOptions);
-
+        const reverseSwiperOptions = {...swiperOptions};
+        reverseSwiperOptions.autoplay.reverseDirection = true;
+        const reverseSwiper = new Swiper("#reverse-swiper-container", reverseSwiperOptions);
+        function updateCards(product, swiperInstance){
+            let cards = swiperInstance.el.querySelectorAll(`#${product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
+            if (cards.length > 0) {
+                cards.forEach((card)=>{
+                    card.querySelector("#price span").innerText = product.price.toFixed(2);
+                    card.querySelector("#diff").innerText = `${product.diff < 0 ? "▼" : "▲"} ${product.diff.toFixed(2)}%`;
+                    card.querySelector("#diff").className.replace(product.diff < 0 ? "text-danger":"text-green", product.diff < 0 ? "text-green" : "text-danger");
+                })
+            } else {
+                console.log(el.name.replace(/[^a-zA-Z0-9]+/g, ""))
+            }
+        }
         function updatePrices() {
+            console.log("Updating prices!")
             get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
-                    response.products.forEach((el) => {
-                        let card = swiper.el.querySelectorAll(`#${el.name.replace(/[^a-zA-Z0-9]+/g, "")}`)[0];
-                        if (card) {
-                            card.querySelector("#price span").innerText = el.price;
-                            card.querySelector("#diff").innerText = `${el.diff < 0 ? "▼" : "▲"} ${el.diff.toFixed(2)}%`;
-                            card.querySelector("#diff").className.replace(/text-green|text-danger/g, el.diff <= 0 ? "text-green" : "text-danger");
-                        } else {
-                            console.log(el.name.replace(/[^a-zA-Z0-9]+/g, ""))
-                        }
+                    response.products.forEach((product) => {
+                        updateCards(product, swiper)
+                        updateCards(product, reverseSwiper)
                     })
                 }
             )
