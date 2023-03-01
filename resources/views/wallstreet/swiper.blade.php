@@ -8,7 +8,7 @@
             <div id="swiper-container" class="swiper-container swiper-container-free-mode stonks-cards">
                 <div class="swiper-wrapper h-100">
                     @foreach($prices as $price)
-                        <div id="{{$price->name}}" class="swiper-slide card w-25">
+                        <div id="{{preg_replace('/[^a-zA-Z0-9]/', '', $price->name)}}" class="swiper-slide card w-25">
                             <div class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img'}}"
                                  style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;">
 
@@ -19,12 +19,12 @@
 
                                 <div class="d-flex flex-row justify-content-between">
                                     {{-- Price --}}
-                                    <div class="fs-4">
+                                    <div id="price" class="fs-4">
                                         € <span>{{sprintf("%.2f",$price->price)}}</span>
                                     </div>
 
                                     {{-- Change --}}
-                                    <div class="fs-4 {{$price->diff < 0 ? 'text-green' : 'text-danger'}}">
+                                    <div id="diff" class="fs-4 {{$price->diff < 0 ? 'text-green' : 'text-danger'}}">
                                         {{sprintf("%s %.2f%%", $price->diff < 0 ? "▼" : "▲", $price->diff)}}
                                     </div>
                                 </div>
@@ -41,12 +41,9 @@
 @push('javascript')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" nonce='{{ csp_nonce() }}'></script>
     <script type='text/javascript' nonce='{{ csp_nonce() }}'>
-        get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response)=>{
-            console.log(response);
-            }
-        )
         const swiperOptions = {
             loop: true,
+            observer: true,
             autoplay: {
                 delay: 1,
                 disableOnInteraction: false,
@@ -66,6 +63,23 @@
         secondSwiperOptions.autoplay.reverseDirection = false;
         const swiper2 = new Swiper("#swiper-container2", secondSwiperOptions);
 
+        function updatePrices() {
+            get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
+                    response.products.forEach((el) => {
+                        let card = swiper.el.querySelectorAll(`#${el.name.replace(/[^a-zA-Z0-9]+/g, "")}`)[0];
+                        if (card) {
+                            card.querySelector("#price span").innerText = el.price;
+                            card.querySelector("#diff").innerText = `${el.diff < 0 ? "▼" : "▲"} ${el.diff.toFixed(2)}%`;
+                            card.querySelector("#diff").className.replace(/text-green|text-danger/g, el.diff <= 0 ? "text-green" : "text-danger");
+                        } else {
+                            console.log(el.name.replace(/[^a-zA-Z0-9]+/g, ""))
+                        }
+                    })
+                }
+            )
+        }
+
+        setInterval(updatePrices, 1000);
     </script>
     <style nonce='{{ csp_nonce() }}'>
         .swiper-container-free-mode > .swiper-wrapper{

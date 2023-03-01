@@ -92,7 +92,7 @@ class WallstreetController extends Controller
             $drink->products()->syncWithoutDetaching($product);
         }
         Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
-        return Redirect::back();
+        return Redirect::to(route('wallstreet::edit', ['id' => $id]));
     }
 
     public function removeProduct($id, $productId) {
