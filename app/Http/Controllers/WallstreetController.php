@@ -113,7 +113,7 @@ class WallstreetController extends Controller
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
             $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first();
-            if(!$newPrice || !$oldPrice || $oldPrice->created_at->timestamp < Carbon::now()->addMinutes(-1.5)->timestamp||$oldPrice->price==0) {
+            if(! $newPrice || ! $oldPrice || $oldPrice->created_at->timestamp < Carbon::now()->addMinutes(-1.5)->timestamp || $oldPrice->price == 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
                 continue;
