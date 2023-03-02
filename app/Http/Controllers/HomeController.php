@@ -48,9 +48,4 @@ class HomeController extends Controller
 
         return view('website.developers', ['developers' => $developers, 'committee' => $committee]);
     }
-
-    /** @return View Display FishCam. */
-    public function fishcam() {
-        return view('misc.fishcam');
-    }
 }
