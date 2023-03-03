@@ -49,6 +49,7 @@ use Proto\Http\Controllers\RegistrationHelperController;
 use Proto\Http\Controllers\RfidCardController;
 use Proto\Http\Controllers\SearchController;
 use Proto\Http\Controllers\ShortUrlController;
+use Proto\Http\Controllers\SmartXpScreenController;
 use Proto\Http\Controllers\SoundboardController;
 use Proto\Http\Controllers\SpotifyController;
 use Proto\Http\Controllers\SurfConextController;
@@ -70,8 +71,6 @@ View::composer('*', function ($view) {
     View::share('viewName', $view->getName());
 });
 
-// TODO: change string based controller route definitions to standard PHP callable syntax.
-
 ROute::middleware('forcedomain')->group(function () {
 
     /* The main route for the frontpage. */
@@ -84,7 +83,7 @@ ROute::middleware('forcedomain')->group(function () {
         })->middleware('member')->name('fishcam');
     });
 
-    Route::get('becomeamember', [UserDashboardController::class, 'becomeAMemberOf']);
+    Route::get('becomeamember', [UserDashboardController::class, 'becomeAMemberOf'])->name('becomeamember');
 
     /* Routes related to the header images. */
     Route::prefix('headerimage')->name('headerimage::')->controller(HeaderImageController::class)->middleware(['auth', 'permission:header-image'])->group(function(){
@@ -179,7 +178,7 @@ ROute::middleware('forcedomain')->group(function () {
             });
 
             Route::prefix('admin')->name('admin::')->middleware('permission:board')->group(function(){
-                Route::get('','index')->name('list');
+                Route::get('admin','index')->name('list');
                 Route::get('{id}', 'details')->name('details');
                 Route::post('{id}', 'update')->name('update');
 
@@ -268,7 +267,7 @@ ROute::middleware('forcedomain')->group(function () {
 
     /* Routes related to the Membership Forms */
     Route::prefix('memberform')->name('memberform::')->middleware('auth')->group(function (){
-        Route::controller(UserAdminController::class)->group(function (){
+        Route::controller(UserDashboardController::class)->group(function (){
             Route::get('sign', 'getMemberForm')->name('sign');
             Route::post('sign', 'postMemberForm')->name('sign');
         });
@@ -289,12 +288,11 @@ ROute::middleware('forcedomain')->group(function () {
         Route::get('{id}', 'show')->name('show');
 
         Route::middleware('auth')->group(function(){
-
-            Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
+            Route::get('{slug/toggle_helper_reminder', 'toggleHelperReminder')->name('toggle_helper_reminder');
 
             Route::middleware('member')->group(function() {
-                Route::get('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@showAnonMailForm']);
-                Route::post('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@postAnonMailForm']);
+                Route::get('{id}/send_anonymous_email', 'showAnonMailForm')->name('anonymousmail');
+                Route::post('{id}/send_anonymous_email', 'postAnonMailForm')->name('anonymousmail');
             });
 
             Route::middleware('permission:board')->group(function() {
@@ -465,9 +463,8 @@ ROute::middleware('forcedomain')->group(function () {
                     Route::get('album/unlink/{album}', 'unlinkAlbum')->name('unlinkalbum');
 
                     Route::prefix('categories')->name('category::')->group(function(){
-                        Route::get('', 'categoryAdmin')->name('admin');
+                        Route::get('admin', 'categoryAdmin')->name('admin');
                         Route::post('add', 'categoryStore')->name('add');
-                        Route::get('edit/{id}', 'categoryEdit')->name('edit');
                         Route::post('edit/{id}', 'categoryUpdate')->name('edit');
                         Route::get('delete/{id}', 'categoryDestroy')->name('delete');
                     });
@@ -524,7 +521,7 @@ ROute::middleware('forcedomain')->group(function () {
 
     /* Routes related to pages. */
     Route::prefix('page')->name('page::')->controller(PageController::class)->group(function(){
-        Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);
+        Route::get('{slug}', 'show')->name('show');
 
         Route::middleware(['auth','permission:board'])->group(function(){
             Route::get('', 'index')->name('list');
@@ -545,9 +542,8 @@ ROute::middleware('forcedomain')->group(function () {
 
     /* Routes related to news. */
     Route::prefix('news')->name('news::')->controller(NewsController::class)->group(function(){
-
-        Route::get('', 'NewsController@index')->name('list');
-        Route::get('{id}', 'NewsController@show')->name('show');
+        Route::get('', 'index')->name('list');
+        Route::get('{id}', 'show')->name('show');
 
         Route::middleware(['auth', 'permission:board'])->group(function(){
             Route::get('admin', 'admin')->name('admin');
