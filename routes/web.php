@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Proto\Http\Controllers\AccountController;
@@ -58,8 +59,8 @@ use Proto\Http\Controllers\TFAController;
 use Proto\Http\Controllers\TicketController;
 use Proto\Http\Controllers\TIPCieController;
 use Proto\Http\Controllers\UserAdminController;
-use Proto\Http\Controllers\UserProfileController;
 use Proto\Http\Controllers\UserDashboardController;
+use Proto\Http\Controllers\UserProfileController;
 use Proto\Http\Controllers\VideoController;
 use Proto\Http\Controllers\WelcomeController;
 use Proto\Http\Controllers\WithdrawalController;
@@ -75,10 +76,10 @@ ROute::middleware('forcedomain')->group(function () {
 
     /* The main route for the frontpage. */
 
-    Route::controller(HomeController::class)->group(function(){
+    Route::controller(HomeController::class)->group(function () {
         Route::get('', 'show')->name('homepage');
         Route::get('developers', 'developers')->name('developers');
-        Route::get('fishcam', function(){
+        Route::get('fishcam', function () {
             return view('misc.fishcam');
         })->middleware('member')->name('fishcam');
     });
@@ -86,7 +87,7 @@ ROute::middleware('forcedomain')->group(function () {
     Route::get('becomeamember', [UserDashboardController::class, 'becomeAMemberOf'])->name('becomeamember');
 
     /* Routes related to the header images. */
-    Route::prefix('headerimage')->name('headerimage::')->controller(HeaderImageController::class)->middleware(['auth', 'permission:header-image'])->group(function(){
+    Route::prefix('headerimage')->name('headerimage::')->controller(HeaderImageController::class)->middleware(['auth', 'permission:header-image'])->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('add', 'create')->name('add');
         Route::post('add', 'store')->name('add');
@@ -94,7 +95,7 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes for the search function. */
-    Route::controller(SearchController::class)->group(function(){
+    Route::controller(SearchController::class)->group(function () {
         Route::get('search','search')->name('search');
         Route::post('search', 'search')->name('search');
         Route::get('opensearch', 'openSearch')->name('search::opensearch');
@@ -111,19 +112,19 @@ ROute::middleware('forcedomain')->group(function () {
         Route::get('login', 'getLogin')->name('show');
         Route::post('login', 'postLogin')->name('post')->middleware('throttle:5,1');
 
-        Route::prefix('logout')->group(function(){
+        Route::prefix('logout')->group(function () {
             Route::get('', 'getLogout')->name('logout');
             Route::get('redirect', 'getLogoutRedirect')->name('logout::redirect');
         });
 
-        Route::prefix('password')->group(function(){
+        Route::prefix('password')->group(function () {
             Route::get('reset/{token}', 'getPasswordReset')->name('resetpass::token');
             Route::post('reset', 'postPasswordReset')->name('resetpass::submit')->middleware('throttle:5,1');
 
             Route::get('email', 'getPasswordResetEmail')->name('resetpass');
             Route::post('email', 'postPasswordResetEmail')->name('resetpass::send')->middleware('throttle:5,1');
 
-            Route::middleware('auth')->group(function(){
+            Route::middleware('auth')->group(function () {
                 Route::get('sync', 'getPasswordSync')->name('password::sync');
                 Route::post('sync', 'postPasswordSync')->name('password::sync')->middleware('throttle:5,1');
 
@@ -131,17 +132,17 @@ ROute::middleware('forcedomain')->group(function () {
                 Route::post('change', 'postPasswordChange')->name('password::change')->middleware('throttle:5,1');
             });
 
-            Route::prefix('register')->group(function(){
+            Route::prefix('register')->group(function () {
                 Route::get('', 'getRegister')->name('register');
                 Route::post('', 'postRegister')->name('register')->middleware('throttle:5,1');
                 Route::post('surfconext', 'postRegisterSurfConext')->name('register::surfconext')->middleware('throttle:5,1');
             });
 
-            Route::prefix('surfconext')->group(function(){
+            Route::prefix('surfconext')->group(function () {
                 Route::get('', 'startSurfConextAuth')->name('edu');
                 Route::get('post', 'postSurfConextAuth')->name('edupost');
 
-                Route::prefix('username')->group(function() {
+                Route::prefix('username')->group(function () {
                     Route::get('', 'requestUsername')->name('requestusername');
                     Route::post('', 'requestUsername')->name('requestusername')->middleware('throttle:5,1');
                 });
@@ -150,19 +151,19 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to user profiles. */
-    Route::prefix('user')->name('user::')->middleware('auth')->group(function(){
-        Route::controller(AuthController::class)->group(function(){
+    Route::prefix('user')->name('user::')->middleware('auth')->group(function () {
+        Route::controller(AuthController::class)->group(function () {
             Route::post('delete', 'deleteUser')->name('delete');
             Route::post('password', 'updatePassword')->name('changepassword');
         });
 
         Route::get('{id?}', [UserProfileController::class, 'show'])->name('profile')->middleware('member');
 
-        Route::controller(UserAdminController::class)->group(function(){
+        Route::controller(UserAdminController::class)->group(function () {
             Route::get('quit_impersonating', 'quitImpersonating')->name('quitimpersonating');
 
             /* Routes related to members. */
-            Route::name('member::')->prefix('{id}/member')->middleware('permission:registermembers')->group(function(){
+            Route::name('member::')->prefix('{id}/member')->middleware('permission:registermembers')->group(function () {
                 Route::get('impersonate', 'impersonate')->name('impersonate')->middleware('permission:board');
                 Route::post('add', 'addMembership')->name('add');
                 Route::post('remove', 'endMembership')->name('remove');
@@ -171,13 +172,13 @@ ROute::middleware('forcedomain')->group(function () {
                 Route::post('settype', 'setMembershipType')->name('settype');
 
                 /* Routes related to the custom omnomcom sound. */
-                Route::prefix('omnomcomsound')->name('omnomcomsound::')->middleware('permission:board')->group(function(){
+                Route::prefix('omnomcomsound')->name('omnomcomsound::')->middleware('permission:board')->group(function () {
                     Route::post('update', 'uploadOmnomcomSound')->name('update');
                     Route::get('delete', 'deleteOmnomcomSound')->name('delete');
                 });
             });
 
-            Route::prefix('admin')->name('admin::')->middleware('permission:board')->group(function(){
+            Route::prefix('admin')->name('admin::')->middleware('permission:board')->group(function () {
                 Route::get('admin','index')->name('list');
                 Route::get('{id}', 'details')->name('details');
                 Route::post('{id}', 'update')->name('update');
@@ -189,37 +190,37 @@ ROute::middleware('forcedomain')->group(function () {
             });
         });
 
-        Route::controller(UserDashboardController::class)->group(function() {
+        Route::controller(UserDashboardController::class)->group(function () {
             Route::get('personal_key', 'generateKey')->name('personal_key::generate');
             Route::get('dashboard', 'show')->name('dashboard');
             Route::post('dashboard', 'update')->name('dashboard');
             Route::post('change_email', 'updateMail')->name('changemail')->middleware('throttle:3,1');
 
             /* Routes related to the memberprofiles */
-            Route::prefix('memberprofile')->name('memberprofile::')->group(function(){
-                Route::prefix('complete')->group(function(){
+            Route::prefix('memberprofile')->name('memberprofile::')->group(function () {
+                Route::prefix('complete')->group(function () {
                     Route::get('', 'getCompleteProfile')->name('complete');
                     Route::post('', 'postCompleteProfile')->name('complete');
                 });
-                Route::prefix('clear')->group(function(){
+                Route::prefix('clear')->group(function () {
                     Route::get('', 'getClearProfile')->name('clear');
                     Route::post('', 'postClearProfile')->name('clear');
                 });
             });
 
             /* Routes related to diet. */
-            Route::prefix('diet')->name('diet::')->group( function () {
+            Route::prefix('diet')->name('diet::')->group(function () {
                 Route::post('edit', 'editDiet')->name('edit');
             });
         });
 
-        Route::prefix('registrationhelper')->name('registrationhelper::')->middleware('permission:registermembers')->controller(RegistrationHelperController::class)->group(function(){
+        Route::prefix('registrationhelper')->name('registrationhelper::')->middleware('permission:registermembers')->controller(RegistrationHelperController::class)->group(function () {
             Route::get('', 'index')->name('list');
             Route::get('{id}', 'details')->name('details');
         });
 
         /* Routes related to addresses. */
-        Route::prefix('address')->name('address::')->controller(AddressController::class)->group(function(){
+        Route::prefix('address')->name('address::')->controller(AddressController::class)->group(function () {
             Route::get('add', 'add')->name('add');
             Route::post('add', 'store')->name('add');
             Route::get('delete', 'destroy')->name('delete');
@@ -229,7 +230,7 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to bank accounts. */
-        Route::prefix('bank')->name('bank::')->controller(BankController::class)->group(function(){
+        Route::prefix('bank')->name('bank::')->controller(BankController::class)->group(function () {
             Route::get('add', 'add')->name('add');
             Route::post('add', 'store')->name('add');
             Route::post('delete', 'destroy')->name('delete');
@@ -238,27 +239,27 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to RFID cards. */
-        Route::prefix('rfidcard/{id}')->name('rfid::')->controller(RFIDCardController::class)->group(function(){
+        Route::prefix('rfidcard/{id}')->name('rfid::')->controller(RFIDCardController::class)->group(function () {
             Route::get('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
             Route::post('edit', 'update')->name('edit');
         });
 
         /* Routes related to profile pictures. */
-        Route::prefix('profilepic')->name('pic::')->controller(ProfilePictureController::class)->group(function(){
+        Route::prefix('profilepic')->name('pic::')->controller(ProfilePictureController::class)->group(function () {
             Route::post('update', 'update')->name('update');
             Route::get('delete', 'destroy')->name('delete');
         });
 
         /* Routes related to UT accounts. */
-        Route::prefix('edu')->name('edu::')->controller(SurfConextController::class)->group(function(){
+        Route::prefix('edu')->name('edu::')->controller(SurfConextController::class)->group(function () {
             Route::get('delete', 'destroy')->name('delete');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
         });
 
         /* Routes related to 2FA. */
-        Route::prefix('2fa')->name('2fa::')->controller(TFAController::class)->group(function(){
+        Route::prefix('2fa')->name('2fa::')->controller(TFAController::class)->group(function () {
             Route::post('add', 'create')->name('add');
             Route::post('delete', 'destroy')->name('delete');
             Route::post('delete/{id}', 'adminDestroy')->name('admindelete')->middleware('permission:board');
@@ -266,13 +267,13 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Membership Forms */
-    Route::prefix('memberform')->name('memberform::')->middleware('auth')->group(function (){
-        Route::controller(UserDashboardController::class)->group(function (){
+    Route::prefix('memberform')->name('memberform::')->middleware('auth')->group(function () {
+        Route::controller(UserDashboardController::class)->group(function () {
             Route::get('sign', 'getMemberForm')->name('sign');
             Route::post('sign', 'postMemberForm')->name('sign');
         });
-        Route::controller(UserAdminController::class)->group(function(){
-            Route::prefix('download')->name('download::')->group(function(){
+        Route::controller(UserAdminController::class)->group(function () {
+            Route::prefix('download')->name('download::')->group(function () {
                 Route::get('new/{id}', 'getNewMemberForm')->name('new');
                 Route::get('signed/{id}', 'getSignedMemberForm')->name('signed');
             });
@@ -282,20 +283,20 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to committees. */
-    Route::prefix('committee')->name('committee::')->controller(CommitteeController::class)->group(function(){
+    Route::prefix('committee')->name('committee::')->controller(CommitteeController::class)->group(function () {
 
         Route::get('list', 'overview')->name('list');
         Route::get('{id}', 'show')->name('show');
 
-        Route::middleware('auth')->group(function(){
+        Route::middleware('auth')->group(function () {
             Route::get('{slug/toggle_helper_reminder', 'toggleHelperReminder')->name('toggle_helper_reminder');
 
-            Route::middleware('member')->group(function() {
+            Route::middleware('member')->group(function () {
                 Route::get('{id}/send_anonymous_email', 'showAnonMailForm')->name('anonymousmail');
                 Route::post('{id}/send_anonymous_email', 'postAnonMailForm')->name('anonymousmail');
             });
 
-            Route::middleware('permission:board')->group(function() {
+            Route::middleware('permission:board')->group(function () {
 
                 Route::get('add', 'add')->name('add');
                 Route::post('add', 'store')->name('add');
@@ -317,15 +318,15 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to societies. */
-    Route::prefix('society')->name('society::')->controller(CommitteeController::class)->group(function(){
+    Route::prefix('society')->name('society::')->controller(CommitteeController::class)->group(function () {
         Route::get('list', 'overview')->name('list')->defaults('showSociety', true);
         Route::get('{id}', 'show')->name('show');
     });
 
     /* Routes related to narrowcasting. */
-    Route::prefix('narrowcasting')->name('narrowcasting::')->controller(NarrowcastingController::class)->group(function(){
+    Route::prefix('narrowcasting')->name('narrowcasting::')->controller(NarrowcastingController::class)->group(function () {
         Route::get('', 'display')->name('display');
-        Route::middleware(['auth', 'permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -337,12 +338,12 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to companies. */
-    Route::prefix('companies')->name('companies::')->controller('CompanyController')->group(function(){
+    Route::prefix('companies')->name('companies::')->controller('CompanyController')->group(function () {
 
         Route::get('', 'index')->name('index');
         Route::get('{id}', 'show')->name('show');
 
-        Route::middleware(['auth', 'permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'adminIndex')->name('admin');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -356,24 +357,24 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to membercard. */
-    Route::prefix('membercard')->name('membercard::')->group(function(){
-       Route::controller(MemberCardController::class)->group(function(){
+    Route::prefix('membercard')->name('membercard::')->group(function () {
+       Route::controller(MemberCardController::class)->group(function () {
            Route::get('print', 'startPrint')->name('print')->middleware(['auth', 'permission:board']);
            Route::get('download/{id}', 'download')->name('download');
        });
 
-        Route::controller(CompanyController::class)->group(function(){
+        Route::controller(CompanyController::class)->group(function () {
             Route::get('', 'indexmembercard')->name('index');
             Route::get('{id}', 'showmembercard')->name('show');
         });
     });
 
     /* Routes related to joboffers. */
-    Route::prefix('joboffers')->name('joboffers::')->controller(JobofferController::class)->group(function(){
+    Route::prefix('joboffers')->name('joboffers::')->controller(JobofferController::class)->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('{id}', 'show')->name('show');
 
-        Route::middleware(['auth', 'permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'adminIndex')->name('admin');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -384,11 +385,11 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to leaderboards. */
-    Route::prefix('leaderboard')->name('leaderboards::')->middleware(['auth', 'member'])->controller(LeaderboardController::class)->group(function(){
+    Route::prefix('leaderboard')->name('leaderboards::')->middleware(['auth', 'member'])->controller(LeaderboardController::class)->group(function () {
 
         Route::get('', 'index')->name('index');
 
-        Route::middleware(['permission:board'])->group(function(){
+        Route::middleware(['permission:board'])->group(function () {
             Route::get('list', 'adminIndex')->name('admin');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -396,7 +397,7 @@ ROute::middleware('forcedomain')->group(function () {
             Route::post('edit/{id}', 'update')->name('edit');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
-            Route::prefix('entries')->name('entries::')->group(function(){
+            Route::prefix('entries')->name('entries::')->group(function () {
                 Route::post('add', 'store')->name('add');
                 Route::post('update', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
@@ -405,9 +406,9 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::prefix('dinnerform')->name('dinnerform::')->middleware('auth')->controller(DinnerformController::class)->group(function(){
+    Route::prefix('dinnerform')->name('dinnerform::')->middleware('auth')->controller(DinnerformController::class)->group(function () {
         Route::get('{id}', 'show')->name('show');
-        Route::middleware('permission:tipcie')->group(function(){
+        Route::middleware('permission:tipcie')->group(function () {
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
             Route::get('edit/{id}', 'edit')->name('edit');
@@ -418,7 +419,7 @@ ROute::middleware('forcedomain')->group(function () {
             Route::get('process/{id}', 'process')->name('process');
         });
 
-        Route::prefix('orderline')->name('orderline::')->group(function(){
+        Route::prefix('orderline')->name('orderline::')->group(function () {
             Route::get('delete/{id}', 'delete')->name('delete');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('add/{id}', 'store')->name('add');
@@ -430,9 +431,9 @@ ROute::middleware('forcedomain')->group(function () {
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
-    Route::prefix('events')->name('event::')->group(function (){
+    Route::prefix('events')->name('event::')->group(function () {
 
-        Route::controller(EventController::class)->group(function(){
+        Route::controller(EventController::class)->group(function () {
             //show event overview pages
             Route::get('', 'index')->name('list');
             Route::get('archive/{year}', 'archive')->name('archive');
@@ -440,7 +441,7 @@ ROute::middleware('forcedomain')->group(function () {
             // Show events
             Route::get('{id}', 'show')->name('show');
 
-            Route::middleware('auth')->group(function(){
+            Route::middleware('auth')->group(function () {
                 Route::post('set_reminder', 'setReminder')->name('set_reminder');
                 Route::get('toggle_relevant_only', 'toggleRelevantOnly')->name('toggle_relevant_only');
 
@@ -449,7 +450,7 @@ ROute::middleware('forcedomain')->group(function () {
                 // Force login for event
                 Route::get('{id}/login', 'forceLogin')->name('login');
 
-                Route::middleware('permission:board')->group(function() {
+                Route::middleware('permission:board')->group(function () {
                     Route::get('add', 'create')->name('add');
                     Route::post('add', 'store')->name('add');
 
@@ -462,7 +463,7 @@ ROute::middleware('forcedomain')->group(function () {
                     Route::post('album/{event}/link', 'linkAlbum')->name('linkalbum');
                     Route::get('album/unlink/{album}', 'unlinkAlbum')->name('unlinkalbum');
 
-                    Route::prefix('categories')->name('category::')->group(function(){
+                    Route::prefix('categories')->name('category::')->group(function () {
                         Route::get('admin', 'categoryAdmin')->name('admin');
                         Route::post('add', 'categoryStore')->name('add');
                         Route::post('edit/{id}', 'categoryUpdate')->name('edit');
@@ -470,17 +471,17 @@ ROute::middleware('forcedomain')->group(function () {
                     });
                 });
 
-                Route::prefix('financial')->name('financial::')->middleware('permission:finadmin')->group(function(){
+                Route::prefix('financial')->name('financial::')->middleware('permission:finadmin')->group(function () {
                     Route::get('', 'finindex')->name('list');
                     Route::post('close/{id}', 'finclose')->name('close');
                 });
             });
         });
         // Related to participation
-        Route::controller(ParticipationController::class)->middleware('auth')->group(function(){
+        Route::controller(ParticipationController::class)->middleware('auth')->group(function () {
             Route::get('unparticipate/{participation_id}', 'destroy')->name('deleteparticipation');
 
-            Route::middleware('member')->group(function(){
+            Route::middleware('member')->group(function () {
                 Route::get('participate/{id}', 'create')->name('addparticipation');
                 Route::get('togglepresence/{id}', 'togglePresence')->name('togglepresence');
             });
@@ -488,11 +489,11 @@ ROute::middleware('forcedomain')->group(function () {
             Route::post('participatefor/{id}', 'createFor')->name('addparticipationfor')->middleware('permission:board');
         });
 
-        Route::controller(ActivityController::class)->group(function(){
+        Route::controller(ActivityController::class)->group(function () {
 
             Route::get('checklist/{id}','checklist')->name('checklist');
 
-            Route::middleware('permission:board')->group(function(){
+            Route::middleware('permission:board')->group(function () {
                 // Related to activities
                 Route::get('signup/{id}', 'store')->name('addsignup');
                 Route::get('signup/{id}/delete', 'destroy')->name('deletesignup');
@@ -509,9 +510,9 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the newsletter */
-    Route::prefix('newsletter')->name('newsletter::')->middleware('auth')->controller(NewsController::class)->group(function(){
+    Route::prefix('newsletter')->name('newsletter::')->middleware('auth')->controller(NewsController::class)->group(function () {
         Route::get('', 'newsletterPreview')->name('preview');
-        Route::middleware('permission:board')->group(function(){
+        Route::middleware('permission:board')->group(function () {
             Route::get('content', 'getInNewsletter')->name('show');
             Route::get('toggle/{id}', 'toggleInNewsletter')->name('toggle');
             Route::post('send', 'sendNewsletter')->name('send');
@@ -520,16 +521,16 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to pages. */
-    Route::prefix('page')->name('page::')->controller(PageController::class)->group(function(){
+    Route::prefix('page')->name('page::')->controller(PageController::class)->group(function () {
         Route::get('{slug}', 'show')->name('show');
 
-        Route::middleware(['auth','permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
-            Route::prefix('/edit/{id}')->group(function(){
+            Route::prefix('/edit/{id}')->group(function () {
                 Route::get('', 'edit')->name('edit');
                 Route::post('', 'update')->name('edit');
                 Route::post('image', 'featuredImage')->name('image');
@@ -541,11 +542,11 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to news. */
-    Route::prefix('news')->name('news::')->controller(NewsController::class)->group(function(){
+    Route::prefix('news')->name('news::')->controller(NewsController::class)->group(function () {
         Route::get('', 'index')->name('list');
         Route::get('{id}', 'show')->name('show');
 
-        Route::middleware(['auth', 'permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('admin', 'admin')->name('admin');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -553,7 +554,7 @@ ROute::middleware('forcedomain')->group(function () {
             Route::post('edit/{id}', 'update')->name('edit');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
-            Route::prefix('edit/{id}')->group(function(){
+            Route::prefix('edit/{id}')->group(function () {
                 Route::get('', 'edit')->name('edit');
                 Route::post('', 'update')->name('edit');
                 Route::post('image', 'featuredImage')->name('image');
@@ -561,7 +562,7 @@ ROute::middleware('forcedomain')->group(function () {
         });
     });
     /* Routes related to menu. */
-    Route::prefix('menu')->name('menu::')->middleware(['auth', 'permission:board'])->controller(MenuController::class)->group(function(){
+    Route::prefix('menu')->name('menu::')->middleware(['auth', 'permission:board'])->controller(MenuController::class)->group(function () {
         Route::get('', 'index')->name('list');
         Route::get('add', 'create')->name('add');
         Route::post('add', 'store')->name('add');
@@ -575,13 +576,13 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to tickets. */
-    Route::prefix('tickets')->name('tickets::')->middleware(['auth'])->controller(TicketController::class)->group(function(){
+    Route::prefix('tickets')->name('tickets::')->middleware(['auth'])->controller(TicketController::class)->group(function () {
 
         Route::get('scan/{barcode}', 'scan')->name('scan');
         Route::get('unscan/{barcode?}', 'unscan')->name('unscan');
         Route::get('download/{id}','download')->name('download');
 
-        Route::middleware(['auth', 'permission:board'])->group(function(){
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -596,9 +597,9 @@ ROute::middleware('forcedomain')->group(function () {
 
     Route::get('unsubscribe/{hash}', [EmailListController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
 
-    Route::prefix('email')->name('email::')->middleware(['auth', 'permission:board'])->group(function(){
+    Route::prefix('email')->name('email::')->middleware(['auth', 'permission:board'])->group(function () {
 
-        Route::controller(EmailController::class)->group(function(){
+        Route::controller(EmailController::class)->group(function () {
             Route::get('', 'index')->name('admin');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -608,13 +609,13 @@ ROute::middleware('forcedomain')->group(function () {
             Route::get('toggleready/{id}', 'toggleReady')->name('toggleready');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
-            Route::prefix('{id}/attachment')->name('attachment::')->group(function(){
+            Route::prefix('{id}/attachment')->name('attachment::')->group(function () {
                 Route::post('add', 'addAttachment')->name('add');
                 Route::get('delete/{file_id}', 'deleteAttachment')->name('delete');
             });
         });
 
-        Route::prefix('list')->name('list::')->controller(EmaillistController::class)->group(function(){
+        Route::prefix('list')->name('list::')->controller(EmaillistController::class)->group(function () {
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
             Route::get('edit/{id}', 'edit')->name('edit');
@@ -624,7 +625,7 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Quote Corner. */
-    Route::prefix('quotes')->name('quotes::')->middleware(['member'])->controller(QuoteCornerController::class)->group(function(){
+    Route::prefix('quotes')->name('quotes::')->middleware(['member'])->controller(QuoteCornerController::class)->group(function () {
         Route::get('', 'overview')->name('list');
         Route::post('add', 'add')->name('add');
         Route::get('delete/{id}', 'destroy')->name('delete');
@@ -633,7 +634,7 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Good Idea Board. */
-    Route::prefix('goodideas')->name('goodideas::')->middleware(['member'])->controller(GoodIdeaController::class)->group(function(){
+    Route::prefix('goodideas')->name('goodideas::')->middleware(['member'])->controller(GoodIdeaController::class)->group(function () {
         Route::get('', 'index')->name('index');
         Route::post('add', 'add')->name('add');
         Route::get('delete/{id}', 'delete')->name('delete');
@@ -642,12 +643,12 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the OmNomCom. */
-    Route::prefix('omnomcom')->name('omnomcom::')->group(function(){
+    Route::prefix('omnomcom')->name('omnomcom::')->group(function () {
         Route::get('minisite', [OmNomController::class, 'miniSite'])->name('minisite');
 
         /* Routes related to OmNomCom stores. */
-        Route::prefix('store')->name('store::')->group(function(){
-            Route::controller(OmNomController::class)->group(function(){
+        Route::prefix('store')->name('store::')->group(function () {
+            Route::controller(OmNomController::class)->group(function () {
                 Route::get('', 'choose')->name('choose')->middleware(['auth']);
                 Route::get('{store?}', 'display')->name('show');
                 Route::post('{store}/buy', 'buy')->name('buy');
@@ -657,10 +658,10 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to OmNomCom orders. */
-        Route::prefix('orders')->name('orders::')->middleware(['auth'])->controller(OrderLineController::class)->group(function(){
+        Route::prefix('orders')->name('orders::')->middleware(['auth'])->controller(OrderLineController::class)->group(function () {
             Route::get('history/{date?}', 'index')->name('list');
 
-            Route::middleware(['permission:omnomcom'])->group(function(){
+            Route::middleware(['permission:omnomcom'])->group(function () {
                 Route::post('add/bulk', 'bulkStore')->name('addbulk');
                 Route::post('add/single', 'store')->name('add');
                 Route::get('delete/{id}', 'destroy')->name('delete');
@@ -668,19 +669,19 @@ ROute::middleware('forcedomain')->group(function () {
             });
 
 
-            Route::prefix('filter')->name('filter::')->middleware(['permission:omnomcom'])->group(function(){
+            Route::prefix('filter')->name('filter::')->middleware(['permission:omnomcom'])->group(function () {
                 Route::get('name/{name?}', 'filterByUser')->name('name');
                 Route::get('date/{date?}', 'filterByDate')->name('date');
             });
         });
 
         /* Routes related to the TIPCie OmNomCom store. */
-        Route::prefix('tipcie')->name('tipcie::')->middleware(['auth', 'permission:tipcie'])->group(function(){
+        Route::prefix('tipcie')->name('tipcie::')->middleware(['auth', 'permission:tipcie'])->group(function () {
             Route::get('', [TIPCieController::class, 'orderIndex'])->name('orderhistory');
         });
 
         /* Routes related to Financial Accounts. */
-        Route::prefix('accounts')->name('accounts::')->middleware(['permission:finadmin'])->controller(AccountController::class)->group(function(){
+        Route::prefix('accounts')->name('accounts::')->middleware(['permission:finadmin'])->controller(AccountController::class)->group(function () {
             Route::get('', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -692,14 +693,14 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to Payment Statistics. */
-        Route::prefix('payments')->name('payments::')->middleware(['permission:finadmin'])->controller(OrderLineController::class)->group(function(){
+        Route::prefix('payments')->name('payments::')->middleware(['permission:finadmin'])->controller(OrderLineController::class)->group(function () {
             Route::get('statistics', 'showPaymentStatistics')->name('statistics');
             Route::post('statistics', 'showPaymentStatistics')->name('statistics');
         });
 
         /* Routes related to Products. */
-        Route::prefix('products')->name('products::')->middleware(['permission:omnomcom'])->group(function(){
-            Route::controller(ProductController::class)->group(function(){
+        Route::prefix('products')->name('products::')->middleware(['permission:omnomcom'])->group(function () {
+            Route::controller(ProductController::class)->group(function () {
                 Route::get('', 'index')->name('list');
                 Route::get('add', 'create')->name('add');
                 Route::post('add', 'store')->name('add');
@@ -710,14 +711,14 @@ ROute::middleware('forcedomain')->group(function () {
                 Route::get('export/csv', 'generateCsv')->name('export_csv');
                 Route::post('update/bulk', 'bulkUpdate')->name('bulkupdate');
             });
-            Route::controller(AccountController::class)->group(function(){
+            Route::controller(AccountController::class)->group(function () {
                 Route::get('statistics', 'showOmnomcomStatistics')->name('statistics');
                 Route::post('statistics', 'showOmnomcomStatistics')->name('statistics');
             });
         });
 
         /* Routes related to OmNomCom Categories. */
-        Route::prefix('categories')->name('categories::')->middleware(['permission:omnomcom'])->controller(ProductCategoryController::class)->group(function(){
+        Route::prefix('categories')->name('categories::')->middleware(['permission:omnomcom'])->controller(ProductCategoryController::class)->group(function () {
                 Route::get('', 'index')->name('list');
                 Route::get('add', 'create')->name('add');
                 Route::post('add', 'store')->name('add');
@@ -727,7 +728,7 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to Withdrawals. */
-        Route::prefix('withdrawals')->name('withdrawal::')->middleware(['permission:finadmin'])->controller(WithdrawalController::class)->group(function(){
+        Route::prefix('withdrawals')->name('withdrawal::')->middleware(['permission:finadmin'])->controller(WithdrawalController::class)->group(function () {
             Route::get('', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -748,11 +749,11 @@ ROute::middleware('forcedomain')->group(function () {
         Route::get('unwithdrawable', [WithdrawalController::class, 'unwithdrawable'])->name('unwithdrawable')->middleware(['permission:finadmin']);
 
         /* Routes related to Mollie. */
-        Route::prefix('mollie')->name('mollie::')->middleware(['auth'])->controller(MollieController::class)->group(function(){
+        Route::prefix('mollie')->name('mollie::')->middleware(['auth'])->controller(MollieController::class)->group(function () {
             Route::post('pay', 'pay')->name('pay');
             Route::get('status/{id}', 'status')->name('status');
             Route::get('receive/{id}', 'receive')->name('receive');
-            Route::middleware(['permission:finadmin'])->group(function(){
+            Route::middleware(['permission:finadmin'])->group(function () {
                 Route::get('list', 'index')->name('list');
                 Route::get('monthly/{month}', 'monthly')->name('monthly');
             });
@@ -796,8 +797,8 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to photos. */
-    Route::prefix('photos')->name('photo::')->group(function(){
-        Route::controller(PhotoController::class)->group(function() {
+    Route::prefix('photos')->name('photo::')->group(function () {
+        Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');
             Route::get('slideshow', 'slideshow')->name('slideshow');
 
@@ -810,14 +811,14 @@ ROute::middleware('forcedomain')->group(function () {
             Route::get('photo/{id}', 'photo')->name('view');
         });
 
-        Route::prefix('admin')->name('admin::')->middleware(['permission:protography'])->controller(PhotoAdminController::class)->group(function(){
+        Route::prefix('admin')->name('admin::')->middleware(['permission:protography'])->controller(PhotoAdminController::class)->group(function () {
             Route::get('index', 'index')->name('index');
             Route::post('index', 'search')->name('index');
             Route::post('add', 'create')->name('add');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('edit/{id}/action', 'action')->name('action');
             Route::post('edit/{id}/upload', 'upload')->name('upload');
-            Route::middleware(['permission:publishalbums'])->group(function(){
+            Route::middleware(['permission:publishalbums'])->group(function () {
                 Route::post('edit/{id}', 'update')->name('edit');
                 Route::get('edit/{id}/delete', 'delete')->name('delete');
                 Route::get('publish/{id}', 'publish')->name('publish');
@@ -866,20 +867,20 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* The route for the SmartXp Screen. */
-    Route::controller(SmartXPScreenController::class)->group(function(){
+    Route::controller(SmartXPScreenController::class)->group(function () {
         Route::get('smartxp','show')->name('smartxp');
         Route::get('caniworkinthesmartxp', 'canWork');
     });
 
     /* The routes for Protube. */
-    Route::prefix('protube')->name('protube::')->group(function(){
-        Route::controller(ProtubeController::class)->group(function(){
+    Route::prefix('protube')->name('protube::')->group(function () {
+        Route::controller(ProtubeController::class)->group(function () {
             Route::get('screen', 'screen')->name('screen');
             Route::get('offline', 'offline')->name('offline');
             Route::get('top', 'top')->name('top');
             Route::get('{id?}', 'remote')->name('remote');
 
-            Route::middleware('auth')->group(function(){
+            Route::middleware('auth')->group(function () {
                 Route::get('admin', 'admin')->name('admin');
                 Route::get('dashboard', 'dashboard')->name('dashboard');
                 Route::get('togglehistory', 'toggleHistory')->name('togglehistory');
@@ -888,14 +889,14 @@ ROute::middleware('forcedomain')->group(function () {
             });
         });
         /* Routes related to the Protube Radio */
-        Route::prefix('radio')->name('radio::')->middleware(['auth', 'permission:sysadmin'])->controller(RadioController::class)->group(function(){
+        Route::prefix('radio')->name('radio::')->middleware(['auth', 'permission:sysadmin'])->controller(RadioController::class)->group(function () {
             Route::get('index', 'index')->name('index');
             Route::post('store', 'store')->name('store');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
 
         /* Routes related to the Protube displays */
-        Route::prefix('display')->name('display::')->middleware(['permission:sysadmin'])->controller(DisplayController::class)->group(function(){
+        Route::prefix('display')->name('display::')->middleware(['permission:sysadmin'])->controller(DisplayController::class)->group(function () {
             Route::get('index', 'index')->name('index');
             Route::post('store', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
@@ -903,7 +904,7 @@ ROute::middleware('forcedomain')->group(function () {
         });
 
         /* Routes related to the Soundboard */
-        Route::prefix('soundboard')->name('soundboard::')->middleware(['permission:sysadmin'])->controller(SoundboardController::class)->group(function(){
+        Route::prefix('soundboard')->name('soundboard::')->middleware(['permission:sysadmin'])->controller(SoundboardController::class)->group(function () {
             Route::get('index', 'index')->name('index');
             Route::post('store', 'store')->name('store');
             Route::get('delete/{id}', 'destroy')->name('delete');
@@ -917,9 +918,9 @@ ROute::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Achievement system. */
-    Route::controller(AchievementController::class)->group(function(){
+    Route::controller(AchievementController::class)->group(function () {
         Route::prefix('achievement')->name('achievement::')->group(function () {
-            Route::middleware(['auth', 'permission:board'])->group(function(){
+            Route::middleware(['auth', 'permission:board'])->group(function () {
                 Route::get('', 'overview')->name('list');
                 Route::get('add', 'create')->name('add');
                 Route::post('add', 'store')->name('add');
@@ -968,7 +969,7 @@ ROute::middleware('forcedomain')->group(function () {
 
     /* Routes related to the Short URL Service */
     Route::name('short_url::')->controller(ShortUrlController::class)->group(function () {
-        Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function (){
+        Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function () {
             Route::get('', 'index')->name('index');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('edit/{id}', 'update')->name('edit');
