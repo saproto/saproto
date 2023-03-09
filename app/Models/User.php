@@ -611,6 +611,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
         return false;
     }
+    
+    /** @returns int|bool */
+    public function getIsProtubeAdminFrom() {
+        if($this->can('protube')) return Carbon::now()->startOfDay()->unix();
+        foreach ($this->tempadmin as $tempadmin) {
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return Carbon::parse($tempadmin->start_at)->unix();
+            }
+        }
+        return false;
+    }
 
     /** @return string */
     public function getPhotoPreviewAttribute()
