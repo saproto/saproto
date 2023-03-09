@@ -150,14 +150,21 @@ $card-collapse-bg: #fff !default;
 }
 
 // Events
-$event-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8)) !default;
-$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) !default;
+$event-gradient: linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.7)) !default;
+$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.6)) !default;
 $event-bg: #eee !default;
 $event-hover-bg: #aaa !default;
 
 .event {
-  * { position: relative; z-index: 2; }
   p { margin: 0; }
+  &.no-img {
+    background: $event-bg;
+    &:hover { background: $event-hover-bg; }
+  }
+}
+
+.dark-card{
+  * { position: relative; z-index: 2; }
   &::after {
     position: absolute;
     top: 0;
@@ -168,12 +175,8 @@ $event-hover-bg: #aaa !default;
     content: '';
     z-index: 1;
   }
-  &:hover.event::after {
+  &:hover::after {
     background-image: $event-hover-gradient;
-  }
-  &.no-img {
-    background: $event-bg;
-    &:hover { background: $event-hover-bg; }
   }
 }
 
@@ -253,11 +256,15 @@ $event-hover-bg: #aaa !default;
 }
 
 // Card Background Photos
-$photo_pop-color: #fff !default;
+$photo_pop-color: #000 !default;
 $photo-color: #222 !default;
 $photo-hover-color: #222 !default;
 $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.7)) !default;
 $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6)) !default;
+
+.card{
+  overflow: hidden;
+}
 
 .photo_pop {
   color: $photo_pop-color;
