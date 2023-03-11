@@ -150,8 +150,8 @@ $card-collapse-bg: #fff !default;
 }
 
 // Events
-$event-gradient: linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.6)) !default;
-$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.5)) !default;
+$card-overlay-gradient: linear-gradient(rgba(255, 255, 255, 0.60), rgba(255, 255, 255, 0.55)) !default;
+$card-overlay-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.45)) !default;
 $event-bg: #eee !default;
 $event-hover-bg: #aaa !default;
 
@@ -163,7 +163,7 @@ $event-hover-bg: #aaa !default;
   }
 }
 
-.dark-card{
+.card-overlay{
   * { position: relative; z-index: 2; }
   &::after {
     position: absolute;
@@ -171,12 +171,12 @@ $event-hover-bg: #aaa !default;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: $event-gradient;
+    background-image: $card-overlay-gradient;
     content: '';
     z-index: 1;
   }
   &:hover::after {
-    background-image: $event-hover-gradient;
+    background-image: $card-overlay-hover-gradient;
   }
 }
 

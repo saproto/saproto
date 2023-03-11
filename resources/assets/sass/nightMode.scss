@@ -65,8 +65,8 @@ $photo-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
 $photo-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
 
 //calendar events
-$event-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
-$event-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
+$card-overlay-gradient: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+$card-overlay-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1));
 $event-bg: $blue-medium;
 $event-hover-bg: $blue-light;
 
