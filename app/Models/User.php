@@ -603,24 +603,29 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return int|bool */
     public function getIsProtubeAdminUntil()
     {
+        $protubeAdminUntil = 0;
         if($this->can('protube')) return Carbon::now()->addYear()->unix();
         foreach ($this->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                return Carbon::parse($tempadmin->end_at)->unix();
+            if (Carbon::parse($tempadmin->start_at)->startOfDay() <= Carbon::now()->startOfDay() &&
+                Carbon::parse($tempadmin->end_at)->isAfter(Carbon::parse($protubeAdminUntil))) {
+                    $protubeAdminUntil = Carbon::parse($tempadmin->end_at)->unix();
             }
         }
-        return false;
+
+        return $protubeAdminUntil > 0 ? $protubeAdminUntil : false;
     }
     
     /** @returns int|bool */
     public function getIsProtubeAdminFrom() {
+        $protubeAdminFrom = 0;
         if($this->can('protube')) return Carbon::now()->startOfDay()->unix();
         foreach ($this->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                return Carbon::parse($tempadmin->start_at)->unix();
+            if (Carbon::parse($tempadmin->start_at)->isToday() &&
+                ($protubeAdminFrom == 0 || Carbon::parse($tempadmin->start_at)->isBefore(Carbon::parse($protubeAdminFrom)))) {
+                $protubeAdminFrom = Carbon::parse($tempadmin->start_at)->unix();
             }
         }
-        return false;
+        return $protubeAdminFrom > 0 ? $protubeAdminFrom : false;
     }
 
     /** @return string */
