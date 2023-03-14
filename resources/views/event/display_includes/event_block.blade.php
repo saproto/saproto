@@ -3,7 +3,7 @@
     <a class="card mb-3 leftborder leftborder-info text-decoration-none"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
-        <div class="card-body dark-card event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? 'bg-img' : 'no-img'}}"
+        <div class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? 'bg-img' : 'no-img'}}"
              style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) : '' }} background-size: cover;">
 
             {{-- Countdown --}}
