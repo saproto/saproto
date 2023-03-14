@@ -319,6 +319,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
     });
 
+    /* routes related to the wallstreet drink system */
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
+        Route::get('', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
+        Route::get('marquee', ['as' => 'marquee', 'uses' => 'WallstreetController@marquee']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'WallstreetController@close']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
+        Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
+        route::group(['prefix'=>'products', 'as'=>'products::'], function () {
+            Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
+            Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
+        });
+    });
+
     /*
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.

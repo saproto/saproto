@@ -98,6 +98,11 @@
 
             initializeOmNomCom()
 
+            if("{{$store_slug}}"==="tipcie"){
+                initializeWallstreetDrink()
+            }
+
+
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
                         .then(data => {
@@ -199,6 +204,16 @@
                         'Complete purchase as cashier, payed with bank card.'
                     ))
                 }
+            }
+
+            async function initializeWallstreetDrink(){
+                await get(config.routes.api_wallstreet_active)
+                    .then(data => {
+                        if(data){
+                            setInterval(updateWallstreetPricing,5000, data.id)
+                            console.log("Wallstreet drink is active")
+                        }
+                    })
             }
 
             function anythingInCart() {
@@ -358,6 +373,27 @@
                     products.forEach(el => { if (stock[el.getAttribute('data-id')] > 0) count++ })
                     lists[i].setAttribute('data-stock', count.toString())
                 }
+            }
+
+            async function updateWallstreetPricing(id){
+                await get(`{{route('api::wallstreet::updated_prices', ['id'=>'_id'])}}`.replace('_id', id)).then((response)=> {
+                    console.log("updating prices!")
+                    if(typeof response.products === 'undefined' || response.products.length === 0)
+                    {
+                        console.log('no products associated with the active drink!');
+                        return;
+                    }
+
+                    response.products.forEach((product) => {
+                            price[product.id] = product.price
+                            document.querySelectorAll(`[data-id="${product.id}"]`).forEach((el) => {
+                                el.querySelector('.product-price').innerHTML = "€".concat(product.price.toFixed(2))
+                            })
+                        }
+                    )
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
 
             function establishNfcConnection() {

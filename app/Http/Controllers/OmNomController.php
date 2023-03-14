@@ -95,7 +95,6 @@ class OmNomController extends Controller
                 }
             }
         }
-
         return json_encode($products);
     }
 
@@ -216,7 +215,7 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-                $product->buyForUser($user, $amount, $amount * $product->price, $payedCash == 'true', $payedCard == 'true', null, $auth_method);
+                $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
                 if ($product->id == config('omnomcom.protube-skip')) {
                     Http::get(config('herbert.server').'/skip?secret='.config('herbert.secret'));
                 }
