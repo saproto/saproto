@@ -2,7 +2,17 @@
 
 @section('body')
     @if(!$activeDrink)
-        No active drink!
+        <div class="d-flex justify-content-center w-100 h-100">
+            <div class="alert alert-danger align-self-center">
+                No active drink! Create one in the admin panel and refresh the page!
+            </div>
+        </div>
+    @elseif(!count($prices))
+        <div class="d-flex justify-content-center w-100 h-100">
+            <div class="alert alert-danger align-self-center">
+            No prices found for this drink! Add some in the admin panel and refresh the page!
+            </div>
+        </div>
     @else
         <div id="swipers-container" class="h-100 d-flex flex-column overflow-hidden justify-content-around">
             <div id="swiper-container" class="swiper-container swiper-container-free-mode stonks-cards">

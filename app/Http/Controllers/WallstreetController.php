@@ -26,8 +26,15 @@ class WallstreetController extends Controller
 
     public function marquee() {
         $activeDrink = WallstreetController::active();
+
+        if(!$activeDrink){
+            Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
+            return Redirect::back();
+        }
+
         $prices = $this->getLatestPrices($activeDrink);
         return view('wallstreet.marquee', ['activeDrink' => $activeDrink, 'prices' => $prices]);
+
     }
 
     public function edit($id) {
@@ -64,15 +71,19 @@ class WallstreetController extends Controller
 
     public function destroy($id) {
         $drink = WallstreetDrink::findOrFail($id);
+        foreach ($drink->products as $product){
+            $drink->products()->detach($product->id);
+        }
+
         $drink->delete();
 
-        $prices = WallstreetPrice::query()->where('drink_id', $id)->get();
+        $prices = WallstreetPrice::query()->where('wallstreet_drink_id', $id)->get();
         foreach ($prices as $price){
             $price->delete();
         }
 
         Session::flash('flash_message', 'Wallstreet drink and its affiliated price history deleted.');
-        return Redirect::back();
+        return Redirect::to(route('wallstreet::admin'));
     }
 
     public function close($id): RedirectResponse

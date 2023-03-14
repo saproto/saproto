@@ -18,7 +18,7 @@ class WallstreetPrice extends Model
 
     public function drink()
     {
-        return $this->belongsTo(WallstreetDrink::class, 'drink_id');
+        return $this->belongsTo(WallstreetDrink::class, 'wallstreet_drink_id');
     }
 
     public function product()
