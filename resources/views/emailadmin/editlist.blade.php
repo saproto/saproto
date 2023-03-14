@@ -42,7 +42,7 @@
 
                         @include('components.forms.checkbox', [
                             'name' => 'is_member_only',
-                            'checked' => $list->is_member_only ,
+                            'checked' => $list?->is_member_only ,
                             'label' => 'Only for members'
                         ])
 
