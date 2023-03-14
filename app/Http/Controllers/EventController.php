@@ -17,6 +17,7 @@ use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\EventCategory;
+use Proto\Models\HelpingCommittee;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
@@ -696,17 +697,32 @@ class EventController extends Controller
         $newEvent->save();
 
         if($event->activity) {
-            $newActivity = $event->activity->replicate();
-            $newActivity->event_id = $newEvent->id;
-
-            $newActivity->registration_start = $event->activity->registration_start + $diff;
-            $newActivity->registration_end = $event->activity->registration_end + $diff;
-            $newActivity->deregistration_end = $event->activity->deregistration_end + $diff;
-
+            $newActivity = new Activity([
+               'event_id' => $newEvent->id,
+               'price' => $event->activity->price,
+               'participants' => $event->activity->participants,
+               'no_show_fee' => $event->activity->no_show_fee,
+               'hide_participants' => $event->activity->hide_participants,
+               'registration_start' => $event->activity->registration_start + $diff,
+               'registration_end' => $event->activity->registration_end + $diff,
+               'deregistration_end' => $event->activity->deregistration_end + $diff,
+               'comment'=>$event->activity->comment,
+            ]);
             $newActivity->save();
+
+            if($event->activity->helpingCommitteeInstances) {
+                foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+                    $newHelpingCommittee = new HelpingCommittee([
+                        'activity_id' => $newActivity->id,
+                        'committee_id' => $helpingCommittee->committee_id,
+                        'amount' => $helpingCommittee->amount,
+                    ]);
+                    $newHelpingCommittee->save();
+                }
+            }
         }
 
         Session::flash('flash_message', 'Copied the event!');
-        return view('event.edit', ['event' => $newEvent]);
+        return Redirect::to(route('event::edit', ['id' => $newEvent->id]));
     }
 }
