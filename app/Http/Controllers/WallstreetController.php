@@ -27,7 +27,7 @@ class WallstreetController extends Controller
     public function marquee() {
         $activeDrink = WallstreetController::active();
 
-        if(!$activeDrink){
+        if(! $activeDrink){
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
             return Redirect::back();
         }
