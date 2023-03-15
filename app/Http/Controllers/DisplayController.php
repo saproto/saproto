@@ -64,7 +64,7 @@ class DisplayController extends Controller
     }
 
     /**
-     * Return a public list of radio stations for Herbert.
+     * Return a public list of radio stations for ProTube.
      *
      * @return Collection|Display[]
      */

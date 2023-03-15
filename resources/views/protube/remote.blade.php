@@ -667,7 +667,7 @@
         }
     });
 
-    var server = "{!! config('herbert.server') !!}";
+    var server = "{!! config('protube.server') !!}";
     var token = 0;
 
     var userInfo = {};

@@ -43,7 +43,7 @@ class ProtubeController extends Controller
     public function remote()
     {
         error_reporting(0);
-        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server').'/maxDuration?secret='.config('herbert.secret')))->cascade()->forHumans();
+        $max_duration = CarbonInterval::seconds(file_get_contents(config('protube.server').'/maxDuration?secret='.config('protube.secret')))->cascade()->forHumans();
 
         return view('protube.remote', ['max_duration' => $max_duration]);
     }
