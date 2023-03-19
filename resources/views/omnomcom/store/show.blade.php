@@ -76,7 +76,7 @@
 
         @include('omnomcom.store.includes.modals')
 
-        @include('website.layouts.assets.javascripts')
+        @include('website.assets.javascripts')
 
         @stack("javascript")
 
@@ -95,13 +95,6 @@
             let cart = []
             let stock = []
             let price = []
-
-            initializeOmNomCom()
-
-            if("{{$store_slug}}"==="tipcie"){
-                initializeWallstreetDrink()
-            }
-
 
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
@@ -214,6 +207,12 @@
                             console.log("Wallstreet drink is active")
                         }
                     })
+            }
+
+            initializeOmNomCom()
+
+            if("{{$store_slug}}"==="tipcie"){
+                initializeWallstreetDrink()
             }
 
             function anythingInCart() {
