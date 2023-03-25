@@ -120,7 +120,7 @@
 
             @if($dinnerformCurrent)
 
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                                            'action' => route("dinnerform::delete", ['id' => $dinnerformCurrent->id]),
                                            'text' => 'Delete',
                                            'title' => 'Confirm Delete',
