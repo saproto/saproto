@@ -70,11 +70,11 @@ class AuthorizationController extends Controller
         $user = User::findOrFail($userId);
         $user->removeRole($role);
 
-        // Call Herbert webhook to run check through all connected admins.
+        // Call ProTube webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
 
-        //        disabled because protube is down
-        //        Http::get(config('herbert.server').'/adminCheck');
+        // Disabled for now. Might be enabled in the future.
+        // Http::get(config('protube.server').'/adminCheck');
 
         Session::flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
         return Redirect::back();

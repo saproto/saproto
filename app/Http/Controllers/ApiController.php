@@ -78,7 +78,7 @@ class ApiController extends Controller
     /** @param Request $request */
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('herbert.secret')) {
+        if ($request->secret != config('protube.secret')) {
             abort(403);
         }
 

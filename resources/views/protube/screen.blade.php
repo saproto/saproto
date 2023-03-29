@@ -300,7 +300,7 @@
     </style>
 
     <script>
-        var server = "{!! config('herbert.server') !!}";
+        var server = "{!! config('protube.server') !!}";
 
         var soundboardSounds;
         var soundboardVolume = 0;
@@ -621,7 +621,7 @@
 <body>
 
 <div id="connecting" class="inactive">
-    <p>Connecting to Herbert...</p>
+    <p>Connecting to ProTube...</p>
 </div>
 
 <div id="protubeOff" class="inactive"></div>
