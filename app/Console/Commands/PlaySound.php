@@ -20,7 +20,7 @@ class PlaySound extends Command
      *
      * @var string
      */
-    protected $description = 'Play sound through ProTube';
+    protected $description = 'Play sound through Herbert on Petra-playout.';
 
     /**
      * Create a new command instance.
@@ -41,10 +41,10 @@ class PlaySound extends Command
     {
         try {
             $sound = '&sound='.$this->argument('sound');
-            Http::get(config('protube.server').'/soundboard?secret='.config('protube.secret').$sound);
+            Http::get(config('herbert.server').'/soundboard?secret='.config('herbert.secret').$sound);
             $this->info('Playing sound.');
         } catch (Exception $e) {
-            $this->error('Could not find ProTube:', $e->getMessage());
+            $this->error('Could not find herbert:', $e->getMessage());
         }
     }
 }

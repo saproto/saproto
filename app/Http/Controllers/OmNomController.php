@@ -217,7 +217,7 @@ class OmNomController extends Controller
                 $product = Product::find($id);
                 $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
                 if ($product->id == config('omnomcom.protube-skip')) {
-                    Http::withToken(config('protube.secret'))->post(config('protube.server').'/api/laravel/skipsong);
+                    Http::get(config('herbert.server').'/skip?secret='.config('herbert.secret'));
                 }
             }
         }

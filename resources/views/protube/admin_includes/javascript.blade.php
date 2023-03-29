@@ -1,6 +1,6 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let server = "{!! config('protube.server') !!}";
+        let server = "{!! config('herbert.server') !!}";
         let token = "{!! Auth::user()->getToken()->token !!}";
 
         $(function () {
