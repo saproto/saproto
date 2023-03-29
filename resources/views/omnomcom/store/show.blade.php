@@ -25,6 +25,12 @@
                 padding: 0;
                 background-color: #555;
             }
+            #omnomcom{
+                @if($store_slug!=="tipcie")
+                    rotate: 180deg y;
+                    transform: rotate(.75deg);
+                @endif
+            }
 
             body {
                 /**

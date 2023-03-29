@@ -176,3 +176,8 @@ html {
 ::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
 ::-webkit-scrollbar-corner { background-color: $grey-dark; }
 ::-webkit-resizer { background-color: #666; }
+
+html{
+  rotate: 180deg y;
+  transform: rotate(.75deg);
+}
