@@ -49,7 +49,7 @@
 
             <div class="wallstreet-body mt-2 px-4 py-4">
                 <div>
-                    <div class="wallstreet-title mb-4">
+                    <div class="wallstreet-title">
                         <div>WALLSTREET</div>
                         <div class="fs-1">Drink</div>
                     </div>
