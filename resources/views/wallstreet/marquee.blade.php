@@ -1,6 +1,37 @@
-@extends('website.layouts.redesign.generic-nonav')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('body')
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+
+    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon1.png') }}"/>
+
+    <title>Wallstreet Marquee!</title>
+
+    @include('website.layouts.assets.stylesheets')
+
+    <style>
+        html, body, #container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            padding:0;
+            background: #303030;
+            background-image:url({{url('images/protons_swatch_grey.png')}});
+            background-size: 50%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
     @if(!$activeDrink)
         <div class="d-flex justify-content-center w-100 h-100">
             <div class="alert alert-danger align-self-center">
@@ -14,8 +45,8 @@
             </div>
         </div>
     @else
-        <div id="swipers-container" class="h-100 d-flex flex-column overflow-hidden justify-content-around">
-            <div id="swiper-container" class="swiper-container swiper-container-free-mode stonks-cards">
+        <div id="swipers-container" class="h-100 d-flex flex-column overflow-hidden justify-content-end z-index-2">
+            <div id="swiper-container" class="swiper-container swiper-container-free-mode stonks-cards mb-2">
                 <div class="swiper-wrapper h-100">
                     @foreach($prices as $price)
                         <div id="{{preg_replace('/[^a-zA-Z0-9]/', '', $price->name)}}" class="swiper-slide card w-25">
@@ -46,9 +77,9 @@
             </div>
         </div>
     @endif
-@endsection
 
-@push('javascript')
+@include('website.layouts.assets.javascripts')
+@stack('javascript')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" nonce='{{ csp_nonce() }}'></script>
     <script type='text/javascript' nonce='{{ csp_nonce() }}'>
         const swiperOptions = {
@@ -64,13 +95,6 @@
 
         const swiper = new Swiper("#swiper-container", swiperOptions);
 
-        const el = document.getElementById("swiper-container").cloneNode(true);
-        el.id = "reverse-swiper-container"
-        document.getElementById("swipers-container").appendChild(el);
-
-        const reverseSwiperOptions = {...swiperOptions};
-        reverseSwiperOptions.autoplay.reverseDirection = true;
-        const reverseSwiper = new Swiper("#reverse-swiper-container", reverseSwiperOptions);
         function updateCards(product, swiperInstance){
             let cards = swiperInstance.el.querySelectorAll(`#${product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
             if (cards.length > 0) {
@@ -89,7 +113,6 @@
             get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
                     response.products.forEach((product) => {
                         updateCards(product, swiper)
-                        updateCards(product, reverseSwiper)
                     })
                 }
             )
@@ -120,4 +143,5 @@
             padding: 10% var(--bs-card-spacer-x);
         }
     </style>
-@endpush
+</body>
+</html>
