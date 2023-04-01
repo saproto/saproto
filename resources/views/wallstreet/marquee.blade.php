@@ -42,31 +42,31 @@
                         <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
                         <div class="wallstreet-info-item">
                             <div>Previous close</div>
-                            <div><b>512.28</b></div>
+                            <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Open</div>
-                            <div><b>512.32</b></div>
+                            <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Market Cap</div>
-                            <div><b>3.256 M</b></div>
+                            <div><b>{{rand(100,500)}} M</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>PE ratio (TMM)</div>
-                            <div><b>11.33</b></div>
+                            <div><b>{{rand(10, 20)}}.{{rand(0,100)}}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>EPS (TTM)</div>
-                            <div><b>46.09</b></div>
+                            <div><b>{{rand(0, 100)}}.{{rand(0,100)}}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Forward Divided & Yield</div>
-                            <div><b>2.00 </b><span class="text-green">(0.39%)</span></div>
+                            <div><b>{{rand(0, 10)}} </b><span class="text-green">(0.12%)</span></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Ex-Dividend Date</div>
-                            <div><b>April 20, 2011</b></div>
+                            <div><b>April 20, 2012</b></div>
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,6 @@
         function updateChart(){
             get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
                 console.log("updating chart")
-                console.log(products)
                 chart.data = createDataSets(products);
                 chart.update('none');
             })

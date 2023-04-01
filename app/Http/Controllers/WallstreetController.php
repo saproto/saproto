@@ -123,13 +123,13 @@ class WallstreetController extends Controller
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            $oldPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first();
-            if(! $newPrice || ! $oldPrice || $oldPrice->created_at->timestamp < Carbon::now()->addMinutes(-1.5)->timestamp || $oldPrice->price == 0) {
+            if(! $newPrice || $product->price===0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
                 continue;
             }
-            $product->diff = ($newPrice->price - $oldPrice->price) / $oldPrice->price * 100;
+            $product->diff = ($newPrice->price - $product->price) / $product->price * 100;
+            $product->price = $newPrice->price;
         }
         return $products;
     }
