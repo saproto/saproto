@@ -14,21 +14,6 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    <style>
-        html, body{
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
-            padding:0;
-            background: #303030;
-            background-image:url({{url('images/protons_swatch_grey.png')}});
-            background-size: 50%;
-            overflow: hidden;
-        }
-    </style>
 </head>
 
 <body>
@@ -88,7 +73,7 @@
                 <div class="wallstreet-right px-4 pb-4 pt-2">
                     <div class="wallstreet-graph-title mb-3 fs-3">Current stonks</div>
                     <div class="wallstreet-graph-container">
-                    {{-- Ysbrand add graphje --}}
+                        <canvas id="wallstreet-graph-canvas" class="wallstreet-graph-canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -126,6 +111,10 @@
     @endif
 
 @include('website.layouts.assets.javascripts')
+{{--    chart.js and the date adapter--}}
+<script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 @stack('javascript')
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" nonce='{{ csp_nonce() }}'></script>
     <script type='text/javascript' nonce='{{ csp_nonce() }}'>
@@ -165,20 +154,91 @@
             )
         }
         setInterval(updatePrices, 5000);
+
+
+        const ctx = document.getElementById('wallstreet-graph-canvas');
+        var chart=null;
+
+        get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
+            console.log("creating chart")
+
+            chart = new Chart(ctx, {
+                type: "line",
+                options: {
+                    maintainAspectRatio: false,
+                    spanGaps: true,
+                    scales: {
+                        x: {
+                            type: "time",
+                            parsing: false
+                        }
+                    },
+                    responsive:true,
+                },
+                data: createDataSets(products),
+            });
+        });
+
+        function createDataSets(products){
+            let myData = {
+                datasets: [],
+            };
+            products.forEach((product) => {
+                let prices = [];
+                product.wallstreet_prices.forEach((price) => {
+                    prices.push({
+                        x: Date.parse(price.created_at),
+                        y: price.price
+                    })
+                });
+                myData.datasets.push({label: product.name, data: prices})
+            });
+            return myData;
+        }
+
+        function updateChart(){
+            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
+                console.log("updating chart")
+                console.log(products)
+                chart.data = createDataSets(products);
+                chart.update('none');
+            })
+        }
+
+        updateChart();
+        setInterval(updateChart, 30000);
+
     </script>
     <style nonce='{{ csp_nonce() }}'>
+
+        :root {
+            --wallstreet-dark: #303030;
+            --wallstreet-light: #555555;
+        }
+
         .swiper-container-free-mode > .swiper-wrapper{
             transition-timing-function : linear;
             height: 90%;
         }
         .swiper-container {
-            background: var(--bs-body-bg);
+            background: var(--wallstreet-light);
             border-top: 5px solid var(--bs-brand-primary);
             border-bottom: 5px solid var(--bs-brand-primary);
         }
-        body{
-            height:100vh;
 
+        html, body{
+            position: absolute;
+            height:100vh;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: 0;
+            padding:0;
+            background: var(--wallstreet-dark);
+            background-image:url({{url('images/protons_swatch_grey.png')}});
+            background-size: 50%;
+            overflow: hidden;
         }
         .text-green{
             color: #00c505;
@@ -199,6 +259,9 @@
         .stonks-card{
             padding: 10% var(--bs-card-spacer-x);
         }
+        .card{
+            background: var(--wallstreet-dark);
+        }
 
         .wallstreet-body{
             flex: 1 0 auto;
@@ -216,7 +279,7 @@
         .wallstreet-right {
             flex: 5 0 auto !important;
             justify-content: flex-start;
-            background: var(--bs-body-bg);
+            background: var(--wallstreet-light);
         }
 
         .wallstreet-graph-title{
@@ -227,13 +290,13 @@
 
         .wallstreet-graph-container {
             flex: 1 0 auto;
-            background: var(--bs-dark);
+            background: var(--wallstreet-dark);
         }
         .wallstreet-title{
             flex: 0 0 35%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: end;
             align-items: center;
             font-size: max(4em, 5vw);
             font-weight: bold;
@@ -246,7 +309,7 @@
         }
         .wallstreet-info {
             flex: 0 0 auto;
-            background: var(--bs-body-bg);
+            background: var(--wallstreet-light);
             display: flex;
             flex-direction: column;
         }
