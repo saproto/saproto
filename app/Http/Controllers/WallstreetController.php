@@ -123,7 +123,7 @@ class WallstreetController extends Controller
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if(! $newPrice || $product->price===0) {
+            if(! $newPrice || $product->price === 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
                 continue;
