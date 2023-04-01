@@ -69,10 +69,10 @@ class UpdateWallstreetPrices extends Command
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
-                    'price' =>$latestPrice->price + $delta >= $product->price ? $product->price : $latestPrice->price + $delta,
+                    'price' =>$latestPrice->price + $delta >= $product->price * 1.2 ? $product->price * 1.2 : $latestPrice->price + $delta,
                 ]);
                 $newPriceObject->save();
-                $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.'to '.$newPriceObject->price);
+                $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
                 continue;
             }
 
