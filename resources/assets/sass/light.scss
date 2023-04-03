@@ -34,8 +34,3 @@ $link-hover-color: lighten($info, 10%);
   background: $warning;
   border-color: $warning;
 }
-
-html{
-  rotate: 180deg y;
-  transform: rotate(.75deg);
-}

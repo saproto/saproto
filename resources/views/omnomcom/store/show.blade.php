@@ -25,12 +25,6 @@
                 padding: 0;
                 background-color: #555;
             }
-            html{
-                @if($store_slug==="tipcie")
-                    rotate: none;
-                    transform: none;
-                @endif
-            }
 
             body {
                 /**
