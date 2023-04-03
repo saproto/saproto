@@ -50,7 +50,7 @@ class IsAlfredThereController extends Controller
         } elseif ($new_status === 'away') {
             $status->value = $arrival_time;
             $text->value = $request->input('is_alfred_there_text');
-        }elseif($new_status === 'text_only'){
+        } elseif($new_status === 'text_only') {
             $text->value = $request->input('is_alfred_there_text');
             $status->value = 'unknown';
         }

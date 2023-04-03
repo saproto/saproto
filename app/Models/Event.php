@@ -118,20 +118,20 @@ class Event extends Model
     public function mayViewEvent($user)
     {
         //board may always view events
-        if($user && $user->can('board')){
+        if($user && $user->can('board')) {
             return true;
         }
 
         //only show secret events if the user is participating, helping or organising
-        if($this->secret){
-            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))){
+        if($this->secret) {
+            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
                 return true;
             }
         }
 
         //show non-secret events only when published
-        if(! $this->secret){
-            if(! $this->publication || $this->isPublished()){
+        if(! $this->secret) {
+            if(! $this->publication || $this->isPublished()) {
                 return true;
             }
         }
@@ -139,7 +139,8 @@ class Event extends Model
     }
 
     /** @return bool */
-    public function isPublished() {
+    public function isPublished()
+    {
         return $this->publication < Carbon::now()->timestamp;
     }
 
@@ -240,7 +241,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-            );
+        );
     }
 
     /**

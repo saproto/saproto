@@ -51,8 +51,8 @@ class EventController extends Controller
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
-        foreach ($data as $index=>$query){
-            if($category){
+        foreach ($data as $index=>$query) {
+            if($category) {
                 $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
@@ -84,7 +84,7 @@ class EventController extends Controller
     {
         $event = Event::fromPublicId($id);
         $methods = [];
-        if (config('omnomcom.mollie.use_fees')){
+        if (config('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
         }
 
@@ -220,7 +220,7 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                    $months[intval(date('n', $event->start))][] = $event;
+                $months[intval(date('n', $event->start))][] = $event;
             }
         }
 
@@ -561,10 +561,10 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isOnBackupList($user)){
+                    } elseif ($event->activity->isOnBackupList($user)) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    }elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }
@@ -676,7 +676,8 @@ class EventController extends Controller
         return Redirect::route('event::category::admin', ['category' => null]);
     }
 
-    public function copyEvent(Request $request) {
+    public function copyEvent(Request $request)
+    {
         $event = Event::findOrFail($request->id);
         $newEvent = $event->replicate();
         $newEvent->title = $newEvent->title.' [copy]';
@@ -689,7 +690,7 @@ class EventController extends Controller
         $newEvent->start = $newDate;
         $newEvent->end = $event->end + $diff;
         $newEvent->secret = true;
-        if($event->publication){
+        if($event->publication) {
             $newEvent->publication = $event->publication + $diff;
             $newEvent->secret = false;
         }

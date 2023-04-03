@@ -123,7 +123,7 @@ class OrderLineController extends Controller
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
-                $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
+            $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
         }
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['date'=>$date]);

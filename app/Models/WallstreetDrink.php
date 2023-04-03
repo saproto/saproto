@@ -33,7 +33,8 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function orders() {
+    public function orders()
+    {
         return OrderLine::query()->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time))->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time))->get();
     }
 }

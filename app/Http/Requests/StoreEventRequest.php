@@ -34,7 +34,8 @@ class StoreEventRequest extends FormRequest
         ];
     }
 
-    public function messages() {
+    public function messages()
+    {
         return [
             'gte' => 'The Event cannot end before it begins!', ];
     }

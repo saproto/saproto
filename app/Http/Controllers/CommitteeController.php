@@ -269,11 +269,12 @@ class CommitteeController extends Controller
         return Redirect::route('committee::edit', ['id' => $committee_id]);
     }
 
-    public function endEdition(int $committeeID, string $edition) {
+    public function endEdition(int $committeeID, string $edition)
+    {
         $memberships = CommitteeMembership::where('edition', $edition)->whereHas('committee', function ($q) use ($committeeID) {
-          $q->where('id', $committeeID);
+            $q->where('id', $committeeID);
         })->get();
-        foreach($memberships as $membership){
+        foreach($memberships as $membership) {
             $membership->delete();
         }
         Session::flash('flash_message', 'all members from the edition ended!');

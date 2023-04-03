@@ -101,7 +101,7 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
-            if($this->to_backup){
+            if($this->to_backup) {
                 return 'event with backup';
             }
             return 'event';
@@ -140,7 +140,7 @@ class Email extends Model
             foreach ($this->events as $event) {
                 if ($event != null) {
                     $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if($this->to_backup && $event->activity){
+                    if($this->to_backup && $event->activity) {
                         $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
                     }
                 }

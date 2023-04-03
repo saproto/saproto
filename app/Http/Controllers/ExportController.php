@@ -77,7 +77,7 @@ class ExportController extends Controller
                 }
 
                 // Exclude 'activity' relation
-                foreach($data as $key => $val){
+                foreach($data as $key => $val) {
                     unset($val->activity);
                 }
 
