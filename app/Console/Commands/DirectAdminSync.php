@@ -180,7 +180,7 @@ class DirectAdminSync extends Command
                     }
                 }
 
-                // Otherwise, we do not modify this alias.
+            // Otherwise, we do not modify this alias.
             }
             // Remove the forwarder because it does not exist according to the target list.
             else {

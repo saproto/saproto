@@ -66,7 +66,7 @@ class MenuItem extends Model
             } catch (Exception $e) {
                 return '#';
             }
-        } else{
+        } else {
             return $this->url;
         }
     }

@@ -344,13 +344,13 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
+        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0) {
             Session::flash('flash_message', 'No payment method is selected!');
             return Redirect::back();
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if(config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0){
+        if(config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
             $payment_method = $available_methods->filter(function ($method) use ($requested_method) {

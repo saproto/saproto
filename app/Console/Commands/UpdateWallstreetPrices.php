@@ -64,7 +64,7 @@ class UpdateWallstreetPrices extends Command
 
             $newOrderlines = OrderLine::query()->where('created_at', '>=', \Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
             //heighten the price if there are new orders and the price is not the actual price
-            if($newOrderlines > 0){
+            if($newOrderlines > 0) {
                 $delta = $newOrderlines * $currentDrink->price_increase;
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
@@ -85,7 +85,7 @@ class UpdateWallstreetPrices extends Command
                 ]);
                 $newPriceObject->save();
                 $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
-            }else{
+            } else {
                 $this->info($product->id.' has no new orderlines and the price is already the minimum price');
             }
         }

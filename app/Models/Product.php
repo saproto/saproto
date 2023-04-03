@@ -81,7 +81,8 @@ class Product extends Model
     }
 
     /** @raturn String */
-    public function getImageUrlAttribute() {
+    public function getImageUrlAttribute()
+    {
         if ($this->image_id) {
             $image = StorageEntry::find($this->image_id);
             if ($image) {
@@ -115,16 +116,18 @@ class Product extends Model
         return ! (! $this->is_visible || $this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
-    public function omnomcomPrice() {
+    public function omnomcomPrice()
+    {
         $active = WallstreetController::active();
-        if (! $active){
+        if (! $active) {
             return $this->price;
         }
         return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
-    public function wallstreetPrices() {
-       return $this->hasMany('Proto\Models\WallstreetPrice');
+    public function wallstreetPrices()
+    {
+        return $this->hasMany('Proto\Models\WallstreetPrice');
     }
 
     /**

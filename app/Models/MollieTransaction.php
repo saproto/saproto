@@ -107,7 +107,7 @@ class MollieTransaction extends Model
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
-        if ($new_status != 'open'){
+        if ($new_status != 'open') {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
 

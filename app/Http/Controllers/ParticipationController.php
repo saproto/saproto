@@ -219,7 +219,8 @@ class ParticipationController extends Controller
         return response()->json($this->getPresent($participation->activity_id));
     }
 
-    public static function getPresent($activity_id) {
+    public static function getPresent($activity_id)
+    {
         return ActivityParticipation::query()
             ->where('activity_id', $activity_id)
             ->where('is_present', true)

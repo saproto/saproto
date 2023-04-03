@@ -208,7 +208,8 @@ class Activity extends Validatable
      * @param User $user
      * @return bool
      */
-    public function isOnBackupList($user) {
+    public function isOnBackupList($user)
+    {
         return in_array($user->id,$this->backupUsers()->pluck('users.id')->toArray());
     }
 
@@ -312,7 +313,7 @@ class Activity extends Validatable
      */
     public function getAttendees(): int
     {
-        if (ParticipationController::getPresent($this->id) > 0){
+        if (ParticipationController::getPresent($this->id) > 0) {
             return ParticipationController::getPresent($this->id);
         }
         return $this->attendees ?? 0;

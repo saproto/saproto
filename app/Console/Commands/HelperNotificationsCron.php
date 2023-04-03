@@ -45,7 +45,7 @@ class HelperNotificationsCron extends Command
             ->whereHas('member')
             ->get()
             ->filter(function ($value, $key) {
-                    return $value->isActiveMember();
+                return $value->isActiveMember();
             });
 
         $handledHelpIds = [];
@@ -76,20 +76,20 @@ class HelperNotificationsCron extends Command
                     });
 
                 foreach ($helps as $help) {
-                            if (! isset($events[$help->activity->event->id])) {
-                                $events[$help->activity->event->id] = new \stdClass();
-                                $events[$help->activity->event->id]->help = [];
-                            }
+                    if (! isset($events[$help->activity->event->id])) {
+                        $events[$help->activity->event->id] = new \stdClass();
+                        $events[$help->activity->event->id]->help = [];
+                    }
 
-                            $helpInfo = new \stdClass();
-                            $helpInfo->amount = $help->amount;
-                            $helpInfo->committeeName = $help->committee->name;
+                    $helpInfo = new \stdClass();
+                    $helpInfo->amount = $help->amount;
+                    $helpInfo->committeeName = $help->committee->name;
 
-                            $events[$help->activity->event->id]->help[] = $helpInfo;
+                    $events[$help->activity->event->id]->help[] = $helpInfo;
 
-                        if (! in_array($help->id, $handledHelpIds)) {
-                            $handledHelpIds[] = $help->id;
-                        }
+                    if (! in_array($help->id, $handledHelpIds)) {
+                        $handledHelpIds[] = $help->id;
+                    }
 
                 }
             }

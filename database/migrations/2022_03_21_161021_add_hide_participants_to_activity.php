@@ -26,7 +26,7 @@ class AddHideParticipantsToActivity extends Migration
     public function down()
     {
         Schema::table('activities', function (Blueprint $table) {
-                $table->dropColumn('hide_participants');
+            $table->dropColumn('hide_participants');
         });
     }
 }

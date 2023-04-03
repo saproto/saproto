@@ -194,7 +194,9 @@ class AchievementsCron extends Command
      */
     private function bigSpender($user)
     {
-        if ($this->notFirstOfMonth()) return false;
+        if ($this->notFirstOfMonth()) {
+            return false;
+        }
 
         $amount = $user->orderlines()
             ->where('updated_at', '>', Carbon::now()->subMonths())
@@ -251,7 +253,8 @@ class AchievementsCron extends Command
      * @param int $n
      * @return bool
      */
-    private function nThActivity($user, $n) {
+    private function nThActivity($user, $n)
+    {
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
         $events = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
@@ -266,9 +269,14 @@ class AchievementsCron extends Command
      * @param int $possibleSignups
      * @return bool
      */
-    private function percentageParticipation($user, $percentage, $possibleSignups) {
-        if ($this->notFirstOfMonth()) return false;
-        if ($possibleSignups < 5) return false;
+    private function percentageParticipation($user, $percentage, $possibleSignups)
+    {
+        if ($this->notFirstOfMonth()) {
+            return false;
+        }
+        if ($possibleSignups < 5) {
+            return false;
+        }
 
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
