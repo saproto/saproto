@@ -48,6 +48,7 @@ class TicketController extends Controller
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
         Session::flash('flash_message', 'The ticket has been created!');
@@ -90,6 +91,7 @@ class TicketController extends Controller
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
         Session::flash('flash_message', 'The ticket has been updated!');
