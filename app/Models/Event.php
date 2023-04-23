@@ -309,7 +309,7 @@ class Event extends Model
 
     public function allUsersCount()
     {
-        $allUserIds=collect([]);
+        $allUserIds = collect([]);
         foreach ($this->tickets as $ticket) {
             if($ticket->show_participants) {
                 $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
