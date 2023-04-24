@@ -307,6 +307,21 @@ class Event extends Model
         });
     }
 
+    public function allUsersCount()
+    {
+        $allUserIds = collect([]);
+        foreach ($this->tickets as $ticket) {
+            if($ticket->show_participants) {
+                $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
+            }
+        }
+
+        if ($this->activity) {
+            $allUserIds = $allUserIds->merge($this->activity->allUsers->pluck('id'));
+        }
+        return $allUserIds->unique()->count();
+    }
+
     /** @return string[] */
     public function getAllEmails()
     {
