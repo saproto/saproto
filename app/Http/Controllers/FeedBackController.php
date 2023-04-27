@@ -257,8 +257,8 @@ class FeedBackController extends Controller
      */
     public function categoryStore(Request $request)
     {
-        $newUrl=strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
-        if(FeedbackCategory::where('url', $newUrl)->first()){
+        $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
+        if(FeedbackCategory::where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
             return Redirect::back();
         }
@@ -286,8 +286,8 @@ class FeedBackController extends Controller
      */
     public function categoryUpdate(Request $request, $id)
     {
-        $newUrl=strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
-        if(FeedbackCategory::where('url', $newUrl)->first()){
+        $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
+        if(FeedbackCategory::where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
             return Redirect::back();
         }
