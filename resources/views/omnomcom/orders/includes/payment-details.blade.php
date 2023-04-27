@@ -36,14 +36,38 @@
 
         @endif
 
-        @if($outstanding>0)
-        <p class="card-text">
-            Remaining outstanding amount
-        </p>
+        @if($outstandingAmount>0)
+            <p class="card-text">
+                Remaining outstanding
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="The amount caught up in activities you signed up for that still have to be processed. This will not be in the next withdrawal AND you CAN NOT pay this now, but you will have to pay this this money somewhere in the future."></i>
+            </p>
+            <ul class="list-group list-group-flush" id="outstanding-accordion">
 
-        <h3 class="card-title">
-            &euro; {{ number_format($outstanding, 2, '.', '') }}
-        </h3>
+                    <li class="cursor-pointer" data-bs-toggle="collapse"
+                        data-bs-target="#outstanding">
+                        <h3 class="card-title">
+                            &euro; {{ number_format($outstandingAmount, 2, '.', '') }}
+                        </h3>
+                    </li>
+                    <div id="outstanding" class="collapse" data-parent="#outstanding-accordion">
+                        <table class="table table-borderless table-hover table-sm mt-1">
+                            <thead>
+                            <tr>
+                                <th scope="col">Activity</th>
+                                <th scope="col">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody
+                                @foreach($outstanding as $outstandingActivity)
+                                    <tr>
+                                        <td>{{ $outstandingActivity->event->title }}</td>
+                                        <td>&euro; {{ number_format($outstandingActivity->price, 2, '.', '') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+            </ul>
         @endif
     </div>
     

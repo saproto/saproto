@@ -14,6 +14,8 @@
 
             @include('users.admin.admin_includes.update')
 
+            @include('users.admin.admin_includes.omnomcomsound')
+
         </div>
 
         <div class="col-md-3">
