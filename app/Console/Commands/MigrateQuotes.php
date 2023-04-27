@@ -48,7 +48,7 @@ class MigrateQuotes extends Command
         ]);
         $quoteCategory->save();
 
-        foreach(Quote::all() as $quote){
+        foreach(Quote::all() as $quote) {
             $new = new Feedback([
                 'user_id'=>$quote->user->id,
                 'feedback_category_id'=>$quoteCategory->id,
@@ -56,7 +56,7 @@ class MigrateQuotes extends Command
                 'reviewed'=>true,
             ]);
             $new->save();
-            foreach($quote->quoteLike() as $like){
+            foreach($quote->quoteLike() as $like) {
                 $newLike = new FeedbackVote([
                     'user_id'=>$like->user_id,
                     'feedback_id'=>$new->id,

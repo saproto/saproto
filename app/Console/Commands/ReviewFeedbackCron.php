@@ -41,12 +41,12 @@ class ReviewFeedbackCron extends Command
     public function handle()
     {
 
-        foreach(FeedbackCategory::query()->where('review', true)->whereNotNull('reviewer_id')->get() as $category){
+        foreach(FeedbackCategory::query()->where('review', true)->whereNotNull('reviewer_id')->get() as $category) {
             $unreviewed = $category->feedback()->where('reviewed', false)->where('updated_at', '>=', \Carbon::now()->subDay()->timestamp)->get();
             if(count($unreviewed)) {
                 $this->info("Sending a review reminder mail for $category->title");
                 Mail::queue((new ReviewFeedbackMail($category, $unreviewed))->onQueue('low'));
-            }else{
+            } else {
                 $this->info('No new reviews which need to be checked today!');
             }
         }

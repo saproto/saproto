@@ -11,7 +11,7 @@ use Proto\Models\User;
 class FeedbackReplyEmail extends Mailable
 {
     use Queueable;
- use SerializesModels;
+    use SerializesModels;
 
     public $feedback;
     public $user;
