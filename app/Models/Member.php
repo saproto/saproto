@@ -28,6 +28,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property-read User $user
  * @property-read StorageEntry|null $membershipForm
+ * @property StorageEntry|null $customOmnomcomSound
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Member onlyTrashed()
@@ -72,6 +73,12 @@ class Member extends Model
     public function membershipForm()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'membership_form_id');
+    }
+
+    /** @return BelongsTo */
+    public function customOmnomcomSound()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'omnomcom_sound_id');
     }
 
     /** @return int */

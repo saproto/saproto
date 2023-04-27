@@ -48,7 +48,7 @@ class DinnerformOrderline extends Model
         $with_regular_discount = $this->price * $this->dinnerform->regular_discount;
         $price = round($with_regular_discount, 2, PHP_ROUND_HALF_DOWN);
 
-        if($this->helper && $this->dinnerform->helper_discount){
+        if($this->helper && $this->dinnerform->helper_discount) {
             $with_helper_discount = $price - $this->dinnerform->helper_discount;
             return max(0, $with_helper_discount);
         }

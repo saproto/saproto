@@ -66,8 +66,12 @@ class OrderLineController extends Controller
 
         $outstanding = Activity::whereHas('users', function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
-        })->where('closed', false)->sum('price');
+        })->where('closed', false);
 
+        $outstandingAmount = $outstanding->sum('price');
+        $outstanding = $outstanding->select('event_id', 'price')->with('Event', function ($q) {
+            $q->select('id', 'title');
+        })->where('price', '>', 0)->get();
 
         $payment_methods = MollieController::getPaymentMethods();
         return view('omnomcom.orders.myhistory', [
@@ -79,6 +83,7 @@ class OrderLineController extends Controller
             'total' => $total,
             'methods' => $payment_methods ?? [],
             'use_fees' => config('omnomcom.mollie')['use_fees'],
+            'outstandingAmount' => $outstandingAmount,
             'outstanding' => $outstanding,
         ]);
     }
@@ -118,7 +123,7 @@ class OrderLineController extends Controller
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
-                $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
+            $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
         }
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['date'=>$date]);

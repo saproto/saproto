@@ -46,15 +46,18 @@ class UserProfileController extends Controller
             ->where('committee.is_society', $with_societies);
     }
 
-    private function getSpentMoney($user) {
+    private function getSpentMoney($user)
+    {
         return OrderLine::where('user_id', $user->id)->pluck('total_price')->sum();
     }
 
-    private function getProductsPurchased($user) {
+    private function getProductsPurchased($user)
+    {
         return OrderLine::where('user_id', $user->id)->pluck('units')->sum();
     }
 
-    private function getTotalSignups($user) {
+    private function getTotalSignups($user)
+    {
         return ActivityParticipation::where('user_id', $user->id)->count();
     }
 }

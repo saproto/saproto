@@ -99,18 +99,18 @@ class OrderLine extends Model
     /** @return bool */
     public function isPayed()
     {
-       $mollie_payment = false;
-       if ($this->payed_with_mollie !== null) {
-           $mollie_payment = $this->molliePayment->translatedStatus();
-       }
-       return
-           $this->total_price == 0 ||
-           $this->payed_with_loss ||
-           $this->payed_with_cash !== null ||
-           $this->payed_with_withdrawal !== null ||
-           $mollie_payment == 'paid' ||
-           $this->payed_with_bank_card !== null;
-   }
+        $mollie_payment = false;
+        if ($this->payed_with_mollie !== null) {
+            $mollie_payment = $this->molliePayment->translatedStatus();
+        }
+        return
+            $this->total_price == 0 ||
+            $this->payed_with_loss ||
+            $this->payed_with_cash !== null ||
+            $this->payed_with_withdrawal !== null ||
+            $mollie_payment == 'paid' ||
+            $this->payed_with_bank_card !== null;
+    }
 
     /** @return bool */
     public function canBeDeleted()

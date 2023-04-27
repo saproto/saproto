@@ -61,6 +61,7 @@ services:
         environment:
             - 'PMA_HOST=mariadb'
             - 'PMA_PORT=${SAIL_SQL_PORT}'
+            - 'UPLOAD_LIMIT=500M'
         networks:
             - sail
         depends_on:

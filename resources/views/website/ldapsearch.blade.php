@@ -90,7 +90,7 @@
                                                     @if(Auth::user()->can('board') && property_exists($result, 'userprincipalname'))
                                                         <br>
                                                         <i class="fas fa-users-cog fa-fw"></i>
-                                                        {{ substr($result->userprincipalname,0,8) }}
+                                                        {{ $result->userprincipalname }}
                                                     @endif
                                                     @if(property_exists($result, 'mail'))
                                                         <br>
