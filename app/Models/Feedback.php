@@ -67,10 +67,15 @@ class Feedback extends Model
         return $this->votes()->sum('vote');
     }
 
-    public function mayViewFeedback($user): bool {
-        if(! $this->category->review) return true;
-        if($this->reviewed) return true;
-//        if($this->category->reviewer_id===$user->id)return true;
+    public function mayViewFeedback($user): bool
+    {
+        if(! $this->category->review) {
+            return true;
+        }
+        if($this->reviewed) {
+            return true;
+        }
+        //        if($this->category->reviewer_id===$user->id)return true;
         return false;
     }
 

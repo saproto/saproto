@@ -36,13 +36,14 @@ class FeedBackController extends Controller
     private function getFeedbackQuery(FeedbackCategory $category): HasMany
     {
         $feedback = $category->feedback()->orderBy('created_at', 'desc')->with('votes');
-        if($category->review && Auth::user()->id !== $category->reviewer_id){
+        if($category->review && Auth::user()->id !== $category->reviewer_id) {
             $feedback = $feedback->where('reviewed', true);
         }
         return $feedback;
     }
 
-    private function getMostVoted(FeedbackCategory $category) {
+    private function getMostVoted(FeedbackCategory $category)
+    {
         //find the most voted idea
         $mostVotedID = FeedbackVote::query()
             ->selectRaw('feedback_id, sum(vote) as votes')
@@ -54,11 +55,12 @@ class FeedBackController extends Controller
         return $mostVoted ?? null;
     }
 
-    private function getUnreviewed(FeedbackCategory $category) {
+    private function getUnreviewed(FeedbackCategory $category)
+    {
         if($category->review) {
             //only get the reviewed ideas if they require it
             $unreviewed = Feedback::where('reviewed', false);
-            if(Auth::user()->id !== $category->reviewer_id){
+            if(Auth::user()->id !== $category->reviewer_id) {
                 $unreviewed = Feedback::where('user_id', Auth::user()->id);
             }
             return $unreviewed->limit(20)->get();
@@ -66,7 +68,8 @@ class FeedBackController extends Controller
         return [];
     }
 
-    public function search(Request $request, string $category) {
+    public function search(Request $request, string $category)
+    {
         $searchTerm = $request->input('searchTerm');
         $category = FeedbackCategory::where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
@@ -75,7 +78,8 @@ class FeedBackController extends Controller
         return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category, 'unreviewed'=>$unreviewed]);
     }
 
-    public function archived($category) {
+    public function archived($category)
+    {
         $category = FeedbackCategory::where('url', $category)->firstOrFail();
         if(! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to view archived feedback.');
@@ -97,9 +101,9 @@ class FeedBackController extends Controller
         $feedback = new Feedback($new);
         $feedback->save();
 
-        if($category->review){
+        if($category->review) {
             Session::flash('flash_message', 'Idea added. This first needs to be reviewed by the board so it might take some time to show up!');
-        }else{
+        } else {
             Session::flash('flash_message', 'Idea added.');
         }
 
@@ -111,7 +115,8 @@ class FeedBackController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function reply(int $id, Request $request) {
+    public function reply(int $id, Request $request)
+    {
         if(! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to reply to this idea.');
             return Redirect::back();
@@ -133,20 +138,21 @@ class FeedBackController extends Controller
         return Redirect::back();
     }
 
-    public function archive(int $id) {
+    public function archive(int $id)
+    {
         if(! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to archive this idea.');
             return Redirect::back();
         }
 
         $feedback = Feedback::withTrashed()->findOrFail($id);
-            if($feedback->trashed()){
-                $feedback->restore();
-                Session::flash('flash_message', 'Good Idea restored.');
-            }else {
-                $feedback->delete();
-                Session::flash('flash_message', 'Good Idea archived.');
-            }
+        if($feedback->trashed()) {
+            $feedback->restore();
+            Session::flash('flash_message', 'Good Idea restored.');
+        } else {
+            $feedback->delete();
+            Session::flash('flash_message', 'Good Idea archived.');
+        }
         return Redirect::back();
     }
 
@@ -154,7 +160,8 @@ class FeedBackController extends Controller
      * @param int $id
      * @return mixed
      */
-    public function restore(int $id) {
+    public function restore(int $id)
+    {
         if(! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to restore this idea.');
             return Redirect::back();
@@ -170,7 +177,8 @@ class FeedBackController extends Controller
      * @param int $id
      * @return mixed
      */
-    public function delete(int $id) {
+    public function delete(int $id)
+    {
         $feedback = Feedback::withTrashed()->findOrFail($id);
         if(! (Auth::user()->can('board') || Auth::user()->id == $feedback->user->id)) {
             Session::flash('flash_message', 'You are not allowed to delete this idea.');
@@ -207,9 +215,9 @@ class FeedBackController extends Controller
 
         /** @var FeedbackVote $vote */
         $vote = FeedbackVote::firstOrCreate(['user_id' => Auth::id(), 'feedback_id' => $request->input('id')]);
-        if($vote->vote === $request->input('voteValue')){
+        if($vote->vote === $request->input('voteValue')) {
             $vote->delete();
-        }else {
+        } else {
             $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
             $vote->save();
         }
@@ -223,7 +231,7 @@ class FeedBackController extends Controller
     public function approve(int $id): RedirectResponse
     {
         $feedback = Feedback::findOrFail($id);
-        if($feedback->category->reviewer_id !== Auth::user()->id){
+        if($feedback->category->reviewer_id !== Auth::user()->id) {
             Session::flash('flash_message', 'Feedback may only be approved by the dedicated reviewer!');
             return Redirect::back();
         }
@@ -249,7 +257,7 @@ class FeedBackController extends Controller
      */
     public function categoryStore(Request $request)
     {
-        if($request->has('reviewed') && ! $request->input('user_id')){
+        if($request->has('reviewed') && ! $request->input('user_id')) {
             Session::flash('flash_message', 'You need to enter a reviewer to have this as a reviewed category!');
             return Redirect::back();
         }
