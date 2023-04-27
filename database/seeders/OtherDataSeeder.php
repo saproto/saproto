@@ -150,16 +150,25 @@ class OtherDataSeeder extends Seeder
         $time_end = microtime(true);
         echo "\e[32mCreated:\e[0m   activity participations ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
-        // Create AchievementOwnership
+
+        $quotes = new \Proto\Models\FeedbackCategory([
+            'title'=>'Quotes',
+            'url'=>'quotes',
+            'review'=>false,
+        ]);
+        $quotes->save();
+
+        // Create Quotes
         $n = 200;
         $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
-            $quote = new Quote([
-                'user_id'=> array_random($users),
-                'quote'=>$faker->text(100),
-            ]);
 
+            $quote = new Feedback([
+                'user_id'=> array_random($users),
+                'feedback'=>$faker->text(100),
+                'feedback_category_id'=>2,
+            ]);
             $quote->save();
             echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." quotes\r";
         }
@@ -168,7 +177,7 @@ class OtherDataSeeder extends Seeder
         echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
 
-        // Create Feedback
+        // Create GoodIdeas
         $n = 200;
 
         $time_start = microtime(true);
