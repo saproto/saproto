@@ -50,14 +50,14 @@ class NewsController extends Controller
         $newsitem = Newsitem::findOrFail($id);
 
         if (! $newsitem->isPublished()) {
-            if (Auth::check() && Auth::user()->can('board')) {
+            if (Auth::user()?->can('board')) {
                 $preview = true;
             } else {
                 abort(404);
             }
         }
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content), 'preview' => $preview]);
+        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview]);
     }
 
     /** @return View */

@@ -7,7 +7,7 @@
     </p>
 
     @if($text != '')
-        {!! Markdown::convertToHtml($text) !!}
+        {!! Markdown::convert($text) !!}
     @endif
 
     <br>
@@ -35,11 +35,11 @@
 
                         <p>
 
-                            {!! Markdown::convertToHtml($event->summary) !!}
+                            {!! Markdown::convert($event->summary) !!}
 
                         </p>
 
-                        @if($event->activity && $event->activity->participants != 0)
+                        @if($event->activity?->participants != 0)
 
                             <p>
                                 <strong>Sign-up required!</strong><br>

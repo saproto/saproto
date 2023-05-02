@@ -17,7 +17,7 @@
                 <!-- Left column -->
                 <div class="col-md-6">
                     <!-- Start -->
-                    @include('website.layouts.macros.datetimepicker', [
+                    @include('components.forms.datetimepicker', [
                         'name' => 'start_time',
                         'label' => 'Opens at:',
                         'placeholder' => $currentDrink? $currentDrink->start_time:null,
@@ -50,7 +50,7 @@
                 <div class="col-md-6">
 
                     <!-- End -->
-                    @include('website.layouts.macros.datetimepicker',[
+                    @include('components.forms.datetimepicker',[
                         'name' => 'end_time',
                         'label' => 'Closes at:',
                         'placeholder' => $currentDrink ? $currentDrink->end_time : null,
@@ -77,7 +77,7 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($currentDrink)
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                                            'action' => route("wallstreet::delete", ['id' => $currentDrink->id]),
                                            'text' => 'Delete',
                                            'title' => 'Confirm Delete',

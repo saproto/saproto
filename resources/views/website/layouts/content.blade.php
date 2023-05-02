@@ -20,7 +20,7 @@
 
 @section('body')
 
-    @include('website.navigation.navbar')
+    @include('website.navbar')
 
     @yield('header')
 

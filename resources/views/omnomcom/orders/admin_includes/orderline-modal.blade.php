@@ -19,7 +19,7 @@
                         <div class="col-lg-3">
 
                             <select name="user[]" class="form-control orderline-user">
-                                {{ $members = Proto\Models\User::orderBy('name', 'asc')->has('member')->get()->reject(function($user, $index) { return $user->member->is_pending == true; }) }}
+                                {{ $members = Proto\Models\User::has('member')->orderBy('name')->get()->reject(function(Proto\Models\User $user, int $index) { return $user->member->is_pending == true; }) }}
                                 @foreach($members as $member)
                                     <option value="{{ $member->id }}">{{ $member->name }} (#{{ $member->id }})</option>
                                 @endforeach

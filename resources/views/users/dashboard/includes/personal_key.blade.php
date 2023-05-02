@@ -19,7 +19,7 @@
 
     <div class="card-footer">
 
-        @include('website.layouts.macros.confirm-modal', [
+        @include('components.modals.confirm-modal', [
            'action' => route('user::personal_key::generate'),
            'classes' => 'btn btn-outline-danger btn-block',
            'text' => 'Mine has been compromised, generate me a new one',

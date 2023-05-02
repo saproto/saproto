@@ -11,7 +11,7 @@
 
     <title>ProTube remote</title>
 
-    @include('website.layouts.assets.stylesheets')
+    @include('website.assets.stylesheets')
 
     <style type="text/css">
         body, html {
@@ -561,7 +561,8 @@
 
                 <form id="protube__remote__ytSearch_form">
                     <input type="search" id="protube__remote__ytSearch"
-                           class="form-control" placeholder="Search on Youtube (maximum duration {{ $max_duration }})..."
+                           class="form-control"
+                           placeholder="Search on Youtube (maximum duration {{ $max_duration }})..."
                            style="width: 100%;">
                 </form>
 
@@ -606,7 +607,8 @@
     </div>
 
     <div class="protube__remote__queue">
-        <div class="protube__remote__queue_nowPlaying" data-bs-toggle="collapse" href="#protube__remote__queue__container">
+        <div class="protube__remote__queue_nowPlaying" data-bs-toggle="collapse"
+             href="#protube__remote__queue__container">
             <div id="protube__remote__queue_nowPlaying_progress"></div>
 
             <div id="protube__remote__queue_nowPlaying_container">
@@ -648,7 +650,7 @@
     </div>
 </div>
 
-@include('website.layouts.assets.javascripts')
+@include('website.assets.javascripts')
 @stack('javascript')
 
 <script>
@@ -762,11 +764,9 @@
                     var input_flds = $('#pin-input').find(':input');
                     if (e.keyCode == 8 && input_flds.index(this) > 0) {
                         input_flds.eq(input_flds.index(this) - 1).focus();
-                    }
-                    else if ($(this).val().length == 1) {
+                    } else if ($(this).val().length == 1) {
                         input_flds.eq(input_flds.index(this) + 1).focus();
-                    }
-                    else if ($(this).val().length > 1) {
+                    } else if ($(this).val().length > 1) {
                         $(this).val($(this).val()[0]);
                     }
                     if (input_flds.index(this) >= 2) {
@@ -863,8 +863,7 @@
                         $("#protube__remote__ytSearch").focus();
 
                         interactiveSearchResults();
-                    }
-                    else {
+                    } else {
                         $("#pin-input").css({
                             "animation": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both"
                         });

@@ -35,7 +35,7 @@ class SpotifySync extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -102,18 +102,14 @@ class SpotifySync extends Command
 
         $this->info('Updating playlist with '.count($uris).' songs.');
 
-        try {
-            $spotify->replaceUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), []);
+        $spotify->replacePlaylistTracks(config('app-proto.spotify-playlist'), []);
 
-            $slice = 0;
-            $batch_size = 75;
-            while ($slice < count($uris)) {
-                $add = array_values(array_slice($uris, $slice, $batch_size));
-                $slice += $batch_size;
-                $spotify->addUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
-            }
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-            $this->error('Error during playlist update.');
+        $slice = 0;
+        $batch_size = 75;
+        while ($slice < count($uris)) {
+            $add = array_values(array_slice($uris, $slice, $batch_size));
+            $slice += $batch_size;
+            $spotify->addPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
         }
 
         $this->info('Done!');
