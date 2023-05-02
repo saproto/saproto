@@ -42,7 +42,8 @@
                             <tr>
 
                                 <td class="name">{{ $company->name }}</td>
-                                <td class="url"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
+                                <td class="url"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a>
+                                </td>
                                 <td class="on-carreer-page">{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
                                 <td class="in-logo-bar">{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
                                 <td>
@@ -51,7 +52,7 @@
                                         <i class="fas fa-edit me-2 fa-fw"></i>
                                     </a>
 
-                                    @include('website.layouts.macros.confirm-modal', [
+                                    @include('components.modals.confirm-modal', [
                                         'action' => route('companies::delete', ['id' => $company->id]),
                                         'text' => '<i class="fas fa-trash me-2 fa-fw text-danger"></i>',
                                         'title' => 'Confirm Delete',

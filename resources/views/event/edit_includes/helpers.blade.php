@@ -1,4 +1,4 @@
-@if($event && $event->activity)
+@if($event?->activity)
 
     <div class="card mb-3">
 

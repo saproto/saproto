@@ -328,7 +328,7 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        if ($user->member && $user->member->is_pending) {
+        if ($user->member?->is_pending) {
             $user->member->delete();
         }
         $member = Member::create();

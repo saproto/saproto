@@ -4,7 +4,7 @@
 
         @foreach(\Proto\Models\PhotoManager::getAlbums($n) as $key => $album)
 
-            @include('website.layouts.macros.card-bg-image', [
+            @include('website.home.cards.card-bg-image', [
             'url' => route('photo::album::list', ['id' => $album->id]) ,
             'img' => $album->thumb(),
             'html' => sprintf('<sub>%s</sub><br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name),

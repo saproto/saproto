@@ -27,26 +27,26 @@
                         <div class="form-group">
                             <label for="name">Description:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Internal description." value="{{ $announcement->description ?? '' }}"
+                                   placeholder="Internal description." value="{{ $announcement?->description }}"
                                    required>
                         </div>
 
                         <div class="form-group">
                             <label for="editor">Announcement:</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'content',
                                 'placeholder' => "Awesome announcement goes here.",
                                 'value' => $announcement == null ? null : $announcement->content
                             ])
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'display_from',
                             'label' => 'Start:',
                             'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'display_till',
                             'label' => 'End:',
                             'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )
@@ -60,50 +60,41 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_only_homepage" value="0">
-                                        <input type="checkbox" name="show_only_homepage" value="1"
-                                                {{ ($announcement == null ? 'checked' : $announcement->show_only_homepage ? 'checked' : '') }}>
-                                        Homepage only
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox',[
+                                    'name' => 'show_only_homepage',
+                                    'checked' => $announcement?->show_only_homepage,
+                                    'label' => 'Homepage only'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_as_popup" value="0">
-                                        <input type="checkbox" name="show_as_popup" value="1"
-                                                {{ ($announcement != null && $announcement->show_as_popup ? 'checked' : '') }}>
-                                        Pop-up
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_as_popup',
+                                    'checked' => $announcement?->show_as_popup,
+                                    'label' => 'Pop-up'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="is_dismissable" value="0">
-                                        <input type="checkbox" name="is_dismissable" value="1"
-                                                {{ ($announcement == null ? 'checked' : $announcement->is_dismissable ? 'checked' : '') }}>
-                                        Dismissable
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'is_dismissable',
+                                    'checked' => $announcement?->is_dismissable,
+                                    'label' => 'Dismissable'
+                                ])
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="show-style">Announcement style:</label>
                             <select id="show-style" name="show_style" class="form-control">
-                                <option value="0" {{ ($announcement != null && $announcement->show_style == 0 ? 'selected' : '') }}>
+                                <option value="0" @selected(old('show_style', $announcement?->show_style == 0))>
                                     Primary (Green)
                                 </option>
-                                <option value="1" {{ ($announcement != null && $announcement->show_style == 1 ? 'selected' : '') }}>
+                                <option value="1" @selected(old('show_style', $announcement?->show_style == 1))>
                                     Info (Blue)
                                 </option>
-                                <option value="2" {{ ($announcement != null && $announcement->show_style == 2 ? 'selected' : '') }}>
+                                <option value="2" @selected(old('show_style', $announcement?->show_style == 2))>
                                     Warning (Yellow)
                                 </option>
-                                <option value="3" {{ ($announcement != null && $announcement->show_style == 3 ? 'selected' : '') }}>
+                                <option value="3" @selected(old('show_style', $announcement?->show_style == 3))>
                                     Danger (Red)
                                 </option>
                             </select>
@@ -115,34 +106,25 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_guests" value="0">
-                                        <input type="checkbox" name="show_guests" value="1"
-                                                {{ ($announcement != null && $announcement->show_guests ? 'checked' : '') }}>
-                                        Guests
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_guests',
+                                    'checked' => $announcement?->show_guests,
+                                    'label' => 'Guests'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_users" value="0">
-                                        <input type="checkbox" name="show_users" value="1"
-                                                {{ ($announcement != null && $announcement->show_users ? 'checked' : '') }}>
-                                        Users
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_users',
+                                    'checked' => $announcement?->show_users,
+                                    'label' => 'Users'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_members" value="0">
-                                        <input type="checkbox" name="show_members" value="1"
-                                                {{ ($announcement != null && $announcement->show_members ? 'checked' : '') }}>
-                                        Members
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_members',
+                                    'checked' => $announcement?->show_members,
+                                    'label' => 'Members'
+                                ])
                             </div>
                         </div>
 
@@ -152,34 +134,30 @@
 
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_only_new" value="0">
-                                        <input type="checkbox" name="show_only_new" value="1"
-                                                {{ ($announcement != null && $announcement->show_only_new ? 'checked' : '') }}>
-                                        New users
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_only_new',
+                                    'checked' => $announcement?->show_only_new,
+                                    'label' => 'New users'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_only_firstyear" value="0">
-                                        <input type="checkbox" name="show_only_firstyear" value="1"
-                                                {{ ($announcement != null && $announcement->show_only_firstyear ? 'checked' : '') }}>
-                                        First years
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'who_only_firstyear',
+                                    'checked' => $announcement?->who_only_firstyear,
+                                    'label' => 'Dismissable'
+                                ])
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_only_firstyear',
+                                    'checked' => $announcement->show_only_firstyear,
+                                    'label' => 'First years'
+                                ])
                             </div>
                             <div class="col-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="hidden" name="show_only_active" value="0">
-                                        <input type="checkbox" name="show_only_active" value="1"
-                                                {{ ($announcement != null && $announcement->show_only_active ? 'checked' : '') }}>
-                                        Active members
-                                    </label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_only_active',
+                                    'checked' => $announcement->show_only_active,
+                                    'label' => 'Active members'
+                                ])
                             </div>
                         </div>
 

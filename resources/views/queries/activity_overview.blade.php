@@ -22,38 +22,38 @@
 
                         <div class="row">
 
-                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
-                                    <div class="col-sm-auto">
-                                        @include('website.layouts.macros.datetimepicker',[
-                                            'name' => 'start',
-                                            'format' => 'date',
-                                            'placeholder' => $start
-                                        ])
-                                    </div>
-                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
-                                    <div class="col-sm-auto mb-3">
-                                        @include('website.layouts.macros.datetimepicker',[
-                                            'name' => 'end',
-                                            'format' => 'date',
-                                            'placeholder' => $end
-                                        ])
-                                    </div>
-
-                                    <div class="col-sm-auto">
-                                        <button type="submit" class="btn btn-success">Find activities!</button>
-                                    </div>
+                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
+                            <div class="col-sm-auto">
+                                @include('components.forms.datetimepicker',[
+                                    'name' => 'start',
+                                    'format' => 'date',
+                                    'placeholder' => $start
+                                ])
                             </div>
+                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
+                            <div class="col-sm-auto mb-3">
+                                @include('components.forms.datetimepicker',[
+                                    'name' => 'end',
+                                    'format' => 'date',
+                                    'placeholder' => $end
+                                ])
+                            </div>
+
+                            <div class="col-sm-auto">
+                                <button type="submit" class="btn btn-success">Find activities!</button>
+                            </div>
+                        </div>
 
                     </form>
 
                 </div>
 
                 <div class="table-responsive">
-                <table class="table table-sm table-hover">
+                    <table class="table table-sm table-hover">
 
-                    <thead>
+                        <thead>
 
-                    <tr class="bg-dark text-white">
+                        <tr class="bg-dark text-white">
 
                         <td>Event</td>
                         <td>Category</td>
@@ -64,11 +64,11 @@
                         <td>Attendees</td>
                         <td>Costs</td>
 
-                    </tr>
+                        </tr>
 
-                    </thead>
+                        </thead>
 
-                    @foreach($events as $event)
+                        @foreach($events as $event)
 
                         <tr>
                             <td>
@@ -112,11 +112,31 @@
                                 <td><span class="font-italic text-muted">no activity</span></td>
                             @endif
 
-                        </tr>
+                                    <td>{{ $event->activity->users->count() }}</td>
+                                    <td>
+                                        @if($event->activity->helpingCommitteeInstances->count() > 0)
+                                            @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
+                                                <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
+                                                    {{ $helping_committee->committee->name }}
+                                                </a>: {{ $helping_committee->helperCount() }}<br>
+                                            @endforeach
+                                        @else
+                                            <span class="font-italic text-muted">not set</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $event->activity->presentUsers->count() }}</td>
 
-                    @endforeach
+                                @else
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                @endif
 
-                </table>
+                            </tr>
+
+                        @endforeach
+
+                    </table>
                 </div>
 
             </div>

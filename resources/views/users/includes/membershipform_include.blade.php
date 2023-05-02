@@ -2,7 +2,10 @@
     The undersigned ...
 </p>
 <p>
-    @php($date = new DateTime($user->birthdate))
+    @php
+        /** @var User $user */
+        $date = new DateTime($user->birthdate)
+    @endphp
     <b>{{ $user->name }}</b>, born on <b>{{ $date->format('M, d, Y') }}</b>,
 </p>
 <p>

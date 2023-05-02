@@ -68,7 +68,7 @@ class TicketPurchase extends Model
         return
             (! $this->ticket->is_prepaid) ||
             ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
-            ($this->orderline->molliePayment && $this->orderline->molliePayment->translatedStatus() == 'paid');
+            ($this->orderline->molliePayment?->translatedStatus() == 'paid');
     }
 
     /** @return array */

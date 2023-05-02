@@ -45,15 +45,15 @@
                             <label for="name">Album name:</label>
                             <input required type="text" id="name" name="name" class="form-control">
                         </div>
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'date',
                             'label' => 'Album date:',
                             'placeholder' => strtotime(Carbon::now())
                         ])
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="private" name="private">
-                            <label class="form-check-label" for="private">Private album</label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'private',
+                            'label' => 'Private album'
+                        ])
                     </div>
 
                     <div class="card-footer">
@@ -83,7 +83,7 @@
 
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                @include('website.layouts.macros.card-bg-image', [
+                                @include('website.home.cards.card-bg-image', [
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
@@ -119,7 +119,7 @@
 
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                @include('website.layouts.macros.card-bg-image', [
+                                @include('website.home.cards.card-bg-image', [
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),

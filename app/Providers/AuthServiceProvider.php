@@ -11,10 +11,10 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * The policy mappings for the application.
      *
-     * @var array
+     * @var array<class-string, class-string>
      */
     protected $policies = [
-        'Proto\Model' => 'Proto\Policies\ModelPolicy',
+        // 'Proto\Model' => 'Proto\Policies\ModelPolicy',
     ];
 
     /**
@@ -24,9 +24,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
-        Passport::routes();
         Passport::tokensExpireIn(Carbon::now()->addDays(7));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(14));
     }
