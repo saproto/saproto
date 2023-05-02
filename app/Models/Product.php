@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Proto\Http\Controllers\WallstreetController;
 
 /**
  * Product Model.
@@ -80,7 +81,8 @@ class Product extends Model
     }
 
     /** @raturn String */
-    public function getImageUrlAttribute() {
+    public function getImageUrlAttribute()
+    {
         if ($this->image_id) {
             $image = StorageEntry::find($this->image_id);
             if ($image) {
@@ -112,6 +114,20 @@ class Product extends Model
     public function isVisible()
     {
         return ! (! $this->is_visible || $this->stock <= 0 && ! $this->is_visible_when_no_stock);
+    }
+
+    public function omnomcomPrice()
+    {
+        $active = WallstreetController::active();
+        if (! $active) {
+            return $this->price;
+        }
+        return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
+    }
+
+    public function wallstreetPrices()
+    {
+        return $this->hasMany('Proto\Models\WallstreetPrice');
     }
 
     /**

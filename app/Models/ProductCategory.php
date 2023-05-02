@@ -41,7 +41,9 @@ class ProductCategory extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return Collection|Product[] */
     public function products()

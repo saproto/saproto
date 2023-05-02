@@ -63,12 +63,11 @@
                 </a>
             </p>
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="privacy_policy_acceptance" required>
-                    I have read and acknowledge the privacy policy.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'privacy_policy_acceptance',
+                'label' => 'I have read and acknowledge the privacy policy.',
+                'required' => true
+            ])
 
             <hr>
 

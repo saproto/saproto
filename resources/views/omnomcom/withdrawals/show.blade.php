@@ -54,7 +54,7 @@
                     </table>
 
                     <div class="card-body">
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'date',
                             'label' => 'Change date:',
                             'placeholder' => strtotime($withdrawal->date),
@@ -72,7 +72,7 @@
 
                         @if(! $withdrawal->closed)
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-warning btn-block mt-2',
                                'text' => 'E-mail Users',
@@ -81,7 +81,7 @@
                                'confirm' => 'Send',
                             ])
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-danger btn-block mt-2',
                                'text' => 'Close Withdrawal',
@@ -90,7 +90,7 @@
                                'confirm' => 'Close',
                             ])
 
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
                                'classes' => 'btn btn-outline-danger btn-block mt-2',
                                'text' => 'Delete',
@@ -167,7 +167,7 @@
                                         <td>
                                             @if($withdrawal->getFailedWithdrawal($data->user))
                                                 Failed
-                                                @include('website.layouts.macros.confirm-modal', [
+                                                @include('components.modals.confirm-modal', [
                                                    'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
                                                    'text' => '(Revert)',
                                                    'title' => 'Confirm Revert',
@@ -175,7 +175,7 @@
                                                    'confirm' => 'Revert',
                                                 ])
                                             @else
-                                                @include('website.layouts.macros.confirm-modal', [
+                                                @include('components.modals.confirm-modal', [
                                                    'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
                                                    'text' => 'Loss',
                                                    'title' => 'Confirm Marking Loss',

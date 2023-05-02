@@ -151,13 +151,13 @@ class AchievementController extends Controller
             return Redirect::back();
         }
 
-        if($this->giveAchievement($achievement, $user)){
+        if($this->giveAchievement($achievement, $user)) {
             Session::flash('flash_message', "You have earned the achievement: '$achievement->name'");
         } else {
             Session::flash('flash_message', 'You have already earned this achievement');
         }
 
-        return view('achievement.achieve', ['achievement' => $achievement, 'parsed_content' => Markdown::convertToHtml($achievement->page_content)]);
+        return view('achievement.achieve', ['achievement' => $achievement, 'parsed_content' => Markdown::convert($achievement->page_content)]);
     }
 
     /**
@@ -170,7 +170,7 @@ class AchievementController extends Controller
         $achievement = Achievement::findOrFail($achievement_id);
         $user = User::findOrFail($request->get('user-id'));
 
-        if($this->giveAchievement($achievement, $user)){
+        if($this->giveAchievement($achievement, $user)) {
             Session::flash('flash_message', "Achievement $achievement->name has been given to $user->name.");
         } else {
             Session::flash('flash_message', "$user->name already has this achievement");
@@ -186,14 +186,14 @@ class AchievementController extends Controller
         foreach ($userIds as $userId) {
             $user = User::find($userId);
             if($user) {
-                if($this->giveAchievement($achievement, $user)){
+                if($this->giveAchievement($achievement, $user)) {
                     $awarded = $awarded.' '.$user->name.',';
                 }
             }
         }
-        if($awarded){
+        if($awarded) {
             Session::flash('flash_message', "Achievement $achievement->name has been newly given to:".$awarded);
-        }else{
+        } else {
             Session::flash('flash_message', "Achievement $achievement->name had already been achieved by all users!");
         }
         return Redirect::back();

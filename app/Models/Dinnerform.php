@@ -50,7 +50,10 @@ class Dinnerform extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $dates = ['start', 'end'];
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+    ];
 
     /** @return BelongsTo */
     public function event()
@@ -98,7 +101,7 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(function ($orderline) {
+            ->sum(function (DinnerformOrderline $orderline) {
                 return $orderline->price_with_discount;
             });
     }
@@ -119,7 +122,7 @@ class Dinnerform extends Model
     public function isHelping()
     {
         return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
-            || ($this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()));
+            || ($this->event?->activity && $this->event->activity->isHelping(Auth::user()));
     }
 
     /** @return bool Whether the current user has any discounts. */
@@ -139,9 +142,9 @@ class Dinnerform extends Model
     {
         parent::boot();
         static::deleting(function ($dinnerform) {
-          foreach($dinnerform->orderlines()->get() as $orderline){
-             $orderline->delete();
-          }
+            foreach($dinnerform->orderlines()->get() as $orderline) {
+                $orderline->delete();
+            }
         });
     }
 }

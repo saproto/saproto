@@ -26,39 +26,47 @@
 
                         <div class="form-group autocomplete">
                             <label for="product">Product:</label>
-                            <input class="form-control product-search" id="product" name="product" placeholder="{{ $ticket ? $ticket->product->name : '' }}" value="{{ $ticket ? $ticket->product->id : '' }}" {{ $ticket ? '' : 'required' }}>
+                            <input class="form-control product-search" id="product" name="product"
+                                   placeholder="{{ $ticket ? $ticket->product->name : '' }}"
+                                   value="{{ $ticket ? $ticket->product->id : '' }}" {{ $ticket ? '' : 'required' }}>
                         </div>
 
                         <div class="form-group autocomplete">
                             <label for="event">Event:</label>
-                            <input class="form-control event-search" id="event" name="event" placeholder="{{ $ticket ? $ticket->event->title : '' }}" value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
+                            <input class="form-control event-search" id="event" name="event"
+                                   placeholder="{{ $ticket ? $ticket->event->title : '' }}"
+                                   value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'available_from',
                             'label' => 'Available from:',
                             'placeholder' => $ticket ? $ticket->available_from : null
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'available_to',
                             'label' => 'Available to:',
                             'placeholder' => $ticket ? $ticket->available_to : null
                         ])
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="is_members_only" {{ ($ticket && $ticket->members_only ? 'checked' : '') }}>
-                                Available to members only.
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'is_members_only',
+                            'checked' =>  $ticket?->members_only,
+                            'label' => 'Available to members only.'
+                        ])
+
+                        @include('components.forms.checkbox', [
+                            'name' => 'is_prepaid',
+                            'checked' =>  $ticket?->is_prepaid,
+                            'label' => 'This ticket should be prepaid.'
+                        ])
 
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox"
-                                       name="is_prepaid" {{ ($ticket && $ticket->is_prepaid ? 'checked' : '') }}>
-                                This ticket should be prepaid.
+                                       name="show_participants" {{ ($ticket && $ticket->show_participants ? 'checked' : '') }}>
+                                Show the participant's who bought this ticket on the event.
                             </label>
                         </div>
 

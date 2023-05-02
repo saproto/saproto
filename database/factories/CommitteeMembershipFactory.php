@@ -1,29 +1,30 @@
 <?php
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
 
-/* @var $factory Factory */
-$factory->define(
-    Proto\Models\CommitteeMembership::class,
-    function (Faker $faker, $attr) {
-        $mintime = date('U', strtotime('-1 year'));
-        $maxtime = date('U', strtotime('+1 year'));
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\CommitteeMembership;
 
-        $date = [date('Y-m-d H:i:s', mt_rand($mintime, $maxtime)), date('Y-m-d H:i:s', mt_rand($mintime, $maxtime))];
-        if ($date[0] < $date[1]) {
-            $startDate = $date[0];
-            $endDate = $date[1];
-        } else {
-            $startDate = $date[1];
-            $endDate = $date[0];
-        }
+/**
+ * @extends Factory<CommitteeMembership>
+ */
+class CommitteeMembershipFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        $created_at = fake()->dateTimeBetween('-1 year', '+1 year');
+        $deleted_at = fake()->dateTimeBetween($created_at, '+1 year');
 
         return [
             'role' => 'Automatically Added',
-            'edition' => (mt_rand(1, 2) == 1 ? mt_rand(1, 5) : null),
-            'created_at' => $startDate,
-            'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
+            'edition' => fake()->boolean() ? fake()->randomDigitNotNull() : null,
+            'created_at' => $created_at,
+            'deleted_at' => fake()->boolean(30) ? $deleted_at : null,
         ];
     }
-);
+}

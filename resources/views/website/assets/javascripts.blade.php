@@ -7,7 +7,8 @@
             api_search_product: "{{ route('api::search::product') }}",
             api_search_committee: "{{ route('api::search::committee') }}",
             api_search_achievement: "{{ route('api::search::achievement') }}",
-            api_omnomcom_stock: "{{ route('api::omnomcom::stock') }}"
+            api_omnomcom_stock: "{{ route('api::omnomcom::stock') }}",
+            api_wallstreet_active: "{{ route('api::wallstreet::active') }}",
         },
         analytics_url: "{{ config('proto.analytics_url') }}",
         discord_server_id: "{{ config('proto.discord_server_id') }}",

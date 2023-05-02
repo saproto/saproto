@@ -1,4 +1,4 @@
-@if($event->activity && Auth::check() && Auth::user()->is_member && $event->activity->withParticipants())
+@if($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
 
     <div class="card mb-3">
 
@@ -190,7 +190,7 @@
 
     @endif
 
-@elseif($event->activity && $event->activity->withParticipants())
+@elseif($event->activity?->withParticipants())
 
     <div class="card">
         <div class="card-header text-center bg-dark text-white">

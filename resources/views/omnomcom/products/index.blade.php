@@ -87,56 +87,56 @@
                 @if (count($products) > 0)
 
                     <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                        <table class="table table-hover table-sm">
 
-                        <thead>
+                            <thead>
 
-                        <tr class="bg-dark text-white">
+                            <tr class="bg-dark text-white">
 
-                            <td>Name</td>
-                            <td>Price</td>
-                            <td>Calories</td>
-                            <td>Stock</td>
-                            <td>Visible</td>
-                            <td>Alcoholic</td>
-                            <td></td>
-
-                        </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                        @foreach($products as $product)
-
-                            <tr>
-
-                                <td>{{ $product->name }} <span class="text-muted">(#{{ $product->id }})</span></td>
-                                <td>{{ $product->price }}</td>
-                                <td>{{ $product->calories }}</td>
-                                <td>{{ $product->stock }}</td>
-                                <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
-                                <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
-                                <td style="min-width: 60px">
-                                    <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                                        <i class="fas fa-edit me-2"></i>
-                                    </a>
-                                    @include('website.layouts.macros.confirm-modal', [
-                                        'action' => route('omnomcom::products::delete', ['id' => $product->id]),
-                                        'text' => '<i class="fas fa-trash text-danger"></i>',
-                                        'title' => 'Confirm Delete',
-                                        'message' => "Are you sure you want to delete $product->name?",
-                                        'confirm' => 'Delete',
-                                    ])
-                                </td>
+                                <td>Name</td>
+                                <td>Price</td>
+                                <td>Calories</td>
+                                <td>Stock</td>
+                                <td>Visible</td>
+                                <td>Alcoholic</td>
+                                <td></td>
 
                             </tr>
 
-                        @endforeach
+                            </thead>
 
-                        </tbody>
+                            <tbody>
 
-                    </table>
+                            @foreach($products as $product)
+
+                                <tr>
+
+                                    <td>{{ $product->name }} <span class="text-muted">(#{{ $product->id }})</span></td>
+                                    <td>{{ $product->price }}</td>
+                                    <td>{{ $product->calories }}</td>
+                                    <td>{{ $product->stock }}</td>
+                                    <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
+                                    <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
+                                    <td style="min-width: 60px">
+                                        <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
+                                            <i class="fas fa-edit me-2"></i>
+                                        </a>
+                                        @include('components.modals.confirm-modal', [
+                                            'action' => route('omnomcom::products::delete', ['id' => $product->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete $product->name?",
+                                            'confirm' => 'Delete',
+                                        ])
+                                    </td>
+
+                                </tr>
+
+                            @endforeach
+
+                            </tbody>
+
+                        </table>
                     </div>
 
                     @if(method_exists($products, 'links'))

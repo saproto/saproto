@@ -51,7 +51,7 @@
                                     <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
 
-                                @include('website.layouts.macros.confirm-modal', [
+                                @include('components.modals.confirm-modal', [
                                    'action' => route('tempadmin::endId', ['id' => $tempadmin->id]),
                                    'text' => Carbon::parse($tempadmin->start_at)->isFuture() ?
                                                '<i class="fas fa-trash fa-fw text-danger"></i>' :

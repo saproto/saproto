@@ -4,6 +4,7 @@ namespace Proto\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Proto\Models\WallstreetDrink;
 
 class Kernel extends ConsoleKernel
 {
@@ -41,6 +42,7 @@ class Kernel extends ConsoleKernel
         Commands\MemberCleanup::class,
         Commands\AddSysadmin::class,
         Commands\EndMemberships::class,
+        Commands\UpdateWallstreetPrices::class,
     ];
 
     /**
@@ -66,8 +68,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
         $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
-//        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
+        //        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
+
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(function () {
+            return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0;
+        });
     }
 }

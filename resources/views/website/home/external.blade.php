@@ -117,7 +117,7 @@
 
 @section('right-column')
 
-    @include('website.layouts.macros.recentalbums', ['n' => 4])
+    @include('website.home.cards.recentalbums', ['n' => 4])
 
     @if(isset($videos) && count($videos) > 0)
 

@@ -38,7 +38,7 @@
 
                         <!-- Start -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'start',
                                 'label' => 'Event start:',
                                 'placeholder' => request()->old('start') ? strtotime(request()->old('start')) : ($event ? $event->start : null)
@@ -47,7 +47,7 @@
 
                         <!-- End -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'end',
                                 'label' => 'Event end:',
                                 'placeholder' => request()->old('start')?strtotime(request()->old('end')):($event ? $event->end : null)
@@ -58,10 +58,10 @@
                         <div class="col-md-6 mb-3">
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" {{ (old('secret') === 1 || $event != null && $event->secret ? 'selected' : '') }}>
+                                <option value="1" @selected(old('secret') === 1 || $event != null && $event->secret)>
                                     Secret
                                 </option>
-                                <option value="0" {{ (old('secret') === 0 || $event != null && !$event->secret ? 'selected' : '') }}>
+                                <option value="0" @selected(old('secret') === 0 || $event != null && !$event->secret)>
                                     Public
                                 </option>
                             </select>
@@ -69,11 +69,11 @@
 
                         <!-- Publication -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'publication',
                                 'label' => 'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
                                 'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
-                                'not_required'=>true,
+                                'not_required'=> true,
                             ])
                         </div>
 
@@ -102,11 +102,11 @@
 
                                 <label for="category">Event category:</label>
                                 <select id="category" name="category" class="form-control">
-                                    <option {{ $event && !$event->category ? 'selected' : '' }}>
+                                    <option @selected($event && !$event->category)>
                                         Uncategorized
                                     </option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $event && $event->category_id == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}" @selected($event?->category_id == $category->id)>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -116,50 +116,43 @@
 
                         <!-- External -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_external" {{($event && $event->is_external ? 'checked' : '') }}>
-                                    This activity is not organized by Proto.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'is_external',
+                                'checked' => $event?->is_external,
+                                'label' => 'This activity is not organized by Proto.'
+                            ])
                         </div>
 
                         <!-- Food -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="involves_food"
-                                            {{ ($event && $event->involves_food ? 'checked' : '') }}>
-                                    This activity involves people eating food.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'involves_food',
+                                'checked' => $event?->involves_food,
+                                'label' => 'This activity involves people eating food.'
+                            ])
                         </div>
 
                         <!-- Force Calendar -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="force_calendar_sync"
-                                            {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
-                                    Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'force_calendar_sync',
+                                'checked' => $event?->force_calendar_sync,
+                                'label' => 'Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>'
+                            ])
                         </div>
 
                         <!-- Feature -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_featured"
-                                            {{ ($event && $event->is_featured ? 'checked' : '') }}>
-                                    Feature this event on the homepage.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'is_featured',
+                                'checked' => $event?->is_featured,
+                                'label' => 'Feature this event on the homepage.'
+                            ])
                         </div>
 
                     </div>
 
-                    @if($event && $event->image)
+                    @if($event?->image)
 
                         <hr>
 
@@ -174,7 +167,7 @@
 
                     <div class="form-group">
                         <label for="editor">Description</label>
-                        @include('website.layouts.macros.markdownfield', [
+                        @include('components.forms.markdownfield', [
                             'name' => 'description',
                             'placeholder' => $event == null ? "Please elaborate on why this event is awesome." : null,
                             'value' => old('description',$event == null ? null : $event->description)
@@ -183,7 +176,7 @@
 
                     <div class="form-group">
                         <label for="editor-summary">Summary</label>
-                        @include('website.layouts.macros.markdownfield', [
+                        @include('components.forms.markdownfield', [
                             'name' => 'summary',
                             'placeholder' => $event == null ? "A summary (used in the newsletter for example). Only a small description is required, other details will be added." : null,
                             'value' => old('summary',$event == null ? null : $event->summary)

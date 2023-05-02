@@ -5,10 +5,12 @@ namespace Proto\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Str;
 
 /**
  * Member Model.
@@ -28,6 +30,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property-read User $user
  * @property-read StorageEntry|null $membershipForm
+ * @property StorageEntry|null $customOmnomcomSound
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Member onlyTrashed()
@@ -55,12 +58,15 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 class Member extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'members';
 
     protected $guarded = ['id', 'user_id'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return BelongsTo */
     public function user()
@@ -72,6 +78,12 @@ class Member extends Model
     public function membershipForm()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'membership_form_id');
+    }
+
+    /** @return BelongsTo */
+    public function customOmnomcomSound()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'omnomcom_sound_id');
     }
 
     /** @return int */
@@ -130,5 +142,38 @@ class Member extends Model
         }
 
         return null;
+    }
+
+    /**
+     * Create an email alias friendly username from a full name.
+     *
+     * @param $name string
+     * @return string
+     */
+    public static function createProtoUsername($name)
+    {
+        $name = explode(' ', $name);
+        if (count($name) > 1) {
+            $usernameBase = strtolower(Str::transliterate(
+                preg_replace('/\PL/u', '', substr($name[0], 0, 1))
+                .'.'.
+                preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
+            ));
+        } else {
+            $usernameBase = strtolower(Str::transliterate(
+                preg_replace('/\PL/u', '', $name[0])
+            ));
+        }
+
+        // make sure usernames are max 20 characters long (windows limitation)
+        $usernameBase = substr($usernameBase, 0, 17);
+
+        $username = $usernameBase;
+        $i = Member::where('proto_username', $username)->withTrashed()->count();
+        if ($i > 0) {
+            $username = "$usernameBase-$i";
+        }
+
+        return $username;
     }
 }

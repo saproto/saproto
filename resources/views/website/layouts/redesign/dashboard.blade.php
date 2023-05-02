@@ -2,7 +2,7 @@
 
 @section('body')
 
-    @include('website.navigation.navbar')
+    @include('website.navbar')
 
     <main role="main" id="dashboard" class="container-fluid border-dark">
 

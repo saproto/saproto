@@ -32,12 +32,12 @@
 
                         <hr>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'start',
                             'label' => 'Start date:',
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'end',
                             'label' => 'End date:',
                         ])

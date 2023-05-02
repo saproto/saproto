@@ -22,7 +22,7 @@ class DinnerformOrderlineController extends Controller
     {
         $dinnerform = Dinnerform::findOrFail($id);
 
-        if($dinnerform->hasOrdered()){
+        if($dinnerform->hasOrdered()) {
             Session::flash('flash_message','You can only make one order per dinnerform!');
             return Redirect::back();
         }
@@ -51,11 +51,11 @@ class DinnerformOrderlineController extends Controller
     public function delete($id)
     {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
-        if($dinnerOrderline->closed){
+        if($dinnerOrderline->closed) {
             Session::flash('flash_message', 'You cannot delete an order of a closed dinnerform!');
             return Redirect::back();
         }
-        if(! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')){
+        if(! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')) {
             Session::flash('flash_message', 'You are not authorized to delete this order!');
             Redirect::back();
         }
@@ -72,7 +72,7 @@ class DinnerformOrderlineController extends Controller
     public function edit($id)
     {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
-        if($dinnerOrderline->closed){
+        if($dinnerOrderline->closed) {
             Session::flash('flash_message', 'You cannot edit an order of a closed dinnerform!');
             return Redirect::back();
         }
@@ -87,7 +87,7 @@ class DinnerformOrderlineController extends Controller
     public function update(Request $request,$id)
     {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
-        if($dinnerOrderline->closed){
+        if($dinnerOrderline->closed) {
             $dinnerform = $dinnerOrderline->dinnerform;
             Session::flash('flash_message', 'You cannot update an order of a closed dinnerform!');
             return view('dinnerform.admin', ['dinnerform'=>$dinnerform, 'orderList'=>$dinnerform->orderlines()->get()]);

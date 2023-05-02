@@ -101,7 +101,7 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
-            if($this->to_backup){
+            if($this->to_backup) {
                 return 'event with backup';
             }
             return 'event';
@@ -116,11 +116,11 @@ class Email extends Model
         if ($this->to_user) {
             return User::orderBy('name', 'asc')->get();
         } elseif ($this->to_member) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
                 return $user->member->is_pending == true;
             });
         } elseif ($this->to_pending) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user) {
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
                 return $user->member->is_pending == false;
             });
         } elseif ($this->to_active) {
@@ -140,7 +140,7 @@ class Email extends Model
             foreach ($this->events as $event) {
                 if ($event != null) {
                     $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if($this->to_backup && $event->activity){
+                    if($this->to_backup && $event->activity) {
                         $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
                     }
                 }

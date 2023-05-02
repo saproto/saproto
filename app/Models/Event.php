@@ -90,7 +90,9 @@ class Event extends Model
 
     protected $appends = ['is_future', 'formatted_date'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return string */
     public function getPublicId()
@@ -118,20 +120,20 @@ class Event extends Model
     public function mayViewEvent($user)
     {
         //board may always view events
-        if($user && $user->can('board')){
+        if($user?->can('board')) {
             return true;
         }
 
         //only show secret events if the user is participating, helping or organising
-        if($this->secret){
-            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))){
+        if($this->secret) {
+            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
                 return true;
             }
         }
 
         //show non-secret events only when published
-        if(! $this->secret){
-            if(! $this->publication || $this->isPublished()){
+        if(! $this->secret) {
+            if(! $this->publication || $this->isPublished()) {
                 return true;
             }
         }
@@ -139,7 +141,8 @@ class Event extends Model
     }
 
     /** @return bool */
-    public function isPublished() {
+    public function isPublished()
+    {
         return $this->publication < Carbon::now()->timestamp;
     }
 
@@ -240,7 +243,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-            );
+        );
     }
 
     /**
@@ -249,7 +252,7 @@ class Event extends Model
      */
     public function isEventAdmin($user)
     {
-        return $user->can('board') || ($this->committee && $this->committee->isMember($user)) || $this->isEventEro($user);
+        return $user->can('board') || ($this->committee?->isMember($user)) || $this->isEventEro($user);
     }
 
     /**
@@ -298,12 +301,27 @@ class Event extends Model
         }
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
-                return isset($a->pivot->committees_activities_id); // prefer helper participation registration
+                return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
             })->unique());
         }
         return $users->sort(function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
+    }
+
+    public function allUsersCount()
+    {
+        $allUserIds = collect([]);
+        foreach ($this->tickets as $ticket) {
+            if($ticket->show_participants) {
+                $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
+            }
+        }
+
+        if ($this->activity) {
+            $allUserIds = $allUserIds->merge($this->activity->allUsers->pluck('id'));
+        }
+        return $allUserIds->unique()->count();
     }
 
     /** @return string[] */
@@ -340,7 +358,7 @@ class Event extends Model
         $yearStart = strtotime('January 1, '.$year);
         $yearEnd = strtotime('January 1, '.($year + 1));
         $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::check() || ! Auth::user()->can('board')) {
+        if (! Auth::user()?->can('board')) {
             $events = $events->where('secret', 0);
         }
 
