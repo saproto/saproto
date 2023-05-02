@@ -139,7 +139,7 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**
