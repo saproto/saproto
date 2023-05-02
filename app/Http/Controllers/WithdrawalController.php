@@ -268,7 +268,8 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return RedirectResponse|void
      */
-    public function bulkUpdate(Request $request, int $id) {
+    public function bulkUpdate(Request $request, int $id)
+    {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
 
@@ -279,20 +280,20 @@ class WithdrawalController extends Controller
 
         $action = $request->input('action');
         $userIds = $request->input('markids');
-        if(! $action){
+        if(! $action) {
             Session::flash('flash_message', 'No action given, please use one of the action buttons');
             return Redirect::back();
         }
-        if(! $userIds || count($userIds) <= 0){
+        if(! $userIds || count($userIds) <= 0) {
             Session::flash('flash_message', 'No users given to perform the action on!');
             return Redirect::back();
         }
 
-        if($action === 'markfailed'){
+        if($action === 'markfailed') {
             return $this->markFailed($withdrawal, $userIds);
-        }elseif($action === 'remove'){
+        } elseif($action === 'remove') {
             return $this->deleteFrom($withdrawal, $userIds);
-        }else{
+        } else {
             Session::flash('flash_message', 'The inputted action is not recognised, please try again');
             return Redirect::back();
         }
