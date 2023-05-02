@@ -35,6 +35,11 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
+    Route::group(['prefix' => 'discord', 'as' => 'discord::', 'middleware' => ['auth']], function () {
+        Route::get('linked', ['uses' => 'UserApiController@discordLinkCallback']);
+        Route::get('unlink', ['as' => 'unlink', 'uses' => 'UserApiController@discordUnlink']);
+    });
+
     /* Routes related to the Events API */
     Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {

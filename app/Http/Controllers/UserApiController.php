@@ -6,11 +6,15 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
+use Session;
+use \GuzzleHttp;
 
 class UserApiController extends Controller
 {
@@ -108,5 +112,46 @@ class UserApiController extends Controller
         }
 
         return $total;
+    }
+
+    public function discordLinkCallback(Request $request) {
+        $tokenURL = "https://discord.com/api/oauth2/token";
+        $apiURLBase = "https://discord.com/api/users/@me";
+        $tokenData = [
+            "client_id" => config('discord_client_id'),
+            "client_secret" => config('discord_secret'),
+            "grant_type" => "authorization_code",
+            "code" => $request->get('code'),
+            "redirect_uri" => 'http://localhost:8080/api/discord/linked',
+            "scope" => "identify"
+        ];
+
+        $client = new GuzzleHttp\Client();
+        try {
+            $accessTokenData = $client->post($tokenURL, ["form_params" => $tokenData]);
+            $accessTokenData = json_decode($accessTokenData -> getBody());
+        } catch (\GuzzleHttp\Exception\ClientException $error) {
+            Session::flash('flash_message', 'Failed to link Discord account :(' . $error);
+            return Redirect::back();
+        };
+
+        $userData = Http::withToken($accessTokenData -> access_token) -> get($apiURLBase);
+        $userData = json_decode($userData);
+
+        $user = Auth::user();
+        $user->discord_id = $userData->id;
+        $user->save();
+
+        Session::flash('flash_message', 'Successfully linked Discord!');
+        return Redirect::route('user::dashboard');
+    }
+
+    public function discordUnlink() {
+        $user = Auth::user();
+        $user->discord_id = null;
+        $user->save();
+
+        Session::flash('flash_message', 'Discord account has been unlinked.');
+        return Redirect::route('user::dashboard');
     }
 }
