@@ -98,39 +98,24 @@
                             </td>
 
                             @if ($event->activity)
-
                                 <td>{{ $event->activity->users->count() }}</td>
-                                <td>{{ $event->activity->backupUsers->count() }}</td>
-                                <td>{{$event->activity->getAttendees()}}</td>
-                                <td>€{{$event->activity->price}}</td>
-
-
+                                <td>
+                                    @if($event->activity->helpingCommitteeInstances->count() > 0)
+                                        @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
+                                            <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
+                                                {{ $helping_committee->committee->name }}
+                                            </a>: {{ $helping_committee->helperCount() }}<br>
+                                        @endforeach
+                                    @else
+                                        <span class="font-italic text-muted">not set</span>
+                                    @endif
+                                </td>
+                                <td>{{ $event->activity->presentUsers->count() }}</td>
                             @else
                                 <td><span class="font-italic text-muted">no activity</span></td>
                                 <td><span class="font-italic text-muted">no activity</span></td>
                                 <td><span class="font-italic text-muted">no activity</span></td>
-                                <td><span class="font-italic text-muted">no activity</span></td>
                             @endif
-
-                                    <td>{{ $event->activity->users->count() }}</td>
-                                    <td>
-                                        @if($event->activity->helpingCommitteeInstances->count() > 0)
-                                            @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
-                                                <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
-                                                    {{ $helping_committee->committee->name }}
-                                                </a>: {{ $helping_committee->helperCount() }}<br>
-                                            @endforeach
-                                        @else
-                                            <span class="font-italic text-muted">not set</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $event->activity->presentUsers->count() }}</td>
-
-                                @else
-                                    <td><span class="font-italic text-muted">no activity</span></td>
-                                    <td><span class="font-italic text-muted">no activity</span></td>
-                                    <td><span class="font-italic text-muted">no activity</span></td>
-                                @endif
 
                             </tr>
 
