@@ -361,7 +361,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
-            if ($orderline->withdrawal?->id !== 1 && ! $orderline->withdrawal->closed) {
+            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
                 return true;
             }
         }
