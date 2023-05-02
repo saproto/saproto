@@ -46,6 +46,9 @@ class FeedBackController extends Controller
     {
         //find the most voted idea
         $mostVotedID = FeedbackVote::query()
+            ->whereHas('feedback', function ($query) use ($category) {
+                $query->where('feedback_category_id', $category->id);
+            })
             ->selectRaw('feedback_id, sum(vote) as votes')
             ->groupBy('feedback_id')
             ->having('votes', '>=', 0)
