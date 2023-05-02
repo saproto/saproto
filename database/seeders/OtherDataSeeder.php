@@ -12,6 +12,7 @@ use Proto\Models\Bank;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Feedback;
+use Proto\Models\FeedbackCategory;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
@@ -93,31 +94,6 @@ class OtherDataSeeder extends Seeder
             }
         });
 
-
-        $quotes = new \Proto\Models\FeedbackCategory([
-            'title'=>'Quotes',
-            'url'=>'quotes',
-            'review'=>false,
-        ]);
-        $quotes->save();
-
-        // Create Quotes
-        $n = 200;
-        $time_start = microtime(true);
-
-        foreach (range(1, $n) as $index) {
-
-            $quote = new Feedback([
-                'user_id'=> array_random($users),
-                'feedback'=>$faker->text(100),
-                'feedback_category_id'=>2,
-            ]);
-            $quote->save();
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." quotes\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
         // Create AchievementOwnership
         $output->task('creating achievement ownerships', function () use ($members) {
             foreach($members as $member) {
@@ -146,28 +122,17 @@ class OtherDataSeeder extends Seeder
         $n = 10;
         $output->task("creating $n pages", fn () => Page::factory()->count($n)->create());
 
-        // Create quotes
+        // Create quotes and Good Ideas
+        $quotes = new FeedbackCategory([
+            'title'=>'Quotes',
+            'url'=>'quotes',
+            'review'=>false,
+        ]);
+        $quotes->save();
+
         $n = 100;
-        $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
-
-        // Create GoodIdeas
-        $n = 200;
-
-        $time_start = microtime(true);
-
-        foreach (range(1, $n) as $index) {
-            $goodIdea = new Feedback([
-                'user_id'=> array_random($users),
-                'feedback'=>$faker->text(50),
-                'feedback_category_id'=>1,
-            ]);
-            $goodIdea->save();
-
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." goodIdeas\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        $output->task("creating $n quotes", fn () => Feedback::factory()->state(['feedback_category_id' => 2])->count($n)->create());
+        $output->task("creating $n Good Ideas", fn () => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
 
         // Create newsletter text
         $output->task('creating newsletter', function () use ($members) {
