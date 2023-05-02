@@ -62,6 +62,14 @@
                             'label' => 'This ticket should be prepaid.'
                         ])
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="show_participants" {{ ($ticket && $ticket->show_participants ? 'checked' : '') }}>
+                                Show the participant's who bought this ticket on the event.
+                            </label>
+                        </div>
+
                     </div>
 
                     <div class="card-footer">

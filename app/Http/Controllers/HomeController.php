@@ -81,7 +81,8 @@ class HomeController extends Controller
     }
 
     /** @return View Display FishCam. */
-    public function fishcam() {
+    public function fishcam()
+    {
         return view('misc.fishcam');
     }
 }

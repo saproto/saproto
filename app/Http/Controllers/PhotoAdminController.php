@@ -93,24 +93,25 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::findOrFail($id);
 
-        if (! $request->hasFile('file')){return response()->json([
-            'message'=>'photo not found in request!',
-        ], 404);
+        if (! $request->hasFile('file')) {
+            return response()->json([
+                'message'=>'photo not found in request!',
+            ], 404);
+        } elseif ($album->published) {
+            return response()->json([
+                'message'=>'album already published! Unpublish to add more photos!',
+            ], 500);
         }
-        elseif ($album->published){return response()->json([
-            'message'=>'album already published! Unpublish to add more photos!',
-        ], 500);
-        }
-            try {
+        try {
             $uploadFile = $request->file('file');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id);
-            return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
-            } catch (Exception $e) {
-                return response()->json([
-                    'message'=>$e,
-                ], 500);
-            }
+            return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
+        } catch (Exception $e) {
+            return response()->json([
+                'message'=>$e,
+            ], 500);
+        }
     }
 
     /**

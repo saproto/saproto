@@ -145,13 +145,13 @@ class DinnerformController extends Controller
     public function destroy($id)
     {
         $dinnerform = Dinnerform::findOrFail($id);
-        if(! $dinnerform->closed){
+        if(! $dinnerform->closed) {
             Session::flash('flash_message', "The dinnerform for '".$dinnerform->restaurant."' has been deleted.");
             $dinnerform->delete();
-        }else{
+        } else {
             Session::flash('flash_message', 'The dinnerform is already closed and can not be deleted!');
         }
-            return Redirect::route('dinnerform::add');
+        return Redirect::route('dinnerform::add');
     }
 
     /**
@@ -175,7 +175,7 @@ class DinnerformController extends Controller
         $dinnerformOrderlines = $dinnerform->orderlines()->get();
         $product = Product::findOrFail(config('omnomcom.dinnerform-product'));
 
-        foreach($dinnerformOrderlines as $dinnerformOrderline){
+        foreach($dinnerformOrderlines as $dinnerformOrderline) {
             $product->buyForUser(
                 $dinnerformOrderline->user,
                 1,

@@ -142,9 +142,9 @@ class Dinnerform extends Model
     {
         parent::boot();
         static::deleting(function ($dinnerform) {
-          foreach($dinnerform->orderlines()->get() as $orderline){
-             $orderline->delete();
-          }
+            foreach($dinnerform->orderlines()->get() as $orderline) {
+                $orderline->delete();
+            }
         });
     }
 }

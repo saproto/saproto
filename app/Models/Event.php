@@ -125,15 +125,15 @@ class Event extends Model
         }
 
         //only show secret events if the user is participating, helping or organising
-        if($this->secret){
-            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))){
+        if($this->secret) {
+            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
                 return true;
             }
         }
 
         //show non-secret events only when published
-        if(! $this->secret){
-            if(! $this->publication || $this->isPublished()){
+        if(! $this->secret) {
+            if(! $this->publication || $this->isPublished()) {
                 return true;
             }
         }
@@ -141,7 +141,8 @@ class Event extends Model
     }
 
     /** @return bool */
-    public function isPublished() {
+    public function isPublished()
+    {
         return $this->publication < Carbon::now()->timestamp;
     }
 
@@ -242,7 +243,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-            );
+        );
     }
 
     /**
@@ -306,6 +307,21 @@ class Event extends Model
         return $users->sort(function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
+    }
+
+    public function allUsersCount()
+    {
+        $allUserIds = collect([]);
+        foreach ($this->tickets as $ticket) {
+            if($ticket->show_participants) {
+                $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
+            }
+        }
+
+        if ($this->activity) {
+            $allUserIds = $allUserIds->merge($this->activity->allUsers->pluck('id'));
+        }
+        return $allUserIds->unique()->count();
     }
 
     /** @return string[] */

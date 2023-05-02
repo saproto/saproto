@@ -107,21 +107,20 @@
             @endif
 
             {{-- Signup Icon --}}
-            @if($event->activity)
                 <div class= "d-flex justify-content-between">
-                    @if($event->activity->users->count()>0)
+                    @if($event->allUsersCount()>0)
                         <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                            {{$event->activity->users->count()}}
+                            {{$event->allUsersCount()}}
                         </span>
                     @endif
-                    @if($event->activity->canSubscribe())
+
+                    @if($event->activity && $event->activity->canSubscribe())
                         <span>
                             <i class="fas fa-lock-open"></i>
                         </span>
                     @endif
                 </div>
-            @endif
 
         </div>
 

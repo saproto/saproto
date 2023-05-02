@@ -166,7 +166,7 @@ class OmNomController extends Controller
             return json_encode($result);
         }
 
-        if($user->member->customOmnomcomSound){
+        if($user->member->customOmnomcomSound) {
             $result->sound = $user->member->customOmnomcomSound->generatePath();
         }
 

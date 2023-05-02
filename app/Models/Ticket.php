@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @property int $available_to
  * @property bool $members_only
  * @property bool $is_prepaid
+ * @property bool $show_participants
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases

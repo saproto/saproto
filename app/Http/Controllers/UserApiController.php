@@ -72,11 +72,17 @@ class UserApiController extends Controller
 
         $orderlines = Orderline::where('user_id', Auth::id())->with('product');
 
-        if ($request->has('from')) $orderlines = $orderlines->where('created_at', '>', $validated['from']);
-        if ($request->has('to')) $orderlines = $orderlines->where('created_at', '<', $validated['to']);
+        if ($request->has('from')) {
+            $orderlines = $orderlines->where('created_at', '>', $validated['from']);
+        }
+        if ($request->has('to')) {
+            $orderlines = $orderlines->where('created_at', '<', $validated['to']);
+        }
 
         $orderlines = $orderlines->orderBy('created_at', 'DESC');
-        if (! $request->has('from') && ! $request->has('to')) $orderlines = $orderlines->limit(100);
+        if (! $request->has('from') && ! $request->has('to')) {
+            $orderlines = $orderlines->limit(100);
+        }
         return $orderlines->get();
     }
 
