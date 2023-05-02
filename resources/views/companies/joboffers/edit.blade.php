@@ -31,7 +31,7 @@
                                 </option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}"
-                                            @if($joboffer && $joboffer->company->id == $company->id) selected @endif>{{ $company->name }}</option>
+                                            @if($joboffer?->company->id == $company->id) selected @endif>{{ $company->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -45,16 +45,22 @@
                         <div class="form-group">
                             <label for="information_type_selector">Offer information type</label>
                             <select id="information_type_selector" class="form-control">
-                                <option value="" @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected @endif disabled>Select a type...
+                                <option value=""
+                                        @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected
+                                        @endif disabled>Select a type...
                                 </option>
-                                <option value="description" @if($joboffer && $joboffer->description != null) selected @endif>Description</option>
-                                <option value="url" @if($joboffer && $joboffer->redirect_url != null) selected @endif>Redirect URL</option>
+                                <option value="description"
+                                        @if($joboffer?->description != null) selected @endif>Description
+                                </option>
+                                <option value="url" @if($joboffer?->redirect_url != null) selected @endif>
+                                    Redirect URL
+                                </option>
                             </select>
                         </div>
 
                         <div id="information_type_description" class="form-group">
                             <label for="editor-description">Description</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'description',
                                 'placeholder' => !$joboffer ? 'A text dedicated to the job offer. Be as elaborate as you need to be!' : null,
                                 'value' => !$joboffer ? null : $joboffer->description
@@ -107,7 +113,7 @@
         typeSelector.addEventListener('change', updateInformationDisplay)
 
         function updateInformationDisplay() {
-            switch(typeSelector.value) {
+            switch (typeSelector.value) {
                 case 'description':
                     typeDescription.classList.remove('d-none')
                     typeUrl.classList.add('d-none')

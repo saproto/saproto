@@ -2,7 +2,7 @@
 
 @section('body')
 
-    {!! Markdown::convertToHtml($body) !!}
+    {!! Markdown::convert($body) !!}
 
     <p>
         &nbsp;&nbsp;

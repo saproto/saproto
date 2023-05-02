@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -86,8 +87,7 @@ class PhotoAdminController extends Controller
     /**
      * @param Request $request
      * @param int $id
-     * @return false|string
-     * @throws FileNotFoundException
+     * @return JsonResponse|string
      */
     public function upload(Request $request, $id)
     {

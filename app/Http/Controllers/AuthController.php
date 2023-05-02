@@ -72,7 +72,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             self::postLoginRedirect();
         }
-        // Catch a login form submission for two factor authentication.
+        // Catch a login form submission for two-factor authentication.
         if ($request->session()->has('2fa_user')) {
             return self::handleTwofactorSubmit($request, $google2fa);
         }
@@ -383,7 +383,7 @@ class AuthController extends Controller
 
         $user_verify = self::verifyCredentials($user->email, $pass_old);
 
-        if ($user_verify && $user_verify->id === $user->id) {
+        if ($user_verify?->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
                 Session::flash('flash_message', 'The new passwords do not match.');
                 return view('auth.passchange');
@@ -430,7 +430,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $user_verify = self::verifyCredentials($user->email, $pass);
 
-        if ($user_verify && $user_verify->id === $user->id) {
+        if ($user_verify?->id === $user->id) {
             $user->setPassword($pass);
             Session::flash('flash_message', 'Your password was successfully synchronized.');
             return Redirect::route('user::dashboard');

@@ -199,8 +199,8 @@ class ApiController extends Controller
 
         foreach (ActivityParticipation::where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
-                'name' => $activity_participation->activity && $activity_participation->activity->event ? $activity_participation->activity->event->title : null,
-                'date' => $activity_participation->activity && $activity_participation->activity->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'name' => $activity_participation->activity?->event?->title,
+                'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,

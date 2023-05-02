@@ -31,7 +31,7 @@
                     <div class="card-footer">
 
                         @if($category)
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                 'action' => route('omnomcom::categories::delete', ['id' => $category->id]),
                                 'classes' => 'btn btn-danger',
                                 'text' => 'Delete',
@@ -49,24 +49,24 @@
 
                 </div>
                 @if($category)
-                <div class="card mb-3">
+                    <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white">
-                        Products in this category
+                        <div class="card-header bg-dark text-white">
+                            Products in this category
+                        </div>
+
+                        <ul class="list-group list-group-flush">
+                            @foreach($category->products() as $product)
+                                <li class="list-group-item">
+                                    {{ $product->name }}
+                                    <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
+                                        <i class="fa fa-edit float-end"></i>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+
                     </div>
-
-                    <ul class="list-group list-group-flush">
-                        @foreach($category->products() as $product)
-                            <li class="list-group-item">
-                                {{ $product->name }}
-                                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                                    <i class="fa fa-edit float-end"></i>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-
-                </div>
                 @endif
 
             </form>

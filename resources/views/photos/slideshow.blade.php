@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <title>Photo Slideshow</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300,100italic,100');
@@ -104,33 +104,33 @@
         }
     </style>
 
-    @include('website.layouts.assets.javascripts')
+    @include('website.assets.javascripts')
 
 </head>
 <body>
 
-    <div id="slideshow" class="loading"></div>
+<div id="slideshow" class="loading"></div>
 
-    <div id="title">Loading...</div>
+<div id="title">Loading...</div>
 
-    <div id="controls">
-        <select id="albums">
-            <option>Loading...</option>
-        </select>
-    </div>
+<div id="controls">
+    <select id="albums">
+        <option>Loading...</option>
+    </select>
+</div>
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let slideInterval
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
+    let slideInterval
 
-        const albumEl = document.getElementById('albums')
-        const albumOptionList = Array.from(document.querySelectorAll('#albums > option'))
-        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"]
+    const albumEl = document.getElementById('albums')
+    const albumOptionList = Array.from(document.querySelectorAll('#albums > option'))
+    const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"]
 
-        startSlideshow()
+    startSlideshow()
 
-        function startSlideshow() {
-            get('{{ route("api::photos::albums") }}')
+    function startSlideshow() {
+        get('{{ route("api::photos::albums") }}')
             .then(data => {
                 albumEl.innerHTML = ''
                 for (const album of data) {
@@ -139,26 +139,30 @@
                 }
                 displayRandomAlbum()
             })
-            .catch(err => { console.error(err) })
-            albumEl.addEventListener('change', _ => { displayAlbum(albumEl.value) })
+            .catch(err => {
+                console.error(err)
+            })
+        albumEl.addEventListener('change', _ => {
+            displayAlbum(albumEl.value)
+        })
+    }
+
+    function displayRandomAlbum() {
+        if (albumOptionList.length > 1) {
+            let i = Math.round(Math.random() * albumOptionList.length)
+            let random = document.querySelector(`#albums > option:nth-child(${i})`).value
+            displayAlbum(random)
+        } else {
+            console.warn('There are no images to display')
         }
+    }
 
-        function displayRandomAlbum() {
-            if (albumOptionList.length > 1) {
-                let i = Math.round(Math.random() * albumOptionList.length)
-                let random = document.querySelector(`#albums > option:nth-child(${i})`).value
-                displayAlbum(random)
-            } else {
-                console.warn('There are no images to display')
-            }
-        }
+    function displayAlbum(id) {
+        const slideshow = document.getElementById('slideshow')
+        slideshow.classList.add('loading')
+        slideshow.innerHTML = ''
 
-        function displayAlbum(id) {
-            const slideshow = document.getElementById('slideshow')
-            slideshow.classList.add('loading')
-            slideshow.innerHTML = ''
-
-            get('{{ route("api::photos::albumList") }}/' + id)
+        get('{{ route("api::photos::albumList") }}/' + id)
             .then(data => {
                 slideshow.classList.remove('loading')
                 albumOptionList.forEach(el => {
@@ -177,22 +181,26 @@
                 clearInterval(slideInterval)
                 slideInterval = setInterval(slide, 7500)
             })
-        }
+    }
 
-        function prepareSlideshow() {
-            document.querySelector('#slideshow > div:first-child').classList.add('active')
-            const slides = Array.from(document.querySelectorAll('#slideshow > div'))
-            slides.forEach(el => {el.style.zIndex = this.z++}, {z: 1})
-        }
+    function prepareSlideshow() {
+        document.querySelector('#slideshow > div:first-child').classList.add('active')
+        const slides = Array.from(document.querySelectorAll('#slideshow > div'))
+        slides.forEach(el => {
+            el.style.zIndex = this.z++
+        }, {z: 1})
+    }
 
-        function slide() {
-            const active = document.querySelector('#slideshow > div.active')
-            const next = active.nextSibling
-            active.classList.remove('active')
-            if (next.length > 0) setTimeout(function () { next.classList.add('active') }, 300)
-            else displayRandomAlbum()
-        }
-    </script>
+    function slide() {
+        const active = document.querySelector('#slideshow > div.active')
+        const next = active.nextSibling
+        active.classList.remove('active')
+        if (next.length > 0) setTimeout(function () {
+            next.classList.add('active')
+        }, 300)
+        else displayRandomAlbum()
+    }
+</script>
 
 </body>
 </html>

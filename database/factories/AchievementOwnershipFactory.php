@@ -1,25 +1,30 @@
 <?php
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
 
-/* @var $factory Factory */
-$factory->define(
-    Proto\Models\AchievementOwnership::class,
-    function (Faker $faker, $attr) {
-        $mintime = date('U', strtotime('-1 year'));
-        $maxtime = date('U', strtotime('now'));
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\Achievement;
+use Proto\Models\AchievementOwnership;
 
-        $achievement = Proto\Models\Achievement::inRandomOrder()->first();
-
-        $date = date('Y-m-d H:i:s', mt_rand($mintime, $maxtime));
-        $alerted = mt_rand(0,1);
+/**
+ * @extends Factory<AchievementOwnership>
+ */
+class AchievementOwnershipFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        $date = fake()->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
 
         return [
-            'achievement_id' => $achievement->id,
+            'achievement_id' => Achievement::inRandomOrder()->first()->id,
             'created_at' => $date,
             'updated_at' => $date,
-            'alerted' => $alerted,
+            'alerted' => fake()->boolean(),
         ];
     }
-);
+}
