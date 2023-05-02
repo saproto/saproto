@@ -604,11 +604,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function getIsProtubeAdminUntil()
     {
         $protubeAdminUntil = 0;
-        if($this->can('protube')) return Carbon::now()->addYear()->unix();
+        if($this->can('protube')) {
+            return Carbon::now()->addYear()->unix();
+        }
         foreach ($this->tempadmin as $tempadmin) {
             if (Carbon::parse($tempadmin->start_at)->startOfDay() <= Carbon::now()->startOfDay() &&
                 Carbon::parse($tempadmin->end_at)->isAfter(Carbon::parse($protubeAdminUntil))) {
-                    $protubeAdminUntil = Carbon::parse($tempadmin->end_at)->unix();
+                $protubeAdminUntil = Carbon::parse($tempadmin->end_at)->unix();
             }
         }
 
@@ -616,9 +618,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
     
     /** @returns int|bool */
-    public function getIsProtubeAdminFrom() {
+    public function getIsProtubeAdminFrom()
+    {
         $protubeAdminFrom = 0;
-        if($this->can('protube')) return Carbon::now()->startOfDay()->unix();
+        if($this->can('protube')) {
+            return Carbon::now()->startOfDay()->unix();
+        }
         foreach ($this->tempadmin as $tempadmin) {
             if (Carbon::parse($tempadmin->start_at)->isToday() &&
                 ($protubeAdminFrom == 0 || Carbon::parse($tempadmin->start_at)->isBefore(Carbon::parse($protubeAdminFrom)))) {
