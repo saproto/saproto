@@ -120,7 +120,7 @@ class Event extends Model
     public function mayViewEvent($user)
     {
         //board may always view events
-        if($user?->can('board')){
+        if($user?->can('board')) {
             return true;
         }
 

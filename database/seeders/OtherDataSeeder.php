@@ -46,23 +46,23 @@ class OtherDataSeeder extends Seeder
         // Create members
         $n = 90;
         $output->task("creating $n members", function () use ($n) {
-                Member::factory()
-                    ->count($n - 5)
-                    ->create();
+            Member::factory()
+                ->count($n - 5)
+                ->create();
 
-                Member::factory()
-                    ->count(4)
-                    ->state(new Sequence(
-                        ['is_lifelong' => 1],
-                        ['is_honorary' => 1],
-                        ['is_donor' => 1],
-                        ['is_pet' => 1],
-                    ))
-                    ->state([
-                        'is_pending' => 0,
-                        'deleted_at' => null,
-                    ])
-                    ->create();
+            Member::factory()
+                ->count(4)
+                ->state(new Sequence(
+                    ['is_lifelong' => 1],
+                    ['is_honorary' => 1],
+                    ['is_donor' => 1],
+                    ['is_pet' => 1],
+                ))
+                ->state([
+                    'is_pending' => 0,
+                    'deleted_at' => null,
+                ])
+                ->create();
         });
 
         // Get users with completed membership

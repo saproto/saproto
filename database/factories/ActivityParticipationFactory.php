@@ -31,7 +31,8 @@ class ActivityParticipationFactory extends Factory
      * @param array $attributes
      * @return string
      */
-    public function createAt(array $attributes) {
+    public function createAt(array $attributes)
+    {
         $activity = Activity::find($attributes['activity_id']);
         $date = fake()->dateTimeBetween($activity->registration_start, $activity->event->start);
         return $date->format('Y-m-d H:i:s');
@@ -43,7 +44,8 @@ class ActivityParticipationFactory extends Factory
      * @param array $attributes
      * @return string
      */
-    public function deletedAt(array $attributes) {
+    public function deletedAt(array $attributes)
+    {
         $activity = Activity::find($attributes['activity_id']);
         $date = fake()->dateTimeBetween($attributes['created_at'], $activity->event->start);
         return $date->format('Y-m-d H:i:s');
@@ -55,7 +57,8 @@ class ActivityParticipationFactory extends Factory
      * @param array $attributes
      * @return bool
      */
-    public function backup(array $attributes) {
+    public function backup(array $attributes)
+    {
         $activity = Activity::find($attributes['activity_id']);
         return $activity->freeSpots() == 0;
     }
