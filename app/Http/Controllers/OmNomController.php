@@ -252,7 +252,7 @@ class OmNomController extends Controller
             }
             $soccerCards = floor($cartTotal / 0.5);
             if($soccerCards > 0) {
-                if($soccerCards > 12){
+                if($soccerCards > 12) {
                     $soccerCards = 12;
                 }
                 $result->message .= sprintf('<br><br> You may take <strong>%s</strong> soccer card%s!', $soccerCards, $soccerCards > 1 ? 's' : '');
