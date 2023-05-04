@@ -174,7 +174,7 @@
 
                         @foreach($accounts as $account)
 
-                            <option value="{{ $account?->id }}" @selected(old('account_id', $account && $product && $account->id == $product?->account_id))>
+                            <option value="{{ $account?->id }}" @selected(old('account_id', $account && $product && $account->id == $product->account_id))>
                                 {{ $account->name }} ({{ $account->account_number }})
                             </option>
 
