@@ -20,7 +20,6 @@ class Kernel extends ConsoleKernel
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
-        Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
         Commands\FeeCron::class,
