@@ -301,4 +301,7 @@ return [
 
     // Analytics URL
     'analytics_url' => env('ANALYTICS_URL', ''),
+
+    // Protube url
+    'protube_url' => env('PROTUBE_URL', 'https://protu.be/remote'),
 ];
