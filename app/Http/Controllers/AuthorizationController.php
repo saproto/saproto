@@ -4,7 +4,6 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Permission;
 use Proto\Models\User;

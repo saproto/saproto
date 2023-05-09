@@ -17,7 +17,6 @@ use Proto\Models\Quote;
 use Proto\Models\QuoteLike;
 use Proto\Models\RfidCard;
 use Proto\Models\Tempadmin;
-use Proto\Models\Token;
 use Proto\Models\User;
 use stdClass;
 
@@ -33,8 +32,8 @@ class ApiController extends Controller
     }
 
     /**
-     * Returns the user details used by ProTube
-     * 
+     * Returns the user details used by ProTube.
+     *
      * @return JsonResponse
      */
     public function protubeUserDetails(): JsonResponse
@@ -49,10 +48,10 @@ class ApiController extends Controller
             $startOfAdmin = 0;
             $endOfAdmin = 0;
 
-            if($user->hasPermissionTo('protube', 'web')){
+            if($user->hasPermissionTo('protube', 'web')) {
                 $startOfAdmin = Carbon::today()->startOfDay()->unix();
                 $endOfAdmin = Carbon::today()->endOfDay()->unix();
-            } else if(!empty($tempadmins)){
+            } elseif(! empty($tempadmins)) {
                 // get the unix timestamps of the earliest and last moment the user is a tempadmin
                 $startOfAdmin = Carbon::parse($tempadmins->sortBy('start_at')->first()->start_at)->unix();
                 $endOfAdmin = Carbon::parse($tempadmins->sortByDesc('end_at')->first()->end_at)->unix();

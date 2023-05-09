@@ -8,7 +8,6 @@ use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
