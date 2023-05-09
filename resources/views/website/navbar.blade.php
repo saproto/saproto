@@ -179,7 +179,7 @@
 
                         @cannot('board')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ config('proto.protube_url') }}" target="_blank" role="button">
+                                <a class="nav-link" href="{{ config('protube.remote_url') }}" target="_blank" role="button">
                                     ProTube 
                                     @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
                                         Admin

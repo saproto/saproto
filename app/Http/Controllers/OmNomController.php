@@ -220,9 +220,6 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::find($id);
                 $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
-                if ($product->id == config('omnomcom.protube-skip')) {
-                    Http::get(config('herbert.server').'/skip?secret='.config('herbert.secret'));
-                }
             }
         }
 
