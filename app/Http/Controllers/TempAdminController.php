@@ -80,7 +80,7 @@ class TempAdminController extends Controller
             // If today, trigger webhook on protube to update the user
             if(Carbon::parse($tempadmin->start_at)->isToday()) {
                 $this->triggerProTubeWebHook($tempadmin->user_id);
-            }  
+            }
         }
 
         return Redirect::back();
@@ -154,7 +154,7 @@ class TempAdminController extends Controller
 
     /**
      * Send a webhook to ProTube to update the user's admin status.
-     * 
+     *
      * @param int $id userID to update
      * @return void
      */
@@ -163,10 +163,10 @@ class TempAdminController extends Controller
         try {
             // If today, trigger webhook on protube to update the user (ignore ssl error in dev mode)
             Http::withToken(config('protube.secret'))
-                ->withOptions([ 'verify' => config('app.env') !== 'local' ])
-                ->post(config('protube.server') . '/api/laravel/updateadmin/' . $userId, );
+                ->withOptions(['verify' => config('app.env') !== 'local'])
+                ->post(config('protube.server').'/api/laravel/updateadmin/'.$userId, );
         } catch (Exception $e) {
-            Log::error('Failed to trigger ProTube webhook: ' . $e->getMessage());
+            Log::error('Failed to trigger ProTube webhook: '.$e->getMessage());
         }
     }
 }
