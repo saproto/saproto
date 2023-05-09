@@ -186,9 +186,6 @@ class UserAdminController extends Controller
             'value' => 1,
         ]);
 
-        // Disabled because ProTube is down.
-        // Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
-
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
         return Redirect::back();
     }

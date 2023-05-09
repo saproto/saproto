@@ -33,33 +33,6 @@ class ApiController extends Controller
     }
 
     /**
-     * @param string $token
-     * @return false|string
-     */
-    public function protubeAdmin($token)
-    {
-        $token = Token::where('token', $token)->first();
-
-        $adminInfo = new stdClass();
-
-        if (! $token) {
-            $adminInfo->is_admin = false;
-        } else {
-            $user = $token->user;
-            if (! $user) {
-                $adminInfo->is_admin = false;
-            } else {
-                $adminInfo->user_id = $user->id;
-                $adminInfo->user_name = $user->name;
-                $adminInfo->calling_name = $user->calling_name;
-                $adminInfo->is_admin = $user->can('protube') || $user->isTempadmin();
-            }
-        }
-
-        return json_encode($adminInfo);
-    }
-
-    /**
      * Returns the user details used by ProTube
      * 
      * @return JsonResponse
