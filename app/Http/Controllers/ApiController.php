@@ -51,7 +51,7 @@ class ApiController extends Controller
             if($user->hasPermissionTo('protube', 'web')) {
                 $startOfAdmin = Carbon::today()->startOfDay()->unix();
                 $endOfAdmin = Carbon::today()->endOfDay()->unix();
-            } elseif(! empty($tempadmins)) {
+            } else if(! empty($tempadmins)) {
                 // get the unix timestamps of the earliest and last moment the user is a tempadmin
                 $startOfAdmin = Carbon::parse($tempadmins->sortBy('start_at')->first()->start_at)->unix();
                 $endOfAdmin = Carbon::parse($tempadmins->sortByDesc('end_at')->first()->end_at)->unix();
