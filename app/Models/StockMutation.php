@@ -50,4 +50,10 @@ class StockMutation extends Model
     public function date(): String{
         return $this->created_at->toDateString();
     }
+
+    public function delta(): int{
+        return $this->after - $this->before;
     }
+
+
+}
