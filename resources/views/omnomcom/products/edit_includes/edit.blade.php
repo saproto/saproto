@@ -82,15 +82,23 @@
 
             <div class="row mb-3">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <label for="stock">Current stock:</label>
+                    <input type="number" class="form-control" id="prev_stock" name="prev_stock"
+                           placeholder="0" value="{{ $product->stock ?? '' }}">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label for="stock">Updated stock:</label>
                     <input type="number" class="form-control" id="stock" name="stock"
                            placeholder="0" value="{{ $product->stock ?? '' }}">
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <label for="preferred_stock">Preferred stock:</label>
                     <input type="number" class="form-control" id="preferred_stock" name="preferred_stock"
@@ -98,7 +106,7 @@
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <label for="max_stock">Maximum stock:</label>
                     <input type="number" class="form-control" id="max_stock" name="max_stock"
@@ -119,6 +127,12 @@
                 </div>
 
             </div>
+
+            @include('components.forms.checkbox', [
+                'name' => 'report_mutation',
+                'checked' => true,
+                'label' => 'Track changes [BETA]'
+            ])
 
             @include('components.forms.checkbox', [
                 'name' => 'is_visible',
