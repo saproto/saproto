@@ -69,6 +69,7 @@ class DinnerformController extends Controller
             'regular_discount'=> (100 - $request->input('regular_discount')) / 100,
             'event_id'=> $request->input('event_select') != '' ? $request->input('event_select') : null,
             'visible_home_page'=> $request->has('homepage'),
+            'ordered_by' => $request->input('ordered_by'),
         ]);
 
         Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
@@ -126,6 +127,7 @@ class DinnerformController extends Controller
             'regular_discount'=> (100 - $request->input('regular_discount')) / 100,
             'event_id'=> $request->input('event_select') != '' ? $request->input('event_select') : null,
             'visible_home_page'=> $request->has('homepage'),
+            'ordered_by' => $request->input('ordered_by'),
         ]);
 
         if ($changed_important_details) {

@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float $helper_discount
  * @property float $regular_discount
  * @property float $regular_discount_percentage
+ * @property User $orderedBy
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
@@ -59,6 +60,12 @@ class Dinnerform extends Model
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event');
+    }
+
+    /** @return BelongsTo */
+    public function orderedBy()
+    {
+        return $this->belongsTo('Proto\Models\User', 'ordered_by');
     }
 
     /** @return HasMany */
