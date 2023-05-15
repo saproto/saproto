@@ -105,7 +105,8 @@
                                             <td>{{$mutation->product->name}}</td>
                                             <td>{{$mutation->before}}</td>
                                             <td>{{$mutation->after}}</td>
-                                            <td>{{$mutation->delta()}}</td>
+                                            <td class="text-{{$mutation->delta() > 0 ? 'white': 'danger'}}">
+                                                {{$mutation->delta()}}</td>
                                             <td><a href="{{ route('user::profile', ['id' => $mutation->user->getPublicId()])  }}">{{$mutation->user->name}}</a></td>
                                             <td>{{$mutation->is_bulk ? "Yes" : "No"}}</td>
                                             <td>{{$mutation->date()}}</td>
