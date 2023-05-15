@@ -3,6 +3,8 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Proto\Models\Product;
 use Proto\Models\StockMutation;
 
 class StockMutationController extends Controller
@@ -10,41 +12,72 @@ class StockMutationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $mutations = StockMutation::orderBy('created_at', 'desc')->paginate(20);
-        return view('omnomcom.products.mutations', ['mutations' => $mutations]);
+
+    function filterMutations(Request $rq, array $selection = null){
+        $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc');
+
+        if ($rq->has("product_name") && strlen($rq->get('product_name')) > 2){
+            $search = $rq->get('product_name');
+            $mutations = $mutations
+                ->join('products','products.id', '=','stock_mutations.product_id','inner')
+                ->where('products.name', 'like', "%$search%");
+        }
+
+        if ($rq->has("author_name") && strlen($rq->input('author_name')) > 2){
+            $search = $rq->get('author_name');
+            $mutations = $mutations
+                ->join('users','users.id', '=','stock_mutations.user_id','inner')
+                ->where('users.name', 'like', "%$search%");
+        }
+
+        if ($rq->has('before')) {
+            $before = Carbon::parse($rq->input('before'));
+            $mutations = $mutations->where('stock_mutations.created_at', '<=', $before);
+        }
+
+        if ($rq->has('after')) {
+            $after = Carbon::parse($rq->input('after'));
+            $mutations = $mutations->where('stock_mutations.created_at', '>', $after);
+        }
+
+        if ($rq->has('only_loss')){
+            $mutations = $mutations->whereColumn('stock_mutations.before','>','stock_mutations.after');
+        }
+        if($selection == null) $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after'];
+
+        return $mutations->select($selection);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function index(Request $rq)
     {
-        //
+        return view('omnomcom.products.mutations', ['mutations' => $this->filterMutations($rq)->paginate(25)]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(StockMutation $stockMutation)
+    public function generateCsv(Request $rq)
     {
-        //
+        $mutations = $this->filterMutations($rq)->get()->toArray();
+
+        $headers = [
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=mutations.csv",
+            'Expires' => '0',
+            'Pragma' => 'public',
+        ];
+
+        array_unshift($mutations, array_keys($mutations[0]));
+
+        $callback = function() use ($mutations) {
+            $f = fopen('php://output', 'w');
+            foreach ($mutations as $row) {
+                fputcsv($f,$row);
+            }
+            fclose($f);
+        };
+
+        return response()->stream($callback, 200, $headers);
+
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, StockMutation $stockMutation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(StockMutation $stockMutation)
-    {
-        //
-    }
 }

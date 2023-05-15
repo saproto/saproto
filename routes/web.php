@@ -594,6 +594,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
 
             Route::get('mut', ['as' => 'mutations', 'uses' => 'StockMutationController@index']);
+            Route::get('mut/csv', ['as' => 'mutations_export', 'uses' => 'StockMutationController@generateCsv']);
         });
 
         /* Routes related to OmNomCom Categories. */

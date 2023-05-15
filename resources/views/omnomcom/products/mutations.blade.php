@@ -24,7 +24,7 @@
                                 <label for="product_name">Product name</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="product_name" name="product_name"
-                                           placeholder="Will to live" value="{{request()->old('product_name','')}}">
+                                           placeholder="Will to live" value="{{request()->input('product_name')}}">
                                 </div>
                             </div>
 
@@ -32,7 +32,7 @@
                                 <label for="author_name">Author name</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="author_name" name="author_name"
-                                           placeholder="John Doe" value="{{request()->old('author_name', '')}}">
+                                           placeholder="John Doe" value="{{request()->input('author_name')}}">
                                 </div>
                             </div>
 
@@ -43,7 +43,7 @@
                                     @include('components.forms.datetimepicker', [
                                         'name' => 'after',
                                         'label' => 'Show after:',
-                                        'placeholder' => request()->old('after') ? strtotime(request()->old('after')) : 563886000
+                                        'placeholder' => request()->has('after') ? strtotime(request()->input('after')) : 563886000
                                     ])
                             </div>
 
@@ -51,7 +51,7 @@
                                 @include('components.forms.datetimepicker', [
                                     'name' => 'before',
                                     'label' => 'Show before:',
-                                    'placeholder' => request()->old('before') ? strtotime(request()->old('before')) : time()
+                                    'placeholder' => request()->has('before') ? strtotime(request()->input('before')) : time()
                                 ])
                             </div>
 
@@ -60,13 +60,17 @@
                         <div class="row-md-12 mb-3">
                             @include('components.forms.checkbox', [
                                 'name' => 'only_loss',
-                                'checked' => false,
+                                'checked' => request()->has('only_loss'),
                                 'label' => 'Only show losses.'
                             ])
                         </div>
                         <div>
                             <button class="btn btn-success mb-3" type="submit">
                                 Apply
+                            </button>
+
+                            <button type="submit" formaction="{{route("omnomcom::products::mutations_export")}}" class="btn btn-success mb-3">
+                                Export as CSV
                             </button>
                         </div>
 
@@ -81,9 +85,9 @@
                     @yield('page-title')
                 </div>
                 <div class="card-body">
-                    @if(count($mutations)> 0)
+                    @if(count($mutations) > 0)
                         <div class="table-responsive">
-                            <table class="table table-hover table-sm">
+                            <table class="table">
                                 <thead>
                                     <tr class="bg-dark text-white">
                                         <td>Product</td>
@@ -98,9 +102,9 @@
                                     @foreach($mutations as $mutation)
                                         <tr>
                                             <td>{{$mutation->product->name}}</td>
-                                            <td>{{$mutation->before}}</td>>
-                                            <td>{{$mutation->after}}</td>>
-                                            <td>{{$mutation->delta()}}</td>>
+                                            <td>{{$mutation->before}}</td>
+                                            <td>{{$mutation->after}}</td>
+                                            <td>{{$mutation->delta()}}</td>
                                             <td><a href="{{ route('user::profile', ['id' => $mutation->user->getPublicId()])  }}">{{$mutation->user->name}}</a></td>
                                             <td>{{$mutation->date()}}</td>
                                         </tr>
@@ -113,6 +117,8 @@
                                 {!! $mutations->links() !!}
                             </div>
                         @endif
+                    @else
+                        <h4>No mutations found!<h4>
                     @endif
 
                 </div>
