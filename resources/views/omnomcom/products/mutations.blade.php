@@ -95,6 +95,7 @@
                                         <td>After</td>
                                         <td>Delta</td>
                                         <td>User</td>
+                                        <td>Made using bulk update</td>
                                         <td>Creation time</td>
                                     </tr>
                                 </thead>
@@ -106,6 +107,7 @@
                                             <td>{{$mutation->after}}</td>
                                             <td>{{$mutation->delta()}}</td>
                                             <td><a href="{{ route('user::profile', ['id' => $mutation->user->getPublicId()])  }}">{{$mutation->user->name}}</a></td>
+                                            <td>{{$mutation->is_bulk ? "Yes" : "No"}}</td>
                                             <td>{{$mutation->date()}}</td>
                                         </tr>
                                     @endforeach

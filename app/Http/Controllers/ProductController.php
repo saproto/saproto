@@ -230,7 +230,9 @@ class ProductController extends Controller
             // Make product mutations for bulk updates
             $mutation = StockMutation::make([
                     'before' => $product->stock,
-                    'after' => $product->stock + $deltas[$i]]);
+                    'after' => $product->stock + $deltas[$i],
+                    'is_bulk' => true]);
+
             $mutation->user()->associate($request->user());
             $mutation->product()->associate($product);
             $mutation->save();

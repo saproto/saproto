@@ -52,7 +52,7 @@ class StockMutationController extends Controller
         // We need this to filter out the data from joins
         // Also prevents shadowing/disappearance of the created_at field
         if($selection == null) {
-            $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after'];
+            $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after', 'stock_mutations.is_bulk'];
         }
 
         return $mutations->select($selection);
@@ -60,7 +60,7 @@ class StockMutationController extends Controller
 
     public function index(Request $rq)
     {
-        return view('omnomcom.products.mutations', ['mutations' => $this->filterMutations($rq)->paginate(25)]);
+        return view('omnomcom.products.mutations', ['mutations' => $this->filterMutations($rq)->paginate(15)]);
     }
 
     public function generateCsv(Request $rq)
