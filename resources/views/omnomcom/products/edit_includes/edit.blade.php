@@ -127,13 +127,6 @@
                 </div>
 
             </div>
-
-            @include('components.forms.checkbox', [
-                'name' => 'report_mutation',
-                'checked' => true,
-                'label' => 'Track changes [BETA]'
-            ])
-
             @include('components.forms.checkbox', [
                 'name' => 'is_visible',
                 'checked' => $product?->is_visible,

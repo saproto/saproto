@@ -123,37 +123,35 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         // Mutation logging point
-        if($request->has('report_mutation')) {
-            $old_stock = $product->stock;
-            $found_stock = $request->input('prev_stock');
-            $new_stock = $request->input('stock');
+        $old_stock = $product->stock;
+        $found_stock = $request->input('prev_stock');
+        $new_stock = $request->input('stock');
 
-            // Splitting mutation into two since restock and loss marking happen with one edit
-            if ($old_stock != $found_stock) {
-                // Stock observation mutation
-                // Is this how you make them records? Is there a better way?
-                $pre_mut = StockMutation::make([
-                        'before' => $old_stock,
-                        'after' => $found_stock]
-                );
+        // Splitting mutation into two since restock and loss marking happen with one edit
+        if ($old_stock != $found_stock) {
+            // Stock observation mutation
+            // Is this how you make them records? Is there a better way?
+            $pre_mut = StockMutation::make([
+                    'before' => $old_stock,
+                    'after' => $found_stock]
+            );
 
-                $pre_mut->user()->associate($request->user());
-                $pre_mut->product()->associate($product);
-                $pre_mut->save();
-            }
+            $pre_mut->user()->associate($request->user());
+            $pre_mut->product()->associate($product);
+            $pre_mut->save();
+        }
 
-            if($found_stock != $new_stock) {
-                // Actwual restocking mutation
-                $after_mut = StockMutation::make([
-                        'before' => $found_stock,
-                        'after' => $new_stock]
-                );
+        if($found_stock != $new_stock) {
+            // Actwual restocking mutation
+            $after_mut = StockMutation::make([
+                    'before' => $found_stock,
+                    'after' => $new_stock]
+            );
 
 
-                $after_mut->user()->associate($request->user());
-                $after_mut->product()->associate($product);
-                $after_mut->save();
-            }
+            $after_mut->user()->associate($request->user());
+            $after_mut->product()->associate($product);
+            $after_mut->save();
         }
 
         $product->fill($request->except('image', 'product_categories'));
@@ -201,7 +199,6 @@ class ProductController extends Controller
 
         $products = [];
         $deltas = [];
-        $mutations = [];
 
         foreach ($input as $lineRaw) {
             $line = explode(',', $lineRaw);

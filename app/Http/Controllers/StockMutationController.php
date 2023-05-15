@@ -15,6 +15,7 @@ class StockMutationController extends Controller
     {
         $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc');
 
+        // Find mutations by Pwoduct
         if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
             $search = $rq->get('product_name');
             $mutations = $mutations
@@ -22,6 +23,7 @@ class StockMutationController extends Controller
                 ->where('products.name', 'like', "%$search%");
         }
 
+        // Find mutations by authoring User
         if ($rq->has('author_name') && strlen($rq->input('author_name')) > 2) {
             $search = $rq->get('author_name');
             $mutations = $mutations
@@ -29,19 +31,26 @@ class StockMutationController extends Controller
                 ->where('users.name', 'like', "%$search%");
         }
 
+        // Find mutations before given date
         if ($rq->has('before')) {
             $before = Carbon::parse($rq->input('before'));
             $mutations = $mutations->where('stock_mutations.created_at', '<=', $before);
         }
 
+        // Find mutations made after given date
         if ($rq->has('after')) {
             $after = Carbon::parse($rq->input('after'));
             $mutations = $mutations->where('stock_mutations.created_at', '>', $after);
         }
 
+        // Filter mwutations by them being a loss
         if ($rq->has('only_loss')) {
             $mutations = $mutations->whereColumn('stock_mutations.before','>','stock_mutations.after');
         }
+
+        // variables for SELECT statement
+        // We need this to filter out the data from joins
+        // Also prevents shadowing/disappearance of the created_at field
         if($selection == null) {
             $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after'];
         }
@@ -56,6 +65,7 @@ class StockMutationController extends Controller
 
     public function generateCsv(Request $rq)
     {
+        // Exclude the userid, which we don't need for reports
         $selection = ['stock_mutations.product_id', 'stock_mutations.before', 'stock_mutations.after', 'stock_mutations.created_at'];
         $mutations = $this->filterMutations($rq, $selection)->get()->toArray();
 
@@ -80,7 +90,5 @@ class StockMutationController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
-
-
     }
 }
