@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 /**
- * Proto\Models\StockMutation
+ * Proto\Models\StockMutation.
  *
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -35,10 +34,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StockMutation extends Model
 {
     use HasFactory;
-    protected $table = "stock_mutations";
+    protected $table = 'stock_mutations';
     protected $fillable = ['before', 'after', 'is_bulk'];
 
-    public function product(): BelongsTo{
+    public function product(): BelongsTo
+    {
         return $this->belongsTo("Proto\Models\Product");
     }
 
@@ -47,13 +47,13 @@ class StockMutation extends Model
         return $this->belongsTo("Proto\Models\User");
     }
 
-    public function date(): String{
+    public function date(): String
+    {
         return $this->created_at->toDateString();
     }
 
-    public function delta(): int{
+    public function delta(): int
+    {
         return $this->after - $this->before;
     }
-
-
 }

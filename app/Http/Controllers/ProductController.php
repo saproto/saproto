@@ -129,7 +129,7 @@ class ProductController extends Controller
             $new_stock = $request->input('stock');
 
             // Splitting mutation into two since restock and loss marking happen with one edit
-            if ($old_stock != $found_stock){
+            if ($old_stock != $found_stock) {
                 // Stock observation mutation
                 // Is this how you make them records? Is there a better way?
                 $pre_mut = StockMutation::make([
@@ -233,7 +233,7 @@ class ProductController extends Controller
             // Make product mutations for bulk updates
             $mutation = StockMutation::make([
                     'before' => $product->stock,
-                    'after' => $product->stock + $deltas[$i] ]);
+                    'after' => $product->stock + $deltas[$i]]);
             $mutation->user()->associate($request->user());
             $mutation->product()->associate($product);
             $mutation->save();

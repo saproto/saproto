@@ -4,7 +4,6 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Proto\Models\Product;
 use Proto\Models\StockMutation;
 
 class StockMutationController extends Controller
@@ -12,18 +11,18 @@ class StockMutationController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-    function filterMutations(Request $rq, array $selection = null){
+    public function filterMutations(Request $rq, array $selection = null)
+    {
         $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc');
 
-        if ($rq->has("product_name") && strlen($rq->get('product_name')) > 2){
+        if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
             $search = $rq->get('product_name');
             $mutations = $mutations
                 ->join('products','products.id', '=','stock_mutations.product_id','inner')
                 ->where('products.name', 'like', "%$search%");
         }
 
-        if ($rq->has("author_name") && strlen($rq->input('author_name')) > 2){
+        if ($rq->has('author_name') && strlen($rq->input('author_name')) > 2) {
             $search = $rq->get('author_name');
             $mutations = $mutations
                 ->join('users','users.id', '=','stock_mutations.user_id','inner')
@@ -40,10 +39,12 @@ class StockMutationController extends Controller
             $mutations = $mutations->where('stock_mutations.created_at', '>', $after);
         }
 
-        if ($rq->has('only_loss')){
+        if ($rq->has('only_loss')) {
             $mutations = $mutations->whereColumn('stock_mutations.before','>','stock_mutations.after');
         }
-        if($selection == null) $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after'];
+        if($selection == null) {
+            $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after'];
+        }
 
         return $mutations->select($selection);
     }
@@ -61,12 +62,12 @@ class StockMutationController extends Controller
         $headers = [
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Content-type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=mutations.csv",
+            'Content-Disposition' => 'attachment; filename=mutations.csv',
             'Expires' => '0',
             'Pragma' => 'public',
         ];
 
-        $callback = function() use ($mutations) {
+        $callback = function () use ($mutations) {
             $f = fopen('php://output', 'w');
 
             $csv_header = ['Product ID', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
@@ -82,5 +83,4 @@ class StockMutationController extends Controller
 
 
     }
-
 }
