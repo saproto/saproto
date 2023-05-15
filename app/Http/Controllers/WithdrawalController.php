@@ -83,7 +83,7 @@ class WithdrawalController extends Controller
             }
 
             //only add the tickets to the withdrawal if the ticket can not be bought anymore
-            if($orderline->product->ticket && Carbon::now()->timestamp <= $orderline->product->ticket->available_to){
+            if($orderline->product->ticket && Carbon::now()->timestamp <= $orderline->product->ticket->available_to) {
                 continue;
             }
 
