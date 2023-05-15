@@ -55,7 +55,8 @@ class StockMutationController extends Controller
 
     public function generateCsv(Request $rq)
     {
-        $mutations = $this->filterMutations($rq)->get()->toArray();
+        $selection = ['stock_mutations.product_id', 'stock_mutations.before', 'stock_mutations.after', 'stock_mutations.created_at'];
+        $mutations = $this->filterMutations($rq, $selection)->get()->toArray();
 
         $headers = [
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
@@ -65,12 +66,14 @@ class StockMutationController extends Controller
             'Pragma' => 'public',
         ];
 
-        array_unshift($mutations, array_keys($mutations[0]));
-
         $callback = function() use ($mutations) {
             $f = fopen('php://output', 'w');
+
+            $csv_header = ['Product ID', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
+            fputcsv($f, $csv_header);
+
             foreach ($mutations as $row) {
-                fputcsv($f,$row);
+                fputcsv($f,[$row['product_id'], $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
             }
             fclose($f);
         };
