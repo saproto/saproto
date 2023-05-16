@@ -159,7 +159,7 @@
         }
 
         #protube.inactive {
-            background-image: url('{{ route('api::fishcam') }}') !important;
+            background-image: url({{env("FISHCAM_URL")}}) !important;
         }
 
         #protube-title {
