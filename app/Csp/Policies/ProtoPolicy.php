@@ -22,8 +22,9 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
-                    'https://protu.be',
                     'https://wrapped.omnomcom.nl',
+                    ...config('proto.domains.protube'),
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [

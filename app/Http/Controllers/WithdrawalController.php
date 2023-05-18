@@ -6,6 +6,7 @@ use AbcAeffchen\SepaUtilities\SepaUtilities;
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\Sephpa\SephpaInputException;
 use Auth;
+use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -62,7 +63,7 @@ class WithdrawalController extends Controller
         ]);
 
         $totalPerUser = [];
-        foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
+        foreach (OrderLine::whereNull('payed_with_withdrawal')->with('product', 'product.ticket')->get() as $orderline) {
             if ($orderline->isPayed()) {
                 continue;
             }
@@ -79,6 +80,11 @@ class WithdrawalController extends Controller
                 if ($totalPerUser[$orderline->user->id] + $orderline->total_price > $max) {
                     continue;
                 }
+            }
+
+            //only add the tickets to the withdrawal if the ticket can not be bought anymore
+            if($orderline->product->ticket && Carbon::now()->timestamp <= $orderline->product->ticket->available_to) {
+                continue;
             }
 
             $orderline->withdrawal()->associate($withdrawal);

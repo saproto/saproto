@@ -67,7 +67,7 @@ class ApiController extends Controller
             return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
-                'admin' => $user->can('protube') || $user->isTempadmin(),
+                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin(),
                 'id' => $user->id,
             ]);
         }
@@ -154,25 +154,6 @@ class ApiController extends Controller
             'album_name'=>$photo->album->name,
             'date_taken'=>Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
         ]);
-    }
-
-    /** @return void */
-    public function fishcamStream()
-    {
-        if (env('FISHCAM_URL') == null) {
-            abort(404);
-        }
-
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Type: multipart/x-mixed-replace; boundary=video-boundary--');
-        header('Cache-Control: no-cache');
-        $handle = fopen(env('FISHCAM_URL'), 'r');
-        while ($data = fread($handle, 8192)) {
-            echo $data;
-            ob_flush();
-            flush();
-            set_time_limit(0);
-        }
     }
 
     /** @return array */

@@ -309,7 +309,7 @@ class Event extends Model
         });
     }
 
-    public function allUsersCount()
+    public function usersCount()
     {
         $allUserIds = collect([]);
         foreach ($this->tickets as $ticket) {
@@ -319,7 +319,7 @@ class Event extends Model
         }
 
         if ($this->activity) {
-            $allUserIds = $allUserIds->merge($this->activity->allUsers->pluck('id'));
+            $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
         }
         return $allUserIds->unique()->count();
     }
