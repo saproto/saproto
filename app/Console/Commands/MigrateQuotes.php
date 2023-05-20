@@ -37,7 +37,7 @@ class MigrateQuotes extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
@@ -67,3 +67,4 @@ class MigrateQuotes extends Command
         }
     }
 }
+
