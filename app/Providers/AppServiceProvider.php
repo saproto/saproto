@@ -4,6 +4,7 @@ namespace Proto\Providers;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 use Proto\Models\MenuItem;
 
@@ -33,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
+
+        self::bootProTubeHttpMacro();
     }
 
     /**
@@ -43,5 +46,20 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
 
+    }
+
+    /**
+     * Register the ProTube HTTP macro.
+     * 
+     * @return void
+     */
+    private function bootProTubeHttpMacro(): void
+    {
+        Http::macro('protube', function () {
+            // Ignore ssl errors during development
+            return Http::withToken(config('protube.secret'))
+                ->withOptions(["verify" => (config('app.env') === 'production')])
+                ->baseUrl(config('protube.server'));
+        });
     }
 }

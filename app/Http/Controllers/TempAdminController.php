@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Proto\App\Services\ProTubeApiService;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
 
@@ -33,8 +34,8 @@ class TempAdminController extends Controller
         $tempAdmin->save();
 
         // If today, trigger webhook on protube to update the user
-        if(Carbon::parse($tempAdmin->start_at)->isToday()) {
-            $this->triggerProTubeWebHook($tempAdmin->user_id);
+        if (Carbon::parse($tempAdmin->start_at)->isToday()) {
+            ProTubeApiService::triggerWebHook($tempAdmin->id);
         }
 
         return Redirect::back();
@@ -56,7 +57,7 @@ class TempAdminController extends Controller
             }
         }
 
-        $this->triggerProTubeWebHook($user->id);
+        ProTubeApiService::triggerWebHook($user->id);
 
         return Redirect::back();
     }
@@ -78,8 +79,8 @@ class TempAdminController extends Controller
             $tempadmin->save();
 
             // If today, trigger webhook on protube to update the user
-            if(Carbon::parse($tempadmin->start_at)->isToday()) {
-                $this->triggerProTubeWebHook($tempadmin->user_id);
+            if (Carbon::parse($tempadmin->start_at)->isToday()) {
+                ProTubeApiService::triggerWebHook($tempadmin->user_id);
             }
         }
 
@@ -117,8 +118,8 @@ class TempAdminController extends Controller
         $tempadmin->save();
 
         // If today, trigger webhook on protube to update the user
-        if(Carbon::parse($tempadmin->start_at)->isToday()) {
-            $this->triggerProTubeWebHook($tempadmin->user_id);
+        if (Carbon::parse($tempadmin->start_at)->isToday()) {
+            ProTubeApiService::triggerWebHook($tempadmin->user_id);
         }
 
         return Redirect::route('tempadmin::index');
@@ -147,26 +148,8 @@ class TempAdminController extends Controller
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
 
-        $this->triggerProTubeWebHook($tempadmin->user_id);
+        ProTubeApiService::triggerWebHook($tempadmin->user_id);
 
         return Redirect::route('tempadmin::index');
-    }
-
-    /**
-     * Send a webhook to ProTube to update the user's admin status.
-     *
-     * @param int $id userID to update
-     * @return void
-     */
-    private function triggerProTubeWebHook(int $userId): void
-    {
-        try {
-            // If today, trigger webhook on protube to update the user (ignore ssl error in dev mode)
-            Http::withToken(config('protube.secret'))
-                ->withOptions(['verify' => config('app.env') !== 'local'])
-                ->post(config('protube.server').'/api/laravel/updateadmin/'.$userId, );
-        } catch (Exception $e) {
-            Log::error('Failed to trigger ProTube webhook: '.$e->getMessage());
-        }
     }
 }
