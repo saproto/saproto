@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register the ProTube HTTP macro.
-     * 
+     *
      * @return void
      */
     private function bootProTubeHttpMacro(): void
@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
         Http::macro('protube', function () {
             // Ignore ssl errors during development
             return Http::withToken(config('protube.secret'))
-                ->withOptions(["verify" => (config('app.env') === 'production')])
+                ->withOptions(['verify' => (config('app.env') === 'production')])
                 ->baseUrl(config('protube.server'));
         });
     }

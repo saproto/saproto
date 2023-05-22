@@ -222,7 +222,9 @@ class OmNomController extends Controller
                 // ProTube skip song
                 if ($product->id == config('omnomcom.protube-skip')) {
                     $skipped = ProTubeApiService::skipSong();
-                    if (!$skipped) continue;
+                    if (! $skipped) {
+                        continue;
+                    }
                 }
 
                 $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
