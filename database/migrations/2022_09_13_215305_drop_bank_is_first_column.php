@@ -12,6 +12,20 @@ class DropBankIsFirstColumn extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('radiostations');
+        Schema::table('bankaccounts', function ($table) {
+            $table->dropColumn('is_first');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('bankaccounts', function ($table) {
+            $table->boolean('is_first')->default(false);
+        });
     }
 }
