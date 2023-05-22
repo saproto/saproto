@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Proto\App\Services\ProTubeApiService;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
@@ -218,6 +219,12 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
+                // ProTube skip song
+                if ($product->id == config('omnomcom.protube-skip')) {
+                    $skipped = ProTubeApiService::skipSong();
+                    if (!$skipped) continue;
+                }
+
                 $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
             }
         }
