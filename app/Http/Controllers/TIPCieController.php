@@ -11,7 +11,6 @@ use Proto\Models\OrderLine;
 class TIPCieController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function orderIndex(Request $request)

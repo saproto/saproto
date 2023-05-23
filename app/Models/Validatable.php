@@ -13,6 +13,7 @@ use Validator;
  * @method static Builder|Validatable newModelQuery()
  * @method static Builder|Validatable newQuery()
  * @method static Builder|Validatable query()
+ *
  * @mixin Eloquent
  */
 class Validatable extends Eloquent
@@ -27,8 +28,10 @@ class Validatable extends Eloquent
         $v = Validator::make($data, $this->rules);
         if ($v->fails()) {
             $this->errors = $v->errors();
+
             return false;
         }
+
         return true;
     }
 

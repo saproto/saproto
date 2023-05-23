@@ -17,15 +17,16 @@ use stdClass;
  * @method static Builder|PhotoManager newModelQuery()
  * @method static Builder|PhotoManager newQuery()
  * @method static Builder|PhotoManager query()
+ *
  * @mixin Eloquent
  */
 class PhotoManager extends Model
 {
     /**
-     * @param int|null $max
-     * @param string|null $query
-     * @param bool $unpublished
-     * @param bool $no_thumb
+     * @param  int|null  $max
+     * @param  string|null  $query
+     * @param  bool  $unpublished
+     * @param  bool  $no_thumb
      * @return Collection|LengthAwarePaginator
      */
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
@@ -57,8 +58,8 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param int $album_id
-     * @param int|null $max
+     * @param  int  $album_id
+     * @param  int|null  $max
      * @return stdClass|null
      */
     public static function getPhotos($album_id, $max = null)
@@ -103,7 +104,7 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param int $photo_id
+     * @param  int  $photo_id
      * @return stdClass
      */
     public static function getPhoto($photo_id)
@@ -137,7 +138,8 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param int $album_id
+     * @param  int  $album_id
+     *
      * @throws Exception
      */
     public static function deleteAlbum($album_id)

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read Quote $quote
  * @property-read User $user
+ *
  * @method static Builder|QuoteLike whereCreatedAt($value)
  * @method static Builder|QuoteLike whereId($value)
  * @method static Builder|QuoteLike whereQuoteId($value)
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|QuoteLike newModelQuery()
  * @method static Builder|QuoteLike newQuery()
  * @method static Builder|QuoteLike query()
+ *
  * @mixin Eloquent
  */
 class QuoteLike extends Model

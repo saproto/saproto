@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static Builder|ActivityParticipation onlyTrashed()
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|ActivityParticipation newModelQuery()
  * @method static Builder|ActivityParticipation newQuery()
  * @method static Builder|ActivityParticipation query()
+ *
  * @mixin Eloquent
  */
 class ActivityParticipation extends Model

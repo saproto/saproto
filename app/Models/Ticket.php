@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
+ *
  * @method static Builder|Ticket whereAvailableFrom($value)
  * @method static Builder|Ticket whereAvailableTo($value)
  * @method static Builder|Ticket whereEventId($value)
@@ -33,6 +34,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket newModelQuery()
  * @method static Builder|Ticket newQuery()
  * @method static Builder|Ticket query()
+ *
  * @mixin Eloquent
  */
 class Ticket extends Model
@@ -65,6 +67,7 @@ class Ticket extends Model
     public function getUsers()
     {
         $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+
         return User::whereIn('id', array_unique($ids))->get();
     }
 
@@ -81,7 +84,6 @@ class Ticket extends Model
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function canBeSoldTo(User $user)
@@ -96,7 +98,6 @@ class Ticket extends Model
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function isAvailable(User $user)
@@ -111,6 +112,7 @@ class Ticket extends Model
         foreach ($this->purchases as $purchase) {
             $total += $purchase->orderline->total_price;
         }
+
         return $total;
     }
 }

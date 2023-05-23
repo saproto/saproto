@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class WallstreetDrink.
+ *
  * @property int end_time
  * @property int start_time
  * @property string name
@@ -20,7 +21,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class WallstreetDrink extends Model
 {
     use HasFactory;
+
     protected $table = 'wallstreet_drink';
+
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
 
     public function isCurrent(): bool

@@ -15,7 +15,6 @@ use Session;
 class LeaderboardEntryController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -23,6 +22,7 @@ class LeaderboardEntryController extends Controller
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
         if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
             Session::flash('flash_message', 'There is already a entry for this user');
+
             return Redirect::back();
         }
 
@@ -33,11 +33,11 @@ class LeaderboardEntryController extends Controller
         $entry->save();
 
         Session::flash('flash_message', 'Added new entry successfully.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request)
@@ -45,12 +45,14 @@ class LeaderboardEntryController extends Controller
         $entry = LeaderboardEntry::findOrFail($request->id);
         $entry->points = $request->points;
         $entry->save();
+
         return response()->json(['points' => $entry->points]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -58,6 +60,7 @@ class LeaderboardEntryController extends Controller
         $entry = LeaderboardEntry::findOrFail($id);
         $entry->delete();
         Session::flash('flash_message', 'The entry has been deleted.');
+
         return Redirect::back();
     }
 }
