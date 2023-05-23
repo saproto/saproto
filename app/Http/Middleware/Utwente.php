@@ -10,8 +10,9 @@ class Utwente
 {
     /**
      * This middleware only allows access if the visiting user is authenticated and is a member.
-     * @param Request $request
-     * @param  Closure $next
+     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, $next)

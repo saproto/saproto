@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Event[]|null $events
+ *
  * @method static Builder|EventCategory whereCreatedAt($value)
  * @method static Builder|EventCategory whereIcon($value)
  * @method static Builder|EventCategory whereId($value)
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|EventCategory newModelQuery()
  * @method static Builder|EventCategory newQuery()
  * @method static Builder|EventCategory query()
+ *
  * @mixin Eloquent
  */
 class EventCategory extends Model

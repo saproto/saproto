@@ -27,8 +27,8 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -53,14 +53,16 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
+
         return Redirect::route('headerimage::index');
     }
 }

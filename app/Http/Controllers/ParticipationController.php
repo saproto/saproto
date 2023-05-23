@@ -24,8 +24,7 @@ use Session;
 class ParticipationController extends Controller
 {
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function create($id, Request $request)
@@ -90,8 +89,7 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function createFor($id, Request $request)
@@ -132,9 +130,9 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param int $participation_id
-     * @param Request $request
+     * @param  int  $participation_id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($participation_id, Request $request)
@@ -202,8 +200,7 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param int $participation_id
-     * @param Request $request
+     * @param  int  $participation_id
      * @return JsonResponse
      */
     public function togglePresence($participation_id, Request $request)
@@ -231,7 +228,6 @@ class ParticipationController extends Controller
             ->count();
     }
 
-    /** @param Activity $activity */
     public static function processBackupQueue(Activity $activity)
     {
         while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
@@ -239,7 +235,6 @@ class ParticipationController extends Controller
         }
     }
 
-    /** @param Activity $activity */
     public static function transferOneBackupUser(Activity $activity)
     {
         $backup_participation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();

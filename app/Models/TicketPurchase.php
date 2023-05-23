@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read OrderLine $orderline
  * @property-read Ticket $ticket
  * @property-read User $user
+ *
  * @method static Builder|TicketPurchase whereBarcode($value)
  * @method static Builder|TicketPurchase whereCreatedAt($value)
  * @method static Builder|TicketPurchase whereId($value)
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|TicketPurchase newModelQuery()
  * @method static Builder|TicketPurchase newQuery()
  * @method static Builder|TicketPurchase query()
+ *
  * @mixin Eloquent
  */
 class TicketPurchase extends Model

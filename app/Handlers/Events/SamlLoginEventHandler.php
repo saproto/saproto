@@ -20,7 +20,7 @@ class SamlLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param Saml2LoginEvent $event
+     * @param  Saml2LoginEvent  $event
      * @return void
      */
     public function handle($event)

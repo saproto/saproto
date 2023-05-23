@@ -37,6 +37,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Collection|StorageEntry[] $attachments
  * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
+ *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)
  * @method static Builder|Email whereDescription($value)
@@ -58,6 +59,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Email newModelQuery()
  * @method static Builder|Email newQuery()
  * @method static Builder|Email query()
+ *
  * @mixin Eloquent
  */
 class Email extends Model
@@ -86,6 +88,7 @@ class Email extends Model
 
     /**
      * @return string
+     *
      * @throws Exception
      */
     public function destinationForBody()
@@ -101,9 +104,10 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
-            if($this->to_backup) {
+            if ($this->to_backup) {
                 return 'event with backup';
             }
+
             return 'event';
         } else {
             throw new Exception('Email has no destination');
@@ -128,23 +132,26 @@ class Email extends Model
             foreach (Committee::all() as $committee) {
                 $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
             }
+
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_list) {
             $user_ids = [];
             foreach ($this->lists as $list) {
                 $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
             }
+
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event != null) {
                     $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if($this->to_backup && $event->activity) {
+                    if ($this->to_backup && $event->activity) {
                         $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
                     }
                 }
             }
+
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
             return collect([]);
@@ -158,13 +165,14 @@ class Email extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return string Email body with variables parsed.
      */
     public function parseBodyFor($user)
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
+
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
@@ -179,6 +187,7 @@ class Email extends Model
                 $events[] = $event->title;
             }
         }
+
         return implode(', ', $events);
     }
 
@@ -193,6 +202,7 @@ class Email extends Model
                 $lists[] = $list->name;
             }
         }
+
         return implode(', ', $lists);
     }
 
@@ -204,6 +214,7 @@ class Email extends Model
         foreach ($lists as $list) {
             $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }
+
         return implode(', ', $footer);
     }
 }

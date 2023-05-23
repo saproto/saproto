@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Committee $committee
  * @property-read Collection|LeaderboardEntry[] $entries
+ *
  * @method static Builder|Leaderboard whereCommitteeId($value)
  * @method static Builder|Leaderboard whereCreatedAt($value)
  * @method static Builder|Leaderboard whereDescription($value)
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Leaderboard newModelQuery()
  * @method static Builder|Leaderboard newQuery()
  * @method static Builder|Leaderboard query()
+ *
  * @mixin Eloquent
  */
 class Leaderboard extends Model

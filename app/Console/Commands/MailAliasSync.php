@@ -45,6 +45,7 @@ class MailAliasSync extends Command
         $domain = EmailDbDomain::where('name', config('proto.emaildomain'))->first();
         if (! $domain) {
             $this->error('The e-mail domain does not exist, please create it!');
+
             return;
         }
 
@@ -69,11 +70,13 @@ class MailAliasSync extends Command
             if (! in_array($alias->source, array_keys($target))) {
                 $this->info(sprintf('Deleting forward: %s -> %s', $alias->source, $alias->destination));
                 $alias->delete();
+
                 continue;
             }
             if (! in_array($alias->destination, $target[$alias->source])) {
                 $this->info(sprintf('Deleting forward: %s -> %s', $alias->source, $alias->destination));
                 $alias->delete();
+
                 continue;
             }
         }

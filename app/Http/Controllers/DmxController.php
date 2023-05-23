@@ -27,7 +27,6 @@ class DmxController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -43,11 +42,12 @@ class DmxController extends Controller
         }
 
         Session::flash('flash_message', sprintf('The new fixture %s has been stored.', $fixture->name));
+
         return Redirect::route('dmx::edit', ['id' => $fixture->id]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -56,8 +56,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -79,12 +78,14 @@ class DmxController extends Controller
         }
 
         Session::flash('flash_message', sprintf('The fixture %s has been updated.', $fixture->name));
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function delete($id)
@@ -114,7 +115,6 @@ class DmxController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function overrideStore(Request $request)
@@ -133,6 +133,7 @@ class DmxController extends Controller
         $override->save();
 
         Session::flash('flash_message', 'Override created.');
+
         return Redirect::route('dmx::override::edit', ['id' => $override->id]);
     }
 
@@ -144,8 +145,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function overrideUpdate(Request $request, $id)
@@ -166,12 +166,14 @@ class DmxController extends Controller
         $override->save();
 
         Session::flash('flash_message', 'Override updated.');
+
         return Redirect::route('dmx::override::edit', ['id' => $override->id]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function overrideDelete($id)
@@ -233,9 +235,9 @@ class DmxController extends Controller
     }
 
     /**
-     * @param DmxFixture $fixture
-     * @param int[] $channel_values
-     * @param int[] $colors
+     * @param  DmxFixture  $fixture
+     * @param  int[]  $channel_values
+     * @param  int[]  $colors
      * @return int[]
      */
     private function setFixtureChannels($fixture, $channel_values, $colors)
@@ -256,6 +258,7 @@ class DmxController extends Controller
         foreach ($fixture->getChannels('brightness') as $channel) {
             $channel_values[$channel->id] = $colors[3];
         }
+
         return $channel_values;
     }
 }

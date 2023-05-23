@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ProductController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function index(Request $request)
@@ -58,8 +57,8 @@ class ProductController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -91,11 +90,12 @@ class ProductController extends Controller
         $product->save();
 
         Session::flash('flash_message', 'The new product has been created!');
+
         return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -111,9 +111,9 @@ class ProductController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(Request $request, $id)
@@ -149,11 +149,11 @@ class ProductController extends Controller
         $product->save();
 
         Session::flash('flash_message', 'The product has been updated.');
+
         return Redirect::route('omnomcom::products::edit', ['id' => $product->id]);
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function bulkUpdate(Request $request)
@@ -203,15 +203,16 @@ class ProductController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
     {
-        if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')) {
+        if ($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')) {
             Session::flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
+
             return Redirect::back();
         }
         /** @var Product $product */
@@ -219,14 +220,14 @@ class ProductController extends Controller
 
         if ($product->orderlines->count() > 0) {
             Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
+
             return Redirect::back();
         }
-
-
 
         $product->delete();
 
         Session::flash('flash_message', 'The product has been deleted.');
+
         return Redirect::route('omnomcom::products::list');
     }
 
