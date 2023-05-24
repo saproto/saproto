@@ -234,7 +234,7 @@
                         <div id="photo-view" data-name="photos" class="row shift-select">
 
                             @foreach($photos as $photo)
-                                @include('website.layouts.macros.selectablephoto', ['photo' => $photo])
+                                @include('photos.includes.selectablephoto', ['photo' => $photo])
                             @endforeach
 
                         </div>

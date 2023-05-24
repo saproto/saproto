@@ -41,7 +41,7 @@
                         @if(!$photo->private || Auth::check() && Auth::user()->member() !== null)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                @include('website.layouts.macros.card-bg-image', [
+                                @include('website.home.cards.card-bg-image', [
                                 'id' => sprintf('photo_%s', $photo->id),
                                 'url' => isset($liked) ? route("photo::liked::likedPhoto", ["id"=> $photo->id]):route("photo::view", ["id"=> $photo->id]),
                                 'img' => $photo->getSmallUrl(),
