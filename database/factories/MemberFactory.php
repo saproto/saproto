@@ -1,22 +1,48 @@
 <?php
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
 
-/* @var $factory Factory */
-$factory->define(
-    Proto\Models\Member::class,
-    function (Faker $faker) {
-        $picktime = $faker->dateTimeInInterval('April 20, 2011', 'now');
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\Member;
+use Proto\Models\User;
+
+/**
+ * @extends Factory<Member>
+ */
+class MemberFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        $created_at = fake()->dateTimeBetween('2011-04-20')->format('Y-m-d H:i:s');
+        $deleted_at = fake()->dateTimeBetween($created_at)->format('Y-m-d H:i:s');
+
         return [
-            'proto_username' => strtolower(str_random(16)),
-            'created_at' => $faker->dateTime($picktime)->format('Y-m-d H:i:s'),
-            'deleted_at' => (mt_rand(0, 1) === 1 ? null : $faker->dateTimeBetween($picktime, '+1 year')->format('Y-m-d H:i:s')),
-            'is_lifelong' => mt_rand(0, 100) > 94 ? 1 : 0,
-            'is_honorary' => mt_rand(0, 100) > 98 ? 1 : 0,
-            'is_donor' => mt_rand(0, 100) > 98 ? 1 : 0,
-            'is_pet' => mt_rand(0, 100) > 98 ? 1 : 0,
-            'is_pending' => mt_rand(0, 100) > 85 ? 1 : 0,
+            'created_at' => $created_at,
+            'deleted_at' => fake()->boolean(25) ? $deleted_at : null,
+            'user_id' => User::factory()->hasBank()->hasAddress(),
+            'proto_username' => fn ($attributes) => Member::createProtoUsername(User::find($attributes['user_id'])->name),
         ];
     }
-);
+
+    /**
+     * Indicate that the member is special.
+     *
+     * @return Factory
+     */
+    public function special()
+    {
+        return $this->state(function (array $attributes) {
+            $member_types = ['is_lifelong', 'is_honorary', 'is_donor', 'is_pet', 'is_pending'];
+
+            return [
+                fake()->randomElement($member_types) => 1,
+                'deleted_at' => null,
+            ];
+        });
+    }
+}

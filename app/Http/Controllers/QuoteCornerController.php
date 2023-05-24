@@ -129,7 +129,8 @@ class QuoteCornerController extends Controller
         }
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $searchTerm = $request->input('searchTerm');
         $quotes = Quote::where('quote', 'LIKE', "%{$searchTerm}%")->orderBy('created_at', 'desc')->paginate(20);
         return view('quotecorner.list', ['data' => $quotes, 'popular' => [], 'searchTerm'=>$searchTerm]);

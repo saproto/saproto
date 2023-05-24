@@ -41,13 +41,15 @@
                                 <tr class="bg-info text-white">
                                     <td><i class="fas fa-folder me-2"></i> {{ $menuItem->menuname }}</td>
                                     <td>{{ $menuItem->getUrl()}} </td>
-                                    <td>@if($menuItem->is_member_only) <i class="fas fa-lock"></i> @endif</td>
+                                    <td>@if($menuItem->is_member_only)
+                                            <i class="fas fa-lock"></i>
+                                        @endif</td>
                                     <td>
                                         <a href="{{ route('menu::edit', ['id' => $menuItem->id]) }}">
                                             <i class="fas fa-edit me-2 text-white"></i>
                                         </a>
 
-                                        @include('website.layouts.macros.confirm-modal', [
+                                        @include('components.modals.confirm-modal', [
                                             'action' => route('menu::delete', ['id' => $menuItem->id]),
                                             'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
                                             'title' => 'Confirm Delete',
@@ -73,14 +75,20 @@
                                     @foreach($menuItem->children()->orderBy('order')->get() as $childItem)
                                         <tr>
                                             <td class="ps-5">{{ $childItem->menuname }}</td>
-                                            <td>@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
-                                            <td>@if($childItem->is_member_only) <i class="fas fa-lock"></i> @endif</td>
+                                            <td>@if($childItem->page)
+                                                    {{ $childItem->page->getUrl() }}
+                                                @else
+                                                    {{ $childItem->url }}
+                                                @endif</td>
+                                            <td>@if($childItem->is_member_only)
+                                                    <i class="fas fa-lock"></i>
+                                                @endif</td>
                                             <td>
                                                 <a href="{{ route('menu::edit', ['id' => $childItem->id]) }}">
                                                     <i class="fas fa-edit me-2"></i>
                                                 </a>
 
-                                                @include('website.layouts.macros.confirm-modal', [
+                                                @include('components.modals.confirm-modal', [
                                                     'action' => route('menu::delete', ['id' => $childItem->id]),
                                                     'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
                                                     'title' => 'Confirm Delete',
@@ -126,6 +134,5 @@
         </div>
 
     </div>
-
 
 @endsection

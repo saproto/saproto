@@ -3,12 +3,14 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\OrderLine;
+use Proto\Models\Photo;
 use Proto\Models\PhotoLikes;
 use Proto\Models\PlayedVideo;
 use Proto\Models\Quote;
@@ -65,8 +67,8 @@ class ApiController extends Controller
             return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
-                'is_admin' => $user->can('protube') || $user->isTempadmin(),
-                'user_id' => $user->id,
+                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin(),
+                'id' => $user->id,
             ]);
         }
 
@@ -118,23 +120,40 @@ class ApiController extends Controller
         }
     }
 
-    /** @return void */
-    public function fishcamStream()
+    public function randomPhoto(): JsonResponse
     {
-        if (! file_exists(env('FISHCAM_URL'))) {
-            abort(404);
+        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
+            $query->where('published', true)->where('private', false);
+        });
+
+        if(! $privateQuery->count()) {
+            return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Type: multipart/x-mixed-replace; boundary=video-boundary--');
-        header('Cache-Control: no-cache');
-        $handle = fopen(env('FISHCAM_URL'), 'r');
-        while ($data = fread($handle, 8192)) {
-            echo $data;
-            ob_flush();
-            flush();
-            set_time_limit(0);
+        $random = mt_rand(1, 100);
+        if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
+            $query = (clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
+        } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
+            $query = (clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
+        } elseif ($random > 55 && $random <= 70) {//15% chance the photo is from two years ago
+            $query = (clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
+        } elseif ($random > 70 && $random <= 80) {//10% chance the photo is from three years ago
+            $query = (clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
+        } else {//20% chance the photo is older than 4 years
+            $query = (clone $privateQuery)->where('date_taken','>', Carbon::now()->subYears(4)->timestamp);
         }
+        $photo = $query->inRandomOrder()->with('album')->first();
+
+        //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
+        if(! $photo) {
+            $photo = $privateQuery->inRandomOrder()->with('album')->first();
+        }
+
+        return response()->JSON([
+            'url'=>$photo->url,
+            'album_name'=>$photo->album->name,
+            'date_taken'=>Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
+        ]);
     }
 
     /** @return array */
@@ -161,8 +180,8 @@ class ApiController extends Controller
 
         foreach (ActivityParticipation::where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
-                'name' => $activity_participation->activity && $activity_participation->activity->event ? $activity_participation->activity->event->title : null,
-                'date' => $activity_participation->activity && $activity_participation->activity->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'name' => $activity_participation->activity?->event?->title,
+                'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,

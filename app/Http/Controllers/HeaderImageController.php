@@ -17,13 +17,13 @@ class HeaderImageController extends Controller
     /** @return View */
     public function index()
     {
-        return view('website.headerimages.index', ['images' => HeaderImage::paginate(5)]);
+        return view('headerimages.index', ['images' => HeaderImage::paginate(5)]);
     }
 
     /** @return View */
     public function create()
     {
-        return view('website.headerimages.add');
+        return view('headerimages.add');
     }
 
     /**

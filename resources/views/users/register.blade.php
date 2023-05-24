@@ -45,6 +45,7 @@
         <p>
             Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
             sent to this e-mail address.
+            <br><i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
         </p>
 
         <hr>
@@ -63,10 +64,11 @@
             Privacy policy
         </a>
 
-        <div class="form-check">
-            <input id="privay-policy-check" class="form-check-input" type="checkbox" name="privacy_policy_acceptance" required>
-            <label class="form-check-label" for="privacy-policy-check">I have read and acknowledge the privacy policy.</label>
-        </div>
+        @include('components.forms.checkbox', [
+            'name' => 'privacy_policy_acceptance',
+            'label' => 'I have read and acknowledge the privacy policy.',
+            'required' => true
+        ])
 
         <hr>
 

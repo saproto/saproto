@@ -30,7 +30,7 @@ class SearchController extends Controller
         $term = $request->input('query');
 
         $users = [];
-        if (Auth::check() && Auth::user()->is_member) {
+        if (Auth::user()?->is_member) {
             $presearch_users = $this->getGenericSearch(
                 User::class,
                 $term,
@@ -50,7 +50,7 @@ class SearchController extends Controller
             ['slug', 'title', 'content']
         );
         foreach ($presearch_pages as $page) {
-            if (! $page->is_member_only || (Auth::check() && Auth::user()->is_member)) {
+            if (! $page->is_member_only || Auth::user()?->is_member) {
                 $pages[] = $page;
             }
         }
@@ -62,7 +62,7 @@ class SearchController extends Controller
             ['id', 'name', 'slug']
         );
         foreach ($presearch_committees as $committee) {
-            if ($committee->public || (Auth::check() && Auth::user()->can('board'))) {
+            if ($committee->public || Auth::user()?->can('board')) {
                 $committees[] = $committee;
             }
         }
@@ -86,12 +86,12 @@ class SearchController extends Controller
             ['id', 'name']
         );
         foreach ($presearch_photo_albums as $album) {
-            if (! $album->secret || (Auth::check() && Auth::user()->can('protography'))) {
+            if (! $album->secret || Auth::user()?->can('protography')) {
                 $photoAlbums[] = $album;
             }
         }
 
-        return view('website.search', [
+        return view('search.search', [
             'term' => $term,
             'users' => $users,
             'pages' => $pages,
@@ -130,7 +130,7 @@ class SearchController extends Controller
             }
         }
 
-        return view('website.ldapsearch', [
+        return view('search.ldapsearch', [
             'term' => $query,
             'data' => (array) $data,
         ]);
@@ -139,7 +139,7 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**

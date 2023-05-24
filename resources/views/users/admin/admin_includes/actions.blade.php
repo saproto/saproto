@@ -40,7 +40,7 @@
                 </a>
             @endif
             @isset($user->tfa_totp_key)
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                     'action' => route("user::2fa::admindelete", ['id'=>$user->id]),
                     'method'=>'POST',
                     'classes' => 'list-group-item text-danger',
@@ -48,7 +48,7 @@
                     'title' => 'Confirm Disabling 2FA',
                     'message' => 'Are you sure you want to disable the two-factor authentication of '.$user->name.' <b>Only continue if you have their consent!</b>',
                 ])
-           @endisset
+            @endisset
 
         </ul>
 

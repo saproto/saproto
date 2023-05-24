@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -36,6 +37,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Address extends Validatable
 {
+    use HasFactory;
+
     protected $table = 'addresses';
 
     protected $guarded = ['id'];

@@ -1,19 +1,29 @@
 <?php
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
 
-/* @var $factory Factory */
-$factory->define(
-    Proto\Models\Page::class,
-    function (Faker $faker) {
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\Page;
+
+/**
+ * @extends Factory<Page>
+ */
+class PageFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
         return [
-            'title' => $faker->words(mt_rand(1, 3), true),
-            'slug' => $faker->unique()->word(),
-            'content' => $faker->paragraphs(10, true),
-            'is_member_only' => mt_rand(0, 1),
+            'title' => fake()->unique()->words(fake()->numberBetween(1, 3), true),
+            'slug' => fn ($attributes) => str_slug($attributes['title']),
+            'content' => fake()->paragraphs(fake()->numberBetween(5, 15), true),
+            'is_member_only' => fake()->boolean(),
             'featured_image_id' => null,
             'show_attachments' => false,
         ];
     }
-);
+}

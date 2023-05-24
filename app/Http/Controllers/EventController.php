@@ -18,6 +18,7 @@ use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\EventCategory;
 use Proto\Models\Photo;
+use Proto\Models\HelpingCommittee;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\User;
@@ -50,8 +51,8 @@ class EventController extends Controller
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
-        foreach ($data as $index=>$query){
-            if($category){
+        foreach ($data as $index=>$query) {
+            if($category) {
                 $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
@@ -83,7 +84,7 @@ class EventController extends Controller
     {
         $event = Event::fromPublicId($id);
         $methods = [];
-        if (config('omnomcom.mollie.use_fees')){
+        if (config('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
         }
 
@@ -224,7 +225,7 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                    $months[intval(date('n', $event->start))][] = $event;
+                $months[intval(date('n', $event->start))][] = $event;
             }
         }
 
@@ -314,6 +315,8 @@ class EventController extends Controller
             return Redirect::back();
         }
 
+        $activity->attendees = $request->input('attendees');
+
         $account = Account::findOrFail($request->input('account'));
 
         if (count($activity->users) == 0 || $activity->price == 0) {
@@ -385,7 +388,7 @@ class EventController extends Controller
      */
     public function apiUpcomingEvents($limit, Request $request)
     {
-        $user = (Auth::check() ? Auth::user() : null);
+        $user = Auth::user() ?? null;
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
 
         $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
@@ -400,13 +403,13 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user && $user->is_member && $event->activity ? $event->activity->users->map(function ($item) {
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview,
                 ];
             }) : null);
-            $backupParticipants = ($user && $user->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview,
@@ -436,8 +439,8 @@ class EventController extends Controller
                 'price' => ($event->activity ? $event->activity->price : null),
                 'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
                 'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
-                'user_signedup_backup' => (bool) ($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
-                'user_signedup_id' => ($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
+                'user_signedup_backup' => (bool) ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'user_signedup_id' => ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
                 'can_signout' => ($user && $event->activity ? $event->activity->canUnsubscribe() : null),
@@ -563,6 +566,9 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
+                    } elseif ($event->activity->isOnBackupList($user)) {
+                        $status = 'On back-up list';
+                        $info_text .= ' You are on the back-up list for this activity';
                     } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
@@ -675,7 +681,8 @@ class EventController extends Controller
         return Redirect::route('event::category::admin', ['category' => null]);
     }
 
-    public function copyEvent(Request $request) {
+    public function copyEvent(Request $request)
+    {
         $event = Event::findOrFail($request->id);
         $newEvent = $event->replicate();
         $newEvent->title = $newEvent->title.' [copy]';
@@ -688,7 +695,7 @@ class EventController extends Controller
         $newEvent->start = $newDate;
         $newEvent->end = $event->end + $diff;
         $newEvent->secret = true;
-        if($event->publication){
+        if($event->publication) {
             $newEvent->publication = $event->publication + $diff;
             $newEvent->secret = false;
         }
@@ -696,17 +703,32 @@ class EventController extends Controller
         $newEvent->save();
 
         if($event->activity) {
-            $newActivity = $event->activity->replicate();
-            $newActivity->event_id = $newEvent->id;
-
-            $newActivity->registration_start = $event->activity->registration_start + $diff;
-            $newActivity->registration_end = $event->activity->registration_end + $diff;
-            $newActivity->deregistration_end = $event->activity->deregistration_end + $diff;
-
+            $newActivity = new Activity([
+               'event_id' => $newEvent->id,
+               'price' => $event->activity->price,
+               'participants' => $event->activity->participants,
+               'no_show_fee' => $event->activity->no_show_fee,
+               'hide_participants' => $event->activity->hide_participants,
+               'registration_start' => $event->activity->registration_start + $diff,
+               'registration_end' => $event->activity->registration_end + $diff,
+               'deregistration_end' => $event->activity->deregistration_end + $diff,
+               'comment'=>$event->activity->comment,
+            ]);
             $newActivity->save();
+
+            if($event->activity->helpingCommitteeInstances) {
+                foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+                    $newHelpingCommittee = new HelpingCommittee([
+                        'activity_id' => $newActivity->id,
+                        'committee_id' => $helpingCommittee->committee_id,
+                        'amount' => $helpingCommittee->amount,
+                    ]);
+                    $newHelpingCommittee->save();
+                }
+            }
         }
 
         Session::flash('flash_message', 'Copied the event!');
-        return view('event.edit', ['event' => $newEvent]);
+        return Redirect::to(route('event::edit', ['id' => $newEvent->id]));
     }
 }

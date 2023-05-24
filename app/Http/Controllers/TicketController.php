@@ -48,6 +48,7 @@ class TicketController extends Controller
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
         Session::flash('flash_message', 'The ticket has been created!');
@@ -90,6 +91,7 @@ class TicketController extends Controller
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
         Session::flash('flash_message', 'The ticket has been updated!');
@@ -344,13 +346,13 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
+        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0) {
             Session::flash('flash_message', 'No payment method is selected!');
             return Redirect::back();
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if(config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0){
+        if(config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
             $payment_method = $available_methods->filter(function ($method) use ($requested_method) {

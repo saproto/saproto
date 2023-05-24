@@ -1,7 +1,11 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    @if($new) New temporary admin @else Edit temporary admin @endif
+    @if($new)
+        New temporary admin
+    @else
+        Edit temporary admin
+    @endif
 @endsection
 
 @section('container')
@@ -27,7 +31,7 @@
                         @if($new)
                             <div class="form-group autocomplete">
                                 <label for="user-id">User:</label>
-                                <input id="user-id" class="form-control user-search" name="user_id" required />
+                                <input id="user-id" class="form-control user-search" name="user_id" required/>
                             </div>
                         @else
                             <div class="input-group">
@@ -36,13 +40,13 @@
                             </div>
                         @endif
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'start_at',
                             'label' => 'Start at:',
                             'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'end_at',
                             'label' => 'End at:',
                             'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)

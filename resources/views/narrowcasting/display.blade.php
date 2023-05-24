@@ -13,7 +13,7 @@
 
     <title>S.A. Proto | Narrowcasting</title>
 
-    @include('website.layouts.assets.stylesheets')
+    @include('website.assets.stylesheets')
 
     <style>
 
@@ -77,7 +77,7 @@
 
 </div>
 
-@include('website.layouts.assets.javascripts')
+@include('website.assets.javascripts')
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
@@ -87,7 +87,7 @@
     let youtubePlayer
 
     function onYouTubeIframeAPIReady() {
-         youtubePlayer = new YT.Player('yt-player', {
+        youtubePlayer = new YT.Player('yt-player', {
             height: window.innerHeight,
             width: window.innerWidth,
             events: {
@@ -126,7 +126,9 @@
             slides.classList.remove('opacity-0')
             slides.classList.add('old')
 
-            if (currentCampaign >= campaigns.length) { currentCampaign = 0 }
+            if (currentCampaign >= campaigns.length) {
+                currentCampaign = 0
+            }
             const campaign = campaigns[currentCampaign]
 
             if (campaign.hasOwnProperty('image')) {

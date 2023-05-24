@@ -131,7 +131,7 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
 
-        if (Auth::check() && Auth::user()->can('board')) {
+        if (Auth::user()?->can('board')) {
             return $events->get();
         } else {
             return $events->where('secret', '=', 0)->get();
@@ -143,7 +143,7 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '>', time());
 
-        if (Auth::check() && Auth::user()->can('board')) {
+        if (Auth::user()?->can('board')) {
             return $events->get();
         } else {
             return $events->where('secret', '=', 0)->get();
@@ -162,7 +162,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && $event->isPublished() || (! $event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }

@@ -7,7 +7,7 @@
              style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) : '' }} background-size: cover;">
 
             {{-- Countdown --}}
-            @if(isset($countdown) && $countdown)
+            @if(!empty($countdown))
                 <div class="btn btn-info btn-block mb-3 ">
                     <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                     <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
@@ -23,7 +23,7 @@
             @endif
 
             {{-- Participating --}}
-            @if($event->activity && Auth::check() && $event->activity->isParticipating(Auth::user()))
+            @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
                     @if($event->activity->isOnBackupList(Auth::user()))
                         <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                            data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
@@ -44,7 +44,7 @@
             @endif
 
             {{-- Helper --}}
-            @if (Auth::check() && Auth::user()->is_member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
+            @if (Auth::user()?->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
                 <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif
@@ -107,21 +107,20 @@
             @endif
 
             {{-- Signup Icon --}}
-            @if($event->activity)
                 <div class= "d-flex justify-content-between">
-                    @if($event->activity->users->count()>0)
+                    @if($event->usersCount()>0)
                         <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                            {{$event->activity->users->count()}}
+                            {{$event->usersCount()}}
                         </span>
                     @endif
-                    @if($event->activity->canSubscribe())
+
+                    @if($event->activity && $event->activity->canSubscribe())
                         <span>
                             <i class="fas fa-lock-open"></i>
                         </span>
                     @endif
                 </div>
-            @endif
 
         </div>
 

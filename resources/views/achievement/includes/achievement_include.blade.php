@@ -13,7 +13,7 @@
                 @endif
             @endforeach
         @endif
-        @if(isset($include_delete_for) && $include_delete_for)
+        @if(!empty($include_delete_for))
             <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
                class="float-end text-white">
                 <i class="fas fa-trash fa-fw ms-3"></i>
@@ -38,7 +38,7 @@
 
     </div>
 
-    @if(isset($footer) && $footer)
+    @if(!empty($footer))
 
         <div class="card-footer">
             {!! $footer !!}

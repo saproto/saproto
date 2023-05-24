@@ -16,6 +16,7 @@ use Proto\Mail\UserMailChange;
 use Proto\Models\Member;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
+use Proto\Rules\NotUtwenteEmail;
 use Redirect;
 use Session;
 use Validator;
@@ -61,7 +62,7 @@ class UserDashboardController extends Controller
 
         if ($new_email !== $user->email) {
             $validator = Validator::make($request->only(['email']), [
-                'email' => 'required|email|unique:users',
+                'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail()],
             ]);
             if ($validator->fails()) {
                 return Redirect::route('user::dashboard')->withErrors($validator);
@@ -327,7 +328,7 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        if ($user->member && $user->member->is_pending) {
+        if ($user->member?->is_pending) {
             $user->member->delete();
         }
         $member = Member::create();

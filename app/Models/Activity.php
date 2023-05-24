@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Proto\Http\Controllers\ParticipationController;
 
 /**
  * Activity Model.
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float|null $price
  * @property float $no_show_fee
  * @property int $participants
+ * @property int $attendees
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
@@ -146,7 +148,7 @@ class Activity extends Validatable
 
     /**
      * @param int $help_id
-     * @return Collection|ActivityParticipation[] The ActivityParticipations for the helping users.
+     * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
     public function helpingUsers($help_id)
     {
@@ -206,7 +208,8 @@ class Activity extends Validatable
      * @param User $user
      * @return bool
      */
-    public function isOnBackupList($user) {
+    public function isOnBackupList($user)
+    {
         return in_array($user->id,$this->backupUsers()->pluck('users.id')->toArray());
     }
 
@@ -230,7 +233,7 @@ class Activity extends Validatable
      */
     public function isOrganising(User $user)
     {
-        return $this->event->committee != null && $this->event->committee->isMember($user);
+        return $this->event?->committee?->isMember($user);
     }
 
     /**
@@ -303,5 +306,16 @@ class Activity extends Validatable
     public function withParticipants()
     {
         return $this->participants !== 0;
+    }
+
+    /**
+     * @return int how many people actually showed up
+     */
+    public function getAttendees(): int
+    {
+        if (ParticipationController::getPresent($this->id) > 0) {
+            return ParticipationController::getPresent($this->id);
+        }
+        return $this->attendees ?? 0;
     }
 }

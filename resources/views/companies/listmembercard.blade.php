@@ -34,7 +34,7 @@
                         </a>
 
                         <div class="mt-3">
-                            {!! Markdown::convertToHtml($company->membercard_excerpt) !!}
+                            {!! Markdown::convert($company->membercard_excerpt) !!}
                         </div>
                     </div>
                 </div>

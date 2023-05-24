@@ -68,7 +68,8 @@ class StorageEntry extends Model
             Photo::where('medium_file_id', $id)->count() == 0 &&
             Photo::where('small_file_id', $id)->count() == 0 &&
             Photo::where('tiny_file_id', $id)->count() == 0 &&
-            Photo::where('file_id', $id)->count() == 0;
+            Photo::where('file_id', $id)->count() == 0 &&
+            Member::where('omnomcom_sound_id', $id)->count() == 0;
     }
 
     /**

@@ -79,7 +79,7 @@ class MollieController extends Controller
             }
         }
 
-        if($use_fees){
+        if($use_fees) {
             $selected_method = $available_methods->filter(function ($method) use ($requested_method) {
                 return $method->id === $requested_method;
             });
@@ -164,7 +164,7 @@ class MollieController extends Controller
 
         $flash_message = 'Unknown error';
         if ($transaction->user_id == Auth::id()) {
-            switch(MollieTransaction::translateStatus($transaction->status)){
+            switch(MollieTransaction::translateStatus($transaction->status)) {
                 case 'failed':
                     $flash_message = 'Your payment has failed';
                     break;
@@ -183,9 +183,9 @@ class MollieController extends Controller
             Session::remove('mollie_paid_tickets');
             $isMember = Auth::user()->getIsMemberAttribute();
 
-            switch(MollieTransaction::translateStatus($transaction->status)){
+            switch(MollieTransaction::translateStatus($transaction->status)) {
                 case 'failed':
-                    if($isMember){
+                    if($isMember) {
                         $flash_message = 'Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.';
                     } else {
                         $flash_message = 'Your payment has failed, the tickets have not been added to your account, please retry the purchase.';
@@ -226,7 +226,7 @@ class MollieController extends Controller
         $total = OrderLine::whereIn('id', $orderlines)->sum('total_price');
 
 
-        if(config('omnomcom.mollie')['use_fees']){
+        if(config('omnomcom.mollie')['use_fees']) {
             $fee = round(
                 $selected_method->pricing[0]->fixed->value +
                     $total * (floatval($selected_method->pricing[0]->variable) / 100),

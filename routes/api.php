@@ -5,7 +5,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     Route::group(['middleware' => ['web']], function () {
         Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
-        Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'ApiController@fishcamStream']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
         Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
@@ -53,6 +52,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('photos_api', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
+        Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}/', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
@@ -110,6 +110,12 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Routes related to OmNomCom */
     Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::', 'middleware' => ['web']], function () {
         Route::get('stock', ['as' => 'stock', 'uses' => 'OmNomController@stock']);
+    });
+
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['web']], function () {
+        Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
+        Route::get('updated_prices/{id}', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPricesJSON']);
+        Route::get('all_prices/{id}', ['as' => 'all_prices', 'uses' => 'WallstreetController@getAllPrices']);
     });
 
     /* Route related to the IsAlfredThere API */

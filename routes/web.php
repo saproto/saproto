@@ -83,7 +83,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
             Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+            Route::post('end_in_september', ['as' => 'endinseptember', 'uses' => 'UserAdminController@EndMembershipInSeptember']);
+            Route::post('remove_end', ['as' => 'removeend', 'uses' => 'UserAdminController@removeMembershipEnd']);
             Route::post('settype', ['as' => 'settype', 'uses' => 'UserAdminController@setMembershipType']);
+
+            /* Routes related to the custom omnomcom sound. */
+            Route::group(['prefix' => 'omnomcomsound', 'as' => 'omnomcomsound::', 'middleware' => ['auth', 'permission:board']], function () {
+                Route::post('update', ['as' => 'update', 'uses' => 'UserAdminController@uploadOmnomcomSound']);
+                Route::get('delete', ['as' => 'delete', 'uses' => 'UserAdminController@deleteOmnomcomSound']);
+            });
         });
 
         Route::group(['prefix' => 'memberprofile', 'as' => 'memberprofile::', 'middleware' => ['auth']], function () {
@@ -189,6 +197,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
             Route::get('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembershipForm']);
             Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
+            Route::get('end/{committee}/{edition}', ['as' => 'endedition', 'uses' => 'CommitteeController@endEdition']);
         });
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
@@ -308,6 +317,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('update/{id}', ['as' => 'update', 'middleware' => ['permission:tipcie'], 'uses' => 'DinnerformOrderlineController@update']);
         });
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
+    });
+
+    /* routes related to the wallstreet drink system */
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
+        Route::get('', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
+        Route::get('marquee', ['as' => 'marquee', 'uses' => 'WallstreetController@marquee']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'WallstreetController@close']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
+        Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
+        route::group(['prefix'=>'products', 'as'=>'products::'], function () {
+            Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
+            Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
+        });
     });
 
     /*
@@ -596,6 +621,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
             Route::get('markfailed/{id}/{user_id}', ['as' => 'markfailed', 'uses' => 'WithdrawalController@markFailed']);
+            Route::get('markloss/{id}/{user_id}', ['as' => 'markloss', 'uses' => 'WithdrawalController@markLoss']);
         });
 
         Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
@@ -844,12 +870,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
-    });
-
-    /*Routes related to the advent calender*/
-    Route::group(['prefix' => 'advent', 'as' => 'advent::'], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'AdventController@index']);
-        Route::get('toggle', ['as' => 'toggle', 'uses' => 'AdventController@toggleDecember']);
     });
 
     /* Routes related to the Minisites */

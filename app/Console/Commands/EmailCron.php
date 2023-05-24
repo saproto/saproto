@@ -54,7 +54,8 @@ class EmailCron extends Command
             foreach ($email->recipients() as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
-                        ['email' => $email->sender_address.'@'.config('proto.emaildomain'), 'name' => $email->sender_name],
+                        $email->sender_address.'@'.config('proto.emaildomain'),
+                        $email->sender_name,
                         $email->subject,
                         $email->parseBodyFor($recipient),
                         $email->attachments,

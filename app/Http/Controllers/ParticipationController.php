@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Mail;
@@ -203,6 +204,7 @@ class ParticipationController extends Controller
     /**
      * @param int $participation_id
      * @param Request $request
+     * @return JsonResponse
      */
     public function togglePresence($participation_id, Request $request)
     {
@@ -219,7 +221,8 @@ class ParticipationController extends Controller
         return response()->json($this->getPresent($participation->activity_id));
     }
 
-    public static function getPresent($activity_id) {
+    public static function getPresent($activity_id)
+    {
         return ActivityParticipation::query()
             ->where('activity_id', $activity_id)
             ->where('is_present', true)

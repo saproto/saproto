@@ -210,7 +210,7 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')){
+        if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')) {
             Session::flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
             return Redirect::back();
         }

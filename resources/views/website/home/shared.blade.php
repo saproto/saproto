@@ -22,9 +22,10 @@
                         height: 150px !important;
                     @endif
             ">
-                @if($header && $header->user)
+                @php /** @var Proto\Models\HeaderImage $header */ @endphp
+                @if($header?->user)
                     <small class="ellipsis text-end pe-3 pt-2">
-                        @if (Auth::check() && Auth::user()->is_member && $header->user->member)
+                        @if (Auth::user()?->is_member && $header->user->member)
                             Photo by <a href="{{ route('user::profile', ['id' => $header->user->getPublicId()]) }}"
                                         class="text-white">
                                 {{ $header->user->name }}</a>

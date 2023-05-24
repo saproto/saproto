@@ -26,7 +26,8 @@
 
                             <td>Event</td>
                             <td>Fee</td>
-                            <td>Participants</td>
+                            <td>Sign ups</td>
+                            <td>Attendees <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="The estimated amount of people that actually showed up, use -1 if not applicable"></i></td>
                             <td>Account</td>
                             <td></td>
 
@@ -52,6 +53,8 @@
                                     <td>&euro;{{ number_format($activity->price, 2) }}</td>
 
                                     <td>{{ $activity->users->count() }}</td>
+
+                                    <td><input class="form-control" id="attendees" name="attendees" min="-1" type="number" required></td>
 
                                     <td>
                                         <select name="account" class="form-control">

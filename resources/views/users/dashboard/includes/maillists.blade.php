@@ -40,7 +40,7 @@
 
                         <div id="email__collapse__{{ $list->id }}" class="collapse" data-parent="#email__accordion">
                             <div class="card-body">
-                                {!! Markdown::convertToHtml($list->description) !!}
+                                {!! Markdown::convert($list->description) !!}
                             </div>
                         </div>
                     </div>

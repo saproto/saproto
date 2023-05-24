@@ -22,7 +22,9 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
-                    'https://protu.be',
+                    'https://wrapped.omnomcom.nl',
+                    ...config('proto.domains.protube'),
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
@@ -77,6 +79,7 @@ class ProtoPolicy extends Policy
                     'https://discordapp.com/api/guilds/600338792766767289/widget.json',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
+                    'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
                 ]);

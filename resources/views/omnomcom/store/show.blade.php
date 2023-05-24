@@ -76,7 +76,7 @@
 
         @include('omnomcom.store.includes.modals')
 
-        @include('website.layouts.assets.javascripts')
+        @include('website.assets.javascripts')
 
         @stack("javascript")
 
@@ -95,8 +95,6 @@
             let cart = []
             let stock = []
             let price = []
-
-            initializeOmNomCom()
 
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
@@ -201,6 +199,22 @@
                 }
             }
 
+            async function initializeWallstreetDrink(){
+                await get(config.routes.api_wallstreet_active)
+                    .then(data => {
+                        if(data){
+                            setInterval(updateWallstreetPricing,5000, data.id)
+                            console.log("Wallstreet drink is active")
+                        }
+                    })
+            }
+
+            initializeOmNomCom()
+
+            if("{{$store_slug}}"==="tipcie"){
+                initializeWallstreetDrink()
+            }
+
             function anythingInCart() {
                 for (let id in cart) if (cart[id] > 0) return true
                 return false
@@ -245,7 +259,7 @@
                     })
                     .then(data => {
                         if (data.status === 'OK') {
-                            finishPurchase(data.message)
+                            finishPurchase(data.message, data.sound??null)
                         } else {
                             purchaseInitiate(
                                 false, false,
@@ -291,13 +305,19 @@
                     })
             }
 
-            function finishPurchase(display_message = null) {
+            function finishPurchase(display_message = null, sound = null) {
                 Object.values(modals).forEach(modal => modal.hide())
                 if (display_message) document.getElementById('finished-modal-message').innerHTML = `<span>${display_message}</span>`
                 document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
                 modals['finished-modal'].show()
                 const movie = document.getElementById('purchase-movie')
+                const audio = document.getElementById('purchase-audio')
                 movie.addEventListener('ended', _ => window.location.reload())
+                if(sound) {
+                    audio.src = sound
+                    movie.muted = true
+                    audio.play()
+                }
                 movie.play()
             }
 
@@ -352,6 +372,27 @@
                     products.forEach(el => { if (stock[el.getAttribute('data-id')] > 0) count++ })
                     lists[i].setAttribute('data-stock', count.toString())
                 }
+            }
+
+            async function updateWallstreetPricing(id){
+                await get(`{{route('api::wallstreet::updated_prices', ['id'=>'_id'])}}`.replace('_id', id)).then((response)=> {
+                    console.log("updating prices!")
+                    if(typeof response.products === 'undefined' || response.products.length === 0)
+                    {
+                        console.log('no products associated with the active drink!');
+                        return;
+                    }
+
+                    response.products.forEach((product) => {
+                            price[product.id] = product.price
+                            document.querySelectorAll(`[data-id="${product.id}"]`).forEach((el) => {
+                                el.querySelector('.product-price').innerHTML = "€".concat(product.price.toFixed(2))
+                            })
+                        }
+                    )
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
 
             function establishNfcConnection() {

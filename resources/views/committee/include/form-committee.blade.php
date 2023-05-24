@@ -36,9 +36,9 @@
                     <div class="form-group">
                         <label for="public">Committee type</label>
                         <select class="form-control" id="is_society" name="is_society">
-                            <option value="0" {{ (!$new && $committee->is_society ? '' : 'selected') }}>Committee
+                            <option value="0" @selected(!$new && !$committee->is_society)>Committee
                             </option>
-                            <option value="1" {{ (!$new && $committee->is_society ? 'selected' : '') }}>Society
+                            <option value="1" @selected(!$new && $committee->is_society)>Society
                             </option>
                         </select>
                     </div>
@@ -50,9 +50,9 @@
                     <div class="form-group">
                         <label for="public">Committee visibility</label>
                         <select class="form-control" id="public" name="public">
-                            <option value="0" {{ (!$new && $committee->public ? '' : 'selected') }}>Admin only
+                            <option value="0" @selected(!$new && !$committee->public)>Admin only
                             </option>
-                            <option value="1" {{ (!$new && $committee->public ? 'selected' : '') }}>Public
+                            <option value="1" @selected(!$new && $committee->public)>Public
                             </option>
                         </select>
                     </div>
@@ -67,9 +67,9 @@
                     <div class="form-group">
                         <label for="public">Enable anonymous e-mail</label>
                         <select class="form-control" id="allow_anonymous_email" name="allow_anonymous_email">
-                            <option value="0" {{ (!$new && $committee->allow_anonymous_email ? '' : 'selected') }}>No
+                            <option value="0" @selected(!$new && $committee->allow_anonymous_email)>No
                             </option>
-                            <option value="1" {{ (!$new && $committee->allow_anonymous_email ? 'selected' : '') }}>Yes
+                            <option value="1" @selected(!$new && $committee->allow_anonymous_email)>Yes
                             </option>
                         </select>
                     </div>
@@ -80,7 +80,7 @@
 
             <div class="form-group">
                 <label for="editor">Description</label>
-                @include('website.layouts.macros.markdownfield', [
+                @include('components.forms.markdownfield', [
                     'name' => 'description',
                     'placeholder' => $new ? "Please elaborate on why this committee is awesome." : null,
                     'value' => $new ? null : $committee->description

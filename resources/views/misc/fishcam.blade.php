@@ -6,11 +6,9 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" style="height: 75vh">
 
-        <div class="col-12" style="height: 480px;">
-
-            <div id="fishcam-warning" class="card mb-3">
+        <div class="col-12 h-100">
 
             <div id="fishcam-warning" class="card mb-3">
 
@@ -48,8 +46,8 @@
 
             </div>
 
-            <div id="fishcam" class="card mb-3 d-none">
-                <img class="card-img-top card-img-bottom d-none" id="fishcam-src">
+            <div id="fishcam" class="mb-3 card bg-transparent d-none h-100 w-auto">
+                <img class="d-none h-100 ml-auto" id="fishcam-src" style="object-fit:contain">
             </div>
 
         </div>
@@ -67,12 +65,14 @@
         const unavailable = document.getElementById("fishcam-unavailable")
 
         activate.addEventListener("click", () => {
-            fishcamSrc.src = '{{ route("api::fishcam") }}'
+            fishcamSrc.src = '{{env('FISHCAM_URL')}}'
+            fishcamSrc.classList.remove('d-none')
             warning.classList.add("d-none")
         })
 
         fishcamSrc.addEventListener("error", () => {
             unavailable.classList.remove("d-none")
+            fishcam.classList.add('d-none')
         })
 
         fishcamSrc.addEventListener("load", () => {

@@ -59,17 +59,17 @@
                                 <input required type="text" id="album" name="album" class="form-control"
                                        value="{{ $album->name }}">
                             </div>
-                            @include('website.layouts.macros.datetimepicker', [
+                            @include('components.forms.datetimepicker', [
                                 'name' => 'date',
                                 'label' => 'Album date:',
                                 'placeholder' => date($album->date_taken),
                                 'format' => 'date'
                             ])
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="private"
-                                       name="private" {{ $album->private ? "checked" : "" }}>
-                                <label class="form-check-label" for="private">Private album</label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'private',
+                                'checked' => $album->private,
+                                'label' => 'Private album'
+                            ])
                         </div>
 
                         <div class="card-footer">
@@ -108,7 +108,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $album->id]) }}">
+                            <a class="btn btn-danger" 
+                            href="{{ route('photo::admin::delete', ['id' => $album->id]) }}">
                                 Delete Album
                             </a>
                         </div>

@@ -11,7 +11,8 @@ class ManualEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $from;
+    public $sender_address;
+    public $sender_name;
     public $subject;
     public $body;
     public $submitted_attachments;
@@ -25,9 +26,10 @@ class ManualEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($from, $subject, $body, $attachments, $destination, $user_id, $events, $email_id)
+    public function __construct($sender_address, $sender_name, $subject, $body, $attachments, $destination, $user_id, $events, $email_id)
     {
-        $this->from = $from;
+        $this->sender_address = $sender_address;
+        $this->sender_name = $sender_name;
         $this->subject = $subject;
         $this->body = $body;
         $this->submitted_attachments = $attachments;
@@ -45,7 +47,7 @@ class ManualEmail extends Mailable
     public function build()
     {
         $mail = $this->view('emails.manualemail')
-            ->from($this->from['email'], $this->from['name'])
+            ->from($this->sender_address, $this->sender_name)
             ->subject($this->subject);
         foreach ($this->submitted_attachments as $attachment) {
             $options = [

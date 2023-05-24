@@ -48,17 +48,18 @@ class ExportController extends Controller
                 $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
                     return $activity->event->mayViewEvent($user);
                 });
-
-                foreach ($data as $key => $val) {
+                foreach ($data as $val) {
                     unset($val->event);
                 }
-
                 break;
             case 'committees':
                 if ($user->can('admin')) {
                     $data = Committee::all();
                 } else {
-                    $data = Committee::where('public', 1)->orWhereIn('id', array_values(config('proto.committee')))->get();
+                    $data = Committee::query()
+                        ->where('public', 1)
+                        ->orWhereIn('id', array_values(config('proto.committee')))
+                        ->get();
                 }
                 break;
             case 'committees_activities':
@@ -71,10 +72,17 @@ class ExportController extends Controller
                 if ($user->can('admin')) {
                     $data = Event::all();
                 } else {
-                    $data = Event::all()->filter(function ($event) use ($user) {
-                        return $event->mayViewEvent($user);
-                    });
+                    $data = Event::all()
+                        ->filter(function (Event $event) use ($user) {
+                            return $event->mayViewEvent($user);
+                        });
                 }
+
+                // Exclude 'activity' relation
+                foreach($data as $key => $val) {
+                    unset($val->activity);
+                }
+
                 break;
             case 'mailinglists':
                 $data = EmailList::all();

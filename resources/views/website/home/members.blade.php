@@ -11,9 +11,9 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.layouts.macros.featuredevents', ['n' => 6])
+        @include('website.home.cards.featuredevents', ['n' => 6])
 
-        @include('website.layouts.macros.leaderboards')
+        @include('website.home.cards.leaderboards')
 
         @if (count($birthdays) > 0)
 
@@ -44,38 +44,22 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.layouts.macros.upcomingevents', ['n' => 6])
+        @include('website.home.cards.upcomingevents', ['n' => 6])
 
     </div>
 
     <div class="col-xl-4 col-md-12">
 
-        @if(Carbon::now()->month>=10)
-            <?php $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-11-30 12:12:12')->timestamp; ?>
-            <a href="{{route('advent::index')}}" class="card mb-3 text-decoration-none">
-                <div class="card-header bg-dark text-white">
-                   ❄🎄🍬👻
-                </div>
-                <div class="card-body">
-                    @if($date > Carbon::now()->timestamp)
-                        <div unix-time="{{ $date }}" class="h1 col text-center december-countdown">Loading...</div>
-                    @else
-                        <h1 class="text-center">🎄 Advent Calendar 🎄</h1>
-                    @endif
-                </div>
-            </a>
-        @endif
-
         @if(count($dinnerforms)>0)
 
             <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
-                    <div class="card-body">
-                        @foreach($dinnerforms as $dinnerform)
-                            @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
-                        @endforeach
-                    </div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
+                <div class="card-body">
+                    @foreach($dinnerforms as $dinnerform)
+                        @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
+                    @endforeach
+                </div>
 
             </div>
 
@@ -88,10 +72,11 @@
                     <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
                 </div>
                 <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
-                    {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
+                    {!! Markdown::convert(Proto\Models\Newsletter::text()) !!}
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue reading</a>
+                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue
+                        reading</a>
                 </div>
             </div>
 
@@ -125,7 +110,7 @@
 
 @section('right-column')
 
-    @include('website.layouts.macros.recentalbums', ['n' => 4])
+    @include('website.home.cards.recentalbums', ['n' => 4])
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
@@ -135,7 +120,7 @@
 
                 @foreach($newsitems as $index => $newsitem)
 
-                    @include('website.layouts.macros.card-bg-image', [
+                    @include('website.home.cards.card-bg-image', [
                     'url' => $newsitem->url,
                     'img' => $newsitem->featuredImage ? $newsitem->featuredImage->thumbnail() : null,
                     'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),

@@ -37,7 +37,7 @@
 
                         <div class="form-group">
                             <label for="newsletter-text">Text in newsletter</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'text',
                                 'placeholder' => 'Text goes here.',
                                 'value' => Proto\Models\Newsletter::text()

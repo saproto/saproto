@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -80,32 +81,32 @@ class PhotoAdminController extends Controller
     /**
      * @param Request $request
      * @param int $id
-     * @return false|string
-     * @throws FileNotFoundException
+     * @return JsonResponse|string
      */
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::findOrFail($id);
 
-        if (! $request->hasFile('file')){return response()->json([
-            'message'=>'photo not found in request!',
-        ], 404);
+        if (! $request->hasFile('file')) {
+            return response()->json([
+                'message'=>'photo not found in request!',
+            ], 404);
+        } elseif ($album->published) {
+            return response()->json([
+                'message'=>'album already published! Unpublish to add more photos!',
+            ], 500);
         }
-        elseif ($album->published){return response()->json([
-            'message'=>'album already published! Unpublish to add more photos!',
-        ], 500);
-        }
-            try{
+        try {
             $uploadFile = $request->file('file');
             $addWaterMark = $request->has('addWaterMark');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id, $addWaterMark);
             return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
-            }catch (Exception $e) {
-                return response()->json([
-                    'message'=>$e,
-                ], 500);
-            }
+        } catch (Exception $e) {
+            return response()->json([
+                'message'=>$e,
+            ], 500);
+        }
     }
 
     /**
@@ -134,8 +135,7 @@ class PhotoAdminController extends Controller
                     break;
 
                 case 'thumbnail':
-                    reset($photos);
-                    $album->thumb_id = key($photos);
+                    $album->thumb_id = (int) $photos[0];
                     break;
 
                 case 'private':

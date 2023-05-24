@@ -11,13 +11,21 @@
             </li>
 
             @if($user->is_member)
-                @include('website.layouts.macros.confirm-modal', [
-                    'action' => route("user::member::remove", ['id'=>$user->id]),
-                    'method' => 'POST',
-                    'classes' => 'list-group-item text-danger',
-                    'text' => 'End membership',
-                    'message' => "Are you sure you want to end the membership of $user->name?"
-                ])
+                @if(!$user->member->until)
+                    @include('components.modals.confirm-modal', [
+                             'action' => route("user::member::endinseptember", ['id'=>$user->id]),
+                             'method' => 'POST',
+                             'classes' => 'list-group-item text-warning',
+                             'text' => 'End membership at the end of September',
+                             'message' => "Are you sure you want to end the membership of $user->name at the end of September?"
+                         ])
+                    @include('components.modals.confirm-modal', [
+                            'action' => route("user::member::remove", ['id'=>$user->id]),
+                            'method' => 'POST',
+                            'classes' => 'list-group-item text-danger',
+                            'text' => 'End membership immediately!',
+                            'message' => "Are you sure you want to end the membership of $user->name?"
+                        ])
                 <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
@@ -26,7 +34,17 @@
                     Preview membership card
                 </a>
 
-                @include('website.layouts.macros.confirm-modal', [
+                @else
+                    @include('components.modals.confirm-modal', [
+                           'action' => route("user::member::removeend", ['id'=>$user->id]),
+                           'method' => 'POST',
+                           'classes' => 'list-group-item text-danger',
+                           'text' => 'Cancel membership removal!',
+                           'message' => "Are you sure you do not want to let the membership of $user->name end anymore?"
+                       ])
+                @endif
+
+                @include('components.modals.confirm-modal', [
                     'action' => route("membercard::print", ['id'=>$user->id]),
                     'method' => 'POST',
                     'classes' => 'list-group-item',
@@ -43,7 +61,8 @@
                         <i class="fas fa-check-circle text-success"></i>
                         Has complete profile
                     </li>
-                    <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#addMembership">
+                    <a href="#" class="list-group-item text-warning" data-bs-toggle="modal"
+                       data-bs-target="#addMembership">
                         Make member
                     </a>
                 @else
@@ -65,41 +84,52 @@
                 <li class="table-responsiv list-group-item">
                     <table class="w-100">
                         <thead>
-                            <tr>
-                                <td>Since</td>
-                                <td>Type</td>
-                                <td class="text-center">Form</td>
-                            </tr>
+                        <tr>
+                            <td>Since</td>
+                            <td>Type</td>
+                            <td class="text-center">Form</td>
+                        </tr>
                         </thead>
                         <tbody>
+                        <tr>
+                            <td>
+                                {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                            </td>
+                            <td>
+                                @if($user->member->is_lifelong)
+                                    Lifelong <i class="fas fa-clock"></i>
+                                @elseif($user->member->is_honorary)
+                                    Honorary <i class="fas fa-trophy"></i>
+                                @elseif($user->member->is_donor)
+                                    Donor <i class="fas fa-hand-holding-usd"></i>
+                                @elseif($user->member->is_pet)
+                                    Pet <i class="fas fa-paw"></i>
+                                @else
+                                    Regular
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if($user->member->membershipForm)
+                                    <a class="ms-2"
+                                       href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                @else
+                                    <i class="fa fa-file-alt" data-bs-toggle="tooltip" data-bs-placement="top"
+                                       title="No digital membership form, check the physical archive."></i>
+                                @endif
+                            </td>
+                        </tr>
+                        </tbody>
+                        <trow>
+                        @if($user->member->until)
                             <tr>
                                 <td>
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
-                                </td>
-                                <td>
-                                    @if($user->member->is_lifelong)
-                                        Lifelong <i class="fas fa-clock"></i>
-                                    @elseif($user->member->is_honorary)
-                                        Honorary <i class="fas fa-trophy"></i>
-                                    @elseif($user->member->is_donor)
-                                        Donor <i class="fas fa-hand-holding-usd"></i>
-                                    @elseif($user->member->is_pet)
-                                        Pet <i class="fas fa-paw"></i>
-                                    @else
-                                        Regular
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    @if($user->member->membershipForm)
-                                        <a class="ms-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
-                                            <i class="fas fa-download"></i>
-                                        </a>
-                                    @else
-                                        <i class="fa fa-file-alt" data-bs-toggle="tooltip" data-bs-placement="top" title="No digital membership form, check the physical archive."></i>
-                                    @endif
+                                    <b>Until: </b><i>{{Carbon::createFromTimestamp($user->member->until)->format('d M Y')}}</i>
                                 </td>
                             </tr>
-                        </tbody>
+                        @endif
+                        </trow>
                     </table>
                 </li>
 
@@ -114,38 +144,39 @@
                 <li class="table-responsive list-group-item">
                     <table class="w-100">
                         <thead>
-                            <tr>
-                                <td>
-                                    Since
-                                </td>
-                                <td>
-                                    Actions
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                Since
+                            </td>
+                            <td>
+                                Actions
+                            </td>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach($memberships['pending'] as $membership)
-                                <tr>
+                        @foreach($memberships['pending'] as $membership)
+                            <tr>
+                                <td>
+                                    {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                </td>
+                                @if($membership->membershipForm)
                                     <td>
-                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                        <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                           class="text-decoration-none">
+                                            <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
+                                        </a>
+                                        @include('components.modals.confirm-modal', [
+                                            'action' => route("memberform::delete", ['id' => $membership->membership_form_id]),
+                                            'classes' => 'text-danger',
+                                            'text' => '<i class="fas fa-trash fa-fw me-2 text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete the signed membership form of <i>$user->name</i>? Only delete a signed membership form if the form is invalid or the user does not want to become a member.",
+                                            'confirm' => 'Delete',
+                                        ])
                                     </td>
-                                    @if($membership->membershipForm)
-                                        <td>
-                                            <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
-                                                <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
-                                            </a>
-                                            @include('website.layouts.macros.confirm-modal', [
-                                                'action' => route("memberform::delete", ['id' => $membership->membership_form_id]),
-                                                'classes' => 'text-danger',
-                                                'text' => '<i class="fas fa-trash fa-fw me-2 text-danger"></i>',
-                                                'title' => 'Confirm Delete',
-                                                'message' => "Are you sure you want to delete the signed membership form of <i>$user->name</i>? Only delete a signed membership form if the form is invalid or the user does not want to become a member.",
-                                                'confirm' => 'Delete',
-                                            ])
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
+                                @endif
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </li>
@@ -181,10 +212,11 @@
                                 </td>
                                 @if($membership->membershipForm)
                                     <td>
-                                        <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
+                                        <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
+                                           class="text-decoration-none">
                                             <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        @include('website.layouts.macros.confirm-modal', [
+                                        @include('components.modals.confirm-modal', [
                                             'action' => route("memberform::delete", ['id' => $membership->membership_form_id]),
                                             'method' => 'POST',
                                             'classes' => 'text-danger',

@@ -55,7 +55,7 @@
 
         <p class="card-text">
 
-            {!! Markdown::convertToHtml($committee->description) !!}
+            {!! Markdown::convert($committee->description) !!}
 
         </p>
 
