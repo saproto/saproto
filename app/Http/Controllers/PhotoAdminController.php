@@ -69,7 +69,7 @@ class PhotoAdminController extends Controller
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
         $album->private = $request->has('private');
-        foreach ($album->items as $photo){
+        foreach ($album->items as $photo) {
             $photo->private = $request->has('private');
             $photo->save();
         }

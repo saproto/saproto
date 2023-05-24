@@ -160,7 +160,9 @@ class Photo extends Model
         }
         $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken);
 
-        if($user == null || $user->member() == null) $result = $result->where('private', false);
+        if($user == null || $user->member() == null) {
+            $result = $result->where('private', false);
+        }
 
         $result = $result->orderBy('date_taken', $ord)->orderBy('id', $ord);
         if ($result->count() > 1) {
@@ -204,9 +206,10 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    public function likedByUser($user) {
-        if($user){
-        return $this->likes()->where('user_id', $user->id)->count() > 0;
+    public function likedByUser($user)
+    {
+        if($user) {
+            return $this->likes()->where('user_id', $user->id)->count() > 0;
         }return false;
     }
 
@@ -240,15 +243,19 @@ class Photo extends Model
         return $this->tiny_file->generateUrl();
     }
 
-    public function mayViewPhoto($user) {
-        if(! $this->private)return true;
-        if($user){
+    public function mayViewPhoto($user)
+    {
+        if(! $this->private) {
+            return true;
+        }
+        if($user) {
             return $user->member() !== null;
         }
         return false;
     }
 
-    public function makePublic() {
+    public function makePublic()
+    {
         return
         $this->file->makePublic() &&
         $this->large_file->makePublic() &&
@@ -257,7 +264,8 @@ class Photo extends Model
         $this->tiny_file->makePublic();
     }
 
-    public function makePrivate() {
+    public function makePrivate()
+    {
         return
         $this->file->makePrivate() &&
         $this->large_file->makePrivate() &&
@@ -271,23 +279,33 @@ class Photo extends Model
         parent::boot();
 
         static::updated(function ($photo) {
-            if($photo->private){
-                if(! $photo->makePrivate()){
+            if($photo->private) {
+                if(! $photo->makePrivate()) {
                     $photo->private = false;
                 }
-            }else{
-                if(! $photo->makePublic()){
+            } else {
+                if(! $photo->makePublic()) {
                     $photo->private = true;
                 }
             }
         });
 
         static::deleting(function ($photo) {
-            if($photo->file())$photo->file()->delete();
-            if($photo->large_file())$photo->large_file()->delete();
-            if($photo->medium_file())$photo->medium_file()->delete();
-            if($photo->small_file())$photo->small_file()->delete();
-            if($photo->tiny_file())$photo->tiny_file()->delete();
+            if($photo->file()) {
+                $photo->file()->delete();
+            }
+            if($photo->large_file()) {
+                $photo->large_file()->delete();
+            }
+            if($photo->medium_file()) {
+                $photo->medium_file()->delete();
+            }
+            if($photo->small_file()) {
+                $photo->small_file()->delete();
+            }
+            if($photo->tiny_file()) {
+                $photo->tiny_file()->delete();
+            }
             if ($photo->album && $photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;

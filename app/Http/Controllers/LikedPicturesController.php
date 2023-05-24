@@ -59,7 +59,8 @@ class LikedPicturesController extends Controller
      * @param bool $next
      * @return JsonResponse
      */
-    private function getAdjacentResponse($id, $next) {
+    private function getAdjacentResponse($id, $next)
+    {
         $photo = Photo::findOrFail($id);
         $adjacent = $this->getAdjacentPhoto($photo, $next);
 
@@ -81,7 +82,8 @@ class LikedPicturesController extends Controller
         return response()->json(['message' => 'adjacent photo not found.'], 404);
     }
 
-    private function getAdjacentPhoto($photo, $next) {
+    private function getAdjacentPhoto($photo, $next)
+    {
         if ($next) {
             $ord = 'ASC';
             $comp = '>';
@@ -93,7 +95,9 @@ class LikedPicturesController extends Controller
             $query->where('user_id', Auth::user()->id);
         })->where('date_taken', $comp.'=', $photo->date_taken);
 
-        if(Auth::user() == null || Auth::user()->member() == null) $adjacent = $adjacent->where('private', false);
+        if(Auth::user() == null || Auth::user()->member() == null) {
+            $adjacent = $adjacent->where('private', false);
+        }
 
         $adjacent = $adjacent->orderBy('date_taken', $ord)->orderBy('id', $ord);
 

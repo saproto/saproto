@@ -12,15 +12,17 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AddMultipleFileIdsToPhotos extends Migration
 {
-    public function ensureLocalDirectoryExists($directoryPath, $output) {
-        if (! File::exists(Storage::disk('local')->path($directoryPath))){
+    public function ensureLocalDirectoryExists($directoryPath, $output)
+    {
+        if (! File::exists(Storage::disk('local')->path($directoryPath))) {
             File::makeDirectory(Storage::disk('local')->path($directoryPath), 0777, true);
             $output->writeln('created the folder: '.$directoryPath);
         }
     }
 
-    public function ensurePublicDirectoryExists($directoryPath, $output) {
-        if (! File::exists(Storage::disk('public')->path($directoryPath))){
+    public function ensurePublicDirectoryExists($directoryPath, $output)
+    {
+        if (! File::exists(Storage::disk('public')->path($directoryPath))) {
             File::makeDirectory(Storage::disk('public')->path($directoryPath), 0777, true);
             $output->writeln('created the folder: '.$directoryPath);
         }
@@ -60,10 +62,10 @@ class AddMultipleFileIdsToPhotos extends Migration
     {
         $output = new ConsoleOutput();
         $output->writeln('starting moving all files back over');
-        foreach(Photo::all() as $photo){
-            if($photo->private){
+        foreach(Photo::all() as $photo) {
+            if($photo->private) {
                 $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->file->hash);
-            }else{
+            } else {
                 $oldPath = Storage::disk('public')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->file->hash);
             }
 
@@ -77,16 +79,24 @@ class AddMultipleFileIdsToPhotos extends Migration
                 $photo->file->save();
 
                 $large_photo = StorageEntry::find($photo->large_file_id);
-                if($large_photo)$large_photo->delete();
+                if($large_photo) {
+                    $large_photo->delete();
+                }
 
                 $medium_photo = StorageEntry::find($photo->medium_file_id);
-                if($medium_photo)$medium_photo->delete();
+                if($medium_photo) {
+                    $medium_photo->delete();
+                }
 
                 $small_photo = StorageEntry::find($photo->small_file_id);
-                if($small_photo)$small_photo->delete();
+                if($small_photo) {
+                    $small_photo->delete();
+                }
 
                 $tiny_photo = StorageEntry::find($photo->tiny_file_id);
-                if($tiny_photo)$tiny_photo->delete();
+                if($tiny_photo) {
+                    $tiny_photo->delete();
+                }
             }
         }
         $output->writeln('dropping the columns!');

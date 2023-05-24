@@ -12,10 +12,11 @@ use Proto\Models\User;
 
 class ConvertStorageEntriesToPhotos extends Migration
 {
-    private function moveOverPhotos($items, $path) {
-        foreach($items as $item){
+    private function moveOverPhotos($items, $path)
+    {
+        foreach($items as $item) {
             $storageEntry = StorageEntry::find($item->photo_id);
-            if($storageEntry){
+            if($storageEntry) {
                 $photo = new Photo();
                 $photo->makePhoto($storageEntry->generateLocalPath(), $storageEntry->original_filename, $storageEntry->created_at, false, $path);
                 $photo->save();
@@ -26,8 +27,9 @@ class ConvertStorageEntriesToPhotos extends Migration
         }
     }
 
-    private function moveBackPhotos($items) {
-        foreach($items as $item){
+    private function moveBackPhotos($items)
+    {
+        foreach($items as $item) {
             $photo = Photo::find($item->photo_id);
             if($photo && $photo->file()->first()) {
                 $originalFile = $photo->file()->first();
@@ -45,8 +47,8 @@ class ConvertStorageEntriesToPhotos extends Migration
                 $item->photo_id = $storageEntry->id;
                 $item->save();
                 $photo->delete();
-                }
             }
+        }
     }
 
     /**
@@ -84,9 +86,9 @@ class ConvertStorageEntriesToPhotos extends Migration
         $this->moveOverPhotos(Event::all(),'event_photos');
         $this->moveOverPhotos(Committee::all(),'committee_photos');
         $this->moveOverPhotos(Company::all(),'committee_photos');
-        foreach(User::all() as $user){
+        foreach(User::all() as $user) {
             $storageEntry = StorageEntry::find($user->photo_id);
-            if($storageEntry){
+            if($storageEntry) {
                 $photo = new Photo();
                 $img = Image::make($storageEntry->generateLocalPath());
                 $smallestSide = $img->width() < $img->height() ? $img->width : $img->height();

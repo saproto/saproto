@@ -19,7 +19,7 @@ class PhotoSeeder extends Seeder
      */
     public function run()
     {
-        foreach (PhotoAlbum::all() as $album){
+        foreach (PhotoAlbum::all() as $album) {
             $album->delete();
         }
         $faker = Factory::create();
@@ -57,7 +57,7 @@ class PhotoSeeder extends Seeder
                         ]);
                         $like->save();
                     }
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                 }
                 
                 

@@ -50,23 +50,28 @@ class PhotoController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function getPhoto($id) {
+    public function getPhoto($id)
+    {
         $photo = Photo::find($id);
-        if(! $photo) return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
-        if(! $photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
-            return response()->JSON([
-                'id' => $photo->id,
-                'largeUrl' => $photo->getLargeUrl(),
-                'tinyUrl' => $photo->getTinyUrl(),
-                'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
-                'albumTitle'=>$photo->album->name,
-                'likes'=>$photo->getLikes(),
-                'likedByUser'=>$photo->likedByUser(Auth::user()),
-                'private' => $photo->private,
-                'hasNextPhoto'=>$photo->getAdjacentPhoto(true, Auth::user()) !== null,
-                'hasPreviousPhoto'=>$photo->getAdjacentPhoto(false, Auth::user()) !== null,
-                'downloadUrl'=>route('image::get', ['id'=>$photo->file->id, 'hash'=>$photo->file->hash]),
-            ]);
+        if(! $photo) {
+            return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
+        }
+        if(! $photo->mayViewPhoto(Auth::user())) {
+            return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
+        }
+        return response()->JSON([
+            'id' => $photo->id,
+            'largeUrl' => $photo->getLargeUrl(),
+            'tinyUrl' => $photo->getTinyUrl(),
+            'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
+            'albumTitle'=>$photo->album->name,
+            'likes'=>$photo->getLikes(),
+            'likedByUser'=>$photo->likedByUser(Auth::user()),
+            'private' => $photo->private,
+            'hasNextPhoto'=>$photo->getAdjacentPhoto(true, Auth::user()) !== null,
+            'hasPreviousPhoto'=>$photo->getAdjacentPhoto(false, Auth::user()) !== null,
+            'downloadUrl'=>route('image::get', ['id'=>$photo->file->id, 'hash'=>$photo->file->hash]),
+        ]);
     }
 
     public function getNextPhoto($id)
@@ -121,7 +126,7 @@ class PhotoController extends Controller
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');
         $albums = $albums->where('published', '=', $published);
-        if(! (Auth::check() && Auth::user()->member() !== null)){
+        if(! (Auth::check() && Auth::user()->member() !== null)) {
             $albums = $albums->where('private', false);
         }
         return $albums->get();
