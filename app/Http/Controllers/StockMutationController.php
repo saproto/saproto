@@ -13,7 +13,7 @@ class StockMutationController extends Controller
      */
     public function filterMutations(Request $rq, array $selection = null)
     {
-        $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc');
+        $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
 
         // Find mutations by Pwoduct
         if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
