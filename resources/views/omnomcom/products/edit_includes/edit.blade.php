@@ -84,7 +84,7 @@
 
                 <div class="col-md-3">
 
-                    <label for="stock">Current stock:</label>
+                    <label for="stock">Shelf stock:<i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="This is the amount of the product before you stock the shelves. This amount is for checking the stock for theft. If you are only reporting theft, make sure that the final stock is set to the same value."></i></label>
                     <input type="number" class="form-control" id="prev_stock" name="prev_stock"
                            placeholder="0" value="{{ $product->stock ?? '' }}">
 
@@ -92,7 +92,7 @@
 
                 <div class="col-md-3">
 
-                    <label for="stock">Updated stock:</label>
+                    <label for="stock">Final stock:<i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="This is the updated amount, put your new stock amounts here."></i></label>
                     <input type="number" class="form-control" id="stock" name="stock"
                            placeholder="0" value="{{ $product->stock ?? '' }}">
 
