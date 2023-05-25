@@ -133,7 +133,8 @@ class ProductController extends Controller
             // Is this how you make them records? Is there a better way?
             $pre_mut = StockMutation::make([
                     'before' => $old_stock,
-                    'after' => $found_stock]
+                    'after' => $found_stock,
+                    'is_bulk' => false]
             );
 
             $pre_mut->user()->associate($request->user());
@@ -145,7 +146,8 @@ class ProductController extends Controller
             // Actwual restocking mutation
             $after_mut = StockMutation::make([
                     'before' => $found_stock,
-                    'after' => $new_stock]
+                    'after' => $new_stock,
+                    'is_bulk' => false]
             );
 
 
