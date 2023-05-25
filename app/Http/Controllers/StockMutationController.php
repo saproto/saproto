@@ -9,7 +9,7 @@ use Proto\Models\StockMutation;
 class StockMutationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     *  Filters mutations using the filter form
      */
     public function filterMutations(Request $rq, array $selection = null)
     {
@@ -44,7 +44,7 @@ class StockMutationController extends Controller
         }
 
         // Filter mwutations by them being a loss
-        if ($rq->has('only_loss')) {
+        if (!$rq->has('also_positive')) {
             $mutations = $mutations->whereColumn('stock_mutations.before','>','stock_mutations.after');
         }
 
@@ -58,6 +58,9 @@ class StockMutationController extends Controller
         return $mutations->select($selection);
     }
 
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $rq)
     {
         return view('omnomcom.products.mutations', ['mutations' => $this->filterMutations($rq)->paginate(15)]);

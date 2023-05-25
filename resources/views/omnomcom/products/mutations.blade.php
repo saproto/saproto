@@ -59,9 +59,9 @@
 
                         <div class="row-md-12 mb-3">
                             @include('components.forms.checkbox', [
-                                'name' => 'only_loss',
-                                'checked' => request()->has('only_loss'),
-                                'label' => 'Only show losses.'
+                                'name' => 'also_positive',
+                                'checked' => request()->has('also_positive'),
+                                'label' => 'Also show positive mutations'
                             ])
                         </div>
                         <div>
