@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Proto\Models\Product;
 use Proto\Models\StockMutation;
 
 class StockMutationController extends Controller
@@ -83,11 +84,14 @@ class StockMutationController extends Controller
         $callback = function () use ($mutations) {
             $f = fopen('php://output', 'w');
 
-            $csv_header = ['Product ID', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
+            $csv_header = ['Product ID','Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
             fputcsv($f, $csv_header);
 
             foreach ($mutations as $row) {
-                fputcsv($f,[$row['product_id'], $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
+                $product = Product::find($row['product_id']);
+
+                if (!is_null($product))
+                    fputcsv($f,[$row['product_id'],$product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
             }
             fclose($f);
         };
