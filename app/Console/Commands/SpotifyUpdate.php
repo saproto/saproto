@@ -48,6 +48,7 @@ class SpotifyUpdate extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
+
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -63,6 +64,7 @@ class SpotifyUpdate extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
+
                 return;
             }
         }
@@ -108,6 +110,7 @@ class SpotifyUpdate extends Command
                 if ($sameVideo) {
                     DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => $sameVideo->spotify_id, 'spotify_name' => $sameVideo->spotify_name]);
                     $this->info("Matched { $video->title } due to earlier occurrence.");
+
                     continue;
                 }
 

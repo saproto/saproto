@@ -17,7 +17,6 @@ class QueryController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function activityOverview(Request $request)
@@ -47,7 +46,6 @@ class QueryController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\Http\Response|View
      */
     public function membershipTotals(Request $request)

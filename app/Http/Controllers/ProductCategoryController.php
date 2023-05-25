@@ -25,7 +25,6 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -34,22 +33,23 @@ class ProductCategoryController extends Controller
         $category->save();
 
         Session::flash('flash_message', 'Category '.$category->name.' created.');
+
         return Redirect::route('omnomcom::categories::list');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function show($id)
     {
         $category = ProductCategory::findOrFail($id);
+
         return view('omnomcom.categories.edit', ['category' => $category]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -60,13 +60,14 @@ class ProductCategoryController extends Controller
         $category->save();
 
         Session::flash('flash_message', 'Category '.$category->name.' saved.');
+
         return Redirect::route('omnomcom::categories::list');
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)

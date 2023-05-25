@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read GoodIdea $goodIdea
+ *
  * @method static Builder|GoodIdeaVote whereCreatedAt($value)
  * @method static Builder|GoodIdeaVote whereGoodIdeaId($value)
  * @method static Builder|GoodIdeaVote whereId($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|GoodIdeaVote newModelQuery()
  * @method static Builder|GoodIdeaVote newQuery()
  * @method static Builder|GoodIdeaVote query()
+ *
  * @mixin Eloquent
  */
 class GoodIdeaVote extends Model

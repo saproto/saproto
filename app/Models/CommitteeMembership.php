@@ -24,6 +24,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property-read Committee $committee
  * @property-read User $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|CommitteeMembership onlyTrashed()
@@ -40,6 +41,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|CommitteeMembership newModelQuery()
  * @method static Builder|CommitteeMembership newQuery()
  * @method static Builder|CommitteeMembership query()
+ *
  * @mixin Eloquent
  */
 class CommitteeMembership extends Model

@@ -14,9 +14,13 @@ class HelperMutation extends Mailable
     use SerializesModels;
 
     public $helper_name;
+
     public $committee;
+
     public $event;
+
     public $helping;
+
     public $help;
 
     /**

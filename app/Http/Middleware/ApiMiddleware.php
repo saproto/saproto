@@ -16,8 +16,8 @@ class ApiMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param  Closure $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, $next)
@@ -27,6 +27,7 @@ class ApiMiddleware
                 config()->set('session.driver', 'array');
             }
         }
+
         return $next($request);
     }
 }

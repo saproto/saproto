@@ -13,6 +13,7 @@ class ProductBulkUpdateNotification extends Mailable
     use SerializesModels;
 
     public $log;
+
     public $user;
 
     /**

@@ -54,7 +54,8 @@ class HomeController extends Controller
 
         if (Auth::user()?->is_member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
-            return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, ]);
+
+            return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
         } else {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }

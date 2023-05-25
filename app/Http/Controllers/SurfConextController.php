@@ -11,7 +11,6 @@ use Session;
 class SurfConextController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function create(Request $request)
@@ -32,7 +31,6 @@ class SurfConextController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function destroy(Request $request)
@@ -45,6 +43,7 @@ class SurfConextController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'The link with your university account has been deleted.');
+
         return Redirect::route('user::dashboard');
     }
 }
