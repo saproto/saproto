@@ -16,7 +16,6 @@ use Session;
 class AddressController extends Controller
 {
     /**
-     * @param Request $request
      * @return View|RedirectResponse
      */
     public function add(Request $request)
@@ -35,7 +34,6 @@ class AddressController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -49,7 +47,6 @@ class AddressController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View|RedirectResponse
      */
     public function edit(Request $request)
@@ -59,6 +56,7 @@ class AddressController extends Controller
 
         if ($address == null) {
             Session::flash('flash_message', "We don't have an address for you?");
+
             return Redirect::back();
         }
 
@@ -70,7 +68,6 @@ class AddressController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function update(Request $request)
@@ -80,6 +77,7 @@ class AddressController extends Controller
 
         if ($address == null) {
             Session::flash('flash_message', "We don't have an address for you?");
+
             return Redirect::back();
         }
 
@@ -88,6 +86,7 @@ class AddressController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy()
@@ -95,15 +94,18 @@ class AddressController extends Controller
         $user = Auth::user();
         if (! $user->address) {
             Session::flash('flash_message', "We don't have an address for you?");
+
             return Redirect::back();
         }
         if ($user->is_member) {
             Session::flash('flash_message', "You are a member. You can't delete your address!");
+
             return Redirect::back();
         }
         $user->address->delete();
 
         Session::flash('flash_message', 'Your address has been deleted.');
+
         return Redirect::route('user::dashboard');
     }
 
@@ -116,13 +118,14 @@ class AddressController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Your primary address is now '.($user->address_visible ? 'visible' : 'hidden').' for members.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param Address $address
-     * @param User $user
+     * @param  Request  $request
+     * @param  Address  $address
+     * @param  User  $user
      * @return RedirectResponse
      */
     public static function saveAddressData($request, $address, $user)
@@ -156,6 +159,7 @@ class AddressController extends Controller
                     $addressdata['zipcode-nl'],
                     $addressdata['number-nl']
                 ));
+
                 return Redirect::back();
             }
         } else {

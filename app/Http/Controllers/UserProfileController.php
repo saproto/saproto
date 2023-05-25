@@ -13,7 +13,7 @@ use Proto\Models\User;
 class UserProfileController extends Controller
 {
     /**
-     * @param string|null $id
+     * @param  string|null  $id
      * @return View
      */
     public function show($id = null)
@@ -29,12 +29,13 @@ class UserProfileController extends Controller
         $moneySpent = $this->getSpentMoney($user);
         $totalProducts = $this->getProductsPurchased($user);
         $totalSignups = $this->getTotalSignups($user);
-        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney'=>$moneySpent, 'signups'=>$totalSignups, 'totalproducts'=>$totalProducts]);
+
+        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney' => $moneySpent, 'signups' => $totalSignups, 'totalproducts' => $totalProducts]);
     }
 
     /**
-     * @param User $user
-     * @param bool $with_societies
+     * @param  User  $user
+     * @param  bool  $with_societies
      * @return Collection|CommitteeMembership[]
      */
     private function getPastMemberships($user, $with_societies)

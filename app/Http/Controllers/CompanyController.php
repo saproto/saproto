@@ -26,6 +26,7 @@ class CompanyController extends Controller
             return view('companies.list', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -42,6 +43,7 @@ class CompanyController extends Controller
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -69,8 +71,8 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -96,13 +98,14 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
+
         return Redirect::route('companies::admin');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function show($id)
@@ -113,7 +116,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function showMembercard($id)
@@ -124,7 +127,7 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -137,9 +140,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(Request $request, $id)
@@ -164,11 +167,12 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
+
         return Redirect::route('companies::admin');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function orderUp($id)
@@ -191,7 +195,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function orderDown($id)
@@ -216,8 +220,9 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)

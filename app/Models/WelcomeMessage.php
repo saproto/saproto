@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
+ *
  * @method static Builder|WelcomeMessage whereCreatedAt($value)
  * @method static Builder|WelcomeMessage whereId($value)
  * @method static Builder|WelcomeMessage whereMessage($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|WelcomeMessage newModelQuery()
  * @method static Builder|WelcomeMessage newQuery()
  * @method static Builder|WelcomeMessage query()
+ *
  * @mixin Eloquent
  */
 class WelcomeMessage extends Model

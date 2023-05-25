@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Product[] $products
+ *
  * @method static Builder|FinancialAccount whereAccountNumber($value)
  * @method static Builder|FinancialAccount whereCreatedAt($value)
  * @method static Builder|FinancialAccount whereId($value)
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|FinancialAccount newModelQuery()
  * @method static Builder|FinancialAccount newQuery()
  * @method static Builder|FinancialAccount query()
+ *
  * @mixin Eloquent
  */
 class FinancialAccount extends Model

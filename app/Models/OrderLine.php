@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read TicketPurchase|null $ticketPurchase
  * @property-read User|null $user
  * @property-read Withdrawal|null $withdrawal
+ *
  * @method static Builder|OrderLine whereAuthenticatedBy($value)
  * @method static Builder|OrderLine whereCashierId($value)
  * @method static Builder|OrderLine whereCreatedAt($value)
@@ -53,6 +54,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|OrderLine newModelQuery()
  * @method static Builder|OrderLine newQuery()
  * @method static Builder|OrderLine query()
+ *
  * @mixin Eloquent
  */
 class OrderLine extends Model
@@ -106,6 +108,7 @@ class OrderLine extends Model
         if ($this->payed_with_mollie !== null) {
             $mollie_payment = $this->molliePayment->translatedStatus();
         }
+
         return
             $this->total_price == 0 ||
             $this->payed_with_loss ||

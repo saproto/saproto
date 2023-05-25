@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read Activity|null $activity
  * @property-read Committee|null $committee
  * @property-read Collection|User[]|null $users
+ *
  * @method static Builder|HelpingCommittee whereActivityId($value)
  * @method static Builder|HelpingCommittee whereAmount($value)
  * @method static Builder|HelpingCommittee whereCommitteeId($value)
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|HelpingCommittee newModelQuery()
  * @method static Builder|HelpingCommittee newQuery()
  * @method static Builder|HelpingCommittee query()
+ *
  * @mixin Eloquent
  */
 class HelpingCommittee extends Validatable
