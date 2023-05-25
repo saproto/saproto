@@ -140,12 +140,6 @@
             ])
 
             @include('components.forms.checkbox', [
-                'name' => 'is_visible_when_no_stock',
-                'checked' => $product?->is_visible_when_no_stock,
-                'label' => 'Visible in OmNomCom even when out of stock.'
-            ])
-
-            @include('components.forms.checkbox', [
                 'name' => 'is_alcoholic',
                 'checked' => $product?->is_alcoholic,
                 'label' => 'Product contains alcohol.'
