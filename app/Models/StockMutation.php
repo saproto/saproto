@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $is_bulk
  * @property-read \Proto\Models\Product|null $product
  * @property-read \Proto\Models\User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|StockMutation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StockMutation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StockMutation query()
@@ -34,7 +35,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class StockMutation extends Model
 {
     use HasFactory;
+
     protected $table = 'stock_mutations';
+
     protected $fillable = ['before', 'after', 'is_bulk'];
 
     public function product(): BelongsTo
@@ -47,7 +50,7 @@ class StockMutation extends Model
         return $this->belongsTo("Proto\Models\User");
     }
 
-    public function date(): String
+    public function date(): string
     {
         return $this->created_at->toDateString();
     }

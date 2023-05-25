@@ -20,7 +20,7 @@ class StockMutationController extends Controller
         if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
             $search = $rq->get('product_name');
             $mutations = $mutations
-                ->join('products','products.id', '=','stock_mutations.product_id','inner')
+                ->join('products', 'products.id', '=', 'stock_mutations.product_id', 'inner')
                 ->where('products.name', 'like', "%$search%");
         }
 
@@ -28,7 +28,7 @@ class StockMutationController extends Controller
         if ($rq->has('author_name') && strlen($rq->input('author_name')) > 2) {
             $search = $rq->get('author_name');
             $mutations = $mutations
-                ->join('users','users.id', '=','stock_mutations.user_id','inner')
+                ->join('users', 'users.id', '=', 'stock_mutations.user_id', 'inner')
                 ->where('users.name', 'like', "%$search%");
         }
 
@@ -45,14 +45,14 @@ class StockMutationController extends Controller
         }
 
         // Filter mwutations by them being a loss
-        if (!$rq->has('also_positive')) {
-            $mutations = $mutations->whereColumn('stock_mutations.before','>','stock_mutations.after');
+        if (! $rq->has('also_positive')) {
+            $mutations = $mutations->whereColumn('stock_mutations.before', '>', 'stock_mutations.after');
         }
 
         // variables for SELECT statement
         // We need this to filter out the data from joins
         // Also prevents shadowing/disappearance of the created_at field
-        if($selection == null) {
+        if ($selection == null) {
             $selection = ['stock_mutations.product_id', 'stock_mutations.user_id', 'stock_mutations.created_at', 'stock_mutations.before', 'stock_mutations.after', 'stock_mutations.is_bulk'];
         }
 
@@ -84,14 +84,15 @@ class StockMutationController extends Controller
         $callback = function () use ($mutations) {
             $f = fopen('php://output', 'w');
 
-            $csv_header = ['Product ID','Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
+            $csv_header = ['Product ID', 'Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
             fputcsv($f, $csv_header);
 
             foreach ($mutations as $row) {
                 $product = Product::find($row['product_id']);
 
-                if (!is_null($product))
-                    fputcsv($f,[$row['product_id'],$product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
+                if (! is_null($product)) {
+                    fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
+                }
             }
             fclose($f);
         };

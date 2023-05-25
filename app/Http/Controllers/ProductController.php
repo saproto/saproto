@@ -132,9 +132,9 @@ class ProductController extends Controller
             // Stock observation mutation
             // Is this how you make them records? Is there a better way?
             $pre_mut = StockMutation::make([
-                    'before' => $old_stock,
-                    'after' => $found_stock,
-                    'is_bulk' => false]
+                'before' => $old_stock,
+                'after' => $found_stock,
+                'is_bulk' => false]
             );
 
             $pre_mut->user()->associate($request->user());
@@ -142,14 +142,13 @@ class ProductController extends Controller
             $pre_mut->save();
         }
 
-        if($found_stock != $new_stock) {
+        if ($found_stock != $new_stock) {
             // Actwual restocking mutation
             $after_mut = StockMutation::make([
-                    'before' => $found_stock,
-                    'after' => $new_stock,
-                    'is_bulk' => false]
+                'before' => $found_stock,
+                'after' => $new_stock,
+                'is_bulk' => false]
             );
-
 
             $after_mut->user()->associate($request->user());
             $after_mut->product()->associate($product);
@@ -231,9 +230,9 @@ class ProductController extends Controller
 
             // Make product mutations for bulk updates
             $mutation = StockMutation::make([
-                    'before' => $product->stock,
-                    'after' => $product->stock + $deltas[$i],
-                    'is_bulk' => true]);
+                'before' => $product->stock,
+                'after' => $product->stock + $deltas[$i],
+                'is_bulk' => true]);
 
             $mutation->user()->associate($request->user());
             $mutation->product()->associate($product);
@@ -242,7 +241,6 @@ class ProductController extends Controller
             $product->stock += $deltas[$i];
             $product->save();
         }
-
 
         Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
         Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
