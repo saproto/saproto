@@ -13,8 +13,8 @@ use Session;
 class ProfilePictureController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(Request $request)
@@ -31,13 +31,16 @@ class ProfilePictureController extends Controller
                 $user->save();
             } else {
                 Session::flash('flash_message', 'This is not an image file!');
+
                 return Redirect::back();
             }
         } else {
             Session::flash('flash_message', 'You forget an image to upload, silly!');
+
             return Redirect::back();
         }
         Session::flash('flash_message', 'Your profile picture has been updated!');
+
         return Redirect::back();
     }
 
@@ -50,6 +53,7 @@ class ProfilePictureController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Your profile picture has been cleared!');
+
         return Redirect::back();
     }
 }

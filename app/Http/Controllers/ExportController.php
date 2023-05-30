@@ -23,8 +23,8 @@ use Role;
 class ExportController extends Controller
 {
     /**
-     * @param array $table
-     * @param string $personal_key
+     * @param  array  $table
+     * @param  string  $personal_key
      * @return mixed
      */
     public function export($table, $personal_key)
@@ -79,7 +79,7 @@ class ExportController extends Controller
                 }
 
                 // Exclude 'activity' relation
-                foreach($data as $key => $val) {
+                foreach ($data as $key => $val) {
                     unset($val->activity);
                 }
 

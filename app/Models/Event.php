@@ -48,6 +48,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Collection|PhotoAlbum[] $albums
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos
+ *
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|Event onlyTrashed()
  * @method static QueryBuilder|Event withTrashed()
@@ -76,6 +77,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Event newModelQuery()
  * @method static Builder|Event newQuery()
  * @method static Builder|Event query()
+ *
  * @mixin Eloquent
  */
 class Event extends Model
@@ -101,12 +103,13 @@ class Event extends Model
     }
 
     /**
-     * @param string $public_id
+     * @param  string  $public_id
      * @return Model
      */
     public static function fromPublicId($public_id)
     {
         $id = Hashids::connection('event')->decode($public_id);
+
         return self::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
@@ -120,23 +123,24 @@ class Event extends Model
     public function mayViewEvent($user)
     {
         //board may always view events
-        if($user?->can('board')) {
+        if ($user?->can('board')) {
             return true;
         }
 
         //only show secret events if the user is participating, helping or organising
-        if($this->secret) {
-            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
+        if ($this->secret) {
+            if ($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
                 return true;
             }
         }
 
         //show non-secret events only when published
-        if(! $this->secret) {
-            if(! $this->publication || $this->isPublished()) {
+        if (! $this->secret) {
+            if (! $this->publication || $this->isPublished()) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -189,7 +193,7 @@ class Event extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user is organising the activity.
      */
     public function isOrganising($user)
@@ -230,9 +234,9 @@ class Event extends Model
     }
 
     /**
-     * @param string $long_format Format when timespan is larger than 24 hours.
-     * @param string $short_format Format when timespan is smaller than 24 hours.
-     * @param string $combiner Character to separate start and end time.
+     * @param  string  $long_format Format when timespan is larger than 24 hours.
+     * @param  string  $short_format Format when timespan is smaller than 24 hours.
+     * @param  string  $combiner Character to separate start and end time.
      * @return string Timespan text in given format
      */
     public function generateTimespanText($long_format, $short_format, $combiner)
@@ -247,7 +251,7 @@ class Event extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user is an admin of the event.
      */
     public function isEventAdmin($user)
@@ -256,7 +260,7 @@ class Event extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user is an ERO at the event
      */
     public function isEventEro($user)
@@ -284,7 +288,7 @@ class Event extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user has bought a ticket for the event.
      */
     public function hasBoughtTickets($user)
@@ -304,23 +308,25 @@ class Event extends Model
                 return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
             })->unique());
         }
+
         return $users->sort(function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
     }
 
-    public function allUsersCount()
+    public function usersCount()
     {
         $allUserIds = collect([]);
         foreach ($this->tickets as $ticket) {
-            if($ticket->show_participants) {
+            if ($ticket->show_participants) {
                 $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
             }
         }
 
         if ($this->activity) {
-            $allUserIds = $allUserIds->merge($this->activity->allUsers->pluck('id'));
+            $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
         }
+
         return $allUserIds->unique()->count();
     }
 

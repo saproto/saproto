@@ -25,12 +25,12 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'start'=>['required', 'gte:end'],
-            'location'=>['required'],
-            'secret'=>['required'],
-            'description'=>['required'],
-            'summary'=>['required'],
-            'image'=>['image'],
+            'start' => ['required', 'gte:end'],
+            'location' => ['required'],
+            'secret' => ['required'],
+            'description' => ['required'],
+            'summary' => ['required'],
+            'image' => ['image'],
         ];
     }
 

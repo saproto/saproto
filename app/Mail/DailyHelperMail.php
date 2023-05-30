@@ -12,6 +12,7 @@ class DailyHelperMail extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $events;
 
     /**

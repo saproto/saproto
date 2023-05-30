@@ -13,13 +13,14 @@ class Newsletter extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $list;
+
     public $text;
 
     /**
-     * @param User $user
-     * @param string $list
-     * @param string $text
+     * @param  string  $list
+     * @param  string  $text
      */
     public function __construct(User $user, $list, $text)
     {

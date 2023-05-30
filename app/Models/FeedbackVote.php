@@ -36,7 +36,9 @@ class FeedbackVote extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /**
+     * @return BelongsTo
+     */
     public function feedback(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\Feedback');

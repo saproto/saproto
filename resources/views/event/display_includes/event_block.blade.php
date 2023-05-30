@@ -108,10 +108,10 @@
 
             {{-- Signup Icon --}}
                 <div class= "d-flex justify-content-between">
-                    @if($event->allUsersCount()>0)
+                    @if($event->usersCount()>0)
                         <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                            {{$event->allUsersCount()}}
+                            {{$event->usersCount()}}
                         </span>
                     @endif
 

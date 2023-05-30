@@ -3,7 +3,6 @@
 namespace Proto\Csp\Policies;
 
 use function Sentry\captureException;
-
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
@@ -22,8 +21,9 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
-                    'https://protu.be',
                     'https://wrapped.omnomcom.nl',
+                    ...config('proto.domains.protube'),
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
@@ -82,7 +82,7 @@ class ProtoPolicy extends Policy
                     'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
                 ]);
-        } catch (InvalidValueSet | InvalidDirective $e) {
+        } catch (InvalidValueSet|InvalidDirective $e) {
             captureException($e);
         }
     }

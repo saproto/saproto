@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|RadioStation whereCreatedAt($value)
  * @method static Builder|RadioStation whereId($value)
  * @method static Builder|RadioStation whereName($value)
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|RadioStation newModelQuery()
  * @method static Builder|RadioStation newQuery()
  * @method static Builder|RadioStation query()
+ *
  * @mixin Eloquent
  */
 class RadioStation extends Model

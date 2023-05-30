@@ -62,13 +62,11 @@
                             'label' => 'This ticket should be prepaid.'
                         ])
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="show_participants" {{ ($ticket && $ticket->show_participants ? 'checked' : '') }}>
-                                Show the participant's who bought this ticket on the event.
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                           'name' => 'show_participants',
+                           'checked' =>  $ticket?->show_participants,
+                           'label' => "Show the participant's who bought this ticket on the event."
+                       ])
 
                     </div>
 
