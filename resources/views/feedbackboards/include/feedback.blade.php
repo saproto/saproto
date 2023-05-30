@@ -45,11 +45,8 @@
             {!! $feedback->feedback !!}
 
             @if ($feedback->reply)
-
                 <hr>
-
                 <b>board:</b> {!! $feedback->reply !!}
-
             @endif
 
             @if (Auth::user()->can("board") && $controls)
@@ -69,7 +66,6 @@
                         </div>
                     </form>
                 </div>
-
             @endif
     </div>
 
@@ -92,8 +88,8 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        if({{isset($controls)}}) {
-            document.querySelectorAll('.toggle-navbar-{{$feedback->id}}').forEach((element) => {
+        if({{ isset($controls) }}) {
+            document.querySelectorAll('.toggle-navbar-{{ $feedback->id }}').forEach((element) => {
                 element.addEventListener('click', (event) => {
                     document.getElementById("idea__{{ $feedback->id }}__collapse").classList.toggle("show");
                 })

@@ -5,7 +5,7 @@
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Add your {{strtolower($category->title)}}
+            Add your {{ strtolower($category->title) }}
         </div>
 
         <div class="card-body">

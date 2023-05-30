@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-{{$category->title}} Board Archive
+    {{ $category->title }} Board Archive
 @endsection
 
 @section('container')
