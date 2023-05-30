@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Feedback $feedback
+ *
  * @method static Builder|FeedbackVote whereCreatedAt($value)
  * @method static Builder|FeedbackVote whereFeedbackId($value)
  * @method static Builder|FeedbackVote whereId($value)
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FeedbackVote newModelQuery()
  * @method static Builder|FeedbackVote newQuery()
  * @method static Builder|FeedbackVote query()
+ *
  * @mixin Eloquent
  */
 class FeedbackVote extends Model
@@ -36,15 +38,11 @@ class FeedbackVote extends Model
 
     protected $guarded = ['id'];
 
-    /**
-     * @return BelongsTo
-     */
     public function feedback(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\Feedback');
     }
 
-    /** @return HasOne */
     public function user(): HasOne
     {
         return $this->hasOne('Proto\Models\User');

@@ -42,29 +42,28 @@ class MigrateQuotes extends Command
     public function handle()
     {
         $quoteCategory = new FeedbackCategory([
-            'title'=>'quotes',
-            'url'=>'quotes',
-            'review'=>false,
+            'title' => 'quotes',
+            'url' => 'quotes',
+            'review' => false,
         ]);
         $quoteCategory->save();
 
-        foreach(Quote::all() as $quote) {
+        foreach (Quote::all() as $quote) {
             $new = new Feedback([
-                'user_id'=>$quote->user->id,
-                'feedback_category_id'=>$quoteCategory->id,
-                'feedback'=>$quote->quote,
-                'reviewed'=>true,
+                'user_id' => $quote->user->id,
+                'feedback_category_id' => $quoteCategory->id,
+                'feedback' => $quote->quote,
+                'reviewed' => true,
             ]);
             $new->save();
-            foreach($quote->quoteLike() as $like) {
+            foreach ($quote->quoteLike() as $like) {
                 $newLike = new FeedbackVote([
-                    'user_id'=>$like->user_id,
-                    'feedback_id'=>$new->id,
-                    'vote'=>1,
+                    'user_id' => $like->user_id,
+                    'feedback_id' => $new->id,
+                    'vote' => 1,
                 ]);
                 $newLike->save();
             }
         }
     }
 }
-

@@ -38,9 +38,9 @@ class ExtendGoodIdeas extends Migration
         });
 
         $goodideas = new \Proto\Models\FeedbackCategory([
-           'title'=>'Good ideas',
-            'url'=>'goodideas',
-            'review'=>false,
+            'title' => 'Good ideas',
+            'url' => 'goodideas',
+            'review' => false,
         ]);
         $goodideas->save();
     }

@@ -235,7 +235,7 @@ class ApiController extends Controller
         foreach (PhotoLikes::where('user_id', $user->id)->get() as $photo_like) {
             $data['liked_photos'][] = $photo_like->photo->url;
         }
-        foreach(FeedbackCategory::all() as $category) {
+        foreach (FeedbackCategory::all() as $category) {
             foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $quote) {
                 $data["placed_$category->url"][] = [
                     'quote' => $quote->feedback,
@@ -252,6 +252,7 @@ class ApiController extends Controller
                 ];
             }
         }
+
         return $data;
     }
 }

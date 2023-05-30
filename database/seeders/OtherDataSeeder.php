@@ -123,9 +123,9 @@ class OtherDataSeeder extends Seeder
 
         // Create quotes and Good Ideas
         $quotes = new FeedbackCategory([
-            'title'=>'Quotes',
-            'url'=>'quotes',
-            'review'=>false,
+            'title' => 'Quotes',
+            'url' => 'quotes',
+            'review' => false,
         ]);
         $quotes->save();
 

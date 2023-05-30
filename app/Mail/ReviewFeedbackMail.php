@@ -13,6 +13,7 @@ class ReviewFeedbackMail extends Mailable
     use SerializesModels;
 
     public $category;
+
     public $feedback;
 
     /**
@@ -36,6 +37,6 @@ class ReviewFeedbackMail extends Mailable
         return $this
             ->to($this->category->reviewer()->get()->email)
             ->subject('Review feedback for: '.$this->category->title.'!')
-            ->view('emails.feedbackreviewreminder', ['category'=>$this->category, 'unreviewed'=>$this->feedback]);
+            ->view('emails.feedbackreviewreminder', ['category' => $this->category, 'unreviewed' => $this->feedback]);
     }
 }

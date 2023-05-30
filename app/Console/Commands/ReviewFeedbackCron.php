@@ -45,13 +45,13 @@ class ReviewFeedbackCron extends Command
             ->whereNotNull('reviewer_id')
             ->get();
 
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $unreviewed = $category->feedback()
-                    ->where('reviewed', false)
-                    ->where('updated_at', '>=', \Carbon::now()->subDay()->timestamp)
-                    ->get();
+                ->where('reviewed', false)
+                ->where('updated_at', '>=', \Carbon::now()->subDay()->timestamp)
+                ->get();
 
-            if(count($unreviewed)) {
+            if (count($unreviewed)) {
                 $this->info("Sending a review reminder mail for $category->title");
                 Mail::queue((new ReviewFeedbackMail($category, $unreviewed))->onQueue('low'));
             } else {
@@ -60,4 +60,3 @@ class ReviewFeedbackCron extends Command
         }
     }
 }
-
