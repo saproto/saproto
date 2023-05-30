@@ -25,6 +25,7 @@ use Youtube;
  * @property Carbon|null $updated_at
  * @property string|null $youtube_id
  * @property-read StorageEntry|null $image
+ *
  * @method static Builder|NarrowcastingItem whereCampaignEnd($value)
  * @method static Builder|NarrowcastingItem whereCampaignStart($value)
  * @method static Builder|NarrowcastingItem whereCreatedAt($value)
@@ -37,6 +38,7 @@ use Youtube;
  * @method static Builder|NarrowcastingItem newModelQuery()
  * @method static Builder|NarrowcastingItem newQuery()
  * @method static Builder|NarrowcastingItem query()
+ *
  * @mixin Eloquent
  */
 class NarrowcastingItem extends Model
@@ -61,11 +63,13 @@ class NarrowcastingItem extends Model
                 return null;
             }
         }
+
         return null;
     }
 
     /**
      * @return int
+     *
      * @throws Exception
      */
     public function videoDuration()

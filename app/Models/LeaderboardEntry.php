@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Leaderboard $leaderboard
  * @property-read User $user
+ *
  * @method static Builder|LeaderboardEntry whereCreatedAt($value)
  * @method static Builder|LeaderboardEntry whereId($value)
  * @method static Builder|LeaderboardEntry whereLeaderboardId($value)
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|LeaderboardEntry newModelQuery()
  * @method static Builder|LeaderboardEntry newQuery()
  * @method static Builder|LeaderboardEntry query()
+ *
  * @mixin Eloquent
  */
 class LeaderboardEntry extends Model

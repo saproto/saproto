@@ -116,6 +116,7 @@ class FeeCron extends Command
         }
 
         $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
+
         return 0;
     }
 }

@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
  * @property-read User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Member onlyTrashed()
@@ -53,6 +54,7 @@ use Illuminate\Support\Str;
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
  * @method static Builder|Member query()
+ *
  * @mixin Eloquent
  */
 class Member extends Model
@@ -99,12 +101,16 @@ class Member extends Model
 
     public static function countPendingMembers()
     {
-        return User::whereHas('member', function ($query) { $query->where('is_pending', true); })->count();
+        return User::whereHas('member', function ($query) {
+            $query->where('is_pending', true);
+        })->count();
     }
 
     public static function countValidMembers()
     {
-        return User::whereHas('member', function ($query) { $query->where('is_pending', false); })->count();
+        return User::whereHas('member', function ($query) {
+            $query->where('is_pending', false);
+        })->count();
     }
 
     /** @return OrderLine|null */

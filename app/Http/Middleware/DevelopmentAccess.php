@@ -39,8 +39,8 @@ class DevelopmentAccess
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return Closure
      */
     public function handle($request, $next)

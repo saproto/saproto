@@ -14,6 +14,7 @@ class MembershipEnded extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $lists;
 
     /** @return void */
@@ -40,6 +41,7 @@ class MembershipEnded extends Mailable
         foreach ($lists as $list) {
             $footer[] = sprintf('<li>%s (<a href="%s">Unsubscribe</a>)</li>', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($this->user->id, $list->id)]));
         }
+
         return implode('', $footer);
     }
 }

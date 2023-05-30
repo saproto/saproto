@@ -13,8 +13,11 @@ class ActivityUnsubscribedToHelp extends Mailable
     use SerializesModels;
 
     public $calling_name;
+
     public $committee_name;
+
     public $event_id;
+
     public $event_title;
 
     /**
