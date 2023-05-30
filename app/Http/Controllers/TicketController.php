@@ -411,9 +411,10 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
 
-        if($ticket->redirect_url){
+        if ($ticket->redirect_url) {
             return Redirect::away($ticket->redirect_url);
         }
+
         return Redirect::back();
     }
 }

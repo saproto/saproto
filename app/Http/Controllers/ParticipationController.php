@@ -73,8 +73,7 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-
-        if(!$is_web){
+        if (! $is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
             } else {
@@ -88,7 +87,7 @@ class ParticipationController extends Controller
             ]);
         }
 
-        if($event->activity->redirect_url){
+        if ($event->activity->redirect_url) {
             return Redirect::to($event->activity->redirect_url);
         }
 
