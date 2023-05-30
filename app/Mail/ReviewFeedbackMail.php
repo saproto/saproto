@@ -18,7 +18,8 @@ class ReviewFeedbackMail extends Mailable
 
     /**
      * Create a new message instance.
-     *
+     * @param FeedbackCategory $category
+     * @param $feedback
      * @return void
      */
     public function __construct(FeedbackCategory $category, $feedback)
@@ -40,3 +41,4 @@ class ReviewFeedbackMail extends Mailable
             ->view('emails.feedbackreviewreminder', ['category' => $this->category, 'unreviewed' => $this->feedback]);
     }
 }
+

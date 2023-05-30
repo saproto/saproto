@@ -47,26 +47,41 @@ class Feedback extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\User');
     }
-
+    /**
+     * @return BelongsTo
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\FeedbackCategory', 'feedback_category_id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function votes(): HasMany
     {
         return $this->hasMany('Proto\Models\FeedbackVote');
     }
 
+    /**
+     * @return int
+     */
     public function voteScore(): int
     {
         return $this->votes()->sum('vote');
     }
 
+    /**
+     * @param $user
+     * @return bool
+     */
     public function mayViewFeedback($user): bool
     {
         if (! $this->category->review) {
@@ -75,14 +90,18 @@ class Feedback extends Model
         if ($this->reviewed) {
             return true;
         }
-        //        if($this->category->reviewer_id===$user->id)return true;
+        if($this->category->reviewer_id===$user->id){
+            return true;
+        }
+
         return false;
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
+     * @return int
      */
-    public function userVote($user): int
+    public function userVote(User $user): int
     {
         /** @var FeedbackVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();
@@ -93,3 +112,4 @@ class Feedback extends Model
         return 0;
     }
 }
+

@@ -249,6 +249,7 @@ class FeedBackController extends Controller
 
     public function categoryStore(Request $request): RedirectResponse
     {
+        //regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
         if (FeedbackCategory::where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
@@ -276,6 +277,7 @@ class FeedBackController extends Controller
 
     public function categoryUpdate(Request $request, int $id): RedirectResponse
     {
+        //regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
         if (FeedbackCategory::where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
