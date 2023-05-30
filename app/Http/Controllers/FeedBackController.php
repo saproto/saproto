@@ -223,8 +223,8 @@ class FeedBackController extends Controller
         }
 
         return response()->json([
-            'voteScore' => $feedback->voteScore(), 
-            'userVote' => $feedback->userVote(Auth::user())
+            'voteScore' => $feedback->voteScore(),
+            'userVote' => $feedback->userVote(Auth::user()),
         ]);
     }
 
@@ -269,7 +269,7 @@ class FeedBackController extends Controller
             'title' => $request->input('name'),
             'url' => $newUrl,
             'review' => $request->has('reviewed'),
-            'reviewer_id' => $request->has('reviewed') ? $request->input('user_id') : null
+            'reviewer_id' => $request->has('reviewed') ? $request->input('user_id') : null,
         ]);
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');
