@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $reviewer_id
  * @property-read User|null $reviewer
  * @property-read Collection|FeedbackVote[] $votes
+ *
  * @method static Builder|Feedback whereCreatedAt($value)
  * @method static Builder|Feedback whereId($value)
  * @method static Builder|Feedback whereIdea($value)
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Feedback newModelQuery()
  * @method static Builder|Feedback newQuery()
  * @method static Builder|Feedback query()
+ *
  * @mixin Eloquent
  */
 class FeedbackCategory extends Model
@@ -38,7 +40,6 @@ class FeedbackCategory extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasMany */
     public function feedback(): HasMany
     {
         return $this->hasMany('Proto\Models\Feedback', 'feedback_category_id');

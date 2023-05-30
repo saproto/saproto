@@ -14,16 +14,15 @@ class FeedbackReplyEmail extends Mailable
     use SerializesModels;
 
     public $feedback;
+
     public $user;
+
     public $reply;
+
     public $accepted;
 
     /**
      * Create a new message instance.
-     *
-     * @param Feedback $feedback
-     * @param User $user
-     * @param $reply
      */
     public function __construct(Feedback $feedback, User $user, $reply, bool $accepted)
     {

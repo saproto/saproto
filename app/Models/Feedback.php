@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property FeedbackCategory|null $category
  * @property-read User|null $user
  * @property-read Collection|FeedbackVote[] $votes
+ *
  * @method static Builder|Feedback whereCreatedAt($value)
  * @method static Builder|Feedback whereId($value)
  * @method static Builder|Feedback whereIdea($value)
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|Feedback newModelQuery()
  * @method static Builder|Feedback newQuery()
  * @method static Builder|Feedback query()
+ *
  * @mixin Eloquent
  */
 class Feedback extends Model
@@ -45,25 +47,21 @@ class Feedback extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return BelongsTo */
     public function category(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\FeedbackCategory', 'feedback_category_id');
     }
 
-    /** @return HasMany */
     public function votes(): HasMany
     {
         return $this->hasMany('Proto\Models\FeedbackVote');
     }
 
-    /** @return int */
     public function voteScore(): int
     {
         return $this->votes()->sum('vote');
@@ -71,10 +69,10 @@ class Feedback extends Model
 
     public function mayViewFeedback($user): bool
     {
-        if(! $this->category->review) {
+        if (! $this->category->review) {
             return true;
         }
-        if($this->reviewed) {
+        if ($this->reviewed) {
             return true;
         }
         //        if($this->category->reviewer_id===$user->id)return true;
@@ -82,8 +80,7 @@ class Feedback extends Model
     }
 
     /**
-     * @param User $user
-     * @return int
+     * @param  User  $user
      */
     public function userVote($user): int
     {
@@ -92,6 +89,7 @@ class Feedback extends Model
         if ($vote != null) {
             return $vote->vote;
         }
+
         return 0;
     }
 }
