@@ -48,4 +48,3 @@ class FeedbackVote extends Model
         return $this->hasOne('Proto\Models\User');
     }
 }
-
