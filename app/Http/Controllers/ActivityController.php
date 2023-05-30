@@ -65,6 +65,7 @@ class ActivityController extends Controller
             'price' => $newPrice,
             'no_show_fee' => $newNoShow,
             'hide_participants' => $request->has('hide_participants'),
+            'redirect_url' => $request->redirect_url,
         ];
 
         if (! $activity->validate($data)) {

@@ -20,6 +20,7 @@ use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 use Redirect;
 use Session;
+use Symfony\Component\HttpFoundation\Response;
 
 class ParticipationController extends Controller
 {
@@ -72,20 +73,26 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        if ($is_web) {
-            return Redirect::back();
-        } else {
+
+        if(!$is_web){
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
             } else {
                 $message = 'You claimed a spot for '.$event->title.'.';
             }
-            abort(200, json_encode((object) [
+
+            return Response::JSON([
                 'success' => true,
                 'message' => $message,
                 'participation_id' => $participation->id,
-            ]));
+            ]);
         }
+
+        if($event->activity->redirect_url){
+            return Redirect::to($event->activity->redirect_url);
+        }
+
+        return Redirect::back();
     }
 
     /**

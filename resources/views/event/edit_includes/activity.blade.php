@@ -81,6 +81,18 @@
                                    required>
                         </div>
 
+                        <!-- Website -->
+                        <div class="col-md-12 mb-3">
+                            <label for="redirect_url">Redirect URL</label>
+                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                               data-html="true"
+                               title="The URL you get redirect to after signing up!."></i>
+                            <input type="url" class="form-control" id="redirect_url" name="redirect_url"
+                                   placeholder='https://forms.gle/...'
+                                   value="{{ $event->activity?->redirect_url ?? ''}}"
+                            />
+                        </div>
+
                     </div>
 
                     <div class="col-md-6">
