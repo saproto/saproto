@@ -222,7 +222,10 @@ class FeedBackController extends Controller
             $vote->save();
         }
 
-        return response()->json(['voteScore' => $feedback->voteScore(), 'userVote' => $feedback->userVote(Auth::user())]);
+        return response()->json([
+            'voteScore' => $feedback->voteScore(),
+            'userVote' => $feedback->userVote(Auth::user()),
+        ]);
     }
 
     public function approve(int $id): RedirectResponse
@@ -263,12 +266,12 @@ class FeedBackController extends Controller
             return Redirect::back();
         }
 
-        $category = new FeedbackCategory();
-        $category->title = $request->input('name');
-        $category->url = $newUrl;
-        $category->review = $request->has('reviewed');
-        $category->reviewer_id = $request->has('reviewed') ? $request->input('user_id') : null;
-        $category->save();
+        $category = FeedbackCategory::create([
+            'title' => $request->input('name'),
+            'url' => $newUrl,
+            'review' => $request->has('reviewed'),
+            'reviewer_id' => $request->has('reviewed') ? $request->input('user_id') : null,
+        ]);
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');
 
@@ -296,7 +299,6 @@ class FeedBackController extends Controller
         $category->url = $newUrl;
         $category->review = $request->has('reviewed');
         $category->reviewer_id = $request->has('reviewed') ? $request->input('user_id') : null;
-
         $category->save();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');

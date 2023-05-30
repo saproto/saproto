@@ -11,7 +11,7 @@
         <div class="col-5">
             <div class="card">
                 <div class="card-header">
-                    {{ $cur_category == null ? 'Add new category' : 'Edit category: '.$cur_category->name }}
+                    {{ $cur_category == null ? 'Add new category' : 'Edit category: ' . $cur_category->name }}
                 </div>
                 <div class="card-body">
                     <form method="POST"
@@ -54,7 +54,7 @@
                             @foreach($categories as $category)
                                 <div class="col-5 row m-1 w-100">
                                     <div class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}">
-                                        <a href="{{route('feedback::index', ['category'=>$category->url])}}" class="text-reset">{{ $category->title }}</a> {{$category->reviewer?" | Reviewer:".$category->reviewer->calling_name:""}}
+                                        <a href="{{ route('feedback::index', ['category' => $category->url]) }}" class="text-reset">{{ $category->title }}</a> {{ $category->reviewer ? " | Reviewer:" . $category->reviewer->calling_name : "" }}
                                     </div>
                                     <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
                                         <a href="{{ route('feedback::category::admin', ['id' => $category]) }}">
@@ -80,7 +80,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 @endsection
@@ -96,7 +95,6 @@
                 document.getElementById("reviewer").classList.add('d-none');
                 document.getElementById("user_id").required=false;
             }
-
         });
     </script>
 @endpush

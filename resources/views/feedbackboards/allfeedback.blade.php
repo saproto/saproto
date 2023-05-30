@@ -1,6 +1,6 @@
 <div class="card mb-3 w-100">
     <div class="card-header bg-dark text-white">
-        {{$category->title}}
+        {{ $category->title }}
 
         @can("board")
             <a href="{{ route('feedback::archiveall', ['category' => $category->url]) }}" class="float-end ms-3 btn btn-danger">
@@ -12,33 +12,23 @@
             </a>
         @endcan
         @if($data->links()!="")
-                {{ $data->withQueryString()->links() }}
+            {{ $data->withQueryString()->links() }}
         @endif
     </div>
 
     <div class="card-body">
-
         @if(count($data) > 0)
-
             <div class="row">
-
                 @foreach($data as $key => $entry)
-
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-
                         @include('feedbackboards.include.feedback', [
-                        'feedback' => $entry,
-                        'controls' => true,
+                            'feedback' => $entry,
+                            'controls' => true,
                         ])
-
                     </div>
-
                 @endforeach
-
             </div>
-
         @endif
-
     </div>
 
     @if($data->links() != "")
