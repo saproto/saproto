@@ -81,7 +81,6 @@
                                    required>
                         </div>
 
-                        <!-- Website -->
                         <div class="col-md-12 mb-3">
                             <label for="redirect_url">Redirect URL</label>
                             <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top"

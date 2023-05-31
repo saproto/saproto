@@ -20,13 +20,12 @@ use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 use Redirect;
 use Session;
-use Symfony\Component\HttpFoundation\Response;
 
 class ParticipationController extends Controller
 {
     /**
      * @param  int  $id
-     * @return RedirectResponse
+     * @return RedirectResponse|JsonResponse
      */
     public function create($id, Request $request)
     {
@@ -80,7 +79,7 @@ class ParticipationController extends Controller
                 $message = 'You claimed a spot for '.$event->title.'.';
             }
 
-            return Response::JSON([
+            return response()->json([
                 'success' => true,
                 'message' => $message,
                 'participation_id' => $participation->id,
