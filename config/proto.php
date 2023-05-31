@@ -37,7 +37,7 @@ return [
     */
 
     'additional_mailboxes' => [
-      'boardarchive',
+        'boardarchive',
     ],
 
     /*

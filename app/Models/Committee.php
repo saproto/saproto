@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
  * @method static Builder|Committee whereCreatedAt($value)
  * @method static Builder|Committee whereDescription($value)
@@ -44,6 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Committee newModelQuery()
  * @method static Builder|Committee newQuery()
  * @method static Builder|Committee query()
+ *
  * @mixin Eloquent
  */
 class Committee extends Model
@@ -113,11 +115,12 @@ class Committee extends Model
         foreach ($subscriptions as $subscription) {
             $users[] = $subscription->user;
         }
+
         return $users;
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user wants to receive helper reminders.
      */
     public function wantsToReceiveHelperReminder($user)
@@ -150,7 +153,7 @@ class Committee extends Model
     }
 
     /**
-     * @param bool $includeSecret
+     * @param  bool  $includeSecret
      * @return Event[]
      */
     public function helpedEvents($includeSecret = false)
@@ -191,10 +194,10 @@ class Committee extends Model
     {
         $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];
         $memberships = CommitteeMembership::withTrashed()->where('committee_id', $this->id)
-                        ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
-                        ->orderBy('created_at', 'desc')
-                        ->orderBy('deleted_at', 'desc')
-                        ->get();
+            ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('deleted_at', 'desc')
+            ->get();
 
         foreach ($memberships as $membership) {
             if ($membership->edition) {
@@ -217,7 +220,7 @@ class Committee extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember($user)

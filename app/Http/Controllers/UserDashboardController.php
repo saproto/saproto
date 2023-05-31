@@ -43,7 +43,6 @@ class UserDashboardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function updateMail(Request $request)
@@ -57,6 +56,7 @@ class UserDashboardController extends Controller
 
         if ($auth_check == null || $auth_check->id != $user->id) {
             Session::flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
+
             return Redirect::back();
         }
 
@@ -96,11 +96,11 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'E-mail address changed.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function update(Request $request)
@@ -141,11 +141,11 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function editDiet(Request $request)
@@ -156,6 +156,7 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Your diet and allergy information has been updated.');
+
         return Redirect::route('user::dashboard');
     }
 
@@ -256,6 +257,7 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
+
             return Redirect::route('becomeamember');
         }
 
@@ -263,8 +265,8 @@ class UserDashboardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse|View
+     *
      * @throws Exception
      */
     public function postCompleteProfile(Request $request)
@@ -272,6 +274,7 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
+
             return Redirect::route('becomeamember');
         }
 
@@ -292,9 +295,11 @@ class UserDashboardController extends Controller
             $user->save();
 
             Session::flash('flash_message', 'Completed profile.');
+
             return Redirect::route('becomeamember');
         } else {
             Session::flash('flash_userdata', $userdata);
+
             return view(
                 'users.dashboard.completeprofile_verify',
                 ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
@@ -310,6 +315,7 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
+
             return Redirect::route('becomeamember');
         }
 
@@ -317,7 +323,6 @@ class UserDashboardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function postMemberForm(Request $request)
@@ -325,6 +330,7 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
+
             return Redirect::route('becomeamember');
         }
 
@@ -345,6 +351,7 @@ class UserDashboardController extends Controller
         $member->save();
 
         Session::flash('flash_message', 'Thanks for signing the membership form!');
+
         return Redirect::route('becomeamember');
     }
 
@@ -378,6 +385,7 @@ class UserDashboardController extends Controller
         $user->clearMemberProfile();
 
         Session::flash('flash_message', 'Profile cleared.');
+
         return Redirect::route('user::dashboard');
     }
 
@@ -389,6 +397,7 @@ class UserDashboardController extends Controller
         $user->generateNewPersonalKey();
 
         Session::flash('flash_message', 'New personal key generated.');
+
         return Redirect::route('user::dashboard');
     }
 }

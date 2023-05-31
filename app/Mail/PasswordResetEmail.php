@@ -13,6 +13,7 @@ class PasswordResetEmail extends Mailable
     use SerializesModels;
 
     public $name;
+
     public $token;
 
     /**

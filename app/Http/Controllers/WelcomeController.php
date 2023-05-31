@@ -19,7 +19,6 @@ class WelcomeController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -43,8 +42,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -52,6 +52,7 @@ class WelcomeController extends Controller
         $message = WelcomeMessage::findOrFail($id);
         $message->delete();
         Session::flash('flash_message', 'Welcome Message removed');
+
         return Redirect::route('welcomeMessages::list');
     }
 }

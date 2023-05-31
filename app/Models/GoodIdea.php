@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read User|null $user
  * @property-read Collection|GoodIdeaVote[] $votes
+ *
  * @method static Builder|GoodIdea whereCreatedAt($value)
  * @method static Builder|GoodIdea whereId($value)
  * @method static Builder|GoodIdea whereIdea($value)
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|GoodIdea newModelQuery()
  * @method static Builder|GoodIdea newQuery()
  * @method static Builder|GoodIdea query()
+ *
  * @mixin Eloquent
  */
 class GoodIdea extends Model
@@ -55,7 +57,7 @@ class GoodIdea extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return int
      */
     public function userVote($user)
@@ -65,6 +67,7 @@ class GoodIdea extends Model
         if ($vote != null) {
             return $vote->vote;
         }
+
         return 0;
     }
 }

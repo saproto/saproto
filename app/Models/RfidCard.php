@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|RfidCard whereCardId($value)
  * @method static Builder|RfidCard whereCreatedAt($value)
  * @method static Builder|RfidCard whereId($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|RfidCard newModelQuery()
  * @method static Builder|RfidCard newQuery()
  * @method static Builder|RfidCard query()
+ *
  * @mixin Eloquent
  */
 class RfidCard extends Model

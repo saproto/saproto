@@ -47,6 +47,7 @@ class SpotifySync extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
+
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -62,6 +63,7 @@ class SpotifySync extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
+
                 return;
             }
         }

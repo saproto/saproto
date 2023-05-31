@@ -13,7 +13,9 @@ class UserMailChange extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $changer;
+
     public $email;
 
     /**

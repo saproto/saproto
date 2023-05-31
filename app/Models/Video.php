@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $youtube_thumb_url
  * @property string $video_date
  * @property-read Event|null $event
+ *
  * @method static Builder|Video whereEventId($value)
  * @method static Builder|Video whereId($value)
  * @method static Builder|Video whereTitle($value)
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video newModelQuery()
  * @method static Builder|Video newQuery()
  * @method static Builder|Video query()
+ *
  * @mixin Eloquent
  */
 class Video extends Model
@@ -72,6 +74,7 @@ class Video extends Model
 
     /**
      * @return string
+     *
      * @throws Exception
      */
     public function getHumanDuration()

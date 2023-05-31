@@ -25,6 +25,7 @@ use Mollie;
  * @property string|null $payment_url
  * @property-read User $user
  * @property-read Collection|OrderLine[] $orderlines
+ *
  * @method static Builder|MollieTransaction whereAmount($value)
  * @method static Builder|MollieTransaction whereCreatedAt($value)
  * @method static Builder|MollieTransaction whereId($value)
@@ -36,6 +37,7 @@ use Mollie;
  * @method static Builder|MollieTransaction newModelQuery()
  * @method static Builder|MollieTransaction newQuery()
  * @method static Builder|MollieTransaction query()
+ *
  * @mixin Eloquent
  */
 class MollieTransaction extends Model
@@ -65,7 +67,7 @@ class MollieTransaction extends Model
     }
 
     /**
-     * @param string $status
+     * @param  string  $status
      * @return string
      */
     public static function translateStatus($status)
@@ -95,6 +97,7 @@ class MollieTransaction extends Model
 
     /**
      * @return MollieTransaction
+     *
      * @throws Exception
      */
     public function updateFromWebhook()
@@ -102,7 +105,6 @@ class MollieTransaction extends Model
         $mollie = Mollie::api()
             ->payments()
             ->get($this->mollie_id);
-        
 
         $new_status = self::translateStatus($mollie->status);
 
@@ -117,6 +119,7 @@ class MollieTransaction extends Model
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->product_id == config('omnomcom.mollie')['fee_id']) {
                     $orderline->delete();
+
                     continue;
                 }
 
@@ -138,6 +141,7 @@ class MollieTransaction extends Model
                     $orderline->product->stock += 1;
                     $orderline->product->save();
                     $orderline->delete();
+
                     continue;
                 }
 
