@@ -719,6 +719,7 @@ class EventController extends Controller
                 'registration_end' => $event->activity->registration_end + $diff,
                 'deregistration_end' => $event->activity->deregistration_end + $diff,
                 'comment' => $event->activity->comment,
+                'redirect_url' => $event->activity->redirect_url,
             ]);
             $newActivity->save();
 

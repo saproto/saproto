@@ -25,7 +25,7 @@ class ParticipationController extends Controller
 {
     /**
      * @param  int  $id
-     * @return RedirectResponse
+     * @return RedirectResponse|JsonResponse
      */
     public function create($id, Request $request)
     {
@@ -72,20 +72,25 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        if ($is_web) {
-            return Redirect::back();
-        } else {
+        if (! $is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
             } else {
                 $message = 'You claimed a spot for '.$event->title.'.';
             }
-            abort(200, json_encode((object) [
+
+            return response()->json([
                 'success' => true,
                 'message' => $message,
                 'participation_id' => $participation->id,
-            ]));
+            ]);
         }
+
+        if ($event->activity->redirect_url) {
+            return Redirect::to($event->activity->redirect_url);
+        }
+
+        return Redirect::back();
     }
 
     /**
