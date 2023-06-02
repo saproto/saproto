@@ -153,6 +153,25 @@ class ApiController extends Controller
         ]);
     }
 
+    public function randomOldPhoto(): JsonResponse
+    {
+        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
+            $query->where('published', true)->where('private', false);
+        })->where('date_taken', '>', Carbon::now()->subYears(4)->timestamp);
+
+        if (! $privateQuery->count()) {
+            return response()->json(['error' => 'No public photos older than 4 years found!.'], 404);
+        }
+
+        $photo = $privateQuery->inRandomOrder()->with('album')->first();
+
+        return response()->JSON([
+            'url' => $photo->url,
+            'album_name' => $photo->album->name,
+            'date_taken' => Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
+        ]);
+    }
+
     /** @return array */
     public function gdprExport()
     {
