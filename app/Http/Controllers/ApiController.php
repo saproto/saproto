@@ -137,7 +137,7 @@ class ApiController extends Controller
         } elseif ($random > 70 && $random <= 80) {//10% chance the photo is from three years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
         } else {//20% chance the photo is older than 4 years
-            $query = (clone $privateQuery)->where('date_taken', '>', Carbon::now()->subYears(4)->timestamp);
+            $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
         }
         $photo = $query->inRandomOrder()->with('album')->first();
 
@@ -145,6 +145,25 @@ class ApiController extends Controller
         if (! $photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
+
+        return response()->JSON([
+            'url' => $photo->url,
+            'album_name' => $photo->album->name,
+            'date_taken' => Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
+        ]);
+    }
+
+    public function randomOldPhoto(): JsonResponse
+    {
+        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
+            $query->where('published', true)->where('private', false);
+        })->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
+
+        if (! $privateQuery->count()) {
+            return response()->json(['error' => 'No public photos older than 4 years found!.'], 404);
+        }
+
+        $photo = $privateQuery->inRandomOrder()->with('album')->first();
 
         return response()->JSON([
             'url' => $photo->url,
