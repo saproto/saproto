@@ -226,6 +226,7 @@ class ProductController extends Controller
 
         if ($product->ticket) {
             Session::flash('flash_message', 'You cannot delete this product is a ticket associated with it.');
+
             return Redirect::back();
         }
 
