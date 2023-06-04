@@ -224,6 +224,11 @@ class ProductController extends Controller
             return Redirect::back();
         }
 
+        if ($product->ticket) {
+            Session::flash('flash_message', 'You cannot delete this product is a ticket associated with it.');
+            return Redirect::back();
+        }
+
         $product->delete();
 
         Session::flash('flash_message', 'The product has been deleted.');
