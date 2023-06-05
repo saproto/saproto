@@ -32,25 +32,23 @@ class ApiController extends Controller
 
     /**
      * Returns the user details used by ProTube.
-     *
-     * @return JsonResponse
      */
     public function protubeUserDetails(): JsonResponse
     {
         $user = Auth::user();
 
-        if($user) {
+        if ($user) {
             $tempadmins = Tempadmin::where('user_id', $user->id)
-                            ->whereDate('start_at', Carbon::today())
-                            ->get();
+                ->whereDate('start_at', Carbon::today())
+                ->get();
 
             $startOfAdmin = 0;
             $endOfAdmin = 0;
 
-            if($user->hasPermissionTo('protube', 'web')) {
+            if ($user->hasPermissionTo('protube', 'web')) {
                 $startOfAdmin = Carbon::today()->startOfDay()->unix();
                 $endOfAdmin = Carbon::today()->endOfDay()->unix();
-            } elseif(! empty($tempadmins)) {
+            } elseif (! empty($tempadmins)) {
                 // get the unix timestamps of the earliest and last moment the user is a tempadmin
                 $startOfAdmin = Carbon::parse($tempadmins->sortBy('start_at')->first()->start_at)->unix();
                 $endOfAdmin = Carbon::parse($tempadmins->sortByDesc('end_at')->first()->end_at)->unix();

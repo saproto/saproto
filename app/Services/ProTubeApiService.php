@@ -23,8 +23,10 @@ class ProTubeApiService
             $response->throw();
         } catch (\Exception $e) {
             \Sentry\captureException($e);
+
             return false;
         }
+
         return true;
     }
 
@@ -41,23 +43,24 @@ class ProTubeApiService
         }
 
         $json = $response->json();
+
         return $json['success'];
     }
 
     /**
      * Trigger ProTube to update the user data for the given user id.
      *
-     * @param int $userID
      * @return bool successfull response
      */
     public static function triggerWebHook(int $userID): bool
     {
         $response = Http::protube()->post(self::$API_PREFIX.'/updateadmin/'.$userID);
-        if(! self::assertResponse($response)) {
+        if (! self::assertResponse($response)) {
             return false;
         }
 
         $json = $response->json();
+
         return $json['success'];
     }
 }

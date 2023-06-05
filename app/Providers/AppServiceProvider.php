@@ -50,8 +50,6 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register the ProTube HTTP macro.
-     *
-     * @return void
      */
     private function bootProTubeHttpMacro(): void
     {
