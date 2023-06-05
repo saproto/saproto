@@ -23,6 +23,7 @@ use Proto\Http\Controllers\FileController;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string $hash
+ *
  * @method static Builder|StorageEntry whereCreatedAt($value)
  * @method static Builder|StorageEntry whereFilename($value)
  * @method static Builder|StorageEntry whereHash($value)
@@ -33,6 +34,7 @@ use Proto\Http\Controllers\FileController;
  * @method static Builder|StorageEntry newModelQuery()
  * @method static Builder|StorageEntry newQuery()
  * @method static Builder|StorageEntry query()
+ *
  * @mixin Eloquent
  */
 class StorageEntry extends Model
@@ -43,11 +45,13 @@ class StorageEntry extends Model
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
+     *
      * @return bool whether or not the file is orphaned (not in use, can really be deleted safely)
      */
     public function isOrphan()
     {
         $id = $this->id;
+
         return
             NarrowcastingItem::where('image_id', $id)->count() == 0 &&
             Page::where('featured_image_id', $id)->count() == 0 &&
@@ -67,8 +71,9 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string|null $customPath
+     * @param  UploadedFile  $file
+     * @param  string|null  $customPath
+     *
      * @throws FileNotFoundException
      */
     public function createFromFile($file, $customPath = null)
@@ -90,10 +95,10 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param resource|string $data
-     * @param string $mime
-     * @param string $name
-     * @param string|null $customPath
+     * @param  resource|string  $data
+     * @param  string  $mime
+     * @param  string  $name
+     * @param  string|null  $customPath
      */
     public function createFromData($data, $mime, $name, $customPath = null)
     {
@@ -124,12 +129,13 @@ class StorageEntry extends Model
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
+
         return $url;
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function generateImagePath($w, $h)
@@ -138,12 +144,13 @@ class StorageEntry extends Model
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
+
         return $url;
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function getBase64($w = null, $h = null)
@@ -153,7 +160,7 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param bool $human Defaults to true.
+     * @param  bool  $human Defaults to true.
      * @return string|int
      */
     public function getFileSize($human = true)
@@ -181,7 +188,7 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param string $algo Defaults to md5.
+     * @param  string  $algo Defaults to md5.
      * @return string
      */
     public function getFileHash($algo = 'md5')

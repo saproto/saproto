@@ -24,6 +24,7 @@ class LeaderboardController extends Controller
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
             Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -51,7 +52,6 @@ class LeaderboardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -67,25 +67,26 @@ class LeaderboardController extends Controller
         $leaderboard->save();
 
         Session::flash('flash_message', "Your leaderboard '".$leaderboard->name."' has been added.");
-        return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
+
+        return Redirect::route('leaderboards::edit', ['id' => $leaderboard->id]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
         $entries = $leaderboard->entries->sortByDesc('points');
+
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -109,11 +110,12 @@ class LeaderboardController extends Controller
         $leaderboard->save();
 
         Session::flash('flash_message', 'Leaderboard has been updated.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function destroy($id)
@@ -122,6 +124,7 @@ class LeaderboardController extends Controller
 
         Session::flash('flash_message', "The leaderboard '".$leaderboard->name."' has been deleted.");
         $leaderboard->delete();
+
         return Redirect::route('leaderboards::admin');
     }
 }

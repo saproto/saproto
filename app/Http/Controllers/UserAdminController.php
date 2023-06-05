@@ -24,10 +24,6 @@ use Spatie\Permission\Models\Permission;
 
 class UserAdminController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return View
-     */
     public function index(Request $request): View
     {
         $search = $request->input('query');
@@ -69,7 +65,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function details($id)
@@ -81,8 +77,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -99,11 +94,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'User updated!');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function impersonate($id)
@@ -146,8 +142,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function addMembership($id, Request $request)
@@ -157,11 +152,13 @@ class UserAdminController extends Controller
 
         if ($user->is_member) {
             Session::flash('flash_message', 'This user is already a member!');
+
             return Redirect::back();
         }
 
         if (! ($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
+
             return Redirect::back();
         }
 
@@ -187,6 +184,7 @@ class UserAdminController extends Controller
         ]);
 
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
+
         return Redirect::back();
     }
 
@@ -194,8 +192,8 @@ class UserAdminController extends Controller
      * Adds membership end date to member object.
      * Member object will be removed by cron job on end date.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
+     *
      * @throws Exception
      */
     public function endMembership($id): RedirectResponse
@@ -208,14 +206,16 @@ class UserAdminController extends Controller
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
         Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
+
         return Redirect::back();
     }
 
     public function EndMembershipInSeptember($id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if(! $user->is_member) {
+        if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+
             return Redirect::back();
         }
 
@@ -223,26 +223,27 @@ class UserAdminController extends Controller
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
+
         return Redirect::back();
     }
 
     public function removeMembershipEnd($id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if(! $user->is_member) {
+        if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+
             return Redirect::back();
         }
         $user->member->until = null;
         $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function setMembershipType(Request $request, $id): RedirectResponse
     {
@@ -261,12 +262,12 @@ class UserAdminController extends Controller
         $member->save();
 
         Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleNda($id): RedirectResponse
     {
@@ -280,12 +281,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function unblockOmnomcom($id): RedirectResponse
     {
@@ -295,12 +296,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleStudiedCreate($id): RedirectResponse
     {
@@ -310,12 +311,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleStudiedITech($id): RedirectResponse
     {
@@ -325,13 +326,14 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+
         return Redirect::back();
     }
 
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if($user->member->customOmnomcomSound) {
+        if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
@@ -343,25 +345,23 @@ class UserAdminController extends Controller
         $user->member->customOmnomcomSound()->associate($file);
         $user->member->save();
         Session::flash('flash_message', 'Sound uploaded!');
+
         return Redirect::back();
     }
 
     public function deleteOmnomcomSound(int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if($user->member->customOmnomcomSound) {
+        if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
         Session::flash('flash_message', 'Sound deleted');
+
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function getSignedMemberForm(int $id): RedirectResponse
     {
         $user = Auth::user();
@@ -377,7 +377,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return string
      */
     public function getNewMemberForm($id)
@@ -387,11 +387,13 @@ class UserAdminController extends Controller
 
         if ($user->address === null) {
             Session::flash('flash_message', 'This user has no address!');
+
             return Redirect::back();
         }
 
         if ($user->bank === null) {
             Session::flash('flash_message', 'This user has no bank account!');
+
             return Redirect::back();
         }
 
@@ -403,7 +405,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function destroyMemberForm($id)
@@ -418,11 +420,12 @@ class UserAdminController extends Controller
         $member->forceDelete();
 
         Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return string
      */
     public function printMemberForm($id)

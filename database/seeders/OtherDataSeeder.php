@@ -33,7 +33,7 @@ class OtherDataSeeder extends Seeder
         $n = 10;
         $output->task("creating $n regular users", function () use ($n) {
             $users = User::factory()->count($n)->create();
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 if (fake()->boolean(30)) {
                     Address::factory()->for($user)->create();
                 }
@@ -71,9 +71,9 @@ class OtherDataSeeder extends Seeder
         // Create committee participations
         $committees = Committee::all();
         $output->task('creating committee memberships', function () use ($members, $committees) {
-            foreach($committees as $committee) {
+            foreach ($committees as $committee) {
                 $n = fake()->numberBetween(1, $members->count() / 2);
-                foreach($members->random($n) as $member) {
+                foreach ($members->random($n) as $member) {
                     CommitteeMembership::factory()
                         ->for($member)
                         ->for($committee)
@@ -84,7 +84,7 @@ class OtherDataSeeder extends Seeder
 
         // Create orderlines
         $output->task('creating orderlines', function () use ($members) {
-            foreach($members as $member) {
+            foreach ($members as $member) {
                 OrderLine::factory()
                     ->count(fake()->randomDigit())
                     ->for($member)
@@ -94,7 +94,7 @@ class OtherDataSeeder extends Seeder
 
         // Create AchievementOwnership
         $output->task('creating achievement ownerships', function () use ($members) {
-            foreach($members as $member) {
+            foreach ($members as $member) {
                 AchievementOwnership::factory()
                     ->count(fake()->randomDigit())
                     ->for($member)
@@ -105,9 +105,9 @@ class OtherDataSeeder extends Seeder
         // Create activity participations
         $output->task('creating activity participations', function () use ($members) {
             $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
-            foreach($activities as $activity) {
+            foreach ($activities as $activity) {
                 $n = fake()->numberBetween(1, $members->count());
-                foreach($members->random($n) as $member) {
+                foreach ($members->random($n) as $member) {
                     ActivityParticipation::factory()
                         ->state(['activity_id' => $activity->id])
                         ->for($member)
@@ -125,9 +125,9 @@ class OtherDataSeeder extends Seeder
         $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
 
         // Create newsletter text
-        $output->task('creating newsletter', function () use ($members) {
+        $output->task('creating newsletter', function () {
             HashMapItem::factory()->text()->create(['key' => 'newsletter_text']);
-            HashMapItem::factory()->date()->create(['key' => 'newsletter_text_updated', ]);
+            HashMapItem::factory()->date()->create(['key' => 'newsletter_text_updated']);
             HashMapItem::factory()->date()->create(['key' => 'newsletter_last_sent']);
         });
     }

@@ -23,14 +23,14 @@ class AuthorizationController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function grant(Request $request, $id)
     {
         if ($id == config('proto.rootrole')) {
             Session::flash('flash_message', 'This role can only be manually added in the database.');
+
             return Redirect::back();
         }
 
@@ -41,25 +41,27 @@ class AuthorizationController extends Controller
 
         if ($user->hasRole($role)) {
             Session::flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
+
             return Redirect::back();
         }
 
         $user->assignRole($role);
 
         Session::flash('flash_message', $user->name.' has been granted role: <strong>'.$role->name.'</strong>.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @param int $userId
+     * @param  int  $id
+     * @param  int  $userId
      * @return RedirectResponse
      */
     public function revoke(Request $request, $id, $userId)
     {
         if ($id == config('proto.rootrole')) {
             Session::flash('flash_message', 'This role can only be manually removed in the database.');
+
             return Redirect::back();
         }
 
@@ -70,6 +72,7 @@ class AuthorizationController extends Controller
         $user->removeRole($role);
 
         Session::flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
+
         return Redirect::back();
     }
 }

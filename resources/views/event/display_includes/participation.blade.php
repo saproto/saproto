@@ -80,6 +80,10 @@
                                 Free!
                             @endif
                         </strong>
+                        <br>
+                        @if($event->activity->redirect_url)
+                            <i>Note: Signing up will redirect you to an external page!</i>
+                        @endif
                     </a>
                 @endif
             @endif
@@ -94,7 +98,6 @@
                     @endif
                 </li>
             @endif
-
         </ul>
 
         <div class="card-body">

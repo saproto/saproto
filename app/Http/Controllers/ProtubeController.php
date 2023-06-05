@@ -39,9 +39,9 @@ class ProtubeController extends Controller
     }
 
     /**
-     * @param string $since
-     * @param User|null $user
-     * @param int $max
+     * @param  string  $since
+     * @param  User|null  $user
+     * @param  int  $max
      * @return array
      */
     private function getHistory($since = '-1 week', $user = null, $max = 50)
@@ -58,9 +58,9 @@ class ProtubeController extends Controller
     }
 
     /**
-     * @param int $limit
-     * @param string|null $since
-     * @param User|null $user
+     * @param  int  $limit
+     * @param  string|null  $since
+     * @param  User|null  $user
      * @return array
      */
     private function getTopVideos($limit = 10, $since = '2011-04-20', $user = null)
@@ -87,6 +87,7 @@ class ProtubeController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
+
         return Redirect::back();
     }
 
@@ -97,6 +98,7 @@ class ProtubeController extends Controller
         PlayedVideo::where('user_id', $user->id)->update(['user_id' => null]);
 
         Session::flash('flash_message', 'History cleared.');
+
         return Redirect::back();
     }
 }

@@ -14,6 +14,7 @@ class OmnomcomFailedWithdrawalNotification extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $withdrawal;
 
     /**

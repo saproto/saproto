@@ -43,11 +43,13 @@ class TestIBANs extends Command
         foreach (Bank::all() as $bank) {
             if (! verify_iban($bank->iban)) {
                 $this->info('INVALID -- '.$bank->iban.' of '.$bank->user->name.'(#'.$bank->user->id.')');
+
                 continue;
             }
 
             if (! iban_country_is_sepa(iban_get_country_part($bank->iban))) {
                 $this->info('NONSEPA -- '.$bank->iban.' of '.$bank->user->name.'(#'.$bank->user->id.')');
+
                 continue;
             }
         }

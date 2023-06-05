@@ -7,9 +7,9 @@ use Exception;
 class CalendarController extends Controller
 {
     /**
-     * @param string $google_calendar_id
-     * @param string $start
-     * @param string $end
+     * @param  string  $google_calendar_id
+     * @param  string  $start
+     * @param  string  $end
      * @return array
      */
     public static function returnGoogleCalendarEvents($google_calendar_id, $start, $end)

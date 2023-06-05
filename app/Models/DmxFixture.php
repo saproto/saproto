@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $channel_start
  * @property int $channel_end
  * @property int $follow_timetable
+ *
  * @method static Builder|DmxFixture whereChannelEnd($value)
  * @method static Builder|DmxFixture whereChannelStart($value)
  * @method static Builder|DmxFixture whereFollowTimetable($value)
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxFixture newModelQuery()
  * @method static Builder|DmxFixture newQuery()
  * @method static Builder|DmxFixture query()
+ *
  * @mixin Eloquent
  */
 class DmxFixture extends Model
@@ -34,7 +36,7 @@ class DmxFixture extends Model
     public $timestamps = false;
 
     /**
-     * @param string|null $special_func
+     * @param  string|null  $special_func
      * @return Collection|DmxChannel[]
      */
     public function getChannels($special_func = null)

@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
  * @property-read bool $is_visible
  * @property-read string $hash_map_id
  * @property-read string $modal_id
+ *
  * @method static Builder|Announcement whereContent($value)
  * @method static Builder|Announcement whereCreatedAt($value)
  * @method static Builder|Announcement whereDescription($value)
@@ -54,6 +55,7 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Announcement newModelQuery()
  * @method static Builder|Announcement newQuery()
  * @method static Builder|Announcement query()
+ *
  * @mixin Eloquent
  */
 class Announcement extends Model
@@ -144,7 +146,7 @@ class Announcement extends Model
     }
 
     /**
-     * @param null|User $user
+     * @param  null|User  $user
      * @return bool
      */
     public function showForUser($user = null)
@@ -197,7 +199,7 @@ class Announcement extends Model
         return true;
     }
 
-    /** @param User|null $user */
+    /** @param  User|null  $user */
     public function dismissForUser($user = null)
     {
         if ($user) {

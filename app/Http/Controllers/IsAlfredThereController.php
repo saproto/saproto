@@ -13,6 +13,7 @@ use stdClass;
 class IsAlfredThereController extends Controller
 {
     public static $HashMapItemKey = 'is_alfred_there';
+
     public static $HashMapTextKey = 'is_alfred_there_text';
 
     /** @return View */
@@ -34,7 +35,6 @@ class IsAlfredThereController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function postAdminInterface(Request $request)
@@ -50,12 +50,13 @@ class IsAlfredThereController extends Controller
         } elseif ($new_status === 'away') {
             $status->value = $arrival_time;
             $text->value = $request->input('is_alfred_there_text');
-        } elseif($new_status === 'text_only') {
+        } elseif ($new_status === 'text_only') {
             $text->value = $request->input('is_alfred_there_text');
             $status->value = 'unknown';
         }
         $status->save();
         $text->save();
+
         return Redirect::back();
     }
 
@@ -69,6 +70,7 @@ class IsAlfredThereController extends Controller
                 'value' => '',
             ]);
         }
+
         return $item;
     }
 
@@ -81,14 +83,17 @@ class IsAlfredThereController extends Controller
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
         if ($status->value == 'there' || $status->value == 'unknown') {
             $result->status = $status->value;
+
             return $result;
         } elseif (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
             $result->backunix = Carbon::parse($status->value)->getTimestamp();
+
             return $result;
         }
         $result->status = 'unknown';
+
         return $result;
     }
 }

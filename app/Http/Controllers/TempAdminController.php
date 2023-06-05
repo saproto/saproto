@@ -17,7 +17,7 @@ use Proto\Models\User;
 class TempAdminController extends Controller
 {
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function make($id)
@@ -40,7 +40,7 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function end($id)
@@ -61,8 +61,9 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function endId($id)
@@ -103,7 +104,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -124,18 +124,18 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $tempadmin = Tempadmin::findOrFail($id);
+
         return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update($id, Request $request)

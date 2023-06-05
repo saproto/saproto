@@ -15,12 +15,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $committee_id
  * @property-read Committee $committee
  * @property-read User $user
+ *
  * @method static Builder|HelperReminder whereCommitteeId($value)
  * @method static Builder|HelperReminder whereId($value)
  * @method static Builder|HelperReminder whereUserId($value)
  * @method static Builder|HelperReminder newModelQuery()
  * @method static Builder|HelperReminder newQuery()
  * @method static Builder|HelperReminder query()
+ *
  * @mixin Eloquent
  */
 class HelperReminder extends Model

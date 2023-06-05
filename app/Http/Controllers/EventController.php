@@ -28,31 +28,30 @@ use Session;
 class EventController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function index(Request $request)
     {
         $data = [[], [], []];
         $data[0] = Event::query()
-            ->where('start', '>=',strtotime('now'))
+            ->where('start', '>=', strtotime('now'))
             ->orderBy('start')->with('activity')
             ->where('start', '<=', strtotime('+1 week'));
 
         $data[1] = Event::query()
-            ->where('start', '>=',strtotime('now'))
+            ->where('start', '>=', strtotime('now'))
             ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 week'))
             ->where('start', '<=', strtotime('+1 month'));
 
         $data[2] = Event::query()
-            ->where('start', '>=',strtotime('now'))
+            ->where('start', '>=', strtotime('now'))
             ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
-        foreach ($data as $index=>$query) {
-            if($category) {
+        foreach ($data as $index => $query) {
+            if ($category) {
                 $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
@@ -69,6 +68,7 @@ class EventController extends Controller
         }
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
+
         return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
     }
 
@@ -76,6 +76,7 @@ class EventController extends Controller
     public function finindex()
     {
         $activities = Activity::where('closed', false)->orderBy('registration_end', 'asc')->get();
+
         return view('event.notclosed', ['activities' => $activities]);
     }
 
@@ -98,25 +99,25 @@ class EventController extends Controller
     }
 
     /**
-     * @param StoreEventRequest $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(StoreEventRequest $request)
     {
         $event = Event::create([
-        'title' => $request->title,
-        'start' => strtotime($request->start),
-        'end' => strtotime($request->end),
-        'location' => $request->location,
-        'secret' => $request->publication ? false : $request->secret,
-        'description' => $request->description,
-        'summary' => $request->summary,
-        'is_featured' => $request->has('is_featured'),
-        'is_external' => $request->has('is_external'),
-        'force_calendar_sync' => $request->has('force_calendar_sync'),
-        'publication'=>$request->publication ? strtotime($request->publication) : null,
-         ]);
+            'title' => $request->title,
+            'start' => strtotime($request->start),
+            'end' => strtotime($request->end),
+            'location' => $request->location,
+            'secret' => $request->publication ? false : $request->secret,
+            'description' => $request->description,
+            'summary' => $request->summary,
+            'is_featured' => $request->has('is_featured'),
+            'is_external' => $request->has('is_external'),
+            'force_calendar_sync' => $request->has('force_calendar_sync'),
+            'publication' => $request->publication ? strtotime($request->publication) : null,
+        ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -131,11 +132,12 @@ class EventController extends Controller
         $event->save();
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
+
         return Redirect::route('event::show', ['id' => $event->getPublicId()]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -146,9 +148,9 @@ class EventController extends Controller
     }
 
     /**
-     * @param StoreEventRequest $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(StoreEventRequest $request, $id)
@@ -170,6 +172,7 @@ class EventController extends Controller
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
+
             return Redirect::back();
         }
 
@@ -199,18 +202,18 @@ class EventController extends Controller
         } else {
             Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
         }
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $year
+     * @param  int  $year
      * @return View
      */
     public function archive(Request $request, $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
+        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<', strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
         $category = EventCategory::find($request->category);
 
         $months = [];
@@ -228,8 +231,9 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -239,6 +243,7 @@ class EventController extends Controller
 
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
+
             return Redirect::back();
         }
 
@@ -250,7 +255,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function forceLogin($id)
@@ -259,7 +264,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse|View
      */
     public function admin($id)
@@ -268,6 +273,7 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
+
             return Redirect::back();
         }
 
@@ -275,7 +281,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse|View
      */
     public function scan($id)
@@ -284,6 +290,7 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
+
             return Redirect::back();
         }
 
@@ -291,8 +298,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function finclose(Request $request, $id)
@@ -302,11 +308,13 @@ class EventController extends Controller
 
         if ($activity->event && ! $activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
+
             return Redirect::back();
         }
 
         if ($activity->closed) {
             Session::flash('flash_message', 'This activity is already closed.');
+
             return Redirect::back();
         }
 
@@ -320,6 +328,7 @@ class EventController extends Controller
             $activity->save();
 
             Session::flash('flash_message', 'This activity is now closed. It either was free or had no participants, so no orderlines or products were created.');
+
             return Redirect::back();
         }
 
@@ -339,12 +348,12 @@ class EventController extends Controller
         $activity->save();
 
         Session::flash('flash_message', 'This activity has been closed and the relevant orderlines were added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param Event $event
+     * @param  Event  $event
      * @return RedirectResponse
      */
     public function linkAlbum(Request $request, $event)
@@ -358,11 +367,12 @@ class EventController extends Controller
         $album->save();
 
         Session::flash('flash_message', 'The album '.$album->name.' has been linked to this activity!');
+
         return Redirect::back();
     }
 
     /**
-     * @param PhotoAlbum $album
+     * @param  PhotoAlbum  $album
      * @return RedirectResponse
      */
     public function unlinkAlbum($album)
@@ -373,12 +383,12 @@ class EventController extends Controller
         $album->save();
 
         Session::flash('flash_message', 'The album '.$album->name.' has been unlinked from an activity!');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $limit
-     * @param Request $request
+     * @param  int  $limit
      * @return array
      */
     public function apiUpcomingEvents($limit, Request $request)
@@ -451,7 +461,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function setReminder(Request $request)
@@ -485,7 +494,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param string|null $personal_key
+     * @param  string|null  $personal_key
      * @return \Illuminate\Http\Response
      */
     public function icalCalendar($personal_key = null)
@@ -616,17 +625,16 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function categoryAdmin(Request $request)
     {
         $category = EventCategory::find($request->id);
+
         return view('event.categories', ['cur_category' => $category]);
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function categoryStore(Request $request)
@@ -637,12 +645,12 @@ class EventController extends Controller
         $category->save();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been created.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function categoryUpdate(Request $request, $id)
@@ -653,12 +661,14 @@ class EventController extends Controller
         $category->save();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function categoryDestroy($id)
@@ -673,6 +683,7 @@ class EventController extends Controller
         $category->delete();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
+
         return Redirect::route('event::category::admin', ['category' => null]);
     }
 
@@ -683,35 +694,36 @@ class EventController extends Controller
         $newEvent->title = $newEvent->title.' [copy]';
 
         $oldStart = Carbon::createFromTimestamp($event->start);
-        $newDate = Carbon::createFromFormat('Y-m-d',$request->input('newDate'));
+        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'));
         $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
         $diff = $newDate - $event->start;
 
         $newEvent->start = $newDate;
         $newEvent->end = $event->end + $diff;
         $newEvent->secret = true;
-        if($event->publication) {
+        if ($event->publication) {
             $newEvent->publication = $event->publication + $diff;
             $newEvent->secret = false;
         }
 
         $newEvent->save();
 
-        if($event->activity) {
+        if ($event->activity) {
             $newActivity = new Activity([
-               'event_id' => $newEvent->id,
-               'price' => $event->activity->price,
-               'participants' => $event->activity->participants,
-               'no_show_fee' => $event->activity->no_show_fee,
-               'hide_participants' => $event->activity->hide_participants,
-               'registration_start' => $event->activity->registration_start + $diff,
-               'registration_end' => $event->activity->registration_end + $diff,
-               'deregistration_end' => $event->activity->deregistration_end + $diff,
-               'comment'=>$event->activity->comment,
+                'event_id' => $newEvent->id,
+                'price' => $event->activity->price,
+                'participants' => $event->activity->participants,
+                'no_show_fee' => $event->activity->no_show_fee,
+                'hide_participants' => $event->activity->hide_participants,
+                'registration_start' => $event->activity->registration_start + $diff,
+                'registration_end' => $event->activity->registration_end + $diff,
+                'deregistration_end' => $event->activity->deregistration_end + $diff,
+                'comment' => $event->activity->comment,
+                'redirect_url' => $event->activity->redirect_url,
             ]);
             $newActivity->save();
 
-            if($event->activity->helpingCommitteeInstances) {
+            if ($event->activity->helpingCommitteeInstances) {
                 foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
                     $newHelpingCommittee = new HelpingCommittee([
                         'activity_id' => $newActivity->id,
@@ -724,6 +736,7 @@ class EventController extends Controller
         }
 
         Session::flash('flash_message', 'Copied the event!');
+
         return Redirect::to(route('event::edit', ['id' => $newEvent->id]));
     }
 }
