@@ -11,7 +11,6 @@ use Proto\Models\NarrowcastingItem;
 use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
-use Youtube;
 
 class NarrowcastingController extends Controller
 {
@@ -62,24 +61,9 @@ class NarrowcastingController extends Controller
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-            $video = Youtube::getVideoInfo($youtube_id);
-
-            /* @phpstan-ignore-next-line */
-            if (! $video) {
-                Session::flash('flash_message', 'This is an invalid video ID!');
-
-                return Redirect::back();
-            }
-
-            if (! $video->status->embeddable) {
-                Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
-
-                return Redirect::back();
-            }
-
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
-            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
+            $narrowcasting->slide_duration = -1;
         }
 
         $narrowcasting->save();
@@ -125,18 +109,10 @@ class NarrowcastingController extends Controller
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-            $video = Youtube::getVideoInfo($youtube_id);
-
-            /* @phpstan-ignore-next-line */
-            if (! $video) {
-                Session::flash('flash_message', 'This is an invalid video ID!');
-
-                return Redirect::back();
-            }
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
-            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
+            $narrowcasting->slide_duration = -1;
         } else {
             $narrowcasting->youtube_id = null;
         }

@@ -17,7 +17,7 @@
 
     <style>
 
-        html, body, #slideshow, #fullpagetext, .slide, #protologo {
+        html, body, #slideshow, #fullpagetext, .slide {
             position: absolute;
             top: 0;
             left: 0;
@@ -49,14 +49,6 @@
             background-position: center center;
             transition: all 1s;
             opacity: 1;
-        }
-
-        .slide.old {
-            opacity: 0;
-        }
-
-        .slide.new {
-            opacity: 0;
         }
 
     </style>
@@ -91,7 +83,8 @@
             height: window.innerHeight,
             width: window.innerWidth,
             events: {
-                'onReady': onPlayerReady
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
             },
             playerVars: {
                 modestbranding: 1,
@@ -102,12 +95,26 @@
     }
 
     async function updateCampaigns() {
-        await get('{{ route("api::screen::narrowcasting") }}').then(data => campaigns = data).catch(error => console.log('Error loading campaigns from server:', error))
+        await get('{{ route("api::screen::narrowcasting") }}')
+            .then((data) => {
+                if(campaigns.length !== 0 && campaigns.length !== data.length){
+                    window.location.reload();
+                }
+
+                campaigns = data
+            })
+            .catch(error => console.log('Error loading campaigns from server:', error))
     }
 
     function onPlayerReady(event) {
         event.target.mute()
         event.target.playVideo()
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            setTimeout(updateSlide, (youtubePlayer.getDuration()-1)*1000)
+        }
     }
 
     function updateSlide() {
@@ -124,24 +131,32 @@
             text.innerHTML = 'Starting slideshow... :)'
             text.classList.add('opacity-0')
             slides.classList.remove('opacity-0')
-            slides.classList.add('old')
 
             if (currentCampaign >= campaigns.length) {
                 currentCampaign = 0
             }
             const campaign = campaigns[currentCampaign]
 
+            //hide the last slide
+            let oldSlide=document.getElementById('slide-' + (currentCampaign-1))
+            if(oldSlide){
+                oldSlide.classList.add('opacity-0')
+            }
+
             if (campaign.hasOwnProperty('image')) {
                 if (previousWasVideo) {
-                    player.classList.remove('opacity-0')
-                    slides.classList.add('opacity-0')
+                    player.classList.add('opacity-0')
+                    slides.classList.remove('opacity-0')
                 }
 
-                slides.innerHTML += '<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaign.image + ');"></div>'
-
+                //show the new slide if it exists, otherwise create it
+                let slide=document.getElementById('slide-' + currentCampaign)
+                if(slide){
+                    slide.classList.remove('opacity-0')
+                }else{
+                    slides.innerHTML += '<div id="slide-' + currentCampaign + '" class="slide" style="background-image: url(' + campaign.image + ');"></div>'
+                }
                 setTimeout(updateSlide, campaign.slide_duration * 1000);
-                setTimeout(showSlide, 0);
-                setTimeout(clearSlides, 2000);
 
                 previousWasVideo = false;
             } else {
@@ -152,24 +167,10 @@
                     slides.classList.add('opacity-0')
                     player.classList.remove('opacity-0')
                 }
-
-                setTimeout(updateSlide, (campaign.slide_duration - 1) * 1000)
-                setTimeout(clearSlides, 2000)
-
                 previousWasVideo = true
             }
             currentCampaign++
         }
-    }
-
-    function showSlide() {
-        const newSlides = Array.from(document.querySelectorAll('.slide.new'))
-        newSlides.forEach(el => el.classList.remove('new'))
-    }
-
-    function clearSlides() {
-        const oldSlides = Array.from(document.querySelectorAll('.slide.old'))
-        oldSlides.forEach(el => el.remove())
     }
 
 

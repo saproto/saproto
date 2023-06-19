@@ -3,14 +3,11 @@
 namespace Proto\Models;
 
 use Carbon;
-use DateInterval;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use stdClass;
-use Youtube;
+
 
 /**
  * Narrowcasting Item Model.
@@ -51,33 +48,5 @@ class NarrowcastingItem extends Model
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry');
-    }
-
-    /** @return StdClass|null */
-    public function video()
-    {
-        if ($this->youtube_id !== null) {
-            try {
-                return Youtube::getVideoInfo($this->youtube_id);
-            } catch (Exception $e) {
-                return null;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return int
-     *
-     * @throws Exception
-     */
-    public function videoDuration()
-    {
-        if ($this->youtube_id) {
-            return date_create('@0')->add(new DateInterval($this->video()->contentDetails->duration))->getTimestamp();
-        } else {
-            return 0;
-        }
     }
 }
