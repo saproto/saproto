@@ -16,8 +16,10 @@
     @include('website.assets.stylesheets')
 
     <style>
-
-        html, body, #slideshow, #fullpagetext, .slide {
+        body{
+            position:relative;
+        }
+        html, #slideshow, #fullpagetext, .slide {
             position: absolute;
             top: 0;
             left: 0;
@@ -28,6 +30,9 @@
             padding: 0;
 
             overflow: hidden;
+
+            width:100%;
+            height:100%;
 
             background-color: #333;
         }
@@ -51,22 +56,28 @@
             opacity: 1;
         }
 
+        #yt-player{
+            aspect-ratio: 16 / 9;
+            height: auto;
+            width: 100%;
+        }
+
     </style>
 
 </head>
 
-<body class="d-block">
+<body>
+    <div id="container" style="position:relative; border-radius: inherit; background-color:#333">
+        <div id="fullpagetext" class="opacity-0">
 
-<div id="fullpagetext" class="opacity-0">
+        </div>
 
-</div>
+        <div id="slideshow" class="opacity-0">
 
-<div id="slideshow" class="opacity-0">
+        </div>
 
-</div>
-
-<div id="yt-player" class="opacity-0">
-
+        <div id="yt-player" class="opacity-0 w-full">
+    </div>
 </div>
 
 @include('website.assets.javascripts')
@@ -80,8 +91,6 @@
 
     function onYouTubeIframeAPIReady() {
         youtubePlayer = new YT.Player('yt-player', {
-            height: window.innerHeight,
-            width: window.innerWidth,
             events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange
