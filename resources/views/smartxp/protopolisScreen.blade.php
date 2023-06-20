@@ -30,6 +30,8 @@
             font-size: 1.5rem;
         }
 
+
+
     </style>
 
 </head>
@@ -81,12 +83,12 @@
     <div class="col mt-3 h-100">
         <div id="protopeners" class="box protubecard p-3" style="height:20%">
 
-            <div class="box-header font-size-lg">
+            <div class="box-header font-size-lg text-center">
                 <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
                 Protopolis
             </div>
 
-            <div id="protopeners-timetable"></div>
+            <div id="protopeners-timetable" class="h-100"></div>
 
         </div>
     </div>
@@ -104,24 +106,24 @@
                   if (data.length > 0) {
                       timetable.innerHTML = ''
                       let count = 0
-                      for (let i in data) {
+                      data.forEach(timetableItem => {
                           if (count >= 4) return
-                          if (!data[i].over) {
-                              let start = moment.unix(data[i].start)
-                              let end = moment.unix(data[i].end)
+                          if (!timetableItem.over) {
+                              let start = moment.unix(timetableItem.start)
+                              let end = moment.unix(timetableItem.end)
                               let time = start.format("HH:mm") + ' - ' + end.format("HH:mm")
-                              let title = data[i].title
-                              let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + data[i].place + '</span>'
+                              let title = timetableItem.title
+                              let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + timetableItem.place + '</span>'
                               timetable.innerHTML +=
                                   '<div class="activity">' +
-                                  (data[i].studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
-                                  '<strong>' + data[i].type + '</strong><br>' +
-                                  '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span><br>' +
+                                  (timetableItem.studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + timetableItem.studyShort + ' ' + (timetableItem.year ? 'Year ' + timetableItem.year : '') + '</span> ' : null) +
+                                  '<strong>' + timetableItem.type + '</strong><br>' +
+                                  '<span class="' + (timetableItem.current ? "current" : "") + '">' + title + '</span><br>' +
                                   displayTime +
-                                  '</div>'
+                                  '</div>'+'<br><hr>'
                               count++
                           }
-                      }
+                      })
                       if (count === 0) {
                           timetable.innerHTML = '<div class="notice">No more lectures today!</div>'
                       }
@@ -146,7 +148,6 @@
                   if (data.length > 0) {
                       document.getElementById("activities").innerHTML = '';
                       data.forEach((activity) => {
-                          console.log(activity)
                           let start = moment.unix(activity.start)
                           let end = moment.unix(activity.end)
                           let time
@@ -164,7 +165,6 @@
                               newDiv.style.backgroundSize = 'cover'
                               newDiv.style.backgroundPosition = 'center center'
                               newDiv.style.backgroundRepeat = 'no-repeat'
-                              console.log(activity.image)
                           }
 
                           let titleSpan=document.createElement("div")
@@ -206,19 +206,34 @@
                   if (data.length > 0) {
                       document.getElementById("protopeners-timetable").innerHTML = ''
                       let open = false, count = 0
-                      for (let i in data) {
-                          if (data[i].over) continue
-                          else if (data[i].current) open = true
-                          let start = moment.unix(data[i].start);
-                          let end = moment.unix(data[i].end);
+                      data.forEach((protOpener) => {
+                          if (protOpener.over||count>1) return
+
+                          else if (protOpener.current) open = true
+                          let start = moment.unix(protOpener.start);
+                          let end = moment.unix(protOpener.end);
                           let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                          document.getElementById("protopeners-timetable").innerHTML +=
-                              '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
-                              '   <div class="float-start">' + time + '</div>' +
-                              '   <div class="float-end"><strong>' + data[i].title + '</strong></div>' +
-                              '</div>'
+
+                          let newDiv=document.createElement("div")
+                          newDiv.className="activity "+(protOpener.current ? "current" : "")
+
+                          let timeDiv=document.createElement("div")
+                            timeDiv.className="float-start h-100"
+                            timeDiv.innerHTML=time
+
+                          let titleDiv=document.createElement("div")
+                            titleDiv.className="float-end h-100"
+                            titleDiv.innerHTML='<strong>'+protOpener.title+'</strong>'
+
+                          newDiv.appendChild(timeDiv)
+                          newDiv.appendChild(titleDiv)
+
+                          let protOpenDiv=document.getElementById("protopeners-timetable")
+                          protOpenDiv.appendChild(newDiv)
+                          protOpenDiv.appendChild(document.createElement("br"))
+                          protOpenDiv.appendChild(document.createElement("hr"))
                           count++
-                      }
+                      });
                       if (open) {
                           protopolisFa.classList.add('green')
                           protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
