@@ -30,7 +30,21 @@
             font-size: 1.5rem;
         }
 
+        .scroll-title {
+            animation: slide-left 15s linear infinite;
+        }
 
+        @keyframes slide-left {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-50%);
+                transform: translateX(-50%);
+            }
+        }
+    </style>
 
     </style>
 
@@ -93,8 +107,6 @@
         </div>
     </div>
 </div>
-
-  @stack('javascript')
 
   <script type="text/javascript" nonce="{{ csp_nonce() }}">
       function updateTimetable() {
@@ -165,21 +177,29 @@
                               newDiv.style.backgroundRepeat = 'no-repeat'
                           }
 
-                          let titleSpan=document.createElement("div")
+                          let titleDiv=document.createElement("div")
+                          let titleSpan=document.createElement("span")
                           titleSpan.innerHTML=activity.title
-                          titleSpan.className="font-weight-bold font-size-lg"
-
-                          let timeSpan=document.createElement("div")
-                          timeSpan.innerHTML='<i class="fas fa-clock fa-fw me-1"></i>'+time
+                          titleSpan.className="font-weight-bold font-size-lg text-nowrap"
+                          titleDiv.appendChild(titleSpan)
+                          let timeDiv=document.createElement("div")
+                          timeDiv.innerHTML='<i class="fas fa-clock fa-fw me-1"></i>'+time
 
                           let locationSpan=document.createElement("div")
                           locationSpan.innerHTML='<i class="fas fa-map-marker-alt fa-fw me-1"></i>' + activity.location + '</span>'
 
-                          newDiv.appendChild(titleSpan)
-                          newDiv.appendChild(timeSpan)
+                          newDiv.appendChild(titleDiv)
+                          newDiv.appendChild(timeDiv)
                           newDiv.appendChild(locationSpan)
 
                           document.getElementById("activities").appendChild(newDiv)
+                          const textWidth = titleSpan.clientWidth;
+                          const parentWidth = newDiv.clientWidth;
+                          console.log(textWidth, parentWidth)
+                          console.log(titleSpan)
+                          if(textWidth > parentWidth) {
+                              timeDiv.classList.add('scroll-title')
+                          }
                       });
                   } else {
                       document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
@@ -230,6 +250,7 @@
                           protOpenDiv.appendChild(newDiv)
                           protOpenDiv.appendChild(document.createElement("br"))
                           protOpenDiv.appendChild(document.createElement("hr"))
+
                           count++
                       });
                       if (open) {
