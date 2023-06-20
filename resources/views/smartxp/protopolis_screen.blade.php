@@ -80,7 +80,7 @@
                 </div>
         </div>
     </div>
-    <div class="col mt-3 h-100">
+    <div class="col-3 mt-3 h-100 " style="padding:0 0 0 8px ">
         <div id="protopeners" class="box protubecard p-3" style="height:20%">
 
             <div class="box-header font-size-lg text-center">
@@ -94,7 +94,6 @@
     </div>
 </div>
 
-{{--  @include('website.assets.javascripts')--}}
   @stack('javascript')
 
   <script type="text/javascript" nonce="{{ csp_nonce() }}">
@@ -160,8 +159,7 @@
                           newDiv.className="activity bg-img protubecard flex-grow-1"+ (activity.current ? "current" : (activity.over ? "past" : ""))
                           newDiv.style.padding='15px'
                           if(activity.image) {
-                              newDiv.style.backgroundColor="#fff"
-                              newDiv.style.backgroundImage = 'url('+activity.image+')'
+                              newDiv.style.background = 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('+activity.image+')'
                               newDiv.style.backgroundSize = 'cover'
                               newDiv.style.backgroundPosition = 'center center'
                               newDiv.style.backgroundRepeat = 'no-repeat'

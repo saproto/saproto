@@ -23,7 +23,7 @@ class SmartXpScreenController extends Controller
      */
     public function showProtopolis(Request $request)
     {
-        return view('smartxp.protopolisScreen');
+        return view('smartxp.protopolis_screen');
     }
 
     /** @return array */
