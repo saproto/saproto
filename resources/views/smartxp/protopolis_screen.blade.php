@@ -1,27 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('website.master')
 
-<head>
+@section('page-title')
+    Protopolis Screen v12
+@endsection
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
-
-    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon2.png') }}"/>
-
-    <title>Protopolis Screen v12</title>
-
-    @include('website.assets.stylesheets')
-
+@push('stylesheet')
     <style>
-        .protubecard{
+        html {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body {
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 30px;
+        }
+
+        #info-row {
+            height: 20%;
+        }
+
+        .protubecard {
             background-color: rgb(255 255 255);
             opacity: 0.8;
-            width:100%;
+            width: 100%;
             border-radius: 8px;
             overflow: hidden;
-            padding:0;
+            padding: 0;
             border: 0px solid #00AAC0;
             border-left-width: 4px;
         }
@@ -47,66 +53,68 @@
     </style>
 
     </style>
+@endpush
 
-</head>
+@section('body')
+    <div class="row text-black">
 
-<body class="h-100 w-100" style=" overflow:hidden; padding:30px; background-color:#f1f1f1;">
-  <div class="row text-black">
-
-    {{-- narrowcasting--}}
-    <div class="col-9" style="border-radius: 8px; padding:0; overflow:hidden;  border: 0px solid #00AAC0;
+        {{-- narrowcasting--}}
+        <div class="col-9" style="border-radius: 8px; padding:0; overflow:hidden;  border: 0px solid #00AAC0;
             border-left-width: 4px;">
-        <div >
             @include('narrowcasting.display')
         </div>
-    </div>
 
 
-    <div class="ms-2 col h-auto d-flex flex-column">
+        <div class="ms-2 col h-auto d-flex flex-column">
 
-        {{-- On screen clock --}}
-        <div class="row mb-3">
-            <div class="protubecard p-3 text-center font-weight-bold display-3">
+            {{-- On screen clock --}}
+            <div class="row mb-3">
+                <div class="protubecard p-3 text-center font-weight-bold display-3">
 
-                <div id="clock" class="notice">Loading</div>
+                    <div id="clock" class="notice">Loading</div>
 
+                </div>
             </div>
-        </div>
 
-        <div class="row flex-grow-1">
-            <div id="timetable" class="protubecard p-3">
+            <div class="row flex-grow-1">
+                <div id="timetable" class="protubecard p-3">
 
-                <div class="notice">Loading timetable...</div>
+                    <div class="notice">Loading timetable...</div>
 
+                </div>
             </div>
+
+
         </div>
-
-
     </div>
-  </div>
-<div class="row text-black d-flex h-100">
-    <div class="col-9 mt-3 h-100" style="padding:0">
+    <div id="info-row" class="row text-black d-flex">
+        <div class="col-9 mt-3 h-100" style="padding:0">
 
-        <div id="activities" class="d-flex flex-row mb-3 gap-2" style="height:20%" >
+            <div id="activities" class="d-flex flex-row mb-3 gap-2 h-100">
 
                 <div class="notice protubecard flex-grow-1 p-2">
-                        <div class="font-weight-bold font-size-lg">Loading events</div>
+                    <div id="event-loader" class="font-weight-bold font-size-lg">Loading events</div>
                 </div>
-        </div>
-    </div>
-    <div class="col-3 mt-3 h-100 " style="padding:0 0 0 8px ">
-        <div id="protopeners" class="box protubecard p-3" style="height:20%">
-
-            <div class="box-header font-size-lg text-center">
-                <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
-                Protopolis
             </div>
+        </div>
+        <div class="col-3 mt-3 h-100 " style="padding:0 0 0 8px ">
+            <div id="protopeners" class="box protubecard p-3 h-100">
 
-            <div id="protopeners-timetable" class="h-100"></div>
+                <div class="box-header font-size-lg text-center">
+                    <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
+                    Protopolis
+                </div>
 
+                <div id="protopeners-timetable" class="h-100"></div>
+
+            </div>
         </div>
     </div>
-</div>
+
+    @endsection
+
+    @push('javascript')
+        
 
   <script type="text/javascript" nonce="{{ csp_nonce() }}">
       function updateTimetable() {
@@ -282,8 +290,5 @@
       setInterval(updateClock, 1000);
 
   </script>
-</body>
-
-</html>
-
+@endpush
 

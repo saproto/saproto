@@ -21,9 +21,9 @@ class NarrowcastingController extends Controller
     }
 
     /** @return View */
-    public function display()
+    public function show()
     {
-        return view('narrowcasting.display');
+        return view('narrowcasting.show');
     }
 
     /** @return View */
