@@ -130,7 +130,7 @@ class AuthController extends Controller
             'name' => 'required|string',
             'calling_name' => 'required|string',
             'g-recaptcha-response' => 'required|recaptcha',
-            'privacy_policy_acceptance' => 'required',
+            'privacy_policy_acceptance' => 'present',
         ]);
 
         $this->registerAccount($request);
@@ -173,7 +173,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'name' => 'required|string',
             'calling_name' => 'required|string',
-            'privacy_policy_acceptance' => 'required',
+            'privacy_policy_acceptance' => 'present',
         ]);
 
         $new_user = $this->registerAccount($request);
