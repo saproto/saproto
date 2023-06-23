@@ -4,7 +4,6 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Proto\Models\OrderLine;
-use Proto\Models\Product;
 use Proto\Models\WallstreetDrink;
 use Proto\Models\WallstreetPrice;
 
