@@ -17,6 +17,10 @@
             padding: 30px;
         }
 
+        .green {
+            color: #c1ff00;
+        }
+
         #info-row {
             height: 20%;
         }
@@ -36,20 +40,19 @@
             font-size: 1.5rem;
         }
 
-        .scroll-title {
-            animation: slide-left 15s linear infinite;
+        .activity.past {
+            opacity: 0.5;
         }
 
-        @keyframes slide-left {
-            0% {
-                -webkit-transform: translateX(0);
-                transform: translateX(0);
-            }
-            100% {
-                -webkit-transform: translateX(-50%);
-                transform: translateX(-50%);
-            }
+        .activity.current {
+            color: #c1ff00;
         }
+
+        span.current {
+            color: #c1ff00;
+            font-weight: bold;
+        }
+
     </style>
 
     </style>
@@ -77,9 +80,14 @@
             </div>
 
             <div class="row flex-grow-1">
-                <div id="timetable" class="protubecard p-3">
+                <div class="protubecard p-3">
 
-                    <div class="notice">Loading timetable...</div>
+                    <div class="box-header font-size-lg">
+                        <i class="fa-solid fa-calendar-days fa-fw me-1"></i>
+                        Timetable
+                    </div>
+
+                    <div id="timetable" class="notice">Loading timetable...</div>
 
                 </div>
             </div>
@@ -92,16 +100,16 @@
 
             <div id="activities" class="d-flex flex-row mb-3 gap-2 h-100">
 
-                <div class="notice protubecard flex-grow-1 p-2">
-                    <div id="event-loader" class="font-weight-bold font-size-lg">Loading events</div>
+                <div class="notice protubecard flex-grow-1 p-2 font-weight-bold">
+                    <div id="event-loader" class="font-size-lg">Loading events</div>
                 </div>
             </div>
         </div>
         <div class="col-3 mt-3 h-100 " style="padding:0 0 0 8px ">
             <div id="protopeners" class="box protubecard p-3 h-100">
 
-                <div class="box-header font-size-lg text-center">
-                    <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
+                <div class="box-header font-size-lg">
+                    <i class="fas fa-door-closed fa-fw me-1" id="protopolis-fa"></i>
                     Protopolis
                 </div>
 
@@ -119,11 +127,11 @@
   <script type="text/javascript" nonce="{{ csp_nonce() }}">
       function updateTimetable() {
           const timetable = document.getElementById("timetable")
-
+          timetable.innerHTML = ""
           get('{{ route('api::screen::timetable') }}')
               .then(data => {
+
                   if (data.length > 0) {
-                      timetable.innerHTML = ''
                       let count = 0
                       data.forEach(timetableItem => {
                           if (count >= 4) return
@@ -132,14 +140,42 @@
                               let end = moment.unix(timetableItem.end)
                               let time = start.format("HH:mm") + ' - ' + end.format("HH:mm")
                               let title = timetableItem.title
-                              let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + timetableItem.place + '</span>'
-                              timetable.innerHTML +=
-                                  '<div class="activity">' +
-                                  (timetableItem.studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + timetableItem.studyShort + ' ' + (timetableItem.year ? 'Year ' + timetableItem.year : '') + '</span> ' : null) +
-                                  '<strong>' + timetableItem.type + '</strong><br>' +
-                                  '<span class="' + (timetableItem.current ? "current" : "") + '">' + title + '</span><br>' +
-                                  displayTime +
-                                  '</div>'+'<br><hr>'
+
+                              let activityDiv= document.createElement('div');
+                                activityDiv.className = 'activity';
+
+                                if(timetableItem.studyShort){
+                                    let yearSpan= document.createElement('span');
+                                    yearSpan.className = 'float-end ms-2';
+                                    yearSpan.innerHTML = '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + timetableItem.studyShort + ' ' + (timetableItem.year ? 'Year ' + timetableItem.year : '')
+                                    activityDiv.appendChild(yearSpan);
+                                }
+
+                                let titleStrong= document.createElement('strong');
+                                titleStrong.innerHTML = timetableItem.type
+                                activityDiv.appendChild(titleStrong);
+                                activityDiv.innerHTML += '<br>'
+
+                              let titleSpan= document.createElement('span');
+                                titleSpan.className=(timetableItem.current ? "current" : "");
+                                titleSpan.innerHTML = title
+                                activityDiv.appendChild(titleSpan);
+
+
+                              let locationDiv= document.createElement('div');
+                                  locationDiv.className = 'w-100 h-10'
+                                locationDiv.innerHTML += '<i class="fas fa-clock fa-fw me-1"></i>' + time
+
+                                  let placeSpan= document.createElement('span');
+                                    placeSpan.className = 'float-end';
+                                    placeSpan.innerHTML='<i class="fas fa-map-marker-alt fa-fw me-1"></i>' + timetableItem.place
+                                    locationDiv.appendChild(placeSpan)
+                                activityDiv.appendChild(locationDiv)
+                                activityDiv.innerHTML += '<br>'
+                                activityDiv.innerHTML += '<hr>'
+
+
+                              timetable.appendChild(activityDiv)
                               count++
                           }
                       })
@@ -163,7 +199,6 @@
       function updateActivities() {
           get('{{ route('api::events::upcoming', ['limit' => 5]) }}')
               .then(data => {
-
                   if (data.length > 0) {
                       document.getElementById("activities").innerHTML = '';
                       data.forEach((activity) => {
@@ -185,11 +220,16 @@
                               newDiv.style.backgroundRepeat = 'no-repeat'
                           }
 
+
                           let titleDiv=document.createElement("div")
+                          titleDiv.className="overflow-hidden"
+
                           let titleSpan=document.createElement("span")
                           titleSpan.innerHTML=activity.title
-                          titleSpan.className="font-weight-bold font-size-lg text-nowrap"
+                          titleSpan.className="text-nowrap text-truncate w-100 me-5 font-weight-bold font-size-lg"
+                          titleSpan.style.display='inline-block'
                           titleDiv.appendChild(titleSpan)
+
                           let timeDiv=document.createElement("div")
                           timeDiv.innerHTML='<i class="fas fa-clock fa-fw me-1"></i>'+time
 
@@ -201,13 +241,6 @@
                           newDiv.appendChild(locationSpan)
 
                           document.getElementById("activities").appendChild(newDiv)
-                          const textWidth = titleSpan.clientWidth;
-                          const parentWidth = newDiv.clientWidth;
-                          console.log(textWidth, parentWidth)
-                          console.log(titleSpan)
-                          if(textWidth > parentWidth) {
-                              timeDiv.classList.add('scroll-title')
-                          }
                       });
                   } else {
                       document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
@@ -229,6 +262,7 @@
 
           get('{{ route('api::screen::timetable::protopeners') }}')
               .then(data => {
+
                   if (data.length > 0) {
                       document.getElementById("protopeners-timetable").innerHTML = ''
                       let open = false, count = 0
