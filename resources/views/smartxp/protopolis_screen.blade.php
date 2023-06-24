@@ -17,6 +17,10 @@
             padding: 30px;
         }
 
+        span{
+            display: block;
+        }
+
         .green {
             color: #c1ff00;
         }
@@ -51,6 +55,21 @@
         span.current {
             color: #c1ff00;
             font-weight: bold;
+        }
+
+        .scroll-title {
+            animation: slide-left 15s linear infinite;
+        }
+
+        @keyframes slide-left {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-50%);
+                transform: translateX(-50%);
+            }
         }
 
     </style>
@@ -222,14 +241,20 @@
 
 
                           let titleDiv=document.createElement("div")
-                          titleDiv.className="overflow-hidden"
+                          titleDiv.style.overflowX='hidden'
+                          titleDiv.style.display='block'
+
+                          let titleH3=document.createElement("h3")
+                            titleH3.style.whiteSpace='nowrap'
+                            titleH3.style.width='fit-content'
 
                           let titleSpan=document.createElement("span")
                           titleSpan.innerHTML=activity.title
-                          titleSpan.className="text-nowrap text-truncate w-100 me-5 font-weight-bold font-size-lg"
+                          titleSpan.className="me-5"
                           titleSpan.style.display='inline-block'
-                          titleDiv.appendChild(titleSpan)
+                          titleH3.appendChild(titleSpan)
 
+                          titleDiv.appendChild(titleH3)
                           let timeDiv=document.createElement("div")
                           timeDiv.innerHTML='<i class="fas fa-clock fa-fw me-1"></i>'+time
 
@@ -239,8 +264,12 @@
                           newDiv.appendChild(titleDiv)
                           newDiv.appendChild(timeDiv)
                           newDiv.appendChild(locationSpan)
-
                           document.getElementById("activities").appendChild(newDiv)
+
+                          if(titleH3.clientWidth > titleDiv.clientWidth){
+                              titleH3.classList.add('scroll-title')
+                              titleH3.appendChild(titleSpan.cloneNode(true))
+                          }
                       });
                   } else {
                       document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
