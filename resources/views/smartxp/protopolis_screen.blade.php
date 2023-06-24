@@ -29,13 +29,16 @@
             height: 20%;
         }
 
-        .protubecard {
+        .protubebackground{
             background-color: rgb(255 255 255);
             opacity: 0.8;
             width: 100%;
+        }
+
+        .protubecard{
             border-radius: 8px;
-            overflow: hidden;
-            padding: 0;
+            padding:0;
+            overflow:hidden;
             border: 0px solid #00AAC0;
             border-left-width: 4px;
         }
@@ -81,8 +84,7 @@
     <div class="row text-black">
 
         {{-- narrowcasting--}}
-        <div class="col-9" style="border-radius: 8px; padding:0; overflow:hidden;  border: 0px solid #00AAC0;
-            border-left-width: 4px;">
+        <div class="col-9 protubecard">
             @include('narrowcasting.display')
         </div>
 
@@ -91,7 +93,7 @@
 
             {{-- On screen clock --}}
             <div class="row mb-3">
-                <div class="protubecard p-3 text-center font-weight-bold display-3">
+                <div class="protubecard protubebackground p-3 text-center font-weight-bold display-3">
 
                     <div id="clock" class="notice">Loading</div>
 
@@ -99,7 +101,7 @@
             </div>
 
             <div class="row flex-grow-1">
-                <div class="protubecard p-3">
+                <div class="protubecard protubebackground p-3">
 
                     <div class="box-header font-size-lg">
                         <i class="fa-solid fa-calendar-days fa-fw me-1"></i>
@@ -119,13 +121,13 @@
 
             <div id="activities" class="d-flex flex-row mb-3 gap-2 h-100">
 
-                <div class="notice protubecard flex-grow-1 p-2 font-weight-bold">
+                <div class="notice protubecard protubebackground flex-grow-1 p-2 font-weight-bold">
                     <div id="event-loader" class="font-size-lg">Loading events</div>
                 </div>
             </div>
         </div>
         <div class="col-3 mt-3 h-100 " style="padding:0 0 0 8px ">
-            <div id="protopeners" class="box protubecard p-3 h-100">
+            <div id="protopeners" class="box protubecard protubebackground p-3 h-100">
 
                 <div class="box-header font-size-lg">
                     <i class="fas fa-door-closed fa-fw me-1" id="protopolis-fa"></i>
@@ -230,7 +232,7 @@
                               time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm")
                           }
                           let newDiv=document.createElement("div")
-                          newDiv.className="activity bg-img protubecard flex-grow-1"+ (activity.current ? "current" : (activity.over ? "past" : ""))
+                          newDiv.className="activity bg-img protubecard protubebackground flex-grow-1"+ (activity.current ? "current" : (activity.over ? "past" : ""))
                           newDiv.style.padding='15px'
                           if(activity.image) {
                               newDiv.style.background = 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('+activity.image+')'
@@ -243,6 +245,7 @@
                           let titleDiv=document.createElement("div")
                           titleDiv.style.overflowX='hidden'
                           titleDiv.style.display='block'
+                          titleDiv.className="mx-2"
 
                           let titleH3=document.createElement("h3")
                             titleH3.style.whiteSpace='nowrap'
