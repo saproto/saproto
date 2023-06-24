@@ -164,7 +164,6 @@ return [
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
-        Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
@@ -238,8 +237,6 @@ return [
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
-
-        'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 

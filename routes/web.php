@@ -226,7 +226,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* Routes related to narrowcasting. */
     Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
-        Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
+        Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@show']);
         Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
@@ -741,6 +741,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* The route for the SmartXp Screen. */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
+    Route::get('protopolis', ['as' => 'protopolis', 'uses' => 'SmartXpScreenController@showProtopolis']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
 
     /* The routes for Protube. */
