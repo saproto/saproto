@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Proto\Models\Committee;
 use Proto\Models\Leaderboard;
@@ -36,7 +37,12 @@ class LeaderboardController extends Controller
      */
     public function adminIndex()
     {
-        return view('leaderboards.adminlist', ['leaderboards' => Leaderboard::all()]);
+        if (Auth::user()->can('board')) {
+            $leaderboards = Leaderboard::all();
+        } else {
+            $leaderboards = Leaderboard::whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
+        }
+        return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
 
     /**
@@ -80,6 +86,11 @@ class LeaderboardController extends Controller
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
+
+        if(!$leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entries = $leaderboard->entries->sortByDesc('points');
 
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
@@ -91,22 +102,32 @@ class LeaderboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($request->featured && Leaderboard::where('featured', true)->first() != null) {
-            Leaderboard::where('featured', true)->update(['featured' => false]);
+        $leaderboard = Leaderboard::findOrFail($id);
+
+        if(!$leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
         }
 
-        $leaderboard = Leaderboard::findOrFail($id);
+
         $leaderboard->name = $request->input('name');
-        $leaderboard->featured = $request->has('featured');
         $leaderboard->description = $request->input('description');
         $leaderboard->points_name = $request->input('points_name');
         if ($request->input('icon') != null) {
             $leaderboard->icon = $request->input('icon');
         }
-        $committee = Committee::findOrFail($request->input('committee'));
-        if ($committee != $leaderboard->committee) {
-            $leaderboard->committee()->associate($committee);
+
+        //Only editable for board permission
+        if (Auth::user()->can('board')) {
+            if ($request->has('featured') && Leaderboard::where('featured', true)->first() != null) {
+                Leaderboard::where('featured', true)->update(['featured' => false]);
+            }
+            $leaderboard->featured = $request->has('featured');
+            $committee = Committee::findOrFail($request->input('committee'));
+            if ($committee != $leaderboard->committee) {
+                $leaderboard->committee()->associate($committee);
+            }
         }
+
         $leaderboard->save();
 
         Session::flash('flash_message', 'Leaderboard has been updated.');

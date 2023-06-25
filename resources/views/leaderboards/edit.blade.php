@@ -24,18 +24,21 @@
 
                     <div class="card-body">
 
-                        <div class="form-group autocomplete">
-                            <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
-                            <input class="form-control committee-search" id="organisation" name="committee"
-                                   value=value="{{$leaderboard?->committee_id ? $leaderboard->committee_id : ""}}"
-                                   required>
-                        </div>
+                        @can('board')
+                            <div class="form-group autocomplete">
+                                <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
+                                <input class="form-control committee-search" id="organisation" name="committee"
+                                       value=value="{{$leaderboard?->committee_id ? $leaderboard->committee_id : ""}}"
+                                       required>
+                            </div>
 
-                        @include('components.forms.checkbox', [
-                            'name' => 'featured',
-                            'checked' => $leaderboard?->featured,
-                            'label' => 'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>'
-                        ])
+                            @include('components.forms.checkbox', [
+                                'name' => 'featured',
+                                'checked' => $leaderboard?->featured,
+                                'label' => 'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>'
+                            ])
+                        @endcan
+
 
                         <div class="form-group">
                             <label for="name">Leaderboard name:</label>

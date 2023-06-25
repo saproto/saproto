@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
 use Proto\Models\User;
@@ -20,6 +21,11 @@ class LeaderboardEntryController extends Controller
     public function store(Request $request)
     {
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
+
+        if(!$leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
+        }
+
         if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
             Session::flash('flash_message', 'There is already a entry for this user');
 
@@ -43,6 +49,11 @@ class LeaderboardEntryController extends Controller
     public function update(Request $request)
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
+
+        if(!$entry->leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entry->points = $request->points;
         $entry->save();
 
@@ -58,6 +69,11 @@ class LeaderboardEntryController extends Controller
     public function destroy($id)
     {
         $entry = LeaderboardEntry::findOrFail($id);
+
+        if(!$entry->leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entry->delete();
         Session::flash('flash_message', 'The entry has been deleted.');
 

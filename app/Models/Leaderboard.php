@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Leaderboard Model.
@@ -56,5 +57,23 @@ class Leaderboard extends Model
     public function entries()
     {
         return $this->hasMany('Proto\Models\LeaderboardEntry');
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public static function isAdminAny(User $user): bool
+    {
+        return Leaderboard::whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function canEdit(User $user): bool
+    {
+        return $user->can('board') || $this->committee->users->contains($user);
     }
 }
