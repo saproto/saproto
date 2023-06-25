@@ -42,6 +42,7 @@ class LeaderboardController extends Controller
         } else {
             $leaderboards = Leaderboard::whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
         }
+
         return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
 
@@ -87,7 +88,7 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::findOrFail($id);
 
-        if(!$leaderboard->canEdit(Auth::user())) {
+        if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
         }
 
@@ -104,10 +105,9 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::findOrFail($id);
 
-        if(!$leaderboard->canEdit(Auth::user())) {
+        if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
         }
-
 
         $leaderboard->name = $request->input('name');
         $leaderboard->description = $request->input('description');

@@ -22,7 +22,7 @@ class LeaderboardEntryController extends Controller
     {
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
 
-        if(!$leaderboard->canEdit(Auth::user())) {
+        if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
         }
 
@@ -50,7 +50,7 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
 
-        if(!$entry->leaderboard->canEdit(Auth::user())) {
+        if (! $entry->leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
         }
 
@@ -70,7 +70,7 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::findOrFail($id);
 
-        if(!$entry->leaderboard->canEdit(Auth::user())) {
+        if (! $entry->leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
         }
 
