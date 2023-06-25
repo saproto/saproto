@@ -1,5 +1,5 @@
 @if(Auth::check() && Auth::user()->theme)
-    <link rel="stylesheet" href="{{ mix("/css/application-".config('proto.themes')[Auth::user()->theme].".css") }}">
+    @vite("resources/assets/sass/".config('proto.themes')[Auth::user()->theme].".scss")
 @else
-    <link rel="stylesheet" href="{{ mix('/css/application-light.css') }}">
+    @vite('resources/assets/sass/light.scss')
 @endif
