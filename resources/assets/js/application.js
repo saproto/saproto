@@ -12,7 +12,7 @@ import './utilities'
 import './broto'
 import './nightMode'
 // Execute theme JavaScript
-// window[config.theme]?.()
+window[config.theme]?.()
 
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
@@ -226,18 +226,18 @@ countdownList.forEach((el)=>{timerList.push(new CountdownTimer(el))})
 import shiftSelect from "./shift-select";
 document.querySelectorAll('.shift-select').forEach(el => el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')): null)
 
-// // Matomo Analytics
-// const _paq = _paq || [];
-// _paq.push(['trackPageView']);
-// _paq.push(['enableLinkTracking']);
-// (_ => {
-//     let u = '//'+config.analytics_url+'/';
-//     _paq.push(['setTrackerUrl', u + 'matomo.php']);
-//     _paq.push(['setSiteId', '1']);
-//     let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-//     g.type = 'text/javascript';
-//     g.async = true;
-//     g.defer = true;
-//     g.src = u + 'matomo.js';
-//     s.parentNode.insertBefore(g, s);
-// })()
+// Matomo Analytics
+const _paq = [];
+_paq.push(['trackPageView']);
+_paq.push(['enableLinkTracking']);
+(_ => {
+    let u = '//'+config.analytics_url+'/';
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.type = 'text/javascript';
+    g.async = true;
+    g.defer = true;
+    g.src = u + 'matomo.js';
+    s.parentNode.insertBefore(g, s);
+})()
