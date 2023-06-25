@@ -1,7 +1,7 @@
 <?php
+
 namespace Proto\Support;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Vite;
 use Spatie\Csp\Nonce\NonceGenerator;
 
