@@ -9,7 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
         <link rel='shortcut icon' href='{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}'/>
-        @vite('resources/sass/dark.scss')
+        @vite('resources/assets/sass/dark.scss')
 
         <style>
             * { box-sizing: border-box; }
@@ -197,6 +197,12 @@
                         'Complete purchase as cashier, payed with bank card.'
                     ))
                 }
+
+                //Initialize WallstreetDrink if active
+
+                if("{{$store_slug}}"==="tipcie"){
+                    initializeWallstreetDrink()
+                }
             }
 
             async function initializeWallstreetDrink(){
@@ -207,12 +213,6 @@
                             console.log("Wallstreet drink is active")
                         }
                     })
-            }
-
-            initializeOmNomCom()
-
-            if("{{$store_slug}}"==="tipcie"){
-                initializeWallstreetDrink()
             }
 
             function anythingInCart() {
@@ -324,7 +324,7 @@
             function createCartElement(index, id, amount, image) {
                 return `<div class="cart-product stretched-link" data-id="${id}" style="left: ${cartOverflowVisible * index * 110}px">` +
                             '<div class="cart-product-image">' +
-                                `<div class="cart-product-image-inner" style="background-image: url(${image});"></div>` +
+                                `<div class="cart-product-image-inner" style="background-image: url(${image}?w=100);"></div>` +
                             '</div>' +
                             `<div class="cart-product-count">${amount}x</div>` +
                         '</div>'
@@ -484,19 +484,6 @@
             let idleTime = 0
             let idleWarning = false
 
-            setInterval(_ => {
-                idleTime = idleTime + 1
-
-                if (idleTime > 60 && !idleWarning) {
-                    if (anythingInCart() && Array.from(modals).every(el => el._isShown())) {
-                        idleWarning = true
-                        Object.values(modals).forEach(el => el.hide())
-                        modals['idlewarning-modal'].show()
-
-                        setTimeout(_ => { if (idleWarning) window.location.reload() }, 10000)
-                    }
-                }
-            }, 1000)
 
             // Reset idle timer on mouse movement.
             document.body.addEventListener('mousemove', _ => {
@@ -508,6 +495,25 @@
             document.body.addEventListener('keydown', _ => {
                 idleTime = 0
                 idleWarning = false
+            })
+
+            // Initialize when page is loaded
+            window.addEventListener('load', _ => {
+                initializeOmNomCom()
+
+                setInterval(_ => {
+                    idleTime = idleTime + 1
+
+                    if (idleTime > 60 && !idleWarning) {
+                        if (anythingInCart() && Array.from(modals).every(el => el._isShown())) {
+                            idleWarning = true
+                            Object.values(modals).forEach(el => el.hide())
+                            modals['idlewarning-modal'].show()
+
+                            setTimeout(_ => { if (idleWarning) window.location.reload() }, 10000)
+                        }
+                    }
+                }, 1000)
             })
         </script>
     </body>
