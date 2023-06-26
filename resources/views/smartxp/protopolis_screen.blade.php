@@ -215,8 +215,6 @@
               })
       }
 
-      updateTimetable();
-
       function updateActivities() {
           get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
               .then(data => {
@@ -291,8 +289,6 @@
               })
       }
 
-      updateActivities();
-
       function updateProtopeners() {
           const timetable = document.getElementById("protopeners-timetable")
           const protopolisFa = document.getElementById('protopolis-fa')
@@ -352,14 +348,17 @@
               })
       }
 
-      updateProtopeners()
-
       function updateClock(){
           document.getElementById('clock').innerHTML = moment().format('HH:mm:ss');
       }
-      updateClock();
-      setInterval(updateClock, 1000);
 
+      window.addEventListener('load', _ => {
+          updateTimetable();
+          updateActivities();
+          updateProtopeners()
+          updateClock();
+          setInterval(updateClock, 1000);
+      });
   </script>
 @endpush
 

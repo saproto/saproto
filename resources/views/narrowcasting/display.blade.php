@@ -122,10 +122,10 @@
                 player.classList.add('opacity-0')
                 setTimeout(updateSlide, 1000)
             } else {
-                text.innerHTML = 'Starting slideshow... :)'
+                text.innerHTML = 'Loading slideshow... :)'
                 text.classList.add('opacity-0')
                 player.classList.add('opacity-0')
-                slides.classList.remove('opacity-0')
+                slides.classList.add('opacity-0')
 
                 if (currentCampaign >= campaigns.length) {
                     currentCampaign = 0
@@ -139,11 +139,7 @@
                 }
 
                 if (campaign.hasOwnProperty('image')) {
-                    if (previousWasVideo) {
-                        player.classList.add('opacity-0')
-                        text.classList.add('opacity-0')
-                        slides.classList.remove('opacity-0')
-                    }
+                    slides.classList.remove('opacity-0')
 
                     //show the new slide if it exists, otherwise create it
                     let slide = document.getElementById('slide-' + currentCampaign)
@@ -159,20 +155,18 @@
                     youtubePlayer.loadVideoById(campaign.video, "highres");
                     youtubePlayer.playVideo();
 
-                    if (!previousWasVideo) {
-                        slides.classList.add('opacity-0')
-                        text.classList.add('opacity-0')
-                        player.classList.remove('opacity-0')
-                    }
+                    player.classList.remove('opacity-0')
+
                     previousWasVideo = true
                 }
                 currentCampaign++
             }
         }
 
-
-        updateCampaigns()
-        setInterval(updateCampaigns, 10 * 1000)
+        window.addEventListener('load', _ => {
+            updateCampaigns()
+            setInterval(updateCampaigns, 10 * 1000)
+        });
     </script>
 
 @endpush
