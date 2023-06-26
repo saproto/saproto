@@ -7,6 +7,8 @@
             background-color:#333;
             margin: 0;
             padding: 0;
+            padding-bottom: 56.25%;
+            overflow: hidden;
         }
 
         #slideshow, #fullpagetext, #yt-player, .slide {
@@ -21,11 +23,16 @@
         }
 
         #fullpagetext {
-            margin: 300px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+
+        #text-container {
             text-align: center;
             font-size: 50px;
             color: #fff;
-            transition: opacity 1s;
         }
 
         #slideshow, #yt-player {
@@ -44,7 +51,7 @@
 
 <div id="container">
     <div id="fullpagetext" class="opacity-0">
-
+        <div id="text-container"></div>
     </div>
 
     <div id="slideshow" class="opacity-0">
@@ -64,6 +71,7 @@
         let currentCampaign = 0
         let previousWasVideo = false
         let youtubePlayer
+        const hideClass = 'opacity-0'
 
         function onYouTubeIframeAPIReady() {
             youtubePlayer = new YT.Player('yt-player', {
@@ -112,20 +120,21 @@
 
         function updateSlide() {
             const text = document.getElementById('fullpagetext')
+            const textContainer = document.getElementById('text-container')
             const slides = document.getElementById('slideshow')
             const player = document.getElementById('yt-player')
 
             if (campaigns.length === 0) {
-                text.innerHTML = "There are no messages to display. :)"
-                text.classList.remove('opacity-0')
-                slides.classList.add('opacity-0')
-                player.classList.add('opacity-0')
+                textContainer.innerHTML = "There are no messages to display. :)"
+                text.classList.remove(hideClass)
+                slides.classList.add(hideClass)
+                player.classList.add(hideClass)
                 setTimeout(updateSlide, 1000)
             } else {
-                text.innerHTML = 'Starting slideshow... :)'
-                text.classList.add('opacity-0')
-                player.classList.add('opacity-0')
-                slides.classList.remove('opacity-0')
+                textContainer.innerHTML = 'Loading slideshow... :)'
+                text.classList.add(hideClass)
+                player.classList.add(hideClass)
+                slides.classList.add(hideClass)
 
                 if (currentCampaign >= campaigns.length) {
                     currentCampaign = 0
@@ -135,20 +144,16 @@
                 //hide the last slide
                 let oldSlide = document.getElementById('slide-' + (currentCampaign - 1))
                 if (oldSlide) {
-                    oldSlide.classList.add('opacity-0')
+                    oldSlide.classList.add(hideClass)
                 }
 
                 if (campaign.hasOwnProperty('image')) {
-                    if (previousWasVideo) {
-                        player.classList.add('opacity-0')
-                        text.classList.add('opacity-0')
-                        slides.classList.remove('opacity-0')
-                    }
+                    slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
                     let slide = document.getElementById('slide-' + currentCampaign)
                     if (slide) {
-                        slide.classList.remove('opacity-0')
+                        slide.classList.remove(hideClass)
                     } else {
                         slides.innerHTML += '<div id="slide-' + currentCampaign + '" class="slide" style="background-image: url(' + campaign.image + ');"></div>'
                     }
@@ -159,20 +164,18 @@
                     youtubePlayer.loadVideoById(campaign.video, "highres");
                     youtubePlayer.playVideo();
 
-                    if (!previousWasVideo) {
-                        slides.classList.add('opacity-0')
-                        text.classList.add('opacity-0')
-                        player.classList.remove('opacity-0')
-                    }
+                    player.classList.remove(hideClass)
+
                     previousWasVideo = true
                 }
                 currentCampaign++
             }
         }
 
-
-        updateCampaigns()
-        setInterval(updateCampaigns, 10 * 1000)
+        window.addEventListener('load', _ => {
+            updateCampaigns()
+            setInterval(updateCampaigns, 10 * 1000)
+        });
     </script>
 
 @endpush

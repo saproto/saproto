@@ -21,10 +21,6 @@
             display: block;
         }
 
-        .green {
-            color: #c1ff00;
-        }
-
         #info-row {
             height: 20%;
         }
@@ -51,12 +47,8 @@
             opacity: 0.5;
         }
 
-        .activity.current {
-            color: #c1ff00;
-        }
 
         span.current {
-            color: #c1ff00;
             font-weight: bold;
         }
 
@@ -215,8 +207,6 @@
               })
       }
 
-      updateTimetable();
-
       function updateActivities() {
           get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
               .then(data => {
@@ -232,7 +222,7 @@
                               time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm")
                           }
                           let newDiv=document.createElement("div")
-                          newDiv.className="activity bg-img protubecard protubebackground flex-grow-1"+ (activity.current ? "current" : (activity.over ? "past" : ""))
+                          newDiv.className="activity bg-img protubecard protubebackground flex-grow-1"+ (activity.over ? "past" : "")
                           newDiv.style.padding='15px'
                           if(activity.image) {
                               newDiv.style.background = 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('+activity.image+')'
@@ -291,8 +281,6 @@
               })
       }
 
-      updateActivities();
-
       function updateProtopeners() {
           const timetable = document.getElementById("protopeners-timetable")
           const protopolisFa = document.getElementById('protopolis-fa')
@@ -333,10 +321,8 @@
                           count++
                       });
                       if (open) {
-                          protopolisFa.classList.add('green')
                           protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
                       } else {
-                          protopolisFa.classList.remove('green')
                           protopolisFa.classList.replace('fa-door-open', 'fa-door-closed')
                       }
                       if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
@@ -352,14 +338,17 @@
               })
       }
 
-      updateProtopeners()
-
       function updateClock(){
           document.getElementById('clock').innerHTML = moment().format('HH:mm:ss');
       }
-      updateClock();
-      setInterval(updateClock, 1000);
 
+      window.addEventListener('load', _ => {
+          updateTimetable();
+          updateActivities();
+          updateProtopeners()
+          updateClock();
+          setInterval(updateClock, 1000);
+      });
   </script>
 @endpush
 
