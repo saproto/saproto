@@ -7,10 +7,12 @@
             background-color:#333;
             margin: 0;
             padding: 0;
+            padding-bottom: 56.25%;
+            overflow: hidden;
         }
 
         #slideshow, #fullpagetext, #yt-player, .slide {
-            /*position: absolute;*/
+            position: absolute;
             top: 0;
             left: 0;
             display: block;
@@ -48,15 +50,15 @@
 @endpush
 
 <div id="container">
-    <div id="fullpagetext" class="d-none">
+    <div id="fullpagetext" class="opacity-0">
         <div id="text-container"></div>
     </div>
 
-    <div id="slideshow" class="d-none">
+    <div id="slideshow" class="opacity-0">
 
     </div>
 
-    <div id="yt-player" class="d-none w-full">
+    <div id="yt-player" class="opacity-0 w-full">
     </div>
 </div>
 
@@ -69,7 +71,7 @@
         let currentCampaign = 0
         let previousWasVideo = false
         let youtubePlayer
-        const hideClass = 'd-none'
+        const hideClass = 'opacity-0'
 
         function onYouTubeIframeAPIReady() {
             youtubePlayer = new YT.Player('yt-player', {
