@@ -10,7 +10,7 @@
         }
 
         #slideshow, #fullpagetext, #yt-player, .slide {
-            position: absolute;
+            /*position: absolute;*/
             top: 0;
             left: 0;
             display: block;
@@ -21,11 +21,16 @@
         }
 
         #fullpagetext {
-            margin: 300px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+
+        #text-container {
             text-align: center;
             font-size: 50px;
             color: #fff;
-            transition: opacity 1s;
         }
 
         #slideshow, #yt-player {
@@ -43,15 +48,15 @@
 @endpush
 
 <div id="container">
-    <div id="fullpagetext" class="opacity-0">
+    <div id="fullpagetext" class="d-none">
+        <div id="text-container"></div>
+    </div>
+
+    <div id="slideshow" class="d-none">
 
     </div>
 
-    <div id="slideshow" class="opacity-0">
-
-    </div>
-
-    <div id="yt-player" class="opacity-0 w-full">
+    <div id="yt-player" class="d-none w-full">
     </div>
 </div>
 
@@ -64,6 +69,7 @@
         let currentCampaign = 0
         let previousWasVideo = false
         let youtubePlayer
+        const hideClass = 'd-none'
 
         function onYouTubeIframeAPIReady() {
             youtubePlayer = new YT.Player('yt-player', {
@@ -112,20 +118,21 @@
 
         function updateSlide() {
             const text = document.getElementById('fullpagetext')
+            const textContainer = document.getElementById('text-container')
             const slides = document.getElementById('slideshow')
             const player = document.getElementById('yt-player')
 
             if (campaigns.length === 0) {
-                text.innerHTML = "There are no messages to display. :)"
-                text.classList.remove('opacity-0')
-                slides.classList.add('opacity-0')
-                player.classList.add('opacity-0')
+                textContainer.innerHTML = "There are no messages to display. :)"
+                text.classList.remove(hideClass)
+                slides.classList.add(hideClass)
+                player.classList.add(hideClass)
                 setTimeout(updateSlide, 1000)
             } else {
-                text.innerHTML = 'Loading slideshow... :)'
-                text.classList.add('opacity-0')
-                player.classList.add('opacity-0')
-                slides.classList.add('opacity-0')
+                textContainer.innerHTML = 'Loading slideshow... :)'
+                text.classList.add(hideClass)
+                player.classList.add(hideClass)
+                slides.classList.add(hideClass)
 
                 if (currentCampaign >= campaigns.length) {
                     currentCampaign = 0
@@ -135,16 +142,16 @@
                 //hide the last slide
                 let oldSlide = document.getElementById('slide-' + (currentCampaign - 1))
                 if (oldSlide) {
-                    oldSlide.classList.add('opacity-0')
+                    oldSlide.classList.add(hideClass)
                 }
 
                 if (campaign.hasOwnProperty('image')) {
-                    slides.classList.remove('opacity-0')
+                    slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
                     let slide = document.getElementById('slide-' + currentCampaign)
                     if (slide) {
-                        slide.classList.remove('opacity-0')
+                        slide.classList.remove(hideClass)
                     } else {
                         slides.innerHTML += '<div id="slide-' + currentCampaign + '" class="slide" style="background-image: url(' + campaign.image + ');"></div>'
                     }
@@ -155,7 +162,7 @@
                     youtubePlayer.loadVideoById(campaign.video, "highres");
                     youtubePlayer.playVideo();
 
-                    player.classList.remove('opacity-0')
+                    player.classList.remove(hideClass)
 
                     previousWasVideo = true
                 }
