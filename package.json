@@ -22,7 +22,7 @@
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "private": true,
   "scripts": {
-    "dev": "vite -d --force",
+    "dev": "vite",
     "build": "vite build"
   },
   "dependencies": {

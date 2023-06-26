@@ -10,16 +10,16 @@ export default defineConfig({
                 ...glob.sync('resources/assets/sass/!(*.example).scss')
             ]),
     ],
-    // build: {
-    //     rollupOptions: {
-    //         output: {
-    //             manualChunks: {
-    //                 bootstrap: ['bootstrap', '@popperjs/core'],
-    //                 interface: ['easymde', 'swiper', 'signature_pad', 'codethereal-iconpicker']
-    //             },
-    //         },
-    //     },
-    // },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    bootstrap: ['bootstrap', '@popperjs/core'],
+                    interface: ['easymde', 'swiper', 'signature_pad', 'codethereal-iconpicker']
+                },
+            },
+        },
+    },
     server: {
         hmr: {
             host: 'localhost',
