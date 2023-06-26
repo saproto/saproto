@@ -218,7 +218,7 @@
       updateTimetable();
 
       function updateActivities() {
-          get('{{ route('api::events::upcoming', ['limit' => 5]) }}')
+          get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
               .then(data => {
                   if (data.length > 0) {
                       document.getElementById("activities").innerHTML = '';
@@ -268,12 +268,17 @@
                           newDiv.appendChild(timeDiv)
                           newDiv.appendChild(locationSpan)
                           document.getElementById("activities").appendChild(newDiv)
+                      });
 
-                          if(titleH3.clientWidth > titleDiv.clientWidth){
-                              titleH3.classList.add('scroll-title')
-                              titleH3.appendChild(titleSpan.cloneNode(true))
+                      document.getElementById("activities").childNodes.forEach((activity) => {
+                          let div=activity.childNodes[0]
+                          let H3=div.childNodes[0]
+                          if(H3.clientWidth > div.clientWidth){
+                              H3.classList.add('scroll-title')
+                              H3.appendChild(H3.childNodes[0].cloneNode(true))
                           }
                       });
+
                   } else {
                       document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
                   }
