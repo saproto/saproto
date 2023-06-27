@@ -11,8 +11,10 @@
         const canvas = document.getElementById('signature-pad')
         const signaturePad = new SignaturePad.default(canvas)
 
-        window.onresize = resizeCanvas
-        resizeCanvas()
+        window.addEventListener('load', _ => {
+            window.addEventListener('resize', resizeCanvas)
+            resizeCanvas()
+        })
 
         function resizeCanvas() {
             // When zoomed out to less than 100%, for some very strange reason,
