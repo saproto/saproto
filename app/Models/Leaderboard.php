@@ -57,4 +57,14 @@ class Leaderboard extends Model
     {
         return $this->hasMany('Proto\Models\LeaderboardEntry');
     }
+
+    public static function isAdminAny(User $user): bool
+    {
+        return Leaderboard::whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
+    }
+
+    public function canEdit(User $user): bool
+    {
+        return $user->can('board') || $this->committee->users->contains($user);
+    }
 }
