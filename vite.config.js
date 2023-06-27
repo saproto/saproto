@@ -1,14 +1,17 @@
 import glob from 'glob';
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     plugins: [
-        laravel([
+        laravel({
+            input: [
                 '/resources/assets/sass/light.scss',
                 '/resources/assets/js/application.js',
                 ...glob.sync('resources/assets/sass/!(*.example).scss')
-            ]),
+            ],
+            refresh: true,
+        }),
     ],
     build: {
         rollupOptions: {
