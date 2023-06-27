@@ -110,6 +110,7 @@ class EventController extends Controller
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
             'location' => $request->location,
+            'maps_location' => $request->maps_location,
             'secret' => $request->publication ? false : $request->secret,
             'description' => $request->description,
             'summary' => $request->summary,
@@ -161,6 +162,7 @@ class EventController extends Controller
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
+        $event->maps_location = $request->maps_location;
         $event->secret = $request->publication ? false : $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
@@ -719,6 +721,7 @@ class EventController extends Controller
                 'registration_end' => $event->activity->registration_end + $diff,
                 'deregistration_end' => $event->activity->deregistration_end + $diff,
                 'comment' => $event->activity->comment,
+                'redirect_url' => $event->activity->redirect_url,
             ]);
             $newActivity->save();
 

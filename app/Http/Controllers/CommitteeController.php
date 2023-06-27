@@ -59,9 +59,7 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        return view('committee.show', ['committee' => $committee, 'members' => $committee->allMembers(),
-            'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user()),
-        ]);
+        return view('committee.show', ['committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
     /**
@@ -349,16 +347,15 @@ class CommitteeController extends Controller
         $committee = Committee::fromPublicId($slug);
         $user = Auth::user();
 
-        if (! $committee->isMember($user)) {
-            Session::flash('flash_message', 'You cannot subscribe for helper notifications for a committee you are not in.');
-
-            return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
-        }
-
         if ($committee->wantsToReceiveHelperReminder($user)) {
             HelperReminder::where('user_id', $user->id)->where('committee_id', $committee->id)->delete();
             Session::flash('flash_message', sprintf('You will no longer receive helper notifications for the %s.', $committee->name));
         } else {
+            if (! $committee->isMember($user)) {
+                Session::flash('flash_message', 'You cannot subscribe for helper notifications for a committee you are not in.');
+
+                return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
+            }
             HelperReminder::create(['user_id' => $user->id, 'committee_id' => $committee->id]);
             Session::flash('flash_message', sprintf('You will now receive helper notifications for the %s.', $committee->name));
         }

@@ -13,6 +13,7 @@ use Proto\Mail\ProductBulkUpdateNotification;
 use Proto\Models\Account;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
+use Proto\Models\StockMutation;
 use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
@@ -120,6 +121,40 @@ class ProductController extends Controller
     {
         /** @var Product $product */
         $product = Product::findOrFail($id);
+
+        // Mutation logging point
+        $old_stock = $product->stock;
+        $found_stock = $request->input('prev_stock');
+        $new_stock = $request->input('stock');
+
+        // Splitting mutation into two since restock and loss marking happen with one edit
+        if ($old_stock != $found_stock) {
+            // Stock observation mutation
+            // Is this how you make them records? Is there a better way?
+            $pre_mut = StockMutation::make([
+                'before' => $old_stock,
+                'after' => $found_stock,
+                'is_bulk' => false]
+            );
+
+            $pre_mut->user()->associate($request->user());
+            $pre_mut->product()->associate($product);
+            $pre_mut->save();
+        }
+
+        if ($found_stock != $new_stock) {
+            // Actwual restocking mutation
+            $after_mut = StockMutation::make([
+                'before' => $found_stock,
+                'after' => $new_stock,
+                'is_bulk' => false]
+            );
+
+            $after_mut->user()->associate($request->user());
+            $after_mut->product()->associate($product);
+            $after_mut->save();
+        }
+
         $product->fill($request->except('image', 'product_categories'));
         $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
@@ -192,6 +227,17 @@ class ProductController extends Controller
 
         foreach ($products as $i => $product_id) {
             $product = Product::find($product_id);
+
+            // Make product mutations for bulk updates
+            $mutation = StockMutation::make([
+                'before' => $product->stock,
+                'after' => $product->stock + $deltas[$i],
+                'is_bulk' => true]);
+
+            $mutation->user()->associate($request->user());
+            $mutation->product()->associate($product);
+            $mutation->save();
+
             $product->stock += $deltas[$i];
             $product->save();
         }
@@ -220,6 +266,12 @@ class ProductController extends Controller
 
         if ($product->orderlines->count() > 0) {
             Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
+
+            return Redirect::back();
+        }
+
+        if ($product->ticket) {
+            Session::flash('flash_message', 'You cannot delete this product because there is still a ticket associated with it.');
 
             return Redirect::back();
         }

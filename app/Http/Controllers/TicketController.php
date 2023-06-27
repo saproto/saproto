@@ -292,6 +292,7 @@ class TicketController extends Controller
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
+
         if ($event->tickets->count() < 1) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
 
@@ -409,6 +410,10 @@ class TicketController extends Controller
         }
 
         Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
+
+        if ($ticket->redirect_url) {
+            return Redirect::away($ticket->redirect_url);
+        }
 
         return Redirect::back();
     }

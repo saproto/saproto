@@ -104,7 +104,8 @@ class PhotoAdminController extends Controller
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id);
 
-            return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
+            return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
+
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e,

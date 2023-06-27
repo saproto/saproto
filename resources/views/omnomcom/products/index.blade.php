@@ -73,7 +73,25 @@
                 </div>
 
             </form>
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    Manual stock modifications
+                </div>
+                <div class="card-body">
 
+                    <p class="card-text">
+                        See every manual modification of the Omnomcom stock and create reports.
+                    </p>
+
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{route('omnomcom::products::mutations')}}" class="btn btn-success btn-block">
+                        Mutations
+                    </a>
+                </div>
+
+            </div>
         </div>
 
         <div class="col-md-9">
