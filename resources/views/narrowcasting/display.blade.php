@@ -89,8 +89,6 @@
 
                 }
             });
-            console.log('ready');
-            console.dir(youtubePlayer);
             setTimeout(updateSlide, 1000);
         }
 
@@ -144,7 +142,6 @@
                 //hide the last slide
                 let oldCampaign = currentCampaign - 1;
                 if (oldCampaign < 0) oldCampaign += campaigns.length
-                console.log('oldslide: '+oldCampaign)
                 const oldSlide = document.getElementById('slide-' + oldCampaign)
                 if (oldSlide) {
                     oldSlide.classList.add(hideClass)
