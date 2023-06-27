@@ -18,7 +18,7 @@
                     <th>Start</th>
                     <th>End</th>
                     <th>Total</th>
-                    <th>Ordered by</th>
+                    <th class="text-center text-nowrap">Ordered by</th>
                     <th class="text-center">Admin</th>
                     <th class="text-center">Controls</th>
                 </tr>
@@ -53,16 +53,14 @@
                         <td>{{ $dinnerform->start->format('Y m-d H:i') }}</td>
                         <td>{{ $dinnerform->end->format('Y m-d H:i') }}</td>
                         <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
-                        @if($dinnerform->ordered_by!=null)
-                            <td class="text-center px-4">
-                                <a class="btn btn-info badge"
-                                   href="{{ route('user::profile', ['id' => $dinnerform->orderedBy->getPublicId()]) }}">
-                                    {{$dinnerform->orderedBy->name}}
-                                </a>
-
-
-                            </td>
-                        @endif
+                        <td class="text-center px-4">
+                            @if($dinnerform->orderedBy)
+                                    <a class="btn btn-info badge"
+                                       href="{{ route('user::profile', ['id' => $dinnerform->orderedBy->getPublicId()]) }}">
+                                        {{$dinnerform->orderedBy->name}}
+                                    </a>
+                            @endif
+                        </td>
                         <td class="text-center px-4">
                             <a class="btn btn-info badge"
                                href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}">

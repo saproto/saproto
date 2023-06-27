@@ -11,7 +11,7 @@ return new class() extends Migration {
     public function up(): void
     {
         Schema::table('dinnerforms', function (Blueprint $table) {
-            $table->integer('ordered_by')->nullable();
+            $table->integer('ordered_by_user_id');
         });
     }
 
@@ -21,7 +21,7 @@ return new class() extends Migration {
     public function down(): void
     {
         Schema::table('dinnerforms', function (Blueprint $table) {
-            $table->dropColumn('ordered_by');
+            $table->dropColumn('ordered_by_user_id');
         });
     }
 };

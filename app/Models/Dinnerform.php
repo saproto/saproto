@@ -65,9 +65,9 @@ class Dinnerform extends Model
     }
 
     /** @return BelongsTo */
-    public function orderedBy()
+    public function orderedBy(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\User', 'ordered_by');
+        return $this->belongsTo('Proto\Models\User', 'ordered_by_user_id');
     }
 
     /** @return HasMany */
