@@ -27,23 +27,16 @@ use Response;
 
 class WithdrawalController extends Controller
 {
-    /**
-     * @return View
-     */
     public function index(): View
     {
         return view('omnomcom.withdrawals.index', ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(6)]);
     }
 
-    /** @return View */
     public function create(): View
     {
         return view('omnomcom.withdrawals.create');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function store(Request $request): RedirectResponse
     {
         $max = ($request->has('max') ? $request->input('max') : null);
@@ -107,19 +100,11 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
     public function show(int $id): View
     {
         return view('omnomcom.withdrawals.show', ['withdrawal' => Withdrawal::findOrFail($id)]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
     public function showAccounts(int $id): View
     {
         $withdrawal = Withdrawal::findOrFail($id);
@@ -139,10 +124,6 @@ class WithdrawalController extends Controller
         ]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
     public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -170,9 +151,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
     public function destroy(Request $request, int $id): RedirectResponse
@@ -203,9 +181,7 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param Withdrawal $withdrawal
-     * @param int[] $userIds
-     * @return RedirectResponse
+     * @param  int[]  $userIds
      */
     public static function dSeleteFrom(Withdrawal $withdrawal, array $userIds): RedirectResponse
     {
@@ -223,18 +199,17 @@ class WithdrawalController extends Controller
         }
 
         Session::flash('flash_message', "Orderlines for $names removed from this withdrawal.");
+
         return Redirect::back();
     }
 
     /**
-     * @param Withdrawal $withdrawal
-     * @param int[] $userIds
-     * @return RedirectResponse
+     * @param  int[]  $userIds
      */
     public static function markFailed(Withdrawal $withdrawal, array $userIds): RedirectResponse
     {
         $names = '';
-        foreach($userIds as $user_id) {
+        foreach ($userIds as $user_id) {
             /** @var User $user */
             $user = User::find($user_id);
 
@@ -270,12 +245,11 @@ class WithdrawalController extends Controller
         }
 
         Session::flash('flash_message', "Withdrawal for $names marked as failed. Users e-mailed.");
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse|void
      */
     public function bulkUpdate(Request $request, int $id)
@@ -291,30 +265,28 @@ class WithdrawalController extends Controller
 
         $action = $request->input('action');
         $userIds = $request->input('markids');
-        if(! $action) {
+        if (! $action) {
             Session::flash('flash_message', 'No action given, please use one of the action buttons');
+
             return Redirect::back();
         }
-        if(! $userIds || count($userIds) <= 0) {
+        if (! $userIds || count($userIds) <= 0) {
             Session::flash('flash_message', 'No users given to perform the action on!');
+
             return Redirect::back();
         }
 
-        if($action === 'markfailed') {
+        if ($action === 'markfailed') {
             return $this->markFailed($withdrawal, $userIds);
-        } elseif($action === 'remove') {
+        } elseif ($action === 'remove') {
             return $this->deleteFrom($withdrawal, $userIds);
         } else {
             Session::flash('flash_message', 'The inputted action is not recognised, please try again');
+
             return Redirect::back();
         }
     }
 
-    /**
-     * @param  int  $id
-     * @param  int  $user_id
-     * @return RedirectResponse
-     */
     public static function markLoss(Request $request, int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -344,7 +316,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|\Illuminate\Http\Response
      *
      * @throws SephpaInputException
@@ -433,10 +404,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
     public function showForUser(Request $request, int $id): View
     {
         $withdrawal = Withdrawal::findOrFail($id);
@@ -446,9 +413,6 @@ class WithdrawalController extends Controller
 
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
-     *
-     * @param  int  $id
-     * @return RedirectResponse
      */
     public function email(Request $request, int $id): RedirectResponse
     {
@@ -470,7 +434,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /** @return View */
     public function unwithdrawable(): View
     {
         $users = [];
@@ -518,7 +481,6 @@ class WithdrawalController extends Controller
         return $sum;
     }
 
-    /** @return int */
     public static function openOrderlinesTotal(): int
     {
         $total = 0;
