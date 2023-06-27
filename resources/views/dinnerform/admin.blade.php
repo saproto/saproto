@@ -7,7 +7,7 @@
     <div class="card mb-3 col-lg-8 ms-auto me-auto">
 
         <div class="card-header bg-dark text-white mb-1">
-            <span>Dinnerform orderline overview</span>
+            <span>Dinnerform orderline overview for <strong>{{$dinnerform->restaurant}}</strong></span>
             <a href="{{ route('dinnerform::add') }}" class="btn btn-info badge float-end ms-2">
                 <i class="fas fa-hand-point-left me-1"></i> Return to overview
             </a>
