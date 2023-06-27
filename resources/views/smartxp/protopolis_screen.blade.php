@@ -21,10 +21,6 @@
             display: block;
         }
 
-        .green {
-            color: #c1ff00;
-        }
-
         #info-row {
             height: 20%;
         }
@@ -51,12 +47,8 @@
             opacity: 0.5;
         }
 
-        .activity.current {
-            color: #c1ff00;
-        }
 
         span.current {
-            color: #c1ff00;
             font-weight: bold;
         }
 
@@ -215,10 +207,8 @@
               })
       }
 
-      updateTimetable();
-
       function updateActivities() {
-          get('{{ route('api::events::upcoming', ['limit' => 5]) }}')
+          get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
               .then(data => {
                   if (data.length > 0) {
                       document.getElementById("activities").innerHTML = '';
@@ -232,7 +222,7 @@
                               time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm")
                           }
                           let newDiv=document.createElement("div")
-                          newDiv.className="activity bg-img protubecard protubebackground flex-grow-1"+ (activity.current ? "current" : (activity.over ? "past" : ""))
+                          newDiv.className="activity bg-img protubecard protubebackground flex-grow-1"+ (activity.over ? "past" : "")
                           newDiv.style.padding='15px'
                           if(activity.image) {
                               newDiv.style.background = 'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('+activity.image+')'
@@ -268,12 +258,17 @@
                           newDiv.appendChild(timeDiv)
                           newDiv.appendChild(locationSpan)
                           document.getElementById("activities").appendChild(newDiv)
+                      });
 
-                          if(titleH3.clientWidth > titleDiv.clientWidth){
-                              titleH3.classList.add('scroll-title')
-                              titleH3.appendChild(titleSpan.cloneNode(true))
+                      document.getElementById("activities").childNodes.forEach((activity) => {
+                          let div=activity.childNodes[0]
+                          let H3=div.childNodes[0]
+                          if(H3.clientWidth > div.clientWidth){
+                              H3.classList.add('scroll-title')
+                              H3.appendChild(H3.childNodes[0].cloneNode(true))
                           }
                       });
+
                   } else {
                       document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
                   }
@@ -285,8 +280,6 @@
                   setTimeout(updateActivities, 5000)
               })
       }
-
-      updateActivities();
 
       function updateProtopeners() {
           const timetable = document.getElementById("protopeners-timetable")
@@ -328,10 +321,8 @@
                           count++
                       });
                       if (open) {
-                          protopolisFa.classList.add('green')
                           protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
                       } else {
-                          protopolisFa.classList.remove('green')
                           protopolisFa.classList.replace('fa-door-open', 'fa-door-closed')
                       }
                       if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
@@ -347,14 +338,17 @@
               })
       }
 
-      updateProtopeners()
-
       function updateClock(){
           document.getElementById('clock').innerHTML = moment().format('HH:mm:ss');
       }
-      updateClock();
-      setInterval(updateClock, 1000);
 
+      window.addEventListener('load', _ => {
+          updateTimetable();
+          updateActivities();
+          updateProtopeners()
+          updateClock();
+          setInterval(updateClock, 1000);
+      });
   </script>
 @endpush
 
