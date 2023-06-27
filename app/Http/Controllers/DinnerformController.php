@@ -70,10 +70,10 @@ class DinnerformController extends Controller
             'url' => $request->input('url'),
             'start' => strtotime($request->input('start')),
             'end' => strtotime($request->input('end')),
-            'helper_discount'=> $request->input('helper_discount'),
-            'regular_discount'=> (100 - $request->input('regular_discount')) / 100,
-            'event_id'=> $request->input('event_select') != '' ? $request->input('event_select') : null,
-            'visible_home_page'=> $request->has('homepage'),
+            'helper_discount' => $request->input('helper_discount'),
+            'regular_discount' => (100 - $request->input('regular_discount')) / 100,
+            'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
+            'visible_home_page' => $request->has('homepage'),
             'ordered_by' => $request->input('ordered_by'),
         ]);
 
@@ -132,10 +132,10 @@ class DinnerformController extends Controller
             'url' => $request->input('url'),
             'start' => strtotime($request->input('start')),
             'end' => strtotime($request->input('end')),
-            'helper_discount'=> $request->input('helper_discount'),
-            'regular_discount'=> (100 - $request->input('regular_discount')) / 100,
-            'event_id'=> $request->input('event_select') != '' ? $request->input('event_select') : null,
-            'visible_home_page'=> $request->has('homepage'),
+            'helper_discount' => $request->input('helper_discount'),
+            'regular_discount' => (100 - $request->input('regular_discount')) / 100,
+            'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
+            'visible_home_page' => $request->has('homepage'),
             'ordered_by' => $request->input('ordered_by'),
         ]);
 
