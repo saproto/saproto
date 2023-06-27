@@ -13,8 +13,11 @@ class HelperReminder extends Mailable
     use SerializesModels;
 
     public $committee;
+
     public $event;
+
     public $help;
+
     public $helping_count;
 
     /**

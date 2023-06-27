@@ -226,7 +226,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* Routes related to narrowcasting. */
     Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
-        Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
+        Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@show']);
         Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
@@ -282,16 +282,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::', 'middleware' => ['auth', 'member']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
 
+        Route::get('list', ['as' => 'admin', 'uses' => 'LeaderboardController@adminIndex']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@update']);
+
         Route::group(['middleware' => ['permission:board']], function () {
-            Route::get('list', ['as' => 'admin', 'uses' => 'LeaderboardController@adminIndex']);
             Route::get('add', ['as' => 'add', 'uses' => 'LeaderboardController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardController@store']);
-            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@edit']);
-            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardController@destroy']);
         });
 
-        Route::group(['prefix' => 'entries', 'as' => 'entries::', 'middleware' => ['permission:board']], function () {
+        Route::group(['prefix' => 'entries', 'as' => 'entries::'], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardEntryController@store']);
             Route::post('update', ['as' => 'update', 'uses' => 'LeaderboardEntryController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardEntryController@destroy']);
@@ -329,7 +330,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
         Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
-        route::group(['prefix'=>'products', 'as'=>'products::'], function () {
+        route::group(['prefix' => 'products', 'as' => 'products::'], function () {
             Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
             Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
         });
@@ -588,11 +589,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
 
             Route::get('export/csv', ['as' => 'export_csv', 'uses' => 'ProductController@generateCsv']);
-
             Route::get('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
             Route::post('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
 
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
+
+            Route::get('mut', ['as' => 'mutations', 'uses' => 'StockMutationController@index']);
+            Route::get('mut/csv', ['as' => 'mutations_export', 'uses' => 'StockMutationController@generateCsv']);
         });
 
         /* Routes related to OmNomCom Categories. */
@@ -739,6 +742,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* The route for the SmartXp Screen. */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
+    Route::get('protopolis', ['as' => 'protopolis', 'uses' => 'SmartXpScreenController@showProtopolis']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
 
     /* The routes for Protube. */

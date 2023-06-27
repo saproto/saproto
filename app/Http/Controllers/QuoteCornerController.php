@@ -53,7 +53,6 @@ class QuoteCornerController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse|string|false
      */
     public function add(Request $request)
@@ -93,13 +92,15 @@ class QuoteCornerController extends Controller
             ]);
         } else {
             Session::flash('flash_message', 'Quote added.');
+
             return Redirect::route('quotes::list');
         }
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -108,11 +109,13 @@ class QuoteCornerController extends Controller
         QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
         Session::flash('flash_message', 'Quote deleted.');
+
         return Redirect::route('quotes::list');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
+     *
      * @throws Exception
      */
     public function toggleLike($id)
@@ -133,6 +136,7 @@ class QuoteCornerController extends Controller
     {
         $searchTerm = $request->input('searchTerm');
         $quotes = Quote::where('quote', 'LIKE', "%{$searchTerm}%")->orderBy('created_at', 'desc')->paginate(20);
-        return view('quotecorner.list', ['data' => $quotes, 'popular' => [], 'searchTerm'=>$searchTerm]);
+
+        return view('quotecorner.list', ['data' => $quotes, 'popular' => [], 'searchTerm' => $searchTerm]);
     }
 }

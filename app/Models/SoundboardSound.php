@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $hidden
  * @property string $name
  * @property-read StorageEntry $file
+ *
  * @method static Builder|SoundboardSound whereFileId($value)
  * @method static Builder|SoundboardSound whereHidden($value)
  * @method static Builder|SoundboardSound whereId($value)
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|SoundboardSound newModelQuery()
  * @method static Builder|SoundboardSound newQuery()
  * @method static Builder|SoundboardSound query()
+ *
  * @mixin Eloquent
  */
 class SoundboardSound extends Model

@@ -37,6 +37,7 @@ use Proto\Http\Controllers\WallstreetController;
  * @property-read Ticket|null $ticket
  * @property-read Collection|ProductCategory[] $categories
  * @property-read Collection|OrderLine[] $orderlines
+ *
  * @method static Builder|Product whereAccountId($value)
  * @method static Builder|Product whereCalories($value)
  * @method static Builder|Product whereCreatedAt($value)
@@ -56,6 +57,7 @@ use Proto\Http\Controllers\WallstreetController;
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
+ *
  * @mixin Eloquent
  */
 class Product extends Model
@@ -89,6 +91,7 @@ class Product extends Model
                 return $image->generateImagePath(null, null);
             }
         }
+
         return null;
     }
 
@@ -122,6 +125,7 @@ class Product extends Model
         if (! $active) {
             return $this->price;
         }
+
         return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
@@ -131,13 +135,13 @@ class Product extends Model
     }
 
     /**
-     * @param User $user
-     * @param int $amount
-     * @param float|null $total_price
-     * @param bool|null $withCash
-     * @param bool|null $withBankCard
-     * @param string|null $description
-     * @param string $auth_method
+     * @param  User  $user
+     * @param  int  $amount
+     * @param  float|null  $total_price
+     * @param  bool|null  $withCash
+     * @param  bool|null  $withBankCard
+     * @param  string|null  $description
+     * @param  string  $auth_method
      * @return int OrderLine id
      */
     public function buyForUser($user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
@@ -163,6 +167,7 @@ class Product extends Model
         ]);
 
         $orderline->save();
+
         return $orderline->id;
     }
 }

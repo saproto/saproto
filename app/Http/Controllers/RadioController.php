@@ -17,23 +17,25 @@ class RadioController extends Controller
     public function index()
     {
         $stations = RadioStation::all();
+
         return view('protube.radio.index', ['stations' => $stations]);
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
         RadioStation::create($request->all());
         Session::flash('flash_message', 'Radio station added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|PlayedVideo whereCreatedAt($value)
  * @method static Builder|PlayedVideo whereId($value)
  * @method static Builder|PlayedVideo whereSpotifyId($value)
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PlayedVideo newModelQuery()
  * @method static Builder|PlayedVideo newQuery()
  * @method static Builder|PlayedVideo query()
+ *
  * @mixin Eloquent
  */
 class PlayedVideo extends Model
@@ -46,7 +48,6 @@ class PlayedVideo extends Model
     }
 
     /**
-     * @param string $youtube_id
      * @return string
      */
     public static function generateYoutubeThumbnail(string $youtube_id)
@@ -55,17 +56,16 @@ class PlayedVideo extends Model
     }
 
     /**
-     * @param string $spotify_id
      * @return string
      */
     public static function generateSpotifyUri(string $spotify_id)
     {
         $spotify_id = str_replace('spotify:track:', '', $spotify_id);
+
         return "https://open.spotify.com/track/$spotify_id";
     }
 
     /**
-     * @param string $youtube_id
      * @return string
      */
     public static function generateYoutubeUrl(string $youtube_id)

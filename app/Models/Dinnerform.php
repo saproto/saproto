@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
+ *
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
  * @method static Builder|Dinnerform whereEnd($value)
@@ -41,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Dinnerform newModelQuery()
  * @method static Builder|Dinnerform newQuery()
  * @method static Builder|Dinnerform query()
+ *
  * @mixin Eloquent
  */
 class Dinnerform extends Model
@@ -149,7 +151,7 @@ class Dinnerform extends Model
     {
         parent::boot();
         static::deleting(function ($dinnerform) {
-            foreach($dinnerform->orderlines()->get() as $orderline) {
+            foreach ($dinnerform->orderlines()->get() as $orderline) {
                 $orderline->delete();
             }
         });

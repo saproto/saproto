@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read OrderLine $correction_orderline
  * @property-read User $user
  * @property-read Withdrawal $withdrawal
+ *
  * @method static Builder|FailedWithdrawal whereCorrectionOrderlineId($value)
  * @method static Builder|FailedWithdrawal whereId($value)
  * @method static Builder|FailedWithdrawal whereUserId($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal newModelQuery()
  * @method static Builder|FailedWithdrawal newQuery()
  * @method static Builder|FailedWithdrawal query()
+ *
  * @mixin Eloquent
  */
 class FailedWithdrawal extends Model

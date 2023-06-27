@@ -70,6 +70,7 @@ class SyncWikiAccounts extends Command
         foreach ($committees as $committee) {
             $groups[] = $this->convertCommitteeNameToGroup($committee->name);
         }
+
         return $groups;
     }
 
@@ -83,6 +84,7 @@ class SyncWikiAccounts extends Command
         if (in_array($rootCommittee, $groups)) {
             $groups[] = 'admin';
         }
+
         return implode(',', $groups);
     }
 }

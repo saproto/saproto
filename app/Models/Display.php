@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $display
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|Display whereCreatedAt($value)
  * @method static Builder|Display whereDisplay($value)
  * @method static Builder|Display whereId($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Display newModelQuery()
  * @method static Builder|Display newQuery()
  * @method static Builder|Display query()
+ *
  * @mixin Eloquent
  */
 class Display extends Model

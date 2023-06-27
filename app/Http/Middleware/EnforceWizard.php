@@ -13,9 +13,11 @@ class EnforceWizard
 {
     /**
      * Handle an incoming request.
-     * @param Request $request
-     * @param Closure $next
+     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
+     *
      * @throws Exception
      */
     public function handle($request, $next)
@@ -26,6 +28,7 @@ class EnforceWizard
             }
             HashMapItem::key('wizard')->subkey(Auth::user()->id)->first()->delete();
         }
+
         return $next($request);
     }
 }

@@ -24,9 +24,8 @@ use Session;
 class ParticipationController extends Controller
 {
     /**
-     * @param int $id
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  int  $id
+     * @return RedirectResponse|JsonResponse
      */
     public function create($id, Request $request)
     {
@@ -73,25 +72,29 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        if ($is_web) {
-            return Redirect::back();
-        } else {
+        if (! $is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
             } else {
                 $message = 'You claimed a spot for '.$event->title.'.';
             }
-            abort(200, json_encode((object) [
+
+            return response()->json([
                 'success' => true,
                 'message' => $message,
                 'participation_id' => $participation->id,
-            ]));
+            ]);
         }
+
+        if ($event->activity->redirect_url) {
+            return Redirect::to($event->activity->redirect_url);
+        }
+
+        return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function createFor($id, Request $request)
@@ -132,9 +135,9 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param int $participation_id
-     * @param Request $request
+     * @param  int  $participation_id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($participation_id, Request $request)
@@ -202,8 +205,7 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param int $participation_id
-     * @param Request $request
+     * @param  int  $participation_id
      * @return JsonResponse
      */
     public function togglePresence($participation_id, Request $request)
@@ -231,7 +233,6 @@ class ParticipationController extends Controller
             ->count();
     }
 
-    /** @param Activity $activity */
     public static function processBackupQueue(Activity $activity)
     {
         while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
@@ -239,7 +240,6 @@ class ParticipationController extends Controller
         }
     }
 
-    /** @param Activity $activity */
     public static function transferOneBackupUser(Activity $activity)
     {
         $backup_participation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();

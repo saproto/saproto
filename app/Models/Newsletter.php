@@ -24,6 +24,7 @@ class Newsletter
                 'value' => 0,
             ]);
         }
+
         return $lastSent;
     }
 
@@ -38,6 +39,7 @@ class Newsletter
                 'value' => 0,
             ]);
         }
+
         return $lastUpdated;
     }
 
@@ -52,6 +54,7 @@ class Newsletter
                 'value' => null,
             ]);
         }
+
         return $lastSent;
     }
 
@@ -100,6 +103,7 @@ class Newsletter
         $lastSent = self::sentAt();
         $current = Carbon::now();
         $diff = $lastSent->diffInWeeks($current);
+
         return $diff >= 1;
     }
 
@@ -107,6 +111,7 @@ class Newsletter
     public static function hasEvents()
     {
         $events = Event::getEventsForNewsletter();
+
         return $events->count() > 0;
     }
 
@@ -114,6 +119,7 @@ class Newsletter
     public static function showTextOnHomepage()
     {
         $daysSinceLastUpdated = self::updatedAt()->diffInDays();
+
         return ! empty(self::text()) && $daysSinceLastUpdated < 10;
     }
 
@@ -122,6 +128,7 @@ class Newsletter
     {
         Artisan::call('proto:newslettercron');
         self::setUpdatedAt();
+
         return true;
     }
 }

@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Proto\Models\Committee;
 use Proto\Models\Leaderboard;
@@ -24,6 +25,7 @@ class LeaderboardController extends Controller
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
             Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -35,7 +37,13 @@ class LeaderboardController extends Controller
      */
     public function adminIndex()
     {
-        return view('leaderboards.adminlist', ['leaderboards' => Leaderboard::all()]);
+        if (Auth::user()->can('board')) {
+            $leaderboards = Leaderboard::all();
+        } else {
+            $leaderboards = Leaderboard::whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
+        }
+
+        return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
 
     /**
@@ -51,7 +59,6 @@ class LeaderboardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -67,53 +74,69 @@ class LeaderboardController extends Controller
         $leaderboard->save();
 
         Session::flash('flash_message', "Your leaderboard '".$leaderboard->name."' has been added.");
-        return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
+
+        return Redirect::route('leaderboards::edit', ['id' => $leaderboard->id]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
+
+        if (! $leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entries = $leaderboard->entries->sortByDesc('points');
+
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        if ($request->featured && Leaderboard::where('featured', true)->first() != null) {
-            Leaderboard::where('featured', true)->update(['featured' => false]);
+        $leaderboard = Leaderboard::findOrFail($id);
+
+        if (! $leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
         }
 
-        $leaderboard = Leaderboard::findOrFail($id);
         $leaderboard->name = $request->input('name');
-        $leaderboard->featured = $request->has('featured');
         $leaderboard->description = $request->input('description');
         $leaderboard->points_name = $request->input('points_name');
         if ($request->input('icon') != null) {
             $leaderboard->icon = $request->input('icon');
         }
-        $committee = Committee::findOrFail($request->input('committee'));
-        if ($committee != $leaderboard->committee) {
-            $leaderboard->committee()->associate($committee);
+
+        //Only editable for board permission
+        if (Auth::user()->can('board')) {
+            if ($request->has('featured') && Leaderboard::where('featured', true)->first() != null) {
+                Leaderboard::where('featured', true)->update(['featured' => false]);
+            }
+            $leaderboard->featured = $request->has('featured');
+            $committee = Committee::findOrFail($request->input('committee'));
+            if ($committee != $leaderboard->committee) {
+                $leaderboard->committee()->associate($committee);
+            }
         }
+
         $leaderboard->save();
 
         Session::flash('flash_message', 'Leaderboard has been updated.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function destroy($id)
@@ -122,6 +145,7 @@ class LeaderboardController extends Controller
 
         Session::flash('flash_message', "The leaderboard '".$leaderboard->name."' has been deleted.");
         $leaderboard->delete();
+
         return Redirect::route('leaderboards::admin');
     }
 }

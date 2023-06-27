@@ -12,13 +12,21 @@ class ManualEmail extends Mailable
     use SerializesModels;
 
     public $sender_address;
+
     public $sender_name;
+
     public $subject;
+
     public $body;
+
     public $submitted_attachments;
+
     public $destination;
+
     public $user_id;
+
     public $events;
+
     public $email_id;
 
     /**
@@ -56,6 +64,7 @@ class ManualEmail extends Mailable
             ];
             $mail->attach($attachment->generateLocalPath(), $options);
         }
+
         return $mail;
     }
 }
