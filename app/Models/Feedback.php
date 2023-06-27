@@ -75,14 +75,14 @@ class Feedback extends Model
         if ($this->reviewed) {
             return true;
         }
-        //        if($this->category->reviewer_id===$user->id)return true;
+        if ($this->category->reviewer_id === $user->id) {
+            return true;
+        }
+
         return false;
     }
 
-    /**
-     * @param  User  $user
-     */
-    public function userVote($user): int
+    public function userVote(User $user): int
     {
         /** @var FeedbackVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();

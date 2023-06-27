@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-{{$category->title}} Board
+    {{ $category->title }} Board
 @endsection
 
 @section('container')
@@ -26,28 +26,25 @@
         const upvoteList = Array.from(document.getElementsByClassName('upvote'))
         upvoteList.forEach(el => {
             el.addEventListener('click', e => {
-                const id = e.target.parentElement.getAttribute('data-id')
-                if (id) sendVote(id, 1)
-                console.log(id, 1)
+                const id = e.target.parentElement.getAttribute('data-id');
+                if (id) sendVote(id, 1);
             })
         })
 
         const downvoteList = Array.from(document.getElementsByClassName('downvote'))
         downvoteList.forEach(el => {
             el.addEventListener('click', e => {
-                const id = e.target.parentElement.getAttribute('data-id')
-                console.log(id, -1)
-                if(id) sendVote(id, -1)
+                const id = e.target.parentElement.getAttribute('data-id');
+                if(id) sendVote(id, -1);
             })
         })
 
         function sendVote(id, voteValue) {
             post('{{ route('feedback::vote') }}', { id: id, voteValue: voteValue })
             .then(data => {
-                console.log(data)
                 document.querySelectorAll(`[data-id='${id}']`).forEach(el => {
-                    const votes = el.querySelector('.votes')
-                    const upvote = el.querySelector('.upvote')
+                    const votes = el.querySelector('.votes');
+                    const upvote = el.querySelector('.upvote');
                     const downvote = el.querySelector('.downvote')
                     votes.innerHTML = data.voteScore
                     switch(data.userVote) {
@@ -67,7 +64,7 @@
             })
             .catch(err => {
                 console.error(err)
-                window.alert('Something went wrong voting. Please try again.')
+                window.alert('Something went wrong voting. Please try again.');
             })
         }
     </script>

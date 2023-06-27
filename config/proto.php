@@ -123,7 +123,7 @@ return [
     |
     */
 
-    'google-timetable-id' => '8fbi3jfctcqa43lohrc1lrvdfeq4eo8o@import.calendar.google.com',
+    'google-timetable-id' => '2mmp2tp6atcdjhnptr4k58n9qhq4ht88@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------

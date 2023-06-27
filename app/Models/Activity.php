@@ -24,6 +24,7 @@ use Proto\Http\Controllers\ParticipationController;
  * @property int $registration_end
  * @property int $deregistration_end
  * @property string|null $comment
+ * @property string|null $redirect_url
  * @property bool $closed
  * @property bool $hide_participants
  * @property Carbon|null $created_at

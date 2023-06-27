@@ -11,11 +11,10 @@
     </p>
 
     <p>
-        You posted the following feedback to the {{$feedback->category->title}} board:
+        You posted the following feedback to the {{ $feedback->category->title }} board:
     </p>
 
     <table style="margin: 0; padding: 0; border: none; background-color: #f0f0f0; width:100%;">
-
         <tr style="margin: 0; padding: 0; border: none;">
             <td style="margin: 0; padding: 10px 20px; border: none;">
                 <p>
@@ -29,41 +28,31 @@
                 <p>
                     <sub>{{ $user->name }} -- {{ $feedback->created_at->format("j M Y, H:i") }}</sub>
                 </p>
-
             </td>
-
         </tr>
-
     </table>
 
     <p>
-        And the board {{$accepted?'liked your idea!':'replied this:'}}
+        And the board {{ $accepted ? 'liked your idea!' : 'replied with:' }}
     </p>
 
     <table style="margin: 0; padding: 0; border: none; background-color: #f0f0f0; width:100%;">
-
         <tr style="margin: 0; padding: 0; border: none;">
-
             <td style="margin: 0; padding: 10px 20px; border: none;">
                 <p>
-s
                     {{ $reply }}
-
                 </p>
                 <hr>
                 <p>
                     <sub>Board of S.A. Proto -- {{ date("j M Y, H:i") }}</sub>
                 </p>
-
             </td>
-
         </tr>
-
     </table>
 
     <p>
         <sub>
-            You receive this e-mail because you posted an idea on the <a href="{{ route('feedback::index', ['category'=>$feedback->category->url]) }}">{{$feedback->category->title}} board</a>.
+            You receive this e-mail because you posted an idea on the <a href="{{ route('feedback::index', ['category' => $feedback->category->url]) }}">{{ $feedback->category->title }} board</a>.
         </sub>
     </p>
 

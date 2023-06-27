@@ -120,11 +120,14 @@ class Committee extends Model
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether the user wants to receive helper reminders.
      */
-    public function wantsToReceiveHelperReminder($user)
+    public function wantsToReceiveHelperReminder(User $user): bool
     {
+        if (! $this->isMember($user)) {
+            HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->delete();
+        }
+
         return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
