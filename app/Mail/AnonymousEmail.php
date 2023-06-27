@@ -15,6 +15,7 @@ class AnonymousEmail extends Mailable
     public $committee;
 
     public $message_content;
+
     public $hash;
 
     /**

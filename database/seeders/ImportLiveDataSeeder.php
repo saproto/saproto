@@ -17,6 +17,7 @@ class ImportLiveDataSeeder extends Seeder
      * This seeder imports some non-sensitive data from the live environment to make your development environment more 'real'.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function run($password, $output)
@@ -66,6 +67,7 @@ class ImportLiveDataSeeder extends Seeder
         if ($response->failed()) {
             return null;
         }
+
         return json_decode($response);
     }
 
@@ -90,8 +92,9 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param string $password
+     * @param  string  $password
      * @return void
+     *
      * @throws Exception
      */
     public static function createAdminUser($password)

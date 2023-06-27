@@ -42,6 +42,7 @@ class HelperReminderCron extends Command
         $events = Event::where('start', '>', strtotime('+3 days'))->where('start', '<', strtotime('+4 days'))->get();
         if ($events->count() == 0) {
             $this->info('No events in three days. Exiting.');
+
             return;
         }
 
@@ -49,21 +50,25 @@ class HelperReminderCron extends Command
             $this->info(sprintf('Handling event %s.', $event->title));
             if (! $event->activity) {
                 $this->info('Event has no activity. Skipping');
+
                 continue;
             }
             $helping_committees = HelpingCommittee::where('activity_id', $event->activity->id)->get();
             if (count($helping_committees) == 0) {
                 $this->info('Event has no helping committees. Skipping');
+
                 continue;
             }
 
             foreach ($helping_committees as $helping_committee) {
                 if ($helping_committee->helperCount() >= $helping_committee->amount) {
                     $this->info(sprintf('%s has enough helpers, skipping.', $helping_committee->committee->name));
+
                     continue;
                 }
                 if (count($helping_committee->committee->helperReminderSubscribers()) == 0) {
                     $this->info(sprintf('%s has no people subscribed to helper reminders, skipping.', $helping_committee->committee->name));
+
                     continue;
                 }
                 $this->error(sprintf('Sending reminder e-mail for %s (%s/%s helping).', $helping_committee->committee->name, $helping_committee->helperCount(), $helping_committee->amount));

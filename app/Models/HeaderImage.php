@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read StorageEntry $image
  * @property-read User|null $user
+ *
  * @method static Builder|HeaderImage whereCreatedAt($value)
  * @method static Builder|HeaderImage whereCreditId($value)
  * @method static Builder|HeaderImage whereId($value)
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|HeaderImage newModelQuery()
  * @method static Builder|HeaderImage newQuery()
  * @method static Builder|HeaderImage query()
+ *
  * @mixin Eloquent
  */
 class HeaderImage extends Model

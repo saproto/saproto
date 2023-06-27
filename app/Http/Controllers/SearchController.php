@@ -22,7 +22,6 @@ use Session;
 class SearchController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function search(Request $request)
@@ -97,12 +96,11 @@ class SearchController extends Controller
             'pages' => $pages,
             'committees' => $committees,
             'events' => array_reverse($events),
-            'photoAlbums'=>$photoAlbums,
+            'photoAlbums' => $photoAlbums,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function ldapSearch(Request $request)
@@ -139,11 +137,10 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getUserSearch(Request $request)
@@ -162,7 +159,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getEventSearch(Request $request)
@@ -173,7 +169,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getCommitteeSearch(Request $request)
@@ -184,7 +179,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getProductSearch(Request $request)
@@ -195,7 +189,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getAchievementSearch(Request $request)
@@ -206,9 +199,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @param class-string|Model $model
-     * @param string $query
-     * @param string[] $attributes
+     * @param  class-string|Model  $model
+     * @param  string  $query
+     * @param  string[]  $attributes
      * @return Collection<Model>|array
      */
     private function getGenericSearch($model, $query, $attributes)

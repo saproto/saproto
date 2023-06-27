@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
+ *
  * @method static Builder|Bank whereBic($value)
  * @method static Builder|Bank whereCreatedAt($value)
  * @method static Builder|Bank whereIban($value)
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Bank newModelQuery()
  * @method static Builder|Bank newQuery()
  * @method static Builder|Bank query()
+ *
  * @mixin Eloquent
  */
 class Bank extends Model

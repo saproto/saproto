@@ -4,7 +4,6 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Proto\Models\OrderLine;
-use Proto\Models\Product;
 use Proto\Models\WallstreetDrink;
 use Proto\Models\WallstreetPrice;
 
@@ -45,6 +44,7 @@ class UpdateWallstreetPrices extends Command
         $currentDrink = WallstreetDrink::where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
+
             return 0;
         }
 
@@ -59,25 +59,27 @@ class UpdateWallstreetPrices extends Command
                     'price' => $product->price,
                 ]);
                 $latestPrice->save();
+
                 continue;
             }
 
             $newOrderlines = OrderLine::query()->where('created_at', '>=', \Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
             //heighten the price if there are new orders and the price is not the actual price
-            if($newOrderlines > 0) {
+            if ($newOrderlines > 0) {
                 $delta = $newOrderlines * $currentDrink->price_increase;
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
-                    'price' =>$latestPrice->price + $delta >= $product->price * 1.2 ? $product->price * 1.2 : $latestPrice->price + $delta,
+                    'price' => $latestPrice->price + $delta >= $product->price * 1.2 ? $product->price * 1.2 : $latestPrice->price + $delta,
                 ]);
                 $newPriceObject->save();
                 $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
+
                 continue;
             }
 
             //lower the price if no orders have been made and the price is not the minimum price
-            if($latestPrice->price !== $currentDrink->minimum_price) {
+            if ($latestPrice->price !== $currentDrink->minimum_price) {
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,

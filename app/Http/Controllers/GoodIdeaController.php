@@ -17,7 +17,7 @@ use Session;
 class GoodIdeaController extends Controller
 {
     /**
-     * @param int $page
+     * @param  int  $page
      * @return View
      */
     public function index($page = 1)
@@ -37,7 +37,6 @@ class GoodIdeaController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function add(Request $request)
@@ -48,12 +47,14 @@ class GoodIdeaController extends Controller
         $idea->save();
 
         Session::flash('flash_message', 'Idea added.');
+
         return Redirect::route('goodideas::index');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function delete($id)
@@ -61,11 +62,13 @@ class GoodIdeaController extends Controller
         $idea = GoodIdea::findOrFail($id);
         if (! (Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
             Session::flash('flash_message', 'You are not allowed to delete this idea.');
+
             return Redirect::back();
         }
         $idea->votes()->delete();
         $idea->delete();
         Session::flash('flash_message', 'Good Idea deleted.');
+
         return Redirect::route('goodideas::index');
     }
 
@@ -79,7 +82,6 @@ class GoodIdeaController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
     public function vote(Request $request)

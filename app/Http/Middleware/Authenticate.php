@@ -13,15 +13,17 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
     /**
      * The Guard implementation.
+     *
      * @var Guard
      */
     protected $auth; /** @phpstan-ignore-line  */
 
     /**
      * Handle an incoming request.
-     * @param Request $request
-     * @param Closure $next
-     * @param string[] $guards
+     *
+     * @param  Request  $request
+     * @param  Closure  $next
+     * @param  string[]  $guards
      * @return RedirectResponse|Response|Closure
      */
     public function handle($request, $next, ...$guards)

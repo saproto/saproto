@@ -63,7 +63,7 @@ class HelperNotificationsCron extends Command
                         });
                     })
                     ->whereHas('committee', function ($q) use ($user) {
-                        $q->whereHas('users',function ($w) use ($user) {
+                        $q->whereHas('users', function ($w) use ($user) {
                             $w->where('users.id', $user->id); //check if the user is still in the active committee members
                         });
                     })
