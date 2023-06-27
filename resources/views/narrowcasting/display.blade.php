@@ -142,7 +142,10 @@
                 const campaign = campaigns[currentCampaign]
 
                 //hide the last slide
-                let oldSlide = document.getElementById('slide-' + (currentCampaign - 1))
+                let oldCampaign = currentCampaign - 1;
+                if (oldCampaign < 0) oldCampaign += campaigns.length
+                console.log('oldslide: '+oldCampaign)
+                const oldSlide = document.getElementById('slide-' + oldCampaign)
                 if (oldSlide) {
                     oldSlide.classList.add(hideClass)
                 }
@@ -151,7 +154,7 @@
                     slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
-                    let slide = document.getElementById('slide-' + currentCampaign)
+                    const slide = document.getElementById('slide-' + currentCampaign)
                     if (slide) {
                         slide.classList.remove(hideClass)
                     } else {
