@@ -24,6 +24,7 @@ composer.phar
 
 # Generated files
 /public/build
+/public/hot
 
 # Dammit, Mac users
 .DS_Store
