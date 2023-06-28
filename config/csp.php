@@ -30,5 +30,5 @@ return [
     /*
      * The class responsible for generating the number only used once used in inline tags and headers.
      */
-    'nonce_generator' => Spatie\Csp\Nonce\RandomString::class,
+    'nonce_generator' => Proto\Support\LaravelViteNonceGenerator::class,
 ];

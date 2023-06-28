@@ -17,10 +17,6 @@
     }
 </script>
 
-<script type="text/javascript" src="{{ mix('/js/manifest.js') }}"></script>
-@foreach(glob('js/*vendor.js') as $chunk)
-    <script type="text/javascript" src="{{ mix("$chunk") }}"></script>
-@endforeach
-<script type="text/javascript" src="{{ mix('/js/application.js') }}"></script>
+@vite('resources/assets/js/application.js')
 
 <script src="https://kit.fontawesome.com/63e98a7060.js" crossorigin="anonymous"></script>
