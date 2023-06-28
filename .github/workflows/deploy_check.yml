@@ -47,9 +47,6 @@ jobs:
       - name: 🔨 build front-end
         run: npm run build
 
-      - name: 🗑️ Remove storage directory
-        run: rm -rf storage
-
       - name: 📝 Create Sentry release
         uses: getsentry/action-release@v1
         env:
