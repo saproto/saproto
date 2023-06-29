@@ -47,6 +47,9 @@ jobs:
       - name: 🔨 build front-end
         run: npm run build
 
+      - name: 🗑️ Remove storage directory
+        run: rm -rf storage
+
       - name: 📝 Create Sentry release
         uses: getsentry/action-release@v1
         env:
@@ -64,7 +67,7 @@ jobs:
         with:
           filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
           path: ${{ env.BUILD_SOURCE_DIR }}
-          exclusions: 'storage/* build/* node_modules/*'
+          exclusions: 'storage/* build/*'
 
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
