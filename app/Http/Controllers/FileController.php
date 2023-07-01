@@ -24,7 +24,7 @@ class FileController extends Controller
             abort(404);
         }
 
-        if(File::exists(Storage::disk('public')->path($entry->filename))) {
+        if (File::exists(Storage::disk('public')->path($entry->filename))) {
             $file = Storage::disk('public')->get($entry->filename);
         } else {
             $file = Storage::disk('local')->get($entry->filename);
@@ -33,9 +33,10 @@ class FileController extends Controller
         $response = new Response($file, 200);
         $response->header('Content-Type', $entry->mime);
         $response->header('Cache-Control', 'max-age=86400, public');
-        if($entry->original_filename) {
+        if ($entry->original_filename) {
             $response->header('Content-Disposition', sprintf('attachment; filename="%s"', $entry->original_filename));
         }
+
         return $response;
     }
 
@@ -72,9 +73,9 @@ class FileController extends Controller
     }
 
     /**
-     * @param string $printer
-     * @param string $url
-     * @param int $copies
+     * @param  string  $printer
+     * @param  string  $url
+     * @param  int  $copies
      * @return string
      */
     public static function requestPrint($printer, $url, $copies = 1)

@@ -62,7 +62,7 @@ class Photo extends Model
         $tiny_photos_storage = 'photos/tiny_photos/'.($albumId ?? $pathInPhotos).'/';
 
         $watermark = null;
-        if($addWatermark) {
+        if ($addWatermark) {
             $watermark = Image::make(public_path('images/protography-watermark-template.png'));
             $watermark->text(strtoupper($watermarkUserName), 267, 1443, function ($font) {
                 $font->file((public_path('fonts/Ubuntu-R.ttf')));
@@ -84,11 +84,11 @@ class Photo extends Model
         $medium_file->save();
 
         $small_file = new StorageEntry();
-        $small_file->createFromPhoto($photo, $small_photos_storage,420, $original_name, $watermark, $private);
+        $small_file->createFromPhoto($photo, $small_photos_storage, 420, $original_name, $watermark, $private);
         $small_file->save();
 
         $tiny_file = new StorageEntry();
-        $tiny_file->createFromPhoto($photo, $tiny_photos_storage,50, $original_name, $watermark, $private);
+        $tiny_file->createFromPhoto($photo, $tiny_photos_storage, 50, $original_name, $watermark, $private);
         $tiny_file->save();
 
         $this->file_id = $original_file->id;
@@ -145,8 +145,8 @@ class Photo extends Model
     }
 
     /**
-     * @param bool $next
-     * @param User $user
+     * @param  bool  $next
+     * @param  User  $user
      * @return Photo|null
      */
     public function getAdjacentPhoto($next = true, $user = null)
@@ -160,7 +160,7 @@ class Photo extends Model
         }
         $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken);
 
-        if($user == null || $user->member() == null) {
+        if ($user == null || $user->member() == null) {
             $result = $result->where('private', false);
         }
 
@@ -168,6 +168,7 @@ class Photo extends Model
         if ($result->count() > 1) {
             return $result->where('id', $comp, $this->id)->first();
         }
+
         return null;
     }
 
@@ -209,9 +210,11 @@ class Photo extends Model
 
     public function likedByUser($user)
     {
-        if($user) {
+        if ($user) {
             return $this->likes()->where('user_id', $user->id)->count() > 0;
-        }return false;
+        }
+
+return false;
     }
 
     /** @return string */
@@ -246,12 +249,13 @@ class Photo extends Model
 
     public function mayViewPhoto($user)
     {
-        if(! $this->private) {
+        if (! $this->private) {
             return true;
         }
-        if($user) {
+        if ($user) {
             return $user->member() !== null;
         }
+
         return false;
     }
 
@@ -280,31 +284,31 @@ class Photo extends Model
         parent::boot();
 
         static::updated(function ($photo) {
-            if($photo->private) {
-                if(! $photo->makePrivate()) {
+            if ($photo->private) {
+                if (! $photo->makePrivate()) {
                     $photo->private = false;
                 }
             } else {
-                if(! $photo->makePublic()) {
+                if (! $photo->makePublic()) {
                     $photo->private = true;
                 }
             }
         });
 
         static::deleting(function ($photo) {
-            if($photo->file()) {
+            if ($photo->file()) {
                 $photo->file()->delete();
             }
-            if($photo->large_file()) {
+            if ($photo->large_file()) {
                 $photo->large_file()->delete();
             }
-            if($photo->medium_file()) {
+            if ($photo->medium_file()) {
                 $photo->medium_file()->delete();
             }
-            if($photo->small_file()) {
+            if ($photo->small_file()) {
                 $photo->small_file()->delete();
             }
-            if($photo->tiny_file()) {
+            if ($photo->tiny_file()) {
                 $photo->tiny_file()->delete();
             }
             if ($photo->album && $photo->id == $photo->album->thumb_id) {

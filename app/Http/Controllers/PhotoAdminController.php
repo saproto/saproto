@@ -54,7 +54,8 @@ class PhotoAdminController extends Controller
         $fileSizeLimit = ini_get('post_max_size');
         $album = PhotoAlbum::findOrFail($id);
         $photos = $album->items()->get();
-        return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
+
+        return view('photos.admin.edit', ['album' => $album, 'photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
     }
 
     /**
@@ -98,6 +99,7 @@ class PhotoAdminController extends Controller
             $addWaterMark = $request->has('addWaterMark');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id, $addWaterMark);
+
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (Exception $e) {
             return response()->json([
@@ -138,7 +140,7 @@ class PhotoAdminController extends Controller
                 case 'private':
                     foreach ($photos as $photoId) {
                         $photo = Photo::find($photoId);
-                        if($photo && ! $album->published) {
+                        if ($photo && ! $album->published) {
                             $photo->private = ! $photo->private;
                             $photo->save();
                         }
@@ -161,6 +163,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::findOrFail($id);
         $album->delete();
+
         return redirect(route('photo::admin::index'));
     }
 
@@ -210,6 +213,7 @@ class PhotoAdminController extends Controller
         $photo = new Photo();
         $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), $album->private, $album->id, $album->id, $addWatermark, Auth::user()->name);
         $photo->save();
+
         return $photo;
     }
 }

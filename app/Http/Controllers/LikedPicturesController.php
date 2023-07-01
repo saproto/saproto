@@ -29,17 +29,18 @@ class LikedPicturesController extends Controller
             abort(404, 'No liked photos!');
         }
 
-        return view('photos.album', ['album' => $album, 'photos' => $likedPhotos, 'liked'=>true]);
+        return view('photos.album', ['album' => $album, 'photos' => $likedPhotos, 'liked' => true]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function photo($id)
     {
         $photo = (new PhotoController())->getPhoto($id)->getData();
-        return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextLikedPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousLikedPhoto', ['id' => ':id'])]);
+
+        return view('photos.photopage', ['photo' => $photo, 'nextRoute' => route('api::photos::getNextLikedPhoto', ['id' => ':id']), 'previousRoute' => route('api::photos::getPreviousLikedPhoto', ['id' => ':id'])]);
     }
 
     /** @return JsonResponse */
@@ -55,8 +56,8 @@ class LikedPicturesController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param bool $next
+     * @param  int  $id
+     * @param  bool  $next
      * @return JsonResponse
      */
     private function getAdjacentResponse($id, $next)
@@ -64,21 +65,22 @@ class LikedPicturesController extends Controller
         $photo = Photo::findOrFail($id);
         $adjacent = $this->getAdjacentPhoto($photo, $next);
 
-        if($adjacent) {
+        if ($adjacent) {
             return response()->JSON([
-                'id' =>$adjacent->id,
+                'id' => $adjacent->id,
                 'largeUrl' => $adjacent->getLargeUrl(),
                 'tinyUrl' => $adjacent->getTinyUrl(),
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
-                'albumTitle'=>$photo->album->name,
-                'likes'=>$adjacent->getLikes(),
-                'likedByUser'=>$adjacent->likedByUser(Auth::user()),
+                'albumTitle' => $photo->album->name,
+                'likes' => $adjacent->getLikes(),
+                'likedByUser' => $adjacent->likedByUser(Auth::user()),
                 'private' => $adjacent->private,
-                'hasNextPhoto'=> (bool) $this->getAdjacentPhoto($adjacent, true),
-                'hasPreviousPhoto'=>(bool) $this->getAdjacentPhoto($adjacent, false),
-                'downloadUrl'=>route('image::get', ['id'=>$photo->file->id, 'hash'=>$photo->file->hash]),
+                'hasNextPhoto' => (bool) $this->getAdjacentPhoto($adjacent, true),
+                'hasPreviousPhoto' => (bool) $this->getAdjacentPhoto($adjacent, false),
+                'downloadUrl' => route('image::get', ['id' => $photo->file->id, 'hash' => $photo->file->hash]),
             ]);
         }
+
         return response()->json(['message' => 'adjacent photo not found.'], 404);
     }
 
@@ -95,7 +97,7 @@ class LikedPicturesController extends Controller
             $query->where('user_id', Auth::user()->id);
         })->where('date_taken', $comp.'=', $photo->date_taken);
 
-        if(Auth::user() == null || Auth::user()->member() == null) {
+        if (Auth::user() == null || Auth::user()->member() == null) {
             $adjacent = $adjacent->where('private', false);
         }
 

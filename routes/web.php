@@ -688,7 +688,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
         });
-        
+
         Route::get('/likes/{id}', ['as' => 'like', 'uses' => 'PhotoController@toggleLike']);
         Route::get('/photo/{id}', ['as' => 'view', 'uses' => 'PhotoController@photo']);
 

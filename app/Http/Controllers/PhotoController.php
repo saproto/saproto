@@ -17,6 +17,7 @@ class PhotoController extends Controller
     public function index()
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc')->paginate(24);
+
         return view('photos.list', ['albums' => $albums]);
     }
 
@@ -43,34 +44,36 @@ class PhotoController extends Controller
     public function photo($id)
     {
         $photo = (new PhotoController())->getPhoto($id)->getData();
-        return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousPhoto', ['id' => ':id'])]);
+
+        return view('photos.photopage', ['photo' => $photo, 'nextRoute' => route('api::photos::getNextPhoto', ['id' => ':id']), 'previousRoute' => route('api::photos::getPreviousPhoto', ['id' => ':id'])]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return JsonResponse
      */
     public function getPhoto($id)
     {
         $photo = Photo::find($id);
-        if(! $photo) {
-            return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
+        if (! $photo) {
+            return response()->json(['error' => 'Photo not found.', 'id' => $id], 404);
         }
-        if(! $photo->mayViewPhoto(Auth::user())) {
-            return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
+        if (! $photo->mayViewPhoto(Auth::user())) {
+            return response()->json(['error' => 'This photo is only visible to members!', 'id' => $id], 403);
         }
+
         return response()->JSON([
             'id' => $photo->id,
             'largeUrl' => $photo->getLargeUrl(),
             'tinyUrl' => $photo->getTinyUrl(),
             'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
-            'albumTitle'=>$photo->album->name,
-            'likes'=>$photo->getLikes(),
-            'likedByUser'=>$photo->likedByUser(Auth::user()),
+            'albumTitle' => $photo->album->name,
+            'likes' => $photo->getLikes(),
+            'likedByUser' => $photo->likedByUser(Auth::user()),
             'private' => $photo->private,
-            'hasNextPhoto'=>$photo->getAdjacentPhoto(true, Auth::user()) !== null,
-            'hasPreviousPhoto'=>$photo->getAdjacentPhoto(false, Auth::user()) !== null,
-            'downloadUrl'=>route('image::get', ['id'=>$photo->file->id, 'hash'=>$photo->file->hash]),
+            'hasNextPhoto' => $photo->getAdjacentPhoto(true, Auth::user()) !== null,
+            'hasPreviousPhoto' => $photo->getAdjacentPhoto(false, Auth::user()) !== null,
+            'downloadUrl' => route('image::get', ['id' => $photo->file->id, 'hash' => $photo->file->hash]),
         ]);
     }
 
@@ -78,6 +81,7 @@ class PhotoController extends Controller
     {
         $photo = Photo::findOrFail($id);
         $adjacent = $photo->getAdjacentPhoto(true, Auth::user());
+
         return $this->getPhoto($adjacent->id);
     }
 
@@ -85,6 +89,7 @@ class PhotoController extends Controller
     {
         $photo = Photo::findOrFail($id);
         $adjacent = $photo->getAdjacentPhoto(false, Auth::user());
+
         return $this->getPhoto($adjacent->id);
     }
 
@@ -95,8 +100,8 @@ class PhotoController extends Controller
     }
 
     /**
+     * @param  int  $photo_id
      * @return JsonResponse
-     * @param int $photo_id
      **/
     public function toggleLike($photo_id)
     {
@@ -111,24 +116,26 @@ class PhotoController extends Controller
             $photoLike->save();
         }
         $photo = Photo::findOrFail($photo_id);
+
         return response()->json([
-                'likes' => $photo->getLikes(),
-                'likedByUser' => $photo->likedByUser(Auth::user()),
-            ]
+            'likes' => $photo->getLikes(),
+            'likedByUser' => $photo->likedByUser(Auth::user()),
+        ]
         );
     }
 
     /**
-     * @param bool $published
+     * @param  bool  $published
      **@return Collection
      */
     public static function getAlbums($published = true)
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');
         $albums = $albums->where('published', '=', $published);
-        if(! (Auth::check() && Auth::user()->member() !== null)) {
+        if (! (Auth::check() && Auth::user()->member() !== null)) {
             $albums = $albums->where('private', false);
         }
+
         return $albums->get();
     }
 
@@ -136,11 +143,12 @@ class PhotoController extends Controller
     public function apiIndex()
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc')->where('private', '=', false)->get();
+
         return json_encode($albums);
     }
 
     /**
-     * @param int $album_id
+     * @param  int  $album_id
      * @return string JSON
      */
 

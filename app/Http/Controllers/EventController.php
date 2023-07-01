@@ -188,8 +188,6 @@ class EventController extends Controller
             $event->photo()->associate($photo);
         }
 
-
-
         if ($request->has('committee')) {
             $committee = Committee::find($request->input('committee'));
             $event->committee()->associate($committee);

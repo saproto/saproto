@@ -29,14 +29,14 @@ class PhotoSeeder extends Seeder
 
         foreach (range(1, $n) as $index) {
             $album = PhotoAlbum::create([
-                'id'=>$index,
-                'name'=>$faker->lastName,
-                'date_create'=>Carbon::now()->valueOf(),
-                'date_taken'=>Carbon::now()->valueOf(),
-                'thumb_id'=>0,
-                'event_id'=>null,
-                'private'=>mt_rand(1, 4) <= 1,
-                'published'=>mt_rand(1, 2) > 1,
+                'id' => $index,
+                'name' => $faker->lastName,
+                'date_create' => Carbon::now()->valueOf(),
+                'date_taken' => Carbon::now()->valueOf(),
+                'thumb_id' => 0,
+                'event_id' => null,
+                'private' => mt_rand(1, 4) <= 1,
+                'published' => mt_rand(1, 2) > 1,
             ]);
             echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." albums\r";
 
@@ -57,10 +57,9 @@ class PhotoSeeder extends Seeder
                         ]);
                         $like->save();
                     }
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                 }
-                
-                
+
                 echo "\e[33mCreating:\e[0m  ".$henk.'/'.$n." Photos\r";
             }
         }

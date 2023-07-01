@@ -123,11 +123,11 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param UploadedFile|string $file
-     * @param string|null $customPath
-     * @param int|null $width
-     * @param string|null $original_name
-     * @param Image|null $watermark
+     * @param  UploadedFile|string  $file
+     * @param  string|null  $customPath
+     * @param  int|null  $width
+     * @param  string|null  $original_name
+     * @param  Image|null  $watermark
      */
     public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $private = false)
     {
@@ -143,7 +143,7 @@ class StorageEntry extends Model
                 $constraint->aspectRatio();
             });
         }
-        if($watermark) {
+        if ($watermark) {
             $watermark->resize($image->width() / 5, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
@@ -156,14 +156,14 @@ class StorageEntry extends Model
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
 
-        if(! File::exists(Storage::disk('local')->path($customPath))) {
+        if (! File::exists(Storage::disk('local')->path($customPath))) {
             File::makeDirectory(Storage::disk('local')->path($customPath), 0777, true);
         }
-        if(! File::exists(Storage::disk('public')->path($customPath))) {
+        if (! File::exists(Storage::disk('public')->path($customPath))) {
             File::makeDirectory(Storage::disk('public')->path($customPath), 0777, true);
         }
 
-        if($private) {
+        if ($private) {
             Storage::disk('local')->put($customPath.$this->hash, $image);
         } else {
             Storage::disk('public')->put($customPath.$this->hash, $image);
@@ -181,7 +181,7 @@ class StorageEntry extends Model
     /** @return string */
     public function generateUrl()
     {
-        if(File::exists(Storage::disk('public')->path($this->filename))) {
+        if (File::exists(Storage::disk('public')->path($this->filename))) {
             $url = asset($this->filename);
         } else {
             $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
@@ -229,9 +229,10 @@ class StorageEntry extends Model
     /** @return string */
     public function generateLocalPath()
     {
-        if(File::exists(Storage::disk('public')->path($this->filename))) {
+        if (File::exists(Storage::disk('public')->path($this->filename))) {
             return Storage::disk('public')->path($this->filename);
         }
+
         return Storage::disk('local')->path($this->filename);
     }
 
@@ -249,9 +250,10 @@ class StorageEntry extends Model
      */
     public function makePublic()
     {
-        if(File::exists(Storage::disk('local')->path($this->filename))) {
+        if (File::exists(Storage::disk('local')->path($this->filename))) {
             File::move(Storage::disk('local')->path($this->filename), Storage::disk('public')->path($this->filename));
         }
+
         return File::exists(Storage::disk('public')->path($this->filename));
     }
 
@@ -260,9 +262,10 @@ class StorageEntry extends Model
      */
     public function makePrivate()
     {
-        if(File::exists(Storage::disk('public')->path($this->filename))) {
+        if (File::exists(Storage::disk('public')->path($this->filename))) {
             File::move(Storage::disk('public')->path($this->filename), Storage::disk('local')->path($this->filename));
         }
+
         return File::exists(Storage::disk('local')->path($this->filename));
     }
 
@@ -271,10 +274,10 @@ class StorageEntry extends Model
         parent::boot();
 
         static::deleting(function ($file) {
-            if(File::exists(Storage::disk('public')->path($file->filename))) {
+            if (File::exists(Storage::disk('public')->path($file->filename))) {
                 Storage::disk('public')->delete($file->filename);
             }
-            if(File::exists(Storage::disk('local')->path($file->filename))) {
+            if (File::exists(Storage::disk('local')->path($file->filename))) {
                 Storage::disk('local')->delete($file->filename);
             }
         });

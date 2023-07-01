@@ -80,12 +80,13 @@ class PhotoAlbum extends Model
 
     public function mayViewAlbum($user)
     {
-        if(! $this->private) {
+        if (! $this->private) {
             return true;
         }
-        if($user) {
+        if ($user) {
             return $user->member() !== null && $this->published || $user->can('protography');
         }
+
         return false;
     }
 
