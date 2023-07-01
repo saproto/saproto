@@ -21,7 +21,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function show($id)
@@ -37,7 +37,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function photo($id)

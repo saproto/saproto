@@ -26,7 +26,6 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -38,12 +37,12 @@ class AnnouncementController extends Controller
         $announcement->save();
 
         Session::flash('flash_message', 'Announcement created.');
+
         return Redirect::route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit(Request $request, $id)
@@ -52,8 +51,7 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -68,12 +66,14 @@ class AnnouncementController extends Controller
         $announcement->save();
 
         Session::flash('flash_message', 'Announcement updated.');
+
         return Redirect::route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -83,11 +83,13 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         Session::flash('flash_message', 'Announcement deleted.');
+
         return Redirect::route('announcement::index');
     }
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function clear()
@@ -95,11 +97,12 @@ class AnnouncementController extends Controller
         Announcement::where('display_till', '<', date('Y-m-d'))->delete();
 
         Session::flash('flash_message', 'Announcements cleared.');
+
         return Redirect::route('announcement::index');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function dismiss($id)
@@ -112,6 +115,7 @@ class AnnouncementController extends Controller
         }
 
         $announcement->dismissForUser(Auth::user());
+
         return Redirect::back();
     }
 }

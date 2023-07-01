@@ -13,7 +13,9 @@ class UsernameReminderEmail extends Mailable
     use SerializesModels;
 
     public $name;
+
     public $username;
+
     public $ismember;
 
     /**

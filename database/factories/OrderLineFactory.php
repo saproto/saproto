@@ -29,7 +29,6 @@ class OrderLineFactory extends Factory
             $cashierId = $tipcie->users()->inRandomOrder()->first()->id;
         }
 
-
         return [
             'product_id' => $product->id,
             'original_unit_price' => $product->price,

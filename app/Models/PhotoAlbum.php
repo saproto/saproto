@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read Event|null $event
  * @property-read Photo|null $thumb_photo
  * @property-read Collection|Photo[] $items
+ *
  * @method static Builder|PhotoAlbum whereCreatedAt($value)
  * @method static Builder|PhotoAlbum whereDateCreate($value)
  * @method static Builder|PhotoAlbum whereDateTaken($value)
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PhotoAlbum newModelQuery()
  * @method static Builder|PhotoAlbum newQuery()
  * @method static Builder|PhotoAlbum query()
+ *
  * @mixin Eloquent
  */
 class PhotoAlbum extends Model

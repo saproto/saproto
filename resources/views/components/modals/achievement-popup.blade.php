@@ -17,7 +17,9 @@
     </div>
     @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        modals['new-achievement-modal'].show()
+        window.addEventListener('load', _ => {
+            modals['new-achievement-modal'].show()
+        })
     </script>
     @endpush
 @endif

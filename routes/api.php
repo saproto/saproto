@@ -53,6 +53,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
+        Route::get('random_old_photo', ['as' => 'randomOldPhoto', 'uses' => 'ApiController@randomOldPhoto']);
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}/', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);

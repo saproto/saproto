@@ -91,6 +91,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|Role[] $roles
  * @property-read Collection|Permission[] $permissions
  * @property-read Collection|Committee[] $societies
+ *
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|User onlyTrashed()
  * @method static QueryBuilder|User withTrashed()
@@ -136,6 +137,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User newQuery()
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
+ *
  * @mixin Eloquent
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
@@ -165,17 +167,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $public_id
+     * @param  string  $public_id
      * @return mixed|User|null
      */
     public static function fromPublicId($public_id)
     {
         $member = Member::where('proto_username', $public_id)->first();
+
         return $member ? $member->user : null;
     }
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS METHOD.
+     *
      * @return bool whether the user is stale (not in use, can really be deleted safely).
      */
     public function isStale()
@@ -360,7 +364,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $password
+     * @param  string  $password
+     *
      * @throws Exception
      */
     public function setPassword($password)
@@ -402,6 +407,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 return true;
             }
         }
+
         return false;
     }
 
@@ -413,11 +419,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * @return int
+     *
      * @throws Exception
      */
     public function age()
@@ -426,7 +434,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param Committee $committee
+     * @param  Committee  $committee
      * @return bool
      */
     public function isInCommittee($committee)
@@ -435,12 +443,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      * @return bool
      */
     public function isInCommitteeBySlug($slug)
     {
         $committee = Committee::where('slug', $slug)->first();
+
         return $committee && $this->isInCommittee($committee);
     }
 
@@ -469,11 +478,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         foreach ($achievements as $achievement) {
             $acquired[] = $achievement;
         }
+
         return $acquired;
     }
 
     /**
-     * @param int $limit
+     * @param  int  $limit
      * @return Withdrawal[]
      */
     public function withdrawals($limit = 0)
@@ -487,6 +497,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 }
             }
         }
+
         return $withdrawals;
     }
 
@@ -525,6 +536,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * This method returns a guess of the system for whether this user is a first year student.
      * Note that this is a _GUESS_. There is no way for us to know sure without manually setting a flag on each user.
+     *
      * @return bool Whether the system thinks the user is a first year.
      */
     public function isFirstYear()
@@ -553,6 +565,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if ($this->personal_key == null) {
             $this->generateNewPersonalKey();
         }
+
         return $this->personal_key;
     }
 
@@ -561,6 +574,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         $token = new Token();
         $token->generate($this);
+
         return $token;
     }
 
@@ -573,6 +587,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             $token = $this->generateNewToken();
         }
         $token->touch();
+
         return $token;
     }
 
@@ -589,6 +604,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
+
         return $memberships;
     }
 
@@ -598,7 +614,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_alarm;
     }
 
-    /** @param float|null $hours */
+    /** @param  float|null  $hours */
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $clicks
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|ShortUrl whereClicks($value)
  * @method static Builder|ShortUrl whereCreatedAt($value)
  * @method static Builder|ShortUrl whereDescription($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|ShortUrl newModelQuery()
  * @method static Builder|ShortUrl newQuery()
  * @method static Builder|ShortUrl query()
+ *
  * @mixin Eloquent
  */
 class ShortUrl extends Model

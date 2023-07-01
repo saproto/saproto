@@ -30,7 +30,6 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function create(Request $request)
@@ -47,7 +46,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -59,8 +58,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -79,8 +77,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return JsonResponse|string
      */
     public function upload(Request $request, $id)
@@ -89,11 +86,11 @@ class PhotoAdminController extends Controller
 
         if (! $request->hasFile('file')) {
             return response()->json([
-                'message'=>'photo not found in request!',
+                'message' => 'photo not found in request!',
             ], 404);
         } elseif ($album->published) {
             return response()->json([
-                'message'=>'album already published! Unpublish to add more photos!',
+                'message' => 'album already published! Unpublish to add more photos!',
             ], 500);
         }
         try {
@@ -104,15 +101,15 @@ class PhotoAdminController extends Controller
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (Exception $e) {
             return response()->json([
-                'message'=>$e,
+                'message' => $e,
             ], 500);
         }
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function action(Request $request, $id)
@@ -155,8 +152,9 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function delete($id)
@@ -167,7 +165,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function publish($id)
@@ -176,6 +174,7 @@ class PhotoAdminController extends Controller
 
         if (! count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+
             return Redirect::back();
         }
 
@@ -186,7 +185,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function unpublish($id)
@@ -199,9 +198,10 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param UploadedFile $uploaded_photo
-     * @param int $album_id
+     * @param  UploadedFile  $uploaded_photo
+     * @param  int  $album_id
      * @return Photo
+     *
      * @throws FileNotFoundException
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)

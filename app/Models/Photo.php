@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Intervention\Image\Facades\Image;
 
 /**
  * Photo model.
@@ -35,6 +33,7 @@ use Intervention\Image\Facades\Image;
  * @property-read StorageEntry $tiny_file
  * @property-read File $url
  * @property-read Collection|PhotoLikes[] $likes
+ *
  * @method static Builder|Photo whereAlbumId($value)
  * @method static Builder|Photo whereCreatedAt($value)
  * @method static Builder|Photo whereDateTaken($value)
@@ -45,6 +44,7 @@ use Intervention\Image\Facades\Image;
  * @method static Builder|Photo newModelQuery()
  * @method static Builder|Photo newQuery()
  * @method static Builder|Photo query()
+ *
  * @mixin Eloquent
  */
 class Photo extends Model
@@ -184,19 +184,20 @@ class Photo extends Model
     }
 
     /**
-     * @param int $paginateLimit
+     * @param  int  $paginateLimit
      * @return false|float|int
      */
     public function getAlbumPageNumber($paginateLimit)
     {
         $photoIndex = 1;
         $photos = self::where('album_id', $this->album_id)->orderBy('date_taken', 'ASC')->orderBy('id', 'ASC')->get();
-        foreach($photos as $photoItem) {
-            if($this->id == $photoItem->id) {
+        foreach ($photos as $photoItem) {
+            if ($this->id == $photoItem->id) {
                 return ceil($photoIndex / $paginateLimit);
             }
             $photoIndex++;
         }
+
         return 1;
     }
 

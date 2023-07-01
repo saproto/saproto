@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property string|null $redirect_url
  * @property-read Company $company
+ *
  * @method static Builder|Joboffer whereCompanyId($value)
  * @method static Builder|Joboffer whereCreatedAt($value)
  * @method static Builder|Joboffer whereDescription($value)
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Joboffer newModelQuery()
  * @method static Builder|Joboffer newQuery()
  * @method static Builder|Joboffer query()
+ *
  * @mixin Eloquent
  */
 class Joboffer extends Model

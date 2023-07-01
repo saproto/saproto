@@ -11,8 +11,8 @@ use Proto\Models\StorageEntry;
 class FileController extends Controller
 {
     /**
-     * @param int $id
-     * @param string $hash
+     * @param  int  $id
+     * @param  string  $hash
      * @return Response
      */
     public function get($id, $hash)
@@ -40,9 +40,8 @@ class FileController extends Controller
     }
 
     /**
-     * @param StorageEntry $entry
-     * @param int $w
-     * @param int $h
+     * @param  int  $w
+     * @param  int  $h
      * @return Image
      */
     public static function makeImage(StorageEntry $entry, $w, $h)

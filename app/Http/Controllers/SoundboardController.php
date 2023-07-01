@@ -24,8 +24,8 @@ class SoundboardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -40,12 +40,14 @@ class SoundboardController extends Controller
         $sound->save();
 
         Session::flash('flash_message', 'Sound added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -58,7 +60,7 @@ class SoundboardController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function toggleHidden($id)

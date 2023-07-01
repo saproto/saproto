@@ -65,18 +65,8 @@
                             <label>Current video:</label>
 
                             <div class="row">
-
-                                <div class="col-md-6">
-                                    <img src="https://i.ytimg.com/vi/{{ $item->youtube_id }}/hqdefault.jpg"
-                                         class="w-100">
-                                </div>
-                                <div class="col-md-6">
-                                    <strong><a href="https://youtu.be/{{ $item->youtube_id }}"
-                                               target="_blank">{{ $item->video()->snippet->title }}</a></strong>
-                                    <br>
-                                    <strong>{{ $item->video()->snippet->channelTitle }}</strong>
-                                </div>
-
+                                <iframe height="300"
+                                        src="https://www.youtube.com/embed/{{$item->youtube_id}}" allow="encrypted-media" allowfullscreen></iframe>
                             </div>
 
                         @else

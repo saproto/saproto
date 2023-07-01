@@ -11,7 +11,7 @@ $link-color: $info;
 $link-hover-color: lighten($info, 10%);
 
 //import bootstrap after setting variables
-@import '~bootstrap';
+@import 'bootstrap';
 
 // Vendors (S)CSS
 @import 'partials/vendors';

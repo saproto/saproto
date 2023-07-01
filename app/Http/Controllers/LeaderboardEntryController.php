@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
 use Proto\Models\User;
@@ -15,14 +16,19 @@ use Session;
 class LeaderboardEntryController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
+
+        if (! $leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
+        }
+
         if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
             Session::flash('flash_message', 'There is already a entry for this user');
+
             return Redirect::back();
         }
 
@@ -33,31 +39,44 @@ class LeaderboardEntryController extends Controller
         $entry->save();
 
         Session::flash('flash_message', 'Added new entry successfully.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request)
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
+
+        if (! $entry->leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entry->points = $request->points;
         $entry->save();
+
         return response()->json(['points' => $entry->points]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
     {
         $entry = LeaderboardEntry::findOrFail($id);
+
+        if (! $entry->leaderboard->canEdit(Auth::user())) {
+            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
+        }
+
         $entry->delete();
         Session::flash('flash_message', 'The entry has been deleted.');
+
         return Redirect::back();
     }
 }

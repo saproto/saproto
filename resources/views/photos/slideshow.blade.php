@@ -127,7 +127,9 @@
     const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"]
 
-    startSlideshow()
+    window.addEventListener('load', _ => {
+        startSlideshow()
+    })
 
     function startSlideshow() {
         get('{{ route("api::photos::albums") }}')

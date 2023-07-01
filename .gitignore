@@ -29,6 +29,8 @@ composer.phar
 /public/css
 /public/js
 /public/mix-manifest.json
+/public/build
+/public/hot
 
 # Dammit, Mac users
 .DS_Store

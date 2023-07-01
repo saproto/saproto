@@ -19,6 +19,7 @@ use Illuminate\Support\Collection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Orderline[] $orderlines
+ *
  * @method static Builder|Withdrawal whereClosed($value)
  * @method static Builder|Withdrawal whereCreatedAt($value)
  * @method static Builder|Withdrawal whereDate($value)
@@ -27,6 +28,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Withdrawal newModelQuery()
  * @method static Builder|Withdrawal newQuery()
  * @method static Builder|Withdrawal query()
+ *
  * @mixin Eloquent
  */
 class Withdrawal extends Model
@@ -64,7 +66,7 @@ class Withdrawal extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return Collection|OrderLine[]
      */
     public function orderlinesForUser($user)
@@ -73,7 +75,7 @@ class Withdrawal extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return int
      */
     public function totalForUser($user)
@@ -82,7 +84,7 @@ class Withdrawal extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return FailedWithdrawal
      */
     public function getFailedWithdrawal($user)
@@ -98,6 +100,7 @@ class Withdrawal extends Model
             ->where('payed_with_withdrawal', $this->id)
             ->groupBy('user_id')
             ->get();
+
         return count($data);
     }
 
@@ -105,6 +108,7 @@ class Withdrawal extends Model
     public function users()
     {
         $users = array_unique(OrderLine::where('payed_with_withdrawal', $this->id)->get()->pluck('user_id')->toArray());
+
         return User::withTrashed()->whereIn('id', $users)->orderBy('id', 'asc')->get();
     }
 

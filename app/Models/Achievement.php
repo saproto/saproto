@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read Collection|User[] $users
  * @property-read Collection|AchievementOwnership[] $achievement_ownership
+ *
  * @method static Builder|Achievement whereCreatedAt($value)
  * @method static Builder|Achievement whereDesc($value)
  * @method static Builder|Achievement whereFaIcon($value)
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Achievement newModelQuery()
  * @method static Builder|Achievement newQuery()
  * @method static Builder|Achievement query()
+ *
  * @mixin Eloquent
  */
 class Achievement extends Model
@@ -75,7 +77,7 @@ class Achievement extends Model
     }
 
     /**
-     * @param bool $is_member
+     * @param  bool  $is_member
      * @return User[]
      */
     public function currentOwners($is_member = true)

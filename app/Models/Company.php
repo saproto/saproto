@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read StorageEntry $image
  * @property-read Collection|Joboffer[] $joboffers
+ *
  * @method static Builder|Company whereCreatedAt($value)
  * @method static Builder|Company whereDescription($value)
  * @method static Builder|Company whereExcerpt($value)
@@ -46,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Company newModelQuery()
  * @method static Builder|Company newQuery()
  * @method static Builder|Company query()
+ *
  * @mixin Eloquent
  */
 class Company extends Model

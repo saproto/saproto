@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Photo $photo
+ *
  * @method static Builder|PhotoLikes whereCreatedAt($value)
  * @method static Builder|PhotoLikes whereId($value)
  * @method static Builder|PhotoLikes wherePhotoId($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PhotoLikes newModelQuery()
  * @method static Builder|PhotoLikes newQuery()
  * @method static Builder|PhotoLikes query()
+ *
  * @mixin Eloquent
  */
 class PhotoLikes extends Model

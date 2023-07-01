@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read User $user
  * @property-read Collection|QuoteLike[] $QuoteLike
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|Quote whereCreatedAt($value)
  * @method static Builder|Quote whereId($value)
  * @method static Builder|Quote whereQuote($value)
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
  * @method static Builder|Quote query()
+ *
  * @mixin Eloquent
  */
 class Quote extends Model
@@ -68,6 +70,7 @@ class Quote extends Model
         foreach ($this->QuoteLike as $like) {
             $users[] = $like;
         }
+
         return $users;
     }
 
@@ -79,6 +82,7 @@ class Quote extends Model
                 return true;
             }
         }
+
         return false;
     }
 }

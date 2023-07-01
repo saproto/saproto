@@ -28,6 +28,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string|null $deleted_at
  * @property-read StorageEntry|null $featuredImage
  * @property-read Collection|StorageEntry[] $files
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Page onlyTrashed()
@@ -46,6 +47,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Page newModelQuery()
  * @method static Builder|Page newQuery()
  * @method static Builder|Page query()
+ *
  * @mixin Eloquent
  */
 class Page extends Model
