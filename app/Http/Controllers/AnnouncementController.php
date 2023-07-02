@@ -63,11 +63,12 @@ class AnnouncementController extends Controller
         return Redirect::route('announcement::edit', ['id' => $announcement->id]);
     }
 
-    private function saveAnnouncement($announcement, $request){
+    private function saveAnnouncement($announcement, $request)
+    {
         $announcement->description = $request->description;
         $announcement->content = $request->input('content');
-        $announcement->display_from=date('Y-m-d H:i:s', strtotime($request->input('display_from')));
-        $announcement->display_till=date('Y-m-d H:i:s', strtotime($request->input('display_till')));
+        $announcement->display_from = date('Y-m-d H:i:s', strtotime($request->input('display_from')));
+        $announcement->display_till = date('Y-m-d H:i:s', strtotime($request->input('display_till')));
         $announcement->show_guests = $request->has('show_guests');
         $announcement->show_users = $request->has('show_users');
         $announcement->show_members = $request->has('show_members');
