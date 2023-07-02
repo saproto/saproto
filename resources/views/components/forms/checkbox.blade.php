@@ -1,7 +1,7 @@
 <div class="form-check">
     <input class="form-check-input {{$input_class_name ?? ''}}"
            type="{{ $type ?? 'checkbox' }}"
-           @if($value)
+           @if(isset($value))
                value="{{ $value }}"
            @endif
            id="{{$id ?? $name}}" name="{{$name}}"
