@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -50,13 +50,13 @@ class MenuItem extends Model
     /** @return BelongsTo */
     public function page()
     {
-        return $this->belongsTo('Proto\Models\Page', 'page_id', 'id');
+        return $this->belongsTo('App\Models\Page', 'page_id', 'id');
     }
 
     /** @return HasMany */
     public function children()
     {
-        return $this->hasMany('Proto\Models\MenuItem', 'parent');
+        return $this->hasMany('App\Models\MenuItem', 'parent');
     }
 
     /** @return string|null */

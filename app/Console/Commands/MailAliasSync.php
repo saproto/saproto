@@ -1,13 +1,13 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Proto\Models\Alias;
-use Proto\Models\Committee;
-use Proto\Models\EmailDbAlias;
-use Proto\Models\EmailDbDomain;
-use Proto\Models\User;
+use App\Models\Alias;
+use App\Models\Committee;
+use App\Models\EmailDbAlias;
+use App\Models\EmailDbDomain;
+use App\Models\User;
 
 class MailAliasSync extends Command
 {

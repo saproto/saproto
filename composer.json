@@ -89,7 +89,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Proto\\": "app/",
+      "App\\": "app/",
       "Database\\Seeders\\": "database/seeders/",
       "Database\\Factories\\": "database/factories/"
     }
