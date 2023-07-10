@@ -2,11 +2,11 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Models\Withdrawal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
-use App\Models\Withdrawal;
 
 class OmnomcomFailedWithdrawalNotification extends Mailable
 {

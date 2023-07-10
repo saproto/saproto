@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
+use Auth;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Redirect;
 use Session;
 

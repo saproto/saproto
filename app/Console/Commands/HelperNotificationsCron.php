@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Mail\DailyHelperMail;
 use App\Models\HelpingCommittee;
 use App\Models\User;
+use Illuminate\Console\Command;
+use Mail;
 
 class HelperNotificationsCron extends Command
 {

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\View\View;
 use App\Models\ActivityParticipation;
 use App\Models\CommitteeMembership;
 use App\Models\OrderLine;
 use App\Models\User;
+use Auth;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
 
 class UserProfileController extends Controller
 {

@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserMailChange;
+use App\Models\Member;
+use App\Models\StorageEntry;
+use App\Models\User;
+use App\Rules\NotUtwenteEmail;
 use Auth;
 use Carbon;
 use DateTime;
@@ -12,11 +17,6 @@ use Illuminate\View\View;
 use Mail;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
-use App\Mail\UserMailChange;
-use App\Models\Member;
-use App\Models\StorageEntry;
-use App\Models\User;
-use App\Rules\NotUtwenteEmail;
 use Redirect;
 use Session;
 use Validator;

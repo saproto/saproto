@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HashMapItem;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use App\Models\HashMapItem;
 use stdClass;
 
 class IsAlfredThereController extends Controller

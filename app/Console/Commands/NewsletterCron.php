@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsletter;
+use Illuminate\Console\Command;
+use Mail;
 
 class NewsletterCron extends Command
 {

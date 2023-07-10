@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<ActivityParticipation>

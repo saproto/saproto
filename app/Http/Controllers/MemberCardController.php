@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
-use App\Models\User;
 
 class MemberCardController extends Controller
 {

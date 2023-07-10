@@ -2,9 +2,9 @@
 
 namespace App\Console;
 
+use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Models\WallstreetDrink;
 
 class Kernel extends ConsoleKernel
 {

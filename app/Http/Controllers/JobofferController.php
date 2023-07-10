@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Joboffer;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Company;
-use App\Models\Joboffer;
 use Redirect;
 use Session;
 

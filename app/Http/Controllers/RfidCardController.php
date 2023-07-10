@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QrAuthRequest;
+use App\Models\RfidCard;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\QrAuthRequest;
-use App\Models\RfidCard;
 use Redirect;
 use Session;
 

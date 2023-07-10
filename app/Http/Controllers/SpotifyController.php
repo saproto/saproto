@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HashMapItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Models\HashMapItem;
 use Redirect;
 use Session;
 use SpotifyWebAPI\Session as SpotifySession;

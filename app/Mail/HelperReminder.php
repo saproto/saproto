@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\HelpingCommittee;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\HelpingCommittee;
 
 class HelperReminder extends Mailable
 {

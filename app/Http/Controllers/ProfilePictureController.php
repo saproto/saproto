@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Models\StorageEntry;
 use Redirect;
 use Session;
 

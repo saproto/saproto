@@ -2,10 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\ActivityParticipation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\ActivityParticipation;
 
 class ActivityMovedFromBackup extends Mailable
 {

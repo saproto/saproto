@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use App\Models\OrderLine;
 use App\Models\User;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class OmNomComCleanup extends Command
 {

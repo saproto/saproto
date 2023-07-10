@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Http\Controllers\LdapController;
 use App\Mail\UtwenteCleanup;
 use App\Models\User;
+use Illuminate\Console\Command;
+use Mail;
 
 class CheckUtwenteAccounts extends Command
 {

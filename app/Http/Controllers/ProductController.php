@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProductBulkUpdateNotification;
+use App\Models\Account;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\StockMutation;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -9,12 +15,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mail;
-use App\Mail\ProductBulkUpdateNotification;
-use App\Models\Account;
-use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\StockMutation;
-use App\Models\StorageEntry;
 use Redirect;
 use Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;

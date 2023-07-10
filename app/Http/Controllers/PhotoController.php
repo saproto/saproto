@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PhotoLikes;
+use App\Models\PhotoManager;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Models\PhotoLikes;
-use App\Models\PhotoManager;
 use Redirect;
 
 class PhotoController extends Controller

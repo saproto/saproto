@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\User;
 
 class RegistrationHelperController extends Controller
 {

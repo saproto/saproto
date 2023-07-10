@@ -2,11 +2,11 @@
 
 namespace App\Mail;
 
+use App\Models\HelpingCommittee;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\HelpingCommittee;
-use App\Models\User;
 
 class HelperMutation extends Mailable
 {

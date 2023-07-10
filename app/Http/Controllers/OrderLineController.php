@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\FailedWithdrawal;
+use App\Models\OrderLine;
+use App\Models\Product;
+use App\Models\TicketPurchase;
+use App\Models\User;
 use Auth;
 use Carbon;
 use DB;
@@ -10,12 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Activity;
-use App\Models\FailedWithdrawal;
-use App\Models\OrderLine;
-use App\Models\Product;
-use App\Models\TicketPurchase;
-use App\Models\User;
 use Redirect;
 use Session;
 

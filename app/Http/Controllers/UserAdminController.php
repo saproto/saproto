@@ -2,14 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Carbon;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Mail;
-use PDF;
 use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
 use App\Mail\MembershipEndSet;
@@ -18,6 +10,14 @@ use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
+use Auth;
+use Carbon;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Mail;
+use PDF;
 use Redirect;
 use Session;
 use Spatie\Permission\Models\Permission;

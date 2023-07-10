@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
-use App\Models\Event;
-use App\Models\Member;
 
 class QueryController extends Controller
 {

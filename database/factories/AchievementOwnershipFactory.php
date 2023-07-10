@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<AchievementOwnership>

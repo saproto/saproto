@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Permission;
 use App\Models\Account;
 use App\Models\Achievement;
 use App\Models\Activity;
@@ -18,6 +17,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductCategoryEntry;
 use App\Models\Ticket;
 use App\Models\User;
+use Permission;
 use Role;
 
 class ExportController extends Controller

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmailList;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\EmailList;
-use App\Models\User;
 use Redirect;
 use Session;
 

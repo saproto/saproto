@@ -2,9 +2,9 @@
 
 namespace App\Handlers\Events;
 
-use Illuminate\Auth\Events\Login;
 use App\Models\Committee;
 use App\Models\User;
+use Illuminate\Auth\Events\Login;
 
 class AuthLoginEventHandler
 {

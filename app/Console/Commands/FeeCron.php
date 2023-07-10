@@ -2,14 +2,14 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Http\Controllers\LdapController;
 use App\Mail\FeeEmail;
 use App\Mail\FeeEmailForBoard;
 use App\Models\Member;
 use App\Models\OrderLine;
 use App\Models\Product;
+use Illuminate\Console\Command;
+use Mail;
 
 class FeeCron extends Command
 {

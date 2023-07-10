@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Bank;
+use Illuminate\Console\Command;
 
 class TestIBANs extends Command
 {

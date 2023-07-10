@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Member;
+use Illuminate\Console\Command;
 
 class PrintActiveMembers extends Command
 {

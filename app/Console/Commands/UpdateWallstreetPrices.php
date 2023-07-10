@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetPrice;
+use Illuminate\Console\Command;
 
 class UpdateWallstreetPrices extends Command
 {

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\OrderLine;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Account;
-use App\Models\OrderLine;
 
 class TIPCieController extends Controller
 {

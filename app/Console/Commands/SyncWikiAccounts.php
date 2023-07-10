@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Committee;
 use App\Models\User;
+use Illuminate\Console\Command;
 
 class SyncWikiAccounts extends Command
 {

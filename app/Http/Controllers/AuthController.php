@@ -2,17 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Exception;
-use Hash;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
-use Mail;
-use nickurt\PwnedPasswords\PwnedPasswords;
-use OneLogin\Saml2\AuthnRequest;
-use PragmaRX\Google2FA\Google2FA;
 use App\Mail\PasswordResetEmail;
 use App\Mail\PwnedPasswordNotification;
 use App\Mail\RegistrationConfirmation;
@@ -29,6 +18,17 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Models\WelcomeMessage;
 use App\Rules\NotUtwenteEmail;
+use Auth;
+use Exception;
+use Hash;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Mail;
+use nickurt\PwnedPasswords\PwnedPasswords;
+use OneLogin\Saml2\AuthnRequest;
+use PragmaRX\Google2FA\Google2FA;
 use Redirect;
 use Session;
 

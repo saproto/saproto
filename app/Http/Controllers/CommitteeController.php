@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AnonymousEmail;
+use App\Models\Committee;
+use App\Models\CommitteeMembership;
+use App\Models\HelperReminder;
+use App\Models\StorageEntry;
+use App\Models\User;
 use Auth;
 use Carbon;
 use Exception;
@@ -11,12 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Mail;
-use App\Mail\AnonymousEmail;
-use App\Models\Committee;
-use App\Models\CommitteeMembership;
-use App\Models\HelperReminder;
-use App\Models\StorageEntry;
-use App\Models\User;
 use Redirect;
 use Session;
 

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Account;
-use App\Models\Product;
 use Redirect;
 use Session;
 

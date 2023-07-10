@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use DB;
-use Illuminate\Console\Command;
 use App\Models\QrAuthRequest;
 use App\Models\Token;
+use DB;
+use Illuminate\Console\Command;
 
 class ClearSessionTable extends Command
 {

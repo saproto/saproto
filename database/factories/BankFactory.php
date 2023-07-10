@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Bank;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Bank>

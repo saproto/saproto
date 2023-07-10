@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\HashMapItem;
 use Auth;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\HashMapItem;
 use Redirect;
 
 class EnforceWizard

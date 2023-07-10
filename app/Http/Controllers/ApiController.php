@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
 use App\Models\EmailListSubscription;
@@ -18,6 +14,10 @@ use App\Models\QuoteLike;
 use App\Models\RfidCard;
 use App\Models\Token;
 use App\Models\User;
+use Auth;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use stdClass;
 
 class ApiController extends Controller

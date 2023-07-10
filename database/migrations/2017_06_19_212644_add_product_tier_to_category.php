@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\ProductCategoryEntry;
+use Illuminate\Database\Migrations\Migration;
 
 class AddProductTierToCategory extends Migration
 {

@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use DB;
-use Illuminate\Console\Command;
 use App\Http\Controllers\SpotifyController;
 use App\Models\PlayedVideo;
+use DB;
+use Illuminate\Console\Command;
 
 class SpotifyUpdate extends Command
 {

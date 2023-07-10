@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\CommitteeMembership;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<CommitteeMembership>

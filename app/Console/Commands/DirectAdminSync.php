@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Alias;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Member;
+use Illuminate\Console\Command;
 use Solitweb\DirectAdmin\DirectAdmin;
 
 class DirectAdminSync extends Command

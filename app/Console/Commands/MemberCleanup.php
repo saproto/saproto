@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Member;
 use Carbon;
 use Exception;
 use Illuminate\Console\Command;
-use App\Models\Member;
 
 class MemberCleanup extends Command
 {

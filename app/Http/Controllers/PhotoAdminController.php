@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
+use App\Models\PhotoAlbum;
+use App\Models\PhotoManager;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -10,10 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
-use App\Models\Photo;
-use App\Models\PhotoAlbum;
-use App\Models\PhotoManager;
-use App\Models\StorageEntry;
 use Redirect;
 use Session;
 

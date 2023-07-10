@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Database\Seeder;
 use App\Models\AchievementOwnership;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
@@ -17,6 +15,8 @@ use App\Models\OrderLine;
 use App\Models\Page;
 use App\Models\Quote;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Database\Seeder;
 
 class OtherDataSeeder extends Seeder
 {

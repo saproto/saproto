@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Mail\MembershipRenew;
 use App\Models\Member;
+use Illuminate\Console\Command;
+use Mail;
 
 class MemberRenewCron extends Command
 {

@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Carbon;
-use Illuminate\Console\Command;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\Activity;
@@ -14,6 +12,8 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
+use Carbon;
+use Illuminate\Console\Command;
 
 class AchievementsCron extends Command
 {

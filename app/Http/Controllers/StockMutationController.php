@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use App\Models\Product;
 use App\Models\StockMutation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class StockMutationController extends Controller
 {

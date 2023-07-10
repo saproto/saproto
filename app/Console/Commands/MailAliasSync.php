@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Alias;
 use App\Models\Committee;
 use App\Models\EmailDbAlias;
 use App\Models\EmailDbDomain;
 use App\Models\User;
+use Illuminate\Console\Command;
 
 class MailAliasSync extends Command
 {

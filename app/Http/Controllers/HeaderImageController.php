@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HeaderImage;
+use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -9,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use App\Models\HeaderImage;
-use App\Models\StorageEntry;
 
 class HeaderImageController extends Controller
 {

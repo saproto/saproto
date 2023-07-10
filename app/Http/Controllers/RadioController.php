@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RadioStation;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use App\Models\RadioStation;
 
 class RadioController extends Controller
 {

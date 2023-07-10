@@ -2,15 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -22,6 +13,15 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
 use App\Models\User;
+use Auth;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 use Response;
 use Session;
 

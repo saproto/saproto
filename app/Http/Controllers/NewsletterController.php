@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmailList;
+use App\Models\Event;
+use App\Models\Newsletter;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\EmailList;
-use App\Models\Event;
-use App\Models\Newsletter;
 use Redirect;
 use Session;
 

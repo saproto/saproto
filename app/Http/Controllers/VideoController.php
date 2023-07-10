@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Video;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\Event;
-use App\Models\Video;
 use Redirect;
 use Session;
 use Youtube;

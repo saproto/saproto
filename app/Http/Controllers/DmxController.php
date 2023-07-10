@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DmxChannel;
+use App\Models\DmxFixture;
+use App\Models\DmxOverride;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Models\DmxChannel;
-use App\Models\DmxFixture;
-use App\Models\DmxOverride;
 use Redirect;
 use Session;
 

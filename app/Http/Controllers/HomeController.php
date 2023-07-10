@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Carbon;
-use Illuminate\View\View;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -14,6 +11,9 @@ use App\Models\Newsitem;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
+use Auth;
+use Carbon;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {

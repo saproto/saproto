@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Mail;
 use App\Mail\VerifyPersonalDetails;
 use App\Models\User;
+use Illuminate\Console\Command;
+use Mail;
 
 class VerifyPersonalDetailsEmailCron extends Command
 {

@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Mail;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -18,6 +12,12 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
 use App\Models\User;
+use Auth;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Mail;
 use Redirect;
 use Session;
 
