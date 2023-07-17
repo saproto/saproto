@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\SyncRoles::class,
         Commands\TestEmail::class,
-        Commands\MailAliasSync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
