@@ -5,20 +5,20 @@ namespace Database\Seeders;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
-useApp\Models\AchievementOwnership;
-useApp\Models\Activity;
-useApp\Models\ActivityParticipation;
-useApp\Models\Address;
-useApp\Models\Bank;
-useApp\Models\Committee;
-useApp\Models\CommitteeMembership;
-useApp\Models\Feedback;
-useApp\Models\FeedbackCategory;
-useApp\Models\HashMapItem;
-useApp\Models\Member;
-useApp\Models\OrderLine;
-useApp\Models\Page;
-useApp\Models\User;
+use App\Models\AchievementOwnership;
+use App\Models\Activity;
+use App\Models\ActivityParticipation;
+use App\Models\Address;
+use App\Models\Bank;
+use App\Models\Committee;
+use App\Models\CommitteeMembership;
+use App\Models\Feedback;
+use App\Models\FeedbackCategory;
+use App\Models\HashMapItem;
+use App\Models\Member;
+use App\Models\OrderLine;
+use App\Models\Page;
+use App\Models\User;
 
 class OtherDataSeeder extends Seeder
 {
