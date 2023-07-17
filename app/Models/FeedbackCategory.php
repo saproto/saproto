@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon\Carbon;
 use Eloquent;
@@ -42,11 +42,11 @@ class FeedbackCategory extends Model
 
     public function feedback(): HasMany
     {
-        return $this->hasMany('Proto\Models\Feedback', 'feedback_category_id');
+        return $this->hasMany('App\Models\Feedback', 'feedback_category_id');
     }
 
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\User', 'reviewer_id');
+        return $this->belongsTo('App\Models\User', 'reviewer_id');
     }
 }

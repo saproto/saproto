@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -49,17 +49,17 @@ class Feedback extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\FeedbackCategory', 'feedback_category_id');
+        return $this->belongsTo('App\Models\FeedbackCategory', 'feedback_category_id');
     }
 
     public function votes(): HasMany
     {
-        return $this->hasMany('Proto\Models\FeedbackVote');
+        return $this->hasMany('App\Models\FeedbackVote');
     }
 
     public function voteScore(): int

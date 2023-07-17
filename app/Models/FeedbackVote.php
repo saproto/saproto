@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\FeedbackVote.
+ * App\Models\FeedbackVote.
  *
  * @property int $id
  * @property int $user_id
@@ -40,11 +40,11 @@ class FeedbackVote extends Model
 
     public function feedback(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\Feedback');
+        return $this->belongsTo('App\Models\Feedback');
     }
 
     public function user(): HasOne
     {
-        return $this->hasOne('Proto\Models\User');
+        return $this->hasOne('App\Models\User');
     }
 }
