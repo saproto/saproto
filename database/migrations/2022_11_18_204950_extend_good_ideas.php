@@ -1,9 +1,13 @@
 <?php
 
+use App\Models\Feedback;
 use App\Models\FeedbackCategory;
+use App\Models\FeedbackVote;
+use App\Models\Quote;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\GoodIdea;
 
 class ExtendGoodIdeas extends Migration
 {
@@ -14,18 +18,23 @@ class ExtendGoodIdeas extends Migration
      */
     public function up()
     {
-        Schema::rename('good_idea_votes', 'feedback_votes');
-        Schema::table('feedback_votes', function (Blueprint $table) {
-            $table->renameColumn('good_idea_id', 'feedback_id');
+        Schema::create('feedback_votes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('feedback_id');
+            $table->integer('vote');
+            $table->timestamps();
         });
 
-        Schema::rename('good_ideas', 'feedback');
-        Schema::table('feedback', function (Blueprint $table) {
-            $table->renameColumn('idea', 'feedback');
-            $table->bigInteger('feedback_category_id')->after('user_id')->default(1);
-            $table->boolean('reviewed')->after('idea')->default(false);
-            $table->boolean('accepted')->after('reviewed')->nullable();
-            $table->text('reply')->after('accepted')->nullable();
+        Schema::create('feedback', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->bigInteger('feedback_category_id')->default(1);
+            $table->text('feedback');
+            $table->boolean('reviewed')->default(false);
+            $table->boolean('accepted')->nullable();
+            $table->text('reply')->nullable();
+            $table->timestamps();
             $table->softDeletes();
         });
 
@@ -35,15 +44,67 @@ class ExtendGoodIdeas extends Migration
             $table->string('url');
             $table->boolean('review');
             $table->integer('reviewer_id')->nullable();
+            $table->boolean('can_reply')->default(true);
             $table->timestamps();
         });
 
-        $goodideas = new FeedbackCategory([
+        $goodideaCategory = new FeedbackCategory([
             'title' => 'Good ideas',
             'url' => 'goodideas',
             'review' => false,
+            'can_reply' => true,
         ]);
-        $goodideas->save();
+        $goodideaCategory->save();
+
+        foreach (GoodIdea::all() as $goodidea) {
+            $new = new Feedback([
+                'user_id' => $goodidea->user->id,
+                'feedback_category_id' => $goodidea->id,
+                'feedback' => $goodidea->quote,
+                'reviewed' => true,
+                'created_at' => $goodidea->created_at,
+            ]);
+            $new->save();
+            foreach ($goodidea->quoteLike() as $like) {
+                $newLike = new FeedbackVote([
+                    'user_id' => $like->user_id,
+                    'feedback_id' => $new->id,
+                    'vote' => 1,
+                    'created_at' => $goodidea->created_at,
+                ]);
+                $newLike->save();
+            }
+        }
+
+
+
+        $quoteCategory = new FeedbackCategory([
+            'title' => 'quotes',
+            'url' => 'quotes',
+            'review' => false,
+            'can_reply' => false,
+        ]);
+        $quoteCategory->save();
+
+        foreach (Quote::all() as $quote) {
+            $new = new Feedback([
+                'user_id' => $quote->user->id,
+                'feedback_category_id' => $quoteCategory->id,
+                'feedback' => $quote->quote,
+                'reviewed' => true,
+                'created_at' => $quote->created_at,
+            ]);
+            $new->save();
+            foreach ($quote->quoteLike() as $like) {
+                $newLike = new FeedbackVote([
+                    'user_id' => $like->user_id,
+                    'feedback_id' => $new->id,
+                    'vote' => 1,
+                    'created_at' => $quote->created_at,
+                ]);
+                $newLike->save();
+            }
+        }
     }
 
     /**
@@ -53,21 +114,8 @@ class ExtendGoodIdeas extends Migration
      */
     public function down()
     {
-        Schema::rename('feedback_votes', 'good_idea_votes');
-        Schema::table('good_idea_votes', function (Blueprint $table) {
-            $table->renameColumn('feedback_id', 'good_idea_id');
-        });
-
-        Schema::rename('feedback', 'good_ideas');
-        Schema::table('good_ideas', function (Blueprint $table) {
-            $table->renameColumn('feedback', 'idea');
-            $table->dropIfExists('reviewed');
-            $table->dropIfExists('accepted');
-            $table->dropIfExists('reply');
-            $table->dropIfExists('feedback_category_id');
-            $table->dropSoftDeletes();
-        });
-
+        Schema::drop('feedback');
+        Schema::drop('feedback_votes');
         Schema::drop('feedback_categories');
     }
 }

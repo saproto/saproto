@@ -45,6 +45,7 @@ class MigrateQuotes extends Command
             'title' => 'quotes',
             'url' => 'quotes',
             'review' => false,
+            'can_reply' => false,
         ]);
         $quoteCategory->save();
 

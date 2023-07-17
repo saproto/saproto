@@ -29,7 +29,7 @@
                                     'label' => 'Review feedback from the category before publishing?'
                                 ])
 
-                        <div id="reviewer" class="{{$cur_category->review?"":"d-none"}}">
+                        <div id="reviewer" class="{{$cur_category?->review?"":"d-none"}}">
                             <label for="user_id">Reviewer Name:</label>
                             <div class="form-group autocomplete">
                                 <input class="form-control user-search" value="{{$cur_category->reviewer_id??''}}" id="user_id" name="user_id"/>

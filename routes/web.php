@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedBackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -512,11 +513,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     Route::get('quotes', ['as' => 'quotes::list', function (Illuminate\Http\Request $request) {
-        return (new App\Http\Controllers\FeedBackController())->index($request, 'quotes');
+        return (new FeedBackController())->index($request, 'quotes');
     }]);
 
     Route::get('goodideas', ['as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
-        return (new App\Http\Controllers\FeedBackController())->index($request, 'goodideas');
+        return (new FeedBackController())->index($request, 'goodideas');
     }]);
 
     /* Routes related to the Feedback Boards. */
