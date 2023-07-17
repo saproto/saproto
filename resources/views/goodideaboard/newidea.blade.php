@@ -1,16 +1,16 @@
-<form class="form-horizontal" method="post" action="{{ route("feedback::add", ['category'=>$category]) }}">
+<form class="form-horizontal" method="post" action="{{ route("goodideas::add") }}">
 
     {{ csrf_field() }}
 
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Add your {{ strtolower($category->title) }}
+            Add your own idea
         </div>
 
         <div class="card-body">
             <textarea class="form-control" rows="4" cols="30" name="idea" required
-                      placeholder="An online {{strtolower($category->title)}} board."></textarea>
+                      placeholder="An online good idea board."></textarea>
         </div>
 
         <div class="card-footer">
