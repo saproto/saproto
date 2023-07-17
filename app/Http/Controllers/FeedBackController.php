@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FeedbackReplyEmail;
+use App\Models\Feedback;
+use App\Models\FeedbackCategory;
+use App\Models\FeedbackVote;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -15,11 +20,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use App\Mail\FeedbackReplyEmail;
-use App\Models\Feedback;
-use App\Models\FeedbackCategory;
-use App\Models\FeedbackVote;
-use App\Models\User;
 
 class FeedBackController extends Controller
 {

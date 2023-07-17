@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Models\Quote;
 use App\Models\FeedbackCategory;
+use App\Models\Quote;
+use Illuminate\Console\Command;
 
 class MigrateQuotes extends Command
 {

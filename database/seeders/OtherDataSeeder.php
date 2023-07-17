@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
+
 useApp\Models\AchievementOwnership;
 useApp\Models\Activity;
 useApp\Models\ActivityParticipation;
