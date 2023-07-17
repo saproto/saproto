@@ -1,7 +1,13 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\OrderLine;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\QrAuthRequest;
+use App\Models\RfidCard;
+use App\Models\User;
 use Auth;
 use DB;
 use Exception;
@@ -11,12 +17,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\ProductCategory;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\RfidCard;
-use Proto\Models\User;
 use stdClass;
 
 class OmNomController extends Controller
@@ -90,10 +90,6 @@ class OmNomController extends Controller
             /** @var Product $product */
             foreach ($category->products as $product) {
                 if ($product->isVisible()) {
-                    if ($product->image) {
-                        /* @phpstan-ignore-next-line  */
-                        $product->image_url = $product->image->generateImagePath(100, null);
-                    }
                     $products[] = $product;
                 }
             }

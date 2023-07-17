@@ -1,7 +1,10 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Dinnerform;
+use App\Models\DinnerformOrderline;
+use App\Models\Product;
 use Auth;
 use Carbon;
 use Exception;
@@ -9,9 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\Dinnerform;
-use Proto\Models\DinnerformOrderline;
-use Proto\Models\Product;
 use Session;
 
 class DinnerformController extends Controller
@@ -74,6 +74,7 @@ class DinnerformController extends Controller
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
             'visible_home_page' => $request->has('homepage'),
+            'ordered_by_user_id' => $request->input('ordered_by'),
         ]);
 
         Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
@@ -135,6 +136,7 @@ class DinnerformController extends Controller
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
             'visible_home_page' => $request->has('homepage'),
+            'ordered_by_user_id' => $request->input('ordered_by'),
         ]);
 
         if ($changed_important_details) {

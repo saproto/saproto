@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\HashMapItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Proto\Models\HashMapItem;
 
 /**
  * @extends Factory<HashMapItem>
