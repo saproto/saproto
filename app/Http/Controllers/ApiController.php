@@ -9,8 +9,6 @@ use App\Models\OrderLine;
 use App\Models\Photo;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
-use App\Models\Quote;
-use App\Models\QuoteLike;
 use App\Models\RfidCard;
 use App\Models\Token;
 use App\Models\User;
@@ -18,19 +16,9 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\AchievementOwnership;
-use App\Models\ActivityParticipation;
-use App\Models\EmailListSubscription;
 use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
-use App\Models\OrderLine;
-use App\Models\Photo;
-use App\Models\PhotoLikes;
-use App\Models\PlayedVideo;
-use App\Models\RfidCard;
-use App\Models\Token;
-use App\Models\User;
 use stdClass;
 
 class ApiController extends Controller
