@@ -3,11 +3,11 @@
 use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
+use App\Models\GoodIdea;
 use App\Models\Quote;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\GoodIdea;
 
 class AddFeedbackFunctionality extends Migration
 {
@@ -56,7 +56,7 @@ class AddFeedbackFunctionality extends Migration
         ]);
         $goodideaCategory->save();
 
-        if(class_exists('GoodIdea')) {
+        if (class_exists('GoodIdea')) {
             foreach (GoodIdea::all() as $goodidea) {
                 $new = new Feedback([
                     'user_id' => $goodidea->user->id,
@@ -78,8 +78,6 @@ class AddFeedbackFunctionality extends Migration
             }
         }
 
-
-
         $quoteCategory = new FeedbackCategory([
             'title' => 'quotes',
             'url' => 'quotes',
@@ -88,7 +86,7 @@ class AddFeedbackFunctionality extends Migration
         ]);
         $quoteCategory->save();
 
-        if(class_exists('Quote')){
+        if (class_exists('Quote')) {
             foreach (Quote::all() as $quote) {
                 $new = new Feedback([
                     'user_id' => $quote->user->id,
