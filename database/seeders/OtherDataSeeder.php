@@ -4,20 +4,20 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
-use Proto\Models\AchievementOwnership;
-use Proto\Models\Activity;
-use Proto\Models\ActivityParticipation;
-use Proto\Models\Address;
-use Proto\Models\Bank;
-use Proto\Models\Committee;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\Feedback;
-use Proto\Models\FeedbackCategory;
-use Proto\Models\HashMapItem;
-use Proto\Models\Member;
-use Proto\Models\OrderLine;
-use Proto\Models\Page;
-use Proto\Models\User;
+useApp\Models\AchievementOwnership;
+useApp\Models\Activity;
+useApp\Models\ActivityParticipation;
+useApp\Models\Address;
+useApp\Models\Bank;
+useApp\Models\Committee;
+useApp\Models\CommitteeMembership;
+useApp\Models\Feedback;
+useApp\Models\FeedbackCategory;
+useApp\Models\HashMapItem;
+useApp\Models\Member;
+useApp\Models\OrderLine;
+useApp\Models\Page;
+useApp\Models\User;
 
 class OtherDataSeeder extends Seeder
 {

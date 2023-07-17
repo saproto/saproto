@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Proto\Models\Feedback;
-use Proto\Models\User;
+use App\Models\Feedback;
+use App\Models\User;
 
 /**
  * @extends Factory<Feedback>

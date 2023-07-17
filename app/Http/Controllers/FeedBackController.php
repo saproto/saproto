@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Mail\FeedbackReplyEmail;
-use Proto\Models\Feedback;
-use Proto\Models\FeedbackCategory;
-use Proto\Models\FeedbackVote;
-use Proto\Models\User;
+use App\Mail\FeedbackReplyEmail;
+use App\Models\Feedback;
+use App\Models\FeedbackCategory;
+use App\Models\FeedbackVote;
+use App\Models\User;
 
 class FeedBackController extends Controller
 {

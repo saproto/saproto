@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\FeedbackCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -37,7 +38,7 @@ class ExtendGoodIdeas extends Migration
             $table->timestamps();
         });
 
-        $goodideas = new \Proto\Models\FeedbackCategory([
+        $goodideas = new FeedbackCategory([
             'title' => 'Good ideas',
             'url' => 'goodideas',
             'review' => false,

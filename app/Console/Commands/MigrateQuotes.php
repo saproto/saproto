@@ -1,12 +1,10 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Proto\Models\Feedback;
-use Proto\Models\FeedbackCategory;
-use Proto\Models\FeedbackVote;
-use Proto\Models\Quote;
+use App\Models\Quote;
+use App\Models\FeedbackCategory;
 
 class MigrateQuotes extends Command
 {
