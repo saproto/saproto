@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
 use App\Models\EmailListSubscription;
+use App\Models\Feedback;
+use App\Models\FeedbackCategory;
+use App\Models\FeedbackVote;
 use App\Models\OrderLine;
 use App\Models\Photo;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
-use App\Models\Quote;
-use App\Models\QuoteLike;
 use App\Models\RfidCard;
 use App\Models\Token;
 use App\Models\User;
@@ -254,18 +255,24 @@ class ApiController extends Controller
             $data['liked_photos'][] = $photo_like->photo->url;
         }
 
-        foreach (Quote::where('user_id', $user->id)->get() as $quote) {
-            $data['placed_quotes'][] = [
-                'quote' => $quote->quote,
-                'created_at' => $quote->created_at,
-            ];
-        }
+        foreach (FeedbackCategory::all() as $category) {
+            foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $quote) {
+                $data["placed_$category->url"][] = [
+                    'feedback' => $quote->feedback,
+                    'created_at' => $quote->created_at,
+                    'accepted' => $quote->accepted,
+                    'reply' => $quote->reply,
+                ];
+            }
 
-        foreach (QuoteLike::where('user_id', $user->id)->get() as $quote) {
-            $data['liked_quotes'][] = [
-                'quote' => $quote->quote,
-                'liked_at' => $quote->created_at,
-            ];
+            foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', function ($q) use ($category) {
+                $q->where('feedback_category_id', $category->id);
+            })->get() as $quote) {
+                $data["liked_$category->url"][] = [
+                    'feedback' => $quote->feedback->feedback,
+                    'liked_at' => $quote->created_at,
+                ];
+            }
         }
 
         return $data;
