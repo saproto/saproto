@@ -48,7 +48,7 @@ class FeedBackController extends Controller
 
     private function getMostVoted(FeedbackCategory $category): Model|Builder|Feedback|null
     {
-        //find the most voted idea
+        //find the most voted piece of feedback
         $mostVotedID = FeedbackVote::query()
             ->whereHas('feedback', function ($query) use ($category) {
                 $query->where('feedback_category_id', $category->id);
@@ -158,10 +158,10 @@ class FeedBackController extends Controller
         $feedback = Feedback::withTrashed()->findOrFail($id);
         if ($feedback->trashed()) {
             $feedback->restore();
-            Session::flash('flash_message', 'Good Idea restored.');
+            Session::flash('flash_message', 'Feedback restored.');
         } else {
             $feedback->delete();
-            Session::flash('flash_message', 'Good Idea archived.');
+            Session::flash('flash_message', 'Feedback archived.');
         }
 
         return Redirect::back();
@@ -170,14 +170,14 @@ class FeedBackController extends Controller
     public function restore(int $id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
-            Session::flash('flash_message', 'You are not allowed to restore this idea.');
+            Session::flash('flash_message', 'You are not allowed to restore this feedback.');
 
             return Redirect::back();
         }
 
         $feedback = Feedback::onlyTrashed()->findOrFail($id);
         $feedback->restore();
-        Session::flash('flash_message', 'Good Idea restored.');
+        Session::flash('flash_message', 'Feedback restored.');
 
         return Redirect::back();
     }
@@ -186,14 +186,14 @@ class FeedBackController extends Controller
     {
         $feedback = Feedback::withTrashed()->findOrFail($id);
         if (! (Auth::user()->can('board') || Auth::user()->id == $feedback->user->id)) {
-            Session::flash('flash_message', 'You are not allowed to delete this idea.');
+            Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();
         }
 
         $feedback->votes()->delete();
         $feedback->forceDelete();
-        Session::flash('flash_message', 'Good Idea deleted.');
+        Session::flash('flash_message', 'Feedback deleted.');
 
         return Redirect::back();
     }
