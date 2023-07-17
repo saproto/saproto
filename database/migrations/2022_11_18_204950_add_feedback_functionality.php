@@ -9,7 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\GoodIdea;
 
-class ExtendGoodIdeas extends Migration
+class AddFeedbackFunctionality extends Migration
 {
     /**
      * Run the migrations.
@@ -56,23 +56,25 @@ class ExtendGoodIdeas extends Migration
         ]);
         $goodideaCategory->save();
 
-        foreach (GoodIdea::all() as $goodidea) {
-            $new = new Feedback([
-                'user_id' => $goodidea->user->id,
-                'feedback_category_id' => $goodidea->id,
-                'feedback' => $goodidea->quote,
-                'reviewed' => true,
-                'created_at' => $goodidea->created_at,
-            ]);
-            $new->save();
-            foreach ($goodidea->quoteLike() as $like) {
-                $newLike = new FeedbackVote([
-                    'user_id' => $like->user_id,
-                    'feedback_id' => $new->id,
-                    'vote' => 1,
+        if(class_exists('GoodIdea')) {
+            foreach (GoodIdea::all() as $goodidea) {
+                $new = new Feedback([
+                    'user_id' => $goodidea->user->id,
+                    'feedback_category_id' => $goodidea->id,
+                    'feedback' => $goodidea->quote,
+                    'reviewed' => true,
                     'created_at' => $goodidea->created_at,
                 ]);
-                $newLike->save();
+                $new->save();
+                foreach ($goodidea->quoteLike() as $like) {
+                    $newLike = new FeedbackVote([
+                        'user_id' => $like->user_id,
+                        'feedback_id' => $new->id,
+                        'vote' => 1,
+                        'created_at' => $goodidea->created_at,
+                    ]);
+                    $newLike->save();
+                }
             }
         }
 
@@ -86,23 +88,25 @@ class ExtendGoodIdeas extends Migration
         ]);
         $quoteCategory->save();
 
-        foreach (Quote::all() as $quote) {
-            $new = new Feedback([
-                'user_id' => $quote->user->id,
-                'feedback_category_id' => $quoteCategory->id,
-                'feedback' => $quote->quote,
-                'reviewed' => true,
-                'created_at' => $quote->created_at,
-            ]);
-            $new->save();
-            foreach ($quote->quoteLike() as $like) {
-                $newLike = new FeedbackVote([
-                    'user_id' => $like->user_id,
-                    'feedback_id' => $new->id,
-                    'vote' => 1,
+        if(class_exists('Quote')){
+            foreach (Quote::all() as $quote) {
+                $new = new Feedback([
+                    'user_id' => $quote->user->id,
+                    'feedback_category_id' => $quoteCategory->id,
+                    'feedback' => $quote->quote,
+                    'reviewed' => true,
                     'created_at' => $quote->created_at,
                 ]);
-                $newLike->save();
+                $new->save();
+                foreach ($quote->quoteLike() as $like) {
+                    $newLike = new FeedbackVote([
+                        'user_id' => $like->user_id,
+                        'feedback_id' => $new->id,
+                        'vote' => 1,
+                        'created_at' => $quote->created_at,
+                    ]);
+                    $newLike->save();
+                }
             }
         }
     }
