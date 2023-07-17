@@ -39,7 +39,7 @@ class FeedBackController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('votes');
 
-        if ($category->review ) {
+        if ($category->review) {
             $feedback = $feedback->where('reviewed', true);
         }
 

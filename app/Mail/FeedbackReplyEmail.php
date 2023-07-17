@@ -41,7 +41,7 @@ class FeedbackReplyEmail extends Mailable
     {
         return $this
             ->from('board@'.config('proto.emaildomain'), 'Board of S.A. Proto')
-            ->subject("Answer on your ".$this->feedback->category->title)
+            ->subject('Answer on your '.$this->feedback->category->title)
             ->view('emails.feedbackreply');
     }
 }
