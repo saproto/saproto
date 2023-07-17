@@ -256,21 +256,21 @@ class ApiController extends Controller
         }
 
         foreach (FeedbackCategory::all() as $category) {
-            foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $quote) {
+            foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $feedback) {
                 $data["placed_$category->url"][] = [
-                    'feedback' => $quote->feedback,
-                    'created_at' => $quote->created_at,
-                    'accepted' => $quote->accepted,
-                    'reply' => $quote->reply,
+                    'feedback' => $feedback->feedback,
+                    'created_at' => $feedback->created_at,
+                    'accepted' => $feedback->accepted,
+                    'reply' => $feedback->reply,
                 ];
             }
 
             foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', function ($q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
-            })->get() as $quote) {
+            })->get() as $feedbackVote) {
                 $data["liked_$category->url"][] = [
-                    'feedback' => $quote->feedback->feedback,
-                    'liked_at' => $quote->created_at,
+                    'feedback' => $feedbackVote->feedback->feedback,
+                    'liked_at' => $feedbackVote->created_at,
                 ];
             }
         }
