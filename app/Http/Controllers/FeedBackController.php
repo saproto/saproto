@@ -246,8 +246,7 @@ class FeedBackController extends Controller
     public function categoryAdmin(Request $request): View
     {
         $category = FeedbackCategory::find($request->id);
-
-        return view('feedbackboards.categories', ['cur_category' => $category]);
+        return view('feedbackboards.categories', ['categories'=>FeedbackCategory::all() ,'cur_category' => $category]);
     }
 
     public function categoryStore(Request $request): RedirectResponse
@@ -269,8 +268,9 @@ class FeedBackController extends Controller
         $category = FeedbackCategory::create([
             'title' => $request->input('name'),
             'url' => $newUrl,
-            'review' => $request->has('reviewed'),
-            'reviewer_id' => $request->has('reviewed') ? $request->input('user_id') : null,
+            'review' => $request->has('can_review'),
+            'reviewer_id' => $request->has('can_review') ? $request->input('user_id') : null,
+            'can_reply' => $request->has('can_reply'),
         ]);
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');
@@ -278,17 +278,17 @@ class FeedBackController extends Controller
         return Redirect::back();
     }
 
-    public function categoryUpdate(Request $request, int $id): RedirectResponse
+    public function categoryUpdate(Request $request, int $id)
     {
         //regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
-        if (FeedbackCategory::where('url', $newUrl)->first()) {
+        if (FeedbackCategory::where('url', $newUrl)->first() && FeedbackCategory::where('url', $newUrl)->first()->id !== $id) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
             return Redirect::back();
         }
 
-        if ($request->has('reviewed') && ! $request->input('user_id')) {
+        if ($request->has('can_review') && ! $request->input('user_id')) {
             Session::flash('flash_message', 'You need to enter a reviewer to have this as a reviewed category!');
 
             return Redirect::back();
@@ -297,9 +297,11 @@ class FeedBackController extends Controller
         $category = FeedbackCategory::findOrFail($id);
         $category->title = $request->input('name');
         $category->url = $newUrl;
-        $category->review = $request->has('reviewed');
-        $category->reviewer_id = $request->has('reviewed') ? $request->input('user_id') : null;
+        $category->review = $request->has('can_review');
+        $category->reviewer_id = $request->has('can_review') ? $request->input('user_id') : null;
+        $category->can_reply = $request->has('can_reply');
         $category->save();
+
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
 

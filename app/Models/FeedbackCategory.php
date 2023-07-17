@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property bool $review
  * @property int $reviewer_id
+ * @property bool $can_reply
  * @property-read User|null $reviewer
  * @property-read Collection|FeedbackVote[] $votes
  *
