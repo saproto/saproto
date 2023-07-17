@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Quote;
+use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Quote>
+ * @extends Factory<Feedback>
  */
-class QuoteFactory extends Factory
+class FeedbackFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,7 +20,7 @@ class QuoteFactory extends Factory
     {
         return [
             'user_id' => User::inRandomOrder()->first()->id,
-            'quote' => fake()->realTextBetween(50, 200),
+            'feedback' => fake()->realTextBetween(50, 200),
         ];
     }
 }

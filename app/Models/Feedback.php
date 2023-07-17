@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Models;
+
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * Feedback model.
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $feedback
+ * @property User|null $reply
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property bool|null $reviewed
+ * @property bool|null $accepted
+ * @property FeedbackCategory|null $category
+ * @property-read User|null $user
+ * @property-read Collection|FeedbackVote[] $votes
+ *
+ * @method static Builder|Feedback whereCreatedAt($value)
+ * @method static Builder|Feedback whereId($value)
+ * @method static Builder|Feedback whereIdea($value)
+ * @method static Builder|Feedback whereUpdatedAt($value)
+ * @method static Builder|Feedback whereUserId($value)
+ * @method static Builder|Feedback newModelQuery()
+ * @method static Builder|Feedback newQuery()
+ * @method static Builder|Feedback query()
+ *
+ * @mixin Eloquent
+ */
+class Feedback extends Model
+{
+    use SoftDeletes;
+    use HasFactory;
+
+    protected $table = 'feedback';
+
+    protected $guarded = ['id'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\FeedbackCategory', 'feedback_category_id');
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany('App\Models\FeedbackVote');
+    }
+
+    public function voteScore(): int
+    {
+        return $this->votes()->sum('vote');
+    }
+
+    public function mayViewFeedback($user): bool
+    {
+        if (! $this->category->review) {
+            return true;
+        }
+        if ($this->reviewed) {
+            return true;
+        }
+        if ($this->category->reviewer_id === $user->id) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function userVote(User $user): int
+    {
+        /** @var FeedbackVote $vote */
+        $vote = $this->votes()->where('user_id', $user->id)->first();
+        if ($vote != null) {
+            return $vote->vote;
+        }
+
+        return 0;
+    }
+}
