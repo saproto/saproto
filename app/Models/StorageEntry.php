@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Carbon;
 use DB;
 use Eloquent;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Proto\Http\Controllers\FileController;
 
 /**
  * Storage Entry Model.

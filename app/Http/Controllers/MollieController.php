@@ -1,7 +1,13 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Event;
+use App\Models\MollieTransaction;
+use App\Models\OrderLine;
+use App\Models\Product;
+use App\Models\User;
 use Auth;
 use DB;
 use Exception;
@@ -9,12 +15,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mollie;
-use Proto\Models\Account;
-use Proto\Models\Event;
-use Proto\Models\MollieTransaction;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\User;
 use Redirect;
 use Session;
 

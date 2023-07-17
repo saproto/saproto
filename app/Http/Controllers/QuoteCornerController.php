@@ -1,15 +1,15 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Quote;
+use App\Models\QuoteLike;
 use Auth;
 use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Quote;
-use Proto\Models\QuoteLike;
 use Redirect;
 use Session;
 
