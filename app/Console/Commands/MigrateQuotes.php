@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Feedback;
 use App\Models\FeedbackCategory;
+use App\Models\FeedbackVote;
 use App\Models\Quote;
 use Illuminate\Console\Command;
 
