@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @property int $id
  * @property int $user_id
- * @property int $good_idea_id
+ * @property int $feedback_id
  * @property int $vote
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at

@@ -29,7 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @method static Builder|Feedback whereCreatedAt($value)
  * @method static Builder|Feedback whereId($value)
- * @method static Builder|Feedback whereIdea($value)
+ * @method static Builder|Feedback whereFeedback($value)
  * @method static Builder|Feedback whereUpdatedAt($value)
  * @method static Builder|Feedback whereUserId($value)
  * @method static Builder|Feedback newModelQuery()

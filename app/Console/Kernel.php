@@ -41,7 +41,6 @@ class Kernel extends ConsoleKernel
         Commands\SyncWikiAccounts::class,
         Commands\MemberCleanup::class,
         Commands\AddSysadmin::class,
-        Commands\MigrateQuotes::class,
         Commands\EndMemberships::class,
         Commands\UpdateWallstreetPrices::class,
     ];

@@ -13,13 +13,13 @@ class FeedbackReplyEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $feedback;
+    public Feedback $feedback;
 
-    public $user;
+    public User $user;
 
-    public $reply;
+    public String $reply;
 
-    public $accepted;
+    public bool $accepted;
 
     /**
      * Create a new message instance.
@@ -41,7 +41,7 @@ class FeedbackReplyEmail extends Mailable
     {
         return $this
             ->from('board@'.config('proto.emaildomain'), 'Board of S.A. Proto')
-            ->subject(`Answer on your {{$this->feedback->category->title}}`)
+            ->subject("Answer on your ".$this->feedback->category->title)
             ->view('emails.feedbackreply');
     }
 }
