@@ -46,6 +46,7 @@
 
             @if ($feedback->reply)
                 <hr>
+                <i class="fa {{$feedback->accepted ? "fa-check":"fa-xmark"}}" aria-hidden="true"></i>
                 <b>board:</b> {!! $feedback->reply !!}
             @endif
 
