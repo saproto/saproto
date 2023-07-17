@@ -23,15 +23,24 @@
                         <input type="text" class="form-control mb-3" id="name" name="name"
                                placeholder="Exciting feedback!" value="{{ $cur_category->title ?? '' }}" required>
 
-                        Check feedback from the category before publishing?
-                        <input class="form-check-input" type="checkbox" id="reviewed" name="reviewed" {{ $cur_category&&$cur_category->review ? 'checked' : '' }}>
-                        <br>
-                        <div id="reviewer" class="d-none">
+                        @include('components.forms.checkbox', [
+                                    'name' => 'can_review',
+                                    'checked' => $cur_category->review??false,
+                                    'label' => 'Review feedback from the category before publishing?'
+                                ])
+
+                        <div id="reviewer" class="{{$cur_category->review?"":"d-none"}}">
                             <label for="user_id">Reviewer Name:</label>
                             <div class="form-group autocomplete">
                                 <input class="form-control user-search" value="{{$cur_category->reviewer_id??''}}" id="user_id" name="user_id"/>
                             </div>
                         </div>
+
+                        @include('components.forms.checkbox', [
+                                   'name' => 'can_reply',
+                                   'checked' => $cur_category->can_reply??true,
+                                   'label' => 'Should the board be able to reply to this feedback?'
+                               ])
 
                         <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if($cur_category)
@@ -49,7 +58,6 @@
                 </div>
                 <div class="card-body">
                     <div class="row justify-content-center">
-                        @php($categories = \Proto\Models\FeedbackCategory::all())
                         @if(count($categories) > 0)
                             @foreach($categories as $category)
                                 <div class="col-5 row m-1 w-100">
@@ -60,7 +68,7 @@
                                         <a href="{{ route('feedback::category::admin', ['id' => $category]) }}">
                                             <i class="fas fa-edit me-2 ms-1 mt-1 float-end"></i>
                                         </a>
-                                        @include('website.layouts.macros.confirm-modal', [
+                                        @include('components.modals.confirm-modal', [
                                             'action' => route('feedback::category::delete', ['id' => $category->id]),
                                             'classes' => 'fas fa-trash mt-1 text-danger float-end',
                                             'confirm'=>'Delete',
@@ -86,7 +94,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let checkbox = document.querySelector("input[type=checkbox]");
+        let checkbox = document.getElementById("can_review");
         checkbox.addEventListener('change', function() {
             if(checkbox.checked){
                 document.getElementById("reviewer").classList.remove('d-none');

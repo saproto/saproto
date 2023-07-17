@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\ReviewFeedbackMail;
+use App\Models\FeedbackCategory;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\ReviewFeedbackMail;
-use Proto\Models\FeedbackCategory;
 
 class ReviewFeedbackCron extends Command
 {

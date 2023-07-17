@@ -20,7 +20,7 @@
                             class="fas fa-trash-restore text-white"></i></a>
             @endif
 
-            @if(!$feedback->reply && $controls)
+            @if(!$feedback->reply && $feedback->category->can_reply && $controls)
                 <a class="float-end me-2 toggle-navbar-{{$feedback->id}}">
                     <i class="fas fa-reply text-white"></i>
                 </a>
@@ -30,7 +30,7 @@
 
 
         @if (Auth::user()->id == $feedback->user->id)
-            @include('website.layouts.macros.confirm-modal', [
+            @include('components.modals.confirm-modal', [
                                      'action' => route("feedback::delete", ['id' => $feedback->id]),
                                      'text' => '<i class="fas fa-trash text-white"></i>',
                                      'title' => 'Confirm Delete',
