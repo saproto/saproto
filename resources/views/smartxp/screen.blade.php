@@ -335,8 +335,6 @@
         document.getElementById("ticker").style.width = ((now.format('s.SSS') / 60) * 100) + "%"
     }
 
-    setInterval(updateClock, 10);
-
     function updateTimetable() {
         const timetable = document.getElementById("timetable")
 
@@ -378,8 +376,6 @@
             })
     }
 
-    updateTimetable();
-
     function updateActivities() {
         get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
             .then(data => {
@@ -407,8 +403,6 @@
                 setTimeout(updateActivities, 5000)
             })
     }
-
-    updateActivities();
 
     function updateBuses() {
         updateBus(43110270, 43110270, 'businfo-langen');
@@ -445,9 +439,6 @@
                 element.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
             })
     }
-
-    updateBuses();
-    setInterval(updateBuses, 60000);
 
     function updateProtopeners() {
         const timetable = document.getElementById("protopeners-timetable")
@@ -491,7 +482,14 @@
             })
     }
 
-    updateProtopeners()
+    window.addEventListener('load', _ => {
+        setInterval(updateClock, 10);
+        updateTimetable();
+        updateActivities();
+        updateBuses();
+        setInterval(updateBuses, 60000);
+        updateProtopeners()
+    })
 </script>
 
 </body>

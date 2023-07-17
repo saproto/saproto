@@ -147,7 +147,9 @@
             document.getElementById('total-price').innerHTML = "&euro; " + totalPrice.toFixed(2)
         }
 
-        calculateTotalPrice()
+        window.addEventListener('load', _ => {
+            calculateTotalPrice()
+        })
 
     </script>
 

@@ -1,8 +1,11 @@
+window.global ||= window;
 // Vendors
-global.SignaturePad = require('signature_pad')
-global.moment = require('moment/moment')
-import quagga from 'quagga'
-global.Quagga = quagga
+import SignaturePad from "signature_pad";
+global.SignaturePad = SignaturePad;
+import moment from "moment/moment.js";
+global.moment = moment;
+import quagga from 'quagga';
+global.Quagga = quagga;
 
 import './countdown-timer'
 import './utilities'
@@ -224,7 +227,7 @@ import shiftSelect from "./shift-select";
 document.querySelectorAll('.shift-select').forEach(el => el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')): null)
 
 // Matomo Analytics
-const _paq = _paq || [];
+const _paq = [];
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (_ => {

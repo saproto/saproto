@@ -47,8 +47,10 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let alfredCountdownStarted = false;
 
-        lookForAlfred();
-        setInterval(lookForAlfred, 60000);
+        window.addEventListener('load', _ => {
+            lookForAlfred();
+            setInterval(lookForAlfred, 60000);
+        });
 
         function lookForAlfred() {
             const status = document.getElementById('alfred-status')
