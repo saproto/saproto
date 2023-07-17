@@ -246,7 +246,8 @@ class FeedBackController extends Controller
     public function categoryAdmin(Request $request): View
     {
         $category = FeedbackCategory::find($request->id);
-        return view('feedbackboards.categories', ['categories'=>FeedbackCategory::all() ,'cur_category' => $category]);
+
+        return view('feedbackboards.categories', ['categories' => FeedbackCategory::all(), 'cur_category' => $category]);
     }
 
     public function categoryStore(Request $request): RedirectResponse
@@ -301,7 +302,6 @@ class FeedBackController extends Controller
         $category->reviewer_id = $request->has('can_review') ? $request->input('user_id') : null;
         $category->can_reply = $request->has('can_reply');
         $category->save();
-
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
 
