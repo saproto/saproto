@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Console;
+namespace App\Console;
 
+use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Proto\Models\WallstreetDrink;
 
 class Kernel extends ConsoleKernel
 {

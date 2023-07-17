@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\TestMail;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\TestMail;
 
 class TestEmail extends Command
 {

@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Committee;
+use App\Models\CommitteeMembership;
+use App\Models\Member;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Proto\Models\Committee;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
-use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
 {

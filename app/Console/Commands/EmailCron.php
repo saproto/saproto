@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\ManualEmail;
+use App\Models\Email;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\ManualEmail;
-use Proto\Models\Email;
 
 class EmailCron extends Command
 {

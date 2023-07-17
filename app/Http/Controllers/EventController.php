@@ -1,7 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEventRequest;
+use App\Models\Account;
+use App\Models\Activity;
+use App\Models\Committee;
+use App\Models\Event;
+use App\Models\EventCategory;
+use App\Models\HelpingCommittee;
+use App\Models\PhotoAlbum;
+use App\Models\Product;
+use App\Models\StorageEntry;
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -11,17 +22,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Http\Requests\StoreEventRequest;
-use Proto\Models\Account;
-use Proto\Models\Activity;
-use Proto\Models\Committee;
-use Proto\Models\Event;
-use Proto\Models\EventCategory;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\Product;
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
 use Response;
 use Session;
 
