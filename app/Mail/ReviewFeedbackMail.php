@@ -12,7 +12,7 @@ class ReviewFeedbackMail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $category;
+    public FeedbackCategory $category;
 
     public $feedback;
 
@@ -24,7 +24,7 @@ class ReviewFeedbackMail extends Mailable
     public function __construct(FeedbackCategory $category, $feedback)
     {
         $this->feedback = $feedback;
-        $this->category = $category->title;
+        $this->category = $category;
     }
 
     /**
@@ -35,8 +35,8 @@ class ReviewFeedbackMail extends Mailable
     public function build()
     {
         return $this
-            ->to($this->category->reviewer()->get()->email)
+            ->to($this->category->reviewer->first()->email)
             ->subject('Review feedback for: '.$this->category->title.'!')
-            ->view('emails.feedbackreviewreminder', ['category' => $this->category, 'unreviewed' => $this->feedback]);
+            ->view('emails.feedbackreviewreminder', ['category' => $this->category, 'unreviewed' => $this->feedback, 'calling_name' => $this->category->reviewer->first()->calling_name]);
     }
 }

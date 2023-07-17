@@ -524,7 +524,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
         Route::group(['prefix' => '/{category}'], function () {
             Route::get('', ['as' => 'index', 'uses' => 'FeedBackController@index']);
-            Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'FeedbackController@search']);
+            Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'FeedBackController@search']);
             Route::get('archived', ['as' => 'archived', 'uses' => 'FeedBackController@archived']);
             Route::post('add', ['as' => 'add', 'uses' => 'FeedBackController@add']);
             Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedBackController@archiveAll']);

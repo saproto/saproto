@@ -39,7 +39,7 @@ class FeedBackController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('votes');
 
-        if ($category->review && Auth::user()->id !== $category->reviewer_id) {
+        if ($category->review ) {
             $feedback = $feedback->where('reviewed', true);
         }
 
@@ -67,9 +67,9 @@ class FeedBackController extends Controller
     {
         if ($category->review) {
             //only get the reviewed ideas if they require it
-            $unreviewed = Feedback::where('reviewed', false);
+            $unreviewed = Feedback::where('reviewed', false)->where('feedback_category_id', $category->id);
             if (Auth::user()->id !== $category->reviewer_id) {
-                $unreviewed = Feedback::where('user_id', Auth::user()->id);
+                $unreviewed = $unreviewed->where('user_id', Auth::user()->id);
             }
 
             return $unreviewed->limit(20)->get();
