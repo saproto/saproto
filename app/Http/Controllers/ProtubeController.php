@@ -1,7 +1,10 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\PlayedVideo;
+use App\Models\SoundboardSound;
+use App\Models\User;
 use Auth;
 use Carbon\CarbonInterval;
 use DB;
@@ -9,9 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\PlayedVideo;
-use Proto\Models\SoundboardSound;
-use Proto\Models\User;
 use Session;
 
 class ProtubeController extends Controller

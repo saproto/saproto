@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Http\Middleware;
+namespace App\Http\Middleware;
 
+use App\Models\HashMapItem;
 use Auth;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Proto\Models\HashMapItem;
 use Redirect;
 
 class EnforceWizard

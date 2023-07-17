@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Committee;
+use App\Models\OrderLine;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Proto\Models\Committee;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
 
 /**
  * @extends Factory<OrderLine>

@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Page;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -10,8 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\Page;
-use Proto\Models\StorageEntry;
 use Session;
 
 class PageController extends Controller

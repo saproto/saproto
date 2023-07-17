@@ -7,35 +7,38 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        const signatureAlert = document.getElementById('signature-alert')
-        const canvas = document.getElementById('signature-pad')
-        const signaturePad = new SignaturePad.default(canvas)
 
-        window.onresize = resizeCanvas
-        resizeCanvas()
+        window.addEventListener('load', _ => {
+            const signatureAlert = document.getElementById('signature-alert')
+            const canvas = document.getElementById('signature-pad')
+            const signaturePad = new SignaturePad(canvas)
 
-        function resizeCanvas() {
-            // When zoomed out to less than 100%, for some very strange reason,
-            // some browsers report devicePixelRatio as less than 1
-            // and only part of the canvas is cleared then.
-            const ratio = Math.max(window.devicePixelRatio || 1, 1)
-            canvas.width = canvas.offsetWidth * ratio
-            canvas.height = canvas.offsetHeight * ratio
-            canvas.getContext("2d").scale(ratio, ratio)
-            signaturePad.clear()
-        }
+            window.addEventListener('resize', resizeCanvas)
+            resizeCanvas()
 
-        document.getElementById('clear').addEventListener('click', _ => {
-            signaturePad.clear()
-        })
-
-        document.getElementById('signature-form').addEventListener('submit', e => {
-            if (signaturePad.isEmpty()) {
-                e.preventDefault()
-                signatureAlert.classList.remove('d-none')
-            } else {
-                document.getElementById('signature').value = signaturePad.toDataURL('image/png')
+            function resizeCanvas() {
+                // When zoomed out to less than 100%, for some very strange reason,
+                // some browsers report devicePixelRatio as less than 1
+                // and only part of the canvas is cleared then.
+                const ratio = Math.max(window.devicePixelRatio || 1, 1)
+                canvas.width = canvas.offsetWidth * ratio
+                canvas.height = canvas.offsetHeight * ratio
+                canvas.getContext("2d").scale(ratio, ratio)
+                signaturePad.clear()
             }
+
+            document.getElementById('clear').addEventListener('click', _ => {
+                signaturePad.clear()
+            })
+
+            document.getElementById('signature-form').addEventListener('submit', e => {
+                if (signaturePad.isEmpty()) {
+                    e.preventDefault()
+                    signatureAlert.classList.remove('d-none')
+                } else {
+                    document.getElementById('signature').value = signaturePad.toDataURL('image/png')
+                }
+            })
         })
 
     </script>

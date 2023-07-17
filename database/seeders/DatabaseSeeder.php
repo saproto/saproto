@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use App;
+use App\Console\ConsoleOutput;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
-use Proto\Console\ConsoleOutput;
-use Proto\Models\User;
 
 class DatabaseSeeder extends Seeder
 {

@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\PasswordEntry;
 use Auth;
 use Crypt;
 use Exception;
@@ -9,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Permission;
-use Proto\Models\PasswordEntry;
 use Redirect;
 use Session;
 

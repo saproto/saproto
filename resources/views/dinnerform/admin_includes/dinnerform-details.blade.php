@@ -58,15 +58,13 @@
                         />
                     </div>
 
-                    <!-- Homepage -->
+                    <!-- Ordered by -->
                     <div class="col-md-12 mb-3">
-                        @include('components.forms.checkbox', [
-                            'name' => 'homepage',
-                            'checked' => $dinnerformCurrent?->visible_home_page,
-                            'label' => 'Visible on the homepage?'
-                        ])
+                        <div class="form-group autocomplete">
+                            <label for="ordered_by">Ordered by:</label>
+                            <input class="form-control user-search" id="ordered_by" value="{{ $dinnerformCurrent->ordered_by ?? ''}}" name="ordered_by" data-label="User:" required>
+                        </div>
                     </div>
-
                 </div>
 
                 <!-- Right column -->
@@ -108,6 +106,15 @@
                                value="{{ $dinnerformCurrent->regular_discount_percentage ?? ''}}"
                                required
                         />
+                    </div>
+
+                    <!-- Homepage -->
+                    <div class="col-md-12 mb-3 mt-5">
+                        @include('components.forms.checkbox', [
+                            'name' => 'homepage',
+                            'checked' => $dinnerformCurrent?->visible_home_page,
+                            'label' => 'Visible on the homepage?'
+                        ])
                     </div>
 
                 </div>

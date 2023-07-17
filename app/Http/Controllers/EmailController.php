@@ -1,18 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Email;
+use App\Models\EmailList;
+use App\Models\EmailListSubscription;
+use App\Models\StorageEntry;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Email;
-use Proto\Models\EmailList;
-use Proto\Models\EmailListSubscription;
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
 use Redirect;
 use Session;
 

@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\QrAuthRequest;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -9,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\User;
 
 class QrAuthController extends Controller
 {

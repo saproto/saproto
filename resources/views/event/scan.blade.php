@@ -161,8 +161,6 @@
     const feedbackField = document.getElementById("feedback-field")
     let prevRead = ''
 
-    initializeCamera()
-
     function initializeCamera() {
         Quagga.init({
             inputStream: {
@@ -266,6 +264,10 @@
         const d = new Date()
         return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2)
     }
+
+    window.addEventListener('load', _ => {
+        initializeCamera()
+    })
 
 </script>
 

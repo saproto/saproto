@@ -203,10 +203,12 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const scanList = Array.from(document.getElementsByClassName("scan"))
-        const unscanList = Array.from(document.getElementsByClassName("unscan"))
-        scanList.forEach(el => setEventListener(el, false))
-        unscanList.forEach(el => setEventListener(el, true))
+        window.addEventListener('load', _ => {
+            const scanList = Array.from(document.getElementsByClassName("scan"))
+            const unscanList = Array.from(document.getElementsByClassName("unscan"))
+            scanList.forEach(el => setEventListener(el, false))
+            unscanList.forEach(el => setEventListener(el, true))
+        })
 
         const scanRequest = (barcode, unscan) => get('{{ route('api::scan', ['event' => $event->id]) }}', {barcode: barcode, ...(unscan && {unscan: true})})
 
