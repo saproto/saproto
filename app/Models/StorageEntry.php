@@ -137,7 +137,7 @@ class StorageEntry extends Model
             $this->filename = $customPath.$this->hash;
         }
         $image = ImageManagerStatic::make($file);
-
+        $image->orientate();
         if ($width != null) {
             $image->resize($width, null, function ($constraint) {
                 $constraint->aspectRatio();
