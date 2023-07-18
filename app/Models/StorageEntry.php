@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -13,7 +14,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManagerStatic;
-use App\Http\Controllers\FileController;
 
 /**
  * Storage Entry Model.

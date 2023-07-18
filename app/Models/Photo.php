@@ -215,7 +215,7 @@ class Photo extends Model
             return $this->likes()->where('user_id', $user->id)->count() > 0;
         }
 
-return false;
+        return false;
     }
 
     /** @return string */
