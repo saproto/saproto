@@ -6,8 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
-use Proto\Models\Photo;
-use Proto\Models\StorageEntry;
+use App\Models\Photo;
+use App\Models\StorageEntry;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AddMultipleFileIdsToPhotos extends Migration

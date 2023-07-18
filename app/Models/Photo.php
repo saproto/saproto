@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Intervention\Image\Facades\Image;
 
 /**
  * Photo model.
@@ -123,25 +124,25 @@ class Photo extends Model
     /** @return HasOne|StorageEntry */
     public function large_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'large_file_id');
+        return $this->hasOne('App\Models\StorageEntry', 'id', 'large_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function medium_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'medium_file_id');
+        return $this->hasOne('App\Models\StorageEntry', 'id', 'medium_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function small_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'small_file_id');
+        return $this->hasOne('App\Models\StorageEntry', 'id', 'small_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function tiny_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'tiny_file_id');
+        return $this->hasOne('App\Models\StorageEntry', 'id', 'tiny_file_id');
     }
 
     /**

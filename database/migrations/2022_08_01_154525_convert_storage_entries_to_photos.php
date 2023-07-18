@@ -3,12 +3,12 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Proto\Models\Committee;
-use Proto\Models\Company;
-use Proto\Models\Event;
-use Proto\Models\Photo;
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
+use App\Models\Committee;
+use App\Models\Company;
+use App\Models\Event;
+use App\Models\Photo;
+use App\Models\StorageEntry;
+use App\Models\User;
 
 class ConvertStorageEntriesToPhotos extends Migration
 {

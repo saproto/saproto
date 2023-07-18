@@ -8,7 +8,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
-use Proto\Models\Photo;
+use App\Models\Photo;
 use Redirect;
 use Session;
 
