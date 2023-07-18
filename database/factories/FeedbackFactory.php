@@ -21,6 +21,10 @@ class FeedbackFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'feedback' => fake()->realTextBetween(50, 200),
+            'reviewed' => fake()->boolean(),
+            'accepted' => fake()->boolean(),
+            'created_at' => fake()->dateTimeBetween('-1 year', 'now'),
+            'deleted_at' => fake()->optional(0.1)->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

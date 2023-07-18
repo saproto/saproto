@@ -57,7 +57,7 @@ class AddFeedbackFunctionality extends Migration
         if (Schema::hasTable('good_ideas')) {
             foreach (DB::table('good_ideas')->get() as $goodidea) {
                 $new = new Feedback([
-                    'user_id' => $goodidea->user->id,
+                    'user_id' => $goodidea->user_id,
                     'feedback_category_id' => $goodidea->id,
                     'feedback' => $goodidea->quote,
                     'reviewed' => true,
@@ -74,6 +74,8 @@ class AddFeedbackFunctionality extends Migration
                     $newLike->save();
                 }
             }
+            Schema::drop('good_ideas');
+            Schema::drop('good_idea_votes');
         }
 
         $quoteCategory = new FeedbackCategory([
@@ -87,7 +89,7 @@ class AddFeedbackFunctionality extends Migration
         if (Schema::hasTable('quotes')) {
             foreach (DB::table('quotes')->get() as $quote) {
                 $new = new Feedback([
-                    'user_id' => $quote->user->id,
+                    'user_id' => $quote->user_id,
                     'feedback_category_id' => $quoteCategory->id,
                     'feedback' => $quote->quote,
                     'reviewed' => true,
@@ -104,6 +106,8 @@ class AddFeedbackFunctionality extends Migration
                     $newLike->save();
                 }
             }
+            Schema::drop('quotes');
+            Schema::drop('quotes_users');
         }
     }
 
