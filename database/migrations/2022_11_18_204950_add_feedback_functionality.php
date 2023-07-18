@@ -128,16 +128,16 @@ class AddFeedbackFunctionality extends Migration
             $table->timestamps();
         });
 
-        $quotes=Feedback::whereHas('category', function ($q) {
+        $quotes = Feedback::whereHas('category', function ($q) {
             $q->where('url', 'quotes');
         })->get();
-        foreach($quotes as $quote){
-            $newQuoteId=DB::table('quotes')->insertGetId(
+        foreach ($quotes as $quote) {
+            $newQuoteId = DB::table('quotes')->insertGetId(
                 ['user_id' => $quote->user_id, 'quote' => $quote->feedback, 'created_at' => $quote->created_at]
             );
 
-            foreach($quote->votes as $vote){
-                if($vote->vote==1){
+            foreach ($quote->votes as $vote) {
+                if ($vote->vote == 1) {
                     DB::table('quotes_users')->insert(
                         ['user_id' => $vote->user_id, 'quote_id' => $newQuoteId, 'created_at' => $vote->created_at]
                     );
@@ -160,17 +160,17 @@ class AddFeedbackFunctionality extends Migration
             $table->timestamps();
         });
 
-        $goodIdeas=Feedback::whereHas('category', function ($q) {
+        $goodIdeas = Feedback::whereHas('category', function ($q) {
             $q->where('url', 'goodideas');
         })->get();
-        foreach($goodIdeas as $goodIdea){
-            $newGoodIdeaId=DB::table('good_ideas')->insertGetId(
+        foreach ($goodIdeas as $goodIdea) {
+            $newGoodIdeaId = DB::table('good_ideas')->insertGetId(
                 ['user_id' => $goodIdea->user_id, 'idea' => $goodIdea->feedback, 'created_at' => $goodIdea->created_at]
             );
 
-            foreach($goodIdea->votes as $vote){
+            foreach ($goodIdea->votes as $vote) {
                 DB::table('good_idea_votes')->insert(
-                    ['user_id' => $vote->user_id, 'good_idea_id' => $newGoodIdeaId, 'vote'=>$vote->vote,'created_at' => $vote->created_at]
+                    ['user_id' => $vote->user_id, 'good_idea_id' => $newGoodIdeaId, 'vote' => $vote->vote, 'created_at' => $vote->created_at]
                 );
             }
         }
