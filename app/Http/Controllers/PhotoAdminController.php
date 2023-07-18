@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
-use App\Models\PhotoManager;
-use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;

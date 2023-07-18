@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\PhotoLikes;
-use App\Models\PhotoManager;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Redirect;
 
 class PhotoController extends Controller
 {
