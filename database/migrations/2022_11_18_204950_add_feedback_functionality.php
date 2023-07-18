@@ -59,7 +59,7 @@ class AddFeedbackFunctionality extends Migration
                 $new = new Feedback([
                     'user_id' => $goodidea->user_id,
                     'feedback_category_id' => $goodidea->id,
-                    'feedback' => $goodidea->quote,
+                    'feedback' => $goodidea->idea,
                     'reviewed' => true,
                     'created_at' => $goodidea->created_at,
                 ]);
@@ -68,7 +68,7 @@ class AddFeedbackFunctionality extends Migration
                     $newLike = new FeedbackVote([
                         'user_id' => $like->user_id,
                         'feedback_id' => $new->id,
-                        'vote' => 1,
+                        'vote' => $like->vote,
                         'created_at' => $goodidea->created_at,
                     ]);
                     $newLike->save();
