@@ -192,7 +192,7 @@ class FeedBackController extends Controller
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();
-        } elseif(! Auth::user()->can('board') && $feedback->reply) {
+        } elseif (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
             return Redirect::back();
