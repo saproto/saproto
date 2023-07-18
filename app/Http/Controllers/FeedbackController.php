@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
-class FeedBackController extends Controller
+class FeedbackController extends Controller
 {
     public function index(Request $request, string $category): View
     {
@@ -66,7 +66,7 @@ class FeedBackController extends Controller
     private function getUnreviewed(FeedbackCategory $category): array|Collection
     {
         if ($category->review) {
-            //only get the reviewed ideas if they require it
+            //only get the reviewed feedback if they require it
             $unreviewed = Feedback::where('reviewed', false)->where('feedback_category_id', $category->id);
             if (Auth::user()->id !== $category->reviewer_id) {
                 $unreviewed = $unreviewed->where('user_id', Auth::user()->id);
@@ -108,7 +108,7 @@ class FeedBackController extends Controller
     public function add(Request $request, $category): RedirectResponse
     {
         $category = FeedbackCategory::findOrFail($category);
-        $temp = nl2br(trim($request->input('idea')));
+        $temp = nl2br(trim($request->input('feedback')));
         $new = ['feedback' => $temp, 'user_id' => Auth::id(), 'feedback_category_id' => $category->id];
         $feedback = new Feedback($new);
         $feedback->save();
@@ -125,13 +125,15 @@ class FeedBackController extends Controller
 
     public function reply(int $id, Request $request): RedirectResponse
     {
+        $feedback = Feedback::findOrFail($id);
+
+        $categoryTitle = str_singular($feedback->category->title);
         if (! Auth::user()->can('board')) {
-            Session::flash('flash_message', 'You are not allowed to reply to this idea.');
+            Session::flash('flash_message', "You are not allowed to reply to this $categoryTitle.");
 
             return Redirect::back();
         }
 
-        $feedback = Feedback::findOrFail($id);
         $reply = $request->input('reply');
         $accepted = $request->input('responseBtn') === 'accept';
 
@@ -143,7 +145,7 @@ class FeedBackController extends Controller
         $feedback->reply = $reply;
         $feedback->accepted = $accepted;
         $feedback->save();
-        $categoryTitle = str_singular($feedback->category->title);
+
         $acceptText = $accepted ? 'accepted' : 'rejected';
         Session::flash('flash_message', "You have $acceptText this $categoryTitle with a reply.");
 
@@ -152,13 +154,15 @@ class FeedBackController extends Controller
 
     public function archive(int $id): RedirectResponse
     {
+        $feedback = Feedback::withTrashed()->findOrFail($id);
+        $categoryTitle = str_singular($feedback->category->title);
+
         if (! Auth::user()->can('board')) {
-            Session::flash('flash_message', 'You are not allowed to archive this idea.');
+            Session::flash('flash_message', "You are not allowed to archive this $categoryTitle.");
 
             return Redirect::back();
         }
 
-        $feedback = Feedback::withTrashed()->findOrFail($id);
         if ($feedback->trashed()) {
             $feedback->restore();
             Session::flash('flash_message', 'Feedback restored.');

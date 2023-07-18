@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\FeedBackController;
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -513,37 +513,37 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     Route::get('quotes', ['as' => 'quotes::list', function (Illuminate\Http\Request $request) {
-        return (new FeedBackController())->index($request, 'quotes');
+        return (new FeedbackController())->index($request, 'quotes');
     }]);
 
     Route::get('goodideas', ['as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
-        return (new FeedBackController())->index($request, 'goodideas');
+        return (new FeedbackController())->index($request, 'goodideas');
     }]);
 
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
         Route::group(['prefix' => '/{category}'], function () {
-            Route::get('', ['as' => 'index', 'uses' => 'FeedBackController@index']);
-            Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'FeedBackController@search']);
-            Route::get('archived', ['as' => 'archived', 'uses' => 'FeedBackController@archived']);
-            Route::post('add', ['as' => 'add', 'uses' => 'FeedBackController@add']);
-            Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedBackController@archiveAll']);
+            Route::get('', ['as' => 'index', 'uses' => 'FeedbackController@index']);
+            Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'FeedbackController@search']);
+            Route::get('archived', ['as' => 'archived', 'uses' => 'FeedbackController@archived']);
+            Route::post('add', ['as' => 'add', 'uses' => 'FeedbackController@add']);
+            Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedbackController@archiveAll']);
         });
 
         Route::group(['prefix' => 'categories', 'middleware' => ['permission:board'], 'as' => 'category::'], function () {
-            Route::get('admin', ['as' => 'admin', 'uses' => 'FeedBackController@categoryAdmin']);
-            Route::post('addone', ['as' => 'add', 'uses' => 'FeedBackController@categoryStore']);
-            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'FeedBackController@categoryEdit']);
-            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'FeedBackController@categoryUpdate']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedBackController@categoryDestroy']);
+            Route::get('admin', ['as' => 'admin', 'uses' => 'FeedbackController@categoryAdmin']);
+            Route::post('addone', ['as' => 'add', 'uses' => 'FeedbackController@categoryStore']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'FeedbackController@categoryEdit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'FeedbackController@categoryUpdate']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedbackController@categoryDestroy']);
         });
 
-        Route::get('approve/{id}', ['as' => 'approve', 'uses' => 'FeedBackController@approve']);
-        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedBackController@reply']);
-        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'FeedBackController@archive']);
-        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'FeedBackController@restore']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedBackController@delete']);
-        Route::post('vote', ['as' => 'vote', 'uses' => 'FeedBackController@vote']);
+        Route::get('approve/{id}', ['as' => 'approve', 'uses' => 'FeedbackController@approve']);
+        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedbackController@reply']);
+        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'FeedbackController@archive']);
+        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'FeedbackController@restore']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedbackController@delete']);
+        Route::post('vote', ['as' => 'vote', 'uses' => 'FeedbackController@vote']);
     });
 
     /* Routes related to the OmNomCom. */
