@@ -5,18 +5,19 @@
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Add your {{ strtolower($category->title) }}
+            Add your own {{ str_singular($category->title) }}
         </div>
 
         <div class="card-body">
-            <textarea class="form-control" rows="4" cols="30" name="idea" required
-                      placeholder="An online {{strtolower($category->title)}} board."></textarea>
+            <label for="new-feedback">New {{ str_singular($category->title) }}:</label>
+            <textarea id="new-feedback" class="form-control" rows="4" cols="30" name="idea" required
+                      placeholder="Your {{ strtolower(str_singular($category->title)) }} goes here."></textarea>
         </div>
 
         <div class="card-footer">
 
             <button type="submit" class="btn btn-success btn-block">
-                Submit
+                Submit {{ str_singular($category->title) }}
             </button>
 
         </div>

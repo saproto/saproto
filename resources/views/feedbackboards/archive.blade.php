@@ -6,45 +6,56 @@
 
 @section('container')
     <div class="row">
-        <div class="card mb-3 mx-4 w-100">
 
-            <div class="card-header bg-dark text-white">
-                <span class="m-0 float-left"><i class="fas fa-archive text-white mr-2"></i>Archived {{$category->title}}</span>
-                <a href="{{ route('feedback::index', ['category' => $category->url]) }}" class="float-end ml-3 px-2 py-1 badge badge-info">
-                    <i class="fas fa-thumbs-up text-white mr-1"></i> View Public
-                </a>
-            </div>
+        <div class="col-12">
 
-            <div class="card-body">
+            <div class="card mb-3 mx-4">
 
-                @if(count($data) > 0)
+                <div class="card-header bg-dark text-white">
+                    <span class="m-0 float-left"><i class="fas fa-archive text-white me-2"></i> Archived {{ $category->title }}</span>
+                    <a href="{{ route('feedback::index', ['category' => $category->url]) }}" class="float-end ms-3 px-2 py-1 btn btn-info">
+                        <i class="fas fa-eye text-white"></i> <span class="d-none d-sm-inline">View Public</span>
+                    </a>
+                </div>
 
-                    <div class="row">
+                <div class="card-body">
 
-                        @foreach($data as $key => $entry)
+                    @if(count($data) > 0)
 
-                            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                        <div class="row">
 
-                                @include('feedbackboards.include.feedback', [
-                                'feedback' => $entry,
-                                'controls' => true,
-                                ])
+                            @foreach($data as $key => $entry)
 
-                            </div>
+                                <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
-                        @endforeach
+                                    @include('feedbackboards.include.feedback', [
+                                    'feedback' => $entry,
+                                    'controls' => true,
+                                    ])
 
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
+                    @else
+
+                        <p class="text-center text-muted mt-3">
+                            No archived {{ $category->title }}.
+                        </p>
+
+                    @endif
+
+                </div>
+
+                @if($data->links() != "")
+                    <div class="card-footer">
+                        {{ $data->links() }}
                     </div>
-
                 @endif
 
             </div>
-
-            @if($data->links() != "")
-                <div class="card-footer">
-                    {{ $data->links() }}
-                </div>
-            @endif
 
         </div>
     </div>

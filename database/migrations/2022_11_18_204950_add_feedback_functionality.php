@@ -49,7 +49,7 @@ class AddFeedbackFunctionality extends Migration
         });
 
         $goodideaCategory = new FeedbackCategory([
-            'title' => 'Good ideas',
+            'title' => 'Good Ideas',
             'url' => 'goodideas',
             'review' => false,
             'can_reply' => true,
@@ -79,7 +79,7 @@ class AddFeedbackFunctionality extends Migration
         }
 
         $quoteCategory = new FeedbackCategory([
-            'title' => 'quotes',
+            'title' => 'Quotes',
             'url' => 'quotes',
             'review' => false,
             'can_reply' => false,

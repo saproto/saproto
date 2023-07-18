@@ -33,7 +33,7 @@
     </table>
 
     <p>
-        And the board {{ $accepted ? 'liked your idea!' : 'replied with:' }}
+        And the board {{ $accepted ? 'liked it!' : 'replied with:' }}
     </p>
 
     <table style="margin: 0; padding: 0; border: none; background-color: #f0f0f0; width:100%;">
@@ -52,7 +52,7 @@
 
     <p>
         <sub>
-            You receive this e-mail because you posted an idea on the <a href="{{ route('feedback::index', ['category' => $feedback->category->url]) }}">{{ $feedback->category->title }} board</a>.
+            You receive this e-mail because you posted something on the <a href="{{ route('feedback::index', ['category' => $feedback->category->url]) }}">{{ $feedback->category->title }} board</a>.
         </sub>
     </p>
 

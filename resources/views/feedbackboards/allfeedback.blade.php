@@ -1,17 +1,22 @@
 <div class="card mb-3 w-100">
     <div class="card-header bg-dark text-white">
-        {{ $category->title }}
+        <div class="d-flex align-items-center justify-items-center justify-content-between mb-2">
+            <span class="">{{ $category->title }}</span>
+            @can("board")
+                <div>
+                    @if(count($data) > 0)
+                        <a href="{{ route('feedback::archiveall', ['category' => $category->url]) }}" class="ms-3 btn btn-danger">
+                            <i class="fas fa-box-archive text-white"></i> Archive all
+                        </a>
+                    @endif
 
-        @can("board")
-            <a href="{{ route('feedback::archiveall', ['category' => $category->url]) }}" class="float-end ms-3 btn btn-danger">
-                <i class="fas fa-file-archive text-white"></i> Archive all
-            </a>
-
-            <a href="{{ route('feedback::archived', ['category' => $category->url]) }}" class="ms-3 btn btn-info">
-                <i class="fas fa-box-archive text-white"></i> View archived
-            </a>
-        @endcan
-        @if($data->links()!="")
+                    <a href="{{ route('feedback::archived', ['category' => $category->url]) }}" class="float-end ms-3 btn btn-info">
+                        <i class="fas fa-inbox text-white"></i> <span class="d-none d-sm-inline">View archived</span>
+                    </a>
+                </div>
+            @endcan
+        </div>
+        @if($data->links() != "")
             {{ $data->withQueryString()->links() }}
         @endif
     </div>
@@ -28,6 +33,10 @@
                     </div>
                 @endforeach
             </div>
+        @else
+            <p class="text-center text-muted mt-3">
+                There are no {{ $category->title }} at the moment, be the first to post a new one!
+            </p>
         @endif
     </div>
 

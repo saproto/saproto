@@ -113,10 +113,11 @@ class FeedBackController extends Controller
         $feedback = new Feedback($new);
         $feedback->save();
 
+        $categoryTitle = str_singular($category->title);
         if ($category->review) {
-            Session::flash('flash_message', 'Idea added. This first needs to be reviewed by the board so it might take some time to show up!');
+            Session::flash('flash_message', "$categoryTitle added. This first needs to be reviewed by the board so it might take some time to show up!");
         } else {
-            Session::flash('flash_message', 'Idea added.');
+            Session::flash('flash_message', "$categoryTitle added.");
         }
 
         return Redirect::back();
@@ -142,7 +143,9 @@ class FeedBackController extends Controller
         $feedback->reply = $reply;
         $feedback->accepted = $accepted;
         $feedback->save();
-        Session::flash('flash_message', 'You have replied to this idea');
+        $categoryTitle = str_singular($feedback->category->title);
+        $acceptText = $accepted ? 'accepted' : 'rejected';
+        Session::flash('flash_message', "You have $acceptText this $categoryTitle with a reply.");
 
         return Redirect::back();
     }
@@ -187,6 +190,10 @@ class FeedBackController extends Controller
         $feedback = Feedback::withTrashed()->findOrFail($id);
         if (! (Auth::user()->can('board') || Auth::user()->id == $feedback->user->id)) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
+
+            return Redirect::back();
+        } elseif(! Auth::user()->can('board') && $feedback->reply) {
+            Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
             return Redirect::back();
         }
