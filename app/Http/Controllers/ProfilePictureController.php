@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
-use App\Models\Photo;
 use Redirect;
 use Session;
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PhotoLikes;
 use App\Models\PhotoAlbum;
+use App\Models\PhotoLikes;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;

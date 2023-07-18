@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use App\Models\Committee;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\Photo;
 use App\Models\StorageEntry;
 use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class ConvertStorageEntriesToPhotos extends Migration
 {
