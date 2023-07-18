@@ -1,9 +1,9 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\Bank;
 use Illuminate\Console\Command;
-use Proto\Models\Bank;
 
 class TestIBANs extends Command
 {

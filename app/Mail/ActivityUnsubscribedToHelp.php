@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\ActivityParticipation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\ActivityParticipation;
 
 class ActivityUnsubscribedToHelp extends Mailable
 {

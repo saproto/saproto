@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Carbon;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManagerStatic;
-use Proto\Http\Controllers\FileController;
+use App\Http\Controllers\FileController;
 
 /**
  * Storage Entry Model.

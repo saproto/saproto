@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
+use App\Http\Controllers\WallstreetController;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Proto\Http\Controllers\WallstreetController;
 
 /**
  * Product Model.
@@ -74,13 +74,13 @@ class Product extends Model
     /** @return BelongsTo */
     public function account()
     {
-        return $this->belongsTo('Proto\Models\FinancialAccount');
+        return $this->belongsTo('App\Models\FinancialAccount');
     }
 
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('App\Models\StorageEntry', 'image_id');
     }
 
     /** @raturn String */
@@ -99,19 +99,19 @@ class Product extends Model
     /** @return BelongsToMany */
     public function categories()
     {
-        return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
+        return $this->belongsToMany('App\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
     }
 
     /** @return HasOne */
     public function ticket()
     {
-        return $this->hasOne('Proto\Models\Ticket', 'product_id');
+        return $this->hasOne('App\Models\Ticket', 'product_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('Proto\Models\OrderLine');
+        return $this->hasMany('App\Models\OrderLine');
     }
 
     /** @return bool */
@@ -132,7 +132,7 @@ class Product extends Model
 
     public function wallstreetPrices()
     {
-        return $this->hasMany('Proto\Models\WallstreetPrice');
+        return $this->hasMany('App\Models\WallstreetPrice');
     }
 
     /**

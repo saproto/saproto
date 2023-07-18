@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Newsitem;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -9,8 +11,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Newsitem;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 

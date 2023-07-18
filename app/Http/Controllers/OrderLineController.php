@@ -1,7 +1,13 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\FailedWithdrawal;
+use App\Models\OrderLine;
+use App\Models\Product;
+use App\Models\TicketPurchase;
+use App\Models\User;
 use Auth;
 use Carbon;
 use DB;
@@ -10,12 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Activity;
-use Proto\Models\FailedWithdrawal;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\TicketPurchase;
-use Proto\Models\User;
 use Redirect;
 use Session;
 

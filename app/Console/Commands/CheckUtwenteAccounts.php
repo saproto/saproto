@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\LdapController;
+use App\Mail\UtwenteCleanup;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Http\Controllers\LdapController;
-use Proto\Mail\UtwenteCleanup;
-use Proto\Models\User;
 
 class CheckUtwenteAccounts extends Command
 {
