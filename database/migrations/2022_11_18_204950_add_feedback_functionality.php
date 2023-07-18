@@ -3,8 +3,6 @@
 use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
-use App\Models\GoodIdea;
-use App\Models\Quote;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -56,8 +54,8 @@ class AddFeedbackFunctionality extends Migration
         ]);
         $goodideaCategory->save();
 
-        if (class_exists('GoodIdea')) {
-            foreach (GoodIdea::all() as $goodidea) {
+        if (Schema::hasTable('good_ideas')) {
+            foreach (DB::table('good_ideas')->get() as $goodidea) {
                 $new = new Feedback([
                     'user_id' => $goodidea->user->id,
                     'feedback_category_id' => $goodidea->id,
@@ -66,7 +64,7 @@ class AddFeedbackFunctionality extends Migration
                     'created_at' => $goodidea->created_at,
                 ]);
                 $new->save();
-                foreach ($goodidea->quoteLike() as $like) {
+                foreach (DB::table('good_idea_votes')->where('good_idea_id', $goodidea->id)->get() as $like) {
                     $newLike = new FeedbackVote([
                         'user_id' => $like->user_id,
                         'feedback_id' => $new->id,
@@ -86,8 +84,8 @@ class AddFeedbackFunctionality extends Migration
         ]);
         $quoteCategory->save();
 
-        if (class_exists('Quote')) {
-            foreach (Quote::all() as $quote) {
+        if (Schema::hasTable('quotes')) {
+            foreach (DB::table('quotes')->get() as $quote) {
                 $new = new Feedback([
                     'user_id' => $quote->user->id,
                     'feedback_category_id' => $quoteCategory->id,
@@ -96,7 +94,7 @@ class AddFeedbackFunctionality extends Migration
                     'created_at' => $quote->created_at,
                 ]);
                 $new->save();
-                foreach ($quote->quoteLike() as $like) {
+                foreach (DB::table('quotes_users')->where('quote_id', $quote->id)->get() as $like) {
                     $newLike = new FeedbackVote([
                         'user_id' => $like->user_id,
                         'feedback_id' => $new->id,
@@ -116,6 +114,67 @@ class AddFeedbackFunctionality extends Migration
      */
     public function down()
     {
+        Schema::create('quotes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->text('quote');
+            $table->timestamps();
+        });
+
+        Schema::create('quotes_users', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('quote_id');
+            $table->timestamps();
+        });
+
+        $quotes=Feedback::whereHas('category', function ($q) {
+            $q->where('url', 'quotes');
+        })->get();
+        foreach($quotes as $quote){
+            $newQuoteId=DB::table('quotes')->insertGetId(
+                ['user_id' => $quote->user_id, 'quote' => $quote->feedback, 'created_at' => $quote->created_at]
+            );
+
+            foreach($quote->votes as $vote){
+                if($vote->vote==1){
+                    DB::table('quotes_users')->insert(
+                        ['user_id' => $vote->user_id, 'quote_id' => $newQuoteId, 'created_at' => $vote->created_at]
+                    );
+                }
+            }
+        }
+
+        Schema::create('good_ideas', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->text('idea');
+            $table->timestamps();
+        });
+
+        Schema::create('good_idea_votes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('good_idea_id');
+            $table->integer('vote');
+            $table->timestamps();
+        });
+
+        $goodIdeas=Feedback::whereHas('category', function ($q) {
+            $q->where('url', 'goodideas');
+        })->get();
+        foreach($goodIdeas as $goodIdea){
+            $newGoodIdeaId=DB::table('good_ideas')->insertGetId(
+                ['user_id' => $goodIdea->user_id, 'idea' => $goodIdea->feedback, 'created_at' => $goodIdea->created_at]
+            );
+
+            foreach($goodIdea->votes as $vote){
+                DB::table('good_idea_votes')->insert(
+                    ['user_id' => $vote->user_id, 'good_idea_id' => $newGoodIdeaId, 'vote'=>$vote->vote,'created_at' => $vote->created_at]
+                );
+            }
+        }
+
         Schema::drop('feedback');
         Schema::drop('feedback_votes');
         Schema::drop('feedback_categories');
