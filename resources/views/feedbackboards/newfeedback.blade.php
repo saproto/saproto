@@ -10,7 +10,7 @@
 
         <div class="card-body">
             <label for="new-feedback">New {{ str_singular($category->title) }}:</label>
-            <textarea id="new-feedback" class="form-control" rows="4" cols="30" name="idea" required
+            <textarea id="new-feedback" class="form-control" rows="4" cols="30" name="feedback" required
                       placeholder="Your {{ strtolower(str_singular($category->title)) }} goes here."></textarea>
         </div>
 
