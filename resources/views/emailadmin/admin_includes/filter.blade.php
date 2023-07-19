@@ -8,22 +8,24 @@
         <div class="card-body row">
             <div class="form-group col-7">
                 <label for="searchterm">Searchterm:</label>
-                <input class="form-control" id="searchterm" name="searchterm" required>
+                <input class="form-control" id="searchterm" name="searchterm" value="{{$searchTerm??""}}" required>
             </div>
 
             <div class="col">
                 @include('components.forms.checkbox',[
                                     'name' => 'search_description',
                                     'label' => 'Search description',
-                                    'checked' => true,
+                                    'checked' => $description??true,
                                 ])
                 @include('components.forms.checkbox',[
                                     'name' => 'search_subject',
-                                    'label' => 'Search subject'
+                                    'label' => 'Search subject',
+                                    'checked' => $subject??false,
                                 ])
                 @include('components.forms.checkbox',[
                                     'name' => 'search_body',
-                                    'label' => 'Search body'
+                                    'label' => 'Search body',
+                                    'checked' => $body??false,
                                 ])
             </div>
         </div>

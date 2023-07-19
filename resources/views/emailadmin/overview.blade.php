@@ -86,7 +86,12 @@
 
             </div>
 
-            @include('emailadmin.admin_includes.filter')
+            @include('emailadmin.admin_includes.filter', [
+                'searchTerm' => $searchTerm,
+                'description' => $description,
+                'subject' => $subject,
+                'body' => $body,
+            ])E
 
         </div>
 
