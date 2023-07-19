@@ -58,7 +58,7 @@ class AddFeedbackFunctionality extends Migration
             foreach (DB::table('good_ideas')->get() as $goodidea) {
                 $new = new Feedback([
                     'user_id' => $goodidea->user_id,
-                    'feedback_category_id' => $goodidea->id,
+                    'feedback_category_id' => $goodideaCategory->id,
                     'feedback' => $goodidea->idea,
                     'reviewed' => true,
                     'created_at' => $goodidea->created_at,
