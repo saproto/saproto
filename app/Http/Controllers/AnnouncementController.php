@@ -44,7 +44,7 @@ class AnnouncementController extends Controller
             'show_only_active' => $request->has('show_only_active'),
             'show_as_popup' => $request->has('show_as_popup'),
             'show_style' => $request->input('show_style'),
-            'is_dismissable' => $request->has('is_dismissable')
+            'is_dismissable' => $request->has('is_dismissable'),
         ]);
 
         Session::flash('flash_message', 'Announcement created.');
@@ -85,7 +85,7 @@ class AnnouncementController extends Controller
             'show_as_popup' => $request->has('show_as_popup'),
             'show_style' => $request->input('show_style'),
             'is_dismissable' => $request->has('is_dismissable'),
-            ]);
+        ]);
 
         Session::flash('flash_message', 'Announcement updated.');
 
