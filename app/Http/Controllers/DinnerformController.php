@@ -185,7 +185,7 @@ class DinnerformController extends Controller
 
     public function process($id)
     {
-        if(!Auth::user()->can('finadmin')) {
+        if (! Auth::user()->can('finadmin')) {
             Session::flash('flash_message', 'You are not allowed to process dinnerforms!');
 
             return Redirect::back();
