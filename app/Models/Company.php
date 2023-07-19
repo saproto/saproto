@@ -59,7 +59,7 @@ class Company extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('App\Models\StorageEntry', 'photo_id');
     }
 
     /** @return HasMany */
