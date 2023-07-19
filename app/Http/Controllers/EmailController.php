@@ -30,22 +30,22 @@ class EmailController extends Controller
     /** @return View */
     public function filter(Request $request)
     {
-        $filteredEmails=Email::orderBy('id', 'desc');
-        $description=$request->has('search_description');
-        $subject=$request->has('search_subject');
-        $body=$request->has('search_body');
-        $searchTerm=$request->input('searchterm');
+        $filteredEmails = Email::orderBy('id', 'desc');
+        $description = $request->has('search_description');
+        $subject = $request->has('search_subject');
+        $body = $request->has('search_body');
+        $searchTerm = $request->input('searchterm');
 
-        if($description){
-            $filteredEmails=$filteredEmails->where('description', 'LIKE', '%'.$searchTerm.'%');
+        if ($description) {
+            $filteredEmails = $filteredEmails->where('description', 'LIKE', '%'.$searchTerm.'%');
         }
 
-        if($subject){
-            $filteredEmails=$filteredEmails->where('subject', 'LIKE', '%'.$searchTerm.'%');
+        if ($subject) {
+            $filteredEmails = $filteredEmails->where('subject', 'LIKE', '%'.$searchTerm.'%');
         }
 
-        if($body){
-            $filteredEmails=$filteredEmails->where('body', 'LIKE', '%'.$searchTerm.'%');
+        if ($body) {
+            $filteredEmails = $filteredEmails->where('body', 'LIKE', '%'.$searchTerm.'%');
         }
 
         return view('emailadmin.overview', [
