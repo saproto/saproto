@@ -86,6 +86,8 @@
 
             </div>
 
+            @include('emailadmin.admin_includes.filter')
+
         </div>
 
         <div class="col-md-7">
