@@ -137,13 +137,13 @@ class AddFeedbackFunctionality extends Migration
         })->get();
         foreach ($quotes as $quote) {
             $newQuoteId = DB::table('quotes')->insertGetId(
-                ['user_id' => $quote->user_id, 'quote' => $quote->feedback, 'created_at' => $quote->created_at]
+                ['user_id' => $quote->user_id, 'quote' => $quote->feedback, 'created_at' => $quote->created_at, 'updated_at' => $quote->updated_at]
             );
 
             foreach ($quote->votes as $vote) {
                 if ($vote->vote == 1) {
                     DB::table('quotes_users')->insert(
-                        ['user_id' => $vote->user_id, 'quote_id' => $newQuoteId, 'created_at' => $vote->created_at]
+                        ['user_id' => $vote->user_id, 'quote_id' => $newQuoteId, 'created_at' => $vote->created_at, 'updated_at' => $vote->updated_at]
                     );
                 }
             }
@@ -169,12 +169,12 @@ class AddFeedbackFunctionality extends Migration
         })->get();
         foreach ($goodIdeas as $goodIdea) {
             $newGoodIdeaId = DB::table('good_ideas')->insertGetId(
-                ['user_id' => $goodIdea->user_id, 'idea' => $goodIdea->feedback, 'created_at' => $goodIdea->created_at]
+                ['user_id' => $goodIdea->user_id, 'idea' => $goodIdea->feedback, 'created_at' => $goodIdea->created_at, 'updated_at' => $goodIdea->updated_at]
             );
 
             foreach ($goodIdea->votes as $vote) {
                 DB::table('good_idea_votes')->insert(
-                    ['user_id' => $vote->user_id, 'good_idea_id' => $newGoodIdeaId, 'vote' => $vote->vote, 'created_at' => $vote->created_at]
+                    ['user_id' => $vote->user_id, 'good_idea_id' => $newGoodIdeaId, 'vote' => $vote->vote, 'created_at' => $vote->created_at, 'updated_at' => $vote->updated_at]
                 );
             }
         }
