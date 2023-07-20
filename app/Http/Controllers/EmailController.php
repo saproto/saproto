@@ -27,7 +27,6 @@ class EmailController extends Controller
         ]);
     }
 
-    /** @return View */
     public function filter(Request $request): View
     {
         $filteredEmails = Email::orderBy('id', 'desc');
