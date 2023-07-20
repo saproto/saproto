@@ -28,7 +28,7 @@ class EmailController extends Controller
     }
 
     /** @return View */
-    public function filter(Request $request)
+    public function filter(Request $request): View
     {
         $filteredEmails = Email::orderBy('id', 'desc');
         $description = $request->has('search_description');

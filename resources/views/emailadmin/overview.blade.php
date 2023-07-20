@@ -87,10 +87,10 @@
             </div>
 
             @include('emailadmin.admin_includes.filter', [
-                'searchTerm' => $searchTerm??null,
-                'description' => $description??null,
-                'subject' => $subject??null,
-                'body' => $body??null,
+                'searchTerm' => $searchTerm ?? null,
+                'description' => $description ?? null,
+                'subject' => $subject ?? null,
+                'body' => $body ?? null,
             ])
 
         </div>
