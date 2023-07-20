@@ -37,15 +37,15 @@ class EmailController extends Controller
         $searchTerm = $request->input('searchterm');
 
         if ($description) {
-            $filteredEmails = $filteredEmails->where('description', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
         }
 
         if ($subject) {
-            $filteredEmails = $filteredEmails->where('subject', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
         }
 
         if ($body) {
-            $filteredEmails = $filteredEmails->where('body', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
         }
 
         return view('emailadmin.overview', [
