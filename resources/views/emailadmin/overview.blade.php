@@ -198,7 +198,7 @@
                 </table>
 
                 <div class="card-footer pb-0">
-                    {!! $emails->links() !!}
+                    {!! $emails->withQueryString()->links() !!}
                 </div>
 
             </div>
