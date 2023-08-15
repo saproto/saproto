@@ -489,6 +489,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
         Route::get('', ['as' => 'admin', 'uses' => 'EmailController@index']);
+        Route::get('filter', ['as' => 'filter', 'uses' => 'EmailController@filter']);
 
         Route::group(['prefix' => 'list', 'as' => 'list::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'EmailListController@create']);

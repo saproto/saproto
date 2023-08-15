@@ -86,6 +86,13 @@
 
             </div>
 
+            @include('emailadmin.admin_includes.filter', [
+                'searchTerm' => $searchTerm ?? null,
+                'description' => $description ?? null,
+                'subject' => $subject ?? null,
+                'body' => $body ?? null,
+            ])
+
         </div>
 
         <div class="col-md-7">
@@ -191,7 +198,7 @@
                 </table>
 
                 <div class="card-footer pb-0">
-                    {!! $emails->links() !!}
+                    {!! $emails->withQueryString()->links() !!}
                 </div>
 
             </div>

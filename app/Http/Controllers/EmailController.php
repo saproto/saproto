@@ -27,6 +27,36 @@ class EmailController extends Controller
         ]);
     }
 
+    public function filter(Request $request): View
+    {
+        $filteredEmails = Email::orderBy('id', 'desc');
+        $description = $request->has('search_description');
+        $subject = $request->has('search_subject');
+        $body = $request->has('search_body');
+        $searchTerm = $request->input('searchterm');
+
+        if ($description) {
+            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        if ($subject) {
+            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        if ($body) {
+            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        return view('emailadmin.overview', [
+            'lists' => EmailList::all(),
+            'emails' => $filteredEmails->paginate(10),
+            'searchTerm' => $searchTerm,
+            'description' => $description,
+            'subject' => $subject,
+            'body' => $body,
+        ]);
+    }
+
     /** @return View */
     public function create()
     {

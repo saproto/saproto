@@ -70,52 +70,47 @@
 
                         @foreach($events as $event)
 
-                        <tr>
-                            <td>
-                                <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
-                                    {{ $event->title }}
-                                </a>
-                            </td>
-
-                            <td>
-                                @if($event->category)
-                                    {{$event->category->name}}
-                                @else
-                                    Not set
-                                @endif
-                            </td>
-
-                            <td>{{ date('Y-m-d H:i', $event->start) }}</td>
-
-                            <td>
-                                @if ($event->committee)
-                                    <a href="{{ route('committee::show', ['id' => $event->committee->slug]) }}">
-                                        {{ $event->committee->name }}
-                                    </a>
-                                @else
-                                    <span class="font-italic text-muted">not set</span>
-                                @endif
-                            </td>
-
-                            @if ($event->activity)
-                                <td>{{ $event->activity->users->count() }}</td>
+                            <tr>
                                 <td>
-                                    @if($event->activity->helpingCommitteeInstances->count() > 0)
-                                        @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
-                                            <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
-                                                {{ $helping_committee->committee->name }}
-                                            </a>: {{ $helping_committee->helperCount() }}<br>
-                                        @endforeach
+                                    <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
+                                        {{ $event->title }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    @if($event->category)
+                                        {{$event->category->name}}
+                                    @else
+                                        Not set
+                                    @endif
+                                </td>
+
+                                <td>{{ date('Y-m-d H:i', $event->start) }}</td>
+
+                                <td>
+                                    @if ($event->committee)
+                                        <a href="{{ route('committee::show', ['id' => $event->committee->slug]) }}">
+                                            {{ $event->committee->name }}
+                                        </a>
                                     @else
                                         <span class="font-italic text-muted">not set</span>
                                     @endif
                                 </td>
-                                <td>{{ $event->activity->presentUsers->count() }}</td>
-                            @else
-                                <td><span class="font-italic text-muted">no activity</span></td>
-                                <td><span class="font-italic text-muted">no activity</span></td>
-                                <td><span class="font-italic text-muted">no activity</span></td>
-                            @endif
+                                
+                                @if ($event->activity)
+
+                                    <td>{{ $event->activity->users->count() }}</td>
+                                    <td>{{ $event->activity->backupUsers->count() }}</td>
+                                    <td>{{$event->activity->getAttendees()}}</td>
+                                    <td>€{{$event->activity->price}}</td>
+
+
+                                @else
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                    <td><span class="font-italic text-muted">no activity</span></td>
+                                @endif
 
                             </tr>
 
