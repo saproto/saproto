@@ -2,12 +2,13 @@
 
 namespace App\Csp\Policies;
 
-use function Sentry\captureException;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Policies\Policy;
+
+use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
 {
