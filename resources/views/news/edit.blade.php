@@ -2,7 +2,7 @@
 
 @section('page-title')
     @if($new)
-        Create new news article
+        Create news!
     @else
         Edit news article {{ $item->title }}
     @endif
@@ -53,17 +53,80 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
-
                         <a href="{{ route("news::list") }}" class="btn btn-default">Cancel</a>
 
+                        <button type="submit" name="weekly" class="btn btn-warning float-end">Send as weekly</button>
+                        <button type="submit" name="newsitem" class="btn btn-success float-end">Save as newsitem</button>
                     </div>
 
                 </div>
 
             </form>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white mb-1">
+                    Activities in the newsitem
+                </div>
+
+                @php
+                    $events=[];
+                @endphp
+
+                @if (count($events) > 0)
+
+                    <table class="table table-sm table-hover">
+
+                        <thead>
+
+                        <tr class="bg-dark text-white">
+
+                            <td>Event</td>
+                            <td>When</td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+
+                        </thead>
+
+                        @foreach($events as $event)
+
+                            <tr class="{{ $event->include_in_newsletter ? '' : 'opacity-50' }}">
+
+                                <td>{{ $event->title }}</td>
+                                <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>
+                                <td>
+                                    <i class="fas fa-{{ ($event->include_in_newsletter ? 'check' : 'times') }}"
+                                       aria-hidden="true"></i>
+                                </td>
+                                <td>
+                                    <a href="{{ route('newsletter::toggle', ['id' => $event->id]) }}">
+                                        Toggle
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                @else
+
+                    <div class="card-body">
+                        <p class="card-text text-center">
+                            There are no upcoming events. Seriously. Go fix that {{ Auth::user()->calling_name }}.
+                        </p>
+                    </div>
+
+                @endif
+
+            </div>
 
         </div>
 

@@ -12,9 +12,9 @@
 
     <br>
 
-    @if(App\Models\Event::getEventsForNewsletter()->count() > 0)
+    @if($events->count() > 0)
 
-        @foreach(App\Models\Event::getEventsForNewsletter() as $i => $event)
+        @foreach($events as $i => $event)
 
             <table style="margin: 0; padding: 0; border: none; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};"
                    width="100%">

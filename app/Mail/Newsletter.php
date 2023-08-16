@@ -18,15 +18,18 @@ class Newsletter extends Mailable
 
     public $text;
 
+    public $events;
+
     /**
      * @param  string  $list
      * @param  string  $text
      */
-    public function __construct(User $user, $list, $text)
+    public function __construct(User $user, $list, $text, $events)
     {
         $this->user = $user;
         $this->list = $list;
         $this->text = $text;
+        $this->events = $events;
     }
 
     /** @return Newsletter */

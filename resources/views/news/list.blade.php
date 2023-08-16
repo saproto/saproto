@@ -12,27 +12,19 @@
 
             <div class="row">
 
+                @can('board')
+                    <a href="{{route("news::admin")}}" class="btn btn-info">
+                        <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">News admin</span>
+                    </a>
+                @endcan
+
                 @if(count($newsitems) == 0)
-
-                    <div class="row">
-
-                        <div class="col-md-4 col-md-offset-4">
-                            <div class="panel panel-default news__card">
-                                <div class="panel-body">
-                                    <p>
-                                        &nbsp;
-                                    </p>
-                                    <p class="text-center">
-                                        <strong>
-                                            There are currently no news articles.
-                                        </strong>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="text-center">
+                        <br>
+                        <strong>
+                            There are currently no news articles.
+                        </strong>
                     </div>
-
                 @else
 
                     @foreach($newsitems as $index => $newsitem)

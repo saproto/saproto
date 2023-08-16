@@ -5,8 +5,10 @@ namespace App\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
@@ -17,6 +19,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property int $user_id
  * @property string $title
  * @property string $content
+ * @property bool $is_weekly
+ * @property Event[] $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at
@@ -50,30 +54,37 @@ class Newsitem extends Model
 {
     use SoftDeletes;
 
+    use HasFactory;
+
     protected $table = 'newsitems';
 
     protected $guarded = ['id'];
 
     /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User', 'user_id');
     }
 
+    public function events(): BelongsToMany
+    {
+        return $this->belongsToMany(Event::class, 'event_newsitem');
+    }
+
     /** @return BelongsTo */
-    public function featuredImage()
+    public function featuredImage(): BelongsTo
     {
         return $this->belongsTo('App\Models\StorageEntry', 'featured_image_id');
     }
 
     /** @return bool */
-    public function isPublished()
+    public function isPublished(): bool
     {
         return Carbon::parse($this->published_at)->isPast();
     }
 
     /** @return string */
-    public function getUrlAttribute()
+    public function getUrlAttribute(): string
     {
         return route('news::show', ['id' => $this->id]);
     }

@@ -11,6 +11,7 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\HashMapItem;
 use App\Models\Member;
+use App\Models\Newsitem;
 use App\Models\OrderLine;
 use App\Models\Page;
 use App\Models\Quote;
@@ -123,6 +124,10 @@ class OtherDataSeeder extends Seeder
         // Create quotes
         $n = 100;
         $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
+
+        // Create newsitems
+        $n = 40;
+        $output->task("creating $n newsitems", fn () => Newsitem::factory()->count($n)->create());
 
         // Create newsletter text
         $output->task('creating newsletter', function () {

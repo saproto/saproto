@@ -404,17 +404,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
     });
 
-    /* Routes related to the newsletter */
-    Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
-        Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
-        Route::group(['middleware' => ['permission:board']], function () {
-            Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
-            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
-            Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
-            Route::post('text', ['as' => 'text', 'uses' => 'NewsletterController@saveNewsletterText']);
-        });
-    });
-
     /* Routes related to pages. */
     Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
@@ -449,6 +438,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
+    });
+
+    /* Routes related to the newsletter */
+    Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
+        Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
+        Route::group(['middleware' => ['permission:board']], function () {
+            Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
+            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
+            Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
+            Route::post('text', ['as' => 'text', 'uses' => 'NewsletterController@saveNewsletterText']);
+        });
     });
 
     /* Routes related to menu. */

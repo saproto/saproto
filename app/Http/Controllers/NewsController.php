@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Newsitem;
 use App\Models\StorageEntry;
 use Auth;
+use Carbon\Carbon;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Redirect;
 use Session;
@@ -27,17 +29,9 @@ class NewsController extends Controller
     /** @return View */
     public function index()
     {
-        $newsitems = Newsitem::all()->sortByDesc('published_at');
+        $newsitems = Newsitem::all()->where('publication' , '<', Carbon::now()->timestamp)->sortByDesc('published_at');
 
-        $return = [];
-
-        foreach ($newsitems as $newsitem) {
-            if ($newsitem->isPublished()) {
-                $return[] = $newsitem;
-            }
-        }
-
-        return view('news.list', ['newsitems' => $return]);
+        return view('news.list', ['newsitems' => $newsitems->where('is_weekly', false), 'weeklies' => $newsitems->where('is_weekly', true)]);
     }
 
     /**
@@ -78,6 +72,11 @@ class NewsController extends Controller
         $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         $newsitem->user_id = Auth::user()->id;
         $newsitem->save();
+
+        if($request->has('weekly')){
+            $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);
+            Artisan::call('proto:newslettercron');
+        }
 
         return Redirect::route('news::admin');
     }

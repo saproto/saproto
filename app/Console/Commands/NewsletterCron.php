@@ -4,8 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
-use App\Models\Event;
-use App\Models\Newsletter;
+use App\Models\Newsitem;
 use Illuminate\Console\Command;
 use Mail;
 
@@ -42,14 +41,14 @@ class NewsletterCron extends Command
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 
-        $events = Event::getEventsForNewsletter();
+        $newsletter=Newsitem::where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 
-        $text = Newsletter::text();
+        $events = $newsletter->events;
 
         $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 
         foreach ($newsletterlist->users as $user) {
-            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $text))->onQueue('low'));
+            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $newsletter->content, $events))->onQueue('low'));
         }
 
         $this->info('Done!');
