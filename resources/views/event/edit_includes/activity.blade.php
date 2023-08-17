@@ -81,17 +81,6 @@
                                    required>
                         </div>
 
-                        <div class="col-md-12 mb-3">
-                            <label for="redirect_url">Redirect URL</label>
-                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top"
-                               data-html="true"
-                               title="The URL you get redirect to after signing up!."></i>
-                            <input type="url" class="form-control" id="redirect_url" name="redirect_url"
-                                   placeholder='https://forms.gle/...'
-                                   value="{{ $event->activity?->redirect_url ?? ''}}"
-                            />
-                        </div>
-
                     </div>
 
                     <div class="col-md-6">
@@ -107,11 +96,26 @@
                                value="{{ old('participants', $event->activity?->participants) }}">
                     </div>
 
-                    @include('components.forms.checkbox', [
+                    <div class="col-md-6">
+                        <div class="col-md-12 mb-3">
+                            <label for="redirect_url">Redirect URL</label>
+                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                               data-html="true"
+                               title="The URL you get redirect to after signing up!."></i>
+                            <input type="url" class="form-control" id="redirect_url" name="redirect_url"
+                                   placeholder='https://forms.gle/...'
+                                   value="{{ $event->activity?->redirect_url ?? ''}}"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        @include('components.forms.checkbox', [
                         'name' => 'hide_participants',
                         'checked' => isset($request) && $request->exists('hide_participants') || $event->activity?->hide_participants,
-                        'label' => '<i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>'
-                    ])
+                        'label' => 'Hide participants  <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>'
+                        ])
+                    </div>
                 </div>
             </div>
 
