@@ -29,7 +29,7 @@ class NewsletterCron extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public int $id)
     {
         parent::__construct();
     }
@@ -41,14 +41,16 @@ class NewsletterCron extends Command
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 
-        $newsletter=Newsitem::where('is_weekly', true)->orderBy('published_at', 'desc')->first();
+        $newsitem=Newsitem::findOrFail($this->id);
 
-        $events = $newsletter->events;
+        $image_url = $newsitem->featuredImage->generateImagePath(600, 300);
+
+        $events = $newsitem->events;
 
         $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 
         foreach ($newsletterlist->users as $user) {
-            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $newsletter->content, $events))->onQueue('low'));
+            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $newsitem->content, $events, $image_url))->onQueue('low'));
         }
 
         $this->info('Done!');

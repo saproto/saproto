@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmailList;
+use App\Models\Event;
 use App\Models\Newsitem;
+use App\Models\Newsletter;
 use App\Models\StorageEntry;
 use Auth;
 use Carbon\Carbon;
@@ -11,7 +14,6 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Redirect;
 use Session;
@@ -52,58 +54,90 @@ class NewsController extends Controller
             }
         }
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview]);
+        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview, 'events' => $newsitem->events()->get()]);
+    }
+
+    public function showWeeklyPreview(int $id){
+        $newsitem = Newsitem::findOrFail($id);
+        return view('emails.newsletter', [
+            'user' => Auth::user(),
+            'list' => EmailList::find(config('proto.weeklynewsletter')),
+            'events' => $newsitem->events()->get(),
+            'text' => $newsitem->content,
+            'image_url'=>$newsitem->featuredImage->generateImagePath(600, 300),
+        ]);
     }
 
     /** @return View */
     public function create()
     {
-        return view('news.edit', ['item' => null, 'new' => true]);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $newsitem = new Newsitem();
-
-        $newsitem->fill($request->all());
-        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
-        $newsitem->user_id = Auth::user()->id;
-        $newsitem->save();
-
-        if($request->has('weekly')){
-            $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);
-            Artisan::call('proto:newslettercron');
-        }
-
-        return Redirect::route('news::admin');
+        $upcomingEvents = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get();
+        return view('news.edit', ['item' => null, 'new' => true, 'is_weekly'=>$is_weekly, 'upcomingEvents'=>$upcomingEvents, 'events'=>[]]);
     }
 
     /** @return View */
     public function edit($id)
     {
         $newsitem = Newsitem::findOrFail($id);
+        $upcomingEvents = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $events=$newsitem->events()->pluck('id')->toArray();
+        return view('news.edit', ['item' => $newsitem, 'new' => false, 'upcomingEvents'=>$upcomingEvents, 'events'=>$events]);
+    }
 
-        return view('news.edit', ['item' => $newsitem, 'new' => false]);
+    /**
+     * @return RedirectResponse
+     * @throws FileNotFoundException
+     */
+    public function store(Request $request)
+    {
+        $newsitem = new Newsitem();
+        return $this->storeNews($newsitem, $request);
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
+
      */
     public function update(Request $request, $id)
     {
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
+        return $this->storeNews($newsitem, $request);
+    }
 
-        $newsitem->fill($request->all());
-        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
+    /**
+     * @param Newsitem $newsitem
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws FileNotFoundException
+     */
+    public function storeNews(Newsitem $newsitem, Request $request): RedirectResponse
+    {
+        $newsitem->user_id = Auth::user()->id;
+        $newsitem->content = $request->input('content');
+        if ($request->has('title')) {
+            $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
+        } else {
+            $newsitem->title = "Weekly update for week " . date('W') . " of " . date('Y') . ".";
+            $newsitem->published_at = null;
+        }
         $newsitem->save();
 
-        return Redirect::route('news::admin');
+        $newsitem->events()->sync($request->input('event'));
+
+        $image = $request->file('image');
+        if ($image) {
+            $file = new StorageEntry();
+            $file->createFromFile($image);
+            $file->save();
+            $newsitem->featuredImage()->associate($file);
+        }
+        $newsitem->save();
+
+        return Redirect::route('news::edit', ['id' => $newsitem->id]);
     }
+
+
 
     /**
      * @param  int  $id
@@ -123,28 +157,11 @@ class NewsController extends Controller
         return Redirect::route('news::admin');
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
-     */
-    public function featuredImage(Request $request, $id)
-    {
-        /** @var Newsitem $newsitem */
+    public function sendWeeklyEmail($id){
         $newsitem = Newsitem::findOrFail($id);
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry();
-            $file->createFromFile($image);
-            $newsitem->featuredImage()->associate($file);
-        } else {
-            $newsitem->featuredImage()->dissociate();
-        }
-        $newsitem->save();
-
-        return Redirect::route('news::edit', ['id' => $id]);
+        Session::flash('flash_message', 'Newsletter has been sent.');
+        return Redirect::route('news::admin');
     }
 
     /** @return array */

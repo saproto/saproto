@@ -1,7 +1,9 @@
 @extends('emails.template')
 
 @section('body')
-
+    @if($image_url)
+        <img src="{{ $image_url }}" style="width: 100%;"/>
+    @endif
     <p>
         Hey {{ $user->calling_name }},
     </p>

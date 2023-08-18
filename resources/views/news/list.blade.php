@@ -18,7 +18,7 @@
                     </a>
                 @endcan
 
-                @if(count($newsitems) == 0)
+                @if(count($newsitems) + count($weeklies) == 0)
                     <div class="text-center">
                         <br>
                         <strong>
@@ -42,6 +42,22 @@
                         </div>
 
                     @endforeach
+
+                        @foreach($weeklies as $index => $weekly)
+
+                            <div class="col-md-4 col-sm-6">
+
+                                @include('website.home.cards.card-bg-image', [
+                                            'url' => $weekly->url,
+                                            'img' => $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500,300) : null,
+                                            'html' => sprintf('<strong>%s</strong><br>Published %s', $weekly->title, Carbon::parse($weekly->published_at)->diffForHumans()),
+                                            'height' => '180',
+                                            'photo_pop' => true
+                                ])
+
+                            </div>
+
+                        @endforeach
 
                 @endif
 

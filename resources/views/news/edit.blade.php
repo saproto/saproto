@@ -1,175 +1,132 @@
 @extends('website.layouts.redesign.dashboard')
-
+@php($newsName=$is_weekly ? 'weekly' : 'news')
 @section('page-title')
     @if($new)
-        Create news!
+       Create a new {{ $newsName }}
     @else
-        Edit news article {{ $item->title }}
+        Edit {{$newsName}} {{ $item->title }}
     @endif
 @endsection
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <form method="post"
+          action="@if($new) {{ route("news::add") }} @else {{ route("news::edit", ['id' => $item->id]) }} @endif"
+          enctype="multipart/form-data">
 
-        <div class="col-md-4">
+        {!! csrf_field() !!}
 
-            <form method="post"
-                  action="@if($new) {{ route("news::add") }} @else {{ route("news::edit", ['id' => $item->id]) }} @endif"
-                  enctype="multipart/form-data">
+            <div class="row justify-content-center">
 
-                {!! csrf_field() !!}
+                <div class="col-md-4">
 
-                <div class="card mb-3">
+                        <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white">
-                        @yield('page-title')
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
-                        </div>
-
-                        @include('components.forms.datetimepicker', [
-                            'name' => 'published_at',
-                            'label' => 'Publish at:',
-                            'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
-                        ])
-
-                        <div class="form-group">
-                            <label for="editor">Content</label>
-                            @include('components.forms.markdownfield', [
-                                'name' => 'content',
-                                'placeholder' => 'Text goes here.',
-                                'value' => $item ? $item->content : null
-                            ])
-                        </div>
-
-                    </div>
-
-                    <div class="card-footer">
-
-                        <a href="{{ route("news::list") }}" class="btn btn-default">Cancel</a>
-
-                        <button type="submit" name="weekly" class="btn btn-warning float-end">Send as weekly</button>
-                        <button type="submit" name="newsitem" class="btn btn-success float-end">Save as newsitem</button>
-                    </div>
-
-                </div>
-
-            </form>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card mb-3">
-
-                <div class="card-header bg-dark text-white mb-1">
-                    Activities in the newsitem
-                </div>
-
-                @php
-                    $events=[];
-                @endphp
-
-                @if (count($events) > 0)
-
-                    <table class="table table-sm table-hover">
-
-                        <thead>
-
-                        <tr class="bg-dark text-white">
-
-                            <td>Event</td>
-                            <td>When</td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-
-                        </thead>
-
-                        @foreach($events as $event)
-
-                            <tr class="{{ $event->include_in_newsletter ? '' : 'opacity-50' }}">
-
-                                <td>{{ $event->title }}</td>
-                                <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>
-                                <td>
-                                    <i class="fas fa-{{ ($event->include_in_newsletter ? 'check' : 'times') }}"
-                                       aria-hidden="true"></i>
-                                </td>
-                                <td>
-                                    <a href="{{ route('newsletter::toggle', ['id' => $event->id]) }}">
-                                        Toggle
-                                    </a>
-                                </td>
-
-                            </tr>
-
-                        @endforeach
-
-                    </table>
-
-                @else
-
-                    <div class="card-body">
-                        <p class="card-text text-center">
-                            There are no upcoming events. Seriously. Go fix that {{ Auth::user()->calling_name }}.
-                        </p>
-                    </div>
-
-                @endif
-
-            </div>
-
-        </div>
-
-        @if(!$new)
-
-            <div class="col-md-3">
-
-                <form method="post" action="{{ route("news::image", ["id" => $item->id]) }}"
-                      enctype="multipart/form-data">
-
-                    {!! csrf_field() !!}
-
-                    <div class="card mb-3">
-
-                        @if($item->featuredImage)
-                            <img src="{!! $item->featuredImage->generateImagePath(700,null) !!}" width="100%;"
-                                 class="card-img-top">
-                        @endif
-
-                        <div class="card-body">
-
-                            <div class="custom-file">
-                                <input id="featured-image" type="file" class="form-control" name="image">
-                                <label for="featured-image" class="form-label">Upload featured image</label>
+                            <div class="card-header bg-dark text-white">
+                                @yield('page-title')
                             </div>
 
+                            <div class="card-body">
+                                @if(!$is_weekly)
+                                    <div class="form-group">
+                                        <label for="title">Title:</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                               placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
+                                    </div>
+
+                                    @include('components.forms.datetimepicker', [
+                                        'name' => 'published_at',
+                                        'label' => 'Publish at:',
+                                        'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
+                                    ])
+                                @endif
+
+                                <div class="form-group">
+                                    <label for="editor">Content</label>
+                                    @include('components.forms.markdownfield', [
+                                        'name' => 'content',
+                                        'placeholder' => 'Text goes here.',
+                                        'value' => $item ? $item->content : null
+                                    ])
+                                </div>
+
+                            </div>
+
+
+
                         </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-success btn-block">
-                                Replace featured image
-                            </button>
+                </div>
+
+            <div class="col-md-5">
+
+                <div class="row">
+                    @include('news.includes.activities')
+                    @if($is_weekly)
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Replace image
+                            </div>
+                            <div class="card-body">
+                                <div class="custom-file">
+                                    <input id="featured-image" type="file" class="form-control" name="image">
+                                </div>
+                            </div>
                         </div>
-
-                    </div>
-
-                </form>
-
-
+                    @endif
+                        <div class="card mb-3">
+                            <div class="card-body">
+                            <a href="{{ route("news::admin") }}" class="btn btn-default">Cancel</a>
+                            <button type="submit" class="btn btn-success float-end">Save as {{$newsName}}</button>
+                            </div>
+                        </div>
+                </div>
             </div>
+                <div class="col">
+                    @if($is_weekly)
+                        <div class="row" style="height:75vh">
+                        <div class="card mb-3 p-0">
+                            <div class="card-header">
+                                Weekly Preview:
+                            </div>
+                            <div class="card-body px-0">
+                                <div class="ratio ratio-21x9 h-100">
+                                    <iframe src="{{route('news::showWeeklyPreview', ['id'=>$item->id])}}" title="W3Schools Free Online Web Tutorials"></iframe>
+                                </div>
+                            </div>
+                            <div class="card-footer">
 
-        @endif
-
-    </div>
+                                @include('components.modals.confirm-modal', [
+                                           'action' => route('news::sendWeekly', ['id' => $item->id]),
+                                           'text' => 'Send weekly!',
+                                           'title' => 'Confirm Sending Weekly',
+                                           'classes' => 'btn btn-danger ms-2',
+                                           'message' => "Are you sure you want to send this weekly? This will send an email to everyone on the list.",
+                                           'confirm' => 'Send',
+                                       ])
+                            </div>
+                        </div>
+                        </div>
+                    @else
+                        <div class="row">
+                            <div class="card mb-3 p-0">
+                                <div class="card-header">
+                                    Featured image
+                                </div>
+                                @if($item?->featuredImage)
+                                    <img src="{!! $item->featuredImage->generateImagePath(700,null) !!}" width="100%;"
+                                         class="card-img-top">
+                                @endif
+                                <div class="card-body">
+                                    <div class="custom-file">
+                                        <input id="featured-image" type="file" class="form-control" name="image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+        </div>
+    </form>
 
 @endsection

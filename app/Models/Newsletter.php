@@ -126,7 +126,7 @@ class Newsletter
     /** @return bool */
     public static function send()
     {
-        Artisan::call('proto:newslettercron');
+        Artisan::call('proto:newslettercron', ['id'=>1]);
         self::setUpdatedAt();
 
         return true;
