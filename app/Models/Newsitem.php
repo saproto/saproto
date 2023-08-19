@@ -53,14 +53,12 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 class Newsitem extends Model
 {
     use SoftDeletes;
-
     use HasFactory;
 
     protected $table = 'newsitems';
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User', 'user_id');
@@ -71,24 +69,22 @@ class Newsitem extends Model
         return $this->belongsToMany(Event::class, 'event_newsitem');
     }
 
-    /** @return BelongsTo */
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo('App\Models\StorageEntry', 'featured_image_id');
     }
 
-    /** @return bool */
     public function isPublished(): bool
     {
         return Carbon::parse($this->published_at)->isPast();
     }
 
-    /** @return string */
     public function getUrlAttribute(): string
     {
-        if($this->is_weekly){
+        if ($this->is_weekly) {
             return route('news::showWeeklyPreview', ['id' => $this->id]);
         }
+
         return route('news::show', ['id' => $this->id]);
     }
 }

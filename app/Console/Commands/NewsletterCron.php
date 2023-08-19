@@ -6,7 +6,6 @@ use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
 use App\Models\Newsitem;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class NewsletterCron extends Command
@@ -42,15 +41,17 @@ class NewsletterCron extends Command
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 
-        $newsitem=Newsitem::findOrFail($this->argument('id'));
+        $newsitem = Newsitem::findOrFail($this->argument('id'));
 
-        if (!$newsitem->is_weekly) {
+        if (! $newsitem->is_weekly) {
             $this->error('This is not a weekly newsletter item!');
+
             return;
         }
 
-        if($newsitem->published_at != null){
+        if ($newsitem->published_at != null) {
             $this->error('This newsletter has already been sent!');
+
             return;
         }
 

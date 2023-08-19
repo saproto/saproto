@@ -27,7 +27,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if(!Auth::user()?->is_member){
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
 
@@ -38,7 +38,7 @@ class HomeController extends Controller
             ->orderBy('published_at', 'desc')
             ->take(3)
             ->get();
-        $weekly=Newsitem::query()
+        $weekly = Newsitem::query()
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(1))
             ->where('is_weekly', true)

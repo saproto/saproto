@@ -18,6 +18,7 @@ class NewsitemFactory extends Factory
     public function definition(): array
     {
         $published_at = fake()->dateTimeBetween('-1 year', '+1 year');
+
         return [
             'user_id' => 1,
             'title' => $this->faker->sentence(),

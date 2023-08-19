@@ -30,9 +30,10 @@ class NewsController extends Controller
     /** @return View */
     public function index()
     {
-        $newsitems = Newsitem::all()->where('publication' , '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', false);
-        $weeklies = Newsitem::all()->where('publication' , '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', true);
-        return view('news.list', ['newsitems' => $newsitems, 'weeklies' =>$weeklies]);
+        $newsitems = Newsitem::all()->where('publication', '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', false);
+        $weeklies = Newsitem::all()->where('publication', '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', true);
+
+        return view('news.list', ['newsitems' => $newsitems, 'weeklies' => $weeklies]);
     }
 
     /**
@@ -56,14 +57,16 @@ class NewsController extends Controller
         return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview, 'events' => $newsitem->events()->get()]);
     }
 
-    public function showWeeklyPreview(int $id){
+    public function showWeeklyPreview(int $id)
+    {
         $newsitem = Newsitem::findOrFail($id);
+
         return view('emails.newsletter', [
             'user' => Auth::user(),
             'list' => EmailList::find(config('proto.weeklynewsletter')),
             'events' => $newsitem->events()->get(),
             'text' => $newsitem->content,
-            'image_url'=>$newsitem->featuredImage?->generateImagePath(600, 300),
+            'image_url' => $newsitem->featuredImage?->generateImagePath(600, 300),
         ]);
     }
 
@@ -72,7 +75,8 @@ class NewsController extends Controller
     {
         $lastWeekly = Newsitem::where('is_weekly', true)->orderBy('published_at', 'desc')->first();
         $upcomingEvents = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get();
-        return view('news.edit', ['item' => null, 'new' => true, 'is_weekly'=>$request->boolean('is_weekly'), 'upcomingEvents'=>$upcomingEvents, 'events'=>[], 'lastWeekly'=>$lastWeekly]);
+
+        return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
 
     /** @return View */
@@ -80,9 +84,10 @@ class NewsController extends Controller
     {
         $newsitem = Newsitem::findOrFail($id);
         $upcomingEvents = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
-        $events=$newsitem->events()->pluck('id')->toArray();
+        $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        return view('news.edit', ['item' => $newsitem, 'new' => false, 'upcomingEvents'=>$upcomingEvents, 'events'=>$events, 'is_weekly'=>$newsitem->is_weekly, 'lastWeekly' => $lastWeekly]);
+
+        return view('news.edit', ['item' => $newsitem, 'new' => false, 'upcomingEvents' => $upcomingEvents, 'events' => $events, 'is_weekly' => $newsitem->is_weekly, 'lastWeekly' => $lastWeekly]);
     }
 
     /**
@@ -91,6 +96,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $newsitem = new Newsitem();
+
         return $this->storeNews($newsitem, $request);
     }
 
@@ -98,25 +104,22 @@ class NewsController extends Controller
     {
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
+
         return $this->storeNews($newsitem, $request);
     }
 
-    /**
-     * @param Newsitem $newsitem
-     * @param Request $request
-     */
     public function storeNews(Newsitem $newsitem, Request $request): View
     {
         $newsitem->user_id = Auth::user()->id;
         $newsitem->content = $request->input('content');
 
         if ($request->has('title')) {
-            $newsitem->is_weekly=false;
+            $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
             $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         } else {
-            $newsitem->is_weekly=true;
-            $newsitem->title = "Weekly update for week " . date('W') . " of " . date('Y') . ".";
+            $newsitem->is_weekly = true;
+            $newsitem->title = 'Weekly update for week '.date('W').' of '.date('Y').'.';
             $newsitem->published_at = null;
         }
         $newsitem->save();
@@ -135,10 +138,7 @@ class NewsController extends Controller
         return $this->edit($newsitem->id);
     }
 
-
-
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -155,17 +155,19 @@ class NewsController extends Controller
         return Redirect::route('news::admin');
     }
 
-    public function sendWeeklyEmail(int $id){
+    public function sendWeeklyEmail(int $id)
+    {
         $newsitem = Newsitem::findOrFail($id);
         if (! Auth::user()->can('board')) {
             abort(403, 'Only the board can do this.');
         }
-        Artisan::call('proto:newslettercron', ['id'=>$newsitem->id]);
+        Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
         $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');
+
         return Redirect::route('news::admin');
     }
 

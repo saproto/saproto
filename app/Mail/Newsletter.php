@@ -16,7 +16,7 @@ class Newsletter extends Mailable
      * @param  string  $list
      * @param  string  $text
      */
-    public function __construct( public User $user, public $list, public $text, public $events, public $image_url)
+    public function __construct(public User $user, public $list, public $text, public $events, public $image_url)
     {
         //
     }

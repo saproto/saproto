@@ -20,7 +20,7 @@ return new class extends Migration
 
         $lastSent = HashMapItem::where('key', 'newsletter_last_sent')->first();
         $text = HashMapItem::where('key', 'newsletter_text')->first();
-        if($text){
+        if ($text) {
             $newsItem = new Newsitem([
                 'title' => 'Weekly newsletter of week '.Carbon::now()->weekOfYear.' of '.Carbon::now()->year,
                 'content' => $text->value,
