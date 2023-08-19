@@ -61,8 +61,9 @@ class NewsController extends Controller
     {
         $newsitem = Newsitem::findOrFail($id);
 
-        if(!$newsitem->published_at && !Auth::user()?->can('board')){
+        if (! $newsitem->published_at && ! Auth::user()?->can('board')) {
             Session::flash('flash_message', 'This weekly newsletter has not been published yet.');
+
             return Redirect::back();
         }
 
