@@ -125,15 +125,8 @@ class OtherDataSeeder extends Seeder
         $n = 100;
         $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
 
-        // Create newsitems
+        // Create newsitems and weekly newsitems
         $n = 40;
         $output->task("creating $n newsitems", fn () => Newsitem::factory()->count($n)->create());
-
-        // Create newsletter text
-        $output->task('creating newsletter', function () {
-            HashMapItem::factory()->text()->create(['key' => 'newsletter_text']);
-            HashMapItem::factory()->date()->create(['key' => 'newsletter_text_updated']);
-            HashMapItem::factory()->date()->create(['key' => 'newsletter_last_sent']);
-        });
     }
 }

@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('news::add', ['is_weekly' => true]) }}" class="badge bg-info float-end ms-3">
+                    <a href="{{ route('news::add', ['is_weekly' => true]) }}" class="badge bg-warning float-end ms-3">
                         Create a new weekly.
                     </a>
 
