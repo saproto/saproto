@@ -33,6 +33,7 @@
 
                             <td>Title</td>
                             <td>Published</td>
+                            <td>Weekly</td>
                             <td>Controls</td>
 
                         </tr>
@@ -49,8 +50,13 @@
                                         {{ $newsitem->published_at }}
                                     </span>
                                 </td>
+                                <td>
+                                    @if($newsitem->is_weekly)
+                                        <i class="fas fa-check text-success"></i>
+                                    @endif
+                                </td>
                                 <td class="controls">
-                                    <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
+                                    <a href="{{ $newsitem->url }}">
                                         <i class="fas fa-link me-2"></i>
                                     </a>
 

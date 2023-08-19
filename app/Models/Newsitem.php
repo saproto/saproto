@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -86,6 +86,9 @@ class Newsitem extends Model
     /** @return string */
     public function getUrlAttribute(): string
     {
+        if($this->is_weekly){
+            return route('news::showWeeklyPreview', ['id' => $this->id]);
+        }
         return route('news::show', ['id' => $this->id]);
     }
 }

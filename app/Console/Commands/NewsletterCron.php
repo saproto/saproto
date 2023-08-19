@@ -6,7 +6,8 @@ use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
 use App\Models\Newsitem;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class NewsletterCron extends Command
 {
@@ -15,7 +16,7 @@ class NewsletterCron extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:newslettercron';
+    protected $signature = 'proto:newslettercron {id}';
 
     /**
      * The console command description.
@@ -29,7 +30,7 @@ class NewsletterCron extends Command
      *
      * @return void
      */
-    public function __construct(public int $id)
+    public function __construct()
     {
         parent::__construct();
     }
@@ -41,9 +42,19 @@ class NewsletterCron extends Command
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 
-        $newsitem=Newsitem::findOrFail($this->id);
+        $newsitem=Newsitem::findOrFail($this->argument('id'));
 
-        $image_url = $newsitem->featuredImage->generateImagePath(600, 300);
+        if (!$newsitem->is_weekly) {
+            $this->error('This is not a weekly newsletter item!');
+            return;
+        }
+
+        if($newsitem->published_at != null){
+            $this->error('This newsletter has already been sent!');
+            return;
+        }
+
+        $image_url = $newsitem->featuredImage?->generateImagePath(600, 300);
 
         $events = $newsitem->events;
 

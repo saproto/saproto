@@ -4,7 +4,13 @@
     @if($new)
        Create a new {{ $newsName }}
     @else
-        Edit {{$newsName}} {{ $item->title }}
+        Edit {{ $item->title }}
+    @endif
+
+    @if($is_weekly && $lastWeekly)
+        <a class="btn btn-danger disabled float-end">
+            Weekly last sent: {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
+        </a>
     @endif
 @endsection
 
@@ -62,7 +68,7 @@
 
                 <div class="row">
                     @include('news.includes.activities')
-                    @if($is_weekly)
+                    @if($is_weekly && $item?->featuredImage)
                         <div class="card mb-3">
                             <div class="card-header">
                                 Replace image
@@ -83,7 +89,7 @@
                 </div>
             </div>
                 <div class="col">
-                    @if($is_weekly)
+                    @if($is_weekly && !$new)
                         <div class="row" style="height:75vh">
                         <div class="card mb-3 p-0">
                             <div class="card-header">
@@ -94,16 +100,20 @@
                                     <iframe src="{{route('news::showWeeklyPreview', ['id'=>$item->id])}}" title="W3Schools Free Online Web Tutorials"></iframe>
                                 </div>
                             </div>
-                            <div class="card-footer">
 
-                                @include('components.modals.confirm-modal', [
-                                           'action' => route('news::sendWeekly', ['id' => $item->id]),
-                                           'text' => 'Send weekly!',
-                                           'title' => 'Confirm Sending Weekly',
-                                           'classes' => 'btn btn-danger ms-2',
-                                           'message' => "Are you sure you want to send this weekly? This will send an email to everyone on the list.",
-                                           'confirm' => 'Send',
-                                       ])
+                            <div class="card-footer">
+                                @if(!$item->published_at)
+                                    @include('components.modals.confirm-modal', [
+                                               'action' => route('news::sendWeekly', ['id' => $item->id]),
+                                               'text' => 'Send weekly!',
+                                               'title' => 'Confirm Sending Weekly',
+                                               'classes' => 'btn ms-2 '.(Carbon::parse($lastWeekly->published_at)->diffInDays(Carbon::now()) < 7 ? 'btn-danger' : 'btn-success'),
+                                               'message' => 'Are you sure you want to send this weekly? <br> It was last sent: <b>'.Carbon::parse($lastWeekly->published_at)->diffForHumans()."</b> and should only be sent once per week.<br> This will send an email to everyone on the list.",
+                                               'confirm' => 'Send',
+                                           ])
+                                @else
+                                    This weekly has already been sent!
+                                @endif
                             </div>
                         </div>
                         </div>

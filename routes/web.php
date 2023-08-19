@@ -428,7 +428,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
-            Route::get('add/{is_weekly}', ['as' => 'add', 'uses' => 'NewsController@create']);
+            Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'NewsController@store']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@update']);
@@ -440,17 +440,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
-    });
-
-    /* Routes related to the newsletter */
-    Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
-        Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
-        Route::group(['middleware' => ['permission:board']], function () {
-            Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
-            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
-            Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
-            Route::post('text', ['as' => 'text', 'uses' => 'NewsletterController@saveNewsletterText']);
-        });
     });
 
     /* Routes related to menu. */
