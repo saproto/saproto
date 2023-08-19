@@ -126,7 +126,7 @@
 
                     @include('website.home.cards.card-bg-image', [
                     'url' => $newsitem->url,
-                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->thumbnail() : null,
+                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : null,
                     'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                     'leftborder' => 'info'
                     ])

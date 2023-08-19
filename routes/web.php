@@ -434,10 +434,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@update']);
             Route::post('edit/{id}/image', ['as' => 'image', 'uses' => 'NewsController@featuredImage']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'NewsController@destroy']);
-            Route::get('showWeeklyPreview/{id}', ['as' => 'showWeeklyPreview', 'uses' => 'NewsController@showWeeklyPreview']);
             Route::get('sendWeekly/{id}', ['as' => 'sendWeekly', 'uses' => 'NewsController@sendWeeklyEmail']);
         });
-
+        Route::get('showWeeklyPreview/{id}', ['as' => 'showWeeklyPreview', 'uses' => 'NewsController@showWeeklyPreview']);
         Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
     });
