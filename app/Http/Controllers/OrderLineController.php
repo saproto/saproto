@@ -159,25 +159,6 @@ class OrderLineController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     */
-    public function bulkStore(Request $request)
-    {
-        for ($i = 0; $i < count($request->input('user')); $i++) {
-            /** @var Product $product */
-            $product = Product::findOrFail($request->input('product')[$i]);
-            $user = User::findOrFail($request->input('user')[$i]);
-            $price = ($request->input('price')[$i] != '' ? floatval(str_replace(',', '.', $request->input('price')[$i])) : $product->price);
-            $units = $request->input('units')[$i];
-            $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'), sprintf('bulk_add_by_%u', Auth::user()->id));
-        }
-
-        Session::flash('flash_message', 'Your manual orders have been added.');
-
-        return Redirect::back();
-    }
-
-    /**
      * Store (a) simple orderline(s).
      *
      * @return RedirectResponse
@@ -189,7 +170,7 @@ class OrderLineController extends Controller
                 $user = User::findOrFail($request->input('user')[$u]);
                 $product = Product::findOrFail($request->input('product')[$p]);
 
-                $product->buyForUser($user, 1, null, null, null, null, sprintf('simple_add_by_%u', Auth::user()->id));
+                $product->buyForUser($user, 1, null, null, null, $request->input('description'), sprintf('simple_add_by_%u', Auth::user()->id));
             }
         }
 
