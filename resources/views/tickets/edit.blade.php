@@ -59,7 +59,7 @@
                         @include('components.forms.checkbox', [
                             'name' => 'is_prepaid',
                             'checked' =>  $ticket?->is_prepaid,
-                            'label' => 'This ticket should be prepaid.'
+                            'label' => 'This ticket should also be prepaid for members.'
                         ])
 
                         @include('components.forms.checkbox', [
