@@ -41,7 +41,7 @@ class BirthdayCron extends Command
     {
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))
-            ->whereHas('member', function($q){
+            ->whereHas('member', function ($q) {
                 $q->where('is_pending', false);
             })
             ->get();

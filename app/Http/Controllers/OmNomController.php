@@ -44,7 +44,7 @@ class OmNomController extends Controller
         if ($store_slug == 'tipcie') {
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
-                ->whereHas('member', function($q){
+                ->whereHas('member', function ($q) {
                     $q->where('is_pending', false);
                 })
                 ->get();

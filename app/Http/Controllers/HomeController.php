@@ -31,7 +31,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         $birthdays = User::query()
-            ->whereHas('member', function($q){
+            ->whereHas('member', function ($q) {
                 $q->where('is_pending', false);
             })
             ->where('show_birthday', true)
