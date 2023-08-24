@@ -15,7 +15,7 @@ class ProductCategoryController extends Controller
     /** @return View */
     public function index()
     {
-        return view('omnomcom.categories.index', ['categories' => ProductCategory::all()]);
+        return view('omnomcom.categories.index', ['categories' => ProductCategory::withCount('products')->get()]);
     }
 
     /** @return View */

@@ -56,7 +56,7 @@
                         </div>
 
                         <ul class="list-group list-group-flush">
-                            @foreach($category->products() as $product)
+                            @foreach($category->sortedProducts() as $product)
                                 <li class="list-group-item">
                                     {{ $product->name }}
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">

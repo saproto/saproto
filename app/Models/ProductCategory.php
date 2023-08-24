@@ -47,11 +47,16 @@ class ProductCategory extends Model
         'deleted_at' => 'datetime',
     ];
 
-    /** @return Collection|Product[] */
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsToMany */
     public function products()
     {
-        $products = $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+        return $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id');
+    }
 
+    public function sortedProducts()
+    {
+        $products = $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
         return $products->sortBy('name');
     }
+
 }
