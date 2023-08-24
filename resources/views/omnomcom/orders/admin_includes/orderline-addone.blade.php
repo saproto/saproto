@@ -18,7 +18,7 @@
                 <input class="form-control product-search" id="product" name="product[]" multiple required>
             </div>
             <div class="form-group">
-                <label for="product">Description (optional)</label>
+                <label for="description">Description (optional)</label>
                 <input class="form-control" id="description" name="description">
             </div>
         </div>
