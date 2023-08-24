@@ -308,7 +308,7 @@ class OmNomController extends Controller
         foreach ($store->categories as $category) {
             $cat = ProductCategory::find($category);
             if ($cat) {
-                $prods = $cat->products();
+                $prods = $cat->sortedProducts();
                 $categories[] = (object) [
                     'category' => $cat,
                     'products' => $prods,
