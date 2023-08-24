@@ -1,7 +1,3 @@
-<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderline-modal" href="#">
-    Add orderline wizard. <span class="ms-3">🧙</span>
-</a>
-
 <form method="post" action="{{ route('omnomcom::orders::add') }}">
 
     {!! csrf_field() !!}
