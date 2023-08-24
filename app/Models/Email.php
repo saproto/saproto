@@ -120,17 +120,17 @@ class Email extends Model
         if ($this->to_user) {
             return User::orderBy('name')->get();
         } elseif ($this->to_member) {
-            return User::whereHas('member', function($q){
+            return User::whereHas('member', function ($q) {
                 $q->where('is_pending', false);
             })->orderBy('name')->get();
         } elseif ($this->to_pending) {
-            return User::whereHas('member', function($q){
+            return User::whereHas('member', function ($q) {
                 $q->where('is_pending', true);
             })->orderBy('name')->get();
         } elseif ($this->to_active) {
             return User::whereHas('committees')->orderBy('name')->get();
         } elseif ($this->to_list) {
-            return User::whereHas('lists', function($q){
+            return User::whereHas('lists', function ($q) {
                 $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         } elseif ($this->to_event) {
