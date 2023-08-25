@@ -28,7 +28,7 @@ const hoverStyles = {
 
 const inputStyles = () => {
   let styles =
-    'focus:ring-0 focus:outline-none focus:border-blue-600 leading-tight w-full text-gray-700 px-3 py-2 disabled:bg-light';
+    'focus:ring-0 focus:outline-none focus:border-blue-600 leading-tight w-full text-front px-3 py-2 bg-back disabled:bg-back-light';
   styles += slots.before ? ' border-s-0' : ' rounded-s';
   styles += slots.after ? ' border-e-0' : ' rounded-e';
   return styles;
@@ -82,7 +82,7 @@ const model = computed({
     <input
       :id="id ?? name"
       v-model="model"
-      class="rounded checked:bg-primary hover:bg-gray-200 checked:hover:bg-primary-dark"
+      class="rounded bg-back border-none ring-1 ring-front ring-opacity-20 checked:bg-primary hover:bg-back-light checked:hover:bg-primary-dark"
       :value="value"
       type="checkbox"
       :name="name"

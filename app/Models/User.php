@@ -152,9 +152,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $guarded = ['password', 'remember_token'];
 
-    protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin', 'bank'];
+    protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin', 'is_active_member', 'bank'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
+
 
     protected $casts = [
         'deleted_at' => 'datetime',
@@ -450,6 +451,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ) > 0;
     }
 
+    /**
+     * @return bool
+     */
+    public function getIsActiveMemberAttribute(): bool
+    {
+        return $this->isActiveMember();
+    }
+
     /** @return Achievement[] */
     public function achieved()
     {
@@ -582,8 +591,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<Member>> */
     public function getMemberships()
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
+        $baseQuery = Member::withTrashed()->where('user_id', '=', $this->id)->with('user');
+        $memberships['pending'] = $baseQuery->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
+        $memberships['previous'] = $baseQuery->where('deleted_at', '!=', null)->get();
 
         return $memberships;
     }
@@ -624,7 +634,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && !$this->member->is_pending;
+        return $this->member->exists && !$this->member->is_pending;
     }
 
     /** @return bool */

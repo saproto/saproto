@@ -3,7 +3,7 @@ import moment from 'moment';
 </script>
 
 <template>
-  <div class="w-full bg-dark text-white p-4 flex flex-col items-center">
+  <div class="w-full bg-back-dark text-white p-4 flex flex-col items-center">
     <div
       class="flex flex-col space-y-8 items-stretch justify-between md:flex-row md:space-y-0 md:w-full lg:mx-auto lg:w-10/12 xl:w-8/12"
     >

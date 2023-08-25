@@ -14,4 +14,5 @@ type Member = {
     deleted_at: string /* Date */;
     card_printed_on: string /* Date */ | null;
     omnomcom_sound_id: number | null;
+    member_type?: string | null;
 }

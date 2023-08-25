@@ -2,6 +2,7 @@ import glob from 'glob';
 import {defineConfig} from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from "@vitejs/plugin-vue";
+import eslint from "vite-plugin-eslint";
 
 export default defineConfig({
     plugins: [
@@ -30,6 +31,10 @@ export default defineConfig({
                     includeAbsolute: false,
                 },
             },
+        }),
+        eslint({
+            fix: true,
+            exclude: ['resources/js/*.js', 'vendor/**/*.js'],
         }),
     ],
     build: {

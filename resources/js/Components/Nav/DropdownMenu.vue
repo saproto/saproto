@@ -52,7 +52,7 @@ onUnmounted(() => {
     </NavItem>
     <div
       v-if="open"
-      class="absolute top-full mt-2 max-h-[80vh] w-fit overflow-y-auto bg-white text-black rounded-md shadow-lg min-w-[100px] py-2 ring-1 ring-black ring-opacity-5"
+      class="absolute top-full mt-2 max-h-[80vh] w-fit overflow-y-auto bg-back text-front rounded-md shadow-lg min-w-[100px] py-2 ring-1 ring-front ring-opacity-20"
       :class="`${direction}-0`"
     >
       <slot name="children" />

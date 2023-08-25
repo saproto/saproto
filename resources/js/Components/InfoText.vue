@@ -1,16 +1,18 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    color?: string;
+    textColor?: string;
+    textSize?: string;
   }>(),
   {
-    color: 'gray-500',
+    textColor: 'text-front-light',
+    textSize: 'text-xs',
   }
 );
 </script>
 
 <template>
-  <p :class="`text-${color}`" class="text-xs italic">
+  <p :class="[textColor, textSize]" class="italic">
     <slot />
   </p>
 </template>

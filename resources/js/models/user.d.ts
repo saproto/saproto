@@ -28,6 +28,7 @@ type User = {
     signed_nda: boolean;
     member?: Member | null;
     bank?: any;
+    is_active_member?: boolean;
     completed_profile?: any;
     is_member?: boolean;
     signed_membership_form?: any;

@@ -47,6 +47,7 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
+    protected $hidden = ['created_at', 'updated_at', 'parent', 'page_id', 'order'];
     protected $appends = ['parsed_url'];
 
     /** @return BelongsTo */

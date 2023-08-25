@@ -22,7 +22,7 @@ const slots = useSlots();
     <div>
       <slot name="input"> </slot>
     </div>
-    <InfoText v-if="slots.error" color="red-500">
+    <InfoText v-if="slots.error" text-color="text-red-500">
       <slot name="error" />
     </InfoText>
     <InfoText v-if="slots.info">
