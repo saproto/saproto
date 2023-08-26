@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\Member;
 use Carbon;
 use Exception;
 use Illuminate\Console\Command;
-use Proto\Models\Member;
 
 class MemberCleanup extends Command
 {
@@ -37,6 +37,7 @@ class MemberCleanup extends Command
      * Execute the console command.
      *
      * @return int
+     *
      * @throws Exception
      */
     public function handle()
@@ -45,6 +46,7 @@ class MemberCleanup extends Command
         foreach ($old_pending_memberships as $pending_membership) {
             $pending_membership->delete();
         }
+
         return 0;
     }
 }

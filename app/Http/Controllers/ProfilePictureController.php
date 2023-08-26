@@ -1,20 +1,20 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 
 class ProfilePictureController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(Request $request)
@@ -31,13 +31,16 @@ class ProfilePictureController extends Controller
                 $user->save();
             } else {
                 Session::flash('flash_message', 'This is not an image file!');
+
                 return Redirect::back();
             }
         } else {
             Session::flash('flash_message', 'You forget an image to upload, silly!');
+
             return Redirect::back();
         }
         Session::flash('flash_message', 'Your profile picture has been updated!');
+
         return Redirect::back();
     }
 
@@ -50,6 +53,7 @@ class ProfilePictureController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Your profile picture has been cleared!');
+
         return Redirect::back();
     }
 }

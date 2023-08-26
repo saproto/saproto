@@ -1,4 +1,4 @@
-@foreach(Proto\Models\Announcement::all() as $announcement)
+@foreach(App\Models\Announcement::all() as $announcement)
 
     @if($announcement->showForUser(Auth::user()))
 
@@ -16,7 +16,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {!! Markdown::convertToHtml($announcement->content) !!}
+                            {!! Markdown::convert($announcement->content) !!}
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,9 @@
             @push('javascript')
 
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-                    window.onload = modals['{{ $announcement->modal_id}}'].show()
+                    window.addEventListener('load', _ => {
+                        modals['{{ $announcement->modal_id}}'].show()
+                    });
                 </script>
 
             @endpush
@@ -43,7 +45,7 @@
                     </span>
                 @endif
 
-                {!! Markdown::convertToHtml($announcement->content) !!}
+                {!! Markdown::convert($announcement->content) !!}
 
             </div>
 

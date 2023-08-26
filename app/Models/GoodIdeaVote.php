@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\GoodIdeaVote.
+ * App\Models\GoodIdeaVote.
  *
  * @property int $id
  * @property int $user_id
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read GoodIdea $goodIdea
+ *
  * @method static Builder|GoodIdeaVote whereCreatedAt($value)
  * @method static Builder|GoodIdeaVote whereGoodIdeaId($value)
  * @method static Builder|GoodIdeaVote whereId($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|GoodIdeaVote newModelQuery()
  * @method static Builder|GoodIdeaVote newQuery()
  * @method static Builder|GoodIdeaVote query()
+ *
  * @mixin Eloquent
  */
 class GoodIdeaVote extends Model
@@ -38,6 +40,6 @@ class GoodIdeaVote extends Model
     /** @return HasOne */
     public function goodIdea()
     {
-        return $this->hasOne('Proto\Models\GoodIdea');
+        return $this->hasOne('App\Models\GoodIdea');
     }
 }

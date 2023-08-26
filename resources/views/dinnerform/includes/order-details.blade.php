@@ -42,10 +42,10 @@
                     @endif
                 </div>
                 @if(! $dinnerform->event)
-                    <div class="form-check">
-                        <input class="form-check-input" id="helper" name="helper" type="checkbox">
-                        <label for="helper">Are you a helper at this event?</label>
-                    </div>
+                    @include('components.forms.checkbox', [
+                        'name' => 'helper',
+                        'label' => 'Are you a helper at this event?'
+                    ])
                 @else
                     <div class="form-group">
                         @if($dinnerform->isHelping())

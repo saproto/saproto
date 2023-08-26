@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
@@ -48,7 +48,7 @@ class SyncRoles extends Command
         /** @var Permission[] $permissions */
         $permissions = [];
 
-        foreach(Permission::all() as $permission) {
+        foreach (Permission::all() as $permission) {
             if (! in_array($permission->name, array_keys(config('permission.permissions')))) {
                 $permission->delete();
                 $this->warn("Removed '$permission->name' permission.");
@@ -72,7 +72,7 @@ class SyncRoles extends Command
         /** @var Role[] $roles */
         $roles = [];
 
-        foreach(Role::all() as $role) {
+        foreach (Role::all() as $role) {
             if (! in_array($role->name, array_keys(config('permission.roles')))) {
                 $role->delete();
                 $this->warn("Removed '$role->name' permission.");

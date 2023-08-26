@@ -65,7 +65,7 @@
         const unavailable = document.getElementById("fishcam-unavailable")
 
         activate.addEventListener("click", () => {
-            fishcamSrc.src = '{{ route("api::fishcam") }}'
+            fishcamSrc.src = '{{env('FISHCAM_URL')}}'
             fishcamSrc.classList.remove('d-none')
             warning.classList.add("d-none")
         })

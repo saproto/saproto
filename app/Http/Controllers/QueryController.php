@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
-use Proto\Models\Event;
-use Proto\Models\Member;
 
 class QueryController extends Controller
 {
@@ -17,7 +17,6 @@ class QueryController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function activityOverview(Request $request)
@@ -47,7 +46,6 @@ class QueryController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\Http\Response|View
      */
     public function membershipTotals(Request $request)

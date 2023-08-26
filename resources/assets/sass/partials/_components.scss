@@ -298,7 +298,7 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   appearance: none;
   height: 14px;
   width: 14px;
-  background-image: url("/images/font-awesome/fa-x.svg");
+  background-image: url("/resources/assets/images/font-awesome/fa-x.svg");
   background-size: 14px 14px;
 }
 
@@ -307,8 +307,8 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   background-image: unset;
   background-color: $dark;
   height: 15px;
-  mask: url("/images/font-awesome/fa-calendar.svg") no-repeat;
-  -webkit-mask: url("/images/font-awesome/fa-calendar.svg") no-repeat;
+  mask: url("/resources/assets/images/font-awesome/fa-calendar.svg") no-repeat;
+  -webkit-mask: url("/resources/assets/images/font-awesome/fa-calendar.svg") no-repeat;
   &:hover {
     cursor: pointer
   }
@@ -556,24 +556,6 @@ a.card {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
-
-//Pagination
-ul.pagination {
-  justify-content: center;
-}
-
-@media (max-width: 520px){
-  ul.pagination {
-    margin-left: auto;
-    margin-right: auto;
-    li.page-item {
-      display: none;
-      &:first-child, &:last-child, &:nth-child(2), &:nth-last-child(2), &.active, &.disabled {
-        display: block;
-      }
-    }
-  }
 }
 
 //OmNomCom

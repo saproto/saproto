@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class UsernameReminderEmail extends Mailable
 {
@@ -13,7 +13,9 @@ class UsernameReminderEmail extends Mailable
     use SerializesModels;
 
     public $name;
+
     public $username;
+
     public $ismember;
 
     /**

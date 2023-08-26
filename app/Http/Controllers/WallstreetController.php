@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\WallstreetDrink;
+use App\Models\WallstreetPrice;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Proto\Models\WallstreetDrink;
-use Proto\Models\WallstreetPrice;
 use Response;
 
 class WallstreetController extends Controller
@@ -16,24 +16,27 @@ class WallstreetController extends Controller
     public function admin()
     {
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
-        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink'=>null]);
+
+        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => null]);
     }
 
     public function statistics($id)
     {
-        return view('wallstreet.price-history', ['id'=>$id]);
+        return view('wallstreet.price-history', ['id' => $id]);
     }
 
     public function marquee()
     {
         $activeDrink = WallstreetController::active();
 
-        if(! $activeDrink) {
+        if (! $activeDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
+
             return Redirect::back();
         }
 
         $prices = $this->getLatestPrices($activeDrink);
+
         return view('wallstreet.marquee', ['activeDrink' => $activeDrink, 'prices' => $prices]);
 
     }
@@ -42,7 +45,8 @@ class WallstreetController extends Controller
     {
         $currentDrink = WallstreetDrink::find($id);
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
-        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink'=>$currentDrink]);
+
+        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => $currentDrink]);
     }
 
     public function store(Request $request)
@@ -57,7 +61,8 @@ class WallstreetController extends Controller
         $drink->save();
 
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
-        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink'=>$drink]);
+
+        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => $drink]);
     }
 
     public function update(Request $request, $id)
@@ -72,7 +77,8 @@ class WallstreetController extends Controller
         $drink->save();
 
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
-        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink'=>$drink]);
+
+        return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => $drink]);
     }
 
     public function destroy($id)
@@ -90,6 +96,7 @@ class WallstreetController extends Controller
         }
 
         Session::flash('flash_message', 'Wallstreet drink and its affiliated price history deleted.');
+
         return Redirect::to(route('wallstreet::admin'));
     }
 
@@ -114,6 +121,7 @@ class WallstreetController extends Controller
         $drink->end_time = time();
         $drink->save();
         Session::flash('flash_message', 'Wallstreet drink closed.');
+
         return Redirect::back();
     }
 
@@ -126,6 +134,7 @@ class WallstreetController extends Controller
             $drink->products()->syncWithoutDetaching($product);
         }
         Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
+
         return Redirect::to(route('wallstreet::edit', ['id' => $id]));
     }
 
@@ -134,6 +143,7 @@ class WallstreetController extends Controller
         $drink = WallstreetDrink::findOrFail($id);
         $drink->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet drink.');
+
         return Redirect::back();
     }
 
@@ -144,19 +154,21 @@ class WallstreetController extends Controller
 
     public function getLatestPrices($drink)
     {
-        $products = $drink->products()->select('name','price', 'id', 'image_id')->get();
-        foreach($products as $product) {
+        $products = $drink->products()->select('name', 'price', 'id', 'image_id')->get();
+        foreach ($products as $product) {
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if(! $newPrice || $product->price === 0) {
+            if (! $newPrice || $product->price === 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
+
                 continue;
             }
             $product->diff = ($newPrice->price - $product->price) / $product->price * 100;
             $product->price = $newPrice->price;
         }
+
         return $products;
     }
 
@@ -165,6 +177,7 @@ class WallstreetController extends Controller
         $drink = WallstreetDrink::findOrFail($drinkID);
         $prices = $this->getLatestPrices($drink);
         $wrapped = ['products' => $prices];
+
         return Response::json($wrapped);
     }
 

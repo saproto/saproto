@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\RadioStation;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\RadioStation;
 
 class RadioController extends Controller
 {
@@ -17,23 +17,25 @@ class RadioController extends Controller
     public function index()
     {
         $stations = RadioStation::all();
+
         return view('protube.radio.index', ['stations' => $stations]);
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
         RadioStation::create($request->all());
         Session::flash('flash_message', 'Radio station added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)

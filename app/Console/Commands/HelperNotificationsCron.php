@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\DailyHelperMail;
+use App\Models\HelpingCommittee;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\DailyHelperMail;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\User;
 
 class HelperNotificationsCron extends Command
 {
@@ -63,7 +63,7 @@ class HelperNotificationsCron extends Command
                         });
                     })
                     ->whereHas('committee', function ($q) use ($user) {
-                        $q->whereHas('users',function ($w) use ($user) {
+                        $q->whereHas('users', function ($w) use ($user) {
                             $w->where('users.id', $user->id); //check if the user is still in the active committee members
                         });
                     })

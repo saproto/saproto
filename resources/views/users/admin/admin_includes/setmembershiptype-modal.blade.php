@@ -12,10 +12,10 @@
                     <span class="me-1">Membership type:</span>
                         <select class="form-select px-2 py-1" aria-label="Membership types" name="type">
                         <option>Regular member</option>
-                        <option {{ $user->member->is_honorary ? 'selected' : '' }} value="honorary">Honorary member</option>
-                        <option {{ $user->member->is_lifelong ? 'selected' : '' }} value="lifelong">Lifelong member</option>
-                        <option {{ $user->member->is_donor ? 'selected' : '' }} value="donor">Donor</option>
-                        <option {{ $user->member->is_pet ? 'selected' : '' }} value="pet">Pet member</option>
+                        <option @selected($user->member->is_honorary) value="honorary">Honorary member</option>
+                        <option @selected($user->member->is_lifelong) value="lifelong">Lifelong member</option>
+                        <option @selected($user->member->is_donor) value="donor">Donor</option>
+                        <option @selected($user->member->is_pet) value="pet">Pet member</option>
                     </select>
                 </div>
                 <div class="modal-footer">

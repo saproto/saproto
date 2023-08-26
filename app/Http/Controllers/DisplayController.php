@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Display;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\Display;
 
 class DisplayController extends Controller
 {
@@ -22,19 +22,18 @@ class DisplayController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
         Display::create($request->all());
         Session::flash('flash_message', 'Display added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -49,8 +48,9 @@ class DisplayController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)

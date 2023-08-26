@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class FeeEmail extends Mailable
 {
@@ -13,15 +13,18 @@ class FeeEmail extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $fee;
+
     public $fee_amount;
+
     public $remitted_reason;
 
     /**
-     * @param User $user
-     * @param string $fee
-     * @param float $fee_amount
-     * @param null|string $remitted_reason
+     * @param  User  $user
+     * @param  string  $fee
+     * @param  float  $fee_amount
+     * @param  null|string  $remitted_reason
      */
     public function __construct($user, $fee, $fee_amount, $remitted_reason)
     {

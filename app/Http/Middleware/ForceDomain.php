@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -11,8 +11,9 @@ class ForceDomain
     /**
      * This middleware forces the entire application to use SSL. We like that, because it's secure.
      * Shamelessly copied from: http://stackoverflow.com/questions/28402726/laravel-5-redirect-to-https.
-     * @param Request $request
-     * @param Closure $next
+     *
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, $next)

@@ -1,7 +1,11 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    @if($new) Create new news article @else Edit news article {{ $item->title }} @endif
+    @if($new)
+        Create new news article
+    @else
+        Edit news article {{ $item->title }}
+    @endif
 @endsection
 
 @section('container')
@@ -30,7 +34,7 @@
                                    placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'published_at',
                             'label' => 'Publish at:',
                             'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
@@ -38,7 +42,7 @@
 
                         <div class="form-group">
                             <label for="editor">Content</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'content',
                                 'placeholder' => 'Text goes here.',
                                 'value' => $item ? $item->content : null

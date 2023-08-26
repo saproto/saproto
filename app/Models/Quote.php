@@ -1,11 +1,12 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read User $user
  * @property-read Collection|QuoteLike[] $QuoteLike
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|Quote whereCreatedAt($value)
  * @method static Builder|Quote whereId($value)
  * @method static Builder|Quote whereQuote($value)
@@ -30,10 +32,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Quote newModelQuery()
  * @method static Builder|Quote newQuery()
  * @method static Builder|Quote query()
+ *
  * @mixin Eloquent
  */
 class Quote extends Model
 {
+    use HasFactory;
+
     protected $table = 'quotes';
 
     protected $guarded = ['id'];
@@ -43,19 +48,19 @@ class Quote extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'quotes_users');
+        return $this->belongsToMany('App\Models\User', 'quotes_users');
     }
 
     /** @return HasMany */
     public function QuoteLike()
     {
-        return $this->hasMany('Proto\Models\QuoteLike');
+        return $this->hasMany('App\Models\QuoteLike');
     }
 
     /** @return array<int, QuoteLike> */
@@ -65,6 +70,7 @@ class Quote extends Model
         foreach ($this->QuoteLike as $like) {
             $users[] = $like;
         }
+
         return $users;
     }
 
@@ -76,6 +82,7 @@ class Quote extends Model
                 return true;
             }
         }
+
         return false;
     }
 }

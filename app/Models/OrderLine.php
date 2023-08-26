@@ -1,16 +1,17 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\OrderLine.
+ * App\Models\OrderLine.
  *
  * @property int $id
  * @property int|null $user_id
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read TicketPurchase|null $ticketPurchase
  * @property-read User|null $user
  * @property-read Withdrawal|null $withdrawal
+ *
  * @method static Builder|OrderLine whereAuthenticatedBy($value)
  * @method static Builder|OrderLine whereCashierId($value)
  * @method static Builder|OrderLine whereCreatedAt($value)
@@ -52,10 +54,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|OrderLine newModelQuery()
  * @method static Builder|OrderLine newQuery()
  * @method static Builder|OrderLine query()
+ *
  * @mixin Eloquent
  */
 class OrderLine extends Model
 {
+    use HasFactory;
+
     protected $table = 'orderlines';
 
     protected $guarded = ['id'];
@@ -63,37 +68,37 @@ class OrderLine extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('Proto\Models\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
     /** @return BelongsTo */
     public function cashier()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /** @return BelongsTo */
     public function withdrawal()
     {
-        return $this->belongsTo('Proto\Models\Withdrawal', 'payed_with_withdrawal');
+        return $this->belongsTo('App\Models\Withdrawal', 'payed_with_withdrawal');
     }
 
     /** @return BelongsTo */
     public function molliePayment()
     {
-        return $this->belongsTo('Proto\Models\MollieTransaction', 'payed_with_mollie');
+        return $this->belongsTo('App\Models\MollieTransaction', 'payed_with_mollie');
     }
 
     /** @return HasOne */
     public function ticketPurchase()
     {
-        return $this->hasOne('Proto\Models\TicketPurchase', 'orderline_id');
+        return $this->hasOne('App\Models\TicketPurchase', 'orderline_id');
     }
 
     /** @return bool */
@@ -103,6 +108,7 @@ class OrderLine extends Model
         if ($this->payed_with_mollie !== null) {
             $mollie_payment = $this->molliePayment->translatedStatus();
         }
+
         return
             $this->total_price == 0 ||
             $this->payed_with_loss ||

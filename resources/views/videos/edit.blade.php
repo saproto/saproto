@@ -25,7 +25,7 @@
 
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
-                                @include('website.layouts.macros.datetimepicker', [
+                                @include('components.forms.datetimepicker', [
                                     'name' => 'video_date',
                                     'label' => 'Video date:',
                                     'format' => 'date',

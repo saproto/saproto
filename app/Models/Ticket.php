@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,9 +19,11 @@ use Illuminate\Support\Collection;
  * @property int $available_to
  * @property bool $members_only
  * @property bool $is_prepaid
+ * @property bool $show_participants
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
+ *
  * @method static Builder|Ticket whereAvailableFrom($value)
  * @method static Builder|Ticket whereAvailableTo($value)
  * @method static Builder|Ticket whereEventId($value)
@@ -32,6 +34,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket newModelQuery()
  * @method static Builder|Ticket newQuery()
  * @method static Builder|Ticket query()
+ *
  * @mixin Eloquent
  */
 class Ticket extends Model
@@ -45,25 +48,26 @@ class Ticket extends Model
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('Proto\Models\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event');
+        return $this->belongsTo('App\Models\Event');
     }
 
     /** @return HasMany */
     public function purchases()
     {
-        return $this->hasMany('Proto\Models\TicketPurchase');
+        return $this->hasMany('App\Models\TicketPurchase');
     }
 
     /** @return Collection */
     public function getUsers()
     {
         $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+
         return User::whereIn('id', array_unique($ids))->get();
     }
 
@@ -80,7 +84,6 @@ class Ticket extends Model
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function canBeSoldTo(User $user)
@@ -95,7 +98,6 @@ class Ticket extends Model
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function isAvailable(User $user)
@@ -110,6 +112,7 @@ class Ticket extends Model
         foreach ($this->purchases as $purchase) {
             $total += $purchase->orderline->total_price;
         }
+
         return $total;
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\ManualEmail;
+use App\Models\Email;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\ManualEmail;
-use Proto\Models\Email;
 
 class EmailCron extends Command
 {
@@ -54,7 +54,8 @@ class EmailCron extends Command
             foreach ($email->recipients() as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
-                        ['email' => $email->sender_address.'@'.config('proto.emaildomain'), 'name' => $email->sender_name],
+                        $email->sender_address.'@'.config('proto.emaildomain'),
+                        $email->sender_name,
                         $email->subject,
                         $email->parseBodyFor($recipient),
                         $email->attachments,

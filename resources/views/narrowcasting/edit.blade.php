@@ -31,13 +31,13 @@
                                    required>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'campaign_start',
                             'label' => 'Campaign start:',
                             'placeholder' => $item ? $item->campaign_start : date('U')
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'campaign_end',
                             'label' => 'Campaign end:',
                             'placeholder' => $item ? $item->campaign_end : null
@@ -60,23 +60,13 @@
                                 field is ignored and hidden.</sup>
                         </p>
 
-                        @if($item && $item->youtube_id)
+                        @if($item?->youtube_id)
 
                             <label>Current video:</label>
 
                             <div class="row">
-
-                                <div class="col-md-6">
-                                    <img src="https://i.ytimg.com/vi/{{ $item->youtube_id }}/hqdefault.jpg"
-                                         class="w-100">
-                                </div>
-                                <div class="col-md-6">
-                                    <strong><a href="https://youtu.be/{{ $item->youtube_id }}"
-                                               target="_blank">{{ $item->video()->snippet->title }}</a></strong>
-                                    <br>
-                                    <strong>{{ $item->video()->snippet->channelTitle }}</strong>
-                                </div>
-
+                                <iframe height="300"
+                                        src="https://www.youtube.com/embed/{{$item->youtube_id}}" allow="encrypted-media" allowfullscreen></iframe>
                             </div>
 
                         @else
@@ -90,7 +80,7 @@
                                 <sup><strong>Images should be</strong> 1366 x 768 pixels.</sup>
                             </p>
 
-                            @if($item && $item->image)
+                            @if($item?->image)
 
                                 <label>Current image:</label>
                                 <img src="{!! $item->image->generateImagePath(500, null) !!}" class="w-100">

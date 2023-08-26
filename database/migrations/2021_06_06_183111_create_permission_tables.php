@@ -10,6 +10,7 @@ class CreatePermissionTables extends Migration
      * Run the migrations.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function up()
@@ -76,6 +77,7 @@ class CreatePermissionTables extends Migration
      * Reverse the migrations.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function down()

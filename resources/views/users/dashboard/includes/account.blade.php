@@ -101,12 +101,11 @@
                         <td>
                             {{ date('F j, Y', strtotime($user->birthdate)) }}
                             @if($user->is_member)
-                                <div class="form-group form-check">
-                                    <input name="show_birthday" type="checkbox" class="form-check-input"
-                                           id="dashboard__check__birthdate" {{ ($user->show_birthday == 1 ? 'checked' : '') }}>
-                                    <label class="form-check-label" for="dashboard__check__birthdate">Show to
-                                        members</label>
-                                </div>
+                                @include('components.forms.checkbox', [
+                                    'name' => 'show_birthday',
+                                    'checked' =>  $user->show_birthday,
+                                    'label' => 'Show to members'
+                                ])
                             @endif
                         </td>
                     </tr>
@@ -116,7 +115,7 @@
                     <th>University account</th>
                     <td>
                         @if ($user->edu_username)
-                            {{ $user->utwente_username ? $user->utwente_username : $user->edu_username }}
+                            {{ $user->utwente_username ?? $user->edu_username }}
                             <a class="badge rounded-pill bg-danger float-end"
                                href="{{ route('user::edu::delete') }}">
                                 <i class="fas fa-unlink fa-fw"></i>
@@ -182,29 +181,30 @@
 
                 @if($user->phone)
                     <tr>
-                        <th>Phone</th>
+                        <th>
+                            <label for="phone">Phone</label>
+                        </th>
                         <td>
-
-                            <input type="phone" class="mb-1 form-control form-control-sm" id="phone" name="phone"
+                            <input type="tel" class="mb-1 form-control form-control-sm" id="phone" name="phone"
                                    value="{{ $user->phone }}">
-                            <div class="form-group form-check">
-                                <input name="show_birthday" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__phoneshow" {{ ($user->phone_visible == 1 ? 'checked' : '') }}>
-                                <label class="form-check-label" for="dashboard__check__phoneshow">Show to
-                                    members</label>
-                                <br>
-                                <input name="show_birthday" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__phonesms" {{ ($user->receive_sms == 1 ? 'checked' : '') }}>
-                                <label class="form-check-label" for="dashboard__check__phonesms">Receive
-                                    messages</label>
-                            </div>
-
+                            @include('components.forms.checkbox', [
+                                'name' => 'phone_visible',
+                                'checked' =>  $user->phone_visible,
+                                'label' => 'Show to members'
+                            ])
+                            @include('components.forms.checkbox', [
+                                'name' => 'receive_sms',
+                                'checked' =>  $user->receive_sms,
+                                'label' => 'Receive messages'
+                            ])
                         </td>
                     </tr>
                 @endif
 
                 <tr>
-                    <th>Homepage</th>
+                    <th>
+                        <label for="website">Homepage</label>
+                    </th>
                     <td>
                         <input type="text" class="form-control form-control-sm" id="website" name="website"
                                value="{{ $user->website }}">
@@ -214,68 +214,49 @@
                 <tr>
                     <th>OmNomCom</th>
                     <td>
-
-                        <div class="form-group form-check">
-
-                            @if($user->is_member)
-                                <input name="show_omnomcom_total" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__omnomtot" {{ ($user->show_omnomcom_total == 1 ? 'checked' : '') }}>
-                                <label class="form-check-label" for="dashboard__check__omnomtot">
-                                    After checkout, show how much I've spent today.
-                                </label>
-                                <small class="form-text text-muted">
-                                    This feature was requested by members who want to be aware of how much they spend.
-                                </small>
-
-                                <br>
-
-
-                                <input name="show_omnomcom_calories" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__omnomcal" {{ ($user->show_omnomcom_calories == 1 ? 'checked' : '') }}>
-                                <label class="form-check-label" for="dashboard__check__omnomcal">
-                                    After checkout, show how much calories worth of food I've bought today.<br>
-                                    <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not
-                                        always be accurate
-                                    </small>
-                                </label>
-                                <small class="form-text text-muted">
-                                    This feature was requested by members who want to be aware of how much calories they
-                                    eat.
-                                </small>
-
-                                <br>
-
-
-                                <input name="disable_omnomcom" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__omnomenabled" {{ ($user->disable_omnomcom == 1 ? 'checked disabled' : '') }}>
-                                <label class="form-check-label" for="disable_omnomcom">
-                                    Don't let me use the OmNomCom. Only the board can allow you access to the OmNomCom
-                                    again.<br>
-                                    <small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;You can still sign-up for
-                                        activities, and the board can manually buy something for you if you need that.
-                                    </small>
-                                </label>
-                                <small class="form-text text-muted">
-                                    This feature was requested by members who wanted some help controlling their
-                                    personal spendings.
-                                </small>
-
-                                <br>
-                            @endif
-
-                            <input name="keep_omnomcom_history" type="checkbox" class="form-check-input"
-                                   id="dashboard__keep_history"
-                                    {{ ($user->keep_omnomcom_history == 1 ? 'checked' : '') }}>
-                            <label class="form-check-label" for="dashboard__keep_history">
-                                Keep my personal orderline history.
-                            </label>
-                            <small class="form-text text-muted">
-                                We are required to keep financial information for 7 years.<br>
-                                If you disable this setting, your purchases will be anonymised after this time.
+                        @if($user->is_member)
+                            @include('components.forms.checkbox', [
+                                'name' => 'show_omnomcom_total',
+                                'checked' =>  $user->show_omnomcom_total,
+                                'label' => 'After checkout, show how much I\'ve spent today.'
+                            ])
+                            <small class="form-text text-muted mb-2 d-block">
+                                This feature was requested by members who want to be aware of how much they spend.
                             </small>
 
-                        </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'show_omnomcom_calories',
+                                'checked' =>  $user->show_omnomcom_calories,
+                                'label' => 'After checkout, show how many calories I\'ve bought today.'
+                            ])
+                            <small class="form-text text-muted mb-2 d-block">
+                                This feature was requested by members who want to be aware of how much calories they eat.
+                            </small>
 
+                            @include('components.forms.checkbox', [
+                                'name' => 'disable_omnomcom',
+                                'checked' =>  $user->disable_omnomcom,
+                                'label' => 'Don\'t let me use the OmNomCom.'
+                            ])
+                            <small class="d-block text-warning mb-1"><i class="fas fa-warning me-1"></i> Only the board can allow you access to the OmNomCom again.</small>
+                            <small class="d-block mb-1"><i class="fas fa-info-circle me-1"></i> You can still sign-up for
+                                activities, and the board can manually buy something for you if you need that.
+                            </small>
+                            <small class="form-text text-muted mb-2 d-block">
+                                This feature was requested by members who wanted some help controlling their
+                                personal spendings.
+                            </small>
+                        @endif
+
+                        @include('components.forms.checkbox', [
+                            'name' => 'keep_omnomcom_history',
+                            'checked' =>  $user->keep_omnomcom_history,
+                            'label' => 'Keep my personal orderline history.'
+                        ])
+                        <small class="form-text text-muted mb-2 d-block">
+                            We are required to keep financial information for 7 years.
+                            If you disable this setting, your purchases will be anonymised after this time.
+                        </small>
                     </td>
                 </tr>
 
@@ -283,12 +264,12 @@
                     <th>Website</th>
                     <td>
 
-                        <p class="form-check-label" for="dashboard__theme">
+                        <label class="form-check-label" for="theme">
                             Choose a theme
-                        </p>
-                        <select class="form-control" name="theme">
+                        </label>
+                        <select class="form-control" id="theme" name="theme">
                             @foreach(config('proto.themes') as $i => $name)
-                                <option value="{{ $i }}" {{ ($user->theme == $i) ? 'selected' : '' }}>{{ ucwords($name) }}</option>
+                                <option value="{{ $i }}" @selected($user->theme == $i)>{{ ucwords($name) }}</option>
                             @endforeach
                         </select>
                         <small class="form-text text-muted">
@@ -303,31 +284,25 @@
                     <tr>
                         <th>Privacy</th>
                         <td>
-
-                            <input name="show_achievements" type="checkbox" class="form-check-input"
-                                   id="dashboard__show_achievements"
-                                    {{ ($user->show_achievements == 1 ? 'checked' : '') }}>
-                            <label class="form-check-label" for="dashboard__show_achievements">
-                                Show my achievements on my profile.
-                            </label>
-                            <small class="form-text text-muted">
+                            @include('components.forms.checkbox', [
+                                'name' => 'show_achievements',
+                                'checked' =>  $user->show_achievements,
+                                'label' => 'Show my achievements on my profile.'
+                            ])
+                            <small class="form-text text-muted d-block mb-2">
                                 Achievements you obtain may reveal some personal details.<br>
                                 Only members can see your achievements.
                             </small>
 
-                            <br>
-
-                            <input name="profile_in_almanac" type="checkbox" class="form-check-input"
-                                   id="dashboard__profile_in_almanac"
-                                    {{ ($user->profile_in_almanac == 1 ? 'checked' : '') }}>
-                            <label class="form-check-label" for="dashboard__profile_in_almanac">
-                                Use my profile picture in the Lustrum Almanac.
-                            </label>
-                            <small class="form-text text-muted">
-                                With this you allow for the use of your profile picture in the Lustrum Alamanac<br>
+                            @include('components.forms.checkbox', [
+                                'name' => 'profile_in_almanac',
+                                'checked' =>  $user->profile_in_almanac,
+                                'label' => 'Use my profile picture in the Lustrum Almanac.'
+                            ])
+                            <small class="form-text text-muted d-block">
+                                With this you allow for the use of your profile picture in the Lustrum Alamanac
                                 if one will be published during your Proto membership.
                             </small>
-
                         </td>
                     </tr>
 

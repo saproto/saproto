@@ -82,15 +82,23 @@
 
             <div class="row mb-3">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
-                    <label for="stock">Current stock:</label>
+                    <label for="stock">Shelf stock:<i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="This is the amount of the product before you stock the shelves. This amount is for checking the stock for theft. If you are only reporting theft, make sure that the final stock is set to the same value."></i></label>
+                    <input type="number" class="form-control" id="prev_stock" name="prev_stock"
+                           placeholder="0" value="{{ $product->stock ?? '' }}">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label for="stock">Final stock:<i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="This is the updated amount, put your new stock amounts here."></i></label>
                     <input type="number" class="form-control" id="stock" name="stock"
                            placeholder="0" value="{{ $product->stock ?? '' }}">
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <label for="preferred_stock">Preferred stock:</label>
                     <input type="number" class="form-control" id="preferred_stock" name="preferred_stock"
@@ -98,7 +106,7 @@
 
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <label for="max_stock">Maximum stock:</label>
                     <input type="number" class="form-control" id="max_stock" name="max_stock"
@@ -110,38 +118,32 @@
 
             <div class="row mb-3">
 
-              <div class="col-md-4">
-                <label for="price">Calories:</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories ?? '' }}">
+                <div class="col-md-4">
+                    <label for="price">Calories:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="calories" name="calories" placeholder="0"
+                               value="{{ $product->calories ?? '' }}">
+                    </div>
                 </div>
-              </div>
 
             </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_visible',
+                'checked' => $product?->is_visible,
+                'label' => 'Visible in OmNomCom.'
+            ])
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_visible" {{ ($product != null && $product->is_visible ? 'checked' : '') }}>
-                    Visible in OmNomCom.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_visible_when_no_stock',
+                'checked' => $product?->is_visible_when_no_stock,
+                'label' => 'Visible in OmNomCom even when out of stock.'
+            ])
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_visible_when_no_stock" {{ ($product != null && $product->is_visible_when_no_stock ? 'checked' : '') }}>
-                    Visible in OmNomCom even when out of stock.
-                </label>
-            </div>
-
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_alcoholic" {{ ($product != null && $product->is_alcoholic ? 'checked' : '') }}>
-                    Product contains alcohol.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_alcoholic',
+                'checked' => $product?->is_alcoholic,
+                'label' => 'Product contains alcohol.'
+            ])
 
             <hr>
 
@@ -155,7 +157,7 @@
 
                         @foreach($categories as $catogory)
 
-                            <option value="{{ $catogory->id }}" {{ ($product != null && $product->categories->contains($catogory) ? 'selected' : '') }}>
+                            <option value="{{ $catogory->id }}" @selected($product != null && $product->categories->contains($catogory))>
                                 {{ $catogory->name }}
                             </option>
 
@@ -173,7 +175,7 @@
 
                         @foreach($accounts as $account)
 
-                            <option value="{{ $account->id }}" {{ ($product != null && $account->id == $product->account_id ? 'selected' : '') }}>
+                            <option value="{{ $account?->id }}" @selected(old('account_id', $account && $product && $account->id == $product->account_id))>
                                 {{ $account->name }} ({{ $account->account_number }})
                             </option>
 
@@ -198,7 +200,7 @@
 
 
             @if($product)
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                    'action' => route('omnomcom::products::delete', ['id' => $product->id]),
                    'classes' => 'btn btn-danger',
                    'text' => 'Delete',
@@ -211,8 +213,9 @@
 
             <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-end">Cancel</a>
 
-            @if ($product && $product->ticket)
-                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-end">
+            @if ($product?->ticket)
+                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}"
+                   class="btn btn-default float-end">
                     Go to event ticket
                 </a>
             @endif

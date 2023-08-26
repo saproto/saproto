@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\HeaderImage;
+use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -9,26 +11,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\HeaderImage;
-use Proto\Models\StorageEntry;
 
 class HeaderImageController extends Controller
 {
     /** @return View */
     public function index()
     {
-        return view('website.headerimages.index', ['images' => HeaderImage::paginate(5)]);
+        return view('headerimages.index', ['images' => HeaderImage::paginate(5)]);
     }
 
     /** @return View */
     public function create()
     {
-        return view('website.headerimages.add');
+        return view('headerimages.add');
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -53,14 +53,16 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
+
         return Redirect::route('headerimage::index');
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\HelpingCommittee;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\HelpingCommittee;
 
 class HelperReminder extends Mailable
 {
@@ -13,8 +13,11 @@ class HelperReminder extends Mailable
     use SerializesModels;
 
     public $committee;
+
     public $event;
+
     public $help;
+
     public $helping_count;
 
     /**

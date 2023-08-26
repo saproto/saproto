@@ -11,8 +11,10 @@
             @foreach($achievement->currentOwners(false) as $user)
 
                 <div class="badge bg-primary">
-                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}" class="text-white">{{ $user->name }}</a>
-                    <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}" class="text-white">
+                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}"
+                       class="text-white">{{ $user->name }}</a>
+                    <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
+                       class="text-white">
                         <i class="fas fa-times ms-2"></i>
                     </a>
                 </div>
@@ -46,7 +48,7 @@
 
             <hr>
 
-            @include('website.layouts.macros.confirm-modal', [
+            @include('components.modals.confirm-modal', [
                 'action' => route('achievement::takeAll', ['id' => $achievement->id]),
                 'classes' => 'btn-outline-danger btn-block',
                 'text' => 'Take from everyone',

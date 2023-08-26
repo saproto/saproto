@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -25,6 +25,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property-read User $user
  * @property-read string $url
  * @property-read StorageEntry|null $featuredImage
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Newsitem onlyTrashed()
@@ -42,6 +43,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Newsitem newModelQuery()
  * @method static Builder|Newsitem newQuery()
  * @method static Builder|Newsitem query()
+ *
  * @mixin Eloquent
  */
 class Newsitem extends Model
@@ -55,13 +57,13 @@ class Newsitem extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     /** @return BelongsTo */
     public function featuredImage()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'featured_image_id');
+        return $this->belongsTo('App\Models\StorageEntry', 'featured_image_id');
     }
 
     /** @return bool */

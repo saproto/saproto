@@ -23,10 +23,8 @@ phpstan.neon
 composer.phar
 
 # Generated files
-/public/css
-/public/js
-/public/fonts
-/public/mix-manifest.json
+/public/build
+/public/hot
 
 # Dammit, Mac users
 .DS_Store

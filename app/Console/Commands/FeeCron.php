@@ -1,15 +1,15 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\LdapController;
+use App\Mail\FeeEmail;
+use App\Mail\FeeEmailForBoard;
+use App\Models\Member;
+use App\Models\OrderLine;
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Http\Controllers\LdapController;
-use Proto\Mail\FeeEmail;
-use Proto\Mail\FeeEmailForBoard;
-use Proto\Models\Member;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
 
 class FeeCron extends Command
 {
@@ -116,6 +116,7 @@ class FeeCron extends Command
         }
 
         $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
+
         return 0;
     }
 }

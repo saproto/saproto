@@ -149,6 +149,9 @@
                                     </select>
                                 @endif
 
+                                @if($ticket->show_participants)
+                                    <i>Note: with this ticket your name be visible on the event page</i>
+                                @endif
                             </div>
                         </div>
 
@@ -193,6 +196,22 @@
 
     </form>
 
+    @foreach($event->tickets as $ticket)
+        @if($ticket->show_participants)
+            <div class="card mb-3">
+                <div class="card-header">
+                    Participants who bought <b>{{$ticket->product->name}}</b> tickets
+                </div>
+                <div class="card-body">
+                    @include('event.display_includes.render_participant_list', [
+                                'participants' => $ticket->getUsers(),
+                                'event' => null
+                            ])
+                </div>
+            </div>
+        @endif
+    @endforeach
+
     @push('javascript')
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             const directPayButton = document.getElementById('directpay')
@@ -217,4 +236,5 @@
             }))
         </script>
     @endpush
+
 @endif

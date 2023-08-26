@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -12,6 +12,7 @@ class DailyHelperMail extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $events;
 
     /**

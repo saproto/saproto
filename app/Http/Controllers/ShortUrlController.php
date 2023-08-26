@@ -1,19 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\ShortUrl;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\ShortUrl;
 
 class ShortUrlController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function index(Request $request)
@@ -24,8 +23,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit(Request $request, $id)
@@ -36,8 +34,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -46,13 +43,14 @@ class ShortUrlController extends Controller
         $url->fill($request->all());
         $url->save();
         Session::flash('flash_message', 'Short URL updated!');
+
         return Redirect::route('short_url::index');
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
@@ -61,12 +59,12 @@ class ShortUrlController extends Controller
         $url->delete();
 
         Session::flash('flash_message', 'Short URL deleted!');
+
         return Redirect::route('short_url::index');
     }
 
     /**
-     * @param Request $request
-     * @param string $short
+     * @param  string  $short
      * @return RedirectResponse
      */
     public function go(Request $request, $short)

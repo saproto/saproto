@@ -1,7 +1,11 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    @if($new) Create new page @else Edit page {{ $item->title }} @endif
+    @if($new)
+        Create new page
+    @else
+        Edit page {{ $item->title }}
+    @endif
 @endsection
 
 @section('container')
@@ -36,29 +40,26 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ route('page::show', '') }}/</span>
                                 </div>
-                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug ?? '' }}" required>
+                                <input type="text" class="form-control" name="slug" placeholder="about-proto"
+                                       value="{{ $item->slug ?? '' }}" required>
                             </div>
                         </div>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="is_member_only"
-                                       @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
-                                <i class="fas fa-lock"></i> Members only
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'is_member_only',
+                            'checked' => $item?->is_member_only,
+                            'label' => 'Member only'
+                        ])
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="show_attachments"
-                                       @if(isset($item->show_attachments) && $item->show_attachments) checked @endif>
-                                Show attachments next to page
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'show_attachments',
+                            'checked' => $item?->show_attachments,
+                            'label' => 'Show attachments next to page'
+                        ])
 
                         <div class="form-group">
                             <label for="content">Content</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'content',
                                 'placeholder' => 'Text goes here.',
                                 'value' => $item ? $item->content : null
@@ -212,8 +213,6 @@
         @endif
 
     </div>
-
-
 
 @endsection
 

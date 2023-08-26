@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\OrderLine;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Proto\Models\OrderLine;
-use Proto\Models\User;
 
 class OmNomComCleanup extends Command
 {

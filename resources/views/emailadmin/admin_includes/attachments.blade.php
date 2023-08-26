@@ -11,11 +11,11 @@
             <table class="table">
 
                 <thead>
-                    <tr>
-                        <th>File</th>
-                        <th>Size</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th>File</th>
+                    <th>Size</th>
+                    <th></th>
+                </tr>
                 </thead>
 
                 @foreach($email->attachments as $attachment)
@@ -28,7 +28,7 @@
                             <i>{{ $attachment->getFileSize() }}</i>
                         </td>
                         <td>
-                            @include('website.layouts.macros.confirm-modal', [
+                            @include('components.modals.confirm-modal', [
                                 'action' => route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]),
                                 'text' => '<i class="fas fa-trash text-danger"></i>',
                                 'title' => 'Confirm Delete',
@@ -52,14 +52,15 @@
 
         <div class="card-footer">
 
-            <form id="add_attachment" method="post" enctype="multipart/form-data" action="{{ route('email::attachment::add', ['id'=>$email->id]) }}">
+            <form id="add_attachment" method="post" enctype="multipart/form-data"
+                  action="{{ route('email::attachment::add', ['id'=>$email->id]) }}">
                 @csrf
 
                 <div class="custom-file mb-3">
                     <input type="file" id="attachment" class="form-control" name="attachment">
                 </div>
 
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                     'form' => '#add_attachment',
                     'classes' => 'btn btn-success btn-block',
                     'text' => 'Upload',

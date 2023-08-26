@@ -33,7 +33,7 @@
                            class="text-info">{{ $joboffer->company->name }}</a>.
                     </h6>
 
-                    {!! Markdown::convertToHtml($joboffer->description) !!}
+                    {!! Markdown::convert($joboffer->description) !!}
 
                 </div>
 

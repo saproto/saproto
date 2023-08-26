@@ -72,7 +72,7 @@ $popover-bg: $grey-medium;
 $popover-header-bg: $grey-dark;
 
 //import bootstrap after setting variables
-@import '~bootstrap';
+@import 'bootstrap';
 
 // Vendors (S)CSS
 @import 'partials/vendors';

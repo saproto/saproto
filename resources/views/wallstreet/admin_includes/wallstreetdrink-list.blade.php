@@ -52,7 +52,7 @@
                                         'confirm' => 'CRASH!',
                                     ])
                                     @if($wallstreetDrink->isCurrent())
-                                        @include('website.layouts.macros.confirm-modal', [
+                                        @include('components.modals.confirm-modal', [
                                             'action' => route("wallstreet::close", ['id' => $wallstreetDrink->id]),
                                             'text' => '<i class="fas fa-ban text-warning me-4"></i>',
                                             'title' => 'Confirm Close',
@@ -63,7 +63,7 @@
                                     <a href="{{ route('wallstreet::edit', ['id' => $wallstreetDrink->id]) }}">
                                         <i class="fas fa-edit me-4"></i>
                                     </a>
-                                    @include('website.layouts.macros.confirm-modal', [
+                                    @include('components.modals.confirm-modal', [
                                         'action' => route("wallstreet::delete", ['id' => $wallstreetDrink->id]),
                                         'text' => '<i class="fas fa-trash text-danger me-4"></i>',
                                         'title' => 'Confirm Delete',

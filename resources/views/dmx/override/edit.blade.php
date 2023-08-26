@@ -28,7 +28,7 @@
                             <label for="name">Fixtures to override:</label>
                             <select class="form-control" name="fixtures[]" multiple required>
                                 @foreach($fixtures as $fixture)
-                                    <option value="{{ $fixture->id }}" {{ ($override && in_array($fixture->id, $override->getFixtureIds()) ? 'selected' : '') }}>
+                                    <option value="{{ $fixture->id }}" @selected($override && in_array($fixture->id, $override->getFixtureIds()))>
                                         {{ $fixture->name }}
                                     </option>
                                 @endforeach
@@ -63,7 +63,7 @@
 
                         <hr>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'start',
                             'label' => 'Override start:',
                             'placeholder' => $override ? $override->start : strtotime(Carbon::now())
@@ -71,7 +71,7 @@
 
                         <div class="form-group">
                             <label for="end">Override end:</label>
-                            @include('website.layouts.macros.datetimepicker', [
+                            @include('components.forms.datetimepicker', [
                                 'name' => 'end',
                                 'label' => 'Override end:',
                                 'placeholder' => $override ? $override->end : strtotime(Carbon::now()->endOfDay())

@@ -11,7 +11,7 @@
 
         <div class="card-body">
 
-            @include('website.layouts.macros.iconpicker', [
+            @include('components.forms.iconpicker', [
                 'name' => 'fa_icon',
                 'placeholder' => isset($achievement) ? $achievement->fa_icon : null,
                 'label' => 'Achievement icon:'

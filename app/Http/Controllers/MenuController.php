@@ -1,15 +1,15 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\MenuItem;
+use App\Models\Page;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\MenuItem;
-use Proto\Models\Page;
 use Session;
 
 class MenuController extends Controller
@@ -18,6 +18,7 @@ class MenuController extends Controller
     public function index()
     {
         $menuItems = MenuItem::where('parent', null)->with('children', 'page')->orderBy('order')->get();
+
         return view('menu.list', ['menuItems' => $menuItems]);
     }
 
@@ -31,7 +32,6 @@ class MenuController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -52,8 +52,7 @@ class MenuController extends Controller
     }
 
     /**
-     * @param Router $router
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit(Router $router, $id)
@@ -66,8 +65,7 @@ class MenuController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -98,7 +96,7 @@ class MenuController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function orderUp($id)
@@ -118,7 +116,7 @@ class MenuController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function orderDown($id)
@@ -138,8 +136,8 @@ class MenuController extends Controller
     }
 
     /**
-     * @param MenuItem $item1
-     * @param MenuItem $item2
+     * @param  MenuItem  $item1
+     * @param  MenuItem  $item2
      */
     private function switchMenuItems($item1, $item2)
     {
@@ -153,7 +151,7 @@ class MenuController extends Controller
         $item2->save();
     }
 
-    /** @param int $parent */
+    /** @param  int  $parent */
     private function fixDuplicateMenuItemsOrder($parent)
     {
         $menuItems = MenuItem::where('parent', $parent)->orderBy('order', 'asc')->get();
@@ -166,8 +164,9 @@ class MenuController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -177,6 +176,7 @@ class MenuController extends Controller
 
         if ($menuItem->children->count() > 0) {
             Session::flash('flash_message', 'A menu item with children can\'t be removed.');
+
             return Redirect::route('menu::list');
         }
 
@@ -198,6 +198,7 @@ class MenuController extends Controller
     private function getAllRoutes($router)
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
+
         return array_filter($routes, function ($route) {
             return
                 $route->getName() &&

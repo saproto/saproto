@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Csp\Policies;
-
-use function Sentry\captureException;
+namespace App\Csp\Policies;
 
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Policies\Policy;
+
+use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
 {
@@ -22,8 +22,9 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
-                    'https://protu.be',
                     'https://wrapped.omnomcom.nl',
+                    ...config('proto.domains.protube'),
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
@@ -38,12 +39,14 @@ class ProtoPolicy extends Policy
                     'https://kit.fontawesome.com/63e98a7060.js',
                     'https://ka-f.fontawesome.com/',
                     'blob:',
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
                     Keyword::SELF,
                     Keyword::UNSAFE_INLINE,
                     'https://fonts.googleapis.com/css',
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::IMG, [
                     Keyword::SELF,
@@ -81,8 +84,9 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
+                    ...(getenv('APP_ENV') != 'production' ? ['ws://localhost:*'] : []),
                 ]);
-        } catch (InvalidValueSet | InvalidDirective $e) {
+        } catch (InvalidValueSet|InvalidDirective $e) {
             captureException($e);
         }
     }

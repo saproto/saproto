@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Newsitem;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -9,8 +11,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Newsitem;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 
@@ -20,6 +20,7 @@ class NewsController extends Controller
     public function admin()
     {
         $newsitems = Newsitem::orderBy('published_at', 'desc')->paginate(20);
+
         return view('news.admin', ['newsitems' => $newsitems]);
     }
 
@@ -40,7 +41,7 @@ class NewsController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function show($id)
@@ -50,14 +51,14 @@ class NewsController extends Controller
         $newsitem = Newsitem::findOrFail($id);
 
         if (! $newsitem->isPublished()) {
-            if (Auth::check() && Auth::user()->can('board')) {
+            if (Auth::user()?->can('board')) {
                 $preview = true;
             } else {
                 abort(404);
             }
         }
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content), 'preview' => $preview]);
+        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview]);
     }
 
     /** @return View */
@@ -67,7 +68,6 @@ class NewsController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -86,12 +86,12 @@ class NewsController extends Controller
     public function edit($id)
     {
         $newsitem = Newsitem::findOrFail($id);
+
         return view('news.edit', ['item' => $newsitem, 'new' => false]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -107,8 +107,9 @@ class NewsController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -124,9 +125,9 @@ class NewsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function featuredImage(Request $request, $id)

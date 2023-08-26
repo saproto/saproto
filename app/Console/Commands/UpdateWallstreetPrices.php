@@ -1,12 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\OrderLine;
+use App\Models\WallstreetDrink;
+use App\Models\WallstreetPrice;
 use Illuminate\Console\Command;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\WallstreetDrink;
-use Proto\Models\WallstreetPrice;
 
 class UpdateWallstreetPrices extends Command
 {
@@ -45,6 +44,7 @@ class UpdateWallstreetPrices extends Command
         $currentDrink = WallstreetDrink::where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
+
             return 0;
         }
 
@@ -59,6 +59,7 @@ class UpdateWallstreetPrices extends Command
                     'price' => $product->price,
                 ]);
                 $latestPrice->save();
+
                 continue;
             }
 
@@ -82,7 +83,7 @@ class UpdateWallstreetPrices extends Command
             }
 
             //lower the price if no orders have been made and the price is not the minimum price
-            if($latestPrice->price !== $currentDrink->minimum_price) {
+            if ($latestPrice->price !== $currentDrink->minimum_price) {
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,

@@ -52,57 +52,57 @@
                 </div>
 
                 <div class="table-responsive">
-                <table class="table table-hover table-sm">
+                    <table class="table table-hover table-sm">
 
-                    <thead>
+                        <thead>
 
-                    <tr class="bg-dark text-white">
+                        <tr class="bg-dark text-white">
 
-                        <td>Title</td>
-                        <td>Date</td>
-                        <td>Length</td>
-                        <td>Event</td>
-                        <td>Controls</td>
+                            <td>Title</td>
+                            <td>Date</td>
+                            <td>Length</td>
+                            <td>Event</td>
+                            <td>Controls</td>
 
-                    </tr>
-
-                    </thead>
-
-                    @foreach($videos as $video)
-
-                        <tr>
-                            <td><a href="{{$video->getYouTubeUrl()}}">{{ $video->title }}</a></td>
-                            <td>{{ date('d-m-Y', $video->getUnixTimeStamp()) }}</td>
-                            <td>{{ $video->getHumanDuration() }}</td>
-                            <td>
-                                @if ($video->event)
-                                    <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}">
-                                        {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
-                                    </a>
-                                @else
-                                    <i class="opacity-50">none</i>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('video::view', ['id' => $video->id]) }}">
-                                    <i class="fas fa-play me-2"></i>
-                                </a>
-                                <a href="{{ route('video::admin::edit', ['id' => $video->id]) }}">
-                                    <i class="fas fa-edit me-2"></i>
-                                </a>
-                                @include('website.layouts.macros.confirm-modal', [
-                                   'action' => route('video::admin::delete', ['id' => $video->id]),
-                                   'text' => '<i class="fas fa-trash text-danger"></i>',
-                                   'title' => 'Confirm Delete',
-                                   'message' => "Are you sure you want to delete this video: $video->title",
-                                   'confirm' => 'Delete',
-                                ])
-                            </td>
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        @foreach($videos as $video)
+
+                            <tr>
+                                <td><a href="{{$video->getYouTubeUrl()}}">{{ $video->title }}</a></td>
+                                <td>{{ date('d-m-Y', $video->getUnixTimeStamp()) }}</td>
+                                <td>{{ $video->getHumanDuration() }}</td>
+                                <td>
+                                    @if ($video->event)
+                                        <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}">
+                                            {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
+                                        </a>
+                                    @else
+                                        <i class="opacity-50">none</i>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('video::view', ['id' => $video->id]) }}">
+                                        <i class="fas fa-play me-2"></i>
+                                    </a>
+                                    <a href="{{ route('video::admin::edit', ['id' => $video->id]) }}">
+                                        <i class="fas fa-edit me-2"></i>
+                                    </a>
+                                    @include('components.modals.confirm-modal', [
+                                       'action' => route('video::admin::delete', ['id' => $video->id]),
+                                       'text' => '<i class="fas fa-trash text-danger"></i>',
+                                       'title' => 'Confirm Delete',
+                                       'message' => "Are you sure you want to delete this video: $video->title",
+                                       'confirm' => 'Delete',
+                                    ])
+                                </td>
+                            </tr>
+
+                        @endforeach
+
+                    </table>
                 </div>
 
             </div>

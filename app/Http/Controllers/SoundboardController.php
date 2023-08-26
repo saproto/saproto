@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\SoundboardSound;
+use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -9,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\SoundboardSound;
-use Proto\Models\StorageEntry;
 use stdClass;
 
 class SoundboardController extends Controller
@@ -24,8 +24,8 @@ class SoundboardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
@@ -40,12 +40,14 @@ class SoundboardController extends Controller
         $sound->save();
 
         Session::flash('flash_message', 'Sound added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -58,7 +60,7 @@ class SoundboardController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function toggleHidden($id)

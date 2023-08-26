@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
+use App\Http\Controllers\ParticipationController;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Proto\Http\Controllers\ParticipationController;
 
 /**
  * Activity Model.
@@ -24,6 +24,7 @@ use Proto\Http\Controllers\ParticipationController;
  * @property int $registration_end
  * @property int $deregistration_end
  * @property string|null $comment
+ * @property string|null $redirect_url
  * @property bool $closed
  * @property bool $hide_participants
  * @property Carbon|null $created_at
@@ -36,6 +37,7 @@ use Proto\Http\Controllers\ParticipationController;
  * @property-read Collection|Committee[] $helpingCommittees
  * @property-read Collection|User[] $presentUsers
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|Activity whereClosed($value)
  * @method static Builder|Activity whereClosedAccount($value)
  * @method static Builder|Activity whereComment($value)
@@ -53,6 +55,7 @@ use Proto\Http\Controllers\ParticipationController;
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
  * @method static Builder|Activity query()
+ *
  * @mixin Eloquent
  */
 class Activity extends Validatable
@@ -72,19 +75,19 @@ class Activity extends Validatable
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event');
+        return $this->belongsTo('App\Models\Event');
     }
 
     /** @return BelongsTo */
     public function closedAccount()
     {
-        return $this->belongsTo('Proto\Models\Account', 'closed_account');
+        return $this->belongsTo('App\Models\Account', 'closed_account');
     }
 
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+        return $this->belongsToMany('App\Models\User', 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
@@ -95,7 +98,7 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function presentUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+        return $this->belongsToMany('App\Models\User', 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
@@ -107,7 +110,7 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function allUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+        return $this->belongsToMany('App\Models\User', 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
@@ -117,23 +120,23 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function backupUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany('App\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
     /** @return BelongsToMany */
     public function helpingCommittees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
+        return $this->belongsToMany('App\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
     /** @return HasMany */
     public function helpingCommitteeInstances()
     {
-        return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
+        return $this->hasMany('App\Models\HelpingCommittee', 'activity_id');
     }
 
     /**
-     * @param User|null $user If a user is specified, true will only be returned if the user can actually help.
+     * @param  User|null  $user If a user is specified, true will only be returned if the user can actually help.
      * @return bool Whether the activity still needs help.
      */
     public function inNeedOfHelp($user = null)
@@ -141,13 +144,15 @@ class Activity extends Validatable
         foreach ($this->helpingCommittees as $committee) {
             $needed = $committee->pivot->amount;
             $available = $this->helpingUsers($committee->pivot->id)->count();
+
             return $available < $needed && ($user == null || ($committee->isMember($user) && ! $this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())));
         }
+
         return false;
     }
 
     /**
-     * @param int $help_id
+     * @param  int  $help_id
      * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
     public function helpingUsers($help_id)
@@ -156,8 +161,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param Committee $committee
-     * @param User $user
+     * @param  Committee  $committee
+     * @param  User  $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation($committee, $user)
@@ -176,8 +181,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
-     * @param HelpingCommittee|null $h
+     * @param  User  $user
+     * @param  HelpingCommittee|null  $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation($user, $h = null)
@@ -196,7 +201,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the user participates
      */
     public function isParticipating($user)
@@ -205,17 +210,17 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool
      */
     public function isOnBackupList($user)
     {
-        return in_array($user->id,$this->backupUsers()->pluck('users.id')->toArray());
+        return in_array($user->id, $this->backupUsers()->pluck('users.id')->toArray());
     }
 
     /**
-     * @param User $user
-     * @param  HelpingCommittee|null $h
+     * @param  User  $user
+     * @param  HelpingCommittee|null  $h
      * @return bool Whether the user or committee is helping
      */
     public function isHelping($user, $h = null)
@@ -228,12 +233,11 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
      * @return bool Whether the user is organising
      */
     public function isOrganising(User $user)
     {
-        return $this->event->committee != null && $this->event->committee->isMember($user);
+        return $this->event?->committee?->isMember($user);
     }
 
     /**
@@ -264,6 +268,7 @@ class Activity extends Validatable
         if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
+
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
     }
 
@@ -278,6 +283,7 @@ class Activity extends Validatable
         if ($this->closed || $this->participants == 0 || date('U') < $this->registration_start) {
             return false;
         }
+
         return true;
     }
 
@@ -289,6 +295,7 @@ class Activity extends Validatable
         if ($this->closed) {
             return false;
         }
+
         return date('U') < $this->deregistration_end;
     }
 
@@ -316,6 +323,7 @@ class Activity extends Validatable
         if (ParticipationController::getPresent($this->id) > 0) {
             return ParticipationController::getPresent($this->id);
         }
+
         return $this->attendees ?? 0;
     }
 }

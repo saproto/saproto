@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\EmailList;
+use App\Models\Event;
+use App\Models\Newsletter;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\EmailList;
-use Proto\Models\Event;
-use Proto\Models\Newsletter;
 use Redirect;
 use Session;
 
@@ -18,11 +18,12 @@ class NewsletterController extends Controller
     public function getInNewsletter()
     {
         $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
+
         return view('event.innewsletter', ['events' => $events]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function toggleInNewsletter($id)
@@ -47,7 +48,6 @@ class NewsletterController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function sendNewsletter(Request $request)
@@ -59,11 +59,11 @@ class NewsletterController extends Controller
         Newsletter::send();
 
         Session::flash('flash_message', 'The weekly newsletter has been sent.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function saveNewsletterText(Request $request)
@@ -71,6 +71,7 @@ class NewsletterController extends Controller
         Newsletter::setText($request->text);
 
         Session::flash('flash_message', 'The newsletter text has been set.');
+
         return Redirect::back();
     }
 }

@@ -19,25 +19,6 @@
     const ctx = document.getElementById('myChart');
     var chart=null;
 
-    get(`{{route('api::wallstreet::all_prices', ['id'=>$id])}}`).then((products) => {
-        console.log("creating chart")
-
-        chart = new Chart(ctx, {
-            type: "line",
-            options: {
-                spanGaps: true,
-                scales: {
-                    x: {
-                        type: "time",
-                        parsing: false
-                    }
-                },
-                responsive:true,
-            },
-            data: createDataSets(products),
-        });
-    });
-
     function createDataSets(products){
         let myData = {
             datasets: [],
@@ -64,7 +45,29 @@
         })
     }
 
-    updateChart();
-    setInterval(updateChart, 30000);
+    window.addEventListener('load', _ => {
+        get(`{{route('api::wallstreet::all_prices', ['id'=>$id])}}`).then((products) => {
+            console.log("creating chart")
+
+            chart = new Chart(ctx, {
+                type: "line",
+                options: {
+                    spanGaps: true,
+                    scales: {
+                        x: {
+                            type: "time",
+                            parsing: false
+                        }
+                    },
+                    responsive:true,
+                },
+                data: createDataSets(products),
+            });
+        });
+
+        updateChart();
+        setInterval(updateChart, 30000);
+    })
+
 </script>
 @endpush

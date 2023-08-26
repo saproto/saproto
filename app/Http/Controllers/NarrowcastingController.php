@@ -1,17 +1,16 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\NarrowcastingItem;
+use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\NarrowcastingItem;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
-use Youtube;
 
 class NarrowcastingController extends Controller
 {
@@ -22,9 +21,9 @@ class NarrowcastingController extends Controller
     }
 
     /** @return View */
-    public function display()
+    public function show()
     {
-        return view('narrowcasting.display');
+        return view('narrowcasting.show');
     }
 
     /** @return View */
@@ -34,14 +33,15 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function store(Request $request)
     {
         if (! $request->file('image') && ! $request->has('youtube_id')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
+
             return Redirect::back();
         }
 
@@ -61,32 +61,20 @@ class NarrowcastingController extends Controller
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-            $video = Youtube::getVideoInfo($youtube_id);
-
-            /* @phpstan-ignore-next-line */
-            if (! $video) {
-                Session::flash('flash_message', 'This is an invalid video ID!');
-                return Redirect::back();
-            }
-
-            if (! $video->status->embeddable) {
-                Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
-                return Redirect::back();
-            }
-
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
-            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
+            $narrowcasting->slide_duration = -1;
         }
 
         $narrowcasting->save();
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
+
         return Redirect::route('narrowcasting::list');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -97,9 +85,9 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function update(Request $request, $id)
@@ -121,17 +109,10 @@ class NarrowcastingController extends Controller
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-            $video = Youtube::getVideoInfo($youtube_id);
-
-            /* @phpstan-ignore-next-line */
-            if (! $video) {
-                Session::flash('flash_message', 'This is an invalid video ID!');
-                return Redirect::back();
-            }
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
-            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
+            $narrowcasting->slide_duration = -1;
         } else {
             $narrowcasting->youtube_id = null;
         }
@@ -139,12 +120,14 @@ class NarrowcastingController extends Controller
         $narrowcasting->save();
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
+
         return Redirect::route('narrowcasting::list');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -159,6 +142,7 @@ class NarrowcastingController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function clear()
@@ -168,6 +152,7 @@ class NarrowcastingController extends Controller
         }
 
         Session::flash('flash_message', 'All finished campaigns have been deleted.');
+
         return Redirect::route('narrowcasting::list');
     }
 
@@ -189,6 +174,7 @@ class NarrowcastingController extends Controller
                 ];
             }
         }
+
         return $data;
     }
 }

@@ -45,7 +45,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: 🔨 build front-end
-        run: npm run prod
+        run: npm run build
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage

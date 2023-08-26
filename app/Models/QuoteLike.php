@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read Quote $quote
  * @property-read User $user
+ *
  * @method static Builder|QuoteLike whereCreatedAt($value)
  * @method static Builder|QuoteLike whereId($value)
  * @method static Builder|QuoteLike whereQuoteId($value)
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|QuoteLike newModelQuery()
  * @method static Builder|QuoteLike newQuery()
  * @method static Builder|QuoteLike query()
+ *
  * @mixin Eloquent
  */
 class QuoteLike extends Model
@@ -42,12 +44,12 @@ class QuoteLike extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /** @return BelongsTo */
     public function quote()
     {
-        return $this->belongsTo('Proto\Models\Quote');
+        return $this->belongsTo('App\Models\Quote');
     }
 }

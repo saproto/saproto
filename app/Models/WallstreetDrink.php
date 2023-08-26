@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class WallstreetDrink.
+ *
  * @property int end_time
  * @property int start_time
  * @property string name
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class WallstreetDrink extends Model
 {
     use HasFactory;
+
     protected $table = 'wallstreet_drink';
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase_percentage', 'price_decrease_percentage'];
 

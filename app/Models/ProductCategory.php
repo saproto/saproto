@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|ProductCategory onlyTrashed()
@@ -31,6 +32,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|ProductCategory newModelQuery()
  * @method static Builder|ProductCategory newQuery()
  * @method static Builder|ProductCategory query()
+ *
  * @mixin Eloquent
  */
 class ProductCategory extends Model
@@ -41,12 +43,15 @@ class ProductCategory extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return Collection|Product[] */
     public function products()
     {
-        $products = $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+        $products = $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+
         return $products->sortBy('name');
     }
 }

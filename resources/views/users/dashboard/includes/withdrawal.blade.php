@@ -104,7 +104,7 @@
                 <div class="modal-footer">
 
                     <div class="btn-group btn-block">
-                    <button type="submit" class="btn btn-danger w-50" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-danger w-50" @disabled($user->hasUnpaidOrderlines()) }}>
                         Cancel my authorization
                     </button>
                         <button type="button" class="btn btn-default w-50" data-bs-dismiss="modal">
