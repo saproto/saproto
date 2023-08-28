@@ -8,7 +8,7 @@
                     You just got {{ count($newAchievements) > 1 ? 'new achievements' : 'a new achievement' }}, check it
                     out:
                     @foreach($newAchievements as $newAchievement)
-                        @include('achievement.includes.achievement_include', ['achievement' => $newAchievement])
+                        @include('achievement.includes.achievement_include', ['achievement' => $newAchievement, 'obtained'=>$newAchievement->pivot])
                     @endforeach
                     <a class="btn btn-success" href="{{ route('user::profile') }}">View all my achievements</a>
                 </div>

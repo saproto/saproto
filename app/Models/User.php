@@ -172,9 +172,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public static function fromPublicId($public_id)
     {
-        $member = Member::where('proto_username', $public_id)->first();
-
-        return $member ? $member->user : null;
+        return User::whereHas('member', function ($query) use ($public_id) {
+            $query->where('proto_username', $public_id);
+        })->first();
     }
 
     /**
@@ -236,7 +236,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsToMany */
     public function achievements()
     {
-        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany */
@@ -432,18 +432,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 ->get()
                 ->where('committee.is_society', false)
         ) > 0;
-    }
-
-    /** @return Achievement[] */
-    public function achieved()
-    {
-        $achievements = $this->achievements;
-        $acquired = [];
-        foreach ($achievements as $achievement) {
-            $acquired[] = $achievement;
-        }
-
-        return $acquired;
     }
 
     /**

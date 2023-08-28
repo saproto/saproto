@@ -49,13 +49,13 @@ class AchievementOwnership extends Model
     ];
 
     /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }
 
     /** @return BelongsTo */
-    public function achievement()
+    public function achievement(): BelongsTo
     {
         return $this->belongsTo('App\Models\Achievement');
     }
