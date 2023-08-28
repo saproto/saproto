@@ -56,7 +56,6 @@ class Achievement extends Model
         return $this->belongsToMany('App\Models\User', 'achievements_users');
     }
 
-    /** @return HasMany */
     public function achievementOwnership(): HasMany
     {
         return $this->hasMany('App\Models\AchievementOwnership');
@@ -82,11 +81,12 @@ class Achievement extends Model
      */
     public function currentOwners($is_member = true)
     {
-        if($is_member){
-            return $this->users()->whereHas('member', function($query){
+        if ($is_member) {
+            return $this->users()->whereHas('member', function ($query) {
                 $query->where('is_pending', false);
             });
         }
+
         return $this->users();
     }
 }

@@ -29,9 +29,9 @@ class UserProfileController extends Controller
         $moneySpent = $this->getSpentMoney($user);
         $totalProducts = $this->getProductsPurchased($user);
         $totalSignups = $this->getTotalSignups($user);
-        $achievements= $user->achievements;
+        $achievements = $user->achievements;
 
-        return view('users.profile.profile', ['user' =>$user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney' => $moneySpent, 'signups' => $totalSignups, 'totalproducts' => $totalProducts, 'achievements'=>$achievements]);
+        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney' => $moneySpent, 'signups' => $totalSignups, 'totalproducts' => $totalProducts, 'achievements' => $achievements]);
     }
 
     /**

@@ -205,7 +205,7 @@ class AchievementsCron extends Command
      */
     private function achievementBeast($user)
     {
-        return $user->achievements->count()>=10;
+        return $user->achievements->count() >= 10;
     }
 
     /**
