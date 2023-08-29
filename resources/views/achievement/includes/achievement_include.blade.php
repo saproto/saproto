@@ -17,8 +17,12 @@
         @endif
 
         <span class="float-end">
-                @for($i = 0; $i < 5; $i++)
-                        <i class="fas fa-star"></i>
+            @for($i = 0; $i < 5; $i++)
+                @if ($i >= $achievement->numberOfStars())
+                    <i class="far fa-star"></i>
+                @else
+                    <i class="fas fa-star"></i>
+                @endif
             @endfor
         </span>
     </div>
