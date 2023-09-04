@@ -91,7 +91,7 @@
 
                                 <p class="card-title">
 
-                                    @if ($ticket->is_prepaid || !Auth::user()->member)
+                                    @if ($ticket->is_prepaid || !Auth::user()->is_member)
                                         @php
                                             $has_prepay_tickets = true;
                                         @endphp
