@@ -46,8 +46,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  */
 class CommitteeMembership extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'committees_users';
 
