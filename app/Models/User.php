@@ -143,10 +143,10 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
     use CanResetPassword;
-    use SoftDeletes;
     use HasApiTokens;
-    use HasRoles;
     use HasFactory;
+    use HasRoles;
+    use SoftDeletes;
 
     protected $table = 'users';
 
