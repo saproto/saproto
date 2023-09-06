@@ -150,7 +150,7 @@
                                 @endif
 
                                 @if($ticket->show_participants)
-                                    <i>Note: with this ticket your name be visible on the event page</i>
+                                    <i>Note: with this ticket your name will be visible on the event page</i>
                                 @endif
                             </div>
                         </div>
