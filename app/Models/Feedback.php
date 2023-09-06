@@ -40,8 +40,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Feedback extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'feedback';
 
