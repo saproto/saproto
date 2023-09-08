@@ -48,8 +48,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class ActivityParticipation extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'activities_users';
 
