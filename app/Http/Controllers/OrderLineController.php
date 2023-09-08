@@ -110,14 +110,15 @@ class OrderLineController extends Controller
         ]);
     }
 
-    public function orderlineWizard(){
-         $members = User::whereHas('member', function ($query) {
+    public function orderlineWizard()
+    {
+        $members = User::whereHas('member', function ($query) {
             $query->where('is_pending', false);
         })->orderBy('name')->get();
 
-         $products=Product::where('is_visible', true)->orderBy('name')->get();
+        $products = Product::where('is_visible', true)->orderBy('name')->get();
 
-       return view('omnomcom.orders.admin_includes.orderline-wizard', [
+        return view('omnomcom.orders.admin_includes.orderline-wizard', [
             'members' => $members,
             'products' => $products,
         ]);
@@ -139,9 +140,9 @@ class OrderLineController extends Controller
         }
 
         $orderlines = $orderlines->with('user', 'product')
-                                 ->orderBy('created_at', 'desc')
-                                 ->paginate(20)
-                                 ->appends(['date' => $date]);
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends(['date' => $date]);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,

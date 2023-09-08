@@ -548,7 +548,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('add/single', ['as' => 'add', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
 
-
             Route::get('history/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
             Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
             Route::get('orderline-wizard', ['as' => 'orderline-wizard', 'uses' => 'OrderLineController@orderlineWizard']);
