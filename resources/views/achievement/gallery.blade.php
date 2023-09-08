@@ -18,11 +18,7 @@
                      data-bs-target="#collapse-achievement-{{ $tier }}">
 
                     @for($i = 0; $i < 5; $i++)
-                        @if ($i >= $achievements[0]->numberOfStars())
-                            <i class="far fa-star"></i>
-                        @else
                             <i class="fas fa-star"></i>
-                        @endif
                     @endfor
 
                     <span class="text-capitalize ms-3">
@@ -43,7 +39,8 @@
                                 <div class="col-xl-4 col-md-6 col-sm-12">
 
                                     @include('achievement.includes.achievement_include', [
-                                    'achievement' => $achievement
+                                    'achievement' => $achievement,
+                                    'obtained'=>$obtained->filter(function($item) use ($achievement) { return $item->id == $achievement->id; })->first()?->pivot
                                     ])
 
                                 </div>
