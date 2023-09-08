@@ -50,7 +50,7 @@
                      'format'=>'date',
                  ])
 
-            <div class="form-group autocomplete">
+            <div class="form-group">
                 <label for="description" class="text-secondary">(optional) description:</label>
                 <input class="form-control" id="description" name="description" data-label="description">
             </div>
