@@ -52,8 +52,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  */
 class Newsitem extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'newsitems';
 
