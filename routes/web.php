@@ -883,5 +883,20 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     Route::group(['prefix' => 'codex', 'as' => 'codex::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'CodexController@index']);
+        Route::get('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@addCodex']);
+        Route::get('add-song', ['as' => 'add-song', 'uses' => 'CodexController@addSong']);
+        Route::get('add-text-type', ['as' => 'add-text-type', 'uses' => 'CodexController@addTextType']);
+
+        Route::get('edit-codex/{codex}', ['as' => 'edit-codex', 'uses' => 'CodexController@editCodex']);
+        Route::get('edit-song/{id}', ['as' => 'edit-song', 'uses' => 'CodexController@editSong']);
+        Route::get('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@editTextType']);
+
+        Route::post('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@storeCodex']);
+        Route::post('add-song', ['as' => 'add-song', 'uses' => 'CodexController@storeSong']);
+        Route::post('add-text-type', ['as' => 'add-text-type', 'uses' => 'CodexController@storeTextType']);
+
+        Route::post('edit-codex/{codex}', ['as' => 'edit-codex', 'uses' => 'CodexController@updateCodex']);
+        Route::post('edit-song/{id}', ['as' => 'edit-song', 'uses' => 'CodexController@updateSong']);
+        Route::post('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@updateTextType']);
     });
 });
