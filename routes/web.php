@@ -880,4 +880,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@postAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
         });
     });
+
+    Route::group(['prefix' => 'codex', 'as' => 'codex::', 'middleware' => ['auth', 'permission:board']], function () {
+        Route::get('/', ['as' => 'index', 'uses' => 'CodexController@index']);
+    });
 });
