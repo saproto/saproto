@@ -2,9 +2,14 @@
     <div class="card-header d-inline-flex justify-content-between">
         Text types
         @if(!isset($edit))
-            <a href="{{ route('codex::add-text-type') }}" class="btn btn-info badge">
-                New Text Type
-            </a>
+            <div>
+                <a href="{{ route('codex::add-text') }}" class="btn btn-info badge">
+                    New Text
+                </a>
+                <a href="{{ route('codex::add-text-type') }}" class="btn btn-info badge">
+                    New Text Type
+                </a>
+            </div>
         @endif
     </div>
     <div class="card-body">
@@ -25,7 +30,7 @@
                                     </div>
                                 @endif
 
-                                {{ $text->name}}
+                                {{ $text->name}}  <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
                             </li>
                         @endforeach
                         </ul>

@@ -2,9 +2,15 @@
     <div class="card-header d-inline-flex justify-content-between">
         Songs
         @if(!isset($edit))
-            <a href="{{ route('codex::add-song') }}" class="btn btn-info badge">
-                New Song
-            </a>
+            <div>
+                <a href="{{ route('codex::add-song') }}" class="btn btn-info badge">
+                    New Song
+                </a>
+
+                <a href="{{ route('codex::add-song') }}" class="btn btn-info badge">
+                    New Song type
+                </a>
+            </div>
         @endif
     </div>
     <div class="card-body">
@@ -13,7 +19,7 @@
                 <li>
                     <div class="d-inline-flex">
                         <a class="text-reset" data-bs-toggle="collapse" data-bs-target=".collapse-song{{ $songCategory->id }}">
-                            <b> {{ $songCategory->name }} ({{$songCategory->songs_count}})</b>
+                            <b> {{ $songCategory->name }} ({{$songCategory->songs_count}})</b> <a href="{{ route('codex::edit-song-category', ['id' => $songCategory->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
                             <br>
                         </a>
                         @if(isset($edit) && $edit)
@@ -33,6 +39,7 @@
                                     @endif
 
                                         {{ $song->title}}
+                                        <a href="{{ route('codex::edit-song', ['id' => $song->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
                                 </li>
                             @endforeach
                         </ul>

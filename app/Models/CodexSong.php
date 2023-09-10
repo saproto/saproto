@@ -10,7 +10,7 @@ class CodexSong extends Model
 {
     use HasFactory;
     protected $table = 'codex_songs';
-    public function category(): BelongsToMany
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(SongCategory::class, 'codex_category_song', 'song', 'category');
     }

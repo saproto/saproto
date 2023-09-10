@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CodexText;
 use Illuminate\Http\Request;
 use App\Models\Codex;
 use App\Models\CodexSong;
@@ -20,19 +21,60 @@ class CodexController extends Controller
     }
 
     public function addSong(){
-        return view('codex.codex-edit', ['song'=>null]);
+        $categories=SongCategory::orderBy('name')->get();
+        return view('codex.song-edit', ['song'=>null, 'textType'=>null, 'categories' => $categories, 'myCategories' => []]);
     }
 
-    public function editSong(CodexSong $song){
-        return view('codex.codex-edit', ['song'=>$song]);
+    public function editSong(int $id){
+        $song=CodexSong::findOrFail($id);
+        $categories=SongCategory::orderBy('name')->get();
+        $myCategories=$song->categories->pluck('id')->toArray();
+        return view('codex.song-edit', ['song'=>$song, 'categories' => $categories, 'myCategories' => $myCategories]);
     }
     public function storeSong(Request $request){
-        return $request;
+        $song=new CodexSong();
+        $this->saveSong($song, $request);
+        return Redirect::back();
     }
 
-    public function updateSong(Request $request, CodexSong $song){
-        return $request;
+    public function updateSong(Request $request, int $id){
+        $song=CodexSong::findOrFail($id);
+        $this->saveSong($song, $request);
+        return Redirect::back();
     }
+
+    private function saveSong(CodexSong $song, Request $request){
+        $song->title=$request->input('title');
+        $song->artist=$request->input('artist');
+        $song->lyrics=$request->input('lyrics');
+        $song->youtube=$request->input('youtube');
+        $song->save();
+        $song->categories()->sync($request->input('categoryids'));
+    }
+
+    public function addSongCategory(){
+        return view('codex.song-category-edit', ['category'=>null]);
+    }
+
+    public function editSongCategory(int $id){
+        $category=SongCategory::findOrFail($id);
+        return view('codex.song-category-edit', ['category'=>$category]);
+    }
+
+    public function storeSongCategory(Request $request){
+        $category = new SongCategory();
+        $category->name = $request->input('name');
+        $category->save();
+        return Redirect::route('codex::index');
+    }
+
+    public function updateSongCategory(Request $request, int $id){
+        $category = SongCategory::findOrFail($id);
+        $category->name = $request->input('name');
+        $category->save();
+        return Redirect::route('codex::index');
+    }
+
     public function addCodex(){
         $textTypes=CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes=SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
@@ -70,6 +112,38 @@ class CodexController extends Controller
         $codex->shuffles()->sync($request->input('shuffleids'));
         $codex->save();
     }
+
+    public function addText(){
+        $textTypes=CodexTextType::orderBy('type')->get();
+        return view('codex.text-edit', ['text'=>null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
+    }
+
+    public function editText(int $id){
+        $text=CodexText::findOrFail($id);
+        $textTypes=CodexTextType::orderBy('type')->get();
+        $selectedTextType=$text->type;
+        return view('codex.text-edit', ['text'=>$text, 'textTypes' => $textTypes, 'selectedTextType' => $selectedTextType]);
+    }
+
+    public function storeText(Request $request){
+//        return $request;
+        $text = new CodexText();
+        $this->saveText($text, $request);
+        return Redirect::route('codex::index');
+    }
+
+    public function updateText(Request $request, int $id){
+        $text = CodexText::findOrFail($id);
+        $this->saveText($text, $request);
+        return Redirect::route('codex::index');
+    }
+
+    private function saveText(CodexText $text, Request $request){
+        $text->name = $request->input('name');
+        $text->type_id = $request->input('category');
+        $text->text = $request->input('text');
+        $text->save();
+    }
     public function addTextType(){
         return view('codex.text-type-edit', ['textType'=>null]);
     }
@@ -90,6 +164,11 @@ class CodexController extends Controller
         $type->type = $request->input('type');
         $type->save();
         return Redirect::route('codex::index');
+    }
+
+    public function exportCodex(int $id){
+        $codex=Codex::findOrFail($id);
+        return $codex;
     }
 
 

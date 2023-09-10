@@ -885,18 +885,29 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'CodexController@index']);
         Route::get('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@addCodex']);
         Route::get('add-song', ['as' => 'add-song', 'uses' => 'CodexController@addSong']);
+        Route::get('add-song-category', ['as' => 'add-song-category', 'uses' => 'CodexController@addSongCategory']);
         Route::get('add-text-type', ['as' => 'add-text-type', 'uses' => 'CodexController@addTextType']);
+        Route::get('add-text', ['as' => 'add-text', 'uses' => 'CodexController@addText']);
+
 
         Route::get('edit-codex/{codex}', ['as' => 'edit-codex', 'uses' => 'CodexController@editCodex']);
         Route::get('edit-song/{id}', ['as' => 'edit-song', 'uses' => 'CodexController@editSong']);
+        Route::get('edit-song-category/{id}', ['as' => 'edit-song-category', 'uses' => 'CodexController@editSongCategory']);
         Route::get('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@editTextType']);
+        Route::get('edit-text/{id}', ['as' => 'edit-text', 'uses' => 'CodexController@editText']);
 
         Route::post('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@storeCodex']);
         Route::post('add-song', ['as' => 'add-song', 'uses' => 'CodexController@storeSong']);
+        Route::post('add-song-category', ['as' => 'add-song-category', 'uses' => 'CodexController@storeSongCategory']);
         Route::post('add-text-type', ['as' => 'add-text-type', 'uses' => 'CodexController@storeTextType']);
+        Route::post('add-text', ['as' => 'add-text', 'uses' => 'CodexController@storeText']);
 
         Route::post('edit-codex/{codex}', ['as' => 'edit-codex', 'uses' => 'CodexController@updateCodex']);
         Route::post('edit-song/{id}', ['as' => 'edit-song', 'uses' => 'CodexController@updateSong']);
+        Route::post('edit-song-category/{id}', ['as' => 'edit-song-category', 'uses' => 'CodexController@updateSongCategory']);
         Route::post('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@updateTextType']);
+        Route::post('edit-text/{id}', ['as' => 'edit-text', 'uses' => 'CodexController@updateText']);
+
+        Route::get('export/{id}', ['as' => 'export', 'uses' => 'CodexController@exportCodex']);
     });
 });
