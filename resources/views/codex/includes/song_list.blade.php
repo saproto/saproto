@@ -11,20 +11,28 @@
         <ul>
             @foreach($songTypes as $songCategory)
                 <li>
-                    <a class="text-reset" data-bs-toggle="collapse" data-bs-target=".collapse-song{{ $songCategory->id }}">
-                        <b> {{ $songCategory->name }} ({{$songCategory->songs_count}})</b><br>
-                    </a>
+                    <div class="d-inline-flex">
+                        <a class="text-reset" data-bs-toggle="collapse" data-bs-target=".collapse-song{{ $songCategory->id }}">
+                            <b> {{ $songCategory->name }} ({{$songCategory->songs_count}})</b>
+                            <br>
+                        </a>
+                        @if(isset($edit) && $edit)
+                            <div class="form-check d-inline-flex text-secondary">
+                                <input class="form-check-input" type="checkbox" name="shuffleids[]" {{in_array($songCategory->id, $myShuffles)?"checked":""}} value="{{$songCategory->id}}"> shuffle category in export?
+                            </div>
+                        @endif
+                    </div>
                     <div class="collapse collapse-song{{  $songCategory->id }}">
                         <ul>
                             @foreach($songCategory->songs as $song)
                                 <li>
-                                    {{ $song->title}}
                                     @if(isset($edit) && $edit)
                                         <div class="form-check d-inline-flex">
-                                            <input class="form-check-input" type="checkbox" name="songids[]" value="{{$song->id}}">
+                                            <input class="form-check-input" type="checkbox" name="songids[]" {{in_array($song->id, $mySongs)?"checked":""}} value="{{$song->id}}">
                                         </div>
                                     @endif
 
+                                        {{ $song->title}}
                                 </li>
                             @endforeach
                         </ul>

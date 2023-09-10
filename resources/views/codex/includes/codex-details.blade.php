@@ -18,7 +18,6 @@
             <label for="export">Document name:</label>
             <input type="text" class="form-control" id="export" name="export"
                    value="{{ $codex->export ?? '' }}"
-                   required
             />
         </div>
 
@@ -27,7 +26,6 @@
             <label for="description">Description:</label>
             <input type="text" class="form-control" id="description" name="description"
                    value="{{ $codex->description ?? '' }}"
-                   required
             />
         </div>
     </div>

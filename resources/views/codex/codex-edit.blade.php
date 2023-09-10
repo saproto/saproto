@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($edit)&&$edit?route('codex::edit-codex', ['codex'=>$codex]):route("codex::add-codex") }}" method="POST">
+    <form action="{{ isset($codex)&&$codex?route('codex::edit-codex', ['codex'=>$codex]):route("codex::add-codex") }}" method="POST">
         {{ csrf_field()}}
         <div class="row gap-3">
             <div class="col">
@@ -13,7 +13,7 @@
                     @include('codex.includes.codex-details', ['codex'=>$codex])
                 </div>
                 <div class="row">
-                    @include('codex.includes.text_types', ['edit'=>true, 'textTypes' => $textTypes])
+                    @include('codex.includes.text_types', ['edit'=>true, 'textTypes' => $textTypes, 'myTextTypes' => $myTextTypes])
                 </div>
             </div>
             <div class="col">
@@ -29,11 +29,10 @@
                 </div>
                 <div class="row">
                         <div class="card-body">
-                            @include('codex.includes.song_list', ['edit'=>true, 'songTypes' => $songTypes])
+                            @include('codex.includes.song_list', ['edit'=>true, 'songTypes' => $songTypes, 'mySongs' => $mySongs, 'myShuffles' => $myShuffles])
                         </div>
                 </div>
             </div>
         </div>
-        <btn class="btn badge btn-success" type="submit" name="submit">Save</btn>
     </form>
 @endsection
