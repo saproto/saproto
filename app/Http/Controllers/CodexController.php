@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CodexText;
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\Request;
 use App\Models\Codex;
 use App\Models\CodexSong;
 use App\Models\CodexTextType;
 use App\Models\SongCategory;
 use Illuminate\Support\Facades\Redirect;
+use Spipu\Html2Pdf\Html2Pdf;
 
 class CodexController extends Controller
 {
@@ -168,7 +170,22 @@ class CodexController extends Controller
 
     public function exportCodex(int $id){
         $codex=Codex::findOrFail($id);
-        return $codex;
+        $html2pdf = new Html2Pdf('P','A6','en', false, 'UTF-8', array(10, 10, 10, 10));
+        $output="";
+        foreach ($codex->texts as $text) {
+            $output .= '<page>' . Markdown::convert($text->text) . '</page>';
+        }
+        $html2pdf->writeHTML($output);
+        $html2pdf->output();
+
+        $A6 = array(105,148);
+        $pdf = new PDF('P','mm',$A6);
+        $pdf->setMargins(10,10,10);//left, top and right margins, 1cm
+        $pdf->setAutoPageBreak(true,10);//bottom margin, 1cm
+        $pdf->AddFont('minion','');
+        $pdf->AddFont('minion','B');
+        $pdf->AddFont('minion','I');
+        $pdf->AddFont('old');
     }
 
 

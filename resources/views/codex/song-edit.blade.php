@@ -49,7 +49,11 @@
                             {{-- Lyrics }--}}
                             <label for="lyrics">Lyrics:</label>
                             <div class="form-group mb-3">
-                                <textarea type="text-area" rows="30" class="form-control" id="lyrics" name="lyrics">{{$song->lyrics??""}}</textarea>
+                                @include('components.forms.markdownfield', [
+                               'name' => 'lyrics',
+                                   'placeholder' => "Awesome lyrics here!",
+                                   'value' => $song->lyrics??"",
+                               ])
                             </div>
 
                             <button type="submit" class="btn btn-success btn-block">

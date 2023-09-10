@@ -29,12 +29,27 @@
 
                             <label for="text">Text:</label>
                             <div class="form-group mb-3">
-                                <textarea type="text-area" rows="30" class="form-control" id="text" name="text">{{$text->text??""}}</textarea>
+                                @include('components.forms.markdownfield', [
+                                'name' => 'text',
+                                'placeholder' => "Place your text here...",
+                                'value' => $text->text??"",
+                                ])
                             </div>
 
                             <button type="submit" class="btn btn-success btn-block">
                                 Save text!
                             </button>
+
+                            @php
+                                $oldText= str_replace('//', '_', $text->text);
+                                while(str_contains($oldText, '==')&&str_contains($oldText, '/=')){
+                                    $between = substr($oldText, strpos($oldText, '==')+2, strpos($oldText, '/=')-strpos($oldText, '==')-2);
+                                    $newBetween= str_replace(PHP_EOL, PHP_EOL."1. ", $between);
+                                    $oldText = str_replace("==".$between."/=", $newBetween, $oldText);
+                                }
+                            @endphp
+                            {{$oldText}}
+
                         </div>
                     </div>
                 </div>
