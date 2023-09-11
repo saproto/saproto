@@ -40,15 +40,7 @@
                                 Save text!
                             </button>
 
-                            @php
-                                $oldText= str_replace('//', '_', $text->text);
-                                while(str_contains($oldText, '==')&&str_contains($oldText, '/=')){
-                                    $between = substr($oldText, strpos($oldText, '==')+2, strpos($oldText, '/=')-strpos($oldText, '==')-2);
-                                    $newBetween= str_replace(PHP_EOL, PHP_EOL."1. ", $between);
-                                    $oldText = str_replace("==".$between."/=", $newBetween, $oldText);
-                                }
-                            @endphp
-                            {{$oldText}}
+
 
                         </div>
                     </div>

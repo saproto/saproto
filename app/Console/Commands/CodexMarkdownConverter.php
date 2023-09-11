@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\CodexSong;
 use App\Models\CodexText;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -28,14 +29,23 @@ class CodexMarkdownConverter extends Command
     public function handle()
     {
         foreach(CodexText::all() as $text){
-            $oldText= str_replace('//', '_', $text->text);
-            while(str_contains($oldText, '==')&&str_contains($oldText, '/=')){
-                $between = substr($oldText, strpos($oldText, '==')+2, strpos($oldText, '/=')-strpos($oldText, '==')-2);
-                $newBetween= "1. ".str_replace(PHP_EOL, PHP_EOL."1. ", $between);
-                $oldText = str_replace("==".$between."/=", $newBetween, $oldText);
-            }
-            $text->text = $oldText;
+            $text->text = $this->reformat($text->text);
             $text->save();
         }
+
+        foreach(CodexSong::all() as $song){
+            $song->lyrics = $this->reformat($song->lyrics);
+            $song->save();
+        }
+    }
+
+    private function reformat(string $text):string{
+        $oldText= str_replace('//', '_', $text);
+        while(str_contains($oldText, '==')&&str_contains($oldText, '/=')){
+            $between = substr($oldText, strpos($oldText, '==')+2, strpos($oldText, '/=')-strpos($oldText, '==')-2);
+            $newBetween= "1. ".str_replace(PHP_EOL, PHP_EOL."1. ", $between);
+            $oldText = str_replace("==".$between."/=", $newBetween, $oldText);
+        }
+        return $oldText;
     }
 }

@@ -14,4 +14,11 @@ class CodexSong extends Model
     {
         return $this->belongsToMany(SongCategory::class, 'codex_category_song', 'song', 'category');
     }
+
+    public function codices(): BelongsToMany
+    {
+        return $this->belongsToMany(Codex::class, 'codex_codex_song', 'song', 'codex');
+    }
+
+
 }

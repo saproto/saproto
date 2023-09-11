@@ -10,6 +10,8 @@ use App\Models\CodexSong;
 use App\Models\CodexTextType;
 use App\Models\SongCategory;
 use Illuminate\Support\Facades\Redirect;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Html2Pdf;
 
 class CodexController extends Controller
@@ -168,25 +170,55 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
-    public function exportCodex(int $id){
-        $codex=Codex::findOrFail($id);
-        $html2pdf = new Html2Pdf('P','A6','en', false, 'UTF-8', array(10, 10, 10, 10));
-        $output="";
-        foreach ($codex->texts as $text) {
-            $output .= '<page>' . Markdown::convert($text->text) . '</page>';
-        }
-        $html2pdf->writeHTML($output);
-        $html2pdf->output();
+    private function shuffle_assoc(&$array) {
+        $keys = array_keys($array);
 
-        $A6 = array(105,148);
-        $pdf = new PDF('P','mm',$A6);
-        $pdf->setMargins(10,10,10);//left, top and right margins, 1cm
-        $pdf->setAutoPageBreak(true,10);//bottom margin, 1cm
-        $pdf->AddFont('minion','');
-        $pdf->AddFont('minion','B');
-        $pdf->AddFont('minion','I');
-        $pdf->AddFont('old');
+        shuffle($keys);
+        $new = array();
+        foreach($keys as $key) {
+            $new[$key] = $array[$key];
+        }
+
+        $array = $new;
+
+        return true;
     }
 
+    public function exportCodex(int $id)
+    {
+        try {
+            $codex = Codex::findOrFail($id);
+            $html2pdf = new Html2Pdf('P', 'A6', 'en', false, 'UTF-8', array(10, 10, 10, 10));
 
+            $categories = SongCategory::whereHas('songs', function ($q) use ($id) {
+                $q->whereHas('codices', function ($q) use ($id) {
+                    $q->where('codex', $id);
+                });
+            })->with(['songs' => function ($query) use ($id) {
+                $query->whereHas('codices', function ($query) use ($id) {
+                    $query->where('codex_codices.id', $id);
+                });
+            }])->orderBy('id')->get();
+
+            $textCategories = CodexTextType::whereHas('texts', function ($q) use ($id) {
+                $q->whereHas('codices', function ($q) use ($id) {
+                    $q->where('codex_codices.id', $id);
+                });
+            })->with(['texts' => function ($query) use ($id) {
+                $query->whereHas('codices', function ($query) use ($id) {
+                    $query->where('codex_codices.id', $id);
+                });
+            }])->orderBy('type')->get();
+
+
+            $output = view('codex.codex', ['codex' => $codex, 'songCategories' => $categories, 'textCategories' => $textCategories])->render();
+
+            $html2pdf->writeHTML($output);
+            $html2pdf->createIndex("Table of Contents", 10, 4, true, true, 2, null, 0 );
+            $html2pdf->output();
+        } catch (Html2PdfException $e) {
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
 }
