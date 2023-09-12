@@ -13,7 +13,7 @@
             </a>
         @endif
 
-        @if((Auth::user()->id == $feedback->user->id && !$feedback->reply) || (Auth::user()->can("board") && $feedback->deleted_at))
+        @if((Auth::user()->id == $feedback->user?->id && !$feedback->reply) || (Auth::user()->can("board") && $feedback->deleted_at))
             @include('components.modals.confirm-modal', [
                 'action' => route("feedback::delete", ['id' => $feedback->id]),
                 'text' => '<i class="delete fas fa-trash"></i>',
@@ -84,7 +84,7 @@
             <em>
                 <sub>
                     @can('board')
-                        By {{ $feedback->user->name }}
+                        By {{ $feedback->user?->name ?? "before we kept track!" }}
                     @endcan
                     -- {{ $feedback->created_at->format("j M Y, H:i") }}
                 </sub>
