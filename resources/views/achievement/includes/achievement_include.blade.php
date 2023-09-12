@@ -31,7 +31,7 @@
 
         {{ $achievement->desc }}
 
-        @if(isset($obtained) && $obtained)
+        @if($obtained?->description)
             <br>
             <div class="text-secondary fst-italic">
                 "{{$obtained->description}}"

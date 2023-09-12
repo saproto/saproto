@@ -405,17 +405,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
     });
 
-    /* Routes related to the newsletter */
-    Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
-        Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
-        Route::group(['middleware' => ['permission:board']], function () {
-            Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
-            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
-            Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
-            Route::post('text', ['as' => 'text', 'uses' => 'NewsletterController@saveNewsletterText']);
-        });
-    });
-
     /* Routes related to pages. */
     Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
@@ -436,7 +425,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);
     });
 
-    /* Routes related to pages. */
+    /* Routes related to news. */
     Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
@@ -446,8 +435,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@update']);
             Route::post('edit/{id}/image', ['as' => 'image', 'uses' => 'NewsController@featuredImage']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'NewsController@destroy']);
+            Route::get('sendWeekly/{id}', ['as' => 'sendWeekly', 'uses' => 'NewsController@sendWeeklyEmail']);
         });
-
+        Route::get('showWeeklyPreview/{id}', ['as' => 'showWeeklyPreview', 'uses' => 'NewsController@showWeeklyPreview']);
         Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
     });
