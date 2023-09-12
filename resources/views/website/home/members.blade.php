@@ -65,26 +65,38 @@
 
         @endif
 
+        <div class="card mb-3">
+                <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
+                <div class="card-body">
 
-        @if($weekly)
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">
-                    <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
-                </div>
-                <div class="card-body overflow-hidden " style="max-height: calc(100vh - 250px)">
-                    @if($weekly->featuredImage)
-                        <img src="{{ $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500,300) : null }}"
-                             class="img-fluid img-thumbnail mb-3 w-50 mx-auto d-block" alt="Featured image">
+                    @if(count($newsitems) > 0)
+
+                        @foreach($newsitems as $index => $newsitem)
+                        <div style="max-height: 300px">
+                            @include('website.home.cards.card-bg-image', [
+                            'height' => $newsitem->is_weekly ? 80 : 120,
+                            'url' => $newsitem->url,
+                            'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : null,
+                            'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
+                            'leftborder' => 'info'
+                            ])
+                        </div>
+
+                        @endforeach
+
+                    @else
+
+                        <p class="card-text text-center mt-2 mb-4">
+                            No recent news. It's
+                            <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>. 😴
+                        </p>
+
                     @endif
-                    {!! Markdown::convert($weekly->content) !!}
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route("news::showWeeklyPreview", ['id'=>$weekly->id]) }}" class="btn btn-info btn-block my-2">Continue
-                        reading</a>
+
+                    <a href="{{ route("news::list") }}" class="btn btn-info btn-block">View older news</a>
                 </div>
             </div>
 
-        @endif
 
         @if(isset($videos) && count($videos) > 0)
 
@@ -115,36 +127,6 @@
 @section('right-column')
 
     @include('website.home.cards.recentalbums', ['n' => 4])
-
-    <div class="card mb-3">
-        <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
-        <div class="card-body">
-
-            @if(count($newsitems) > 0)
-
-                @foreach($newsitems as $index => $newsitem)
-
-                    @include('website.home.cards.card-bg-image', [
-                    'url' => $newsitem->url,
-                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : null,
-                    'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
-                    'leftborder' => 'info'
-                    ])
-
-                @endforeach
-
-            @else
-
-                <p class="card-text text-center mt-2 mb-4">
-                    No recent news. It's
-                    <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>. 😴
-                </p>
-
-            @endif
-
-            <a href="{{ route("news::list") }}" class="btn btn-info btn-block">View older news</a>
-        </div>
-    </div>
 
     @parent
 @endsection

@@ -32,17 +32,13 @@ class HomeController extends Controller
         }
 
         $newsitems = Newsitem::query()
+            ->whereNotNull('published_at')
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(2))
-            ->where('is_weekly', false)
             ->orderBy('published_at', 'desc')
             ->take(3)
             ->get();
-        $weekly = Newsitem::query()
-            ->where('published_at', '<=', Carbon::now())
-            ->where('published_at', '>', Carbon::now()->subWeeks(1))
-            ->where('is_weekly', true)
-            ->first();
+
         $birthdays = User::query()
             ->has('member')
             ->where('show_birthday', true)
@@ -65,7 +61,7 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
+        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
     }
 
     /** @return View Display the most important page of the whole site. */
