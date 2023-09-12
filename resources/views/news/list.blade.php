@@ -18,9 +18,5 @@
         <div class="col">
             @include('news.includes.newsitemcolumn', ['items' => $newsitems, 'text'=>'News Articles'])
         </div>
-
-        <div class="col">
-            @include('news.includes.newsitemcolumn', ['items' => $weeklies, 'text'=>'Weekly updates'])
-        </div>
     </div>
 @endsection

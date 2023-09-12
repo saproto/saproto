@@ -30,10 +30,9 @@ class NewsController extends Controller
     /** @return View */
     public function index()
     {
-        $newsitems = Newsitem::all()->where('publication', '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', false);
-        $weeklies = Newsitem::all()->where('publication', '<', Carbon::now()->timestamp)->sortByDesc('published_at')->where('is_weekly', true);
+        $newsitems = Newsitem::all()->where('publication', '<', Carbon::now()->timestamp)->sortByDesc('published_at');
 
-        return view('news.list', ['newsitems' => $newsitems, 'weeklies' => $weeklies]);
+        return view('news.list', ['newsitems' => $newsitems]);
     }
 
     /**
