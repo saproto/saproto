@@ -13,7 +13,7 @@
             </a>
         @endif
 
-        @if((Auth::user()->id == $feedback->user->id && !$feedback->reply) || (Auth::user()->can("board") && $feedback->deleted_at))
+        @if((Auth::user()->id == $feedback->user?->id && !$feedback->reply) || (Auth::user()->can("board") && $feedback->deleted_at))
             @include('components.modals.confirm-modal', [
                 'action' => route("feedback::delete", ['id' => $feedback->id]),
                 'text' => '<i class="delete fas fa-trash"></i>',
