@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -512,22 +513,38 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    /* Routes related to the Quote Corner. */
-    Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
-        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@destroy']);
-        Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
-        Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'QuoteCornerController@search']);
-    });
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', function (Illuminate\Http\Request $request) {
+        return (new FeedbackController())->index($request, 'quotes');
+    }]);
 
-    /* Routes related to the Good Idea Board. */
-    Route::group(['prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
-        Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
-        Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
-        Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
+        return (new FeedbackController())->index($request, 'goodideas');
+    }]);
+
+    /* Routes related to the Feedback Boards. */
+    Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
+        Route::group(['prefix' => '/{category}'], function () {
+            Route::get('', ['as' => 'index', 'uses' => 'FeedbackController@index']);
+            Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'FeedbackController@search']);
+            Route::get('archived', ['as' => 'archived', 'uses' => 'FeedbackController@archived']);
+            Route::post('add', ['as' => 'add', 'uses' => 'FeedbackController@add']);
+            Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedbackController@archiveAll']);
+        });
+
+        Route::group(['prefix' => 'categories', 'middleware' => ['permission:board'], 'as' => 'category::'], function () {
+            Route::get('admin', ['as' => 'admin', 'uses' => 'FeedbackController@categoryAdmin']);
+            Route::post('addone', ['as' => 'add', 'uses' => 'FeedbackController@categoryStore']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'FeedbackController@categoryEdit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'FeedbackController@categoryUpdate']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedbackController@categoryDestroy']);
+        });
+
+        Route::get('approve/{id}', ['as' => 'approve', 'uses' => 'FeedbackController@approve']);
+        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedbackController@reply']);
+        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'FeedbackController@archive']);
+        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'FeedbackController@restore']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedbackController@delete']);
+        Route::post('vote', ['as' => 'vote', 'uses' => 'FeedbackController@vote']);
     });
 
     /* Routes related to the OmNomCom. */
