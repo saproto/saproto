@@ -33,6 +33,7 @@ class Kernel extends ConsoleKernel
         Commands\HelperNotificationsCron::class,
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
+        Commands\ReviewFeedbackCron::class,
         Commands\MemberRenewCron::class,
         Commands\OmNomComCleanup::class,
         Commands\MakeAdmin::class,
@@ -56,6 +57,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
+        $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
