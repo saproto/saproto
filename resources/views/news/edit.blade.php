@@ -8,8 +8,8 @@
     @endif
 
     @if($is_weekly && $lastWeekly)
-        <a class="btn btn-danger disabled float-end">
-            Weekly last sent: {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
+        <a class="badge bg-danger disabled float-end">
+            Last sent: {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
         </a>
     @endif
 @endsection
