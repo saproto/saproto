@@ -13,30 +13,52 @@
         @endif
     </div>
     <div class="card-body">
-        <ul>
             @foreach($textTypes as $textType)
-                <li>
-                    <a class="text-reset" data-bs-toggle="collapse" data-bs-target=".collapse-text{{ $textType->id }}">
-                        <b>{{ $textType->type }} ({{$textType->texts_count }})
-                            <a href="{{ route('codex::edit-text-type', ['id' => $textType->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
-                    </a>
-                    <div class="collapse collapse-text{{ $textType->id }}">
-                        <ul>
-                        @foreach($textType->texts as $text)
-                            <li>
-                                @if(isset($edit) && $edit)
-                                    <div class="form-check d-inline-flex">
-                                        <input class="form-check-input" type="checkbox" {{in_array($text->id, $myTextTypes)?"checked":""}} name="textids[]" value="{{$text->id}}">
+
+                <div class="card border">
+                    <div class="card-header border-bottom-0">
+                            <span class="w-100 d-inline-flex justify-content-between">
+                                <span class=" cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapse-text{{ $textType->id }}">
+                                    <b><i class="fas fa-sm fa-fw fa-caret-down"></i> {{ $textType->type }} ({{$textType->texts_count }})</b>
+                                </span>
+                                @if(!isset($edit))
+                                    <div>
+                                        <a href="{{ route('codex::edit-text-type', ['id' => $textType->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                        <a href="{{ route('codex::delete-text-type', ['id' => $textType->id]) }}" class="btn btn-danger badge m-1">Delete</a>
                                     </div>
                                 @endif
+                            </span>
 
-                                {{ $text->name}}  <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
-                            </li>
-                        @endforeach
-                        </ul>
+                        <div id="collapse-text{{ $textType->id }}" class="collapse">
+                            <div class="card-body cursor-default">
+
+                                @foreach($textType->texts as $text)
+                                    <span class="w-100 d-inline-flex justify-content-between">
+                                        @if(isset($edit) && $edit)
+                                            <div class="form-check">
+                                                 @include('components.forms.checkbox', [
+                                                    'input_class_name'=>'',
+                                                    'name' => 'textids[]',
+                                                    'checked' => in_array($text->id, $myTextTypes),
+                                                    'value'=>$text->id,
+                                                    'label' => 'Include'
+                                                    ])
+                                            </div>
+                                        @endif
+
+                                        {{ $text->name}}
+                                        @if(!isset($edit))
+                                             <div>
+                                                <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                                 <a href="{{ route('codex::delete-text', ['id' => $text->id]) }}" class="btn btn-danger badge m-1">Delete</a>
+                                             </div>
+                                        @endif
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
-                </li>
+                </div>
             @endforeach
-        </ul>
     </div>
 </div>

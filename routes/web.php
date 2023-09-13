@@ -889,7 +889,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::group(['prefix' => 'codex', 'as' => 'codex::', 'middleware' => ['auth', 'permission:board']], function () {
+    Route::group(['prefix' => 'codex', 'as' => 'codex::', 'middleware' => ['auth', 'permission:senate']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'CodexController@index']);
         Route::get('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@addCodex']);
         Route::get('add-song', ['as' => 'add-song', 'uses' => 'CodexController@addSong']);
@@ -903,6 +903,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit-song-category/{id}', ['as' => 'edit-song-category', 'uses' => 'CodexController@editSongCategory']);
         Route::get('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@editTextType']);
         Route::get('edit-text/{id}', ['as' => 'edit-text', 'uses' => 'CodexController@editText']);
+
+        Route::get('delete-codex/{codex}', ['as' => 'delete-codex', 'uses' => 'CodexController@deleteCodex']);
+        Route::get('delete-song/{id}', ['as' => 'delete-song', 'uses' => 'CodexController@deleteSong']);
+        Route::get('delete-song-category/{id}', ['as' => 'delete-song-category', 'uses' => 'CodexController@deleteSongCategory']);
+        Route::get('delete-text-type/{id}', ['as' => 'delete-text-type', 'uses' => 'CodexController@deleteTextType']);
+        Route::get('delete-text/{id}', ['as' => 'delete-text', 'uses' => 'CodexController@deleteText']);
 
         Route::post('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@storeCodex']);
         Route::post('add-song', ['as' => 'add-song', 'uses' => 'CodexController@storeSong']);

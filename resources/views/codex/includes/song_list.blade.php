@@ -14,38 +14,54 @@
         @endif
     </div>
     <div class="card-body">
-        <ul>
             @foreach($songTypes as $songCategory)
-                <li>
-                    <div class="d-inline-flex">
-                        <a class="text-reset" data-bs-toggle="collapse" data-bs-target=".collapse-song{{ $songCategory->id }}">
-                            <b> {{ $songCategory->name }} ({{$songCategory->songs_count}})</b> <a href="{{ route('codex::edit-song-category', ['id' => $songCategory->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
-                            <br>
-                        </a>
-                        @if(isset($edit) && $edit)
-                            <div class="form-check d-inline-flex text-secondary">
-                                <input class="form-check-input" type="checkbox" name="shuffleids[]" {{in_array($songCategory->id, $myShuffles)?"checked":""}} value="{{$songCategory->id}}"> shuffle category in export?
-                            </div>
-                        @endif
-                    </div>
-                    <div class="collapse collapse-song{{  $songCategory->id }}">
-                        <ul>
-                            @foreach($songCategory->songs as $song)
-                                <li>
-                                    @if(isset($edit) && $edit)
-                                        <div class="form-check d-inline-flex">
-                                            <input class="form-check-input" type="checkbox" name="songids[]" {{in_array($song->id, $mySongs)?"checked":""}} value="{{$song->id}}">
-                                        </div>
+                <div class="card border">
+                    <div class="card-header border-bottom-0">
+                        <span class="w-100 d-inline-flex justify-content-between">
+                            <span class=" cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapse-song{{ $songCategory->id }}">
+                                <b><i class="fas fa-sm fa-fw fa-caret-down"></i> {{ $songCategory->name }} ({{$songCategory->songs_count }})</b>
+                                <input class="form-check-input" type="checkbox" name="shuffleids[]" {{in_array($songCategory->id, $myShuffles??[])?"checked":""}} value="{{$songCategory->id}}"> shuffle?
+                            </span>
+                            @if(!isset($edit))
+                                <div>
+                                    <a href="{{ route('codex::edit-song-category', ['id' => $songCategory->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                    <a href="{{ route('codex::delete-song-category', ['id' => $songCategory->id]) }}" class="btn btn-danger badge m-1">Delete</a>
+                                </div>
+                            @endif
+                        </span>
+
+                        <div id="collapse-song{{ $songCategory->id }}" class="collapse">
+                            <div class="card-body cursor-default">
+
+                                @foreach($songCategory->songs as $song)
+                                    <span class="w-100 d-inline-flex justify-content-between">
+                                        @if(isset($edit) && $edit)
+                                            <div class="form-check">
+                                                 @include('components.forms.checkbox', [
+                                                    'input_class_name'=>'',
+                                                    'name' => 'songids[]',
+                                                    'checked' => in_array($song->id, $mySongs??[]),
+                                                    'value'=>$song->id,
+                                                    'label' => 'Include'
+                                                    ])
+                                            </div>
                                     @endif
 
-                                        {{ $song->title}}
-                                        <a href="{{ route('codex::edit-song', ['id' => $song->id]) }}" class="btn btn-info badge m-1">Edit</a></b>
-                                </li>
-                            @endforeach
-                        </ul>
+                                    {{$song->title}}
+                                    @if(!isset($edit))
+                                        <div>
+                                        <a href="{{ route('codex::edit-song', ['id' => $song->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                         <a href="{{ route('codex::delete-song', ['id' => $song->id]) }}" class="btn btn-danger badge m-1">Delete</a>
+                                     </div>
+                                    @endif
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+
+
                     </div>
-                </li>
+                </div>
             @endforeach
-        </ul>
     </div>
 </div>

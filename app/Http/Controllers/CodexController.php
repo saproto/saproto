@@ -54,6 +54,12 @@ class CodexController extends Controller
         $song->categories()->sync($request->input('categoryids'));
     }
 
+    public function deleteSong(int $id){
+        $song=CodexSong::findOrFail($id);
+        $song->delete();
+        return Redirect::back();
+    }
+
     public function addSongCategory(){
         return view('codex.song-category-edit', ['category'=>null]);
     }
@@ -77,6 +83,12 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
+    public function deleteSongCategory(int $id){
+        $category=SongCategory::findOrFail($id);
+        $category->delete();
+        return Redirect::back();
+    }
+
     public function addCodex(){
         $textTypes=CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes=SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
@@ -93,7 +105,9 @@ class CodexController extends Controller
     }
 
     public function storeCodex(Request $request){
+//        return $request;
         $codex=new Codex();
+        $codex->save();
         $this->saveCodex($codex, $request);
         return Redirect::back();
     }
@@ -113,6 +127,12 @@ class CodexController extends Controller
         $codex->texts()->sync($request->input('textids'));
         $codex->shuffles()->sync($request->input('shuffleids'));
         $codex->save();
+    }
+
+    public function deleteCodex(int $id){
+        $codex=Codex::findOrFail($id);
+        $codex->delete();
+        return Redirect::back();
     }
 
     public function addText(){
@@ -146,6 +166,12 @@ class CodexController extends Controller
         $text->text = $request->input('text');
         $text->save();
     }
+
+    public function deleteText(int $id){
+        $text=CodexText::findOrFail($id);
+        $text->delete();
+        return Redirect::back();
+    }
     public function addTextType(){
         return view('codex.text-type-edit', ['textType'=>null]);
     }
@@ -166,6 +192,12 @@ class CodexController extends Controller
         $type->type = $request->input('type');
         $type->save();
         return Redirect::route('codex::index');
+    }
+
+    public function deleteTextType(int $id){
+        $type=CodexTextType::findOrFail($id);
+        $type->delete();
+        return Redirect::back();
     }
 
     private function shuffle_assoc(&$array) {
