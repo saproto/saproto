@@ -59,7 +59,7 @@ select {
   }
 }
 
-.goodidea {
+.feedback {
   .votes { min-width: 20px; }
   .upvote:hover {
     color: $success;
@@ -68,6 +68,21 @@ select {
   .downvote:hover {
     color: $danger;
     font-weight: bolder;
+  }
+  .reply:hover {
+    color: $info;
+  }
+  .archive, .restore {
+    color: $white;
+    &:hover {
+      color: $warning;
+    }
+  }
+  .delete {
+    color: $white;
+    &:hover {
+      color: $danger;
+    }
   }
 }
 

@@ -128,8 +128,8 @@
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
                                         <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
-                                        <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event
-                                            Categories</a>
+                                        <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
+                                        <a class="dropdown-item" href="{{ route("feedback::category::admin") }}">Feedback Categories</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item"
@@ -138,7 +138,6 @@
                                         <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
                                         <a class="dropdown-item"
                                            href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                        <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                     @endcan
 
                                     @if(Auth::user()->hasAllPermissions(['board', 'finadmin']))
@@ -189,7 +188,7 @@
                                     <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                     <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
                                         Messages</a>
-                                    <a class="dropdown-item" href="{{ route("newsletter::show") }}">Weekly Update</a>
+                                    <a class="dropdown-item" href="{{ route("news::add", ['is_weekly'=>true]) }}">Weekly Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
                                     <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>

@@ -14,7 +14,11 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('news::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('news::add', ['is_weekly' => true]) }}" class="badge bg-warning float-end ms-3">
+                        Create a new weekly.
+                    </a>
+
+                    <a href="{{ route('news::add', ['is_weekly' => false]) }}" class="badge bg-info float-end">
                         Create a new news item.
                     </a>
                 </div>
@@ -29,6 +33,7 @@
 
                             <td>Title</td>
                             <td>Published</td>
+                            <td>Weekly</td>
                             <td>Controls</td>
 
                         </tr>
@@ -45,8 +50,13 @@
                                         {{ $newsitem->published_at }}
                                     </span>
                                 </td>
+                                <td>
+                                    @if($newsitem->is_weekly)
+                                        <i class="fas fa-check text-success"></i>
+                                    @endif
+                                </td>
                                 <td class="controls">
-                                    <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
+                                    <a href="{{ $newsitem->url }}">
                                         <i class="fas fa-link me-2"></i>
                                     </a>
 

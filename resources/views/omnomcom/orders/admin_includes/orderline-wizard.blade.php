@@ -1,25 +1,33 @@
-<div id="orderline-modal" class="modal fade vh-100" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
+@extends('website.layouts.redesign.generic')
+
+@section('page-title')
+Orderline wizard
+@endsection
+
+@section('container')
+    <div class="row">
+    <div class="column">
 
         <form method="post" action="{{ route('omnomcom::orders::addbulk') }}">
 
             {!! csrf_field() !!}
 
-            <div class="modal-content" style="height:calc(100vh - 80px)">
+            <div class="card mb-3">
 
-                <div class="modal-header">
-                    <h5 class="modal-title">Add orderlines</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="card-header d-inline-flex justify-content-between">
+                    <h5>Add orderlines</h5 >
+                    <a href="{{ route('omnomcom::orders::adminlist') }}" class="btn btn-default">
+                        Back to Orderline Overview
+                    </a>
                 </div>
 
-                <div id="orderline-rows" class="modal-body overflow-auto">
+                <div id="orderline-rows" class="card-body">
 
                     <div class="row orderline-row">
 
                         <div class="col-lg-3">
 
                             <select name="user[]" class="form-control orderline-user">
-                                {{ $members = App\Models\User::has('member')->orderBy('name')->get()->reject(function(App\Models\User $user, int $index) { return $user->member->is_pending == true; }) }}
                                 @foreach($members as $member)
                                     <option value="{{ $member->id }}">{{ $member->name }} (#{{ $member->id }})</option>
                                 @endforeach
@@ -30,7 +38,7 @@
                         <div class="col-lg-3">
 
                             <select name="product[]" class="form-control orderline-product">
-                                @foreach(App\Models\Product::where('is_visible', true)->orderBy('name', 'asc')->get() as $product)
+                                @foreach($products as $product)
                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}">{{ $product->name }}
                                         (&euro;{{ $product->price }}, #{{ $product->id }})
                                     </option>
@@ -91,11 +99,6 @@
                         </button>
                     </div>
                     <div class="col-1">
-                        <button class="btn btn-outline-default btn-block" data-bs-dismiss="modal">
-                            <i class="fas fa-times-circle"></i>
-                        </button>
-                    </div>
-                    <div class="col-1">
                         <button type="submit" class="btn btn-success btn-block">
                             <i class="fas fa-shopping-cart"></i>
                         </button>
@@ -106,9 +109,9 @@
             </div>
 
         </form>
-
     </div>
-</div>
+    </div>
+@endsection
 
 @push('javascript')
 
