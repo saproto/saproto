@@ -23,4 +23,12 @@ class CodexText extends Model
         return $this->belongsToMany(Codex::class, 'codex_codex_text', 'text_id', 'codex');
     }
 
+    protected static function booted()
+    {
+        static::deleting(function ($text) {
+            $text->codices()->detach();
+            $text->type()->dissociate();
+        });
+    }
+
 }

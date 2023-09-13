@@ -24,7 +24,12 @@
                                 @if(!isset($edit))
                                     <div>
                                         <a href="{{ route('codex::edit-text-type', ['id' => $textType->id]) }}" class="btn btn-info badge m-1">Edit</a>
-                                        <a href="{{ route('codex::delete-text-type', ['id' => $textType->id]) }}" class="btn btn-danger badge m-1">Delete</a>
+                                         @include('components.modals.confirm-modal', [
+                                            'action' => route('codex::delete-text-type', ['id' => $textType->id]),
+                                            'classes' => 'btn btn-danger badge m-1',
+                                            'text' => 'Delete',
+                                            'message' => "Are you sure you want to delete $textType->type? <br> This will also delete <b>all texts</b> in this category",
+                                         ])
                                     </div>
                                 @endif
                             </span>
@@ -50,7 +55,12 @@
                                         @if(!isset($edit))
                                              <div>
                                                 <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}" class="btn btn-info badge m-1">Edit</a>
-                                                 <a href="{{ route('codex::delete-text', ['id' => $text->id]) }}" class="btn btn-danger badge m-1">Delete</a>
+                                                 @include('components.modals.confirm-modal', [
+                                                    'action' => route('codex::delete-text', ['id' => $text->id]),
+                                                    'classes' => 'btn btn-danger badge m-1',
+                                                    'text' => 'Delete',
+                                                    'message' => "Are you sure you want to delete $text->name?",
+                                                 ])
                                              </div>
                                         @endif
                                     </span>

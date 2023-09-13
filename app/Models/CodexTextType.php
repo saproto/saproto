@@ -16,4 +16,11 @@ class CodexTextType extends Model
     {
         return $this->hasMany(CodexText::class, 'type_id');
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($type) {
+            $type->texts()->delete();
+        });
+    }
 }

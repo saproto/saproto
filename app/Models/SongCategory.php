@@ -15,4 +15,11 @@ class SongCategory extends Model
     {
         return $this->belongsToMany(CodexSong::class, 'codex_category_song', 'category', 'song');
     }
+
+    protected static function booted()
+    {
+        static::deleting(function ($category) {
+            $category->songs()->delete();
+        });
+    }
 }

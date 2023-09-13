@@ -10,6 +10,7 @@ use App\Models\CodexSong;
 use App\Models\CodexTextType;
 use App\Models\SongCategory;
 use Illuminate\Support\Facades\Redirect;
+use Session;
 
 
 class CodexController extends Controller
@@ -23,6 +24,10 @@ class CodexController extends Controller
     }
 
     public function addSong(){
+        if(!SongCategory::count()){
+            Session::flash('flash_message', 'You need to add a song category first!');
+            return Redirect::route('codex::index');
+        }
         $categories=SongCategory::orderBy('name')->get();
         return view('codex.song-edit', ['song'=>null, 'textType'=>null, 'categories' => $categories, 'myCategories' => []]);
     }
@@ -36,13 +41,13 @@ class CodexController extends Controller
     public function storeSong(Request $request){
         $song=new CodexSong();
         $this->saveSong($song, $request);
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     public function updateSong(Request $request, int $id){
         $song=CodexSong::findOrFail($id);
         $this->saveSong($song, $request);
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     private function saveSong(CodexSong $song, Request $request){
@@ -57,7 +62,7 @@ class CodexController extends Controller
     public function deleteSong(int $id){
         $song=CodexSong::findOrFail($id);
         $song->delete();
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     public function addSongCategory(){
@@ -85,8 +90,9 @@ class CodexController extends Controller
 
     public function deleteSongCategory(int $id){
         $category=SongCategory::findOrFail($id);
+        $category->songs()->delete();
         $category->delete();
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     public function addCodex(){
@@ -105,17 +111,16 @@ class CodexController extends Controller
     }
 
     public function storeCodex(Request $request){
-//        return $request;
         $codex=new Codex();
         $codex->save();
         $this->saveCodex($codex, $request);
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     public function updateCodex(Request $request, int $id){
         $codex=Codex::findOrFail($id);
         $this->saveCodex($codex, $request);
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     private function saveCodex($codex, $request){
@@ -131,11 +136,18 @@ class CodexController extends Controller
 
     public function deleteCodex(int $id){
         $codex=Codex::findOrFail($id);
+        $codex->songs()->detach();
+        $codex->texts()->detach();
+        $codex->shuffles()->detach();
         $codex->delete();
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
 
     public function addText(){
+        if(!CodexTextType::count()){
+            Session::flash('flash_message', 'You need to add a text type first!');
+            return Redirect::route('codex::index');
+        }
         $textTypes=CodexTextType::orderBy('type')->get();
         return view('codex.text-edit', ['text'=>null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
     }
@@ -148,7 +160,6 @@ class CodexController extends Controller
     }
 
     public function storeText(Request $request){
-//        return $request;
         $text = new CodexText();
         $this->saveText($text, $request);
         return Redirect::route('codex::index');
@@ -169,8 +180,9 @@ class CodexController extends Controller
 
     public function deleteText(int $id){
         $text=CodexText::findOrFail($id);
+        $text->codices()->detach();
         $text->delete();
-        return Redirect::back();
+        return Redirect::route('codex::index');
     }
     public function addTextType(){
         return view('codex.text-type-edit', ['textType'=>null]);
@@ -196,22 +208,9 @@ class CodexController extends Controller
 
     public function deleteTextType(int $id){
         $type=CodexTextType::findOrFail($id);
+        $type->texts()->delete();
         $type->delete();
-        return Redirect::back();
-    }
-
-    private function shuffle_assoc(&$array) {
-        $keys = array_keys($array);
-
-        shuffle($keys);
-        $new = array();
-        foreach($keys as $key) {
-            $new[$key] = $array[$key];
-        }
-
-        $array = $new;
-
-        return true;
+        return Redirect::route('codex::index');
     }
 
     public function exportCodex(int $id)
@@ -237,7 +236,10 @@ class CodexController extends Controller
                     $query->where('codex_codices.id', $id);
                 });
             }])->orderBy('type')->get();
-
+        if(count($categories)==0 || count($textCategories)==0){
+            Session::flash('flash_message', 'You need to add at least one song and one text to the codex first!');
+            return Redirect::route('codex::index');
+        }
         $A6 = array(105,148);
         $pdf = new PDF_TOC('P','mm',$A6);
 
@@ -361,7 +363,7 @@ class CodexController extends Controller
 
         $pdf->AddPage(); //TOC, possibly empty pages, and notes page
         $pdf->stopPageNums();
-        $pdf->insertTOC($tocPage,9,5,'minion' );
+        $pdf->insertTOC($tocPage,9,6,'minion' );
 
         $pagesNeeded = (4-(($pdf->PageNo()+1) % 4))%4;
         if ($pagesNeeded>0){
