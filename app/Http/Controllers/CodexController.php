@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\PDF;
+use App\Libraries\PDF_TOC;
 use App\Models\CodexText;
-use Fpdf;
 use Illuminate\Http\Request;
 use App\Models\Codex;
 use App\Models\CodexSong;
@@ -185,7 +184,6 @@ class CodexController extends Controller
 
     public function exportCodex(int $id)
     {
-//        return resource_path('fonts');
             $codex = Codex::findOrFail($id);
 
             $categories = SongCategory::whereHas('songs', function ($q) use ($id) {
@@ -209,11 +207,10 @@ class CodexController extends Controller
             }])->orderBy('type')->get();
 
         $A6 = array(105,148);
-        $pdf = new PDF('P','mm',$A6);
+        $pdf = new PDF_TOC('P','mm',$A6);
 
         $pdf->setMargins(10,10,10);//left, top and right margins, 1cm
         $pdf->setAutoPageBreak(true,10);//bottom margin, 1cm
-        $pdf->setFont('Arial','',8);
 
         $pdf->AddFont('minion','');
         $pdf->AddFont('minion','B');
@@ -231,7 +228,7 @@ class CodexController extends Controller
         $pdf->SetFont('old','',52);
         $pdf->Image(public_path('images/logo/codex_logo.png'),10,10,85,48); $pdf->Ln(50);
         $codex_name = str_replace("’", "'", $codex->name);
-        $codex_name = str_replace("‘", "'", $codex->name);
+        $codex_name = str_replace("‘", "'", $codex_name);
         $pdf->MultiCell(0,22,$codex_name,0,'C');
         $pdf->SetAlpha(0.1);
         $pdf->Image(public_path('images/logo/codex_logo.png'),-100,47,210);
@@ -241,7 +238,7 @@ class CodexController extends Controller
         foreach ($textCategories as $category){
             foreach ($category->texts as $text) {
                 $pdf->AddPage();
-                $pdf->setNumbering(true);
+                $pdf->startPageNums();
 
                 $pdf->SetFont('minion', 'B', $textSize);
 
@@ -253,35 +250,33 @@ class CodexController extends Controller
                 $pdf->SetFont('minion', '', $textSize);
                 $textArray = explode(PHP_EOL, $text->text);
                 $list = false;
-                $n = 0;
+                $count = 0;
 
                 foreach ($textArray as $textValue) {
-                    if ($list || strpos($textValue, "==") !== false ) {
-                        $textValue = str_replace("==", "", $textValue);
+                    if ($list || preg_match('/(\d+)\./', $textValue)) {
+                        $textValue = str_replace("1.", "", $textValue);
                         $list = true;
-                        if(strpos($textValue, "/=") !== false ) {
-                            $textValue = str_replace("/=", "", $textValue);
+                        if(!preg_match('/(\d+)\./', $textValue)) {
                             $list = false;
                         }
-                        $n += 1;
-                        $pdf->Cell($bulletListIndent,$textHeight,$n.".");
+                        $count += 1;
+                        $pdf->Cell($bulletListIndent,$textHeight,$count.".");
                     } else {
-                        $n=0;
+                        $count=0;
                     }
-                    if (strpos($textValue, "**") !== false ){
+                    if (str_contains($textValue, "**")){
                         $textValue = str_replace("**", "", $textValue);
                         $pdf->SetFont('minion','B',$textSize);
                         $toc_text = substr($textValue,0,-1);
                         $pdf->TOC_Entry($toc_text,1);
-                    } elseif (strpos($textValue, "//") !== false ) {
-                        $textValue = str_replace("//", "", $textValue);
+                    } elseif (str_contains($textValue, "_")||str_contains($textValue, "*")) {
+                        $textValue = str_replace("_", "", $textValue);
+                        $textValue = str_replace("*", "", $textValue);
                         $pdf->SetFont('minion','I',$textSize);
                     }
                     $pdf->MultiCell(0,$textHeight,$textValue,0,'L');
                     $pdf->SetFont('minion','',$textSize);
                 }
-
-            $pdf->TOC_Entry("",0);
 
             $tocPage = $pdf->PageNo()+1;
             }
@@ -305,14 +300,14 @@ class CodexController extends Controller
                 $print=true;
                 for ($index = 0; $index < count($lyricsArray); $index++) {
                     $text = $lyricsArray[$index];
-                    $text = mb_convert_encoding($text, 'ISO-8859-1');
-                    if (strpos($text, "**") !== false ){
+                    if (str_contains($text, "**")){
                         $text = str_replace("**", "", $text);
                         $pdf->SetFont('minion','B',$textSize);
-                    } elseif (strpos($text, "//") !== false ) {
-                        $text = str_replace("//", "", $text);
+                    } elseif (str_contains($text, "*") || str_contains($text, "_")) {
+                        $text = str_replace("*", "", $text);
+                        $text = str_replace("_", "", $text);
                         $pdf->SetFont('minion','I',$textSize);
-                    }  elseif (strpos($text, ":") !== false ) {
+                    }  elseif (str_contains($text, ":")) {
                         $subString1 = substr($text, 0, strpos($text, ":"));
                         $subString2 = substr($text, strpos($text, ":"));
                         $pdf->SetFont('minion','I',$textSize);
@@ -320,8 +315,6 @@ class CodexController extends Controller
                         $pdf->SetFont('minion','',$textSize);
                         $pdf->Cell($pdf->GetStringWidth($subString2),$textHeight,$subString2,0,1);
                         $print=false;
-                    } elseif (strpos($text, "--") !== false ) {
-                        $pdf->SetFont('minion','I',$textSize);
                     }
                     if ($print) {
                         $pdf->MultiCell(0,$textHeight,$text,0,'L');
@@ -335,8 +328,8 @@ class CodexController extends Controller
 
 
         $pdf->AddPage(); //TOC, possibly empty pages, and notes page
-        $pdf->setNumbering(false);
-        $pdf->insertTOC($tocPage,9,5,'Arial' );
+        $pdf->stopPageNums();
+        $pdf->insertTOC($tocPage,9,5,'minion' );
 
         $pagesNeeded = (4-(($pdf->PageNo()+1) % 4))%4;
         if ($pagesNeeded>0){
@@ -344,6 +337,7 @@ class CodexController extends Controller
                 $pdf->AddPage();
             }
         }
+
         $pdf->setY(10);
         $pdf->SetFont('minion','B',$textSize);
         $pdf->MultiCell(0,$textHeight,"Notes:",0,'C');
