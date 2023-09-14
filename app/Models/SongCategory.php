@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class SongCategory extends Model
 {
     use HasFactory;
+
     protected $table = 'codex_category';
 
     public function songs(): BelongsToMany

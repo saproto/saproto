@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\CodexSong;
 use App\Models\CodexText;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 
 class CodexMarkdownConverter extends Command
 {
@@ -28,26 +27,28 @@ class CodexMarkdownConverter extends Command
      */
     public function handle()
     {
-        foreach(CodexText::all() as $text){
+        foreach (CodexText::all() as $text) {
             $text->text = $this->reformat($text->text);
             $text->save();
         }
 
-        foreach(CodexSong::all() as $song){
+        foreach (CodexSong::all() as $song) {
             $song->lyrics = $this->reformat($song->lyrics);
             $song->save();
         }
     }
 
-    private function reformat(string $text):string{
+    private function reformat(string $text): string
+    {
         $text = str_replace('ÃŸ', utf8_encode('ẞ'), $text);
-        $text= str_replace('//', '_', $text);
-        $text= str_replace('`', "\'", $text);
-        while(str_contains($text, '==')&&str_contains($text, '/=')){
-            $between = substr($text, strpos($text, '==')+2, strpos($text, '/=')-strpos($text, '==')-2);
-            $newBetween= "1. ".str_replace(PHP_EOL, PHP_EOL."1. ", $between);
-            $text = str_replace("==".$between."/=", $newBetween, $text);
+        $text = str_replace('//', '_', $text);
+        $text = str_replace('`', "\'", $text);
+        while (str_contains($text, '==') && str_contains($text, '/=')) {
+            $between = substr($text, strpos($text, '==') + 2, strpos($text, '/=') - strpos($text, '==') - 2);
+            $newBetween = '1. '.str_replace(PHP_EOL, PHP_EOL.'1. ', $between);
+            $text = str_replace('=='.$between.'/=', $newBetween, $text);
         }
+
         return utf8_decode($text);
     }
 }
