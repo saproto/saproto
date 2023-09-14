@@ -49,7 +49,7 @@ return [
         'registermembers' => (object) [
             'display_name' => 'Register Members',
             'description' => 'Allows finalisation of memberships.',
-        ],'senate' => (object) [
+        ], 'senate' => (object) [
             'display_name' => 'Codex Access',
             'description' => 'Allows managing of codices.',
         ],
@@ -115,7 +115,7 @@ return [
             'display_name' => 'Registration Helper',
             'description' => 'Can help register members',
             'permissions' => ['registermembers'],
-        ],'senate' => (object) [
+        ], 'senate' => (object) [
             'display_name' => 'Senate',
             'description' => 'May view and edit codexes',
             'permissions' => ['senate'],

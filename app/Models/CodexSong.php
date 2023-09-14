@@ -9,7 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class CodexSong extends Model
 {
     use HasFactory;
+
     protected $table = 'codex_songs';
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(SongCategory::class, 'codex_category_song', 'song', 'category');
@@ -20,7 +22,6 @@ class CodexSong extends Model
         return $this->belongsToMany(Codex::class, 'codex_codex_song', 'song', 'codex');
     }
 
-
     protected static function booted()
     {
         static::deleting(function ($song) {
@@ -28,6 +29,4 @@ class CodexSong extends Model
             $song->codices()->detach();
         });
     }
-
-
 }

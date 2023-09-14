@@ -897,7 +897,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('add-text-type', ['as' => 'add-text-type', 'uses' => 'CodexController@addTextType']);
         Route::get('add-text', ['as' => 'add-text', 'uses' => 'CodexController@addText']);
 
-
         Route::get('edit-codex/{codex}', ['as' => 'edit-codex', 'uses' => 'CodexController@editCodex']);
         Route::get('edit-song/{id}', ['as' => 'edit-song', 'uses' => 'CodexController@editSong']);
         Route::get('edit-song-category/{id}', ['as' => 'edit-song-category', 'uses' => 'CodexController@editSongCategory']);

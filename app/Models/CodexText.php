@@ -30,5 +30,4 @@ class CodexText extends Model
             $text->type()->dissociate();
         });
     }
-
 }

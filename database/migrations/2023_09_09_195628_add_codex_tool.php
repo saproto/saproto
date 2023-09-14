@@ -42,7 +42,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
         Schema::create('codex_category', function (Blueprint $table) {
             $table->id();
             $table->string('name');
