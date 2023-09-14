@@ -334,6 +334,7 @@ class CodexController extends Controller
                 $print=true;
                 for ($index = 0; $index < count($lyricsArray); $index++) {
                     $text = $lyricsArray[$index];
+                    $text = str_replace("\\", "", $text);
                     if (str_contains($text, "**")){
                         $text = str_replace("**", "", $text);
                         $pdf->SetFont('minion','B',$textSize);
