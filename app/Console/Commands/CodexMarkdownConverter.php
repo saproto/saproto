@@ -14,7 +14,7 @@ class CodexMarkdownConverter extends Command
      *
      * @var string
      */
-    protected $signature = 'app:codex-markdown-converter';
+    protected $signature = 'proto:codex-markdown-converter';
 
     /**
      * The console command description.
@@ -40,12 +40,14 @@ class CodexMarkdownConverter extends Command
     }
 
     private function reformat(string $text):string{
-        $oldText= str_replace('//', '_', $text);
-        while(str_contains($oldText, '==')&&str_contains($oldText, '/=')){
-            $between = substr($oldText, strpos($oldText, '==')+2, strpos($oldText, '/=')-strpos($oldText, '==')-2);
+        $text = str_replace('ÃŸ', utf8_encode('ẞ'), $text);
+        $text= str_replace('//', '_', $text);
+        $text= str_replace('`', "\'", $text);
+        while(str_contains($text, '==')&&str_contains($text, '/=')){
+            $between = substr($text, strpos($text, '==')+2, strpos($text, '/=')-strpos($text, '==')-2);
             $newBetween= "1. ".str_replace(PHP_EOL, PHP_EOL."1. ", $between);
-            $oldText = str_replace("==".$between."/=", $newBetween, $oldText);
+            $text = str_replace("==".$between."/=", $newBetween, $text);
         }
-        return $oldText;
+        return utf8_decode($text);
     }
 }
