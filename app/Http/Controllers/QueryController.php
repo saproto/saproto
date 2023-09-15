@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Member;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -156,5 +158,21 @@ class QueryController extends Controller
                 'pending' => $count_pending,
             ]);
         }
+    }
+
+    public function activityStatistics()
+    {
+        $events= DB::table('events')
+            ->select(DB::raw("YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total"))
+            ->whereNull('deleted_at')
+            ->groupBy(DB::raw("YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))"))
+            ->get();
+
+        $change=Carbon::create('01-09-2010');
+        foreach ($events as $event) {
+            $event->Board = Carbon::createFromTimestamp($event->Start)->diffInYears($change);
+        }
+
+        return view('queries.activity_statistics', ['events' => $events->groupBy('Board')]);
     }
 }
