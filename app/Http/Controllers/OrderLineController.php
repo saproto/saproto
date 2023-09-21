@@ -101,12 +101,26 @@ class OrderLineController extends Controller
         } else {
             $orderlines = OrderLine::whereDate('created_at', Carbon::today());
         }
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
+        $orderlines = $orderlines->with('user', 'product')->orderBy('created_at', 'desc')->paginate(20);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => Carbon::today()->format('d-m-Y'),
             'orderlines' => $orderlines,
             'user' => null,
+        ]);
+    }
+
+    public function orderlineWizard()
+    {
+        $members = User::whereHas('member', function ($query) {
+            $query->where('is_pending', false);
+        })->orderBy('name')->get();
+
+        $products = Product::where('is_visible', true)->orderBy('name')->get();
+
+        return view('omnomcom.orders.admin_includes.orderline-wizard', [
+            'members' => $members,
+            'products' => $products,
         ]);
     }
 
@@ -125,7 +139,10 @@ class OrderLineController extends Controller
             $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['date' => $date]);
+        $orderlines = $orderlines->with('user', 'product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends(['date' => $date]);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
@@ -149,7 +166,10 @@ class OrderLineController extends Controller
             $orderlines = OrderLine::where('user_id', $user);
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['user' => $user]);
+        $orderlines = $orderlines->with('user', 'product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends(['user' => $user]);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => null,
