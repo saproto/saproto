@@ -46,6 +46,7 @@ class FeeCron extends Command
     {
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
             $this->info('We don\'t charge membership fees in August or September.');
+            return 0;
         }
 
         if (intval(date('n')) >= 9) {
