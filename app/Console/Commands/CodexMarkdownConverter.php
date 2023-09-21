@@ -40,7 +40,7 @@ class CodexMarkdownConverter extends Command
 
     private function reformat(string $text): string
     {
-        $text = str_replace('ÃŸ', utf8_encode('ẞ'), $text);
+        $text = str_replace('ÃŸ', utf8_encode('ß'), $text);
         $text = str_replace('//', '_', $text);
         $text = str_replace('`', "\'", $text);
         while (str_contains($text, '==') && str_contains($text, '/=')) {

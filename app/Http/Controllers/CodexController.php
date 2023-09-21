@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Session;
 
+define('FPDF_FONTPATH', '/var/www/html/resources/fonts');
+
 class CodexController extends Controller
 {
     public function index()
@@ -299,14 +301,15 @@ class CodexController extends Controller
             return Redirect::route('codex::index');
         }
         $A6 = [105, 148];
+
         $pdf = new PDF_TOC('P', 'mm', $A6);
 
         $pdf->setMargins(10, 10, 10); //left, top and right margins, 1cm
         $pdf->setAutoPageBreak(true, 10); //bottom margin, 1cm
 
-        $pdf->AddFont('minion', '');
-        $pdf->AddFont('minion', 'B');
-        $pdf->AddFont('minion', 'I');
+        $pdf->AddFont('minion', '', 'minion.ttf', true);
+        $pdf->AddFont('minion', 'B', 'minionb.ttf', true);
+        $pdf->AddFont('minion', 'I', 'minioni.ttf', true);
         $pdf->AddFont('old');
 
         $textSize = 8;
@@ -338,8 +341,6 @@ class CodexController extends Controller
                 $pdf->MultiCell(0, $textHeight, $category->type, 0, 'L');
                 $pdf->SetFont('minion', '', $textSize);
 
-                $pdf->AddFont('minion');
-                $pdf->SetFont('minion', '', $textSize);
                 $textArray = explode(PHP_EOL, $text->text);
                 $list = false;
                 $count = 0;

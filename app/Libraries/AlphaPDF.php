@@ -2,9 +2,9 @@
 
 namespace App\Libraries;
 
-use Codedge\Fpdf\Fpdf\Fpdf;
+use tFPDF;
 
-class AlphaPDF extends Fpdf
+class AlphaPDF extends tFpdf
 {
     protected $extgstates = [];
 
