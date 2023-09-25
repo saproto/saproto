@@ -68,7 +68,7 @@ class FeedbackController extends Controller
         if ($category->review) {
             //only get the reviewed feedback if they require it
             $unreviewed = Feedback::where('reviewed', false)->where('feedback_category_id', $category->id);
-            if (Auth::user()->id !== $category->reviewer_id || !Auth::user()->can('sysadmin')) {
+            if (Auth::user()->id !== $category->reviewer_id || ! Auth::user()->can('sysadmin')) {
                 $unreviewed = $unreviewed->where('user_id', Auth::user()->id);
             }
 
