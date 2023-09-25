@@ -242,7 +242,7 @@ class FeedbackController extends Controller
     public function approve(int $id): RedirectResponse
     {
         $feedback = Feedback::findOrFail($id);
-        if ($feedback->category->reviewer_id !== Auth::user()->id || !Auth::user()->can('sysadmin')) {
+        if ($feedback->category->reviewer_id !== Auth::user()->id || ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Feedback may only be approved by the dedicated reviewer!');
 
             return Redirect::back();
