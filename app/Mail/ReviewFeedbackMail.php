@@ -35,7 +35,7 @@ class ReviewFeedbackMail extends Mailable
     public function build()
     {
         return $this
-            ->to($this->category->reviewer->first()->email)
+            ->to($this->category->reviewer->email)
             ->subject('Review feedback for: '.$this->category->title.'!')
             ->view('emails.feedbackreviewreminder', ['category' => $this->category, 'unreviewed' => $this->feedback, 'calling_name' => $this->category->reviewer->first()->calling_name]);
     }
