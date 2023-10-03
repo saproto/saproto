@@ -181,38 +181,38 @@ class QueryController extends Controller
 
         $eventCategories = EventCategory::withCount(['events' => function ($query) use ($start, $end) {
             $query->where('start', '>=', $start)->where('end', '<=', $end);
-            }])->get()->sortBy('name');
+        }])->get()->sortBy('name');
 
-        foreach ($eventCategories as $category){
-            $category->spots= Activity::whereHas('event', function ($query) use ($category, $start, $end) {
+        foreach ($eventCategories as $category) {
+            $category->spots = Activity::whereHas('event', function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
-            ->sum('participants');
+                ->sum('participants');
 
-            $category->signups= ActivityParticipation::whereHas('activity', function ($query) use ($category, $start, $end) {
+            $category->signups = ActivityParticipation::whereHas('activity', function ($query) use ($category, $start, $end) {
                 $query->whereHas('event', function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
 
-            $category->attendees=Activity::where('participants', '>', 0)->whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->attendees = Activity::where('participants', '>', 0)->whereHas('event', function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
         }
 
-        $events= DB::table('events')
-            ->select(DB::raw("YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total"))
+        $events = DB::table('events')
+            ->select(DB::raw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total'))
             ->whereNull('deleted_at')
-            ->groupBy(DB::raw("YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))"))
+            ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
 
-        $totalEvents=Event::where('start', '>=', $start)->where('end', '<=', $end)->count();
+        $totalEvents = Event::where('start', '>=', $start)->where('end', '<=', $end)->count();
 
-        $changeGMM=Carbon::create('01-09-2010');
+        $changeGMM = Carbon::create('01-09-2010');
         foreach ($events as $event) {
             $event->Board = Carbon::createFromTimestamp($event->Start)->diffInYears($changeGMM);
         }
 
-        return view('queries.activity_statistics', ['start'=>$start, 'end'=>$end ,'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
+        return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
     }
 }

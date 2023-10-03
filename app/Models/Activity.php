@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\ParticipationController;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;

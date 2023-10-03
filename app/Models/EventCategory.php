@@ -42,7 +42,7 @@ class EventCategory extends Model
 
     public function average_cost(): float
     {
-        return Activity::whereHas('event', function($q){
+        return Activity::whereHas('event', function ($q) {
             $q->where('category_id', $this->id);
         })->get()->average('price');
     }
