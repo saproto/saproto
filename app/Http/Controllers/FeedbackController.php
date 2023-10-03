@@ -66,13 +66,14 @@ class FeedbackController extends Controller
     private function getUnreviewed(FeedbackCategory $category): array|Collection
     {
         if ($category->review) {
-            //only get the reviewed feedback if they require it
             $unreviewed = Feedback::where('reviewed', false)->where('feedback_category_id', $category->id);
-            if (Auth::user()->id !== $category->reviewer_id) {
-                $unreviewed = $unreviewed->where('user_id', Auth::user()->id);
+
+            //get all unreviewed feedback for authorized users
+            if (Auth::user()->id === $category->reviewer_id || Auth::user()->can('sysadmin')) {
+                return $unreviewed->limit(20)->get();
             }
 
-            return $unreviewed->limit(20)->get();
+            return $unreviewed->where('user_id', Auth::user()->id)->limit(20)->get();
         }
 
         return [];
@@ -242,7 +243,7 @@ class FeedbackController extends Controller
     public function approve(int $id): RedirectResponse
     {
         $feedback = Feedback::findOrFail($id);
-        if ($feedback->category->reviewer_id !== Auth::user()->id) {
+        if ($feedback->category->reviewer_id !== Auth::user()->id && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Feedback may only be approved by the dedicated reviewer!');
 
             return Redirect::back();
