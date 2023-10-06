@@ -27,7 +27,7 @@ class CodexController extends Controller
 
     public function addSong()
     {
-        if (! SongCategory::count()) {
+        if (!SongCategory::count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex::index');
@@ -124,7 +124,7 @@ class CodexController extends Controller
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
 
-        return view('codex.codex-edit', ['codex' => null, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => [], 'myTexts' => [], 'myShuffles' => [], 'myTextTypes' => []]);
+        return view('codex.codex-edit', ['codex' => null, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => [], 'myTexts' => [], 'myTextTypes' => []]);
     }
 
     public function editCodex(int $id)
@@ -134,9 +134,8 @@ class CodexController extends Controller
         $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
         $myTexts = $codex->texts->pluck('id')->toArray();
-        $myShuffles = $codex->shuffles->pluck('id')->toArray();
 
-        return view('codex.codex-edit', ['codex' => $codex, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => $mySongs, 'myTextTypes' => $myTexts, 'myShuffles' => $myShuffles]);
+        return view('codex.codex-edit', ['codex' => $codex, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => $mySongs, 'myTextTypes' => $myTexts]);
     }
 
     public function storeCodex(Request $request)
@@ -161,10 +160,8 @@ class CodexController extends Controller
         $codex->name = $request->input('name');
         $codex->export = $request->input('export');
         $codex->description = $request->input('description');
-        //todo: add category to the song sync
         $codex->songs()->sync($request->input('songids'));
         $codex->texts()->sync($request->input('textids'));
-        $codex->shuffles()->sync($request->input('shuffleids'));
         $codex->save();
     }
 
@@ -173,7 +170,6 @@ class CodexController extends Controller
         $codex = Codex::findOrFail($id);
         $codex->songs()->detach();
         $codex->texts()->detach();
-        $codex->shuffles()->detach();
         $codex->delete();
 
         return Redirect::route('codex::index');
@@ -181,7 +177,7 @@ class CodexController extends Controller
 
     public function addText()
     {
-        if (! CodexTextType::count()) {
+        if (!CodexTextType::count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex::index');
@@ -349,11 +345,11 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (! preg_match('/(\d+)\./', $textValue)) {
+                        if (!preg_match('/(\d+)\./', $textValue)) {
                             $list = false;
                         }
                         $count += 1;
-                        $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
+                        $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
                     } else {
                         $count = 0;
                     }
