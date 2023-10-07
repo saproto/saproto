@@ -43,7 +43,6 @@ class Kernel extends ConsoleKernel
         Commands\AddSysadmin::class,
         Commands\EndMemberships::class,
         Commands\UpdateWallstreetPrices::class,
-        Commands\CodexMarkdownConverter::class,
     ];
 
     /**
@@ -72,7 +71,6 @@ class Kernel extends ConsoleKernel
         //        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
-
         $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(function () {
             return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0;
         });
