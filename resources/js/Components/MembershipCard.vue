@@ -40,11 +40,11 @@ const is_current = computed(() => {
           </span>
         </div>
         <div>
-          <div v-if="!membership.is_pet">🐶 Pet member</div>
+          <div v-if="membership.is_pet">🐶 Pet member</div>
           <div v-if="membership.is_lifelong">🕰️ Lifelong member</div>
           <div v-if="membership.is_donor">💸 Generous donor</div>
           <div v-if="membership.is_honorary">😇 Honorary member</div>
-          <div v-if="membership.is_pending">⏲️ Pending member</div>
+          <div v-if="!membership.is_pending">⏲️ Pending member</div>
         </div>
       </div>
     </div>

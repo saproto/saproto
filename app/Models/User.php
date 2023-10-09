@@ -274,8 +274,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->hasOne('App\Models\Bank');
     }
 
-    /** @return Bank */
-    public function getBankAttribute(): Bank
+    /** @return Bank | null */
+    public function getBankAttribute(): Bank | null
     {
         return $this->bank()->first();
     }

@@ -282,7 +282,7 @@ const postForm = () => {
           <InfoText v-if="form.isDirty" text-color="text-warning"><i class="fas fa-warning"></i> Not saved</InfoText>
         </div>
       </form>
-      <div class="w-3/12">
+      <div class="w-6/12">
         <InputGroup>
           Profile picture
           <template #input>
