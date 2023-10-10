@@ -39,6 +39,13 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
+        $weekly = Newsitem::query()
+            ->where('published_at', '<=', Carbon::now())
+            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('is_weekly', true)
+            ->orderBy('published_at', 'desc')
+            ->first();
+
         $birthdays = User::query()
             ->has('member')
             ->where('show_birthday', true)
@@ -47,6 +54,7 @@ class HomeController extends Controller
             ->reject(function (User $user, int $index) {
                 return $user->member->is_pending == true;
             });
+
         $dinnerforms = Dinnerform::query()
             ->where('closed', false)
             ->where('start', '<=', Carbon::now())
@@ -61,7 +69,7 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
+        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
     }
 
     /** @return View Display the most important page of the whole site. */
