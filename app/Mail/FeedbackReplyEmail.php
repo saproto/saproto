@@ -17,7 +17,7 @@ class FeedbackReplyEmail extends Mailable
 
     public User $user;
 
-    public String $reply;
+    public string $reply;
 
     public bool $accepted;
 
