@@ -143,8 +143,14 @@ class MollieController extends Controller
         }
 
         $month = Carbon::parse($month);
-        $start = $month->copy()->firstOfMonth(Carbon::MONDAY);
-        $end = $month->copy()->addMonth()->firstOfMonth(Carbon::MONDAY);
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
 
         // We do one massive query to reduce the number of queries.
         $orderlines = DB::table('orderlines')
@@ -300,9 +306,14 @@ class MollieController extends Controller
     public static function getTotalForMonth($month)
     {
         $month = Carbon::parse($month);
-        $start = $month->copy()->firstOfMonth(Carbon::MONDAY);
-        $end = $month->copy()->addMonth()->firstOfMonth(Carbon::MONDAY);
-
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
         return OrderLine::whereNotNull('payed_with_mollie')
             ->whereBetween('created_at', [$start, $end])
             ->sum('total_price');
