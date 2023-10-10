@@ -302,6 +302,7 @@ class MollieController extends Controller
         $month = Carbon::parse($month);
         $start = $month->copy()->firstOfMonth(Carbon::MONDAY);
         $end = $month->copy()->addMonth()->firstOfMonth(Carbon::MONDAY);
+
         return OrderLine::whereNotNull('payed_with_mollie')
             ->whereBetween('created_at', [$start, $end])
             ->sum('total_price');
