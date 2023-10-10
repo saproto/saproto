@@ -36,7 +36,7 @@ class HomeController extends Controller
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
             ->first();
-        
+
         $newsitems = Newsitem::query()
             ->whereNotNull('published_at')
             ->where('published_at', '<=', Carbon::now())
