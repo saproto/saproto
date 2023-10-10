@@ -4,10 +4,9 @@ namespace App\Console\Commands;
 
 use App\Mail\Newsletter as NewsletterMail;
 use App\Models\EmailList;
-use App\Models\Event;
-use App\Models\Newsletter;
+use App\Models\Newsitem;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class NewsletterCron extends Command
 {
@@ -16,7 +15,7 @@ class NewsletterCron extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:newslettercron';
+    protected $signature = 'proto:newslettercron {id}';
 
     /**
      * The console command description.
@@ -42,14 +41,28 @@ class NewsletterCron extends Command
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 
-        $events = Event::getEventsForNewsletter();
+        $newsitem = Newsitem::findOrFail($this->argument('id'));
 
-        $text = Newsletter::text();
+        if (! $newsitem->is_weekly) {
+            $this->error('This is not a weekly newsletter item!');
+
+            return;
+        }
+
+        if ($newsitem->published_at != null) {
+            $this->error('This newsletter has already been sent!');
+
+            return;
+        }
+
+        $image_url = $newsitem->featuredImage?->generateImagePath(600, 300);
+
+        $events = $newsitem->events;
 
         $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 
         foreach ($newsletterlist->users as $user) {
-            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $text))->onQueue('low'));
+            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $newsitem->content, $events, $image_url))->onQueue('low'));
         }
 
         $this->info('Done!');

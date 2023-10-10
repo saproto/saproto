@@ -59,8 +59,8 @@ use Illuminate\Support\Str;
  */
 class Member extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'members';
 

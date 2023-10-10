@@ -5,13 +5,9 @@
         <i class="{{ $achievement->fa_icon }} fa-fw me-2 text-white"></i>
 
         <strong class="text-white">{{ $achievement->name }}</strong>
-        @if(Auth::check())
-            @foreach(Auth::user()->achieved() as $achievedMent)
-                @if($achievedMent->id==$achievement->id)
+        @if(isset($obtained) && $obtained)
                 <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You have achieved this!"></i>
-                @endif
-            @endforeach
         @endif
         @if(!empty($include_delete_for))
             <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
@@ -21,22 +17,29 @@
         @endif
 
         <span class="float-end">
-                @for($i = 0; $i < 5; $i++)
+            @for($i = 0; $i < 5; $i++)
                 @if ($i >= $achievement->numberOfStars())
                     <i class="far fa-star"></i>
                 @else
                     <i class="fas fa-star"></i>
                 @endif
             @endfor
-            </span>
-
+        </span>
     </div>
 
     <div class="card-body text-dark">
 
         {{ $achievement->desc }}
 
+        @if($obtained?->description)
+            <br>
+            <div class="text-secondary fst-italic">
+                "{{$obtained->description}}"
+            </div>
+        @endif
     </div>
+
+
 
     @if(!empty($footer))
 

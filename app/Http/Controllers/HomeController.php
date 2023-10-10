@@ -11,8 +11,8 @@ use App\Models\Newsitem;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
-use Auth;
-use Carbon;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -24,12 +24,28 @@ class HomeController extends Controller
             ->where('in_logo_bar', true)
             ->inRandomOrder()
             ->get();
+
+        $header = HeaderImage::inRandomOrder()->first();
+
+        if (! Auth::user()?->is_member) {
+            return view('website.home.external', ['companies' => $companies, 'header' => $header]);
+        }
+
         $newsitems = Newsitem::query()
+            ->whereNotNull('published_at')
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(2))
             ->orderBy('published_at', 'desc')
             ->take(3)
             ->get();
+
+        $weekly = Newsitem::query()
+            ->where('published_at', '<=', Carbon::now())
+            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('is_weekly', true)
+            ->orderBy('published_at', 'desc')
+            ->first();
+
         $birthdays = User::query()
             ->whereHas('member', function ($q) {
                 $q->where('is_pending', false);
@@ -37,6 +53,7 @@ class HomeController extends Controller
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
             ->get();
+
         $dinnerforms = Dinnerform::query()
             ->where('closed', false)
             ->where('start', '<=', Carbon::now())
@@ -44,20 +61,14 @@ class HomeController extends Controller
             ->where('visible_home_page', true)
             ->orderBy('end')
             ->get();
-        $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::query()
             ->orderBy('video_date', 'desc')
             ->where('video_date', '>', Carbon::now()->subMonths(3))
             ->limit(3)
             ->get();
+        $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        if (Auth::user()?->is_member) {
-            $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
-
-            return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
-        } else {
-            return view('website.home.external', ['companies' => $companies, 'header' => $header]);
-        }
+        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
     }
 
     /** @return View Display the most important page of the whole site. */

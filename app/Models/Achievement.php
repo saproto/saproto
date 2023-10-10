@@ -56,8 +56,7 @@ class Achievement extends Model
         return $this->belongsToMany('App\Models\User', 'achievements_users');
     }
 
-    /** @return HasMany */
-    public function achievementOwnership()
+    public function achievementOwnership(): HasMany
     {
         return $this->hasMany('App\Models\AchievementOwnership');
     }
@@ -78,17 +77,16 @@ class Achievement extends Model
 
     /**
      * @param  bool  $is_member
-     * @return User[]
+     * @return BelongsToMany|Builder|User[]
      */
     public function currentOwners($is_member = true)
     {
-        $users = [];
-        foreach ($this->users as $user) {
-            if ((! $is_member || $user->is_member)) {
-                $users[] = $user;
-            }
+        if ($is_member) {
+            return $this->users()->whereHas('member', function ($query) {
+                $query->where('is_pending', false);
+            });
         }
 
-        return $users;
+        return $this->users();
     }
 }

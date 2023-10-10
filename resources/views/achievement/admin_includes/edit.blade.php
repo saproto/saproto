@@ -9,7 +9,7 @@
             @yield('page-title')
             @if($achievement)
                 <span class="badge bg-info float-end">
-                    Obtained by {{ count($achievement->currentOwners(true)) }} members
+                    Obtained by {{ $achievement->currentOwners(true)->count() }} members
                 </span>
             @endif
         </div>

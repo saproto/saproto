@@ -12,7 +12,7 @@
 
             @if($achievement)
                 @include('achievement.includes.achievement_include', [
-                    'achievement' => $achievement
+                    'achievement' => $achievement,
                 ])
             @endif
 

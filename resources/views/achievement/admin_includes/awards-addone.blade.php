@@ -17,6 +17,17 @@
                 <label for="user">User(s):</label>
                 <input class="form-control user-search" id="users" name="users[]" data-label="User(s):" multiple required>
             </div>
+            @include('components.forms.datetimepicker', [
+                           'name' => 'achieved_on',
+                           'label' => 'Achieved on',
+                           'placeholder' => Carbon::now()->timestamp,
+                           'format'=>'date',
+                       ])
+            <div class="form-group">
+                <label for="description" class="text-secondary">(optional) description:</label>
+                <input class="form-control" id="description" name="description" data-label="description">
+            </div>
+
         </div>
 
         <div class="card-footer">
