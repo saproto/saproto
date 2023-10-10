@@ -47,13 +47,12 @@ class HomeController extends Controller
             ->first();
 
         $birthdays = User::query()
-            ->has('member')
+            ->whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
-            ->get()
-            ->reject(function (User $user, int $index) {
-                return $user->member->is_pending == true;
-            });
+            ->get();
 
         $dinnerforms = Dinnerform::query()
             ->where('closed', false)

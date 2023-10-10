@@ -41,11 +41,10 @@ class BirthdayCron extends Command
     {
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))
-            ->has('member')
-            ->get()
-            ->reject(function (User $user, int $index) {
-                return $user->member->is_pending == true;
-            });
+            ->whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })
+            ->get();
 
         if ($users->count() > 0) {
             $this->info('Sending birthday notification to '.$users->count().' people.');
