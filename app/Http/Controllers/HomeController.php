@@ -30,24 +30,26 @@ class HomeController extends Controller
         if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
-
-        $newsitems = Newsitem::query()
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', Carbon::now())
-            ->where('published_at', '>', Carbon::now()->subWeeks(2))
-            ->orderBy('published_at', 'desc')
-            ->take(3)
-            ->get();
-
         $weekly = Newsitem::query()
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(1))
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
             ->first();
+        
+        $newsitems = Newsitem::query()
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', Carbon::now())
+            ->where('published_at', '>', Carbon::now()->subWeeks(2))
+            ->where('id', '!=', $weekly?->id)
+            ->orderBy('published_at', 'desc')
+            ->take(3)
+            ->get();
 
         $birthdays = User::query()
-            ->has('member')
+            ->whereHas('member', function($q){
+                $q->where('is_pending', false);
+            })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
             ->get()
