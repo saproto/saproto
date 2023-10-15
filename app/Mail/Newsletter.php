@@ -12,21 +12,13 @@ class Newsletter extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $user;
-
-    public $list;
-
-    public $text;
-
     /**
      * @param  string  $list
      * @param  string  $text
      */
-    public function __construct(User $user, $list, $text)
+    public function __construct(public User $user, public $list, public $text, public $events, public $image_url)
     {
-        $this->user = $user;
-        $this->list = $list;
-        $this->text = $text;
+        //
     }
 
     /** @return Newsletter */

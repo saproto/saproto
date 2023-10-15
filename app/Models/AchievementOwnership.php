@@ -48,14 +48,12 @@ class AchievementOwnership extends Model
         'achievement_id' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }
 
-    /** @return BelongsTo */
-    public function achievement()
+    public function achievement(): BelongsTo
     {
         return $this->belongsTo('App\Models\Achievement');
     }

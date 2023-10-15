@@ -46,7 +46,7 @@
                                 @endif
                             </td>
                             <td>{{ $achievement->name }}</td>
-                            <td>{{ count($achievement->currentOwners(true)) }}</td>
+                            <td>{{ $achievement->currentOwners(true)->count() }}</td>
                             <td>{{ $achievement->desc }}</td>
                             <td>{{ $achievement->tier }}</td>
                             <td class="text-end">

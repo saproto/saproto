@@ -147,7 +147,7 @@
                   if (data.length > 0) {
                       let count = 0
                       data.forEach(timetableItem => {
-                          if (count >= 4) return
+                          if (count >= 3) return
                           if (!timetableItem.over) {
                               let start = moment.unix(timetableItem.start)
                               let end = moment.unix(timetableItem.end)

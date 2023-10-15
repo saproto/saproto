@@ -70,7 +70,7 @@ class WithdrawalController extends Controller
             }
 
             if ($max != null) {
-                if ($totalPerUser[$orderline->user->id] + $orderline->total_price > $max) {
+                if ($max < $totalPerUser[$orderline->user->id] + $orderline->total_price) {
                     continue;
                 }
             }

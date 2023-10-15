@@ -60,12 +60,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
-    /* Routes related to the Quotes API */
-    Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api', 'member']], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'QuoteCornerController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
-    });
-
     /* Routes related to the Committees API */
     Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {

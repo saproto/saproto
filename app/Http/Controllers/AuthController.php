@@ -75,6 +75,7 @@ class AuthController extends Controller
         if ($request->session()->has('2fa_user')) {
             return self::handleTwofactorSubmit($request, $google2fa);
         }
+
         // Otherwise, this is a regular login.
         return self::handleRegularLogin($request);
     }
