@@ -22,7 +22,7 @@ class EmailController extends Controller
     public function index()
     {
         return view('emailadmin.overview', [
-            'lists' => EmailList::all(),
+            'lists' => EmailList::withCount('users')->get(),
             'emails' => Email::orderBy('id', 'desc')->paginate(10),
         ]);
     }
@@ -48,7 +48,7 @@ class EmailController extends Controller
         }
 
         return view('emailadmin.overview', [
-            'lists' => EmailList::all(),
+            'lists' => EmailList::withCount('users')->get(),
             'emails' => $filteredEmails->paginate(10),
             'searchTerm' => $searchTerm,
             'description' => $description,

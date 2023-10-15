@@ -43,6 +43,7 @@ class Kernel extends ConsoleKernel
         Commands\AddSysadmin::class,
         Commands\EndMemberships::class,
         Commands\UpdateWallstreetPrices::class,
+        Commands\CodexMarkdownConverter::class,
     ];
 
     /**
