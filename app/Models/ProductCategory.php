@@ -5,7 +5,6 @@ namespace App\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -47,8 +46,13 @@ class ProductCategory extends Model
         'deleted_at' => 'datetime',
     ];
 
-    /** @return Collection|Product[] */
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsToMany */
     public function products()
+    {
+        return $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id');
+    }
+
+    public function sortedProducts()
     {
         $products = $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
 
