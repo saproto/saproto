@@ -45,11 +45,11 @@
     </div>
 
     <div class="card-body">
-        {!! $feedback->feedback !!}
+        {{ $feedback->feedback }}
 
         @if ($feedback->reply)
             <hr>
-            <i class="me-1 fa {{$feedback->accepted ? "fa-circle-check text-primary":"fa-circle-xmark text-danger"}}"
+            <i class="me-1 fa {{$feedback->accepted ? "fa-circle-check text-primary" : "fa-circle-xmark text-danger"}}"
                aria-hidden="true"></i>
             <b>Board:</b> {!! $feedback->reply !!}
         @endif

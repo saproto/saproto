@@ -32,24 +32,24 @@
                         <div id="reviewer" class="{{$cur_category?->review?"":"d-none"}}">
                             <label for="user_id">Reviewer Name:</label>
                             <div class="form-group autocomplete">
-                                <input class="form-control user-search" value="{{$cur_category->reviewer_id??''}}"
+                                <input class="form-control user-search" value="{{ $cur_category->reviewer_id ?? '' }}"
                                        id="user_id" name="user_id"/>
                             </div>
                         </div>
 
                         @include('components.forms.checkbox', [
                                    'name' => 'can_reply',
-                                   'checked' => $cur_category->can_reply??true,
+                                   'checked' => $cur_category->can_reply ?? true,
                                    'label' => 'Should the board be able to reply to this feedback?'
                                ])
 
                         @include('components.forms.checkbox', [
                                   'name' => 'show_publisher',
-                                  'checked' => $cur_category->show_publisher??false,
+                                  'checked' => $cur_category->show_publisher ?? false,
                                   'label' => 'Show the name of the person who submits the feedback?'
                               ])
 
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end"> Submit</button>
                         @if($cur_category)
                             <a class="btn btn-warning float-end me-1" href="{{ route('feedback::category::admin') }}">Cancel</a>
                         @endif
