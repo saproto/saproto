@@ -183,7 +183,7 @@ class WithdrawalController extends Controller
     /**
      * @param  int[]  $userIds
      */
-    public static function dSeleteFrom(Withdrawal $withdrawal, array $userIds): RedirectResponse
+    public static function deleteFrom(Withdrawal $withdrawal, array $userIds): RedirectResponse
     {
         $names = '';
         foreach ($userIds as $user_id) {
