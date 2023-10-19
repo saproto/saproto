@@ -9,6 +9,7 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
 use Auth;
+use Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -141,18 +142,28 @@ class MollieController extends Controller
             return Redirect::back();
         }
 
+        $month = Carbon::parse($month);
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
+
         // We do one massive query to reduce the number of queries.
         $orderlines = DB::table('orderlines')
             ->join('products', 'orderlines.product_id', '=', 'products.id')
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->whereNotNull('orderlines.payed_with_mollie')
-            ->where('orderlines.created_at', 'like', $month.'-%')
+            ->whereBetween('orderlines.created_at', [$start, $end])
             ->get();
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Account breakdown for Mollie transactions in '.date('F Y', strtotime($month)),
+            'title' => 'Account breakdown for Mollie transactions between '.$start->format('d-m-Y').' and '.$end->format('d-m-Y'),
         ]);
     }
 
@@ -294,8 +305,18 @@ class MollieController extends Controller
      */
     public static function getTotalForMonth($month)
     {
+        $month = Carbon::parse($month);
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
+
         return OrderLine::whereNotNull('payed_with_mollie')
-            ->where('created_at', 'LIKE', sprintf('%s-%%', $month))
+            ->whereBetween('created_at', [$start, $end])
             ->sum('total_price');
     }
 
