@@ -142,20 +142,15 @@
                             </div>
                             <div class="col-md-4">
                                 @include('components.forms.checkbox', [
-                                    'name' => 'who_only_firstyear',
-                                    'checked' => $announcement?->who_only_firstyear,
-                                    'label' => 'Dismissable'
-                                ])
-                                @include('components.forms.checkbox', [
                                     'name' => 'show_only_firstyear',
-                                    'checked' => $announcement->show_only_firstyear,
+                                    'checked' => $announcement?->show_only_firstyear,
                                     'label' => 'First years'
                                 ])
                             </div>
                             <div class="col-md-4">
                                 @include('components.forms.checkbox', [
                                     'name' => 'show_only_active',
-                                    'checked' => $announcement->show_only_active,
+                                    'checked' => $announcement?->show_only_active,
                                     'label' => 'Active members'
                                 ])
                             </div>

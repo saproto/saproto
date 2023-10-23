@@ -52,19 +52,19 @@
 
                         @include('components.forms.checkbox', [
                             'name' => 'on_carreer_page',
-                            'checked' => $announcement?->on_carreer_page,
+                            'checked' => $company?->on_carreer_page,
                             'label' => 'Visible on the career page'
                         ])
 
                         @include('components.forms.checkbox', [
                             'name' => 'in_logo_bar',
-                            'checked' => $announcement?->in_logo_bar,
+                            'checked' => $company?->in_logo_bar,
                             'label' => 'Place logo in the logo bar'
                         ])
 
                         @include('components.forms.checkbox', [
                             'name' => 'on_membercard',
-                            'checked' => $announcement?->on_membercard,
+                            'checked' => $company?->on_membercard,
                             'label' => 'Visible on membercard page'
                         ])
 

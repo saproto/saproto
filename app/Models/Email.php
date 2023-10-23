@@ -118,29 +118,21 @@ class Email extends Model
     public function recipients()
     {
         if ($this->to_user) {
-            return User::orderBy('name', 'asc')->get();
+            return User::orderBy('name')->get();
         } elseif ($this->to_member) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
-                return $user->member->is_pending == true;
-            });
+            return User::whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })->orderBy('name')->get();
         } elseif ($this->to_pending) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
-                return $user->member->is_pending == false;
-            });
+            return User::whereHas('member', function ($q) {
+                $q->where('is_pending', true);
+            })->orderBy('name')->get();
         } elseif ($this->to_active) {
-            $user_ids = [];
-            foreach (Committee::all() as $committee) {
-                $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
-            }
-
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::whereHas('committees')->orderBy('name')->get();
         } elseif ($this->to_list) {
-            $user_ids = [];
-            foreach ($this->lists as $list) {
-                $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
-            }
-
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::whereHas('lists', function ($q) {
+                $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
+            })->orderBy('name')->get();
         } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {

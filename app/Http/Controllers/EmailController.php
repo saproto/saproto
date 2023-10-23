@@ -22,8 +22,38 @@ class EmailController extends Controller
     public function index()
     {
         return view('emailadmin.overview', [
-            'lists' => EmailList::all(),
+            'lists' => EmailList::withCount('users')->get(),
             'emails' => Email::orderBy('id', 'desc')->paginate(10),
+        ]);
+    }
+
+    public function filter(Request $request): View
+    {
+        $filteredEmails = Email::orderBy('id', 'desc');
+        $description = $request->has('search_description');
+        $subject = $request->has('search_subject');
+        $body = $request->has('search_body');
+        $searchTerm = $request->input('searchterm');
+
+        if ($description) {
+            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        if ($subject) {
+            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        if ($body) {
+            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
+        }
+
+        return view('emailadmin.overview', [
+            'lists' => EmailList::withCount('users')->get(),
+            'emails' => $filteredEmails->paginate(10),
+            'searchTerm' => $searchTerm,
+            'description' => $description,
+            'subject' => $subject,
+            'body' => $body,
         ]);
     }
 

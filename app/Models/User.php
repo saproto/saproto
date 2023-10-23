@@ -83,7 +83,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
  * @property-read Collection|PlayedVideo[] $playedVideos
- * @property-read Collection|Quote[] $quotes
+ * @property-read Collection|Feedback[] $feedback
  * @property-read Collection|RfidCard[] $rfid
  * @property-read Collection|Tempadmin[] $tempadmin
  * @property-read Collection|Token[] $tokens
@@ -143,10 +143,10 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
     use CanResetPassword;
-    use SoftDeletes;
     use HasApiTokens;
-    use HasRoles;
     use HasFactory;
+    use HasRoles;
+    use SoftDeletes;
 
     protected $table = 'users';
 
@@ -172,9 +172,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public static function fromPublicId($public_id)
     {
-        $member = Member::where('proto_username', $public_id)->first();
-
-        return $member ? $member->user : null;
+        return User::whereHas('member', function ($query) use ($public_id) {
+            $query->where('proto_username', $public_id);
+        })->first();
     }
 
     /**
@@ -193,7 +193,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             Address::where('user_id', $this->id)->first() ||
             OrderLine::where('user_id', $this->id)->count() > 0 ||
             CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0 ||
-            Quote::where('user_id', $this->id)->count() > 0 ||
+            Feedback::where('user_id', $this->id)->count() > 0 ||
             EmailListSubscription::where('user_id', $this->id)->count() > 0 ||
             RfidCard::where('user_id', $this->id)->count() > 0 ||
             PlayedVideo::where('user_id', $this->id)->count() > 0 ||
@@ -236,7 +236,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsToMany */
     public function achievements()
     {
-        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany */
@@ -282,9 +282,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return HasMany */
-    public function quotes()
+    public function feedback()
     {
-        return $this->hasMany('App\Models\Quote');
+        return $this->hasMany('App\Models\Feedback');
     }
 
     /** @return HasMany */
@@ -472,18 +472,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 ->get()
                 ->where('committee.is_society', false)
         ) > 0;
-    }
-
-    /** @return Achievement[] */
-    public function achieved()
-    {
-        $achievements = $this->achievements;
-        $acquired = [];
-        foreach ($achievements as $achievement) {
-            $acquired[] = $achievement;
-        }
-
-        return $acquired;
     }
 
     /**

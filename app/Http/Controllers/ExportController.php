@@ -9,6 +9,7 @@ use App\Models\Committee;
 use App\Models\Company;
 use App\Models\EmailList;
 use App\Models\Event;
+use App\Models\EventCategory;
 use App\Models\HelpingCommittee;
 use App\Models\MenuItem;
 use App\Models\Page;
@@ -83,6 +84,9 @@ class ExportController extends Controller
                     unset($val->activity);
                 }
 
+                break;
+            case 'event_categories':
+                $data = EventCategory::all();
                 break;
             case 'mailinglists':
                 $data = EmailList::all();

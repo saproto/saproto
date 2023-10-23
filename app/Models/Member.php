@@ -59,8 +59,8 @@ use Illuminate\Support\Str;
  */
 class Member extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'members';
 
@@ -91,12 +91,7 @@ class Member extends Model
     /** @return int */
     public static function countActiveMembers()
     {
-        $user_ids = [];
-        foreach (Committee::all() as $committee) {
-            $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
-        }
-
-        return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->count();
+        return User::whereHas('committees')->count();
     }
 
     public static function countPendingMembers()

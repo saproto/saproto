@@ -55,6 +55,7 @@ class FileController extends Controller
         ];
 
         ini_set('memory_limit', '512M');
+
         /* @phpstan-ignore-next-line */
         return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {

@@ -4,12 +4,12 @@
          data-bs-toggle="collapse" data-bs-target="#committee_collapse_{{ $unique }}">
         {!! $title !!}
 
-        @if(Auth::user()->can('board') && isset($edition) && isset($edit))
+        @if(Auth::user()->can('board') && isset($edition) && isset($edit) && count(array_filter($memberships,  fn($n) => $n->deleted_at == null)) > 0)
             @include('components.modals.confirm-modal', [
                 'action' => route("committee::membership::endedition", ['edition'=>$edition, 'committee'=>$committee->id]),
-                'text' => "Delete <i class='fas fa-trash'></i>",
+                'text' => "End edition <i class='fas fa-ban'></i>",
                 'title' => 'Confirm the ending of this edition',
-                'message' => 'Are you sure you want to end this edition?',
+                'message' => 'Are you sure you want to end all memberships in this edition?',
                 'confirm' => 'End',
                 'classes' => 'badge bg-danger float-end mt-1',
             ])

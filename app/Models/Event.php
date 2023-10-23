@@ -36,7 +36,6 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property bool $involves_food
  * @property bool $secret
  * @property bool $force_calendar_sync
- * @property bool $include_in_newsletter
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -64,7 +63,6 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Event whereForceCalendarSync($value)
  * @method static Builder|Event whereId($value)
  * @method static Builder|Event whereImageId($value)
- * @method static Builder|Event whereIncludeInNewsletter($value)
  * @method static Builder|Event whereInvolvesFood($value)
  * @method static Builder|Event whereIsEducational($value)
  * @method static Builder|Event whereIsExternal($value)
@@ -208,17 +206,6 @@ class Event extends Model
         return TicketPurchase::query()
             ->where('user_id', $user->id)
             ->whereIn('ticket_id', $this->tickets->pluck('id'))
-            ->get();
-    }
-
-    /** @return Collection|Event[] */
-    public static function getEventsForNewsletter()
-    {
-        return self::query()
-            ->where('include_in_newsletter', true)
-            ->where('secret', false)
-            ->where('start', '>', date('U'))
-            ->orderBy('start')
             ->get();
     }
 

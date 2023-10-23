@@ -32,9 +32,14 @@ composer.phar
 /public/build
 /public/hot
 
+# Font metadata files
+/resources/fonts/unifont/*.cw*
+/resources/fonts/unifont/*.mtx*
+
 # Dammit, Mac users
 .DS_Store
 
+# Private stuff
 storage/oauth-private.key
 storage/oauth-public.key
 

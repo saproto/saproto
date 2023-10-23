@@ -9,11 +9,11 @@ use App\Models\Address;
 use App\Models\Bank;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
-use App\Models\HashMapItem;
+use App\Models\Feedback;
 use App\Models\Member;
+use App\Models\Newsitem;
 use App\Models\OrderLine;
 use App\Models\Page;
-use App\Models\Quote;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
@@ -120,15 +120,13 @@ class OtherDataSeeder extends Seeder
         $n = 10;
         $output->task("creating $n pages", fn () => Page::factory()->count($n)->create());
 
-        // Create quotes
+        //create quotes and good ideas
         $n = 100;
-        $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
+        $output->task("creating $n Good Ideas", fn () => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
+        $output->task("creating $n quotes", fn () => Feedback::factory()->state(['feedback_category_id' => 2])->count($n)->create());
 
-        // Create newsletter text
-        $output->task('creating newsletter', function () {
-            HashMapItem::factory()->text()->create(['key' => 'newsletter_text']);
-            HashMapItem::factory()->date()->create(['key' => 'newsletter_text_updated']);
-            HashMapItem::factory()->date()->create(['key' => 'newsletter_last_sent']);
-        });
+        // Create newsitems and weekly newsitems
+        $n = 40;
+        $output->task("creating $n newsitems", fn () => Newsitem::factory()->count($n)->create());
     }
 }

@@ -20,11 +20,7 @@ class PhotoController extends Controller
         return view('photos.list', ['albums' => $albums]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function show($id)
+    public function show(int $id): View|RedirectResponse
     {
         $album = PhotoAlbum::findOrFail($id);
         $photos = $album->items()->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->paginate(24);
@@ -33,7 +29,9 @@ class PhotoController extends Controller
             return view('photos.album', ['album' => $album, 'photos' => $photos]);
         }
 
-        abort(404, 'Album not found.');
+        Session::flash('flash_message', 'Album not found.');
+
+        return Redirect::back();
     }
 
     /**

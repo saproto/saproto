@@ -100,7 +100,7 @@
 
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        Upcoming events
+                        Events
                     </div>
                     <div class="card-body">
 

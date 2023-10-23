@@ -6,6 +6,7 @@ use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\User;
 use Auth;
+use Carbon\Carbon;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\RedirectResponse;
@@ -30,13 +31,7 @@ class AchievementController extends Controller
         $rare = Achievement::where('tier', 'RARE')->where('is_archived', false)->get();
         $epic = Achievement::where('tier', 'EPIC')->where('is_archived', false)->get();
         $legendary = Achievement::where('tier', 'LEGENDARY')->where('is_archived', false)->get();
-        $obtained = [];
-        if (Auth::check()) {
-            $achievements = Auth::user()->achieved();
-            foreach ($achievements as $achievement) {
-                $obtained[] = $achievement->id;
-            }
-        }
+        $obtained = Auth::user()?->achievements->where('is_archived', false);
 
         return view('achievement.gallery', ['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary, 'obtained' => $obtained]);
     }
@@ -154,7 +149,7 @@ class AchievementController extends Controller
             return Redirect::back();
         }
 
-        if ($this->giveAchievement($achievement, $user)) {
+        if ($this->giveAchievement($achievement, $user, null, null)) {
             Session::flash('flash_message', "You have earned the achievement: '$achievement->name'");
         } else {
             Session::flash('flash_message', 'You have already earned this achievement');
@@ -172,7 +167,7 @@ class AchievementController extends Controller
         $achievement = Achievement::findOrFail($achievement_id);
         $user = User::findOrFail($request->get('user-id'));
 
-        if ($this->giveAchievement($achievement, $user)) {
+        if ($this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
             Session::flash('flash_message', "Achievement $achievement->name has been given to $user->name.");
         } else {
             Session::flash('flash_message', "$user->name already has this achievement");
@@ -183,13 +178,13 @@ class AchievementController extends Controller
 
     public function give(Request $request)
     {
-        $achievement = Achievement::find($request->get('achievement-id'));
+        $achievement = Achievement::findOrFail($request->input('achievement-id'));
         $userIds = $request->input('users');
         $awarded = '';
         foreach ($userIds as $userId) {
             $user = User::find($userId);
             if ($user) {
-                if ($this->giveAchievement($achievement, $user)) {
+                if ($this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
                     $awarded = $awarded.' '.$user->name.',';
                 }
             }
@@ -264,31 +259,35 @@ class AchievementController extends Controller
      */
     public static function staticTakeAll($id)
     {
-        $achieved = AchievementOwnership::all();
+        $achieved = AchievementOwnership::where('achievement_id', $id)->get();
         foreach ($achieved as $entry) {
-            if ($entry->achievement_id == $id) {
-                $entry->delete();
-            }
+            $entry->delete();
         }
     }
 
-    private function giveAchievement($achievement, $user)
+    private function giveAchievement($achievement, $user, $description, $achievedOn)
     {
-        $achieved = $user->achieved();
-        $hasAchievement = false;
-        foreach ($achieved as $entry) {
-            if ($entry->id == $achievement->id) {
-                $hasAchievement = true;
-            }
-        }
-        if (! $hasAchievement) {
+        $achieved = $user->achievements()->where('achievement_id', $achievement->id)->first();
+        if (! $achieved) {
             $relation = new AchievementOwnership([
                 'user_id' => $user->id,
                 'achievement_id' => $achievement->id,
+                'description' => $description,
             ]);
+
+            if ($achievedOn) {
+                $relation->created_at = Carbon::parse($achievedOn);
+            }
+
             $relation->save();
 
             return true;
+        } elseif ($description) {
+
+            $achieved->pivot->description = $description;
+            $achievement->save();
+
+            return false;
         }
 
         return false;

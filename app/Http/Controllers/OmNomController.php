@@ -44,11 +44,10 @@ class OmNomController extends Controller
         if ($store_slug == 'tipcie') {
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
-                ->has('member')
-                ->get()
-                ->reject(function (User $user, int $index) {
-                    return $user->member->is_pending || $user->member->is_pet;
-                });
+                ->whereHas('member', function ($q) {
+                    $q->where('is_pending', false);
+                })
+                ->get();
         } else {
             $minors = collect([]);
         }
@@ -312,7 +311,7 @@ class OmNomController extends Controller
         foreach ($store->categories as $category) {
             $cat = ProductCategory::find($category);
             if ($cat) {
-                $prods = $cat->products();
+                $prods = $cat->sortedProducts();
                 $categories[] = (object) [
                     'category' => $cat,
                     'products' => $prods,

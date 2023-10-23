@@ -1,69 +1,70 @@
 @extends('website.layouts.redesign.dashboard')
-
+@php($newsName=$is_weekly ? 'weekly' : 'news')
 @section('page-title')
     @if($new)
-        Create new news article
+       Create a new {{ $newsName }}
     @else
-        Edit news article {{ $item->title }}
+        Edit {{ $item->title }}
+    @endif
+
+    @if($is_weekly && $lastWeekly)
+        <a class="badge bg-danger disabled float-end">
+            Last sent: {{ Carbon::parse($lastWeekly->published_at)->diffForHumans() }}
+        </a>
     @endif
 @endsection
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <form method="post"
+          action="@if($new) {{ route("news::add") }} @else {{ route("news::edit", ['id' => $item->id]) }} @endif"
+          enctype="multipart/form-data">
 
-        <div class="col-md-4">
+        {!! csrf_field() !!}
 
-            <form method="post"
-                  action="@if($new) {{ route("news::add") }} @else {{ route("news::edit", ['id' => $item->id]) }} @endif"
-                  enctype="multipart/form-data">
+            <div class="row justify-content-center">
 
-                {!! csrf_field() !!}
+                <div class="col-md-4">
 
-                <div class="card mb-3">
+                        <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white">
-                        @yield('page-title')
-                    </div>
+                            <div class="card-header bg-dark text-white">
+                                @yield('page-title')
+                            </div>
 
-                    <div class="card-body">
+                            <div class="card-body">
+                                @if(!$is_weekly)
+                                    <div class="form-group">
+                                        <label for="title">Title:</label>
+                                        <input type="text" class="form-control" id="title" name="title"
+                                               placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
+                                    </div>
 
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
+                                    @include('components.forms.datetimepicker', [
+                                        'name' => 'published_at',
+                                        'label' => 'Publish at:',
+                                        'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
+                                    ])
+                                @endif
+
+                                <div class="form-group">
+                                    <label for="editor">Content</label>
+                                    @include('components.forms.markdownfield', [
+                                        'name' => 'content',
+                                        'placeholder' => 'Text goes here.',
+                                        'value' => $item ? $item->content : null
+                                    ])
+                                </div>
+
+                            </div>
+
+
+
                         </div>
-
-                        @include('components.forms.datetimepicker', [
-                            'name' => 'published_at',
-                            'label' => 'Publish at:',
-                            'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
-                        ])
-
-                        <div class="form-group">
-                            <label for="editor">Content</label>
-                            @include('components.forms.markdownfield', [
-                                'name' => 'content',
-                                'placeholder' => 'Text goes here.',
-                                'value' => $item ? $item->content : null
-                            ])
-                        </div>
-
-                    </div>
-
-                    <div class="card-footer">
-
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
-
-                        <a href="{{ route("news::list") }}" class="btn btn-default">Cancel</a>
-
-                    </div>
 
                 </div>
 
-            </form>
+            <div class="col-md-5">
 
         </div>
 
@@ -90,23 +91,42 @@
                                 <label for="featured-image" class="form-label">Upload featured image</label>
                             </div>
 
+                            <div class="card-footer">
+                                @if(!$item->published_at)
+                                    @include('components.modals.confirm-modal', [
+                                               'action' => route('news::sendWeekly', ['id' => $item->id]),
+                                               'text' => 'Send weekly!',
+                                               'title' => 'Confirm Sending Weekly',
+                                               'classes' => 'btn ms-2 '.(Carbon::parse($lastWeekly->published_at)->diffInDays(Carbon::now()) < 7 ? 'btn-danger' : 'btn-success'),
+                                               'message' => 'Are you sure you want to send this weekly? <br> It was last sent: <b>'.Carbon::parse($lastWeekly->published_at)->diffForHumans()."</b> and should only be sent once per week.<br> This will send an email to everyone on the list.",
+                                               'confirm' => 'Send',
+                                           ])
+                                @else
+                                    This weekly has already been sent!
+                                @endif
+                            </div>
                         </div>
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-success btn-block">
-                                Replace featured image
-                            </button>
                         </div>
-
-                    </div>
-
-                </form>
-
-
-            </div>
-
-        @endif
-
-    </div>
+                    @else
+                        <div class="row">
+                            <div class="card mb-3 p-0">
+                                <div class="card-header">
+                                    Featured image
+                                </div>
+                                @if($item?->featuredImage)
+                                    <img src="{!! $item->featuredImage->generateImagePath(700,null) !!}" width="100%;"
+                                         class="card-img-top">
+                                @endif
+                                <div class="card-body">
+                                    <div class="custom-file">
+                                        <input id="featured-image" type="file" class="form-control" name="image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+        </div>
+    </form>
 
 @endsection
