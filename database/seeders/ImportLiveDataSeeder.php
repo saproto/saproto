@@ -23,7 +23,7 @@ class ImportLiveDataSeeder extends Seeder
     public function run($password, $output)
     {
         // First let's create our admin user.
-        $output->task('creating admin user.', fn () => self::createAdminUser($password));
+        $output->task('creating admin user.', fn() => self::createAdminUser($password));
 
         $output->info('Importing live data');
 
@@ -34,7 +34,7 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'activities'],
             ['name' => 'committees'],
             ['name' => 'committees_activities'],
-            ['name' => 'companies'],
+            ['name' => 'companies', 'excluded_columns' => ['image_id']],
             ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
             ['name' => 'event_categories'],
             ['name' => 'mailinglists'],
@@ -46,11 +46,11 @@ class ImportLiveDataSeeder extends Seeder
         ];
 
         foreach ($tables as $table) {
-            $output->task('importing '.$table['name'], fn () => self::createEntries(self::getDataFromExportApi($table['name']), $table));
+            $output->task('importing ' . $table['name'], fn() => self::createEntries(self::getDataFromExportApi($table['name']), $table));
         }
 
         // Now let's add our admin user to the committee and give them the sysadmin role.
-        $output->task('assigning admin roles.', fn () => self::assignAdminRole());
+        $output->task('assigning admin roles.', fn() => self::assignAdminRole());
 
     }
 
@@ -80,7 +80,7 @@ class ImportLiveDataSeeder extends Seeder
     public static function createEntries($entries, $table)
     {
         foreach ($entries as $entry) {
-            $entry = (array) $entry;
+            $entry = (array)$entry;
 
             if (array_key_exists('excluded_columns', $table)) {
                 foreach ($table['excluded_columns'] as $column) {
@@ -93,14 +93,14 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param  string  $password
+     * @param string $password
      * @return void
      *
      * @throws Exception
      */
     public static function createAdminUser($password)
     {
-        $userData = (array) self::getDataFromExportApi('user');
+        $userData = (array)self::getDataFromExportApi('user');
         if ($userData == null) {
             /** @var User $adminUser */
             $adminUser = User::factory()->member()->create(['id' => 1]);
@@ -108,12 +108,12 @@ class ImportLiveDataSeeder extends Seeder
 
             // Stop the import dataseeder from here as the user does not have enough rights.
             throw new Exception(
-                'You are not allowed to import data from the live website.'.PHP_EOL.
-                'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.'.PHP_EOL.
+                'You are not allowed to import data from the live website.' . PHP_EOL .
+                'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.' . PHP_EOL .
                 'Otherwise you can continue without seeding the database.'
             );
         } else {
-            $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
+            $memberData = (array)(array_key_exists('member', $userData) ? $userData['member'] : null);
             unset($userData['member']);
             unset($userData['photo']);
             unset($userData['roles']);

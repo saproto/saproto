@@ -6,9 +6,9 @@ use Carbon;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Intervention\Image\Facades\Image;
-use Proto\Models\Photo;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoLikes;
+use App\Models\Photo;
+use App\Models\PhotoAlbum;
+use App\Models\PhotoLikes;
 
 class PhotoSeeder extends Seeder
 {
@@ -25,7 +25,6 @@ class PhotoSeeder extends Seeder
         $faker = Factory::create();
 
         $n = 12 / 2;
-        $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
             $album = PhotoAlbum::create([
@@ -38,7 +37,7 @@ class PhotoSeeder extends Seeder
                 'private' => mt_rand(1, 4) <= 1,
                 'published' => mt_rand(1, 2) > 1,
             ]);
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." albums\r";
+            echo "\e[33mCreating:\e[0m  " . $index . '/' . $n . " albums\r";
 
             $addWatermark = mt_rand(1, 2) > 1;
             foreach (range(1, $n) as $henk) {
@@ -60,7 +59,7 @@ class PhotoSeeder extends Seeder
                 } catch (\Exception $e) {
                 }
 
-                echo "\e[33mCreating:\e[0m  ".$henk.'/'.$n." Photos\r";
+                echo "\e[33mCreating:\e[0m  " . $henk . '/' . $n . " Photos\r";
             }
         }
     }

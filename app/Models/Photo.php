@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Intervention\Image\Facades\Image;
 
 /**
@@ -56,11 +57,11 @@ class Photo extends Model
 
     public function makePhoto($photo, $original_name, $date_taken, $private = false, $pathInPhotos = null, $albumId = null, $addWatermark = false, $watermarkUserName = null)
     {
-        $original_photo_storage = 'photos/original_photos/'.($albumId ?? $pathInPhotos).'/';
-        $large_photos_storage = 'photos/large_photos/'.($albumId ?? $pathInPhotos).'/';
-        $medium_photos_storage = 'photos/medium_photos/'.($albumId ?? $pathInPhotos).'/';
-        $small_photos_storage = 'photos/small_photos/'.($albumId ?? $pathInPhotos).'/';
-        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId ?? $pathInPhotos).'/';
+        $original_photo_storage = 'photos/original_photos/' . ($albumId ?? $pathInPhotos) . '/';
+        $large_photos_storage = 'photos/large_photos/' . ($albumId ?? $pathInPhotos) . '/';
+        $medium_photos_storage = 'photos/medium_photos/' . ($albumId ?? $pathInPhotos) . '/';
+        $small_photos_storage = 'photos/small_photos/' . ($albumId ?? $pathInPhotos) . '/';
+        $tiny_photos_storage = 'photos/tiny_photos/' . ($albumId ?? $pathInPhotos) . '/';
 
         $watermark = null;
         if ($addWatermark) {
@@ -103,54 +104,54 @@ class Photo extends Model
         $this->album_id = $albumId;
     }
 
-    /** @return BelongsTo|PhotoAlbum[] */
-    public function album()
+    /** @return BelongsTo */
+    public function album(): BelongsTo
     {
         return $this->belongsTo('App\Models\PhotoAlbum', 'album_id');
     }
 
     /** @return HasMany */
-    public function likes()
+    public function likes(): HasMany
     {
         return $this->hasMany('App\Models\PhotoLikes');
     }
 
-    /** @return hasOne */
-    public function file()
+    /** @return HasOne */
+    public function file(): HasOne
     {
         return $this->hasOne('App\Models\StorageEntry', 'id', 'file_id');
     }
 
-    /** @return HasOne|StorageEntry */
+    /** @return HasOne */
     public function large_file()
     {
         return $this->hasOne('App\Models\StorageEntry', 'id', 'large_file_id');
     }
 
-    /** @return HasOne|StorageEntry */
+    /** @return HasOne */
     public function medium_file()
     {
         return $this->hasOne('App\Models\StorageEntry', 'id', 'medium_file_id');
     }
 
-    /** @return HasOne|StorageEntry */
+    /** @return HasOne */
     public function small_file()
     {
         return $this->hasOne('App\Models\StorageEntry', 'id', 'small_file_id');
     }
 
-    /** @return HasOne|StorageEntry */
-    public function tiny_file()
+    /** @return HasOne */
+    public function tiny_file(): HasOne
     {
         return $this->hasOne('App\Models\StorageEntry', 'id', 'tiny_file_id');
     }
 
     /**
-     * @param  bool  $next
-     * @param  User  $user
+     * @param bool $next
+     * @param User $user
      * @return Photo|null
      */
-    public function getAdjacentPhoto($next = true, $user = null)
+    public function getAdjacentPhoto($next = true, $user = null): ?Photo
     {
         if ($next) {
             $ord = 'ASC';
@@ -159,7 +160,7 @@ class Photo extends Model
             $ord = 'DESC';
             $comp = '<';
         }
-        $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken);
+        $result = self::where('album_id', $this->album_id)->where('date_taken', $comp . '=', $this->date_taken);
 
         if ($user == null || $user->member() == null) {
             $result = $result->where('private', false);
@@ -173,21 +174,27 @@ class Photo extends Model
         return null;
     }
 
-    /** @return Photo */
-    public function getNextPhoto($user)
+    /**
+     * @param $user
+     * @return Photo|null
+     */
+    public function getNextPhoto($user): ?Photo
     {
         return $this->getAdjacentPhoto(true, $user);
     }
 
-    /** @return Photo */
-    public function getPreviousPhoto($user)
+    /**
+     * @param $user
+     * @return Photo|null
+     */
+    public function getPreviousPhoto($user): ?Photo
     {
         return $this->getAdjacentPhoto(false, $user);
     }
 
     /**
-     * @param  int  $paginateLimit
-     * @return false|float|int
+     * @param int $paginateLimit
+     * @return float|int
      */
     public function getAlbumPageNumber($paginateLimit)
     {
@@ -204,12 +211,12 @@ class Photo extends Model
     }
 
     /** @return int */
-    public function getLikes()
+    public function getLikes(): int
     {
         return $this->likes()->count();
     }
 
-    public function likedByUser($user)
+    public function likedByUser($user): bool
     {
         if ($user) {
             return $this->likes()->where('user_id', $user->id)->count() > 0;
@@ -219,38 +226,38 @@ class Photo extends Model
     }
 
     /** @return string */
-    public function getOriginalUrl()
+    public function getOriginalUrl(): string
     {
         return $this->file->generateUrl();
     }
 
     /** @return string */
-    public function getLargeUrl()
+    public function getLargeUrl(): string
     {
         return $this->large_file->generateUrl();
     }
 
     /** @return string */
-    public function getMediumUrl()
+    public function getMediumUrl(): string
     {
         return $this->medium_file->generateUrl();
     }
 
     /** @return string */
-    public function getSmallUrl()
+    public function getSmallUrl(): string
     {
         return $this->small_file->generateUrl();
     }
 
     /** @return string */
-    public function getTinyUrl()
+    public function getTinyUrl(): string
     {
         return $this->tiny_file->generateUrl();
     }
 
-    public function mayViewPhoto($user)
+    public function mayViewPhoto($user): bool
     {
-        if (! $this->private) {
+        if (!$this->private) {
             return true;
         }
         if ($user) {
@@ -260,37 +267,37 @@ class Photo extends Model
         return false;
     }
 
-    public function makePublic()
+    public function makePublic(): bool
     {
         return
-        $this->file->makePublic() &&
-        $this->large_file->makePublic() &&
-        $this->medium_file->makePublic() &&
-        $this->small_file->makePublic() &&
-        $this->tiny_file->makePublic();
+            $this->file->makePublic() &&
+            $this->large_file->makePublic() &&
+            $this->medium_file->makePublic() &&
+            $this->small_file->makePublic() &&
+            $this->tiny_file->makePublic();
     }
 
-    public function makePrivate()
+    public function makePrivate(): bool
     {
         return
-        $this->file->makePrivate() &&
-        $this->large_file->makePrivate() &&
-        $this->medium_file->makePrivate() &&
-        $this->small_file->makePrivate() &&
-        $this->tiny_file->makePrivate();
+            $this->file->makePrivate() &&
+            $this->large_file->makePrivate() &&
+            $this->medium_file->makePrivate() &&
+            $this->small_file->makePrivate() &&
+            $this->tiny_file->makePrivate();
     }
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
         static::updated(function ($photo) {
             if ($photo->private) {
-                if (! $photo->makePrivate()) {
+                if (!$photo->makePrivate()) {
                     $photo->private = false;
                 }
             } else {
-                if (! $photo->makePublic()) {
+                if (!$photo->makePublic()) {
                     $photo->private = true;
                 }
             }
