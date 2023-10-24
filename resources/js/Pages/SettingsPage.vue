@@ -9,10 +9,10 @@ import Membership from '@/Pages/Settings/MembershipSettings.vue';
 import Card from '@/Components/CardComponent.vue';
 
 const props = defineProps<{
-  user: User;
+  user: App.Models.Member;
   memberships: {
-    previous: Array<Member>;
-    pending: Array<Member>;
+    previous: Array<App.Models.Member>;
+    pending: Array<App.Models.Member>;
   };
   settingsPage: string | null;
 }>();

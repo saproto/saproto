@@ -1,4 +1,5 @@
-import { createApp, DefineComponent, h } from 'vue';
+import { createApp, h } from 'vue';
+import type { DefineComponent } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';

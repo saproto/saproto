@@ -1,7 +1,9 @@
-type WelcomeMessage = {
-    id: number;
-    user_id: number;
-    message: string;
-    created_at: string /* Date */ | null;
-    updated_at: string /* Date */ | null;
+declare namespace App.Models {
+    type WelcomeMessage = {
+        id: number;
+        user_id: number;
+        message: string;
+        created_at: string /* Date */ | null;
+        updated_at: string /* Date */ | null;
+    }
 }

@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Inertia\Inertia;
 use Response;
 use Session;
 
@@ -92,10 +93,12 @@ class EventController extends Controller
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    /** @return View */
+    /** @return \Inertia\Response */
     public function create()
     {
-        return view('event.edit', ['event' => null]);
+        return Inertia::render('Event/EditEvent', [
+            'event' => null,
+        ]);
     }
 
     /**
@@ -139,13 +142,15 @@ class EventController extends Controller
 
     /**
      * @param  int  $id
-     * @return View
+     * @return \Inertia\Response
      */
     public function edit($id)
     {
         $event = Event::findOrFail($id);
 
-        return view('event.edit', ['event' => $event]);
+        return Inertia::render('Event/EditEvent', [
+            'event' => $event,
+        ]);
     }
 
     /**

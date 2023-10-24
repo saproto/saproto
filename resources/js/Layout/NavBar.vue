@@ -23,7 +23,7 @@ const mobileOpen: Ref<boolean> = ref(false);
 </script>
 
 <template>
-  <nav class="bg-primary text-white fixed w-full">
+  <nav class="bg-primary text-white fixed w-full z-50">
     <div class="mx-auto px-2 sm:px-4 lg:px-4">
       <div class="relative flex h-14 items-center justify-between">
         <div class="flex items-center flex-none justify-center lg:justify-start">

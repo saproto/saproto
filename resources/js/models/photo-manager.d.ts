@@ -1,2 +1,4 @@
-type PhotoManager = {
+declare namespace App.Models {
+    type PhotoManager = {
+    }
 }

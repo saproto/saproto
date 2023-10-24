@@ -39,69 +39,22 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<{
-    name?: string;
-    id?: string;
-    type?: 'text' | 'number' | 'datetime-local' | 'select' | 'checkbox' | 'file';
-    disabled?: boolean;
-    required?: boolean;
-    value?: string | number | boolean | Array<boolean>;
-    modelValue?: string | number | boolean | Array<boolean>;
-    placeHolder?: string;
     afterVariant?: string;
     beforeVariant?: string;
     beforeHover?: boolean;
     afterHover?: boolean;
   }>(),
   {
-    name: null,
-    id: null,
-    type: 'text',
-    value: null,
-    modelValue: null,
-    placeHolder: null,
     afterVariant: 'info',
     beforeVariant: 'info',
   }
 );
-
-const emit = defineEmits(['update:modelValue']);
-
-const model = computed({
-  get() {
-    return props.modelValue ?? props.value;
-  },
-  set(val) {
-    emit('update:modelValue', val);
-  },
-});
 </script>
 
 <template>
   <div class="shadow rounded flex items-center m-0 p-0 ring-blue-600 focus-within:ring-1">
     <div class="order-2 flex-grow peer">
-      <select
-        v-if="type === 'select'"
-        :id="id ?? name"
-        v-model="model"
-        :name="name"
-        :value="value"
-        :disabled="disabled"
-        :required="required"
-        :class="inputStyles()"
-      >
-        <slot />
-      </select>
-      <input
-        v-else
-        :id="id ?? name"
-        v-model="model"
-        :name="name"
-        :type="type ?? 'text'"
-        :placeholder="placeHolder"
-        :disabled="disabled"
-        :required="required"
-        :class="inputStyles()"
-      />
+      <slot />
     </div>
     <div
       v-if="slots.before"

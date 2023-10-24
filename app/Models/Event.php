@@ -90,9 +90,12 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
-    protected $appends = ['is_future', 'formatted_date'];
+    protected $appends = ['committee', 'is_future', 'formatted_date'];
 
     protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+        'publication' => 'datetime',
         'deleted_at' => 'datetime',
     ];
 
@@ -117,6 +120,10 @@ class Event extends Model
     public function committee()
     {
         return $this->belongsTo('App\Models\Committee');
+    }
+
+    public function getCommitteeAttribute(): Committee {
+        return $this->committee()->first();
     }
 
     /** @return bool */
@@ -352,10 +359,10 @@ class Event extends Model
     public function getFormattedDateAttribute()
     {
         return (object) [
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => $this->start->format('M d, Y'),
+            'year' => $this->start->format('Y'),
+            'month' => $this->start->format('M Y'),
+            'time' => $this->start->format('H:i'),
         ];
     }
 

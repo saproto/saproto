@@ -171,7 +171,7 @@ import GenericLayout from "@/Layout/GenericLayout.vue";
 ```
 
 ### Model types
-The Vue app in this project uses TypeScript. To make life easier, TypeScript types for Laravel models can be automatically generated using the `artisan types:generate` command.
+The Vue app in this project uses TypeScript. To make life easier, TypeScript types for Laravel models can be automatically generated using the `artisan types:generate --namepsace=Models` command.
 
 ### Linting
 EsLint is configured for TypeScript, Vue and Prettier. Using `npm run lint` most things will be automatically fixed, what couldn't be fixed will be displayed in a nice list.

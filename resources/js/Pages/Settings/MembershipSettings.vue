@@ -5,10 +5,10 @@ import InputField from '@/Components/Input/InputField.vue';
 import MembershipCard from '@/Components/MembershipCard.vue';
 
 defineProps<{
-  user: User;
+  user: App.Models.User;
   memberships: {
-    previous: Array<Member>;
-    pending: Array<Member>;
+    previous: Array<App.Models.Member>;
+    pending: Array<App.Models.Member>;
   };
 }>();
 </script>

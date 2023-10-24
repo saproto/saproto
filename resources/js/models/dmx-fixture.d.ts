@@ -1,7 +1,9 @@
-type DmxFixture = {
-    id: number;
-    name: string;
-    channel_start: number;
-    channel_end: number;
-    follow_timetable: boolean;
+declare namespace App.Models {
+    type DmxFixture = {
+        id: number;
+        name: string;
+        channel_start: number;
+        channel_end: number;
+        follow_timetable: boolean;
+    }
 }

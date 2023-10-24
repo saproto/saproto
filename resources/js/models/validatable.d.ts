@@ -1,2 +1,4 @@
-type Validatable = {
+declare namespace App.Models {
+    type Validatable = {
+    }
 }

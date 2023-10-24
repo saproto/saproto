@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\MenuItem;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
