@@ -153,17 +153,17 @@ class MollieController extends Controller
         }
 
         // We do one massive query to reduce the number of queries.
-        $orderlines = DB::table('orderlines')
+        $orderlines = OrderLine::query()
             ->join('products', 'orderlines.product_id', '=', 'products.id')
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
-            ->whereIn('orderlines.payed_with_mollie', MollieTransaction::query()
-                ->where(function ($query) {
+            ->select(['orderlines.*', 'accounts.account_number', 'accounts.name'])
+            ->whereHas('molliePayment', function ($query) use ($start, $end) {
+                $query->where(function ($query) {
                     $query->where('status', 'paid')
                         ->orWhere('status', 'paidout');
                 })
-                ->whereBetween('created_at', [$start, $end])
-                ->pluck('id'))
+                    ->whereBetween('created_at', [$start, $end]);
+            })
             ->get();
 
         return view('omnomcom.accounts.orderlines-breakdown', [
@@ -320,13 +320,13 @@ class MollieController extends Controller
             $end->nextWeekday();
         }
 
-        return OrderLine::whereIn('payed_with_mollie', MollieTransaction::query()
-            ->where(function ($query) {
+        return OrderLine::whereHas('molliePayment', function ($query) use ($start, $end) {
+            $query->where(function ($query) {
                 $query->where('status', 'paid')
                     ->orWhere('status', 'paidout');
             })
-            ->whereBetween('created_at', [$start, $end])
-            ->pluck('id'))
+                ->whereBetween('created_at', [$start, $end]);
+        })
             ->sum('total_price');
     }
 
