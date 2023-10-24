@@ -156,12 +156,12 @@ class MollieController extends Controller
         $orderlines = DB::table('orderlines')
             ->join('products', 'orderlines.product_id', '=', 'products.id')
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->join('mollie_transactions', 'orderlines.payed_with_mollie', "=", "mollie_transactions.id")
+            ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->whereBetween('mollie_transactions.created_at', [$start, $end])
             ->where(function ($q) {
-               $q->where('mollie_transactions.status', 'paid')
-                 ->orWhere('mollie_transactions.status', 'paidout');
+                $q->where('mollie_transactions.status', 'paid')
+                    ->orWhere('mollie_transactions.status', 'paidout');
             })
             ->get();
 
