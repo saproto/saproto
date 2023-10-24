@@ -10,7 +10,6 @@ use App\Models\Product;
 use App\Models\User;
 use Auth;
 use Carbon;
-use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
