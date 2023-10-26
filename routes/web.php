@@ -927,6 +927,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*Route related to the december theme*/
     Route::get('/december/toggle', function () {
         Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
+
         return Redirect::back();
     })->name('december::toggle');
 });
