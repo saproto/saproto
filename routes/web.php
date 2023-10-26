@@ -301,7 +301,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::',  'middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::', 'middleware' => ['auth']], function () {
         Route::group(['middleware' => ['permission:tipcie']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'DinnerformController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'DinnerformController@store']);
@@ -923,4 +923,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('export/{id}', ['as' => 'export', 'uses' => 'CodexController@exportCodex']);
     });
+
+    /*Route related to the december theme*/
+    Route::get('/december/toggle', function () {
+        Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
+        return Redirect::back();
+    })->name('december::toggle');
 });
