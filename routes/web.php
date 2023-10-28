@@ -426,7 +426,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to news. */
-    Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
+    Route::group(['prefix' => 'news', 'as' => 'news::', 'middleware' => ['member']], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
             Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
