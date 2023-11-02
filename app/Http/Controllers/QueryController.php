@@ -85,7 +85,7 @@ class QueryController extends Controller
             if ($member->is_pending) {
                 $count_pending++;
             } else {
-                if (!$member->is_pet) {
+                if (! $member->is_pet) {
                     $count_total++;
                 }
 
@@ -93,7 +93,7 @@ class QueryController extends Controller
                     $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object)[
+                        $export_active[] = (object) [
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -121,7 +121,7 @@ class QueryController extends Controller
 
                 if ($request->has('export_subsidies')) {
                     if ($is_ut) {
-                        $export_subsidies[] = (object)[
+                        $export_subsidies[] = (object) [
                             'primary' => $is_primary_student ? 'true' : 'false',
                             'name' => $member->user->name,
                             'email' => $has_ut_mail ? $member->user->email : null,
@@ -199,7 +199,7 @@ class QueryController extends Controller
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
         }
-        
+
         $events = Event::selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
