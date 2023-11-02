@@ -44,7 +44,7 @@
                                      Remaining outstanding
                                     <i class="fas fa-info-circle" data-bs-toggle="tooltip"
                                        data-bs-placement="right"
-                                       title="The amount caught up in activities you signed up for that still have to be processed. This will not be in the next withdrawal AND you CAN NOT pay this now, but you will have to pay this this money somewhere in the future."></i>
+                                       title="The amount owed for activities you signed up for that have not yet been processed by the treasurer. Therefore, you can not pay this yet."></i>
                                     <i class="fas fa-sm fa-fw fa-caret-down"></i>
                                 </span>
                             </span>
