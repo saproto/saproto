@@ -9,7 +9,7 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
 use Auth;
-use DB;
+use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -141,18 +141,33 @@ class MollieController extends Controller
             return Redirect::back();
         }
 
+        $month = Carbon::parse($month);
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
+
         // We do one massive query to reduce the number of queries.
-        $orderlines = DB::table('orderlines')
+        $orderlines = OrderLine::query()
             ->join('products', 'orderlines.product_id', '=', 'products.id')
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
-            ->whereNotNull('orderlines.payed_with_mollie')
-            ->where('orderlines.created_at', 'like', $month.'-%')
+            ->select(['orderlines.*', 'accounts.account_number', 'accounts.name'])
+            ->whereHas('molliePayment', function ($query) use ($start, $end) {
+                $query->where(function ($query) {
+                    $query->where('status', 'paid')
+                        ->orWhere('status', 'paidout');
+                })
+                    ->whereBetween('created_at', [$start, $end]);
+            })
             ->get();
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Account breakdown for Mollie transactions in '.date('F Y', strtotime($month)),
+            'title' => 'Account breakdown for Mollie transactions between '.$start->format('d-m-Y').' and '.$end->format('d-m-Y'),
         ]);
     }
 
@@ -232,7 +247,7 @@ class MollieController extends Controller
         if (config('omnomcom.mollie')['use_fees']) {
             $fee = round(
                 $selected_method->pricing[0]->fixed->value +
-                    $total * (floatval($selected_method->pricing[0]->variable) / 100),
+                $total * (floatval($selected_method->pricing[0]->variable) / 100),
                 2
             );
             if ($fee > 0) {
@@ -294,8 +309,23 @@ class MollieController extends Controller
      */
     public static function getTotalForMonth($month)
     {
-        return OrderLine::whereNotNull('payed_with_mollie')
-            ->where('created_at', 'LIKE', sprintf('%s-%%', $month))
+        $month = Carbon::parse($month);
+        $start = $month->copy()->startOfMonth();
+        if ($start->isWeekend()) {
+            $start->nextWeekday();
+        }
+        $end = $month->copy()->addMonth()->startOfMonth();
+        if ($end->isWeekend()) {
+            $end->nextWeekday();
+        }
+
+        return OrderLine::whereHas('molliePayment', function ($query) use ($start, $end) {
+            $query->where(function ($query) {
+                $query->where('status', 'paid')
+                    ->orWhere('status', 'paidout');
+            })
+                ->whereBetween('created_at', [$start, $end]);
+        })
             ->sum('total_price');
     }
 
