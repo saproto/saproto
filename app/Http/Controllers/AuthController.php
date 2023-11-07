@@ -237,6 +237,7 @@ class AuthController extends Controller
 
         if ($user->name != $request->name) {
             Session::flash('flash_message', 'You need to correctly input the user\'s name before the account is deactivated.');
+
             return Redirect::back();
         }
 
