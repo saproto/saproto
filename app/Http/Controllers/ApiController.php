@@ -17,6 +17,7 @@ use App\Models\Token;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use stdClass;
@@ -28,11 +29,11 @@ class ApiController extends Controller
      */
     public function train(Request $request)
     {
-        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
+        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station=' . $_GET['station']));
     }
 
     /**
-     * @param  string  $token
+     * @param string $token
      * @return false|string
      */
     public function protubeAdmin($token)
@@ -41,11 +42,11 @@ class ApiController extends Controller
 
         $adminInfo = new stdClass();
 
-        if (! $token) {
+        if (!$token) {
             $adminInfo->is_admin = false;
         } else {
             $user = $token->user;
-            if (! $user) {
+            if (!$user) {
                 $adminInfo->is_admin = false;
             } else {
                 $adminInfo->user_id = $user->id;
@@ -118,17 +119,20 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function randomPhoto(): JsonResponse
     {
         $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
             $query->where('published', true)->where('private', false);
         });
 
-        if (! $privateQuery->count()) {
+        if (!$privateQuery->count()) {
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
-        $random = mt_rand(1, 100);
+        $random = random_int(1, 100);
         if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
         } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
@@ -143,7 +147,7 @@ class ApiController extends Controller
         $photo = $query->inRandomOrder()->with('album')->first();
 
         //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
-        if (! $photo) {
+        if (!$photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
 
@@ -160,7 +164,7 @@ class ApiController extends Controller
             $query->where('published', true)->where('private', false);
         })->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
 
-        if (! $privateQuery->count()) {
+        if (!$privateQuery->count()) {
             return response()->json(['error' => 'No public photos older than 4 years found!.'], 404);
         }
 
