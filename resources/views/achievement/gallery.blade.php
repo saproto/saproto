@@ -8,7 +8,6 @@
 
     <div id="achievement-accordion">
 
-        <?php $stars = 0; ?>
 
         @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
@@ -52,8 +51,6 @@
                             @endforeach
 
                         @endif
-
-                        <?php $stars++; ?>
 
                     </div>
 
