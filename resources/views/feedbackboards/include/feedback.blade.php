@@ -45,13 +45,13 @@
     </div>
 
     <div class="card-body">
-        {{ $feedback->feedback }}
+        <p style="white-space: pre-wrap">{{$feedback->feedback}}</p>
 
         @if ($feedback->reply)
             <hr>
             <i class="me-1 fa {{$feedback->accepted ? "fa-circle-check text-primary" : "fa-circle-xmark text-danger"}}"
                aria-hidden="true"></i>
-            <b>Board:</b> {!! $feedback->reply !!}
+            <b>Board:</b> {{ $feedback->reply }}
         @endif
 
         @if (Auth::user()->can("board") && $controls)
@@ -63,7 +63,7 @@
                     <textarea id="feedback__{{ $feedback->id }}__reply" class="form-control mb-2" rows="2" cols="30"
                               name="reply"
                               placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
-                              required>{!! $feedback->reply ?? '' !!}</textarea>
+                              required>{{ $feedback->reply ?? '' }}</textarea>
                     <div class="btn-group w-100">
                         <button type="submit" name="responseBtn" value="accept" class="btn btn-primary">
                             <i class="fas fa-circle-check"></i> Accept
