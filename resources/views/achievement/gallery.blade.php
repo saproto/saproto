@@ -8,7 +8,7 @@
 
     <div id="achievement-accordion">
 
-        <?php $stars = 1; ?>
+        <?php $stars = 0; ?>
 
         @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
@@ -18,7 +18,11 @@
                      data-bs-target="#collapse-achievement-{{ $tier }}">
 
                     @for($i = 0; $i < 5; $i++)
+                        @if ($i >= $achievements[0]->numberOfStars())
+                            <i class="far fa-star"></i>
+                        @else
                             <i class="fas fa-star"></i>
+                        @endif
                     @endfor
 
                     <span class="text-capitalize ms-3">
