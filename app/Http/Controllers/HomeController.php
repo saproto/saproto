@@ -30,23 +30,30 @@ class HomeController extends Controller
         if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
+        $weekly = Newsitem::query()
+            ->where('published_at', '<=', Carbon::now())
+            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('is_weekly', true)
+            ->orderBy('published_at', 'desc')
+            ->first();
 
         $newsitems = Newsitem::query()
             ->whereNotNull('published_at')
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(2))
+            ->where('id', '!=', $weekly?->id)
             ->orderBy('published_at', 'desc')
             ->take(3)
             ->get();
 
         $birthdays = User::query()
-            ->has('member')
+            ->whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
-            ->get()
-            ->reject(function (User $user, int $index) {
-                return $user->member->is_pending == true;
-            });
+            ->get();
+
         $dinnerforms = Dinnerform::query()
             ->where('closed', false)
             ->where('start', '<=', Carbon::now())
@@ -61,7 +68,7 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
+        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
     }
 
     /** @return View Display the most important page of the whole site. */

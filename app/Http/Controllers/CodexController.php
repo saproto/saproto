@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Session;
 
-define('FPDF_FONTPATH', '/var/www/html/resources/fonts');
+define('FPDF_FONTPATH', resource_path('fonts/'));
 
 class CodexController extends Controller
 {
