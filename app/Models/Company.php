@@ -56,10 +56,10 @@ class Company extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function image()
+    /** @return BelongsTo|StorageEntry */
+    public function photo()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('App\Models\Photo', 'photo_id');
     }
 
     /** @return HasMany */

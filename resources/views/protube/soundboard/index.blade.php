@@ -38,7 +38,7 @@
                             <tr>
 
                                 <td>
-                                    <a href="{{ $sound->file->generatePath() }}">
+                                    <a href="{{ $sound->file->generateUrl() }}">
                                         <i class="fas fa-cloud-download-alt fa-fw me-2"></i>
                                     </a>
                                     {{ $sound->name }}
@@ -49,7 +49,7 @@
                                        href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}">
                                         <i class="fas fa-trash me-2"></i> Delete
                                     </a>
-                                    <div class="btn btn-success sound__test" data-url="{{ $sound->file->generatePath() }}">
+                                    <div class="btn btn-success sound__test" data-url="{{ $sound->file->generateUrl() }}">
                                         <i class="fas fa-volume-up"></i> Test
                                     </div>
                                     <a class="btn btn-success"

@@ -10,6 +10,9 @@
 # Local files
 /personal
 
+#public faster photos
+/public/photos
+
 # IDE files
 /.idea
 
@@ -23,6 +26,9 @@ phpstan.neon
 composer.phar
 
 # Generated files
+/public/css
+/public/js
+/public/mix-manifest.json
 /public/build
 /public/hot
 
