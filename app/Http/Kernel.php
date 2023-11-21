@@ -25,6 +25,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\EnforceHTTPS::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\DevelopmentAccess::class,
             \App\Http\Middleware\EnforceTFA::class,
             \App\Http\Middleware\EnforceWizard::class,
