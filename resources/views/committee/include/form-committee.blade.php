@@ -5,22 +5,20 @@
 
     <div class="card">
 
-        <div class="card-header bg-dark text-white">
-
+        <div class="card-header bg-dark text-white" id="committee_header_label">
             Committee information
-
         </div>
 
         <div class="card-body">
 
             <div class="form-group">
-                <label for="name">Committee name</label>
+                <label for="name" id="committee_name_label">Committee name</label>
                 <input type="text" class="form-control" id="name" name="name"
                        placeholder="Awesome Committee Extraordinaire" value="{{ (!$new ? $committee->name : "" ) }}">
             </div>
 
             <div class="form-group">
-                <label for="slug">Committee e-mail alias</label>
+                <label for="slug" id="committee_slug_label">Committee e-mail alias</label>
 
                 <div class="input-group">
                     <input type="text" class="form-control" id="slug" name="slug"
@@ -49,7 +47,7 @@
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        <label for="public">Committee visibility</label>
+                        <label for="public" id="committee_type_label">Committee visibility</label>
                         <select class="form-control" id="public" name="public">
                             <option value="0" @selected(!$new && !$committee->public)>Admin only
                             </option>
@@ -120,16 +118,21 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Update the is active checkbox when the committee type is changed
-        document.getElementById('is_society').addEventListener("change", function() {
-            updateSocietyActive(this.value === '1');
+        document.getElementById('is_society').addEventListener("change", function () {
+            updateIsSociety(this.value === '1');
         });
 
         // Update the is active checkbox when the committee type is changed
-        function updateSocietyActive(isSociety) {
+        function updateIsSociety(isSociety) {
             document.getElementById('isActiveInput').lastElementChild.lastElementChild.innerText = "Set " + (isSociety ? 'society' : 'committee') + " as inactive";
+
+            document.getElementById('committee_header_label').innerText = (isSociety ? 'Society' : 'Committee') + " information";
+            document.getElementById('committee_name_label').innerText = (isSociety ? 'Society' : 'Committee') + " name";
+            document.getElementById('committee_slug_label').innerText = (isSociety ? 'Society' : 'Committee') + " e-mail alias";
+            document.getElementById('committee_type_label').innerText = (isSociety ? 'Society' : 'Committee') + " visibility";
         }
 
         // Set the initial state of the is active checkbox
-        updateSocietyActive(Boolean({{($committee?->is_society ?? 0)}}));
+        updateIsSociety(Boolean({{($committee?->is_society ?? 0)}}));
     </script>
 @endpush
