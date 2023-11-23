@@ -62,11 +62,11 @@
             </div>
 
             <div class="form-group mt-1" id="isSocietyActiveGroup">
-                <div class="input-group">
+                <div class="input-group" id="isActiveInput">
                     @include('components.forms.checkbox', [
                                 'name' => 'is_active',
                                 'checked' => !$new && !$committee?->is_active ,
-                                'label' => 'Set society as inactive'
+                                'label' => "Set " . ($committee?->is_society ? 'society' : 'committee') . " as inactive"
                             ])
                 </div>
             </div>
@@ -119,17 +119,17 @@
 </form>
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        // Update the society active checkbox when the committee type is changed
+        // Update the is active checkbox when the committee type is changed
         document.getElementById('is_society').addEventListener("change", function() {
-            updateSocietyActive(this.value === '1')
+            updateSocietyActive(this.value === '1');
         });
 
-        // Hide/show the option to set a society as inactive
+        // Update the is active checkbox when the committee type is changed
         function updateSocietyActive(isSociety) {
-            document.getElementById('isSocietyActiveGroup').style.display = isSociety ? "flex" : "none"
+            document.getElementById('isActiveInput').lastElementChild.lastElementChild.innerText = "Set " + (isSociety ? 'society' : 'committee') + " as inactive";
         }
 
-        // Set the initial state if the society inactive checkbox should be shown
+        // Set the initial state of the is active checkbox
         updateSocietyActive(Boolean({{($committee?->is_society ?? 0)}}));
     </script>
 @endpush
