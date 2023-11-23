@@ -150,12 +150,13 @@ class CommitteeController extends Controller
         $committee->fill($request->all());
 
         // The is_active value is either unset or 'on' so only set it to false if selected.
-        $committee->is_active = !$request->has('is_active');
+        $committee->is_active = ! $request->has('is_active');
 
         $committee->save();
 
         // Redirect back with a message
         Session::flash('flash_message', 'Changes have been saved.');
+
         return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
     }
 
