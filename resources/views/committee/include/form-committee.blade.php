@@ -66,7 +66,7 @@
                     @include('components.forms.checkbox', [
                                 'name' => 'is_active',
                                 'checked' => !$new && !$committee?->is_active ,
-                                'label' => "Set " . ($committee?->is_society ? 'society' : 'committee') . " as inactive"
+                                'label' => "Set " . (!$new && $committee?->is_society ? 'society' : 'committee') . " as inactive"
                             ])
                 </div>
             </div>
