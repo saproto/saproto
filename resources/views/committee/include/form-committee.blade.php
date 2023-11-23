@@ -28,13 +28,14 @@
                     <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
                 </div>
 
+
             </div>
 
             <div class="row">
                 <div class="col-md-6">
 
                     <div class="form-group">
-                        <label for="public">Committee type</label>
+                        <label for="is_society">Committee type</label>
                         <select class="form-control" id="is_society" name="is_society">
                             <option value="0" @selected(!$new && !$committee->is_society)>Committee
                             </option>
@@ -60,12 +61,22 @@
                 </div>
             </div>
 
+            <div class="form-group mt-1" id="isSocietyActiveGroup">
+                <div class="input-group">
+                    @include('components.forms.checkbox', [
+                                'name' => 'is_active',
+                                'checked' => !$new && !$committee?->is_active ,
+                                'label' => 'Set society as inactive'
+                            ])
+                </div>
+            </div>
+
             <div class="row">
 
                 <div class="col-md-12">
 
                     <div class="form-group">
-                        <label for="public">Enable anonymous e-mail</label>
+                        <label for="allow_anonymous_email">Enable anonymous e-mail</label>
                         <select class="form-control" id="allow_anonymous_email" name="allow_anonymous_email">
                             <option value="0" @selected(!$new && $committee->allow_anonymous_email)>No
                             </option>
@@ -106,3 +117,19 @@
     </div>
 
 </form>
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        // Update the society active checkbox when the committee type is changed
+        document.getElementById('is_society').addEventListener("change", function() {
+            updateSocietyActive(this.value === '1')
+        });
+
+        // Hide/show the option to set a society as inactive
+        function updateSocietyActive(isSociety) {
+            document.getElementById('isSocietyActiveGroup').style.display = isSociety ? "flex" : "none"
+        }
+
+        // Set the initial state if the society inactive checkbox should be shown
+        updateSocietyActive(Boolean({{($committee?->is_society ?? 0)}}));
+    </script>
+@endpush
