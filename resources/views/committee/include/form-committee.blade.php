@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="form-group mt-1" id="isSocietyActiveGroup">
+            <div class="form-group mt-1">
                 <div class="input-group" id="isActiveInput">
                     @include('components.forms.checkbox', [
                                 'name' => 'is_active',
@@ -128,8 +128,10 @@
 
         // Update the is active checkbox when the committee type is changed
         function updateIsSociety(isSociety) {
-            document.getElementById('isActiveInput').lastElementChild.lastElementChild.innerText = "Set " + (isSociety ? 'society' : 'committee') + " as inactive";
+            // Update the checkbox text
+            document.getElementById('isActiveInput').firstElementChild.lastElementChild.innerText = "Set " + (isSociety ? 'society' : 'committee') + " as inactive";
 
+            // Update the labels
             document.getElementById('committee_header_label').innerText = (isSociety ? 'Society' : 'Committee') + " information";
             document.getElementById('committee_name_label').innerText = (isSociety ? 'Society' : 'Committee') + " name";
             document.getElementById('committee_slug_label').innerText = (isSociety ? 'Society' : 'Committee') + " e-mail alias";
