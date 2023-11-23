@@ -66,6 +66,10 @@
                                 'checked' => !$new && !$committee?->is_active ,
                                 'label' => "Set " . (!$new && $committee?->is_society ? 'society' : 'committee') . " as inactive"
                             ])
+                    {{-- Tooltip to show aditional information --}}
+                    <i class="fas fa-info-circle align-self-center ms-1" data-bs-toggle="tooltip"
+                       data-bs-placement="right"
+                       title="Setting it to inactive will not hide the committee/society, it will only display it separately"></i>
                 </div>
             </div>
 
