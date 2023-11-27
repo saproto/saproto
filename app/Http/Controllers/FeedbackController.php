@@ -112,9 +112,7 @@ class FeedbackController extends Controller
     public function add(Request $request, $category): RedirectResponse
     {
         $category = FeedbackCategory::findOrFail($category);
-        $temp = nl2br(trim($request->input('feedback')));
-        $new = ['feedback' => $temp, 'user_id' => Auth::id(), 'feedback_category_id' => $category->id];
-        $feedback = new Feedback($new);
+        $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
         $feedback->save();
 
         $categoryTitle = str_singular($category->title);
