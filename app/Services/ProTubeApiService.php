@@ -18,8 +18,8 @@ class ProTubeApiService
     private static function client(): PendingRequest
     {
         return Http::withToken(config('protube.secret'))
-                ->withOptions(['verify' => (config('app.env') === 'production')])
-                ->baseUrl(config('protube.server') . self::API_PREFIX);
+            ->withOptions(['verify' => (config('app.env') === 'production')])
+            ->baseUrl(config('protube.server').self::API_PREFIX);
     }
 
     /**
@@ -33,6 +33,7 @@ class ProTubeApiService
             $response->throw();
         } catch (\Exception $e) {
             captureException($e);
+
             return false;
         }
 
@@ -57,16 +58,16 @@ class ProTubeApiService
     }
 
     /**
-     * Trigger ProTube to update the user admin status for the given user id. 
+     * Trigger ProTube to update the user admin status for the given user id.
      *
      * @return bool successfull response (if the user was found)
      */
     public static function updateAdmin(int $userID, bool $admin): bool
     {
         $response = self::client()->post('/updateadmin', [
-                'user_id' => $userID,
-                'admin' => $admin,
-            ]);
+            'user_id' => $userID,
+            'admin' => $admin,
+        ]);
 
         if (! self::assertResponse($response)) {
             return false;

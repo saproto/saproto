@@ -140,13 +140,12 @@ class TempAdminController extends Controller
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
-        
+
         // Update the tempadmin to whether now is between start and end
-        ProTubeApiService::updateAdmin($tempadmin->user->id, 
-            Carbon::parse($tempadmin->start_at)->isBefore(Carbon::now()) 
+        ProTubeApiService::updateAdmin($tempadmin->user->id,
+            Carbon::parse($tempadmin->start_at)->isBefore(Carbon::now())
             && Carbon::parse($tempadmin->start_at)->isAfter(Carbon::now())
         );
-
 
         return Redirect::route('tempadmin::index');
     }

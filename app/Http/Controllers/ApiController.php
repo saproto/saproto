@@ -13,7 +13,6 @@ use App\Models\Photo;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
-use App\Models\Token;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;

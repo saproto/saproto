@@ -13,7 +13,6 @@ use Session;
 
 class ProtubeController extends Controller
 {
-
     /** @return View */
     public function topVideos()
     {
