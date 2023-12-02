@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
-use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\StorageEntry;
 use App\Models\TicketPurchase;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Http\Request;
 
 class WrappedController extends Controller
 {
@@ -17,6 +15,7 @@ class WrappedController extends Controller
     {
         $timespan = [now()->startOfYear(), now()->endOfYear()];
         $total_spent = round(OrderLine::whereBetween('created_at', $timespan)->sum('total_price'), 2);
+
         return response()->json([
             'total_spent' => $total_spent,
             'order_totals' => $this->orderTotals(),
@@ -25,7 +24,7 @@ class WrappedController extends Controller
         ], 200, [], JSON_NUMERIC_CHECK);
     }
 
-    function orderTotals()
+    public function orderTotals()
     {
         $totals = OrderLine::query()
             ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
@@ -41,17 +40,17 @@ class WrappedController extends Controller
         });
     }
 
-    function eventList()
+    public function eventList()
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
             ->where(function ($query) {
                 $query->whereIn('id', function (Builder $query) {
-                        $query->select('event_id')
-                            ->from('tickets')
-                            ->join('ticket_purchases', 'tickets.id', '=', 'ticket_purchases.ticket_id')
-                            ->where('ticket_purchases.user_id', auth()->user()->id);
-                    })
+                    $query->select('event_id')
+                        ->from('tickets')
+                        ->join('ticket_purchases', 'tickets.id', '=', 'ticket_purchases.ticket_id')
+                        ->where('ticket_purchases.user_id', auth()->user()->id);
+                })
                     ->orWhereIn('id', function (Builder $query) {
                         $query->select('event_id')
                             ->from('activities')
@@ -91,6 +90,7 @@ class WrappedController extends Controller
                 $event->price = $activity_price + $ticket_price;
 
                 $event->image_url = $images->where('event_id')->first()->generateImagePath(null, null);
+
                 return $event->only([
                     'title',
                     'start',
@@ -102,5 +102,4 @@ class WrappedController extends Controller
             });
 
     }
-
 }
