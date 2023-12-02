@@ -109,4 +109,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
+
+    /* Routes related to the OmNomCom Wrapped API */
+    Route::get('wrapped')->middleware('auth:api')->uses('WrappedController@index')->name('wrapped');
 });
