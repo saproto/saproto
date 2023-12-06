@@ -89,7 +89,7 @@ class WrappedController extends Controller
 
                 $event->price = $activity_price + $ticket_price;
 
-                $event->image_url = $images->where('event_id')->first()->generateImagePath(null, null);
+                $event->image_url = $images->where('event_id', $event->id)->first()->generateImagePath(null, null);
 
                 return $event->only([
                     'title',
