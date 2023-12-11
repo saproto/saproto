@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property float minimum_price
  * @property float price_decrease
  * @property float price_increase
- * @property boolean random_events
+ * @property bool random_events
  **/
 class WallstreetDrink extends Model
 {
