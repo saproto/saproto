@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\HashMapItem;
 use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
@@ -54,7 +53,7 @@ class UpdateWallstreetPrices extends Command
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
-                $this->info('No price found for product ' . $product->id . ' creating new price object with current price (' . $product->price . ') for drink ' . $currentDrink->id);
+                $this->info('No price found for product '.$product->id.' creating new price object with current price ('.$product->price.') for drink '.$currentDrink->id);
                 $latestPrice = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
@@ -75,7 +74,7 @@ class UpdateWallstreetPrices extends Command
                     'price' => $latestPrice->price + $delta >= $product->price * 1.2 ? $product->price * 1.2 : $latestPrice->price + $delta,
                 ]);
                 $newPriceObject->save();
-                $this->info($product->id . ' has ' . $newOrderlines . ' new orderlines, increasing price by ' . $delta . ' to ' . $newPriceObject->price);
+                $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
 
                 continue;
             }
@@ -88,9 +87,9 @@ class UpdateWallstreetPrices extends Command
                     'price' => $latestPrice->price - $currentDrink->price_decrease < $currentDrink->minimum_price ? $currentDrink->minimum_price : $latestPrice->price - $currentDrink->price_decrease,
                 ]);
                 $newPriceObject->save();
-                $this->info($product->id . ' has no new orderlines, lowering price by ' . $currentDrink->price_decrease . ' to ' . $newPriceObject->price);
+                $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
             } else {
-                $this->info($product->id . ' has no new orderlines and the price is already the minimum price');
+                $this->info($product->id.' has no new orderlines and the price is already the minimum price');
             }
         }
         //chance of 1 in 30 (so about every 30 minutes that a random event is triggered)
@@ -98,7 +97,7 @@ class UpdateWallstreetPrices extends Command
             $randomEvent = WallstreetEvent::inRandomOrder()->whereHas('products', function ($q) use ($currentDrink) {
                 $q->whereIn('products.id', $currentDrink->products->pluck('id'));
             })->first();
-            $this->info('Random event ' . $randomEvent->name . ' triggered');
+            $this->info('Random event '.$randomEvent->name.' triggered');
             $currentDrink->events()->attach($randomEvent->id);
             foreach ($randomEvent->products->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
