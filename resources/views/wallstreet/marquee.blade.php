@@ -158,7 +158,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="modal-title">Modal title</h5>
                     </div>
-                    <div class="modal-body" id="modal-body" style="min-height: 50vh; min-width:70vw; text-align:center;>
+                    <div class="modal-body" id="modal-body"
+                         style="min-height: 50vh; min-width:70vw; text-align:center;">
                     </div>
                 </div>
             </div>
@@ -166,222 +167,222 @@
         <div id=" swipers-container
                     " class="h-100 d-flex flex-column overflow-hidden justify-content-end z-index-2">
 
-                    <div class="wallstreet-body mt-2 px-4 py-4">
-                        <div>
-                            <div class="wallstreet-title">
-                                <div>WALLSTREET</div>
-                                <div class="fs-1">Drink</div>
-                            </div>
-                            <div class="wallstreet-info px-4 pb-4 pt-2">
-                                <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
-                                <div class="wallstreet-info-item">
-                                    <div>Previous close</div>
-                                    <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>Open</div>
-                                    <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>Market Cap</div>
-                                    <div><b>{{rand(100,500)}} M</b></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>PE ratio (TMM)</div>
-                                    <div><b>{{rand(10, 20)}}.{{rand(0,100)}}</b></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>EPS (TTM)</div>
-                                    <div><b>{{rand(0, 100)}}.{{rand(0,100)}}</b></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>Forward Divided & Yield</div>
-                                    <div><b>{{rand(0, 10)}} </b><span class="text-green">(0.12%)</span></div>
-                                </div>
-                                <div class="wallstreet-info-item">
-                                    <div>Ex-Dividend Date</div>
-                                    <div><b>April 20, 2012</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallstreet-right px-4 pb-4 pt-2">
-                            <div class="wallstreet-graph-title mb-3 fs-3">Current stonks</div>
-                            <div class="wallstreet-graph-container">
-                                <canvas id="wallstreet-graph-canvas" class="wallstreet-graph-canvas"></canvas>
-                            </div>
-                        </div>
+            <div class="wallstreet-body mt-2 px-4 py-4">
+                <div>
+                    <div class="wallstreet-title">
+                        <div>WALLSTREET</div>
+                        <div class="fs-1">Drink</div>
                     </div>
-
-                    <div id="swiper-container"
-                         class="swiper-container swiper-container-free-mode stonks-cards mb-2 d-flex align-items-center">
-                        <div class="swiper-wrapper">
-                            @foreach($prices as $price)
-                                <div id="{{preg_replace('/[^a-zA-Z0-9]/', '', $price->name)}}"
-                                     class="swiper-slide card w-25">
-                                    <div class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img'}}"
-                                         style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;">
-
-                                        {{-- Title --}}
-                                        <div class="fs-4">
-                                            <b>{{$price->name}}</b>
-                                        </div>
-
-                                        <div class="d-flex flex-row justify-content-between">
-                                            {{-- Price --}}
-                                            <div id="price" class="fs-5">
-                                                € <span>{{sprintf("%.2f",$price->price)}}</span>
-                                            </div>
-
-                                            {{-- Change --}}
-                                            <div id="diff"
-                                                 class="fs-5 {{$price->diff < 0 ? 'text-green' : 'text-danger'}}">
-                                                {{sprintf("%s %.2f%%", $price->diff < 0 ? "▼" : "▲", $price->diff)}}
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            @endforeach
+                    <div class="wallstreet-info px-4 pb-4 pt-2">
+                        <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
+                        <div class="wallstreet-info-item">
+                            <div>Previous close</div>
+                            <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>Open</div>
+                            <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>Market Cap</div>
+                            <div><b>{{rand(100,500)}} M</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>PE ratio (TMM)</div>
+                            <div><b>{{rand(10, 20)}}.{{rand(0,100)}}</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>EPS (TTM)</div>
+                            <div><b>{{rand(0, 100)}}.{{rand(0,100)}}</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>Forward Divided & Yield</div>
+                            <div><b>{{rand(0, 10)}} </b><span class="text-green">(0.12%)</span></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>Ex-Dividend Date</div>
+                            <div><b>April 20, 2012</b></div>
                         </div>
                     </div>
                 </div>
-                @endif
-                @endsection
+                <div class="wallstreet-right px-4 pb-4 pt-2">
+                    <div class="wallstreet-graph-title mb-3 fs-3">Current stonks</div>
+                    <div class="wallstreet-graph-container">
+                        <canvas id="wallstreet-graph-canvas" class="wallstreet-graph-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
 
-                @push('javascript')
-                    {{--    chart.js and the date adapter--}}
-                    <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script nonce="{{ csp_nonce() }}"
-                            src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+            <div id="swiper-container"
+                 class="swiper-container swiper-container-free-mode stonks-cards mb-2 d-flex align-items-center">
+                <div class="swiper-wrapper">
+                    @foreach($prices as $price)
+                        <div id="{{preg_replace('/[^a-zA-Z0-9]/', '', $price->name)}}"
+                             class="swiper-slide card w-25">
+                            <div class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img'}}"
+                                 style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;">
 
-                    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
-                            nonce='{{ csp_nonce() }}'></script>
-                    <script type='text/javascript' nonce='{{ csp_nonce() }}'>
-                        const swiperOptions = {
-                            loop: true,
-                            observer: true,
-                            autoplay: {
-                                delay: 1,
-                                disableOnInteraction: false,
-                            },
-                            slidesPerView: 'auto',
-                            speed: 5000,
-                        };
+                                {{-- Title --}}
+                                <div class="fs-4">
+                                    <b>{{$price->name}}</b>
+                                </div>
 
-                        const swiper = new Swiper("#swiper-container", swiperOptions);
+                                <div class="d-flex flex-row justify-content-between">
+                                    {{-- Price --}}
+                                    <div id="price" class="fs-5">
+                                        € <span>{{sprintf("%.2f",$price->price)}}</span>
+                                    </div>
 
-                        function updateCards(product, swiperInstance) {
-                            let cards = swiperInstance.el.querySelectorAll(`#${product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
-                            if (cards.length > 0) {
-                                cards.forEach((card) => {
-                                    card.querySelector("#price span").innerText = product.price.toFixed(2);
-                                    card.querySelector("#diff").innerText = `${product.diff < 0 ? "▼" : "▲"} ${product.diff.toFixed(2)}%`;
-                                    card.querySelector("#diff").className.replace(product.diff < 0 ? "text-danger" : "text-green", product.diff < 0 ? "text-green" : "text-danger");
-                                })
-                            } else {
-                                //a new product has been added, reload the page
-                                window.location.reload(true);
+                                    {{-- Change --}}
+                                    <div id="diff"
+                                         class="fs-5 {{$price->diff < 0 ? 'text-green' : 'text-danger'}}">
+                                        {{sprintf("%s %.2f%%", $price->diff < 0 ? "▼" : "▲", $price->diff)}}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+@endsection
+
+@push('javascript')
+    {{--    chart.js and the date adapter--}}
+    <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script nonce="{{ csp_nonce() }}"
+            src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
+            nonce='{{ csp_nonce() }}'></script>
+    <script type='text/javascript' nonce='{{ csp_nonce() }}'>
+        const swiperOptions = {
+            loop: true,
+            observer: true,
+            autoplay: {
+                delay: 1,
+                disableOnInteraction: false,
+            },
+            slidesPerView: 'auto',
+            speed: 5000,
+        };
+
+        const swiper = new Swiper("#swiper-container", swiperOptions);
+
+        function updateCards(product, swiperInstance) {
+            let cards = swiperInstance.el.querySelectorAll(`#${product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
+            if (cards.length > 0) {
+                cards.forEach((card) => {
+                    card.querySelector("#price span").innerText = product.price.toFixed(2);
+                    card.querySelector("#diff").innerText = `${product.diff < 0 ? "▼" : "▲"} ${product.diff.toFixed(2)}%`;
+                    card.querySelector("#diff").className.replace(product.diff < 0 ? "text-danger" : "text-green", product.diff < 0 ? "text-green" : "text-danger");
+                })
+            } else {
+                //a new product has been added, reload the page
+                window.location.reload(true);
+            }
+        }
+
+        function updatePrices() {
+            console.log("Updating prices!")
+            get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
+                    response.products.forEach((product) => {
+                        updateCards(product, swiper)
+                    })
+                }
+            )
+        }
+
+        const handledEvents = [];
+
+        function updateEvents() {
+            get('{{route('api::wallstreet::latest_events', ['id' => $activeDrink->id])}}').then((response) => {
+                    console.log(response)
+                    response.forEach((event) => {
+                        if (!handledEvents.includes(event.pivot.id)) {
+                            showEvent(event);
+                            handledEvents.push(event.pivot.id);
+                        }
+                    })
+                }
+            )
+        }
+
+        function showEvent(event) {
+            var a = new Audio("{{$sound_path}}");
+            a.play().catch(() => {
+                confirm("Click somewhere within the document for the sound to play!")
+            });
+            modalTitle = document.getElementById('modal-title');
+            modalBody = document.getElementById('modal-body');
+            modalBody.style.backgroundImage = `url(${event.img})`;
+            modalBody.style.backgroundSize = 'cover';
+            modalBody.style.backgroundPosition = 'center';
+            modalTitle.innerText = event.name;
+            modalBody.innerHTML = event.description;
+            window.modals.eventModal.show()
+            setTimeout(() => {
+                window.modals.eventModal.hide()
+            }, 10000)
+        }
+
+
+        const ctx = document.getElementById('wallstreet-graph-canvas');
+        var chart = null;
+
+
+        function createDataSets(products) {
+            let myData = {
+                datasets: [],
+            };
+            products.forEach((product) => {
+                let prices = [];
+                product.wallstreet_prices.forEach((price) => {
+                    prices.push({
+                        x: Date.parse(price.created_at),
+                        y: price.price
+                    })
+                });
+                myData.datasets.push({label: product.name, data: prices})
+            });
+            return myData;
+        }
+
+        function updateChart() {
+            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
+                console.log("updating chart")
+                chart.data = createDataSets(products);
+                chart.update('none');
+            })
+        }
+
+        window.addEventListener('load', _ => {
+            setInterval(updatePrices, 5000);
+            setInterval(updateEvents, 5000);
+            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
+                console.log("creating chart")
+
+                chart = new Chart(ctx, {
+                    type: "line",
+                    options: {
+                        maintainAspectRatio: false,
+                        spanGaps: true,
+                        scales: {
+                            x: {
+                                type: "time",
+                                parsing: false
                             }
-                        }
+                        },
+                        responsive: true,
+                    },
+                    data: createDataSets(products),
+                });
+            });
 
-                        function updatePrices() {
-                            console.log("Updating prices!")
-                            get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
-                                    response.products.forEach((product) => {
-                                        updateCards(product, swiper)
-                                    })
-                                }
-                            )
-                        }
-
-                        const handledEvents = [];
-
-                        function updateEvents() {
-                            get('{{route('api::wallstreet::latest_events', ['id' => $activeDrink->id])}}').then((response) => {
-                                    console.log(response)
-                                    response.forEach((event) => {
-                                        if (!handledEvents.includes(event.pivot.id)) {
-                                            showEvent(event);
-                                            handledEvents.push(event.pivot.id);
-                                        }
-                                    })
-                                }
-                            )
-                        }
-
-                        function showEvent(event) {
-                            var a = new Audio("{{$sound_path}}");
-                            a.play().catch(() => {
-                                confirm("Click somewhere within the document for the sound to play!")
-                            });
-                            modalTitle = document.getElementById('modal-title');
-                            modalBody = document.getElementById('modal-body');
-                            modalBody.style.backgroundImage = `url(${event.img})`;
-                            modalBody.style.backgroundSize = 'cover';
-                            modalBody.style.backgroundPosition = 'center';
-                            modalTitle.innerText = event.name;
-                            modalBody.innerHTML = event.description;
-                            window.modals.eventModal.show()
-                            setTimeout(() => {
-                                // window.modals.eventModal.hide()
-                            }, 10000)
-                        }
-
-
-                        const ctx = document.getElementById('wallstreet-graph-canvas');
-                        var chart = null;
-
-
-                        function createDataSets(products) {
-                            let myData = {
-                                datasets: [],
-                            };
-                            products.forEach((product) => {
-                                let prices = [];
-                                product.wallstreet_prices.forEach((price) => {
-                                    prices.push({
-                                        x: Date.parse(price.created_at),
-                                        y: price.price
-                                    })
-                                });
-                                myData.datasets.push({label: product.name, data: prices})
-                            });
-                            return myData;
-                        }
-
-                        function updateChart() {
-                            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
-                                console.log("updating chart")
-                                chart.data = createDataSets(products);
-                                chart.update('none');
-                            })
-                        }
-
-                        window.addEventListener('load', _ => {
-                            setInterval(updatePrices, 5000);
-                            setInterval(updateEvents, 5000);
-                            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
-                                console.log("creating chart")
-
-                                chart = new Chart(ctx, {
-                                    type: "line",
-                                    options: {
-                                        maintainAspectRatio: false,
-                                        spanGaps: true,
-                                        scales: {
-                                            x: {
-                                                type: "time",
-                                                parsing: false
-                                            }
-                                        },
-                                        responsive: true,
-                                    },
-                                    data: createDataSets(products),
-                                });
-                            });
-
-                            updateChart();
-                            setInterval(updateChart, 30000);
-                        })
-                    </script>
-        @endpush
+            updateChart();
+            setInterval(updateChart, 30000);
+        })
+    </script>
+@endpush
