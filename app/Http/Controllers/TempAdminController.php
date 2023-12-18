@@ -22,6 +22,7 @@ class TempAdminController extends Controller
      */
     public function make($id)
     {
+        /** @var User */
         $user = User::findOrFail($id);
 
         $tempAdmin = new Tempadmin();
@@ -31,8 +32,7 @@ class TempAdminController extends Controller
         $tempAdmin->user()->associate($user);
         $tempAdmin->save();
 
-        // Call Protube webhook to run check through all connected admins.
-        ProTubeApiService::updateAdmin($user->id, true);
+        ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
         return Redirect::back();
     }
@@ -53,9 +53,7 @@ class TempAdminController extends Controller
             }
         }
 
-        // Call Protube webhook to run check through all connected admins.
-        // Will result in kick for users whose temporary admin powers were removed.
-        ProTubeApiService::updateAdmin($user->id, false);
+        ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
         return Redirect::back();
     }
@@ -76,12 +74,9 @@ class TempAdminController extends Controller
         } else {
             $tempadmin->end_at = Carbon::now()->subSeconds(1);
             $tempadmin->save();
-
-            // Call Protube webhook to run check through all connected admins.
-            // Will result in kick for users whose temporary admin powers were removed.
-            ProTubeApiService::updateAdmin($tempadmin->user->id, false);
-
         }
+
+        ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
         return Redirect::back();
     }
@@ -108,13 +103,18 @@ class TempAdminController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User */
+        $tempAdminUser = User::findOrFail($request->user_id);
+
         $tempadmin = new Tempadmin();
-        $tempadmin->user()->associate(User::findOrFail($request->user_id));
+        $tempadmin->user()->associate($tempAdminUser);
         $tempadmin->creator()->associate(Auth::user());
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
 
+        ProTubeApiService::updateAdmin($tempAdminUser->id, $tempAdminUser->isTempadminLaterToday());
+        
         return Redirect::route('tempadmin::index');
     }
 
@@ -141,11 +141,7 @@ class TempAdminController extends Controller
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
 
-        // Update the tempadmin to whether now is between start and end
-        ProTubeApiService::updateAdmin($tempadmin->user->id,
-            Carbon::parse($tempadmin->start_at)->isBefore(Carbon::now())
-            && Carbon::parse($tempadmin->start_at)->isAfter(Carbon::now())
-        );
+        ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
         return Redirect::route('tempadmin::index');
     }
