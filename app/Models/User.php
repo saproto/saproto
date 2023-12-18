@@ -398,11 +398,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isTempadminLaterToday(): bool
     {
+        $now = Carbon::now();
         foreach ($this->tempadmin as $tempadmin) {
             // Skip all 'past' tempadmin entries
-            if (Carbon::parse($tempadmin->end_at)->isAfter(Carbon::now())) continue;
+            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) continue;
 
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
+            if ($now->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
                 return true;
             }
         }
