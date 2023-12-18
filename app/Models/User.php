@@ -377,8 +377,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * Returns whether the user is currently tempadmin.
-     * 
-     * @return bool
      */
     public function isTempadmin(): bool
     {
@@ -393,15 +391,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * Returns whether the user is tempadmin between now and the end of the day.
-     * 
-     * @return bool
      */
     public function isTempadminLaterToday(): bool
     {
         $now = Carbon::now();
         foreach ($this->tempadmin as $tempadmin) {
             // Skip all 'past' tempadmin entries
-            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) continue;
+            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) {
+                continue;
+            }
 
             if ($now->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
                 return true;

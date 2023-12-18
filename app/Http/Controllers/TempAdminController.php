@@ -114,7 +114,7 @@ class TempAdminController extends Controller
         $tempadmin->save();
 
         ProTubeApiService::updateAdmin($tempAdminUser->id, $tempAdminUser->isTempadminLaterToday());
-        
+
         return Redirect::route('tempadmin::index');
     }
 
