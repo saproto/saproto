@@ -176,6 +176,10 @@
                     <div class="wallstreet-info px-4 pb-4 pt-2">
                         <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
                         <div class="wallstreet-info-item">
+                            <div>Current loss</div>
+                            <div><b id="current_loss">{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
+                        </div>
+                        <div class="wallstreet-info-item">
                             <div>Previous close</div>
                             <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
                         </div>
@@ -198,10 +202,6 @@
                         <div class="wallstreet-info-item">
                             <div>Forward Divided & Yield</div>
                             <div><b>{{rand(0, 10)}} </b><span class="text-green">(0.12%)</span></div>
-                        </div>
-                        <div class="wallstreet-info-item">
-                            <div>Ex-Dividend Date</div>
-                            <div><b>April 20, 2012</b></div>
                         </div>
                     </div>
                 </div>
@@ -285,22 +285,19 @@
             }
         }
 
+        const handledEvents = [];
+
         function updatePrices() {
             console.log("Updating prices!")
             get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
+                    console.log(response)
+                    const lossDiv = document.getElementById("current_loss");
+                    lossDiv.innerHTML = "€ " + response.loss.toFixed(2);
                     response.products.forEach((product) => {
                         updateCards(product, swiper)
                     })
-                }
-            )
-        }
 
-        const handledEvents = [];
-
-        function updateEvents() {
-            get('{{route('api::wallstreet::latest_events', ['id' => $activeDrink->id])}}').then((response) => {
-                    console.log(response)
-                    response.forEach((event) => {
+                    response.events.forEach((event) => {
                         if (!handledEvents.includes(event.pivot.id)) {
                             showEvent(event);
                             handledEvents.push(event.pivot.id);
@@ -360,7 +357,6 @@
 
         window.addEventListener('load', _ => {
             setInterval(updatePrices, 5000);
-            setInterval(updateEvents, 5000);
             get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
                 console.log("creating chart")
 
