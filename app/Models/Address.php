@@ -1,10 +1,11 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user
+ *
  * @method static Builder|Address whereCity($value)
  * @method static Builder|Address whereCountry($value)
  * @method static Builder|Address whereCreatedAt($value)
@@ -32,10 +34,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Address newModelQuery()
  * @method static Builder|Address newQuery()
  * @method static Builder|Address query()
+ *
  * @mixin Eloquent
  */
 class Address extends Validatable
 {
+    use HasFactory;
+
     protected $table = 'addresses';
 
     protected $guarded = ['id'];
@@ -54,6 +59,6 @@ class Address extends Validatable
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

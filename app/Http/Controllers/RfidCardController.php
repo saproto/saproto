@@ -1,22 +1,22 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\QrAuthRequest;
+use App\Models\RfidCard;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\RfidCard;
 use Redirect;
 use Session;
 
 class RfidCardController extends Controller
 {
     /**
-     * @param Request $request
      * @return array This method returns raw HTML and is intended to be used via AJAX!
+     *
      * @throws Exception
      */
     public function store(Request $request)
@@ -65,7 +65,7 @@ class RfidCardController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -80,8 +80,7 @@ class RfidCardController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -96,13 +95,14 @@ class RfidCardController extends Controller
         $rfid->save();
 
         Session::flash('flash_message', 'Your RFID card has been updated.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
@@ -115,6 +115,7 @@ class RfidCardController extends Controller
         $rfid->delete();
 
         Session::flash('flash_message', 'Your RFID card has been deleted.');
+
         return Redirect::back();
     }
 }

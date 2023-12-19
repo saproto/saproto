@@ -33,13 +33,13 @@
                                         {{ $category->name }}
                                     </td>
                                     <td>
-                                        {{ count($category->products()) }} products
+                                        {{ $category->products_count }} products
                                     </td>
                                     <td>
                                         <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
-                                        @include('website.layouts.macros.confirm-modal', [
+                                        @include('components.modals.confirm-modal', [
                                             'action' => route('omnomcom::categories::delete', ['id' => $category->id]),
                                             'text' => '<i class="fas fa-trash text-danger"></i>',
                                             'title' => 'Confirm Delete',

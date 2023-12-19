@@ -7,7 +7,7 @@
 $grey-light: #424242;
 $grey-medium: #303030;
 $grey-dark: #212121;
-$dark: $grey-medium;
+$dark: $grey-dark;
 $light: $grey-medium;
 
 $theme-colors: (
@@ -86,7 +86,7 @@ $popover-bg: $grey-medium;
 $popover-header-bg: $grey-dark;
 
 //import bootstrap after setting variables
-@import '~bootstrap';
+@import 'bootstrap';
 
 // Vendors (S)CSS
 @import 'partials/vendors';

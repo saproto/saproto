@@ -1,18 +1,17 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\User;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\User;
 
 class RegistrationHelperController extends Controller
 {
     /**
      * Display a list of pending members.
      *
-     * @param Request $request
      * @return View
      */
     public function index(Request $request)
@@ -43,7 +42,7 @@ class RegistrationHelperController extends Controller
     /**
      * Show the user details for registration helper.
      *
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function details($id)

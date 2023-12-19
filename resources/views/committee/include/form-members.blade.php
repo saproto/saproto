@@ -37,14 +37,14 @@
 
                 <div class="row">
                     <div class="col-6">
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'format' => 'date',
                             'name' => 'start',
                             'label' => 'Since'
                         ])
                     </div>
                     <div class="col-6">
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'format' => 'date',
                             'name' => 'end',
                             'label' => 'Until',

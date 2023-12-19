@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @property string $end
  * @property-read bool $is_active
  * @property-read string $window_size
+ *
  * @method static Builder|DmxOverride whereColor($value)
  * @method static Builder|DmxOverride whereEnd($value)
  * @method static Builder|DmxOverride whereFixtures($value)
@@ -25,6 +26,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|DmxOverride newModelQuery()
  * @method static Builder|DmxOverride newQuery()
  * @method static Builder|DmxOverride query()
+ *
  * @mixin Eloquent
  */
 class DmxOverride extends Model

@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Console;
+namespace App\Console;
 
+use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,11 +16,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\SyncRoles::class,
         Commands\TestEmail::class,
-        Commands\MailAliasSync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
-        Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
         Commands\FeeCron::class,
@@ -33,6 +32,7 @@ class Kernel extends ConsoleKernel
         Commands\HelperNotificationsCron::class,
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
+        Commands\ReviewFeedbackCron::class,
         Commands\MemberRenewCron::class,
         Commands\OmNomComCleanup::class,
         Commands\MakeAdmin::class,
@@ -41,12 +41,13 @@ class Kernel extends ConsoleKernel
         Commands\MemberCleanup::class,
         Commands\AddSysadmin::class,
         Commands\EndMemberships::class,
+        Commands\UpdateWallstreetPrices::class,
+        Commands\CodexMarkdownConverter::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -56,6 +57,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
+        $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
@@ -66,8 +68,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
         $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
-//        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
+
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(function () {
+            return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0;
+        });
     }
 }

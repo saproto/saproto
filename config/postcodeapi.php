@@ -150,12 +150,12 @@ return [
         'key' => '',
         'code' => 'fr_FR',
     ],
-   'GeonamesDE' => [
+    'GeonamesDE' => [
         'url' => 'http://api.geonames.org/postalCodeLookupJSON?postalcode=%s&country=DE&username=demo',
         'key' => '',
         'code' => 'de_DE',
     ],
-   'ZippopotamusDE' => [
+    'ZippopotamusDE' => [
         'url' => 'http://api.zippopotam.us/DE/%s',
         'key' => '',
         'code' => 'de_DE',

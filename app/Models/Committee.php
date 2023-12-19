@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Auth;
 use Carbon;
@@ -26,11 +26,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $image_id
  * @property int $allow_anonymous_email
  * @property int $is_society
+ * @property int $is_active
  * @property-read string $email_address
  * @property-read StorageEntry|null $image
  * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
  * @method static Builder|Committee whereCreatedAt($value)
  * @method static Builder|Committee whereDescription($value)
@@ -44,6 +46,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Committee newModelQuery()
  * @method static Builder|Committee newQuery()
  * @method static Builder|Committee query()
+ *
  * @mixin Eloquent
  */
 class Committee extends Model
@@ -69,7 +72,7 @@ class Committee extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')
+        return $this->belongsToMany('App\Models\User', 'committees_users')
             ->where(function ($query) {
                 $query
                     ->whereNull('committees_users.deleted_at')
@@ -84,19 +87,19 @@ class Committee extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('App\Models\StorageEntry', 'image_id');
     }
 
     /** @return HasMany */
     public function organizedEvents()
     {
-        return $this->hasMany('Proto\Models\Event', 'committee_id');
+        return $this->hasMany('App\Models\Event', 'committee_id');
     }
 
     /** @return HasMany */
     public function helperReminderSubscriptions()
     {
-        return $this->hasMany('Proto\Models\HelperReminder');
+        return $this->hasMany('App\Models\HelperReminder');
     }
 
     /** @return string */
@@ -113,15 +116,19 @@ class Committee extends Model
         foreach ($subscriptions as $subscription) {
             $users[] = $subscription->user;
         }
+
         return $users;
     }
 
     /**
-     * @param User $user
      * @return bool Whether the user wants to receive helper reminders.
      */
-    public function wantsToReceiveHelperReminder($user)
+    public function wantsToReceiveHelperReminder(User $user): bool
     {
+        if (! $this->isMember($user)) {
+            HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->delete();
+        }
+
         return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
@@ -130,7 +137,7 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
 
-        if (Auth::check() && Auth::user()->can('board')) {
+        if (Auth::user()?->can('board')) {
             return $events->get();
         } else {
             return $events->where('secret', '=', 0)->get();
@@ -142,7 +149,7 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '>', time());
 
-        if (Auth::check() && Auth::user()->can('board')) {
+        if (Auth::user()?->can('board')) {
             return $events->get();
         } else {
             return $events->where('secret', '=', 0)->get();
@@ -150,18 +157,18 @@ class Committee extends Model
     }
 
     /**
-     * @param bool $includeSecret
+     * @param  bool  $includeSecret
      * @return Event[]
      */
     public function helpedEvents($includeSecret = false)
     {
         /** @var Activity[] $activities */
-        $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $activities = $this->belongsToMany('App\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
 
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && $event->isPublished() || (! $event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -173,7 +180,7 @@ class Committee extends Model
     public function pastHelpedEvents()
     {
         /** @var Activity[] $activities */
-        $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $activities = $this->belongsToMany('App\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
 
         $events = [];
         foreach ($activities as $activity) {
@@ -191,10 +198,10 @@ class Committee extends Model
     {
         $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];
         $memberships = CommitteeMembership::withTrashed()->where('committee_id', $this->id)
-                        ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
-                        ->orderBy('created_at', 'desc')
-                        ->orderBy('deleted_at', 'desc')
-                        ->get();
+            ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('deleted_at', 'desc')
+            ->get();
 
         foreach ($memberships as $membership) {
             if ($membership->edition) {
@@ -217,7 +224,7 @@ class Committee extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember($user)

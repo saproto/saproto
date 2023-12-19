@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\HelpingCommittee;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\User;
 
 class HelperMutation extends Mailable
 {
@@ -14,9 +14,13 @@ class HelperMutation extends Mailable
     use SerializesModels;
 
     public $helper_name;
+
     public $committee;
+
     public $event;
+
     public $helping;
+
     public $help;
 
     /**

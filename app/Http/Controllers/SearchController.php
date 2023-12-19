@@ -1,7 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Achievement;
+use App\Models\Committee;
+use App\Models\Event;
+use App\Models\Page;
+use App\Models\PhotoAlbum;
+use App\Models\Product;
+use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -10,19 +17,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
-use Proto\Models\Achievement;
-use Proto\Models\Committee;
-use Proto\Models\Event;
-use Proto\Models\Page;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\Product;
-use Proto\Models\User;
 use Session;
 
 class SearchController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function search(Request $request)
@@ -30,7 +29,7 @@ class SearchController extends Controller
         $term = $request->input('query');
 
         $users = [];
-        if (Auth::check() && Auth::user()->is_member) {
+        if (Auth::user()?->is_member) {
             $presearch_users = $this->getGenericSearch(
                 User::class,
                 $term,
@@ -50,7 +49,7 @@ class SearchController extends Controller
             ['slug', 'title', 'content']
         );
         foreach ($presearch_pages as $page) {
-            if (! $page->is_member_only || (Auth::check() && Auth::user()->is_member)) {
+            if (! $page->is_member_only || Auth::user()?->is_member) {
                 $pages[] = $page;
             }
         }
@@ -62,7 +61,7 @@ class SearchController extends Controller
             ['id', 'name', 'slug']
         );
         foreach ($presearch_committees as $committee) {
-            if ($committee->public || (Auth::check() && Auth::user()->can('board'))) {
+            if ($committee->public || Auth::user()?->can('board')) {
                 $committees[] = $committee;
             }
         }
@@ -86,23 +85,22 @@ class SearchController extends Controller
             ['id', 'name']
         );
         foreach ($presearch_photo_albums as $album) {
-            if (! $album->secret || (Auth::check() && Auth::user()->can('protography'))) {
+            if (! $album->secret || Auth::user()?->can('protography')) {
                 $photoAlbums[] = $album;
             }
         }
 
-        return view('website.search', [
+        return view('search.search', [
             'term' => $term,
             'users' => $users,
             'pages' => $pages,
             'committees' => $committees,
             'events' => array_reverse($events),
-            'photoAlbums'=>$photoAlbums,
+            'photoAlbums' => $photoAlbums,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function ldapSearch(Request $request)
@@ -130,7 +128,7 @@ class SearchController extends Controller
             }
         }
 
-        return view('website.ldapsearch', [
+        return view('search.ldapsearch', [
             'term' => $query,
             'data' => (array) $data,
         ]);
@@ -139,11 +137,10 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getUserSearch(Request $request)
@@ -162,7 +159,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getEventSearch(Request $request)
@@ -173,7 +169,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getCommitteeSearch(Request $request)
@@ -184,7 +179,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getProductSearch(Request $request)
@@ -195,7 +189,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getAchievementSearch(Request $request)
@@ -206,9 +199,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @param class-string|Model $model
-     * @param string $query
-     * @param string[] $attributes
+     * @param  class-string|Model  $model
+     * @param  string  $query
+     * @param  string[]  $attributes
      * @return Collection<Model>|array
      */
     private function getGenericSearch($model, $query, $attributes)

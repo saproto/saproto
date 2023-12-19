@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use DB;
@@ -37,6 +37,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Collection|StorageEntry[] $attachments
  * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
+ *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)
  * @method static Builder|Email whereDescription($value)
@@ -58,6 +59,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Email newModelQuery()
  * @method static Builder|Email newQuery()
  * @method static Builder|Email query()
+ *
  * @mixin Eloquent
  */
 class Email extends Model
@@ -69,23 +71,24 @@ class Email extends Model
     /** @return BelongsToMany */
     public function lists()
     {
-        return $this->belongsToMany('Proto\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
+        return $this->belongsToMany('App\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
     }
 
     /** @return BelongsToMany */
     public function events()
     {
-        return $this->belongsToMany('Proto\Models\Event', 'emails_events', 'email_id', 'event_id');
+        return $this->belongsToMany('App\Models\Event', 'emails_events', 'email_id', 'event_id');
     }
 
     /** @return BelongsToMany */
     public function attachments()
     {
-        return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
+        return $this->belongsToMany('App\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
     }
 
     /**
      * @return string
+     *
      * @throws Exception
      */
     public function destinationForBody()
@@ -101,9 +104,10 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
-            if($this->to_backup){
+            if ($this->to_backup) {
                 return 'event with backup';
             }
+
             return 'event';
         } else {
             throw new Exception('Email has no destination');
@@ -114,37 +118,32 @@ class Email extends Model
     public function recipients()
     {
         if ($this->to_user) {
-            return User::orderBy('name', 'asc')->get();
+            return User::orderBy('name')->get();
         } elseif ($this->to_member) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
-                return $user->member->is_pending == true;
-            });
+            return User::whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })->orderBy('name')->get();
         } elseif ($this->to_pending) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user) {
-                return $user->member->is_pending == false;
-            });
+            return User::whereHas('member', function ($q) {
+                $q->where('is_pending', true);
+            })->orderBy('name')->get();
         } elseif ($this->to_active) {
-            $user_ids = [];
-            foreach (Committee::all() as $committee) {
-                $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
-            }
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::whereHas('committees')->orderBy('name')->get();
         } elseif ($this->to_list) {
-            $user_ids = [];
-            foreach ($this->lists as $list) {
-                $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
-            }
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::whereHas('lists', function ($q) {
+                $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
+            })->orderBy('name')->get();
         } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event != null) {
                     $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if($this->to_backup && $event->activity){
+                    if ($this->to_backup && $event->activity) {
                         $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
                     }
                 }
             }
+
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
             return collect([]);
@@ -158,13 +157,14 @@ class Email extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return string Email body with variables parsed.
      */
     public function parseBodyFor($user)
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
+
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
@@ -179,6 +179,7 @@ class Email extends Model
                 $events[] = $event->title;
             }
         }
+
         return implode(', ', $events);
     }
 
@@ -193,6 +194,7 @@ class Email extends Model
                 $lists[] = $list->name;
             }
         }
+
         return implode(', ', $lists);
     }
 
@@ -204,6 +206,7 @@ class Email extends Model
         foreach ($lists as $list) {
             $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }
+
         return implode(', ', $footer);
     }
 }

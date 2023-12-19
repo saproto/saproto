@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Providers;
+namespace App\Providers;
 
+use App\Models\MenuItem;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use Proto\Models\MenuItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,18 +16,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Paginator::useBootstrap();
+        Paginator::useBootstrapFive();
 
-        view()->composer('website.navigation.navbar', function ($view) {
+        view()->composer('website.navbar', function ($view) {
             $menuItems = MenuItem::where('parent', null)->orderBy('order')->with('page')->with('children')->get();
             $view->with('menuItems', $menuItems);
         });
 
-        view()->composer('website.layouts.macros.achievement-popup', function ($view) {
+        view()->composer('components.modals.achievement-popup', function ($view) {
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();
-                if(count($newAchievements) > 0) {
+                if (count($newAchievements) > 0) {
                     $newAchievementsQuery->update(['alerted' => true]);
                     $view->with('newAchievements', $newAchievements);
                 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\SpotifyController;
 use DB;
 use Illuminate\Console\Command;
-use Proto\Http\Controllers\SpotifyController;
 
 class SpotifySync extends Command
 {
@@ -35,7 +35,7 @@ class SpotifySync extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -47,6 +47,7 @@ class SpotifySync extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
+
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -62,6 +63,7 @@ class SpotifySync extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
+
                 return;
             }
         }
@@ -102,18 +104,14 @@ class SpotifySync extends Command
 
         $this->info('Updating playlist with '.count($uris).' songs.');
 
-        try {
-            $spotify->replaceUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), []);
+        $spotify->replacePlaylistTracks(config('app-proto.spotify-playlist'), []);
 
-            $slice = 0;
-            $batch_size = 75;
-            while ($slice < count($uris)) {
-                $add = array_values(array_slice($uris, $slice, $batch_size));
-                $slice += $batch_size;
-                $spotify->addUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
-            }
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-            $this->error('Error during playlist update.');
+        $slice = 0;
+        $batch_size = 75;
+        while ($slice < count($uris)) {
+            $add = array_values(array_slice($uris, $slice, $batch_size));
+            $slice += $batch_size;
+            $spotify->addPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
         }
 
         $this->info('Done!');

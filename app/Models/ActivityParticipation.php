@@ -1,10 +1,11 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static Builder|ActivityParticipation onlyTrashed()
@@ -41,33 +43,37 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|ActivityParticipation newModelQuery()
  * @method static Builder|ActivityParticipation newQuery()
  * @method static Builder|ActivityParticipation query()
+ *
  * @mixin Eloquent
  */
 class ActivityParticipation extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'activities_users';
 
     protected $guarded = ['id'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /** @return BelongsTo */
     public function activity()
     {
-        return $this->belongsTo('Proto\Models\Activity');
+        return $this->belongsTo('App\Models\Activity');
     }
 
     /** @return BelongsTo */
     public function help()
     {
-        return $this->belongsTo('Proto\Models\HelpingCommittee', 'committees_activities_id');
+        return $this->belongsTo('App\Models\HelpingCommittee', 'committees_activities_id');
     }
 }

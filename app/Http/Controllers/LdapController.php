@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
 class LdapController extends Controller
 {
     /**
-     * @param string $query
-     * @param bool $only_active
+     * @param  string  $query
+     * @param  bool  $only_active
      * @return array
      */
     public static function searchUtwente($query, $only_active = false)

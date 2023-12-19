@@ -64,7 +64,7 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
-    laravelsail/php74-composer:latest \
+    laravelsail/php81-composer:latest \
     composer install --ignore-platform-reqs --no-scripts
 ```
 
@@ -88,7 +88,7 @@ sail artisan migrate --seed
 #### Client-side dependencies
 To install the client-side dependencies you'll need to run `sail npm install` to install all client-side dependencies.
 
-To compile the project assets (JS/CSS) run `sail npm run dev` to compile once or `sail npm run watch` to keep checking for changes to scripts or stylesheets.
+To compile the project assets (JS/CSS) run `sail npm run build` to compile once or `sail npm run dev` to keep checking for changes to scripts or stylesheets.
 
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`.
 

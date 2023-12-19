@@ -37,7 +37,7 @@ return [
     */
 
     'additional_mailboxes' => [
-      'boardarchive',
+        'boardarchive',
     ],
 
     /*
@@ -123,7 +123,7 @@ return [
     |
     */
 
-    'google-timetable-id' => '8fbi3jfctcqa43lohrc1lrvdfeq4eo8o@import.calendar.google.com',
+    'google-timetable-id' => '2mmp2tp6atcdjhnptr4k58n9qhq4ht88@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'internal' => 'Sterre Kuijper',
+    'internal' => 'Joris Agtereek',
 
     /*
     |--------------------------------------------------------------------------
@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => 'Ben Ligthart',
+    'treasurer' => 'Mark Tool',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,7 +178,7 @@ return [
     |
     */
 
-    'secretary' => 'Max Liebe',
+    'secretary' => 'Ilse de Haan',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,7 +189,7 @@ return [
     |
     */
 
-    'boardnumber' => '12.0',
+    'boardnumber' => '13.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -297,6 +297,14 @@ return [
         2 => 'rainbowbarf',
         3 => 'broto',
         4 => 'nightMode',
+    ],
+
+    'logoThemes' => [
+        0 => 'regular',
+        1 => 'inverse',
+        2 => 'regular',
+        3 => 'broto-inverse',
+        4 => 'inverse',
     ],
 
     // Analytics URL

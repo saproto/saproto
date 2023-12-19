@@ -10,7 +10,7 @@
             Change Proto password
         </a>
 
-        <a href="https://tap.utwente.nl/chpw1.php" target="_blank" class="btn btn-outline-secondary btn-block">
+        <a href="https://tap.utwente.nl/protected/chpw1.php" target="_blank" class="btn btn-outline-secondary btn-block">
             Change UTwente password
         </a>
 

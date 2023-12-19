@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Handlers\Events;
+namespace App\Handlers\Events;
 
+use App\Models\Committee;
+use App\Models\User;
 use Illuminate\Auth\Events\Login;
-use Proto\Models\Committee;
-use Proto\Models\User;
 
 class AuthLoginEventHandler
 {
@@ -21,7 +21,7 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param Login $event
+     * @param  Login  $event
      * @return void
      */
     public function handle($event)
@@ -40,7 +40,7 @@ class AuthLoginEventHandler
             ['committee' => Committee::find(config('proto.committee')['protography']), 'role' => 'protography', 'nda' => false],
         ];
 
-        foreach($committees as $committee) {
+        foreach ($committees as $committee) {
             if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] or $user->signed_nda)) {
                 if (! $user->hasRole($committee['role'])) {
                     $user->assignRole($committee['role']);

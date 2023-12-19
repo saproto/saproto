@@ -1,7 +1,15 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Http\Requests\MP3Request;
+use App\Mail\MembershipEnded;
+use App\Mail\MembershipEndSet;
+use App\Mail\MembershipStarted;
+use App\Models\HashMapItem;
+use App\Models\Member;
+use App\Models\StorageEntry;
+use App\Models\User;
 use Auth;
 use Carbon;
 use Exception;
@@ -10,24 +18,12 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mail;
 use PDF;
-use Proto\Http\Requests\MP3Request;
-use Proto\Mail\MembershipEnded;
-use Proto\Mail\MembershipEndSet;
-use Proto\Mail\MembershipStarted;
-use Proto\Models\HashMapItem;
-use Proto\Models\Member;
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
 use Redirect;
 use Session;
 use Spatie\Permission\Models\Permission;
 
 class UserAdminController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return View
-     */
     public function index(Request $request): View
     {
         $search = $request->input('query');
@@ -69,7 +65,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function details($id)
@@ -81,8 +77,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -99,11 +94,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'User updated!');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function impersonate($id)
@@ -146,8 +142,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function addMembership($id, Request $request)
@@ -157,11 +152,13 @@ class UserAdminController extends Controller
 
         if ($user->is_member) {
             Session::flash('flash_message', 'This user is already a member!');
+
             return Redirect::back();
         }
 
         if (! ($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
+
             return Redirect::back();
         }
 
@@ -173,32 +170,7 @@ class UserAdminController extends Controller
         $member = $user->member;
         $member->created_at = Carbon::now();
         $member->is_pending = false;
-
-        $name = explode(' ', $user->name);
-        if (count($name) > 1) {
-            $alias_base = self::transliterateString(strtolower(
-                preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                .'.'.
-                preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
-            ));
-        } else {
-            $alias_base = self::transliterateString(strtolower(
-                preg_replace('/\PL/u', '', $name[0])
-            ));
-        }
-
-        // make sure usernames are max 20 characters long (windows limitation)
-        $alias_base = substr($alias_base, 0, 17);
-
-        $alias = $alias_base;
-        $i = 0;
-
-        while (Member::where('proto_username', $alias)->withTrashed()->count() > 0) {
-            $i++;
-            $alias = $alias_base.'-'.$i;
-        }
-
-        $member->proto_username = $alias;
+        $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
 
         Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
@@ -212,9 +184,10 @@ class UserAdminController extends Controller
         ]);
 
         // Disabled because ProTube is down.
-        // Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
+        // Removed; Here should the playsound new-member be played
 
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
+
         return Redirect::back();
     }
 
@@ -222,8 +195,8 @@ class UserAdminController extends Controller
      * Adds membership end date to member object.
      * Member object will be removed by cron job on end date.
      *
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
+     *
      * @throws Exception
      */
     public function endMembership($id): RedirectResponse
@@ -236,14 +209,16 @@ class UserAdminController extends Controller
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
         Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
+
         return Redirect::back();
     }
 
     public function EndMembershipInSeptember($id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if(! $user->is_member) {
+        if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+
             return Redirect::back();
         }
 
@@ -251,26 +226,27 @@ class UserAdminController extends Controller
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
+
         return Redirect::back();
     }
 
     public function removeMembershipEnd($id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if(! $user->is_member) {
+        if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
+
             return Redirect::back();
         }
         $user->member->until = null;
         $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function setMembershipType(Request $request, $id): RedirectResponse
     {
@@ -289,12 +265,12 @@ class UserAdminController extends Controller
         $member->save();
 
         Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleNda($id): RedirectResponse
     {
@@ -308,12 +284,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function unblockOmnomcom($id): RedirectResponse
     {
@@ -323,12 +299,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleStudiedCreate($id): RedirectResponse
     {
@@ -338,12 +314,12 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
+     * @param  int  $id
      */
     public function toggleStudiedITech($id): RedirectResponse
     {
@@ -353,13 +329,14 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+
         return Redirect::back();
     }
 
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if($user->member->customOmnomcomSound) {
+        if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
@@ -371,25 +348,23 @@ class UserAdminController extends Controller
         $user->member->customOmnomcomSound()->associate($file);
         $user->member->save();
         Session::flash('flash_message', 'Sound uploaded!');
+
         return Redirect::back();
     }
 
     public function deleteOmnomcomSound(int $id): RedirectResponse
     {
         $user = User::findOrFail($id);
-        if($user->member->customOmnomcomSound) {
+        if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
         Session::flash('flash_message', 'Sound deleted');
+
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function getSignedMemberForm(int $id): RedirectResponse
     {
         $user = Auth::user();
@@ -405,7 +380,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return string
      */
     public function getNewMemberForm($id)
@@ -415,11 +390,13 @@ class UserAdminController extends Controller
 
         if ($user->address === null) {
             Session::flash('flash_message', 'This user has no address!');
+
             return Redirect::back();
         }
 
         if ($user->bank === null) {
             Session::flash('flash_message', 'This user has no bank account!');
+
             return Redirect::back();
         }
 
@@ -431,7 +408,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function destroyMemberForm($id)
@@ -446,11 +423,12 @@ class UserAdminController extends Controller
         $member->forceDelete();
 
         Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return string
      */
     public function printMemberForm($id)
@@ -468,18 +446,5 @@ class UserAdminController extends Controller
         $result = FileController::requestPrint('document', route('memberform::download', ['id' => $user->id]));
 
         return "The printer service responded: $result";
-    }
-
-    /**
-     * Replace all strange characters in a string with normal ones. Shamelessly borrowed from http://stackoverflow.com/a/6837302.
-     *
-     * @param string $txt
-     * @return string|string[]
-     */
-    public static function transliterateString($txt)
-    {
-        $transliterationTable = ['á' => 'a', 'Á' => 'A', 'à' => 'a', 'À' => 'A', 'ă' => 'a', 'Ă' => 'A', 'â' => 'a', 'Â' => 'A', 'å' => 'a', 'Å' => 'A', 'ã' => 'a', 'Ã' => 'A', 'ą' => 'a', 'Ą' => 'A', 'ā' => 'a', 'Ā' => 'A', 'ä' => 'ae', 'Ä' => 'AE', 'æ' => 'ae', 'Æ' => 'AE', 'ḃ' => 'b', 'Ḃ' => 'B', 'ć' => 'c', 'Ć' => 'C', 'ĉ' => 'c', 'Ĉ' => 'C', 'č' => 'c', 'Č' => 'C', 'ċ' => 'c', 'Ċ' => 'C', 'ç' => 'c', 'Ç' => 'C', 'ď' => 'd', 'Ď' => 'D', 'ḋ' => 'd', 'Ḋ' => 'D', 'đ' => 'd', 'Đ' => 'D', 'ð' => 'dh', 'Ð' => 'Dh', 'é' => 'e', 'É' => 'E', 'è' => 'e', 'È' => 'E', 'ĕ' => 'e', 'Ĕ' => 'E', 'ê' => 'e', 'Ê' => 'E', 'ě' => 'e', 'Ě' => 'E', 'ë' => 'e', 'Ë' => 'E', 'ė' => 'e', 'Ė' => 'E', 'ę' => 'e', 'Ę' => 'E', 'ē' => 'e', 'Ē' => 'E', 'ḟ' => 'f', 'Ḟ' => 'F', 'ƒ' => 'f', 'Ƒ' => 'F', 'ğ' => 'g', 'Ğ' => 'G', 'ĝ' => 'g', 'Ĝ' => 'G', 'ġ' => 'g', 'Ġ' => 'G', 'ģ' => 'g', 'Ģ' => 'G', 'ĥ' => 'h', 'Ĥ' => 'H', 'ħ' => 'h', 'Ħ' => 'H', 'í' => 'i', 'Í' => 'I', 'ì' => 'i', 'Ì' => 'I', 'î' => 'i', 'Î' => 'I', 'ï' => 'i', 'Ï' => 'I', 'ĩ' => 'i', 'Ĩ' => 'I', 'į' => 'i', 'Į' => 'I', 'ī' => 'i', 'Ī' => 'I', 'ĵ' => 'j', 'Ĵ' => 'J', 'ķ' => 'k', 'Ķ' => 'K', 'ĺ' => 'l', 'Ĺ' => 'L', 'ľ' => 'l', 'Ľ' => 'L', 'ļ' => 'l', 'Ļ' => 'L', 'ł' => 'l', 'Ł' => 'L', 'ṁ' => 'm', 'Ṁ' => 'M', 'ń' => 'n', 'Ń' => 'N', 'ň' => 'n', 'Ň' => 'N', 'ñ' => 'n', 'Ñ' => 'N', 'ņ' => 'n', 'Ņ' => 'N', 'ó' => 'o', 'Ó' => 'O', 'ò' => 'o', 'Ò' => 'O', 'ô' => 'o', 'Ô' => 'O', 'ő' => 'o', 'Ő' => 'O', 'õ' => 'o', 'Õ' => 'O', 'ø' => 'oe', 'Ø' => 'OE', 'ō' => 'o', 'Ō' => 'O', 'ơ' => 'o', 'Ơ' => 'O', 'ö' => 'oe', 'Ö' => 'OE', 'ṗ' => 'p', 'Ṗ' => 'P', 'ŕ' => 'r', 'Ŕ' => 'R', 'ř' => 'r', 'Ř' => 'R', 'ŗ' => 'r', 'Ŗ' => 'R', 'ś' => 's', 'Ś' => 'S', 'ŝ' => 's', 'Ŝ' => 'S', 'š' => 's', 'Š' => 'S', 'ṡ' => 's', 'Ṡ' => 'S', 'ş' => 's', 'Ş' => 'S', 'ș' => 's', 'Ș' => 'S', 'ß' => 'SS', 'ť' => 't', 'Ť' => 'T', 'ṫ' => 't', 'Ṫ' => 'T', 'ţ' => 't', 'Ţ' => 'T', 'ț' => 't', 'Ț' => 'T', 'ŧ' => 't', 'Ŧ' => 'T', 'ú' => 'u', 'Ú' => 'U', 'ù' => 'u', 'Ù' => 'U', 'ŭ' => 'u', 'Ŭ' => 'U', 'û' => 'u', 'Û' => 'U', 'ů' => 'u', 'Ů' => 'U', 'ű' => 'u', 'Ű' => 'U', 'ũ' => 'u', 'Ũ' => 'U', 'ų' => 'u', 'Ų' => 'U', 'ū' => 'u', 'Ū' => 'U', 'ư' => 'u', 'Ư' => 'U', 'ü' => 'ue', 'Ü' => 'UE', 'ẃ' => 'w', 'Ẃ' => 'W', 'ẁ' => 'w', 'Ẁ' => 'W', 'ŵ' => 'w', 'Ŵ' => 'W', 'ẅ' => 'w', 'Ẅ' => 'W', 'ý' => 'y', 'Ý' => 'Y', 'ỳ' => 'y', 'Ỳ' => 'Y', 'ŷ' => 'y', 'Ŷ' => 'Y', 'ÿ' => 'y', 'Ÿ' => 'Y', 'ź' => 'z', 'Ź' => 'Z', 'ž' => 'z', 'Ž' => 'Z', 'ż' => 'z', 'Ż' => 'Z', 'þ' => 'th', 'Þ' => 'Th', 'µ' => 'u', 'а' => 'a', 'А' => 'a', 'б' => 'b', 'Б' => 'b', 'в' => 'v', 'В' => 'v', 'г' => 'g', 'Г' => 'g', 'д' => 'd', 'Д' => 'd', 'е' => 'e', 'Е' => 'E', 'ё' => 'e', 'Ё' => 'E', 'ж' => 'zh', 'Ж' => 'zh', 'з' => 'z', 'З' => 'z', 'и' => 'i', 'И' => 'i', 'й' => 'j', 'Й' => 'j', 'к' => 'k', 'К' => 'k', 'л' => 'l', 'Л' => 'l', 'м' => 'm', 'М' => 'm', 'н' => 'n', 'Н' => 'n', 'о' => 'o', 'О' => 'o', 'п' => 'p', 'П' => 'p', 'р' => 'r', 'Р' => 'r', 'с' => 's', 'С' => 's', 'т' => 't', 'Т' => 't', 'у' => 'u', 'У' => 'u', 'ф' => 'f', 'Ф' => 'f', 'х' => 'h', 'Х' => 'h', 'ц' => 'c', 'Ц' => 'c', 'ч' => 'ch', 'Ч' => 'ch', 'ш' => 'sh', 'Ш' => 'sh', 'щ' => 'sch', 'Щ' => 'sch', 'ъ' => '', 'Ъ' => '', 'ы' => 'y', 'Ы' => 'y', 'ь' => '', 'Ь' => '', 'э' => 'e', 'Э' => 'e', 'ю' => 'ju', 'Ю' => 'ju', 'я' => 'ja', 'Я' => 'ja'];
-
-        return str_replace(array_keys($transliterationTable), array_values($transliterationTable), $txt);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Auth;
 use Closure;
@@ -17,7 +17,7 @@ class Member
      */
     public function handle($request, $next)
     {
-        if (Auth::check() && Auth::user()->is_member) {
+        if (Auth::user()?->is_member) {
             return $next($request);
         }
         abort(403, 'You need to be a member of S.A. Proto to see this page.');

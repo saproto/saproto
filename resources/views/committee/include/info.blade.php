@@ -23,7 +23,7 @@
 
             <div class="row justify-content-end">
 
-                @if($committee->isMember(Auth::user()))
+                @if($committee->isMember(Auth::user()) || $committee->wantsToReceiveHelperReminder(Auth::user()))
                     <div class="col-8">
 
                         <a href="{{ route('committee::toggle_helper_reminder', ['slug'=>$committee->slug]) }}"
@@ -55,7 +55,7 @@
 
         <p class="card-text">
 
-            {!! Markdown::convertToHtml($committee->description) !!}
+            {!! Markdown::convert($committee->description) !!}
 
         </p>
 

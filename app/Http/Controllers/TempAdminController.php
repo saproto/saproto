@@ -1,23 +1,23 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Tempadmin;
+use App\Models\User;
+use App\Services\ProTubeApiService;
 use Auth;
 use Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
-use Proto\Models\Tempadmin;
-use Proto\Models\User;
 use Redirect;
 
 class TempAdminController extends Controller
 {
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function make($id)
@@ -31,11 +31,14 @@ class TempAdminController extends Controller
         $tempAdmin->user()->associate($user);
         $tempAdmin->save();
 
+        // Call Protube webhook to run check through all connected admins.
+        ProTubeApiService::updateAdmin($user->id, true);
+
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function end($id)
@@ -50,18 +53,17 @@ class TempAdminController extends Controller
             }
         }
 
-        // Call Herbert webhook to run check through all connected admins.
+        // Call Protube webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-
-        //disabled because protube is down/it is not implemented in the new one yet
-        //Http::get(config('herbert.server').'/adminCheck');
+        ProTubeApiService::updateAdmin($user->id, false);
 
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function endId($id)
@@ -75,12 +77,9 @@ class TempAdminController extends Controller
             $tempadmin->end_at = Carbon::now()->subSeconds(1);
             $tempadmin->save();
 
-            // Call Herbert webhook to run check through all connected admins.
+            // Call Protube webhook to run check through all connected admins.
             // Will result in kick for users whose temporary admin powers were removed.
-
-
-            //disabled because protube is down/it is not implemented in the new one yet
-            //Http::get(config('herbert.server').'/adminCheck');
+            ProTubeApiService::updateAdmin($tempadmin->user->id, false);
 
         }
 
@@ -105,7 +104,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -121,18 +119,18 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $tempadmin = Tempadmin::findOrFail($id);
+
         return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }
 
     /**
-     * @param int $id
-     * @param Request $request
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update($id, Request $request)
@@ -142,6 +140,12 @@ class TempAdminController extends Controller
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
+
+        // Update the tempadmin to whether now is between start and end
+        ProTubeApiService::updateAdmin($tempadmin->user->id,
+            Carbon::parse($tempadmin->start_at)->isBefore(Carbon::now())
+            && Carbon::parse($tempadmin->start_at)->isAfter(Carbon::now())
+        );
 
         return Redirect::route('tempadmin::index');
     }

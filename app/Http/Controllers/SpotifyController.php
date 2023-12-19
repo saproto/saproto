@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\HashMapItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Proto\Models\HashMapItem;
 use Redirect;
 use Session;
 use SpotifyWebAPI\Session as SpotifySession;
@@ -14,7 +14,7 @@ class SpotifyController extends Controller
 {
     /**
      * A dummy OAuth flow to generate a token for the Spotify API.
-     * @param Request $request
+     *
      * @return RedirectResponse
      */
     public function oauthTool(Request $request)
@@ -51,11 +51,12 @@ class SpotifyController extends Controller
             self::setApi($api);
 
             Session::flash('flash_message', 'Successfully saved Spotify credentials.');
+
             return Redirect::route('homepage');
         }
     }
 
-    /** @param SpotifySession $session */
+    /** @param  SpotifySession  $session */
     public static function setSession($session)
     {
         $dbSession = HashMapItem::where('key', 'spotify')->where('subkey', 'session')->first();
@@ -69,7 +70,7 @@ class SpotifyController extends Controller
         $dbSession->save();
     }
 
-    /** @param SpotifyWebAPI $api */
+    /** @param  SpotifyWebAPI  $api */
     public static function setApi($api)
     {
         $dbApi = HashMapItem::where('key', 'spotify')->where('subkey', 'api')->first();

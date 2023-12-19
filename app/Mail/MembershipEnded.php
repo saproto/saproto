@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\EmailList;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\EmailList;
-use Proto\Models\User;
 
 class MembershipEnded extends Mailable
 {
@@ -14,6 +14,7 @@ class MembershipEnded extends Mailable
     use SerializesModels;
 
     public $user;
+
     public $lists;
 
     /** @return void */
@@ -40,6 +41,7 @@ class MembershipEnded extends Mailable
         foreach ($lists as $list) {
             $footer[] = sprintf('<li>%s (<a href="%s">Unsubscribe</a>)</li>', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($this->user->id, $list->id)]));
         }
+
         return implode('', $footer);
     }
 }

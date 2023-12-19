@@ -1,7 +1,13 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\FailedWithdrawal;
+use App\Models\OrderLine;
+use App\Models\Product;
+use App\Models\TicketPurchase;
+use App\Models\User;
 use Auth;
 use Carbon;
 use DB;
@@ -10,19 +16,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Activity;
-use Proto\Models\FailedWithdrawal;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\TicketPurchase;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
 class OrderLineController extends Controller
 {
     /**
-     * @param string $date
+     * @param  string  $date
      * @return View
      */
     public function index($date = null)
@@ -49,7 +49,7 @@ class OrderLineController extends Controller
         $selected_month = $date ?? date('Y-m');
 
         $available_months = [];
-        foreach($orderlines->keys() as $month) {
+        foreach ($orderlines->keys() as $month) {
             $month = Carbon::parse($month);
             $available_months[$month->year][] = $month->month;
         }
@@ -66,10 +66,15 @@ class OrderLineController extends Controller
 
         $outstanding = Activity::whereHas('users', function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
-        })->where('closed', false)->sum('price');
+        })->where('closed', false);
 
+        $outstandingAmount = $outstanding->sum('price');
+        $outstanding = $outstanding->select('event_id', 'price')->with('Event', function ($q) {
+            $q->select('id', 'title');
+        })->where('price', '>', 0)->get();
 
         $payment_methods = MollieController::getPaymentMethods();
+
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
@@ -79,12 +84,12 @@ class OrderLineController extends Controller
             'total' => $total,
             'methods' => $payment_methods ?? [],
             'use_fees' => config('omnomcom.mollie')['use_fees'],
+            'outstandingAmount' => $outstandingAmount,
             'outstanding' => $outstanding,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function adminindex(Request $request)
@@ -94,19 +99,32 @@ class OrderLineController extends Controller
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', (Carbon::today()));
         } else {
-            $orderlines = OrderLine::whereDate('created_at',  Carbon::today());
+            $orderlines = OrderLine::whereDate('created_at', Carbon::today());
         }
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
+        $orderlines = $orderlines->with('user', 'product')->orderBy('created_at', 'desc')->paginate(20);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => Carbon::today()->format('d-m-Y'),
             'orderlines' => $orderlines,
-            'user' =>null,
+            'user' => null,
+        ]);
+    }
+
+    public function orderlineWizard()
+    {
+        $members = User::whereHas('member', function ($query) {
+            $query->where('is_pending', false);
+        })->orderBy('name')->get();
+
+        $products = Product::where('is_visible', true)->orderBy('name')->get();
+
+        return view('omnomcom.orders.admin_includes.orderline-wizard', [
+            'members' => $members,
+            'products' => $products,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function filterByDate(Request $request)
@@ -118,10 +136,13 @@ class OrderLineController extends Controller
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
-                $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
+            $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['date'=>$date]);
+        $orderlines = $orderlines->with('user', 'product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends(['date' => $date]);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
@@ -131,7 +152,6 @@ class OrderLineController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return View|RedirectResponse
      */
     public function filterByUser(Request $request)
@@ -146,7 +166,10 @@ class OrderLineController extends Controller
             $orderlines = OrderLine::where('user_id', $user);
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20)->appends(['user'=>$user]);
+        $orderlines = $orderlines->with('user', 'product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->appends(['user' => $user]);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => null,
@@ -156,7 +179,6 @@ class OrderLineController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function bulkStore(Request $request)
@@ -171,13 +193,13 @@ class OrderLineController extends Controller
         }
 
         Session::flash('flash_message', 'Your manual orders have been added.');
+
         return Redirect::back();
     }
 
     /**
      * Store (a) simple orderline(s).
      *
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -192,13 +214,14 @@ class OrderLineController extends Controller
         }
 
         Session::flash('flash_message', 'Your manual orders have been added.');
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
@@ -208,6 +231,7 @@ class OrderLineController extends Controller
 
         if (! $order->canBeDeleted()) {
             Session::flash('flash_message', 'The orderline cannot be deleted.');
+
             return Redirect::back();
         }
 
@@ -220,13 +244,13 @@ class OrderLineController extends Controller
         $order->delete();
 
         Session::flash('flash_message', 'The orderline was deleted.');
+
         return Redirect::back();
     }
 
     /**
      * Display aggregated payment totals for cash and card payments to check the financial administration.
      *
-     * @param Request $request
      * @return View
      */
     public function showPaymentStatistics(Request $request)

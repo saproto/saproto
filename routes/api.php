@@ -5,7 +5,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     Route::group(['middleware' => ['web']], function () {
         Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
-        Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'ApiController@fishcamStream']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
         Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
@@ -54,16 +53,11 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
+        Route::get('random_old_photo', ['as' => 'randomOldPhoto', 'uses' => 'ApiController@randomOldPhoto']);
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
-    });
-
-    /* Routes related to the Quotes API */
-    Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api', 'member']], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'QuoteCornerController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
     });
 
     /* Routes related to the Committees API */
@@ -85,12 +79,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     /* Routes related to the Protube API */
     Route::group(['prefix' => 'protube', 'as' => 'protube::', 'middleware' => ['web']], function () {
-        Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
         Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
-        Route::get('radiostations', ['uses' => 'RadioController@api']);
         Route::get('userdetails', ['middleware' => ['auth:api'], 'uses' => 'ApiController@protubeUserDetails']);
-        Route::get('displays', ['uses' => 'DisplayController@api']);
-        Route::get('sounds', ['as' => 'sounds', 'uses' => 'SoundboardController@apiIndex']);
     });
 
     /* Routes related to the Search API */
@@ -107,6 +97,15 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('stock', ['as' => 'stock', 'uses' => 'OmNomController@stock']);
     });
 
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['web']], function () {
+        Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
+        Route::get('updated_prices/{id}', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPricesJSON']);
+        Route::get('all_prices/{id}', ['as' => 'all_prices', 'uses' => 'WallstreetController@getAllPrices']);
+    });
+
     /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
+
+    /* Routes related to the OmNomCom Wrapped API */
+    Route::get('wrapped')->middleware('auth:api')->uses('WrappedController@index')->name('wrapped');
 });

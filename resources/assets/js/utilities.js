@@ -1,3 +1,5 @@
+window.global ||= window;
+
 // Find CSRF token in page meta tags
 const token = document.head.querySelector('meta[name="csrf-token"]').content
 if (token === undefined) console.error("X-CSRF token could not be found!")

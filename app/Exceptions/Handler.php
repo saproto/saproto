@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Exceptions;
+namespace App\Exceptions;
 
 use App;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -25,7 +25,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that should not be reported.
      *
-     * @var array<string>
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         HttpExceptionInterface::class,
@@ -43,8 +43,8 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Throwable $e
      * @return void
+     *
      * @throws Throwable
      */
     public function report(Throwable $e)
@@ -59,9 +59,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
-     * @param Throwable $e
+     * @param  Request  $request
      * @return SymfonyResponse
+     *
      * @throws Throwable
      */
     public function render($request, Throwable $e)
@@ -76,8 +76,7 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  Request $request
-     * @param  AuthenticationException $exception
+     * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
@@ -92,7 +91,6 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpException.
      *
-     * @param HttpExceptionInterface $e
      * @return SymfonyResponse
      */
     protected function renderHttpException(HttpExceptionInterface $e)
@@ -100,6 +98,7 @@ class Handler extends ExceptionHandler
         if (! view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());
         }
+
         return parent::renderHttpException($e);
     }
 }

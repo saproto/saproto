@@ -1,30 +1,31 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Achievement;
+use App\Models\Activity;
+use App\Models\Committee;
+use App\Models\Company;
+use App\Models\EmailList;
+use App\Models\Event;
+use App\Models\EventCategory;
+use App\Models\HelpingCommittee;
+use App\Models\MenuItem;
+use App\Models\Page;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\ProductCategoryEntry;
+use App\Models\Ticket;
+use App\Models\User;
 use Permission;
-use Proto\Models\Account;
-use Proto\Models\Achievement;
-use Proto\Models\Activity;
-use Proto\Models\Committee;
-use Proto\Models\Company;
-use Proto\Models\EmailList;
-use Proto\Models\Event;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\MenuItem;
-use Proto\Models\Page;
-use Proto\Models\Product;
-use Proto\Models\ProductCategory;
-use Proto\Models\ProductCategoryEntry;
-use Proto\Models\Ticket;
-use Proto\Models\User;
 use Role;
 
 class ExportController extends Controller
 {
     /**
-     * @param array $table
-     * @param string $personal_key
+     * @param  array  $table
+     * @param  string  $personal_key
      * @return mixed
      */
     public function export($table, $personal_key)
@@ -48,17 +49,18 @@ class ExportController extends Controller
                 $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
                     return $activity->event->mayViewEvent($user);
                 });
-
-                foreach ($data as $key => $val) {
+                foreach ($data as $val) {
                     unset($val->event);
                 }
-
                 break;
             case 'committees':
                 if ($user->can('admin')) {
                     $data = Committee::all();
                 } else {
-                    $data = Committee::where('public', 1)->orWhereIn('id', array_values(config('proto.committee')))->get();
+                    $data = Committee::query()
+                        ->where('public', 1)
+                        ->orWhereIn('id', array_values(config('proto.committee')))
+                        ->get();
                 }
                 break;
             case 'committees_activities':
@@ -71,16 +73,20 @@ class ExportController extends Controller
                 if ($user->can('admin')) {
                     $data = Event::all();
                 } else {
-                    $data = Event::all()->filter(function ($event) use ($user) {
-                        return $event->mayViewEvent($user);
-                    });
+                    $data = Event::all()
+                        ->filter(function (Event $event) use ($user) {
+                            return $event->mayViewEvent($user);
+                        });
                 }
 
                 // Exclude 'activity' relation
-                foreach($data as $key => $val){
+                foreach ($data as $key => $val) {
                     unset($val->activity);
                 }
 
+                break;
+            case 'event_categories':
+                $data = EventCategory::all();
                 break;
             case 'mailinglists':
                 $data = EmailList::all();

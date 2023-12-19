@@ -39,14 +39,18 @@
                         <tr>
 
                             <td>{{ $page->title }}</td>
-                            <td><a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a></td>
-                            <td>@if($page->is_member_only) <i class="fas fa-lock"></i> @endif</td>
+                            <td>
+                                <a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a>
+                            </td>
+                            <td>@if($page->is_member_only)
+                                    <i class="fas fa-lock"></i>
+                                @endif</td>
                             <td>
                                 <a href="{{ route('page::edit', ['id' => $page->id]) }}">
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
 
-                                @include('website.layouts.macros.confirm-modal', [
+                                @include('components.modals.confirm-modal', [
                                    'action' => route('page::delete', ['id' => $page->id]),
                                    'text' => '<i class="fas fa-trash text-danger"></i>',
                                    'title' => 'Confirm Delete',

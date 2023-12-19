@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\MembershipRenew;
+use App\Models\Member;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\MembershipRenew;
-use Proto\Models\Member;
 
 class MemberRenewCron extends Command
 {

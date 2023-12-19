@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Handlers\Events;
+namespace App\Handlers\Events;
 
 use Aacotroneo\Saml2\Events\Saml2LoginEvent;
 use Session;
@@ -20,7 +20,7 @@ class SamlLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param Saml2LoginEvent $event
+     * @param  Saml2LoginEvent  $event
      * @return void
      */
     public function handle($event)

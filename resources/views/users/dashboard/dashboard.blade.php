@@ -22,7 +22,7 @@
 
         <div class="col-xl-3 col-md-12">
 
-            @include('website.layouts.macros.confirm-modal', [
+            @include('components.modals.confirm-modal', [
                'action' => route('api::user::gdpr_export'),
                'classes' => 'btn btn-outline-info btn-block mb-3 ellipsis',
                'text' => '<strong>Download all my personal information. (GDPR)</strong>',

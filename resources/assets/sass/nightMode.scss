@@ -90,7 +90,7 @@ $popover-bg: $blue-light;
 $popover-header-bg: $blue-medium;
 
 //import bootstrap after setting variables
-@import '~bootstrap';
+@import 'bootstrap';
 
 // Vendors (S)CSS
 @import 'partials/vendors';

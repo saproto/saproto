@@ -1,14 +1,16 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\PhotoAlbum;
+use App\Models\PhotoLikes;
+use App\Models\PhotoManager;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Proto\Models\PhotoLikes;
-use Proto\Models\PhotoManager;
 use Redirect;
+use Session;
 
 class PhotoController extends Controller
 {
@@ -16,26 +18,32 @@ class PhotoController extends Controller
     public function index()
     {
         $albums = PhotoManager::getAlbums(24);
+
         return view('photos.list', ['albums' => $albums]);
     }
 
-    /**
-     * @param int $id
-     * @return View
-     */
-    public function show($id)
+    public function show(int $id): View|RedirectResponse
     {
+        $album = PhotoAlbum::findOrFail($id);
+
+        if (! $album->published && ! Auth::user()?->can('protography')) {
+            Session::flash('flash_message', 'You do not have the permissions for this.');
+
+            return Redirect::back();
+        }
         $photos = PhotoManager::getPhotos($id, 24);
 
         if ($photos) {
             return view('photos.album', ['photos' => $photos]);
         }
 
-        abort(404, 'Album not found.');
+        Session::flash('flash_message', 'Album not found.');
+
+        return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function photo($id)
@@ -54,7 +62,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $photo_id
+     * @param  int  $photo_id
      * @return RedirectResponse
      */
     public function likePhoto($photo_id)
@@ -72,13 +80,15 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $photo_id
+     * @param  int  $photo_id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function dislikePhoto($photo_id)
     {
         PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
+
         return Redirect::route('photo::view', ['id' => $photo_id]);
     }
 
@@ -86,16 +96,18 @@ class PhotoController extends Controller
     public function apiIndex()
     {
         $albums = PhotoManager::getAlbums();
+
         return json_encode($albums);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return string JSON
      */
     public function apiShow($id)
     {
         $photos = PhotoManager::getPhotos($id);
+
         return json_encode($photos);
     }
 }

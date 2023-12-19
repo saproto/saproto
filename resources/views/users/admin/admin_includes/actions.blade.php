@@ -4,6 +4,23 @@
 
     <div class="card-body">
 
+        @includeWhen(
+            ! $user->is_member && ! $user->hasUnpaidOrderlines(),
+            'components.modals.confirm-modal', [
+               'action' => route('user::delete', ['id' => $user->id]),
+               'method' => 'POST',
+               'text' => '<button class="btn btn-block btn-danger mb-1"><i class="fas fa-trash"></i> Delete</button>',
+               'title' => 'Confirm Delete',
+               'message' => "Are you sure you want to delete this user's account?
+                            <div class='form-group mt-2'>
+                                <label for='confirm-input'>Confirm by typing the users name ($user->name):</label>
+                                <input type='text' class='form-control' id='confirm-input' name='name'
+                                       value='' placeholder='$user->name' required>
+                            </div>",
+               'confirm' => 'Delete',
+            ]
+        )
+
         <a class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
            href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
             User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
@@ -40,7 +57,7 @@
                 </a>
             @endif
             @isset($user->tfa_totp_key)
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                     'action' => route("user::2fa::admindelete", ['id'=>$user->id]),
                     'method'=>'POST',
                     'classes' => 'list-group-item text-danger',
@@ -48,7 +65,7 @@
                     'title' => 'Confirm Disabling 2FA',
                     'message' => 'Are you sure you want to disable the two-factor authentication of '.$user->name.' <b>Only continue if you have their consent!</b>',
                 ])
-           @endisset
+            @endisset
 
         </ul>
 

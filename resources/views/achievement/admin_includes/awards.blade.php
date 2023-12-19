@@ -6,13 +6,15 @@
 
     <div class="card-body">
 
-        @if (count($achievement->currentOwners(false)) > 0)
+        @if ($achievement->currentOwners(false)->count())
 
-            @foreach($achievement->currentOwners(false) as $user)
+            @foreach($achievement->currentOwners(false)->get() as $user)
 
                 <div class="badge bg-primary">
-                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}" class="text-white">{{ $user->name }}</a>
-                    <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}" class="text-white">
+                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}"
+                       class="text-white">{{ $user->name }}</a>
+                    <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
+                       class="text-white">
                         <i class="fas fa-times ms-2"></i>
                     </a>
                 </div>
@@ -37,7 +39,20 @@
             {!! csrf_field() !!}
 
             <div class="form-group autocomplete">
+                <label for="user-id">User</label>
                 <input class="form-control user-search" name="user-id"/>
+            </div>
+
+            @include('components.forms.datetimepicker', [
+                     'name' => 'achieved_on',
+                     'label' => 'Achieved on',
+                     'placeholder' => Carbon::now()->timestamp,
+                     'format'=>'date',
+                 ])
+
+            <div class="form-group">
+                <label for="description" class="text-secondary">(optional) description:</label>
+                <input class="form-control" id="description" name="description" data-label="description">
             </div>
 
             <button type="submit" class="mt-3 btn btn-success btn-block">
@@ -46,7 +61,7 @@
 
             <hr>
 
-            @include('website.layouts.macros.confirm-modal', [
+            @include('components.modals.confirm-modal', [
                 'action' => route('achievement::takeAll', ['id' => $achievement->id]),
                 'classes' => 'btn-outline-danger btn-block',
                 'text' => 'Take from everyone',

@@ -1,59 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\PlayedVideo;
+use App\Models\User;
 use Auth;
-use Carbon\CarbonInterval;
 use DB;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\PlayedVideo;
-use Proto\Models\SoundboardSound;
-use Proto\Models\User;
 use Session;
 
 class ProtubeController extends Controller
 {
-    /** @return View */
-    public function admin()
-    {
-        if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
-            $sounds = SoundboardSound::where('hidden', '=', false)->get();
-            return view('protube.admin', ['sounds' => $sounds]);
-        } else {
-            abort(403);
-        }
-    }
-
-    /** @return View */
-    public function screen(Request $request)
-    {
-        return view('protube.screen', ['showPin' => $request->has('showPin')]);
-    }
-
-    /** @return View */
-    public function offline()
-    {
-        return view('protube.offline');
-    }
-
-    /** @return View */
-    public function remote()
-    {
-        error_reporting(0);
-        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server').'/maxDuration?secret='.config('herbert.secret')))->cascade()->forHumans();
-
-        return view('protube.remote', ['max_duration' => $max_duration]);
-    }
-
-    /** @return RedirectResponse */
-    public function loginRedirect()
-    {
-        return Redirect::away('protube::remote');
-    }
-
     /** @return View */
     public function topVideos()
     {
@@ -80,9 +39,9 @@ class ProtubeController extends Controller
     }
 
     /**
-     * @param string $since
-     * @param User|null $user
-     * @param int $max
+     * @param  string  $since
+     * @param  User|null  $user
+     * @param  int  $max
      * @return array
      */
     private function getHistory($since = '-1 week', $user = null, $max = 50)
@@ -99,9 +58,9 @@ class ProtubeController extends Controller
     }
 
     /**
-     * @param int $limit
-     * @param string|null $since
-     * @param User|null $user
+     * @param  int  $limit
+     * @param  string|null  $since
+     * @param  User|null  $user
      * @return array
      */
     private function getTopVideos($limit = 10, $since = '2011-04-20', $user = null)
@@ -128,6 +87,7 @@ class ProtubeController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
+
         return Redirect::back();
     }
 
@@ -138,6 +98,7 @@ class ProtubeController extends Controller
         PlayedVideo::where('user_id', $user->id)->update(['user_id' => null]);
 
         Session::flash('flash_message', 'History cleared.');
+
         return Redirect::back();
     }
 }

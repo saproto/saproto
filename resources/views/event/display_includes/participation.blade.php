@@ -1,4 +1,4 @@
-@if($event->activity && Auth::check() && Auth::user()->is_member && $event->activity->withParticipants())
+@if($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
 
     <div class="card mb-3">
 
@@ -80,6 +80,10 @@
                                 Free!
                             @endif
                         </strong>
+                        <br>
+                        @if($event->activity->redirect_url)
+                            <i>Note: Signing up will redirect you to an external page!</i>
+                        @endif
                     </a>
                 @endif
             @endif
@@ -94,7 +98,6 @@
                     @endif
                 </li>
             @endif
-
         </ul>
 
         <div class="card-body">
@@ -190,7 +193,7 @@
 
     @endif
 
-@elseif($event->activity && $event->activity->withParticipants())
+@elseif($event->activity?->withParticipants())
 
     <div class="card">
         <div class="card-header text-center bg-dark text-white">

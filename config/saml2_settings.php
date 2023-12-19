@@ -31,7 +31,7 @@ return $settings = [
      * which middleware group to use for the saml routes
      * Laravel 5.2 will need a group which includes StartSession
      */
-    'routesMiddleware' => ['saml', 'web'],
+    'routesMiddleware' => ['web', 'saml'],
 
     /*
      * Indicates how the parameters will be

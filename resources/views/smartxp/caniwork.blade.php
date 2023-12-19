@@ -20,7 +20,7 @@
 
     <title>Can I work in the SmartXP?</title>
 
-    @include('website.layouts.assets.stylesheets')
+    @include('website.assets.stylesheets')
 
     <style type="text/css">
 
@@ -199,7 +199,7 @@
 
 </div>
 
-@include('website.layouts.assets.javascripts')
+@include('website.assets.javascripts')
 @stack('javascript')
 
 </body>

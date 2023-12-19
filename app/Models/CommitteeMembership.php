@@ -1,10 +1,11 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +24,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property-read Committee $committee
  * @property-read User $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|CommitteeMembership onlyTrashed()
@@ -39,10 +41,12 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|CommitteeMembership newModelQuery()
  * @method static Builder|CommitteeMembership newQuery()
  * @method static Builder|CommitteeMembership query()
+ *
  * @mixin Eloquent
  */
 class CommitteeMembership extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'committees_users';
@@ -51,17 +55,19 @@ class CommitteeMembership extends Model
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
 
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('Proto\Models\Committee');
+        return $this->belongsTo('App\Models\Committee');
     }
 }

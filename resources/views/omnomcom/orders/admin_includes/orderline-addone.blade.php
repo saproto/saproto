@@ -1,4 +1,4 @@
-<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderline-modal" href="#">
+<a class="btn btn-success btn-block mb-3" href="{{route('omnomcom::orders::orderline-wizard')}}">
     Add orderline wizard. <span class="ms-3">🧙</span>
 </a>
 

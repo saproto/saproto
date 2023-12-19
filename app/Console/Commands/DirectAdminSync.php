@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\Alias;
+use App\Models\Committee;
+use App\Models\CommitteeMembership;
+use App\Models\Member;
 use Illuminate\Console\Command;
-use Proto\Models\Alias;
-use Proto\Models\Committee;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
 use Solitweb\DirectAdmin\DirectAdmin;
 
 class DirectAdminSync extends Command
@@ -40,7 +40,6 @@ class DirectAdminSync extends Command
      */
     public function handle()
     {
-        ini_set('max_input_vars', 2000);
         $da = new DirectAdmin();
         $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
         $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
@@ -144,8 +143,8 @@ class DirectAdminSync extends Command
     /**
      * Construct a patch list of forwarders from the target list.
      *
-     * @param array $current The current list of forwarders
-     * @param array $target The target list of forwarders
+     * @param  array  $current The current list of forwarders
+     * @param  array  $target The target list of forwarders
      * @return array A forwarders patch list containing an 'add', 'mod' and 'del' array
      */
     private function constructForwarderPatchList($current, $target)
@@ -180,7 +179,7 @@ class DirectAdminSync extends Command
                     }
                 }
 
-                // Otherwise, we do not modify this alias.
+            // Otherwise, we do not modify this alias.
             }
             // Remove the forwarder because it does not exist according to the target list.
             else {
@@ -203,7 +202,7 @@ class DirectAdminSync extends Command
     /**
      * Generate queries to apply the forwarders patch lists.
      *
-     * @param array $patch The forwarders patch list containing a 'add' and 'del' array.
+     * @param  array  $patch The forwarders patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the forwarders patch
      */
     private function applyForwarderPatchList($patch)
@@ -251,8 +250,8 @@ class DirectAdminSync extends Command
     /**
      * Construct a patch list of accounts from the target list.
      *
-     * @param array $current The current list of accounts
-     * @param array $target The target list of accounts
+     * @param  array  $current The current list of accounts
+     * @param  array  $target The target list of accounts
      * @return array An accounts patch list containing an 'add' and 'del' array
      */
     private function constructAccountPatchList($current, $target)
@@ -286,7 +285,7 @@ class DirectAdminSync extends Command
     /**
      * Generate queries to apply the accounts patch lists.
      *
-     * @param array $patch The accounts patch list containing a 'add' and 'del' array.
+     * @param  array  $patch The accounts patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the accounts patch
      */
     private function applyAccountPatchList($patch)
@@ -326,8 +325,8 @@ class DirectAdminSync extends Command
     /**
      * Execute a list of DirectAdmin queries.
      *
-     * @param DirectAdmin $da The DirectAdmin instance
-     * @param array $queries An array containing a 'cmd' and 'options' array
+     * @param  DirectAdmin  $da The DirectAdmin instance
+     * @param  array  $queries An array containing a 'cmd' and 'options' array
      */
     private function executeQueries($da, $queries)
     {

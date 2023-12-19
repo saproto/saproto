@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Http\Requests;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,16 +25,17 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'start'=>['required', 'gte:end'],
-            'location'=>['required'],
-            'secret'=>['required'],
-            'description'=>['required'],
-            'summary'=>['required'],
-            'image'=>['image'],
+            'start' => ['required', 'gte:end'],
+            'location' => ['required'],
+            'secret' => ['required'],
+            'description' => ['required'],
+            'summary' => ['required'],
+            'image' => ['image'],
         ];
     }
 
-    public function messages() {
+    public function messages()
+    {
         return [
             'gte' => 'The Event cannot end before it begins!', ];
     }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\LdapController;
+use App\Mail\FeeEmail;
+use App\Mail\FeeEmailForBoard;
+use App\Models\Member;
+use App\Models\OrderLine;
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Http\Controllers\LdapController;
-use Proto\Mail\FeeEmail;
-use Proto\Mail\FeeEmailForBoard;
-use Proto\Models\Member;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
 
 class FeeCron extends Command
 {
@@ -46,6 +46,8 @@ class FeeCron extends Command
     {
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
             $this->info('We don\'t charge membership fees in August or September.');
+
+            return 0;
         }
 
         if (intval(date('n')) >= 9) {
@@ -87,7 +89,7 @@ class FeeCron extends Command
                     $email_remittance_reason = 'you signed up for life-long membership when you became a member';
                 } elseif ($member->is_pet) {
                     $reason = 'Pet member';
-                    $email_remittance_reason = 'you are a pet and therefore do not posses any money';
+                    $email_remittance_reason = 'you are a pet and therefore do not possess any money';
                 } elseif ($member->is_donor) {
                     $reason = 'Donor';
                     $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
@@ -116,6 +118,7 @@ class FeeCron extends Command
         }
 
         $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
+
         return 0;
     }
 }

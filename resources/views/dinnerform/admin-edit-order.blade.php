@@ -26,10 +26,11 @@
                             <input class="form-control" value="{{$dinnerformOrderline->price}}" id="price" name="price" type="number" min="1" step="any"
                                    required>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" id="helper" name="helper" type="checkbox" {{$dinnerformOrderline->helper ? 'checked' : ''}}>
-                            <label for="helper">Were they a helper?</label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'helper',
+                            'checked' => $dinnerformOrderline->helper,
+                            'label' => 'Were they a helper?'
+                        ])
                     </div>
 
                     <div class="card-footer">

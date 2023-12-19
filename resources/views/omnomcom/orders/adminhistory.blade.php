@@ -27,6 +27,4 @@
 
     </div>
 
-    @include('omnomcom.orders.admin_includes.orderline-modal')
-
 @endsection

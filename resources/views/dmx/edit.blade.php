@@ -33,8 +33,8 @@
                         <div class="form-group">
                             <label for="channel_start">Fixture behavior:</label>
                             <select class="form-control" name="follow_timetable">
-                                <option value="0" {{ $fixture && !$fixture->follow_timetable ? 'selected' : '' }}>Manual</option>
-                                <option value="1" {{ $fixture && $fixture->follow_timetable ? 'selected' : '' }}>
+                                <option value="0" @selected($fixture && !$fixture->follow_timetable)>Manual</option>
+                                <option value="1" @selected($fixture?->follow_timetable)>
                                     Automatic via timetable
                                 </option>
                             </select>
@@ -72,16 +72,16 @@
                                                     <option value="none">
                                                         None
                                                     </option>
-                                                    <option value="red" {{ $channel->special_function == 'red' ? 'selected' : '' }}>
+                                                    <option value="red" @selected($channel->special_function == 'red')>
                                                         Red
                                                     </option>
-                                                    <option value="green" {{ $channel->special_function == 'green' ? 'selected' : '' }}>
+                                                    <option value="green" @selected($channel->special_function == 'green')>
                                                         Green
                                                     </option>
-                                                    <option value="blue" {{ $channel->special_function == 'blue' ? 'selected' : '' }}>
+                                                    <option value="blue" @selected($channel->special_function == 'blue')>
                                                         Blue
                                                     </option>
-                                                    <option value="brightness" {{ $channel->special_function == 'brightness' ? 'selected' : '' }}>
+                                                    <option value="brightness" @selected($channel->special_function == 'brightness')>
                                                         Brightness
                                                     </option>
                                                 </select>

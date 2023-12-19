@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\DailyHelperMail;
+use App\Models\HelpingCommittee;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\DailyHelperMail;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\User;
 
 class HelperNotificationsCron extends Command
 {
@@ -45,7 +45,7 @@ class HelperNotificationsCron extends Command
             ->whereHas('member')
             ->get()
             ->filter(function ($value, $key) {
-                    return $value->isActiveMember();
+                return $value->isActiveMember();
             });
 
         $handledHelpIds = [];
@@ -63,7 +63,7 @@ class HelperNotificationsCron extends Command
                         });
                     })
                     ->whereHas('committee', function ($q) use ($user) {
-                        $q->whereHas('users',function ($w) use ($user) {
+                        $q->whereHas('users', function ($w) use ($user) {
                             $w->where('users.id', $user->id); //check if the user is still in the active committee members
                         });
                     })
@@ -76,20 +76,20 @@ class HelperNotificationsCron extends Command
                     });
 
                 foreach ($helps as $help) {
-                            if (! isset($events[$help->activity->event->id])) {
-                                $events[$help->activity->event->id] = new \stdClass();
-                                $events[$help->activity->event->id]->help = [];
-                            }
+                    if (! isset($events[$help->activity->event->id])) {
+                        $events[$help->activity->event->id] = new \stdClass();
+                        $events[$help->activity->event->id]->help = [];
+                    }
 
-                            $helpInfo = new \stdClass();
-                            $helpInfo->amount = $help->amount;
-                            $helpInfo->committeeName = $help->committee->name;
+                    $helpInfo = new \stdClass();
+                    $helpInfo->amount = $help->amount;
+                    $helpInfo->committeeName = $help->committee->name;
 
-                            $events[$help->activity->event->id]->help[] = $helpInfo;
+                    $events[$help->activity->event->id]->help[] = $helpInfo;
 
-                        if (! in_array($help->id, $handledHelpIds)) {
-                            $handledHelpIds[] = $help->id;
-                        }
+                    if (! in_array($help->id, $handledHelpIds)) {
+                        $handledHelpIds[] = $help->id;
+                    }
 
                 }
             }

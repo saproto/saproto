@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><span id="present">{{\Proto\Http\Controllers\ParticipationController::getPresent($event->activity->id)}}</span>/{{$event->allUsers()->count()}}</td>
+                            <td><span id="present">{{$event->activity->getPresent()}}</span>/{{$event->allUsers()->count()}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -101,7 +101,7 @@
                                 @if ($event->shouldShowDietInfo())
                                     <td>
                                         @if($user->hasDiet())
-                                            {!! Markdown::convertToHtml($user->diet) !!}
+                                            {!! Markdown::convert($user->diet) !!}
                                         @endif
                                     </td>
                                 @endif
