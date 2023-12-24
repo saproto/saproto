@@ -1,6 +1,7 @@
 version: '3'
 services:
     laravel.test:
+        hostname: 'saproto_sail'
         container_name: '${SAIL_CONTAINER_NAME}-app'
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
@@ -39,6 +40,7 @@ services:
         volumes:
             - 'sail-mariadb:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './create-protube-db.sh:/docker-entrypoint-initdb.d/10-create-protube-database.sh'
         networks:
             - sail
         healthcheck:
