@@ -130,20 +130,20 @@ class OtherDataSeeder extends Seeder
         // Create newsitems and weekly newsitems
         $n = 40;
         $output->task("creating $n newsitems", fn () => Newsitem::factory()->count($n)->create());
-        
-        $output->task("Creating ProTube OAUTH client", function () { 
-            Artisan::call("passport:client", [
-                "--name" => "ProTube",
-                "--no-interaction" => true,
-                "--redirect_uri" => "http://localhost:3000/auth/login/callback"
+
+        $output->task('Creating ProTube OAUTH client', function () {
+            Artisan::call('passport:client', [
+                '--name' => 'ProTube',
+                '--no-interaction' => true,
+                '--redirect_uri' => 'http://localhost:3000/auth/login/callback',
             ]);
         });
 
-        $client = DB::table("oauth_clients")
-            ->where("name", "ProTube")
+        $client = DB::table('oauth_clients')
+            ->where('name', 'ProTube')
             ->latest()
             ->first();
-    
+
         $output->info("<options=bold>ProTube OAUTH Id:</> <fg=green>$client->id</>
                <options=bold>secret:</> <fg=green>$client->secret</>");
     }
