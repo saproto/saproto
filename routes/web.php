@@ -885,39 +885,11 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* The routes for Protube. */
-    Route::controller(RadioController::class)->prefix('protube')->name('protube::')->group(function () {
-        Route::get('screen', 'screen')->name('screen'); # ProtubeController
-        Route::get('admin', 'admin')->middleware(['auth'])->name('admin'); # ProtubeController
-        Route::get('offline', 'offline')->name('offline'); # ProtubeController
+    Route::controller(ProtubeController::class)->prefix('protube')->name('protube::')->group(function () {
         Route::get('dashboard', 'dashboard')->middleware(['auth'])->name('dashboard'); # ProtubeController
         Route::get('togglehistory', 'toggleHistory')->middleware(['auth'])->name('togglehistory'); # ProtubeController
         Route::get('clearhistory', 'clearHistory')->middleware(['auth'])->name('clearhistory'); # ProtubeController
         Route::get('top', 'topVideos')->name('top'); # ProtubeController
-        Route::get('login', 'loginRedirect')->middleware(['auth'])->name('login'); # ProtubeController
-        Route::get('{id?}', 'remote')->name('remote'); # ProtubeController
-
-        /* Routes related to the Protube Radio */
-        Route::controller(RadioController::class)->prefix('radio')->middleware(['permission:sysadmin'])->name('radio::')->group(function () {
-            Route::get('index', 'index')->name('index'); # RadioController
-            Route::post('store', 'store')->name('store'); # RadioController
-            Route::get('delete/{id}', 'destroy')->name('delete'); # RadioController
-        });
-
-        /* Routes related to the Protube displays */
-        Route::controller(DisplayController::class)->prefix('display')->middleware(['permission:sysadmin'])->name('display::')->group(function () {
-            Route::get('index', 'index')->name('index'); # DisplayController
-            Route::post('store', 'store')->name('store'); # DisplayController
-            Route::post('update/{id}', 'update')->name('update'); # DisplayController
-            Route::get('delete/{id}', 'destroy')->name('delete'); # DisplayController
-        });
-
-        /* Routes related to teh Soundboard */
-        Route::controller(SoundboardController::class)->prefix('soundboard')->middleware(['permission:sysadmin'])->name('soundboard::')->group(function () {
-            Route::get('index', 'index')->name('index'); # SoundboardController
-            Route::post('store', 'store')->name('store'); # SoundboardController
-            Route::get('delete/{id}', 'destroy')->name('delete'); # SoundboardController
-            Route::get('togglehidden/{id}', 'toggleHidden')->name('togglehidden'); # SoundboardController
-        });
     });
 
     /* Routes related to calendars. */

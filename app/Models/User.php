@@ -375,11 +375,33 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return false;
     }
 
-    /** @return bool */
-    public function isTempadmin()
+    /**
+     * Returns whether the user is currently tempadmin.
+     */
+    public function isTempadmin(): bool
     {
         foreach ($this->tempadmin as $tempadmin) {
             if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether the user is tempadmin between now and the end of the day.
+     */
+    public function isTempadminLaterToday(): bool
+    {
+        $now = Carbon::now();
+        foreach ($this->tempadmin as $tempadmin) {
+            // Skip all 'past' tempadmin entries
+            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) {
+                continue;
+            }
+
+            if ($now->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
                 return true;
             }
         }
@@ -453,7 +475,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $withdrawals;
     }
 
-    /** @return string|null*/
+    /** @return string|null */
     public function websiteUrl()
     {
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
@@ -463,7 +485,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
     }
 
-    /** @return string|null*/
+    /** @return string|null */
     public function websiteDisplay()
     {
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
@@ -479,7 +501,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
-    /** @return string*/
+    /** @return string */
     public function getDisplayEmail()
     {
         return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
