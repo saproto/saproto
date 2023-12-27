@@ -40,7 +40,7 @@ class ApiController extends Controller
             return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
-                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin() || $user->isTempadminSomeWhereToday(),
+                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin() || $user->isTempadminLaterToday(),
                 'id' => $user->id,
             ]);
         }
