@@ -66,7 +66,7 @@ class OtherDataSeeder extends Seeder
         });
 
         // Get users with completed membership
-        $members = User::whereHas('member', fn($members) => $members->where('is_pending', '==', false))->get();
+        $members = User::whereHas('member', fn ($members) => $members->where('is_pending', '==', false))->get();
 
         // Create committee participations
         $committees = Committee::all();
@@ -118,15 +118,15 @@ class OtherDataSeeder extends Seeder
 
         // Create pages
         $n = 10;
-        $output->task("creating $n pages", fn() => Page::factory()->count($n)->create());
+        $output->task("creating $n pages", fn () => Page::factory()->count($n)->create());
 
         //create quotes and good ideas
         $n = 100;
-        $output->task("creating $n Good Ideas", fn() => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
-        $output->task("creating $n quotes", fn() => Feedback::factory()->state(['feedback_category_id' => 2])->count($n)->create());
+        $output->task("creating $n Good Ideas", fn () => Feedback::factory()->state(['feedback_category_id' => 1])->count($n)->create());
+        $output->task("creating $n quotes", fn () => Feedback::factory()->state(['feedback_category_id' => 2])->count($n)->create());
 
         // Create newsitems and weekly newsitems
         $n = 40;
-        $output->task("creating $n newsitems", fn() => Newsitem::factory()->count($n)->create());
+        $output->task("creating $n newsitems", fn () => Newsitem::factory()->count($n)->create());
     }
 }
