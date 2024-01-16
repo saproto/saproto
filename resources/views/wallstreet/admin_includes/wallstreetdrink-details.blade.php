@@ -63,7 +63,7 @@
                         <label for="price_increase">€ increase per sold item:</label>
                         <input type="number" step="0.01" class="form-control" id="price_increase" name="price_increase"
                                placeholder='0'
-                               value="{{ $currentDrink->price_increase ?? ''}}"
+                               value="{{ $currentDrink->price_increase ?? '' }}"
                                required
                         />
                     </div>
@@ -72,7 +72,7 @@
                     <div class="col-md-12 mb-3">
                         @include('components.forms.checkbox', [
                             'name' => 'random_events',
-                            'checked' => $currentDrink?$currentDrink->random_events:true,
+                            'checked' => $currentDrink ? $currentDrink->random_events : true,
                             'label' => 'Random events <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="If random events happen during the drink"></i>'
                         ])
                     </div>
