@@ -177,11 +177,11 @@
                         <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
                         <div class="wallstreet-info-item">
                             <div>Current loss</div>
-                            <div><b id="current_loss">{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
+                            <div><b id="current_loss">{{ rand(500, 600) }}.{{ rand(0, 50) }}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Previous close</div>
-                            <div><b>{{rand(500, 600)}}.{{rand(0,50)}}</b></div>
+                            <div><b>{{ rand(500, 600) }}.{{ rand(0, 50) }}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Open</div>
@@ -201,7 +201,7 @@
                         </div>
                         <div class="wallstreet-info-item">
                             <div>Forward Divided & Yield</div>
-                            <div><b>{{rand(0, 10)}} </b><span class="text-green">(0.12%)</span></div>
+                            <div><b>{{ rand(0, 10) }} </b><span class="text-green">(0.12%)</span></div>
                         </div>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
                  class="swiper-container swiper-container-free-mode stonks-cards mb-2 d-flex align-items-center">
                 <div class="swiper-wrapper">
                     @foreach($prices as $price)
-                        <div id="{{preg_replace('/[^a-zA-Z0-9]/', '', $price->name)}}"
+                        <div id="{{ preg_replace('/[^a-zA-Z0-9]/', '', $price->name) }}"
                              class="swiper-slide card w-25">
                             <div class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img'}}"
                                  style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;">
@@ -235,7 +235,7 @@
 
                                     {{-- Change --}}
                                     <div id="diff"
-                                         class="fs-5 {{$price->diff < 0 ? 'text-green' : 'text-danger'}}">
+                                         class="fs-5 {{ $price->diff < 0 ? 'text-green' : 'text-danger' }}">
                                         {{sprintf("%s %.2f%%", $price->diff < 0 ? "▼" : "▲", $price->diff)}}
                                     </div>
                                 </div>
@@ -288,9 +288,7 @@
         const handledEvents = [];
 
         function updatePrices() {
-            console.log("Updating prices!")
             get('{{route('api::wallstreet::updated_prices', ['id' => $activeDrink->id])}}').then((response) => {
-                    console.log(response)
                     const lossDiv = document.getElementById("current_loss");
                     lossDiv.innerHTML = "€ " + response.loss.toFixed(2);
                     response.products.forEach((product) => {
@@ -349,7 +347,6 @@
 
         function updateChart() {
             get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
-                console.log("updating chart")
                 chart.data = createDataSets(products);
                 chart.update('none');
             })
@@ -358,7 +355,6 @@
         window.addEventListener('load', _ => {
             setInterval(updatePrices, 5000);
             get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
-                console.log("creating chart")
 
                 chart = new Chart(ctx, {
                     type: "line",

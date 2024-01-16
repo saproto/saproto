@@ -102,7 +102,7 @@ class UpdateWallstreetPrices extends Command
             $currentDrink->events()->attach($randomEvent->id);
             foreach ($randomEvent->products->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
-                $delta = $randomEvent->percentage / 100 * $latestPrice->price;
+                $delta = ($randomEvent->percentage / 100) * $latestPrice->price;
                 $delta = max($delta, $currentDrink->minimum_price - $latestPrice->price);
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,

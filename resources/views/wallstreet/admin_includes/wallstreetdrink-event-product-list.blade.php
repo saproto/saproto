@@ -25,7 +25,7 @@
         <div>
             <div class="card-footer">
                 @foreach($currentEvent->products as $product)
-                    <a href="{{ route('wallstreet::events::products::remove', ['id'=>$currentEvent->id, 'productId'=>$product->id]) }}">
+                    <a href="{{ route('wallstreet::events::products::remove', ['id' => $currentEvent->id, 'productId' => $product->id]) }}">
                         <span class="badge rounded-pill bg-warning">
                             {{ $product->name }}
                         </span>

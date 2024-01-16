@@ -12,7 +12,7 @@ class WallstreetEvent extends Model
 
     public function image(): BelongsTo
     {
-        return $this->belongsTo('App\Models\StorageEntry');
+        return $this->belongsTo(StorageEntry::class);
     }
 
     public function products(): BelongsToMany
