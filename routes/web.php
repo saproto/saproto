@@ -377,6 +377,7 @@ Route::middleware('forcedomain')->group(function () {
 
     /* Routes related to dinnerforms. */
     Route::prefix('dinnerform')->name('dinnerform::')->middleware(['auth'])->group(function () {
+        Route::get('{id}', [DinnerformController::class, 'show'])->name('show'); // DinnerformController
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
             Route::get('add', 'create')->name('add'); // DinnerformController
             Route::post('add', 'store')->name('add'); // DinnerformController
@@ -387,13 +388,12 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('admin/{id}', 'admin')->name('admin'); // DinnerformController
             Route::get('process/{id}', 'process')->name('process'); // DinnerformController
         });
-        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->group(function () {
+        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
             Route::get('delete/{id}', 'delete')->name('delete'); // DinnerformOrderlineController
             Route::get('edit/{id}', 'edit')->name('edit'); // DinnerformOrderlineController
             Route::post('add/{id}', 'store')->name('add'); // DinnerformOrderlineController
-            Route::post('update/{id}', 'update')->middleware(['permission:tipcie'])->name('update'); // DinnerformOrderlineController
+            Route::post('update/{id}', 'update')->name('update'); // DinnerformOrderlineController
         });
-        Route::get('{id}', [DinnerformController::class, 'show'])->name('show'); // DinnerformController
     });
 
     /* routes related to the wallstreet drink system */
@@ -971,7 +971,7 @@ Route::middleware('forcedomain')->group(function () {
     /* Routes related to the Minisites */
     Route::prefix('minisites')->name('minisites::')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
-            Route::get('/', 'showMiniSite')->name('index'); // IsAlfredThereController
+            Route::get('/', 'showMiniSite')->name('index'); 
             Route::get('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
             Route::post('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
         });
