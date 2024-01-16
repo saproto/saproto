@@ -23,7 +23,7 @@
                         <label for="name">Event name:</label>
                         <input type="text" class="form-control" id="name" name="title"
                                placeholder="A keg fell of the truck!"
-                               value="{{ old('title',$currentEvent->name ?? '') }}"
+                               value="{{ old('title', $currentEvent->name ?? '') }}"
                                required>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <label for="percentage">price % per product</label>
                     <input type="number" step="0.01" class="form-control" id="percentage" name="percentage"
                            placeholder='1'
-                           value="{{ $currentEvent->percentage ?? ''}}"
+                           value="{{ $currentEvent->percentage ?? '' }}"
                            required
                     />
                 </div>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <!-- Image -->
                 <div class="custom-file">
-                    @if($currentEvent?->image==null)
+                    @if($currentEvent?->image == null)
                         <label for="image">Set event image:</label>
                     @else
                         <image class="mb-3" src="{{ $currentEvent->image->generatePath() ?? '' }}"/>
@@ -51,7 +51,7 @@
                 @include('components.forms.markdownfield', [
                     'name' => 'description',
                     'placeholder' => $currentEvent == null ? "A keg fell of the Grolsch truck and now we have to empty it! What a pity..." : null,
-                    'value' => old('description',$currentEvent == null ? null : $currentEvent->description)
+                    'value' => old('description', $currentEvent == null ? null : $currentEvent->description)
                 ])
 
             </div>
