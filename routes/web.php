@@ -971,7 +971,7 @@ Route::middleware('forcedomain')->group(function () {
     /* Routes related to the Minisites */
     Route::prefix('minisites')->name('minisites::')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
-            Route::get('/', 'showMiniSite')->name('index'); 
+            Route::get('/', 'showMiniSite')->name('index');
             Route::get('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
             Route::post('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
         });
