@@ -96,7 +96,7 @@ class UpdateWallstreetPrices extends Command
             }
         }
         //chance of 1 in 30 (so about every 30 minutes that a random event is triggered)
-        if ($currentDrink->random_events) {
+        if ($currentDrink->random_events && rand(0, 30) === 0 && WallstreetEvent::count() > 0) {
             $randomEvent = WallstreetEvent::inRandomOrder()->whereHas('products', function ($q) use ($currentDrink) {
                 $q->whereIn('products.id', $currentDrink->products->pluck('id'));
             })->first();
