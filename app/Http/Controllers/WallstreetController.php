@@ -32,7 +32,7 @@ class WallstreetController extends Controller
     {
         $activeDrink = WallstreetController::active();
 
-        if (!$activeDrink) {
+        if (! $activeDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
 
             return Redirect::back();
@@ -64,6 +64,7 @@ class WallstreetController extends Controller
 
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
         Session::flash('flash_message', 'Wallstreet drink created. Do not forget to add products below!');
+
         return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => $drink]);
     }
 
@@ -120,7 +121,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $drink->products()->syncWithoutDetaching($product);
         }
-        Session::flash('flash_message', count($products) . ' Products added to Wallstreet drink.');
+        Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
 
         return Redirect::to(route('wallstreet::edit', ['id' => $id]));
     }
@@ -146,7 +147,7 @@ class WallstreetController extends Controller
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if (!$newPrice || $product->price === 0) {
+            if (! $newPrice || $product->price === 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
 
@@ -199,6 +200,7 @@ class WallstreetController extends Controller
         foreach ($events as $event) {
             $event->img = $event->image->generatePath();
         }
+
         return $events;
     }
 
@@ -225,6 +227,7 @@ class WallstreetController extends Controller
 
         $event->save();
         Session::flash('flash_message', 'Wallstreet event created. Do not forget to add products below!');
+
         return Redirect::back();
     }
 
@@ -262,9 +265,9 @@ class WallstreetController extends Controller
         $currentEvent->image()->dissociate();
         $currentEvent->save();
         $currentEvent->delete();
+
         return Redirect::to(route('wallstreet::events::list'));
     }
-
 
     public function addEventProducts($id, Request $request)
     {
@@ -274,7 +277,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $event->products()->syncWithoutDetaching($product);
         }
-        Session::flash('flash_message', count($products) . ' Products added to Wallstreet event.');
+        Session::flash('flash_message', count($products).' Products added to Wallstreet event.');
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
     }
