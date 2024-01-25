@@ -2,129 +2,129 @@
 
 return [
     'permissions' => [
-        'sysadmin' => (object)[
+        'sysadmin' => (object) [
             'display_name' => 'System Admin',
             'description' => 'Gives admin access to the application.',
         ],
-        'board' => (object)[
+        'board' => (object) [
             'display_name' => 'Board Access',
             'description' => 'Gives access to the association administration.',
         ],
-        'protube' => (object)[
+        'protube' => (object) [
             'display_name' => 'Protube Admin',
             'description' => 'Gives Protube admin access.',
         ],
-        'omnomcom' => (object)[
+        'omnomcom' => (object) [
             'display_name' => 'OmNomCom Access',
             'description' => 'Gives access to the OmNomCom administration.',
         ],
-        'finadmin' => (object)[
+        'finadmin' => (object) [
             'display_name' => 'Financial Admin',
             'description' => 'Gives access to the financial administration.',
         ],
-        'tipcie' => (object)[
+        'tipcie' => (object) [
             'display_name' => 'TIPCie Access',
             'description' => 'Gives access to the TIPCie tools.',
         ],
-        'drafters' => (object)[
+        'drafters' => (object) [
             'display_name' => 'Guild of Drafters Access',
             'description' => 'Gives access to the relevant tools for drafters.',
         ],
-        'alfred' => (object)[
+        'alfred' => (object) [
             'display_name' => 'Alfred\'s Workshop',
             'description' => 'Manages OmNomCom for workshop functionality.',
         ],
-        'header-image' => (object)[
+        'header-image' => (object) [
             'display_name' => 'Update Header Image',
             'description' => 'Allows updating the site\'s header images.',
         ],
-        'protography' => (object)[
+        'protography' => (object) [
             'display_name' => 'Photo Access',
             'description' => 'Allows managing photos and albums.',
         ],
-        'publishalbums' => (object)[
+        'publishalbums' => (object) [
             'display_name' => 'Publish Albums',
             'description' => 'Allows publishing photo albums.',
         ],
-        'registermembers' => (object)[
+        'registermembers' => (object) [
             'display_name' => 'Register Members',
             'description' => 'Allows finalisation of memberships.',
-        ], 'senate' => (object)[
+        ], 'senate' => (object) [
             'display_name' => 'Codex Access',
             'description' => 'Allows managing of codices.',
         ],
-        'closeactivities' => (object)[
+        'closeactivities' => (object) [
             'display_name' => 'Activity Closer',
             'description' => 'Allows closing of activities.',
         ],
     ],
 
     'roles' => [
-        'sysadmin' => (object)[
+        'sysadmin' => (object) [
             'display_name' => 'System Administrator',
             'description' => 'Can access all website functionality',
             'permissions' => '*',
         ],
-        'admin' => (object)[
+        'admin' => (object) [
             'display_name' => 'Application Administrator',
             'description' => 'Can administrate the website',
             'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums', 'registermembers', 'closeactivities'],
         ],
-        'protube' => (object)[
+        'protube' => (object) [
             'display_name' => 'Protube Administrator',
             'description' => 'Can access Protube admin interface',
             'permissions' => 'protube',
         ],
-        'board' => (object)[
+        'board' => (object) [
             'display_name' => 'Association Board',
             'description' => 'Can administrate the website',
             'permissions' => ['board', 'omnomcom', 'tipcie', 'protube', 'drafters', 'registermembers'],
         ],
-        'omnomcom' => (object)[
+        'omnomcom' => (object) [
             'display_name' => 'OmNomCom',
             'description' => 'Can manage the OmNomCom store',
             'permissions' => ['omnomcom'],
         ],
-        'finadmin' => (object)[
+        'finadmin' => (object) [
             'display_name' => 'Financial Administrator',
             'description' => 'Can manage all financials',
             'permissions' => ['finadmin', 'closeactivities'],
         ],
-        'tipcie' => (object)[
+        'tipcie' => (object) [
             'display_name' => 'TipCie',
             'description' => 'Can manage the TipCie store',
             'permissions' => ['tipcie', 'drafters', 'omnomcom'],
         ],
-        'drafters' => (object)[
+        'drafters' => (object) [
             'display_name' => 'Guild of Drafters',
             'description' => 'Can access the TipCie store',
             'permissions' => 'drafters',
         ],
-        'alfred' => (object)[
+        'alfred' => (object) [
             'display_name' => 'Alfred',
             'description' => 'This person is Alfred',
             'permissions' => ['alfred', 'omnomcom'],
         ],
-        'protography-admin' => (object)[
+        'protography-admin' => (object) [
             'display_name' => 'Protography Administrator',
             'description' => 'Can manage photos and albums',
             'permissions' => ['header-image', 'protography', 'publishalbums'],
         ],
-        'protography' => (object)[
+        'protography' => (object) [
             'display_name' => 'Protography',
             'description' => 'Can upload photos',
             'permissions' => 'protography',
         ],
-        'registration-helper' => (object)[
+        'registration-helper' => (object) [
             'display_name' => 'Registration Helper',
             'description' => 'Can help register members',
             'permissions' => ['registermembers'],
-        ], 'senate' => (object)[
+        ], 'senate' => (object) [
             'display_name' => 'Senate',
             'description' => 'May view and edit codexes',
             'permissions' => ['senate'],
         ],
-        'activity-closer' => (object)[
+        'activity-closer' => (object) [
             'display_name' => 'Activity Closer',
             'description' => 'May close activities',
             'permissions' => ['closeactivities'],
