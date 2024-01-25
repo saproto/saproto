@@ -97,7 +97,7 @@ class Handler extends ExceptionHandler
     protected function renderHttpException(HttpExceptionInterface $e)
     {
         if (! view()->exists("errors.{$e->getStatusCode()}")) {
-            return response()->view('errors.default', ['exception' => $e, 'hide_message' => (! Auth::check() || Auth::user()?->canNot('sysadmin'))], 500, $e->getHeaders());
+            return response()->view('errors.default', ['exception' => $e, 'hide_message' => (! Auth::check() || Auth::user()?->canNot('finadmin'))], 500, $e->getHeaders());
         }
 
         return parent::renderHttpException($e);
