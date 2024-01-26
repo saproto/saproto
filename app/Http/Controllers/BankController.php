@@ -154,29 +154,29 @@ class BankController extends Controller
     }
 
     /**
-     * @param string $iban
-     * @param string|null $bic
+     * @param  string  $iban
+     * @param  string|null  $bic
      * @return object
      */
     public static function doVerifyIban($iban, $bic = null)
     {
         $iban = strtoupper($iban);
 
-        $response = (object)[
+        $response = (object) [
             'status' => true,
             'message' => 'Valid',
             'iban' => iban_to_machine_format($iban),
             'bic' => str_replace(' ', '', strtoupper($bic)),
         ];
 
-        if (!verify_iban($response->iban)) {
+        if (! verify_iban($response->iban)) {
             $response->status = false;
             $response->message = 'Your IBAN is not valid.';
 
             return $response;
         }
 
-        if (!iban_country_is_sepa(iban_get_country_part($response->iban))) {
+        if (! iban_country_is_sepa(iban_get_country_part($response->iban))) {
             $response->status = false;
             $response->message = 'Your bank is not a member of SEPA (Single Euro Payments Area) so you can\'t use this bank account here. Please try another one.';
 
@@ -209,7 +209,7 @@ class BankController extends Controller
     }
 
     /**
-     * @param string $bic
+     * @param  string  $bic
      * @return bool
      */
     public static function verifyBic($bic)
@@ -218,16 +218,16 @@ class BankController extends Controller
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return string
      */
     public static function generateAuthorizationId($user)
     {
-        return 'PROTOX' . str_pad(strval($user->id), 5, '0', STR_PAD_LEFT) . 'X' . str_pad(strval(mt_rand(0, 99999)), 5, '0');
+        return 'PROTOX'.str_pad(strval($user->id), 5, '0', STR_PAD_LEFT).'X'.str_pad(strval(mt_rand(0, 99999)), 5, '0');
     }
 
     /**
-     * @param string $iban
+     * @param  string  $iban
      * @return string|null
      */
     private static function getNlBicFromIban($iban)
