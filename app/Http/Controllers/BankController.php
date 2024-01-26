@@ -190,7 +190,6 @@ class BankController extends Controller
                 $response->bic = self::getNlBicFromIban($iban);
             }
 
-            if ($response->bic != '' && self::verifyBic($response->bic)) {
             if ($response->bic === null || $response->bic != '' && self::verifyBic($response->bic)) {
                 $response->status = false;
                 $response->message = 'Your BIC is not valid.';
