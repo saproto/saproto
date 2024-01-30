@@ -79,8 +79,8 @@ require 'minisites.php';
  *
  *      /. --- Public Routes --- ./
  *      Route::#method#('url', 'controllerFn')->name('name');
- *  
- *      /. --- Catch alls  ---./ 
+ *
+ *      /. --- Catch alls  ---./
  *      Route::#method#('{id}', 'show')->('show')
  *
  * });
@@ -308,7 +308,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('{id}/image', 'image')->name('image');
 
         });
-        
+
         /* --- Public routes --- */
         Route::get('list', 'overview')->name('list');
         Route::get('{id}', 'show')->name('show');
@@ -325,7 +325,7 @@ Route::middleware('forcedomain')->group(function () {
 
     /* Routes related to narrowcasting (Board only). */
     Route::controller(NarrowcastingController::class)->prefix('narrowcasting')->name('narrowcasting::')->group(function () {
-        Route::middleware(['auth', 'permission:board'])->group(function () { 
+        Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'index')->name('list');
             Route::get('add', 'create')->name('add');
             Route::post('add', 'store')->name('add');
@@ -352,7 +352,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('up/{id}', 'orderUp')->name('orderUp');
             Route::get('down/{id}', 'orderDown')->name('orderDown');
         });
-        
+
         /* --- Public routes --- */
         Route::get('index', 'index')->name('index');
         Route::get('{id}', 'show')->name('show');
@@ -465,15 +465,12 @@ Route::middleware('forcedomain')->group(function () {
      */
     Route::prefix('events')->name('event::')->group(function () {
         Route::controller(EventController::class)->group(function () {
-            
+
             // Financials related to events (Finadmin only)
             Route::prefix('financial')->name('financial::')->middleware('permission:finadmin')->group(function () {
                 Route::get('list', 'finindex')->name('list');
                 Route::post('close/{id}', 'finclose')->name('close');
             });
-
-
-
 
             // Event related admin (Board only)
             Route::middleware(['permission:board'])->group(function () {
@@ -512,7 +509,7 @@ Route::middleware('forcedomain')->group(function () {
 
             // Force login for event
             Route::get('{id}/login', 'forceLogin')->middleware(['auth'])->name('login');
-            // Show event 
+            // Show event
             Route::get('{id}', 'show')->name('show');
         });
 
@@ -684,7 +681,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('restore/{id}', 'restore')->name('restore');
         Route::get('delete/{id}', 'delete')->name('delete');
         Route::post('vote', 'vote')->name('vote');
-        
+
         /* -- Catch-alls -- */
         Route::prefix('/{category}')->group(function () {
             Route::get('index', 'index')->name('index');
@@ -812,8 +809,8 @@ Route::middleware('forcedomain')->group(function () {
                 Route::get('deletefrom/{id}/{user_id}', 'deleteFrom')->name('deleteuser');
                 Route::get('markfailed/{id}/{user_id}', 'markFailed')->name('markfailed');
                 Route::get('markloss/{id}/{user_id}', 'markLoss')->name('markloss');
-                
-                // Catchall 
+
+                // Catchall
                 Route::get('{id}', 'show')->name('show');
             });
         });
@@ -866,7 +863,7 @@ Route::middleware('forcedomain')->group(function () {
     /* Routes related to photos. */
     Route::prefix('photos')->name('photo::')->group(function () {
         /* --- Public routes --- */
-        Route::controller(PhotoController::class)->group(function () { 
+        Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');
             Route::get('slideshow', 'slideshow')->name('slideshow');
 
@@ -874,7 +871,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('/dislike/{id}', 'dislikePhoto')->middleware(['auth'])->name('dislikes');
             Route::get('/photo/{id}', 'photo')->name('view');
             Route::get('{id}', 'show')->name('album::list');
-        }); 
+        });
 
         /* Routes related to the photo admin. (Protography only) */
         Route::controller(PhotoAdminController::class)->prefix('admin')->middleware(['permission:protography'])->name('admin::')->group(function () {
