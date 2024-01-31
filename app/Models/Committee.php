@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $is_active
  * @property-read string $email_address
  * @property-read StorageEntry|null $image
- * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  *
@@ -96,40 +95,10 @@ class Committee extends Model
         return $this->hasMany('App\Models\Event', 'committee_id');
     }
 
-    /** @return HasMany */
-    public function helperReminderSubscriptions()
-    {
-        return $this->hasMany('App\Models\HelperReminder');
-    }
-
     /** @return string */
     public function getEmailAddressAttribute()
     {
         return $this->slug.'@'.config('proto.emaildomain');
-    }
-
-    /** @return User[] */
-    public function HelperReminderSubscribers()
-    {
-        $users = [];
-        $subscriptions = $this->helperReminderSubscriptions()->get();
-        foreach ($subscriptions as $subscription) {
-            $users[] = $subscription->user;
-        }
-
-        return $users;
-    }
-
-    /**
-     * @return bool Whether the user wants to receive helper reminders.
-     */
-    public function wantsToReceiveHelperReminder(User $user): bool
-    {
-        if (! $this->isMember($user)) {
-            HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->delete();
-        }
-
-        return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
     /** @return Collection|Event[] */

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
-use App\Models\HelperReminder;
 use App\Models\StorageEntry;
 use App\Models\User;
 use Auth;
@@ -276,7 +275,6 @@ class CommitteeController extends Controller
         Session::flash('flash_message', 'You have removed '.$membership->user->name.' from '.$membership->committee->name.'.');
 
         $membership->forceDelete();
-        HelperReminder::where('committee_id', $committee_id)->where('user_id', $membership->user->id)->delete();
 
         return Redirect::route('committee::edit', ['id' => $committee_id]);
     }
@@ -339,33 +337,6 @@ class CommitteeController extends Controller
         ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
 
         Session::flash('flash_message', sprintf('Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.', $committee->name));
-
-        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
-    }
-
-    /**
-     * @param  string  $slug
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function toggleHelperReminder($slug)
-    {
-        $committee = Committee::fromPublicId($slug);
-        $user = Auth::user();
-
-        if ($committee->wantsToReceiveHelperReminder($user)) {
-            HelperReminder::where('user_id', $user->id)->where('committee_id', $committee->id)->delete();
-            Session::flash('flash_message', sprintf('You will no longer receive helper notifications for the %s.', $committee->name));
-        } else {
-            if (! $committee->isMember($user)) {
-                Session::flash('flash_message', 'You cannot subscribe for helper notifications for a committee you are not in.');
-
-                return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
-            }
-            HelperReminder::create(['user_id' => $user->id, 'committee_id' => $committee->id]);
-            Session::flash('flash_message', sprintf('You will now receive helper notifications for the %s.', $committee->name));
-        }
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }

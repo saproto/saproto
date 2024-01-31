@@ -76,7 +76,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Address|null $address
  * @property-read Bank|null $bank
  * @property-read Member|null $member
- * @property-read HelperReminder|null $helperReminderSubscriptions
  * @property-read Collection|Achievement[] $achievements
  * @property-read Collection|Client[] $clients
  * @property-read Collection|EmailList[] $lists
@@ -205,12 +204,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function photo()
     {
         return $this->belongsTo('App\Models\StorageEntry', 'image_id');
-    }
-
-    /** @return BelongsTo */
-    public function helperReminderSubscriptions()
-    {
-        return $this->belongsTo('App\Models\HelperReminder');
     }
 
     /** @return BelongsToMany */
@@ -588,7 +581,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_alarm;
     }
 
-    /** @param  float|null  $hours */
+    /** @param float|null $hours */
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);
