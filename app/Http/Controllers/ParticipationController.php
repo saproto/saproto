@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
-use App\Mail\ActivityUnsubscribedToHelp;
-use App\Mail\HelperMutation;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Event;
@@ -54,7 +52,6 @@ class ParticipationController extends Controller
                 abort(403, 'There are already enough people of your committee helping, thanks though!');
             }
             $data['committees_activities_id'] = $helping->id;
-            Mail::queue((new HelperMutation(Auth::user(), $helping, true))->onQueue('medium'));
         } elseif ($is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
@@ -111,7 +108,6 @@ class ParticipationController extends Controller
                 abort(403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
             }
             $data['committees_activities_id'] = $helping->id;
-            Mail::queue((new HelperMutation($user, $helping, true))->onQueue('medium'));
         }
 
         if (! $event->activity) {
@@ -184,12 +180,6 @@ class ParticipationController extends Controller
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
-
-            if ($notify) {
-                Mail::to($participation->user)->queue((new ActivityUnsubscribedToHelp($participation))->onQueue('high'));
-            }
-
-            Mail::queue((new HelperMutation($participation->user, $participation->help, false))->onQueue('medium'));
 
             $participation->delete();
         }
