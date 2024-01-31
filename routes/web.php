@@ -353,7 +353,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
-        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:finadmin']], function () {
+        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:closeactivities']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'EventController@finindex']);
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
