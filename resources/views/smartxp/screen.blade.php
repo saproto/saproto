@@ -367,12 +367,10 @@
                 } else {
                     timetable.innerHTML = '<div class="notice">No lectures today!</div>'
                 }
-                setTimeout(updateTimetable, 60000);
             })
             .catch(err => {
                 console.error(err)
                 timetable.innerHTML = '<div class="notice">Lectures could not be found...</div>'
-                setTimeout(updateTimetable, 5000);
             })
     }
 
@@ -395,12 +393,10 @@
                 } else {
                     document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
                 }
-                setTimeout(updateActivities, 60000)
             })
             .catch(err => {
                 console.error(err)
                 document.getElementById("activities").innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-                setTimeout(updateActivities, 5000)
             })
     }
 
@@ -473,22 +469,30 @@
                 } else {
                     timetable.innerHTML = '<div class="notice">Protopolis closed today!</div>'
                 }
-                setTimeout(updateProtopeners, 60000)
             })
             .catch(err => {
                 console.error(err)
                 timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-                setTimeout(updateProtopeners, 5000)
             })
     }
 
     window.addEventListener('load', _ => {
-        setInterval(updateClock, 10);
+
         updateTimetable();
         updateActivities();
+        updateProtopeners();
+        updateClock();
         updateBuses();
-        setInterval(updateBuses, 60000);
-        updateProtopeners()
+        updateProtopeners();
+
+        const everySecond = 1000;
+        const everyMinute = 60 * 1000;
+        const everyFiveMinutes = 5 * 60 * 1000;
+        setInterval(updateTimetable, everyFiveMinutes);
+        setInterval(updateActivities, everyFiveMinutes);
+        setInterval(updateProtopeners, everyMinute);
+        setInterval(updateClock, everySecond);
+        setInterval(updateBuses, everyFiveMinutes);
     })
 </script>
 

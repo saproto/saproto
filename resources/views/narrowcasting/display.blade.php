@@ -4,7 +4,7 @@
             position: relative;
             width: 100%;
             aspect-ratio: 16 / 9 !important;
-            background-color:#333;
+            background-color: #333;
             margin: 0;
             padding: 0;
             padding-bottom: 56.25%;
@@ -174,7 +174,8 @@
 
         window.addEventListener('load', _ => {
             updateCampaigns()
-            setInterval(updateCampaigns, 10 * 1000)
+            const everyTwoHours = 60 * 60 * 2 * 1000
+            setInterval(updateCampaigns, everyTwoHours)
         });
     </script>
 
