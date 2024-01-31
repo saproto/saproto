@@ -132,7 +132,7 @@
                                            href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                     @endcan
 
-                                    @if(Auth::user()->hasAllPermissions(['board', 'finadmin']) || Auth::user()->can('closeactivities'))
+                                    @if(Auth::user()->hasAllPermissions(['board', 'finadmin']) || Auth::user()->hasAllPermissions(['board', 'closeactivities']) )
                                         <li role="separator" class="dropdown-divider"></li>
                                     @endif
 
