@@ -214,7 +214,7 @@ class BankController extends Controller
      */
     public static function verifyBicIsValid($bic)
     {
-        if (($bic === null) || ($bic != '')) {
+        if (($bic == '')) {
             return false;
         }
         return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) === 1;
