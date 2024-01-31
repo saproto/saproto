@@ -47,6 +47,10 @@ class ProTubeApiService
      */
     public static function skipSong(): bool
     {
+        //when in production don't update the protube admin status
+        if (! app()->environment('production')) {
+            return true;
+        }
         $response = self::client()->post('/skipsong');
         if (! self::assertResponse($response)) {
             return false;
@@ -64,6 +68,10 @@ class ProTubeApiService
      */
     public static function updateAdmin(int $userID, bool $admin): bool
     {
+        //when in production don't update the protube admin status
+        if (! app()->environment('production')) {
+            return true;
+        }
         $response = self::client()->post('/updateadmin', [
             'user_id' => $userID,
             'admin' => $admin,
