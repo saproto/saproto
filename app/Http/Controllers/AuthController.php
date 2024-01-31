@@ -235,26 +235,6 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($request->id ?? Auth::id());
 
-        if ($user->name != $request->name) {
-            Session::flash('flash_message', 'You need to correctly input the user\'s name before the account is deactivated.');
-
-            return Redirect::back();
-        }
-
-        if (Auth::id() != $user->id && Auth::user()->cannot('sysadmin')) {
-            Session::flash('flash_message', 'You cannot deactivate someone else\'s account.');
-        }
-
-        if (Auth::id() == $user->id) {
-            $password = $request->input('password');
-            $auth_check = self::verifyCredentials($user->email, $password);
-            if ($auth_check == null || $auth_check->id != $user->id) {
-                Session::flash('flash_message', 'You need to provide a valid password to delete an account.');
-
-                return Redirect::back();
-            }
-        }
-
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
 
@@ -265,6 +245,28 @@ class AuthController extends Controller
             Session::flash('flash_message', 'An account cannot be deactivated while it still has an active membership.');
 
             return Redirect::back();
+        }
+
+        if (Auth::id() == $user->id) {
+            $password = $request->input('password');
+            $auth_check = self::verifyCredentials($user->email, $password);
+            if ($auth_check == null || $auth_check->id != $user->id) {
+                Session::flash('flash_message', 'You need to provide a valid password to deactivate your account.');
+
+                return Redirect::back();
+            }
+        } else {
+            if (Auth::user()->cannot('sysadmin')) {
+                Session::flash('flash_message', 'You cannot deactivate someone else\'s account.');
+
+                return Redirect::back();
+            }
+
+            if ($user->name != $request->name) {
+                Session::flash('flash_message', 'You need to correctly input the user\'s name before the account is deactivated.');
+
+                return Redirect::back();
+            }
         }
 
         Address::where('user_id', $user->id)->delete();
