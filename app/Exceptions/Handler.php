@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return SymfonyResponse
      *
      * @throws Throwable
@@ -77,7 +77,7 @@ class Handler extends ExceptionHandler
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return JsonResponse|RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
@@ -96,10 +96,10 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
-        if (! view()->exists("errors.{$e->getStatusCode()}")) {
-            $maySeeError = App()->env('local') | Auth::check() && Auth::user()->can('finadmin');
+        if (!view()->exists("errors.{$e->getStatusCode()}")) {
+            $maySeeError = App()->env('local') || (Auth::check() && Auth::user()->can('finadmin'));
 
-            return response()->view('errors.default', ['exception' => $e, 'hide_message' => ! $maySeeError], 500, $e->getHeaders());
+            return response()->view('errors.default', ['exception' => $e, 'hide_message' => !$maySeeError], 500, $e->getHeaders());
         }
 
         return parent::renderHttpException($e);
