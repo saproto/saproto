@@ -97,7 +97,8 @@ class Handler extends ExceptionHandler
     protected function renderHttpException(HttpExceptionInterface $e)
     {
         if (! view()->exists("errors.{$e->getStatusCode()}")) {
-            $maySeeError = App()->env('local') || (Auth::check() && Auth::user()->can('finadmin'));
+
+            $maySeeError = App::environment('local') || (Auth::check() && Auth::user()->can('finadmin'));
 
             return response()->view('errors.default', ['exception' => $e, 'hide_message' => ! $maySeeError], 500, $e->getHeaders());
         }
