@@ -38,7 +38,7 @@
                         <td> €{{$wallstreetDrink->minimum_price}} </td>
                         <td> €{{$wallstreetDrink->price_decrease}} </td>
                         <td> €{{$wallstreetDrink->price_increase}} </td>
-                        <td> @if($wallstreetDrink->random_events)
+                        <td> @if($wallstreetDrink->random_events_chance>0)
                                 <i class="fas fa-check text-primary"></i>
                             @endif
                         </td>

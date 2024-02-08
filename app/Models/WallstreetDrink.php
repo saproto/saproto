@@ -17,19 +17,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property float minimum_price
  * @property float price_decrease
  * @property float price_increase
- * @property bool random_events
+ * @property int random_events_chance
  **/
 class WallstreetDrink extends Model
 {
-    use HasFactory;
 
     protected $table = 'wallstreet_drink';
 
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
-
-    protected $casts = [
-        'random_events' => 'boolean',
-    ];
 
     public function isCurrent(): bool
     {
