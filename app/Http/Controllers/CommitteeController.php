@@ -22,7 +22,7 @@ use Session;
 class CommitteeController extends Controller
 {
     /**
-     * @param  bool  $showSociety
+     * @param bool $showSociety
      * @return View
      */
     public function overview($showSociety = false)
@@ -47,55 +47,18 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function show($id)
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && (! Auth::check() || (! Auth::user()->can('board') && ! $committee->isMember(Auth::user())))) {
+        if (!$committee->public && (!Auth::check() || (!Auth::user()->can('board') && !$committee->isMember(Auth::user())))) {
             abort(404);
         }
 
         return view('committee.show', ['committee' => $committee, 'members' => $committee->allMembers()]);
-    }
-
-    /**
-     * @return array
-     */
-    public function indexApi(Request $request)
-    {
-        $showSocieties = filter_var($request->get('show_societies', false), FILTER_VALIDATE_BOOLEAN);
-
-        $data = [];
-        foreach (Committee::where('public', 1)->where('is_society', $showSocieties)->orderBy('name', 'asc')->get() as $committee) {
-            if (Auth::user() && Auth::user()->is_member) {
-                $current_members = [];
-                foreach ($committee->users as $user) {
-                    $current_members[] = (object) [
-                        'name' => $user->name,
-                        'photo' => $user->photo_preview,
-                        'edition' => $user->pivot->edition,
-                        'role' => $user->pivot->role,
-                        'since' => strval($user->pivot->created_at),
-                    ];
-                }
-            } else {
-                $current_members = null;
-            }
-
-            $data[] = (object) [
-                'id' => $committee->id,
-                'name' => $committee->name,
-                'description' => $committee->description,
-                'email' => sprintf('%s@%s', $committee->slug, config('proto.emaildomain')),
-                'photo' => $committee->image->generateImagePath(null, null),
-                'current_members' => $current_members,
-            ];
-        }
-
-        return $data;
     }
 
     /** @return View */
@@ -120,7 +83,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -131,7 +94,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function update($id, Request $request)
@@ -150,7 +113,7 @@ class CommitteeController extends Controller
         $committee->fill($request->all());
 
         // The is_active value is either unset or 'on' so only set it to false if selected.
-        $committee->is_active = ! $request->has('is_active');
+        $committee->is_active = !$request->has('is_active');
 
         $committee->save();
 
@@ -161,7 +124,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -215,13 +178,13 @@ class CommitteeController extends Controller
 
         $membership->save();
 
-        Session::flash('flash_message', 'You have added '.$membership->user->name.' to '.$membership->committee->name.'.');
+        Session::flash('flash_message', 'You have added ' . $membership->user->name . ' to ' . $membership->committee->name . '.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function editMembershipForm($id)
@@ -232,7 +195,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function editMembership(Request $request, $id)
@@ -261,7 +224,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -272,7 +235,7 @@ class CommitteeController extends Controller
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $committee_id = $membership->committee->id;
 
-        Session::flash('flash_message', 'You have removed '.$membership->user->name.' from '.$membership->committee->name.'.');
+        Session::flash('flash_message', 'You have removed ' . $membership->user->name . ' from ' . $membership->committee->name . '.');
 
         $membership->forceDelete();
 
@@ -293,14 +256,14 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function showAnonMailForm($id)
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->allow_anonymous_email) {
+        if (!$committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
 
             return Redirect::back();
@@ -310,14 +273,14 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function postAnonMailForm(Request $request, $id)
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->allow_anonymous_email) {
+        if (!$committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
 
             return Redirect::back();
@@ -329,9 +292,9 @@ class CommitteeController extends Controller
         $message_content = strip_tags($request->get('message'));
         $message_hash = md5($message_content);
 
-        Log::info('Anonymous e-mail with hash '.$message_hash.' sent to '.$name.' by user #'.Auth::user()->id);
+        Log::info('Anonymous e-mail with hash ' . $message_hash . ' sent to ' . $name . ' by user #' . Auth::user()->id);
 
-        Mail::to((object) [
+        Mail::to((object)[
             'name' => $committee->name,
             'email' => $committee->email_address,
         ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));

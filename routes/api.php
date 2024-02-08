@@ -13,20 +13,9 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('info', ['uses' => 'UserApiController@getUser']);
-            Route::get('profile_picture', ['uses' => 'UserApiController@getUserProfilePicture']);
-            Route::get('address', ['uses' => 'UserApiController@getAddress']);
-            Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
-            Route::get('societies', ['uses' => 'UserApiController@getSocieties']);
-            Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
             Route::get('qr_auth_approve/{code}', ['uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['uses' => 'QrAuthController@apiInfo']);
             Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
-            Route::group(['prefix' => 'orders'], function () {
-                Route::get('', ['uses' => 'UserApiController@getPurchases']);
-                Route::get('total_month', ['uses' => 'UserApiController@getPurchasesMonth']);
-                Route::get('next_withdrawal', ['uses' => 'UserApiController@getNextWithdrawal']);
-            });
         });
         Route::group(['middleware' => ['web']], function () {
             Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
@@ -36,11 +25,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     /* Routes related to the Events API */
     Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('upcoming/for_user/{limit?}', ['as' => 'list_for_user', 'uses' => 'EventController@apiUpcomingEvents']);
-            Route::get('signup/{id}', ['middleware' => ['member'], 'uses' => 'ParticipationController@create']);
-            Route::get('signout/{participation_id}', ['middleware' => ['member'], 'uses' => 'ParticipationController@destroy']);
-        });
         Route::group(['middleware' => ['web']], function () {
             Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
         });
@@ -53,20 +37,10 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
-        Route::get('random_old_photo', ['as' => 'randomOldPhoto', 'uses' => 'ApiController@randomOldPhoto']);
+
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
-        });
-    });
-
-    /* Routes related to the Committees API */
-    Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
-        });
-        Route::group(['middleware' => ['web']], function () {
-            Route::get('unauthenticated', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
         });
     });
 

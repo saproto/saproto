@@ -23,13 +23,6 @@ use stdClass;
 
 class ApiController extends Controller
 {
-    /**
-     * @return string
-     */
-    public function train(Request $request)
-    {
-        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
-    }
 
     /** @return JsonResponse */
     public function protubeUserDetails()
@@ -100,7 +93,7 @@ class ApiController extends Controller
             $query->where('published', true)->where('private', false);
         });
 
-        if (! $privateQuery->count()) {
+        if (!$privateQuery->count()) {
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
@@ -119,28 +112,9 @@ class ApiController extends Controller
         $photo = $query->inRandomOrder()->with('album')->first();
 
         //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
-        if (! $photo) {
+        if (!$photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
-
-        return response()->JSON([
-            'url' => $photo->url,
-            'album_name' => $photo->album->name,
-            'date_taken' => Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
-        ]);
-    }
-
-    public function randomOldPhoto(): JsonResponse
-    {
-        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
-            $query->where('published', true)->where('private', false);
-        })->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
-
-        if (! $privateQuery->count()) {
-            return response()->json(['error' => 'No public photos older than 4 years found!.'], 404);
-        }
-
-        $photo = $privateQuery->inRandomOrder()->with('album')->first();
 
         return response()->JSON([
             'url' => $photo->url,
