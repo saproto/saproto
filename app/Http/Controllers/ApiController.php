@@ -23,7 +23,6 @@ use stdClass;
 
 class ApiController extends Controller
 {
-
     /** @return JsonResponse */
     public function protubeUserDetails()
     {
@@ -93,7 +92,7 @@ class ApiController extends Controller
             $query->where('published', true)->where('private', false);
         });
 
-        if (!$privateQuery->count()) {
+        if (! $privateQuery->count()) {
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
@@ -112,7 +111,7 @@ class ApiController extends Controller
         $photo = $query->inRandomOrder()->with('album')->first();
 
         //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
-        if (!$photo) {
+        if (! $photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
 
