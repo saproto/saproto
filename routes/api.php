@@ -24,27 +24,21 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     /* Routes related to the Events API */
-    Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
-        Route::group(['middleware' => ['web']], function () {
-            Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
-        });
+    Route::group(['prefix' => 'events', 'as' => 'events::', 'middleware' => ['web']], function () {
+        Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
     });
 
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('photos_api', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
-            Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
-        });
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
 
-        Route::group(['middleware' => ['web']], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
     });
 
-    Route::group(['prefix' => 'screen', 'as' => 'screen::'], function () {
+    Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], function () {
         Route::get('bus', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
