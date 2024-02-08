@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -21,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  **/
 class WallstreetDrink extends Model
 {
-
     protected $table = 'wallstreet_drink';
 
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
