@@ -39,7 +39,7 @@
                         <td> €{{$wallstreetDrink->price_decrease}} </td>
                         <td> €{{$wallstreetDrink->price_increase}} </td>
                         <td> @if($wallstreetDrink->random_events_chance>0)
-                                <i class="fas fa-check text-primary"></i>
+                                1/{{$wallstreetDrink->random_events_chance}}
                             @endif
                         </td>
                         <td class="text-center px-4">

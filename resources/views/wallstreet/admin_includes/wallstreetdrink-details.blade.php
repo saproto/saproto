@@ -72,7 +72,7 @@
 
                     <!-- The chance a random event happens per minute -->
                     <div class="col-md-12 mb-3">
-                        <label for="random_events_chance">Random event chance per minute:</label>
+                        <label for="random_events_chance">Random event chance/min:</label>
                         <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right"
                            title="The chance a random event happens per minute. For instance 30 means a random event happens approximately every half hour. Set to 0 for no random events"></i>
                         <input type="number" step="1" class="form-control" id="random_events_chance"
