@@ -35,11 +35,11 @@
                         <td class="text-muted">#{{ $wallstreetDrink->id }}</td>
                         <td>{{ Carbon::createFromTimestamp($wallstreetDrink->start_time)->format('m-d-Y H:i') }}</td>
                         <td>{{ Carbon::createFromTimestamp($wallstreetDrink->end_time)->format('m-d-Y H:i') }}</td>
-                        <td> €{{$wallstreetDrink->minimum_price}} </td>
-                        <td> €{{$wallstreetDrink->price_decrease}} </td>
-                        <td> €{{$wallstreetDrink->price_increase}} </td>
-                        <td> @if($wallstreetDrink->random_events_chance>0)
-                                1/{{$wallstreetDrink->random_events_chance}}
+                        <td> €{{ $wallstreetDrink->minimum_price }} </td>
+                        <td> €{{ $wallstreetDrink->price_decrease }} </td>
+                        <td> €{{ $wallstreetDrink->price_increase }} </td>
+                        <td> @if($wallstreetDrink->random_events_chance > 0)
+                                1/{{ $wallstreetDrink->random_events_chance }}
                             @endif
                         </td>
                         <td class="text-center px-4">
