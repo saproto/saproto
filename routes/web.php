@@ -329,7 +329,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
         Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
-        route::group(['prefix' => 'products', 'as' => 'products::'], function () {
+        Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
             Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
             Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
         });
@@ -339,6 +339,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@addEvent']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@editEvent']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@updateEvent']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroyEvent']);
             Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
                 Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addEventProducts']);
                 Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeEventProduct']);

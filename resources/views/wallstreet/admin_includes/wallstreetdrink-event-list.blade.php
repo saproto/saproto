@@ -34,10 +34,10 @@
                                 <i class="fas fa-edit me-4"></i>
                             </a>
                             @include('components.modals.confirm-modal', [
-                                'action' => route("wallstreet::delete", ['id' => $wallstreetEvent->id]),
+                                'action' => route("wallstreet::events::delete", ['id' => $wallstreetEvent->id]),
                                 'text' => '<i class="fas fa-trash text-danger"></i>',
                                 'title' => 'Confirm Delete',
-                                'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
+                                'message' => "Are you sure you want to remove this wallstreet event?",
                                 'confirm' => 'Delete',
                             ])
                         </td>
@@ -53,7 +53,7 @@
     @else
 
         <div class="text-center text-muted py-3">
-            There are no wallstreet drinks yet!
+            There are no wallstreet events yet!
         </div>
 
     @endif

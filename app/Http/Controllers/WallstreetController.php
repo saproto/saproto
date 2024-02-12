@@ -41,7 +41,6 @@ class WallstreetController extends Controller
         $sound_path = asset('sounds/kaching.mp3');
 
         return view('wallstreet.marquee', ['activeDrink' => $activeDrink, 'prices' => $prices, 'sound_path' => $sound_path]);
-
     }
 
     public function edit($id)
@@ -60,10 +59,11 @@ class WallstreetController extends Controller
         $drink->minimum_price = $request->input('minimum_price');
         $drink->price_increase = $request->input('price_increase');
         $drink->price_decrease = $request->input('price_decrease');
-        $drink->random_events = $request->has('random_events');
+        $drink->random_events_chance = $request->input('random_events_chance');
         $drink->save();
 
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
+        Session::flash('flash_message', 'Wallstreet drink created. Do not forget to add products below!');
 
         return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink' => $drink]);
     }
@@ -76,7 +76,7 @@ class WallstreetController extends Controller
         $drink->minimum_price = $request->input('minimum_price');
         $drink->price_increase = $request->input('price_increase');
         $drink->price_decrease = $request->input('price_decrease');
-        $drink->random_events = $request->has('random_events');
+        $drink->random_events_chance = $request->input('random_events_chance');
         $drink->save();
 
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
@@ -223,13 +223,12 @@ class WallstreetController extends Controller
             $file = new StorageEntry();
             $file->createFromFile($image);
             $event->image()->associate($file);
-        } else {
-            $event->image()->dissociate();
         }
 
         $event->save();
+        Session::flash('flash_message', 'Wallstreet event created. Do not forget to add products above!');
 
-        return Redirect::back();
+        return Redirect::to(route('wallstreet::events::edit', ['id' => $event->id]));
     }
 
     public function updateEvent(Request $request, int $id)
@@ -248,7 +247,7 @@ class WallstreetController extends Controller
         }
         $event->save();
 
-        return Redirect::back();
+        return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
     }
 
     public function editEvent(int $id)
@@ -257,6 +256,17 @@ class WallstreetController extends Controller
         $allEvents = WallstreetEvent::all();
 
         return view('wallstreet.admin_includes.wallstreetdrink-events', ['allEvents' => $allEvents, 'currentEvent' => $currentEvent]);
+    }
+
+    public function destroyEvent($id)
+    {
+        $currentEvent = WallstreetEvent::findOrFail($id);
+        $currentEvent->products()->detach();
+        $currentEvent->image()->dissociate();
+        $currentEvent->save();
+        $currentEvent->delete();
+
+        return Redirect::to(route('wallstreet::events::list'));
     }
 
     public function addEventProducts($id, Request $request)
