@@ -256,7 +256,7 @@ class AuthController extends Controller
                 return Redirect::back();
             }
         } else {
-            if (Auth::user()->cannot('sysadmin')) {
+            if (Auth::user()->cannot('board')) {
                 Session::flash('flash_message', 'You cannot deactivate someone else\'s account.');
 
                 return Redirect::back();
