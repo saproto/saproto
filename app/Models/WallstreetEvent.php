@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string description
  * @property int percentage
  * @property int image_id
- * @property boolean active
+ * @property bool active
  * @property StorageEntry image
  * @property Product[] products
  **/
