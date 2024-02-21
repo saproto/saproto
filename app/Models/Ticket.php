@@ -91,7 +91,7 @@ class Ticket extends Model
      */
     public function canBeSoldTo(User $user)
     {
-        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
+        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
     }
 
     /**
@@ -116,9 +116,6 @@ class Ticket extends Model
         return date('U') > $this->available_from && date('U') < $this->available_to;
     }
 
-    /**
-     * @return bool
-     */
     public function isAvailable(User $user): bool
     {
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
