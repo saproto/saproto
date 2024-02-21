@@ -3,7 +3,11 @@
 @section('greeting')
 
     <strong>Hi {{ Auth::user()->calling_name }},</strong><br>
-    @if($message != null) {!! $message->message !!} @else Nice to see you back! @endif
+    @if($message != null)
+        {!! $message->message !!}
+    @else
+        Nice to see you back!
+    @endif
 
 @endsection
 
@@ -79,7 +83,8 @@
                     {!! Markdown::convert($weekly->content) !!}
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route("news::showWeeklyPreview", ['id'=>$weekly->id]) }}" class="btn btn-info btn-block my-2">Continue
+                    <a href="{{ route("news::showWeeklyPreview", ['id'=>$weekly->id]) }}"
+                       class="btn btn-info btn-block my-2">Continue
                         reading</a>
                 </div>
 
@@ -134,11 +139,12 @@
                 @foreach($newsitems as $index => $newsitem)
                     <div style="max-height: 300px">
                         @include('website.home.cards.card-bg-image', [
-                        'height' => $newsitem->is_weekly ? 80 : 120,
-                        'url' => $newsitem->url,
-                        'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : null,
-                        'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
-                        'leftborder' => 'info'
+                                    'height' => $newsitem->is_weekly ? 80 : 120,
+                                    'url' => $newsitem->url,
+                                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : ($newsitem->is_weekly?url('images/weekly-cover.png'):null),
+                                    'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
+                                    'photo_pop' => $newsitem->featuredImage,
+                                    'leftborder' => 'info'
                         ])
                     </div>
 
