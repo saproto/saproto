@@ -63,6 +63,21 @@
                         ])
 
                         @include('components.forms.checkbox', [
+                         'name' => 'has_buy_limit',
+                         'checked' =>  $ticket?->has_buy_limit,
+                         'label' => "Impose a limit of how many tickets a user can buy.",
+                         'input_class_name'=>'buy_limit_checkbox'
+                        ])
+
+                        <div class="collapse mt-3 ms-4 {{$ticket?->has_buy_limit?'show':''}}" id="buy_limit__collapse">
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" name="buy_limit" placeholder="15"
+                                       min="1" step="1" value="{{$ticket?->buy_limit}}">
+                                <span class="input-group-text" id="basic-addon2">tickets</span>
+                            </div>
+                        </div>
+
+                        @include('components.forms.checkbox', [
                            'name' => 'show_participants',
                            'checked' =>  $ticket?->show_participants,
                            'label' => "Show the participant's who bought this ticket on the event."
@@ -87,3 +102,15 @@
     </div>
 
 @endsection
+
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        document.querySelectorAll('.buy_limit_checkbox').forEach((element) => {
+            element.addEventListener('click', () => {
+                document.getElementById("buy_limit__collapse").classList.toggle("show");
+            });
+        });
+
+    </script>
+@endpush
+

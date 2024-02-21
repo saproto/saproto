@@ -17,9 +17,12 @@ use Illuminate\Support\Collection;
  * @property int $product_id
  * @property int $available_from
  * @property int $available_to
+ * @property int $buy_limit
  * @property bool $members_only
  * @property bool $is_prepaid
  * @property bool $show_participants
+ * @property bool $has_buy_limit
+ * @property string $redirect_url
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
@@ -88,7 +91,23 @@ class Ticket extends Model
      */
     public function canBeSoldTo(User $user)
     {
-        return $user->is_member || ! $this->members_only;
+        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
+    }
+
+    /**
+     * @return bool
+     */
+    public function buyLimitReached(User $user)
+    {
+        return $this->has_buy_limit && $this->buyLimitForUser($user) <= 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function buyLimitForUser(User $user)
+    {
+        return $this->buy_limit - $this->purchases->where('user_id', $user->id)->count();
     }
 
     /** @return bool */
@@ -100,12 +119,12 @@ class Ticket extends Model
     /**
      * @return bool
      */
-    public function isAvailable(User $user)
+    public function isAvailable(User $user): bool
     {
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
     }
 
-    /** @return float|int*/
+    /** @return float|int */
     public function turnover()
     {
         $total = 0;
