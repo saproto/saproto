@@ -190,8 +190,8 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-        $user = User::findOrFail($request->user_id);
-        $committee = Committee::findOrFail($request->committee_id);
+        User::findOrFail($request->user_id);
+        Committee::findOrFail($request->committee_id);
 
         $membership = new CommitteeMembership();
         $membership->role = $request->role;
@@ -322,8 +322,6 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
-        $email = $committee->email_address;
         $name = $committee->name;
 
         $message_content = strip_tags($request->get('message'));

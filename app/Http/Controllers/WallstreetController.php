@@ -174,7 +174,8 @@ class WallstreetController extends Controller
     public function getLoss(WallstreetDrink $drink)
     {
         $productIDs = $drink->products->pluck('id');
-        $orderlines = OrderLine::query()
+
+        return OrderLine::query()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')
             ->whereHas('product', function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
@@ -183,8 +184,6 @@ class WallstreetController extends Controller
             ->where('created_at', '>', Carbon::parse($drink->start_time))
             ->get()
             ->sum('loss');
-
-        return $orderlines;
     }
 
     public function getAllPrices($drinkID)

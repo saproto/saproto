@@ -516,7 +516,7 @@ class AuthController extends Controller
             $remoteFullName = $remoteData['givenname'].' '.$remoteData['surname'];
             $remoteCallingName = $remoteData['givenname'];
         } elseif ($remoteData['surname'] || $remoteData['givenname']) {
-            $remoteFullName = $remoteData['surname'] ? $remoteData['surname'] : $remoteData['givenname'];
+            $remoteFullName = $remoteData['surname'] ?: $remoteData['givenname'];
             $remoteCallingName = $remoteFullName;
         }
         $remoteData['name'] = $remoteFullName;

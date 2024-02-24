@@ -42,12 +42,12 @@ class StockMutation extends Model
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo("App\Models\Product");
+        return $this->belongsTo(\App\Models\Product::class);
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo("App\Models\User");
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     public function date(): string

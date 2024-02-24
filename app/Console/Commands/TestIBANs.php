@@ -38,8 +38,6 @@ class TestIBANs extends Command
     {
         $this->info('Starting clean-up.');
 
-        $count = 0;
-
         foreach (Bank::all() as $bank) {
             if (! verify_iban($bank->iban)) {
                 $this->info('INVALID -- '.$bank->iban.' of '.$bank->user->name.'(#'.$bank->user->id.')');

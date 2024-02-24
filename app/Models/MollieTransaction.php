@@ -49,13 +49,13 @@ class MollieTransaction extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('App\Models\OrderLine', 'payed_with_mollie');
+        return $this->hasMany(\App\Models\OrderLine::class, 'payed_with_mollie');
     }
 
     /** @return MollieTransaction */

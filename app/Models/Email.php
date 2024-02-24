@@ -71,19 +71,19 @@ class Email extends Model
     /** @return BelongsToMany */
     public function lists()
     {
-        return $this->belongsToMany('App\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
+        return $this->belongsToMany(\App\Models\EmailList::class, 'emails_lists', 'email_id', 'list_id');
     }
 
     /** @return BelongsToMany */
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event', 'emails_events', 'email_id', 'event_id');
+        return $this->belongsToMany(\App\Models\Event::class, 'emails_events', 'email_id', 'event_id');
     }
 
     /** @return BelongsToMany */
     public function attachments()
     {
-        return $this->belongsToMany('App\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
+        return $this->belongsToMany(\App\Models\StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
 
     /**

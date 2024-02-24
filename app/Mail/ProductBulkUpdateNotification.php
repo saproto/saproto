@@ -12,8 +12,6 @@ class ProductBulkUpdateNotification extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $log;
-
     public $user;
 
     /**
@@ -21,9 +19,8 @@ class ProductBulkUpdateNotification extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user, $log)
+    public function __construct(User $user, public $log)
     {
-        $this->log = $log;
         $this->user = $user;
     }
 

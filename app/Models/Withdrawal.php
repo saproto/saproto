@@ -40,7 +40,7 @@ class Withdrawal extends Model
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('App\Models\OrderLine', 'payed_with_withdrawal');
+        return $this->hasMany(\App\Models\OrderLine::class, 'payed_with_withdrawal');
     }
 
     /** @return array */
