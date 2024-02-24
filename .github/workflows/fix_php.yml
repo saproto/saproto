@@ -5,12 +5,25 @@ jobs:
     runs-on: ubuntu-latest
     name: 🛠 Fix PHP formatting
     steps:
+      - name: 🔍 Read .env
+        run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+          
+      - uses: "ramsey/composer-install@v2"
+      - run: vendor/bin/rector --ansi
+
       - name: "laravel-pint"
         uses: aglipanci/laravel-pint-action@2.2.0
-      - name : "Commit changes"
+
+      - name: "Commit changes"
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: PHP Linting (Pint)
