@@ -97,6 +97,16 @@
                         <i class="fas fa-infinity fa-fw"></i> Unlimited places available.
                     @endif
                 </li>
+            @else
+                <li class="list-group-item">
+                    @if($event->activity->participants != -1)
+                        {{ $event->activity->participants }} people can sign up.
+                    @else
+                        <i class="fas fa-infinity fa-fw"></i> No limit on signups.
+                    @endif
+                </li>
+
+
             @endif
         </ul>
 
