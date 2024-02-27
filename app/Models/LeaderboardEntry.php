@@ -41,12 +41,12 @@ class LeaderboardEntry extends Model
     /** @return BelongsTo */
     public function leaderboard()
     {
-        return $this->belongsTo('App\Models\Leaderboard', 'leaderboard_id');
+        return $this->belongsTo(\App\Models\Leaderboard::class, 'leaderboard_id');
     }
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 }

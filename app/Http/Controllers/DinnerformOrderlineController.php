@@ -32,7 +32,7 @@ class DinnerformOrderlineController extends Controller
         $amount = $request->input('price');
         $helper = $request->has('helper') || $dinnerform->isHelping();
 
-        $dinnerOrderline = DinnerformOrderline::create([
+        DinnerformOrderline::create([
             'description' => $order,
             'price' => $amount,
             'user_id' => Auth::user()->id,

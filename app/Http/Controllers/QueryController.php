@@ -125,7 +125,7 @@ class QueryController extends Controller
                             'primary' => $is_primary_student ? 'true' : 'false',
                             'name' => $member->user->name,
                             'email' => $has_ut_mail ? $member->user->email : null,
-                            'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null,
+                            'ut_number' => $member->user->utwente_username ?: null,
                         ];
                     }
                 }

@@ -62,13 +62,13 @@ class Page extends Model
     /** @return BelongsTo */
     public function featuredImage()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'featured_image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'featured_image_id');
     }
 
     /** @return BelongsToMany */
     public function files()
     {
-        return $this->belongsToMany('App\Models\StorageEntry', 'pages_files', 'page_id', 'file_id');
+        return $this->belongsToMany(\App\Models\StorageEntry::class, 'pages_files', 'page_id', 'file_id');
     }
 
     /** @return string */

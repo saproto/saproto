@@ -29,9 +29,12 @@
                 </div>
                 <!-- Right column -->
                 <div class="col-md-6">
-                    <label for="percentage">price % per product</label>
+                    <label for="percentage">Percentage price difference
+                        <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right"
+                           title="The percentage of the current price that will be added. For instance: a weizen is €5. This field is -10(%). The new price will be €4.50">
+                        </i></label>
                     <input type="number" step="0.01" class="form-control" id="percentage" name="percentage"
-                           placeholder='1'
+                           placeholder='-10'
                            value="{{ $currentEvent->percentage ?? '' }}"
                            required
                     />
@@ -62,11 +65,11 @@
 
             @if($currentEvent)
                 @include('components.modals.confirm-modal', [
-                                           'action' => route("wallstreet::delete", ['id' => $currentEvent->id]),
+                                           'action' => route("wallstreet::events::delete", ['id' => $currentEvent->id]),
                                            'text' => 'Delete',
                                            'title' => 'Confirm Delete',
                                            'classes' => 'btn btn-danger ms-2',
-                                           'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
+                                           'message' => "Are you sure you want to remove this wallstreet event?",
                                            'confirm' => 'Delete',
                                        ])
             @endif

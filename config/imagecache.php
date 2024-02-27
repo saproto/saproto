@@ -50,9 +50,9 @@ return [
     */
 
     'templates' => [
-        'small' => 'Intervention\Image\Templates\Small',
-        'medium' => 'Intervention\Image\Templates\Medium',
-        'large' => 'Intervention\Image\Templates\Large',
+        'small' => \Intervention\Image\Templates\Small::class,
+        'medium' => \Intervention\Image\Templates\Medium::class,
+        'large' => \Intervention\Image\Templates\Large::class,
     ],
 
     /*

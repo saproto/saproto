@@ -203,13 +203,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsTo */
     public function photo()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
     }
 
     /** @return BelongsToMany */
     private function getGroups()
     {
-        return $this->belongsToMany('App\Models\Committee', 'committees_users')
+        return $this->belongsToMany(\App\Models\Committee::class, 'committees_users')
             ->where(function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
@@ -223,13 +223,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsToMany */
     public function lists()
     {
-        return $this->belongsToMany('App\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
+        return $this->belongsToMany(\App\Models\EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
     /** @return BelongsToMany */
     public function achievements()
     {
-        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany */
@@ -247,61 +247,61 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return HasOne */
     public function member()
     {
-        return $this->hasOne('App\Models\Member');
+        return $this->hasOne(\App\Models\Member::class);
     }
 
     /** @return HasOne */
     public function bank()
     {
-        return $this->hasOne('App\Models\Bank');
+        return $this->hasOne(\App\Models\Bank::class);
     }
 
     /** @return HasOne */
     public function address()
     {
-        return $this->hasOne('App\Models\Address');
+        return $this->hasOne(\App\Models\Address::class);
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('App\Models\OrderLine');
+        return $this->hasMany(\App\Models\OrderLine::class);
     }
 
     /** @return HasMany */
     public function tempadmin()
     {
-        return $this->hasMany('App\Models\Tempadmin');
+        return $this->hasMany(\App\Models\Tempadmin::class);
     }
 
     /** @return HasMany */
     public function feedback()
     {
-        return $this->hasMany('App\Models\Feedback');
+        return $this->hasMany(\App\Models\Feedback::class);
     }
 
     /** @return HasMany */
     public function rfid()
     {
-        return $this->hasMany('App\Models\RfidCard');
+        return $this->hasMany(\App\Models\RfidCard::class);
     }
 
     /** @return HasMany */
     public function tokens()
     {
-        return $this->hasMany('App\Models\Token');
+        return $this->hasMany(\App\Models\Token::class);
     }
 
     /** @return HasMany */
     public function playedVideos()
     {
-        return $this->hasMany('App\Models\PlayedVideo');
+        return $this->hasMany(\App\Models\PlayedVideo::class);
     }
 
     /** @return HasMany */
     public function mollieTransactions()
     {
-        return $this->hasMany('App\Models\MollieTransaction');
+        return $this->hasMany(\App\Models\MollieTransaction::class);
     }
 
     /**

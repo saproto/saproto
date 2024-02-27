@@ -12,11 +12,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Auth\Events\Login' => [
-            'App\Handlers\Events\AuthLoginEventHandler',
+        \Illuminate\Auth\Events\Login::class => [
+            \App\Handlers\Events\AuthLoginEventHandler::class,
         ],
-        'Aacotroneo\Saml2\Events\Saml2LoginEvent' => [
-            'App\Handlers\Events\SamlLoginEventHandler',
+        \Aacotroneo\Saml2\Events\Saml2LoginEvent::class => [
+            \App\Handlers\Events\SamlLoginEventHandler::class,
         ],
     ];
 

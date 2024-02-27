@@ -61,18 +61,18 @@ class Dinnerform extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('App\Models\Event');
+        return $this->belongsTo(\App\Models\Event::class);
     }
 
     public function orderedBy(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'ordered_by_user_id');
+        return $this->belongsTo(\App\Models\User::class, 'ordered_by_user_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('App\Models\DinnerformOrderline');
+        return $this->hasMany(\App\Models\DinnerformOrderline::class);
     }
 
     /** @return float The regular discount as a percentage out of 100. */

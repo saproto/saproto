@@ -29,6 +29,7 @@
                             <td>Ticket Name</td>
                             <td>Availability</td>
                             <td>Who</td>
+                            <td>Buy limit</td>
                             <td>Sold</td>
                             <td>Controls</td>
 
@@ -41,9 +42,9 @@
                             <tr>
                                 <td style="max-width: 200px">
                                     @if($ticket->event)
-                                    <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
-                                        {{ $ticket->event->title }}
-                                    </a>
+                                        <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
+                                            {{ $ticket->event->title }}
+                                        </a>
                                     @endif
                                 </td>
                                 <td style="max-width: 200px">
@@ -59,12 +60,18 @@
                                 <td>
                                     {{ $ticket->members_only ? 'Members' : 'Everyone' }}
                                 </td>
+                                <td>
+                                    @if($ticket->has_buy_limit)
+                                        {{ $ticket->buy_limit }}
+                                    @endif
+                                </td>
                                 <td>{{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}</td>
                                 <td>
                                     <a href="{{ route('tickets::edit', ['id' => $ticket->id]) }}">
                                         <i class="fas fa-edit" aria-hidden="true"></i>
                                     </a>
-                                    <a class="text-danger ms-2" href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
+                                    <a class="text-danger ms-2"
+                                       href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
                                         <i class="fas fa-trash" aria-hidden="true"></i>
                                     </a>
                                 </td>

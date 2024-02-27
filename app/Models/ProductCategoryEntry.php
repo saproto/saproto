@@ -45,12 +45,12 @@ class ProductCategoryEntry extends Model
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->belongsTo(\App\Models\Product::class);
     }
 
     /** @return BelongsTo */
     public function ProductCategory()
     {
-        return $this->belongsTo('App\Models\ProductCategory');
+        return $this->belongsTo(\App\Models\ProductCategory::class);
     }
 }

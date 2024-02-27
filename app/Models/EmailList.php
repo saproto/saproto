@@ -40,7 +40,7 @@ class EmailList extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'users_mailinglists', 'list_id', 'user_id');
+        return $this->belongsToMany(\App\Models\User::class, 'users_mailinglists', 'list_id', 'user_id');
     }
 
     /**

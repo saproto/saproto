@@ -7,11 +7,10 @@
 @section('container')
     <div class="row">
         <div class="col-xl-4">
-            @include('wallstreet.admin_includes.wallstreetdrink-event-details')
-
             @if($currentEvent)
                 @include('wallstreet.admin_includes.wallstreetdrink-event-product-list')
             @endif
+            @include('wallstreet.admin_includes.wallstreetdrink-event-details')
         </div>
         <div class="col-xl-8">
 

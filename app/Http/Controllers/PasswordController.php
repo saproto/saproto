@@ -46,7 +46,7 @@ class PasswordController extends Controller
     public function index(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         return view('passwordstore.index', ['passwords' => PasswordEntry::orderBy('permission_id', 'asc')->orderBy('description', 'asc')->get()]);
@@ -58,7 +58,7 @@ class PasswordController extends Controller
     public function create(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         return view('passwordstore.edit', ['password' => null, 'type' => $request->get('type')]);
@@ -70,7 +70,7 @@ class PasswordController extends Controller
     public function store(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         $permission = Permission::findOrFail($request->get('permission_id'));
@@ -121,7 +121,7 @@ class PasswordController extends Controller
     public function edit(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         /** @var PasswordEntry $password */
@@ -142,7 +142,7 @@ class PasswordController extends Controller
     public function update(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         /** @var PasswordEntry $password */
@@ -208,7 +208,7 @@ class PasswordController extends Controller
     public function destroy(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         $password = PasswordEntry::findOrFail($id);
@@ -245,7 +245,7 @@ class PasswordController extends Controller
     /**
      * @return RedirectResponse
      */
-    private function forwardToAuth(Request $request)
+    private function forwardToAuth()
     {
         Session::flash('flash_message', 'You need to enter your password again, in order to access this feature.');
 
