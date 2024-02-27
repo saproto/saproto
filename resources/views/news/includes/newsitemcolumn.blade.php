@@ -31,10 +31,10 @@
 
                         @include('website.home.cards.card-bg-image', [
                                     'url' => $newsitem->url,
-                                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(500,300) : null,
+                                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(500,300) : ($newsitem->is_weekly ? url('images/weekly-cover.png') : null),
                                     'html' => sprintf('<div class="w-100">%s %s %s</div>', $title, $weekly, $published),
                                     'height' => '180',
-                                    'photo_pop' => true
+                                    'photo_pop' => $newsitem->featuredImage,
                         ])
 
                     </div>
