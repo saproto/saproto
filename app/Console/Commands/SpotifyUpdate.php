@@ -103,7 +103,7 @@ class SpotifyUpdate extends Command
 
         $this->info("Matching to Spotify music.\n---");
 
-        foreach ($videos_to_search as $t => $video) {
+        foreach ($videos_to_search as $video) {
             if (! $video->spotify_id) {
                 $sameVideo = PlayedVideo::where('video_id', $video->video_id)->whereNotNull('spotify_id')->first();
 

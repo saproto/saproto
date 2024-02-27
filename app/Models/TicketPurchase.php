@@ -49,19 +49,19 @@ class TicketPurchase extends Model
     /** @return BelongsTo */
     public function ticket()
     {
-        return $this->belongsTo('App\Models\Ticket', 'ticket_id');
+        return $this->belongsTo(\App\Models\Ticket::class, 'ticket_id');
     }
 
     /** @return BelongsTo */
     public function orderline()
     {
-        return $this->belongsTo('App\Models\OrderLine', 'orderline_id');
+        return $this->belongsTo(\App\Models\OrderLine::class, 'orderline_id');
     }
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User', 'user_id')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class, 'user_id')->withTrashed();
     }
 
     /** @return bool*/

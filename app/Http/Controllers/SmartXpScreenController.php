@@ -89,7 +89,7 @@ class SmartXpScreenController extends Controller
                 $name_exp[0] = '';
             }
             $name = '';
-            foreach ($name_exp as $key => $val) {
+            foreach ($name_exp as $val) {
                 $name .= $val.' ';
             }
             preg_match('/Type: (.*)/', $entry->description, $type);

@@ -46,6 +46,6 @@ class NarrowcastingItem extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('App\Models\StorageEntry');
+        return $this->belongsTo(\App\Models\StorageEntry::class);
     }
 }
