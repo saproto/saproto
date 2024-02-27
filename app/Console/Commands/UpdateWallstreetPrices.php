@@ -100,7 +100,8 @@ class UpdateWallstreetPrices extends Command
 
         $randomEventQuery = WallstreetEvent::inRandomOrder()->whereHas('products', function ($q) use ($currentDrink) {
             $q->whereIn('products.id', $currentDrink->products->pluck('id'));
-        });
+        })->where('active', true);
+
         //chance of 1 in random_events_chance (so about every random_events_chance minutes that a random event is triggered)
         if ($currentDrink->random_events_chance > 0 && $randomEventQuery->count() > 0 && rand(1, $currentDrink->random_events_chance) === 1) {
             $randomEvent = $randomEventQuery->first();

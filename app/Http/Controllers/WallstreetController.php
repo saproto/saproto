@@ -269,6 +269,15 @@ class WallstreetController extends Controller
         return Redirect::to(route('wallstreet::events::list'));
     }
 
+    public function toggleEvent(Request $request)
+    {
+        $event = WallstreetEvent::findOrFail($request->input('id'));
+        $event->active = ! $event->active;
+        $event->save();
+
+        return Response::json(['active' => $event->active, 'id' => $event->id]);
+    }
+
     public function addEventProducts($id, Request $request)
     {
         $event = WallstreetEvent::findOrFail($id);
