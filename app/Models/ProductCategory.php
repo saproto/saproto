@@ -49,12 +49,12 @@ class ProductCategory extends Model
     /** @return \Illuminate\Database\Eloquent\Relations\BelongsToMany */
     public function products()
     {
-        return $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id');
+        return $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id');
     }
 
     public function sortedProducts()
     {
-        $products = $this->belongsToMany('App\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+        $products = $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id')->get();
 
         return $products->sortBy('name');
     }

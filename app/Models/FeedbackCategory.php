@@ -44,11 +44,11 @@ class FeedbackCategory extends Model
 
     public function feedback(): HasMany
     {
-        return $this->hasMany('App\Models\Feedback', 'feedback_category_id');
+        return $this->hasMany(\App\Models\Feedback::class, 'feedback_category_id');
     }
 
     public function reviewer(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'reviewer_id');
+        return $this->belongsTo(\App\Models\User::class, 'reviewer_id');
     }
 }

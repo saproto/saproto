@@ -11,16 +11,13 @@ class MembershipEndedForBoard extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $deleted_memberships;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($deleted_memberships)
+    public function __construct(public $deleted_memberships)
     {
-        $this->deleted_memberships = $deleted_memberships;
     }
 
     /**

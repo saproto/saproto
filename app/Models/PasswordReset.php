@@ -35,6 +35,6 @@ class PasswordReset extends Model
     /** @return HasOne */
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'email', 'email');
+        return $this->hasOne(\App\Models\User::class, 'email', 'email');
     }
 }

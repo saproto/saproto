@@ -86,7 +86,8 @@
     "symfony/css-selector": "~4.0",
     "symfony/dom-crawler": "~4.0",
     "laravel/sail": "^1.16",
-    "laravel/pint": "^1.10"
+    "laravel/pint": "^1.10",
+    "rector/rector": "^1.0.0"
   },
   "autoload": {
     "psr-4": {

@@ -49,13 +49,13 @@ class Leaderboard extends Model
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('App\Models\Committee', 'committee_id');
+        return $this->belongsTo(\App\Models\Committee::class, 'committee_id');
     }
 
     /** @return HasMany */
     public function entries()
     {
-        return $this->hasMany('App\Models\LeaderboardEntry');
+        return $this->hasMany(\App\Models\LeaderboardEntry::class);
     }
 
     public static function isAdminAny(User $user): bool

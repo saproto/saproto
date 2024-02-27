@@ -11,16 +11,13 @@ class BirthdayEmailForBoard extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $users;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($users)
+    public function __construct(public $users)
     {
-        $this->users = $users;
     }
 
     /**
