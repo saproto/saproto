@@ -197,7 +197,7 @@ class WallstreetController extends Controller
     {
         $events = $drink->events()->with('products')->get();
         foreach ($events as $event) {
-            $event->img = $event->image->generatePath();
+            $event->img = $event->image?->generatePath();
         }
 
         return $events;
