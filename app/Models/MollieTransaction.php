@@ -74,17 +74,18 @@ class MollieTransaction extends Model
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
             return 'open';
-        } elseif (
-            $status == 'expired' ||
-            $status == 'canceled' ||
-            $status == 'failed' ||
-            $status == 'charged_back' ||
-            $status == 'refunded'
-        ) {
+        }
+        if ($status == 'expired' ||
+        $status == 'canceled' ||
+        $status == 'failed' ||
+        $status == 'charged_back' ||
+        $status == 'refunded') {
             return 'failed';
-        } elseif ($status == 'paid' || $status == 'paidout') {
+        }
+        if ($status == 'paid' || $status == 'paidout') {
             return 'paid';
-        } else {
+        }
+        else {
             return 'unknown';
         }
     }

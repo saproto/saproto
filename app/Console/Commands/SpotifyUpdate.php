@@ -87,18 +87,22 @@ class SpotifyUpdate extends Command
         ];
 
         foreach ($videos as $video) {
-            if (! in_array($video->video_title, array_keys($videos_to_search)) && strlen($video->video_title) > 0) {
-                $videos_to_search[$video->video_title] = (object) [
-                    'title' => $video->video_title,
-                    'video_id' => $video->video_id,
-                    'spotify_id' => $video->spotify_id,
-                    'title_formatted' => preg_replace(
-                        '/(\(.*|[^\S{2,}\s])/',
-                        '',
-                        str_replace($strip, ' ', strtolower($video->video_title))
-                    ),
-                ];
+            if (in_array($video->video_title, array_keys($videos_to_search))) {
+                continue;
             }
+            if (strlen($video->video_title) <= 0) {
+                continue;
+            }
+            $videos_to_search[$video->video_title] = (object) [
+                'title' => $video->video_title,
+                'video_id' => $video->video_id,
+                'spotify_id' => $video->spotify_id,
+                'title_formatted' => preg_replace(
+                    '/(\(.*|[^\S{2,}\s])/',
+                    '',
+                    str_replace($strip, ' ', strtolower($video->video_title))
+                ),
+            ];
         }
 
         $this->info("Matching to Spotify music.\n---");

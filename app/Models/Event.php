@@ -243,7 +243,13 @@ class Event extends Model
      */
     public function isEventAdmin($user)
     {
-        return $user->can('board') || ($this->committee?->isMember($user)) || $this->isEventEro($user);
+        if ($user->can('board')) {
+            return true;
+        }
+        if ($this->committee?->isMember($user)) {
+            return true;
+        }
+        return $this->isEventEro($user);
     }
 
     /**
@@ -269,9 +275,8 @@ class Event extends Model
                 ->where('activity_id', $this->activity->id)
                 ->where('committees_activities_id', $eroHelping->id)
                 ->where('user_id', $user->id)->count() > 0;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

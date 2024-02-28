@@ -65,6 +65,9 @@ class Leaderboard extends Model
 
     public function canEdit(User $user): bool
     {
-        return $user->can('board') || $this->committee->users->contains($user);
+        if ($user->can('board')) {
+            return true;
+        }
+        return $this->committee->users->contains($user);
     }
 }

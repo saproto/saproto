@@ -160,9 +160,13 @@ class AchievementsCron extends Command
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
             $alreadyAchieved = $user->achievements->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
-                if (! in_array($id, $alreadyAchieved) && $check($user)) {
-                    $this->giveAchievement($user, $id);
+                if (in_array($id, $alreadyAchieved)) {
+                    continue;
                 }
+                if (!$check($user)) {
+                    continue;
+                }
+                $this->giveAchievement($user, $id);
             }
         }
 

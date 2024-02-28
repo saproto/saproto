@@ -71,10 +71,12 @@ class FeeCron extends Command
         ];
 
         foreach (Member::all() as $member) {
-            if (in_array($member->user->id, $already_paid) || $member->is_pending) {
+            if (in_array($member->user->id, $already_paid)) {
                 continue;
             }
-
+            if ($member->is_pending) {
+                continue;
+            }
             $reason = null;
             $email_remittance_reason = null;
 

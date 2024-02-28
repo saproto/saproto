@@ -33,11 +33,9 @@ class PasswordController extends Controller
             Session::flash('flash_message', 'You can access this tool for 10 minutes.');
 
             return Redirect::route('passwordstore::index');
-        } else {
-            Session::flash('flash_message', 'Wrong password.');
-
-            return Redirect::route('passwordstore::auth');
         }
+        Session::flash('flash_message', 'Wrong password.');
+        return Redirect::route('passwordstore::auth');
     }
 
     /**
@@ -80,7 +78,6 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->get('type') == 'password') {
             PasswordEntry::create([
                 'permission_id' => $permission->id,
@@ -90,11 +87,11 @@ class PasswordController extends Controller
                 'url' => ($request->get('url') == '' ? null : $request->get('url')),
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             Session::flash('flash_message', 'Password saved.');
-
             return Redirect::route('passwordstore::index');
-        } elseif ($request->get('type') == 'note') {
+        }
+
+        if ($request->get('type') == 'note') {
             PasswordEntry::create([
                 'permission_id' => $permission->id,
                 'description' => $request->get('description'),
@@ -103,9 +100,7 @@ class PasswordController extends Controller
                 'url' => null,
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             Session::flash('flash_message', 'Note saved.');
-
             return Redirect::route('passwordstore::index');
         }
 
@@ -161,7 +156,6 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->get('type') == 'password') {
             $password->fill([
                 'permission_id' => $permission->id,
@@ -171,13 +165,12 @@ class PasswordController extends Controller
                 'url' => ($request->get('url') == '' ? null : $request->get('url')),
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             $password->save();
-
             Session::flash('flash_message', 'Password saved.');
-
             return Redirect::route('passwordstore::index');
-        } elseif ($request->get('type') == 'note') {
+        }
+
+        if ($request->get('type') == 'note') {
             $password->fill([
                 'permission_id' => $permission->id,
                 'description' => $request->get('description'),
@@ -186,11 +179,8 @@ class PasswordController extends Controller
                 'url' => null,
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             $password->save();
-
             Session::flash('flash_message', 'Note saved.');
-
             return Redirect::route('passwordstore::index');
         }
 

@@ -335,9 +335,13 @@ class DirectAdminSync extends Command
             $da->query($query['cmd'], $query['options']);
 
             $response = $da->fetch_parsed_body();
-            if (array_key_exists('error', $response) && $response['error'] == 1) {
-                $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
+            if (!array_key_exists('error', $response)) {
+                continue;
             }
+            if ($response['error'] != 1) {
+                continue;
+            }
+            $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
         }
     }
 }

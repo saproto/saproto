@@ -227,13 +227,12 @@ class TicketController extends Controller
                 'message' => 'Valid ticket',
                 'data' => $ticket,
             ];
-        } else {
-            return [
-                'code' => 500,
-                'message' => 'Unknown barcode',
-                'data' => null,
-            ];
         }
+        return [
+            'code' => 500,
+            'message' => 'Unknown barcode',
+            'data' => null,
+        ];
     }
 
     /**

@@ -23,11 +23,9 @@ class LeaderboardController extends Controller
         $leaderboards = Leaderboard::all()->reverse();
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
-        } else {
-            Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
-
-            return Redirect::back();
         }
+        Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
+        return Redirect::back();
     }
 
     /**

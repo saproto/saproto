@@ -274,19 +274,15 @@ class AchievementController extends Controller
                 'achievement_id' => $achievement->id,
                 'description' => $description,
             ]);
-
             if ($achievedOn) {
                 $relation->created_at = Carbon::parse($achievedOn);
             }
-
             $relation->save();
-
             return true;
-        } elseif ($description) {
-
+        }
+        if ($description) {
             $achieved->pivot->description = $description;
             $achievement->save();
-
             return false;
         }
 

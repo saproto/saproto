@@ -32,8 +32,10 @@ class DevelopmentAccess
     protected function clientNotAllowed()
     {
         $isAllowedIP = in_array(request()->ip(), $this->ipWhitelist);
-
-        return auth()->guest() || ! $isAllowedIP;
+        if (auth()->guest()) {
+            return true;
+        }
+        return ! $isAllowedIP;
     }
 
     /**

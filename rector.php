@@ -8,11 +8,11 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__.'/app',
-        __DIR__.'/config',
-        __DIR__.'/public',
-        __DIR__.'/resources',
-        __DIR__.'/routes',
+        __DIR__ . '/app',
+        __DIR__ . '/config',
+        __DIR__ . '/public',
+        __DIR__ . '/resources',
+        __DIR__ . '/routes',
     ])->withPhpSets(php53: true)
     ->withRules(
         [
@@ -27,5 +27,5 @@ return RectorConfig::configure()
         privatization: false,
         naming: false,
         instanceOf: false,
-        earlyReturn: false,
+        earlyReturn: true,
         strictBooleans: false);

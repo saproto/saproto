@@ -65,9 +65,8 @@ class EmailList extends Model
             ]);
 
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

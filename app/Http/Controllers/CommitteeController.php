@@ -31,19 +31,15 @@ class CommitteeController extends Controller
 
         if (Auth::check() && $user->can('board')) {
             return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
-        } else {
-            $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
-
-            if ($showSociety) {
-                $userGroups = Auth::check() ? $user->societies : [];
-            } else {
-                $userGroups = Auth::check() ? $user->committees : [];
-            }
-
-            $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
-
-            return view('committee.list', ['data' => $mergedGroups]);
         }
+        $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
+        if ($showSociety) {
+            $userGroups = Auth::check() ? $user->societies : [];
+        } else {
+            $userGroups = Auth::check() ? $user->committees : [];
+        }
+        $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
+        return view('committee.list', ['data' => $mergedGroups]);
     }
 
     /**
@@ -204,12 +200,12 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
-
             return Redirect::back();
-        } elseif ($request->end == '') {
+        }
+
+        if ($request->end == '') {
             $membership->deleted_at = null;
         }
 
@@ -246,12 +242,12 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
-
             return Redirect::back();
-        } elseif ($request->end == '') {
+        }
+
+        if ($request->end == '') {
             $membership->deleted_at = null;
         }
 

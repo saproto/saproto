@@ -184,19 +184,20 @@ class Announcement extends Model
         if ($this->show_only_active && $user != null && $user->is_member && ! $user->isActiveMember()) {
             return false;
         }
-
         // Check if not already dismissed.
         if ($this->is_dismissable && Cookie::get($this->hash_map_id)) {
             return false;
-        } elseif (
-            $user != null &&
-            $this->is_dismissable &&
-            HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() > 0
-        ) {
-            return false;
         }
-
-        return true;
+        if ($user == null) {
+            return true;
+        }
+        if (!$this->is_dismissable) {
+            return true;
+        }
+        if (HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0) {
+            return true;
+        }
+        return false;
     }
 
     /** @param  User|null  $user */
