@@ -39,6 +39,7 @@ class CommitteeController extends Controller
             $userGroups = Auth::check() ? $user->committees : [];
         }
         $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
+
         return view('committee.list', ['data' => $mergedGroups]);
     }
 
@@ -202,6 +203,7 @@ class CommitteeController extends Controller
         }
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
+
             return Redirect::back();
         }
 
@@ -244,6 +246,7 @@ class CommitteeController extends Controller
         }
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
+
             return Redirect::back();
         }
 

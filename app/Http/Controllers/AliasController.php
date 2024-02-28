@@ -27,6 +27,7 @@ class AliasController extends Controller
 
             return view('aliases.index', ['aliases' => $data]);
         }
+
         return Redirect::route('alias::add');
     }
 

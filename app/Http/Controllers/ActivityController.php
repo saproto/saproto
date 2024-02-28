@@ -42,11 +42,13 @@ class ActivityController extends Controller
         }
         if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
+
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
         if ($newNoShow < 0) {
             Session::flash('flash_message', 'The no show fee should be a positive amount.');
+
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
@@ -99,11 +101,13 @@ class ActivityController extends Controller
         $event = Event::findOrFail($id);
         if (! $event->activity) {
             Session::flash('flash_message', 'There is no participation data to delete.');
+
             return Redirect::back();
         }
 
         if (count($event->activity->users) > 0) {
             Session::flash('flash_message', 'You cannot delete participation data because there are still participants to this activity.');
+
             return Redirect::back();
         }
 

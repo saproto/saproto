@@ -132,6 +132,7 @@ class Dinnerform extends Model
         if ($this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()) {
             return true;
         }
+
         return $this->event?->activity && $this->event->activity->isHelping(Auth::user());
     }
 

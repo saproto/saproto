@@ -85,9 +85,8 @@ class MollieTransaction extends Model
         if ($status == 'paid' || $status == 'paidout') {
             return 'paid';
         }
-        else {
-            return 'unknown';
-        }
+
+        return 'unknown';
     }
 
     /** @return string */

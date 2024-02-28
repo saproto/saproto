@@ -191,12 +191,13 @@ class Announcement extends Model
         if ($user == null) {
             return true;
         }
-        if (!$this->is_dismissable) {
+        if (! $this->is_dismissable) {
             return true;
         }
         if (HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0) {
             return true;
         }
+
         return false;
     }
 

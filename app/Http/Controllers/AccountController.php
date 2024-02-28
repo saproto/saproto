@@ -131,6 +131,7 @@ class AccountController extends Controller
                 'start' => $request->start, 'end' => $request->end, 'account' => $account,
             ]);
         }
+
         return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to aggregate OmNomCom product sales.']);
     }
 }

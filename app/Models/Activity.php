@@ -192,6 +192,7 @@ class Activity extends Validatable
                 ->whereNull('committees_activities_id')
                 ->first();
         }
+
         return ActivityParticipation::where('activity_id', $this->id)
             ->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)
@@ -226,6 +227,7 @@ class Activity extends Validatable
         if ($h) {
             return $this->getParticipation($user, $h) !== null;
         }
+
         return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
     }
 
@@ -253,6 +255,7 @@ class Activity extends Validatable
         if ($this->participants <= 0) {
             return -1;
         }
+
         return max(($this->participants - count($this->users)), 0);
     }
 

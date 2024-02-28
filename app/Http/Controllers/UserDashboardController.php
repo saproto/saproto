@@ -299,6 +299,7 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
         Session::flash('flash_userdata', $userdata);
+
         return view(
             'users.dashboard.completeprofile_verify',
             ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]

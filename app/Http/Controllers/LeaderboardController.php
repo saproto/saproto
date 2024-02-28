@@ -25,6 +25,7 @@ class LeaderboardController extends Controller
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
         Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
+
         return Redirect::back();
     }
 

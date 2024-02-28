@@ -51,6 +51,7 @@ class AuthController extends Controller
         if ($request->has('SAMLRequest')) {
             Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
         }
+
         return view('auth.login');
     }
 
@@ -340,6 +341,7 @@ class AuthController extends Controller
             return view('auth.passreset_pass', ['reset' => $reset]);
         }
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
+
         return Redirect::route('login::resetpass');
     }
 
@@ -355,10 +357,12 @@ class AuthController extends Controller
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
                 Session::flash('flash_message', 'Your passwords don\'t match.');
+
                 return Redirect::back();
             }
             if (strlen($request->password) < 10) {
                 Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
+
                 return Redirect::back();
             }
             $reset->user->setPassword($request->password);
@@ -368,6 +372,7 @@ class AuthController extends Controller
             return Redirect::route('login::show');
         }
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
+
         return Redirect::route('login::resetpass');
     }
 
@@ -410,22 +415,23 @@ class AuthController extends Controller
         if ($user_verify?->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
                 Session::flash('flash_message', 'The new passwords do not match.');
+
                 return view('auth.passchange');
             }
             if (strlen($pass_new1) < 10) {
                 Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
+
                 return view('auth.passchange');
             }
             if ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
                 Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
+
                 return view('auth.passchange');
             }
-            else {
-                $user->setPassword($pass_new1);
-                Session::flash('flash_message', 'Your password has been changed.');
+            $user->setPassword($pass_new1);
+            Session::flash('flash_message', 'Your password has been changed.');
 
-                return Redirect::route('user::dashboard');
-            }
+            return Redirect::route('user::dashboard');
         }
 
         Session::flash('flash_message', 'Old password incorrect.');
@@ -469,6 +475,7 @@ class AuthController extends Controller
             return Redirect::route('user::dashboard');
         }
         Session::flash('flash_message', 'Password incorrect.');
+
         return view('auth.sync');
     }
 
@@ -525,6 +532,7 @@ class AuthController extends Controller
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
             }
+
             return Redirect::route('user::dashboard');
         }
 
@@ -544,6 +552,7 @@ class AuthController extends Controller
             }
             Session::flash('surfconext_create_account', $remoteData);
             $request->session()->reflash();
+
             return view('users.registersurfconext', ['remote_data' => $remoteData]);
         }
 
@@ -567,6 +576,7 @@ class AuthController extends Controller
 
             return Redirect::route('login::show');
         }
+
         return view('auth.username');
     }
 
@@ -663,6 +673,7 @@ class AuthController extends Controller
 
             return view('auth.2fa');
         }
+
         return self::loginUser($user);
     }
 
@@ -685,6 +696,7 @@ class AuthController extends Controller
             }
             Session::flash('flash_message', 'Your code is invalid. Please try again.');
             $request->session()->reflash();
+
             return view('auth.2fa');
         }
 

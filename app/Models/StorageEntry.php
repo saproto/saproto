@@ -166,7 +166,7 @@ class StorageEntry extends Model
     public function getFileSize($human = true)
     {
         $size = File::size($this->generateLocalPath());
-        if (!$human) {
+        if (! $human) {
             return $size;
         }
         if ($size < 1024) {
@@ -178,10 +178,8 @@ class StorageEntry extends Model
         if ($size < pow(1024, 3)) {
             return round($size / pow(1024, 2), 1).' megabytes';
         }
-        else {
-            return round($size / pow(1024, 3), 1).' gigabytes';
-        }
-        return $size;
+
+        return round($size / pow(1024, 3), 1).' gigabytes';
     }
 
     /** @return string */

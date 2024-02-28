@@ -170,11 +170,9 @@ class OrderLine extends Model
                         $this->payed_with_mollie.
                         '</a>';
             }
-        }
-        elseif ($this->total_price == 0) {
+        } elseif ($this->total_price == 0) {
             return 'Free!';
-        }
-        else {
+        } else {
             return 'Unpaid';
         }
     }

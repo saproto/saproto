@@ -278,11 +278,13 @@ class AchievementController extends Controller
                 $relation->created_at = Carbon::parse($achievedOn);
             }
             $relation->save();
+
             return true;
         }
         if ($description) {
             $achieved->pivot->description = $description;
             $achievement->save();
+
             return false;
         }
 

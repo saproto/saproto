@@ -95,9 +95,8 @@ class Video extends Model
         if ($interval->i > 0) {
             return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
         }
-        else {
-            return sprintf('%s seconds', $interval->s);
-        }
+
+        return sprintf('%s seconds', $interval->s);
     }
 
     /** @return string|false */

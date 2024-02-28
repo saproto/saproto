@@ -316,6 +316,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if ($this->photo) {
             return $this->photo->generateImagePath($w, $h);
         }
+
         return asset('images/default-avatars/other.png');
     }
 
@@ -359,7 +360,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
-            if (!$orderline->orderline) {
+            if (! $orderline->orderline) {
                 continue;
             }
             if ($orderline->withdrawal->id === 1) {
@@ -368,6 +369,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if ($orderline->withdrawal->closed) {
                 continue;
             }
+
             return true;
         }
 
@@ -480,6 +482,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
         }
+
         return 'https://'.$this->website;
     }
 
@@ -489,6 +492,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
             return $matches[1];
         }
+
         return $this->website;
     }
 
@@ -630,6 +634,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if ($this->can('protube')) {
             return true;
         }
+
         return $this->isTempadmin();
     }
 
@@ -652,6 +657,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         if ($welcomeMessage) {
             return $welcomeMessage->message;
         }
+
         return null;
     }
 }

@@ -48,6 +48,7 @@ class SpotifyController extends Controller
         self::setSession($session);
         self::setApi($api);
         Session::flash('flash_message', 'Successfully saved Spotify credentials.');
+
         return Redirect::route('homepage');
     }
 

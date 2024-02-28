@@ -249,6 +249,7 @@ class Event extends Model
         if ($this->committee?->isMember($user)) {
             return true;
         }
+
         return $this->isEventEro($user);
     }
 
@@ -276,6 +277,7 @@ class Event extends Model
                 ->where('committees_activities_id', $eroHelping->id)
                 ->where('user_id', $user->id)->count() > 0;
         }
+
         return false;
     }
 

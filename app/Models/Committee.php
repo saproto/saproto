@@ -109,6 +109,7 @@ class Committee extends Model
         if (Auth::user()?->can('board')) {
             return $events->get();
         }
+
         return $events->where('secret', '=', 0)->get();
     }
 
@@ -120,6 +121,7 @@ class Committee extends Model
         if (Auth::user()?->can('board')) {
             return $events->get();
         }
+
         return $events->where('secret', '=', 0)->get();
     }
 
@@ -152,7 +154,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if (!$event) {
+            if (! $event) {
                 continue;
             }
             if ($event->secret) {

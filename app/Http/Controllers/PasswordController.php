@@ -35,6 +35,7 @@ class PasswordController extends Controller
             return Redirect::route('passwordstore::index');
         }
         Session::flash('flash_message', 'Wrong password.');
+
         return Redirect::route('passwordstore::auth');
     }
 
@@ -88,6 +89,7 @@ class PasswordController extends Controller
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
             Session::flash('flash_message', 'Password saved.');
+
             return Redirect::route('passwordstore::index');
         }
 
@@ -101,6 +103,7 @@ class PasswordController extends Controller
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
             Session::flash('flash_message', 'Note saved.');
+
             return Redirect::route('passwordstore::index');
         }
 
@@ -167,6 +170,7 @@ class PasswordController extends Controller
             ]);
             $password->save();
             Session::flash('flash_message', 'Password saved.');
+
             return Redirect::route('passwordstore::index');
         }
 
@@ -181,6 +185,7 @@ class PasswordController extends Controller
             ]);
             $password->save();
             Session::flash('flash_message', 'Note saved.');
+
             return Redirect::route('passwordstore::index');
         }
 

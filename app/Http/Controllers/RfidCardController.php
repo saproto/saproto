@@ -51,6 +51,7 @@ class RfidCardController extends Controller
             if ($card->user->id == $user->id) {
                 return ['ok' => false, 'text' => 'This card is already registered to you!'];
             }
+
             return ['ok' => false, 'text' => 'This card is already registered to someone.'];
         }
         $card = RfidCard::create([
@@ -58,6 +59,7 @@ class RfidCardController extends Controller
             'card_id' => $uid,
         ]);
         $card->save();
+
         return ['ok' => true, 'text' => 'This card has been successfully registered to '.$user->name];
     }
 

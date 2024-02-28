@@ -87,6 +87,7 @@ class ApiController extends Controller
         if ($request->has('callback')) {
             return response()->json($response)->setCallback($request->input('callback'));
         }
+
         return response()->json($response);
     }
 

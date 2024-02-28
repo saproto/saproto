@@ -228,6 +228,7 @@ class TicketController extends Controller
                 'data' => $ticket,
             ];
         }
+
         return [
             'code' => 500,
             'message' => 'Unknown barcode',

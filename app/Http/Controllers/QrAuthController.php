@@ -131,6 +131,7 @@ class QrAuthController extends Controller
         if ($qrAuthRequest->isApproved()) {
             return 'true';
         }
+
         return 'false';
     }
 
