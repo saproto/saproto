@@ -53,12 +53,12 @@ class Achievement extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'achievements_users');
+        return $this->belongsToMany(\App\Models\User::class, 'achievements_users');
     }
 
     public function achievementOwnership(): HasMany
     {
-        return $this->hasMany('App\Models\AchievementOwnership');
+        return $this->hasMany(\App\Models\AchievementOwnership::class);
     }
 
     /** @return int */

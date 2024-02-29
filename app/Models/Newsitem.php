@@ -61,7 +61,7 @@ class Newsitem extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
     public function events(): BelongsToMany
@@ -71,7 +71,7 @@ class Newsitem extends Model
 
     public function featuredImage(): BelongsTo
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'featured_image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'featured_image_id');
     }
 
     public function isPublished(): bool

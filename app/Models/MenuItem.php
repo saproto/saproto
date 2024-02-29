@@ -50,13 +50,13 @@ class MenuItem extends Model
     /** @return BelongsTo */
     public function page()
     {
-        return $this->belongsTo('App\Models\Page', 'page_id', 'id');
+        return $this->belongsTo(\App\Models\Page::class, 'page_id', 'id');
     }
 
     /** @return HasMany */
     public function children()
     {
-        return $this->hasMany('App\Models\MenuItem', 'parent');
+        return $this->hasMany(\App\Models\MenuItem::class, 'parent');
     }
 
     /** @return string|null */

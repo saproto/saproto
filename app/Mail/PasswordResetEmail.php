@@ -14,17 +14,14 @@ class PasswordResetEmail extends Mailable
 
     public $name;
 
-    public $token;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $token)
+    public function __construct(User $user, public $token)
     {
         $this->name = $user->calling_name;
-        $this->token = $token;
     }
 
     /**

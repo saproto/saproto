@@ -45,6 +45,8 @@ class TicketController extends Controller
         $ticket->event_id = Event::findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
+        $ticket->has_buy_limit = $request->has('has_buy_limit');
+        $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
@@ -90,6 +92,8 @@ class TicketController extends Controller
         }
 
         $ticket->members_only = $request->has('is_members_only');
+        $ticket->has_buy_limit = $request->has('has_buy_limit');
+        $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
@@ -307,6 +311,7 @@ class TicketController extends Controller
 
         foreach ($request->get('tickets') as $ticket_id => $amount) {
             $ticket = Ticket::find($ticket_id);
+            $user_owns = TicketPurchase::where('user_id', Auth::id())->where('ticket_id', $ticket_id)->count();
             if (! $ticket) {
                 Session::flash('flash_message', "Ticket ID#$ticket_id is not an existing ticket. Entire order cancelled.");
 
@@ -322,8 +327,15 @@ class TicketController extends Controller
 
                 return Redirect::back();
             }
+
+            if ($ticket->has_buy_limit && ($amount + $user_owns) > $ticket->buy_limit) {
+                Session::flash('flash_message', 'You tried to buy '.$amount." of ticket '".$ticket->product->name."'. The total limit per user for this ticket is ".$ticket->buy_limit.' and you have already bought '.$user_owns.'. Entire order cancelled.');
+
+                return Redirect::back();
+            }
+
             if ($amount > config('proto.maxtickets')) {
-                Session::flash('flash_message', 'You tried to more then '.config('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".config('proto.maxtickets').' at a time. Entire order cancelled.');
+                Session::flash('flash_message', 'You tried to buy more then '.config('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".config('proto.maxtickets').' at a time. Entire order cancelled.');
 
                 return Redirect::back();
             }

@@ -73,19 +73,19 @@ class Member extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function membershipForm()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'membership_form_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'membership_form_id');
     }
 
     /** @return BelongsTo */
     public function customOmnomcomSound()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'omnomcom_sound_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'omnomcom_sound_id');
     }
 
     /** @return int */
@@ -148,7 +148,7 @@ class Member extends Model
     /**
      * Create an email alias friendly username from a full name.
      *
-     * @param $name string
+     * @param  $name  string
      * @return string
      */
     public static function createProtoUsername($name)

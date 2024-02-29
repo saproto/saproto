@@ -62,18 +62,18 @@ class ActivityParticipation extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function activity()
     {
-        return $this->belongsTo('App\Models\Activity');
+        return $this->belongsTo(\App\Models\Activity::class);
     }
 
     /** @return BelongsTo */
     public function help()
     {
-        return $this->belongsTo('App\Models\HelpingCommittee', 'committees_activities_id');
+        return $this->belongsTo(\App\Models\HelpingCommittee::class, 'committees_activities_id');
     }
 }

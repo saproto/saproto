@@ -215,8 +215,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@update']);
 
         Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
-
-        Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
     });
 
     /* Routes related to societies. */
@@ -331,9 +329,21 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
         Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
-        route::group(['prefix' => 'products', 'as' => 'products::'], function () {
+        Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
             Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
             Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
+        });
+
+        Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'WallstreetController@events']);
+            Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@addEvent']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@editEvent']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@updateEvent']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroyEvent']);
+            Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
+                Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addEventProducts']);
+                Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeEventProduct']);
+            });
         });
     });
 
@@ -342,7 +352,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
-        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:finadmin']], function () {
+        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:closeactivities']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'EventController@finindex']);
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });

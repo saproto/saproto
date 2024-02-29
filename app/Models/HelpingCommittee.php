@@ -51,20 +51,20 @@ class HelpingCommittee extends Validatable
     /** @return BelongsTo */
     public function activity()
     {
-        return $this->belongsTo('App\Models\Activity');
+        return $this->belongsTo(\App\Models\Activity::class);
     }
 
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('App\Models\Committee');
+        return $this->belongsTo(\App\Models\Committee::class);
     }
 
     /** @return BelongsToMany */
     public function users()
     {
         return $this
-            ->belongsToMany('App\Models\User', 'activities_users', 'committees_activities_id')
+            ->belongsToMany(\App\Models\User::class, 'activities_users', 'committees_activities_id')
             ->whereNull('activities_users.deleted_at')
             ->withTrashed();
     }
