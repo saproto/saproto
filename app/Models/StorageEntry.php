@@ -72,8 +72,8 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string|null $customPath
+     * @param  UploadedFile  $file
+     * @param  string|null  $customPath
      *
      * @throws FileNotFoundException
      */
@@ -81,10 +81,10 @@ class StorageEntry extends Model
     {
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
 
         if ($customPath) {
-            $this->filename = $customPath . $this->hash;
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, File::get($file));
@@ -96,20 +96,20 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param resource|string $data
-     * @param string $mime
-     * @param string $name
-     * @param string|null $customPath
+     * @param  resource|string  $data
+     * @param  string  $mime
+     * @param  string  $name
+     * @param  string|null  $customPath
      */
     public function createFromData($data, $mime, $name, $customPath = null)
     {
         $this->hash = $this->generateHash();
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
         if ($customPath) {
-            $this->filename = $customPath . $this->hash;
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, $data);
@@ -120,7 +120,7 @@ class StorageEntry extends Model
     /** @return string */
     private function generateHash()
     {
-        return sha1(date('U') . mt_rand(1, intval(99999999999)));
+        return sha1(date('U').mt_rand(1, intval(99999999999)));
     }
 
     /** @return string */
@@ -135,8 +135,8 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function generateImagePath($w, $h)
@@ -150,8 +150,8 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function getBase64($w = null, $h = null)
@@ -161,7 +161,7 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param bool $human Defaults to true.
+     * @param  bool  $human  Defaults to true.
      * @return string|int
      */
     public function getFileSize($human = true)
@@ -169,13 +169,13 @@ class StorageEntry extends Model
         $size = File::size($this->generateLocalPath());
         if ($human) {
             if ($size < 1024) {
-                return $size . ' bytes';
+                return $size.' bytes';
             } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1) . ' kilobytes';
+                return round($size / pow(1024, 1), 1).' kilobytes';
             } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1) . ' megabytes';
+                return round($size / pow(1024, 2), 1).' megabytes';
             } else {
-                return round($size / pow(1024, 3), 1) . ' gigabytes';
+                return round($size / pow(1024, 3), 1).' gigabytes';
             }
         } else {
             return $size;
@@ -185,16 +185,16 @@ class StorageEntry extends Model
     /** @return string */
     public function generateLocalPath()
     {
-        return storage_path('app/' . $this->filename);
+        return storage_path('app/'.$this->filename);
     }
 
     /**
-     * @param string $algo Defaults to md5.
+     * @param  string  $algo  Defaults to md5.
      * @return string
      */
     public function getFileHash($algo = 'md5')
     {
-        return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+        return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
     public static function boot()
