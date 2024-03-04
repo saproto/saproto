@@ -67,7 +67,8 @@ class StorageEntry extends Model
             SoundboardSound::where('file_id', $id)->count() == 0 &&
             HeaderImage::where('image_id', $id)->count() == 0 &&
             Photo::where('file_id', $id)->count() == 0 &&
-            Member::where('omnomcom_sound_id', $id)->count() == 0;
+            Member::where('omnomcom_sound_id', $id)->count() == 0 &&
+            WallstreetEvent::where('image_id', $id)->count() == 0;
     }
 
     /**
