@@ -120,6 +120,7 @@
 
                         <thead>
                         <tr class="bg-dark text-white">
+                            <td>ID</td>
                             <td>User</td>
                             @if(!$withdrawal->closed)
                                 <td>Bank Account</td>
@@ -136,6 +137,7 @@
                         @foreach($withdrawal->totalsPerUser() as $data)
 
                             <tr>
+                                <td>{{ $data->user->id }}</td>
                                 <td>{{ $data->user->name }}</td>
                                 @if(! $withdrawal->closed)
                                     @isset($data->user->bank)
