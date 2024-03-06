@@ -157,7 +157,7 @@ class Email extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return string Email body with variables parsed.
      */
     public function parseBodyFor($user)
@@ -172,7 +172,7 @@ class Email extends Model
     public function getEventName()
     {
         $events = [];
-        if (!$this->to_event) {
+        if (! $this->to_event) {
             return '';
         } else {
             foreach ($this->events as $event) {
@@ -187,7 +187,7 @@ class Email extends Model
     public function getListName()
     {
         $lists = [];
-        if (!$this->to_list) {
+        if (! $this->to_list) {
             return '';
         } else {
             foreach ($this->lists as $list) {
