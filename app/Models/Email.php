@@ -131,7 +131,7 @@ class Email extends Model
             return User::whereHas('committees')->orderBy('name')->get();
         } elseif ($this->to_list) {
             return User::whereHas('lists', function ($q) {
-                $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
+                $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         } elseif ($this->to_event) {
             $user_ids = [];
@@ -157,7 +157,7 @@ class Email extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return string Email body with variables parsed.
      */
     public function parseBodyFor($user)
@@ -172,7 +172,7 @@ class Email extends Model
     public function getEventName()
     {
         $events = [];
-        if (! $this->to_event) {
+        if (!$this->to_event) {
             return '';
         } else {
             foreach ($this->events as $event) {
@@ -187,7 +187,7 @@ class Email extends Model
     public function getListName()
     {
         $lists = [];
-        if (! $this->to_list) {
+        if (!$this->to_list) {
             return '';
         } else {
             foreach ($this->lists as $list) {
