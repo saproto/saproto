@@ -101,7 +101,7 @@ class Event extends Model
     }
 
     /**
-     * @param  string  $public_id
+     * @param string $public_id
      * @return Model
      */
     public static function fromPublicId($public_id)
@@ -133,8 +133,8 @@ class Event extends Model
         }
 
         //show non-secret events only when published
-        if (! $this->secret) {
-            if (! $this->publication || $this->isPublished()) {
+        if (!$this->secret) {
+            if (!$this->publication || $this->isPublished()) {
                 return true;
             }
         }
@@ -191,7 +191,7 @@ class Event extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is organising the activity.
      */
     public function isOrganising($user)
@@ -221,24 +221,24 @@ class Event extends Model
     }
 
     /**
-     * @param  string  $long_format  Format when timespan is larger than 24 hours.
-     * @param  string  $short_format  Format when timespan is smaller than 24 hours.
-     * @param  string  $combiner  Character to separate start and end time.
+     * @param string $long_format Format when timespan is larger than 24 hours.
+     * @param string $short_format Format when timespan is smaller than 24 hours.
+     * @param string $combiner Character to separate start and end time.
      * @return string Timespan text in given format
      */
     public function generateTimespanText($long_format, $short_format, $combiner)
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
+        return date($long_format, $this->start) . ' ' . $combiner . ' ' . (
             (($this->end - $this->start) < 3600 * 24)
                 ?
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-        );
+            );
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is an admin of the event.
      */
     public function isEventAdmin($user)
@@ -247,7 +247,7 @@ class Event extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is an ERO at the event
      */
     public function isEventEro($user)
@@ -258,7 +258,7 @@ class Event extends Model
         if (date('U') > $this->end) {
             return false;
         }
-        if (! $this->activity) {
+        if (!$this->activity) {
             return false;
         }
         $eroHelping = HelpingCommittee::query()
@@ -266,16 +266,16 @@ class Event extends Model
             ->where('committee_id', config('proto.committee')['ero'])->first();
         if ($eroHelping) {
             return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
+                    ->where('activity_id', $this->activity->id)
+                    ->where('committees_activities_id', $eroHelping->id)
+                    ->where('user_id', $user->id)->count() > 0;
         } else {
             return false;
         }
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user has bought a ticket for the event.
      */
     public function hasBoughtTickets($user)
@@ -292,7 +292,7 @@ class Event extends Model
         }
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
-                return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
+                return (int)isset($a->pivot->committees_activities_id); // prefer helper participation registration
             })->unique());
         }
 
@@ -338,24 +338,12 @@ class Event extends Model
     /** @return object */
     public function getFormattedDateAttribute()
     {
-        return (object) [
+        return (object)[
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
             'time' => date('H:i', $this->start),
         ];
-    }
-
-    public static function countEventsPerYear(int $year)
-    {
-        $yearStart = strtotime('January 1, '.$year);
-        $yearEnd = strtotime('January 1, '.($year + 1));
-        $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::user()?->can('board')) {
-            $events = $events->where('secret', 0);
-        }
-
-        return $events->count();
     }
 
     public static function boot()
