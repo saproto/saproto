@@ -48,7 +48,7 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.home.cards.upcomingevents', ['n' => 6])
+        @include('website.home.cards.upcomingevents', ['events'=>$upcomingEvents])
 
     </div>
 

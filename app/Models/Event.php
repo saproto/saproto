@@ -89,6 +89,7 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
+    protected $with = ['category'];
     protected $appends = ['is_future', 'formatted_date'];
 
     protected $casts = [

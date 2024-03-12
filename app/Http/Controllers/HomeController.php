@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
 use App\Models\Dinnerform;
+use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
 use App\Models\Ticket;
@@ -78,7 +80,24 @@ class HomeController extends Controller
                 ->where('start', '<=', strtotime('+1 month'));
         })->pluck('event_id');
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, 'myTicketsEventIDs' => $myTicketsEventIDs]);
+        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
+            $q->whereHas('participation', function ($q) {
+                $q->where('user_id', Auth::id())
+                    ->whereNull('committees_activities_id');
+            });
+        })->where('start', '>=', strtotime('now'))
+            ->where('start', '<=', strtotime('+1 month'))->pluck('id');
+
+        $upcomingEvents = Event::query()
+            ->where('is_featured', false)
+            ->where('end', '>=', date('U'))
+            ->where('secret', false)
+            ->orderBy('start')
+            ->with('activity')
+            ->limit(6)
+            ->get();
+
+        return view('website.home.members', ['upcomingEvents' => $upcomingEvents, 'companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, 'myTicketsEventIDs' => $myTicketsEventIDs, 'myParticipatingEventIDs' => $myParticipatingEventIDs]);
     }
 
     /** @return View Display the most important page of the whole site. */

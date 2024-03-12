@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $hide_participants
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property ActivityParticipation[] $participation
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
  * @property-read Collection|User[] $allUsers
@@ -181,6 +182,11 @@ class Activity extends Validatable
                 ->where('committees_activities_id', $h->id)
                 ->first();
         }
+    }
+
+    public function participation(): HasMany
+    {
+        return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
 
     /**

@@ -24,7 +24,7 @@
             @endif
 
             {{-- Participating --}}
-            @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
+            @if(Auth::check() && $myParticipatingEventIDs->contains($event->id))
                 @if($event->activity->isOnBackupList(Auth::user()))
                     <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>

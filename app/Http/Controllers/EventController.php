@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
+use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\EventCategory;
@@ -78,9 +79,17 @@ class EventController extends Controller
                 ->where('start', '<=', strtotime('+1 month'));
         })->pluck('event_id');
 
+        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
+            $q->whereHas('participation', function ($q) {
+                $q->where('user_id', \Illuminate\Support\Facades\Auth::id())
+                    ->whereNull('committees_activities_id');
+            });
+        })->where('start', '>=', strtotime('now'))
+            ->where('start', '<=', strtotime('+1 month'))->pluck('id');
+
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs, 'myParticipatingEventIDs' => $myParticipatingEventIDs]);
     }
 
     /** @return View */
@@ -248,7 +257,15 @@ class EventController extends Controller
             $q->where('start', '>', strtotime($year . '-01-01 00:00:01'))->where('start', '<', strtotime($year . '-12-31 23:59:59'));
         })->pluck('event_id');
 
-        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs]);
+        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
+            $q->whereHas('participation', function ($q) {
+                $q->where('user_id', \Illuminate\Support\Facades\Auth::id())
+                    ->whereNull('committees_activities_id');
+            });
+        })->where('start', '>', strtotime($year . '-01-01 00:00:01'))->where('start', '<', strtotime($year . '-12-31 23:59:59'))->pluck('id');
+
+
+        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs, 'myParticipatingEventIDs' => $myParticipatingEventIDs]);
     }
 
     /**
