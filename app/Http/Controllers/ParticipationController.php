@@ -181,7 +181,7 @@ class ParticipationController extends Controller
 
             $participation->activity->event->updateUniqueUsersCount();
 
-            if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->spots) {
+            if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->participants) {
                 self::transferOneBackupUser($participation->activity);
             }
         } else {
@@ -242,7 +242,7 @@ class ParticipationController extends Controller
 
     public static function processBackupQueue(Activity $activity)
     {
-        while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->spots) {
+        while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
             self::transferOneBackupUser($activity);
         }
     }

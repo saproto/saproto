@@ -94,7 +94,7 @@
                         </label>
                         <input type="number" class="form-control" id="participants"
                                name="participants" min="-1" required
-                               value="{{ old('participants', $event->activity?->spots) }}">
+                               value="{{ old('participants', $event->activity?->participants) }}">
                     </div>
 
                     <div class="col-md-6">

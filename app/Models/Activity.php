@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int|null $event_id
  * @property float|null $price
  * @property float $no_show_fee
- * @property int $spots
+ * @property int $participants
  * @property int $attendees
  * @property int $registration_start
  * @property int $registration_end
@@ -136,7 +136,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  int  $help_id
+     * @param int $help_id
      * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
     public function helpingUsers($help_id)
@@ -145,8 +145,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  Committee  $committee
-     * @param  User  $user
+     * @param Committee $committee
+     * @param User $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation($committee, $user)
@@ -165,8 +165,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation($user, $h = null)
@@ -190,7 +190,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user participates
      */
     public function isParticipating($user)
@@ -199,7 +199,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function isOnBackupList($user)
@@ -208,8 +208,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return bool Whether the user or committee is helping
      */
     public function isHelping($user, $h = null)
@@ -234,7 +234,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return $this->spots != -1 && count($this->users) >= $this->spots;
+        return $this->participants != -1 && count($this->users) >= $this->participants;
     }
 
     /**
@@ -242,10 +242,10 @@ class Activity extends Validatable
      */
     public function freeSpots()
     {
-        if ($this->spots <= 0) {
+        if ($this->participants <= 0) {
             return -1;
         } else {
-            return max(($this->spots - count($this->users)), 0);
+            return max(($this->participants - count($this->users)), 0);
         }
     }
 
@@ -254,7 +254,7 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if ($this->closed || $this->isFull() || $this->spots == 0) {
+        if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
 
@@ -269,7 +269,7 @@ class Activity extends Validatable
         if ($this->canSubscribe()) {
             return true;
         }
-        if ($this->closed || $this->spots == 0 || date('U') < $this->registration_start) {
+        if ($this->closed || $this->participants == 0 || date('U') < $this->registration_start) {
             return false;
         }
 
@@ -301,7 +301,7 @@ class Activity extends Validatable
      */
     public function withParticipants()
     {
-        return $this->spots !== 0;
+        return $this->participants !== 0;
     }
 
     /**
