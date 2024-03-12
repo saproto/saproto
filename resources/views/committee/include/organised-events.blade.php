@@ -38,7 +38,7 @@
 
             <div class="row">
 
-                @foreach($committee->pastEvents()->slice(0, 6) as $key => $event)
+                @foreach($pastEvents as $key => $event)
 
                     <div class="col-6">
                         @include('event.display_includes.event_block', [
