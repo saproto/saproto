@@ -27,5 +27,11 @@ return RectorConfig::configure()
         privatization: false,
         naming: false,
         instanceOf: false,
-        earlyReturn: false,
-        strictBooleans: false);
+        earlyReturn: true,
+        strictBooleans: false)
+    ->withSkip(
+        [
+            Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector::class,
+            Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector::class, 
+            Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector::class,
+        ]);
