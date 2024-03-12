@@ -98,7 +98,7 @@ class Committee extends Model
     /** @return string */
     public function getEmailAddressAttribute()
     {
-        return $this->slug . '@' . config('proto.emaildomain');
+        return $this->slug.'@'.config('proto.emaildomain');
     }
 
     /** @return Collection|Event[] */
@@ -126,7 +126,7 @@ class Committee extends Model
     }
 
     /**
-     * @param bool $includeSecret
+     * @param  bool  $includeSecret
      * @return Event[]
      */
     public function helpedEvents($includeSecret = false)
@@ -137,7 +137,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event?->isPublished() || (!$event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -177,7 +177,7 @@ class Committee extends Model
             } else {
                 if (
                     strtotime($membership->created_at) < date('U') &&
-                    (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
+                    (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
                 ) {
                     $members['members']['current'][] = $membership;
                 } elseif (strtotime($membership->created_at) > date('U')) {
@@ -192,7 +192,7 @@ class Committee extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember($user)

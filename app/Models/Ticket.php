@@ -91,7 +91,7 @@ class Ticket extends Model
      */
     public function canBeSoldTo(User $user)
     {
-        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
+        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
     }
 
     /**
