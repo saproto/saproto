@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (! Auth::user()?->is_member) {
+        if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()
@@ -70,6 +70,7 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
+        //get all the IDs of the events where we have bought a ticket to show the ticket icon on the event card
         $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
             $q->whereHas('user', function ($q) {
                 $q->where('id', Auth::id());
@@ -79,6 +80,7 @@ class HomeController extends Controller
                 ->where('start', '<=', strtotime('+1 month'));
         })->pluck('event_id');
 
+        //get all the IDs of the events where we have participated to show the participation icon on the event card
         $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
             $q->whereHas('participation', function ($q) {
                 $q->where('user_id', Auth::id())
@@ -88,15 +90,28 @@ class HomeController extends Controller
             ->where('start', '<=', strtotime('+1 month'))->pluck('id');
 
         $upcomingEvents = Event::query()
-            ->where('is_featured', false)
-            ->where('end', '>=', date('U'))
-            ->where('secret', false)
-            ->orderBy('start')
+            ->where([
+                ['is_featured', false],
+                ['end', '>=', date('U')],
+                ['secret', false]
+            ])->orderBy('start')
             ->with('activity')
             ->limit(6)
             ->get();
 
-        return view('website.home.members', ['upcomingEvents' => $upcomingEvents, 'companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, 'myTicketsEventIDs' => $myTicketsEventIDs, 'myParticipatingEventIDs' => $myParticipatingEventIDs]);
+        return view('website.home.members', [
+            'upcomingEvents' => $upcomingEvents,
+            'companies' => $companies,
+            'message' => $message,
+            'newsitems' => $newsitems,
+            'weekly' => $weekly,
+            'birthdays' => $birthdays,
+            'dinnerforms' => $dinnerforms,
+            'header' => $header,
+            'videos' => $videos,
+            'myTicketsEventIDs' => $myTicketsEventIDs,
+            'myParticipatingEventIDs' => $myParticipatingEventIDs
+        ]);
     }
 
     /** @return View Display the most important page of the whole site. */
