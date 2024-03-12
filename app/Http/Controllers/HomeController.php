@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (!Auth::user()?->is_member) {
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()
@@ -93,7 +93,7 @@ class HomeController extends Controller
             ->where([
                 ['is_featured', false],
                 ['end', '>=', date('U')],
-                ['secret', false]
+                ['secret', false],
             ])->orderBy('start')
             ->with('activity')
             ->limit(6)
@@ -110,7 +110,7 @@ class HomeController extends Controller
             'header' => $header,
             'videos' => $videos,
             'myTicketsEventIDs' => $myTicketsEventIDs,
-            'myParticipatingEventIDs' => $myParticipatingEventIDs
+            'myParticipatingEventIDs' => $myParticipatingEventIDs,
         ]);
     }
 
