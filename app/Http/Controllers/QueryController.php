@@ -131,7 +131,6 @@ class QueryController extends Controller
                 }
             }
         }
-
         if ($request->has('export_subsidies')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
@@ -140,7 +139,9 @@ class QueryController extends Controller
             ];
 
             return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
-        } elseif ($request->has('export_active')) {
+        }
+
+        if ($request->has('export_active')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',

@@ -32,6 +32,6 @@ return RectorConfig::configure()
     ->withSkip(
         [
             Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector::class,
-            Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector::class, 
+            Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector::class,
             Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector::class,
         ]);
