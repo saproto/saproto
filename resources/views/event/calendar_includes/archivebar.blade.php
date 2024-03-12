@@ -15,31 +15,33 @@
             @endif
 
             @foreach($years as $y)
-                @if(App\Models\Event::countEventsPerYear($y) > 0)
-                    <a href="{{ route('event::archive', ['year'=>$y, 'category' => $cur_category]) }}"
-                       class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}
+                <a href="{{ route('event::archive', ['year'=>$y, 'category' => $cur_category]) }}"
+                   class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}
                         {{ $loop->index == count($years)-1 ? 'rounded-end' : '' }}">
-                        {{ $y }}
-                    </a>
-                @endif
+                    {{ $y }}
+                </a>
             @endforeach
         </div>
     </div>
     <div class="col-12 col-sm-auto mb-2 text-center">
         <div class="btn-group">
-            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-end' : '' }}" data-bs-toggle="modal" data-bs-target="#calendar-modal">
+            <button type="button"
+                    class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-end' : '' }}"
+                    data-bs-toggle="modal" data-bs-target="#calendar-modal">
                 <i class="fas fa-calendar-alt"></i><span class="d-none d-sm-inline-block ms-2">Import Calendar</span>
             </button>
 
             @can('board')
                 <a href="{{ route("event::add") }}" class="btn btn-info rounded-end">
-                    <i class="fas fa-calendar-plus me-2"></i><span class="d-none d-sm-inline-block ms-2">Create Event</span>
+                    <i class="fas fa-calendar-plus me-2"></i><span
+                            class="d-none d-sm-inline-block ms-2">Create Event</span>
                 </a>
             @endcan
 
             @php($categories = \App\Models\EventCategory::all())
             @if(count($categories) > 0)
-                <form class="form-inline ms-3" action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::list')}}">
+                <form class="form-inline ms-3"
+                      action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::list')}}">
                     <div id="category-search" class="input-group">
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
@@ -78,8 +80,12 @@
                     favorite calendar application and looking for an option similar to <i>Import calendar by URL</i>.
                     You can then to copy the URL below.
                 </p>
-                <input id="ical-url" class="form-control" value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}" readonly>
-                <script nonce="{{ csp_nonce() }}"> document.getElementById('ical-url').addEventListener('click', e => { e.target.focus(); e.target.select() }) </script>
+                <input id="ical-url" class="form-control"
+                       value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}" readonly>
+                <script nonce="{{ csp_nonce() }}"> document.getElementById('ical-url').addEventListener('click', e => {
+                        e.target.focus();
+                        e.target.select()
+                    }) </script>
 
                 <hr>
 

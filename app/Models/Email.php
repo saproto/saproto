@@ -131,7 +131,7 @@ class Email extends Model
             return User::whereHas('committees')->orderBy('name')->get();
         } elseif ($this->to_list) {
             return User::whereHas('lists', function ($q) {
-                $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
+                $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         } elseif ($this->to_event) {
             $user_ids = [];

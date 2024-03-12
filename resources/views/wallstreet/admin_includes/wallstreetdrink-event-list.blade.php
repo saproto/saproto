@@ -14,7 +14,6 @@
 
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Description</th>
                     <th>Percentage</th>
                     <th>Active</th>
                     <th>Controls</th>
@@ -27,7 +26,6 @@
                     <tr class="align-middle text-nowrap">
                         <td class="text-muted">#{{ $wallstreetEvent->id }}</td>
                         <td class="text">{{ $wallstreetEvent->name }}</td>
-                        <td class="text text-truncate">{{ $wallstreetEvent->description }}</td>
                         <td class="text">%{{ $wallstreetEvent->percentage }}</td>
                         <td>
                             @include('components.forms.checkbox', [

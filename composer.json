@@ -87,7 +87,8 @@
     "symfony/dom-crawler": "~4.0",
     "laravel/sail": "^1.16",
     "laravel/pint": "^1.10",
-    "rector/rector": "^1.0.0"
+    "rector/rector": "^1.0.0",
+    "phpunit/phpunit": "^10.5"
   },
   "autoload": {
     "psr-4": {
@@ -96,9 +97,20 @@
       "Database\\Factories\\": "database/factories/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "scripts": {
     "fix": [
       "./vendor/bin/pint"
+    ],
+    "test": [
+      "phpunit"
+    ],
+    "rector": [
+      "vendor/bin/rector process"
     ],
     "ide-helper": [
       "php artisan cache:clear",
