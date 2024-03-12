@@ -98,13 +98,13 @@ class Committee extends Model
     /** @return string */
     public function getEmailAddressAttribute()
     {
-        return $this->slug.'@'.config('proto.emaildomain');
+        return $this->slug . '@' . config('proto.emaildomain');
     }
 
     /** @return Collection|Event[] */
-    public function pastEvents()
+    public function pastEvents($n)
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
+        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
 
         if (Auth::user()?->can('board')) {
             return $events->get();
@@ -126,7 +126,7 @@ class Committee extends Model
     }
 
     /**
-     * @param  bool  $includeSecret
+     * @param bool $includeSecret
      * @return Event[]
      */
     public function helpedEvents($includeSecret = false)
@@ -137,7 +137,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (!$event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -145,21 +145,20 @@ class Committee extends Model
         return $events;
     }
 
-    /** @return Event[] */
-    public function pastHelpedEvents()
+    public function pastHelpedEvents($n)
     {
-        /** @var Activity[] $activities */
-        $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
-
-        $events = [];
-        foreach ($activities as $activity) {
-            $event = $activity->event;
-            if ($event && ! $event->secret && $event->end < time()) {
-                $events[] = $event;
-            }
-        }
-
-        return $events;
+        return Event::whereHas('activity', function ($q) {
+            $q->whereHas('helpingCommittees', function ($q) {
+                $q->where('committee_id', $this->id);
+            });
+        })
+            ->where('secret', false)
+            ->where(function ($q) {
+                $q->where('publication', '<', time())
+                    ->orWhereNull('publication');
+            })
+            ->where('end', '<', time())
+            ->orderBy('created_at')->take($n)->get();
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
@@ -178,7 +177,7 @@ class Committee extends Model
             } else {
                 if (
                     strtotime($membership->created_at) < date('U') &&
-                    (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
+                    (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
                 ) {
                     $members['members']['current'][] = $membership;
                 } elseif (strtotime($membership->created_at) > date('U')) {
@@ -193,7 +192,7 @@ class Committee extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember($user)

@@ -26,7 +26,7 @@
 
 @endif
 
-@if(count($committee->pastEvents()) > 0)
+@if(count($pastEvents) > 0)
 
     <div class="card mb-3">
 
@@ -57,7 +57,7 @@
 
 @endif
 
-@if(count($committee->pastHelpedEvents()) > 0)
+@if(count($committee->pastHelpedEvents(1)) > 0)
 
     <div class="card mb-3">
 
@@ -69,7 +69,7 @@
 
             <div class="row">
 
-                @foreach(array_slice($committee->pastHelpedEvents(), 0, 6) as $key => $event)
+                @foreach($committee->pastHelpedEvents(6) as $key => $event)
                     <div class="col-6">
                         @include('event.display_includes.event_block', [
                             'event' => $event,

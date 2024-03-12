@@ -60,7 +60,7 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        $pastEvents = $committee->pastEvents()->take(6);
+        $pastEvents = $committee->pastEvents(6);
 
         $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) use ($pastEvents) {
             $q->whereHas('user', function ($q) {

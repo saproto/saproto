@@ -88,7 +88,7 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
-    protected $with = ['category'];
+    protected $with = ['category', 'activity'];
     protected $appends = ['is_future', 'formatted_date'];
 
     protected $casts = [
@@ -347,7 +347,7 @@ class Event extends Model
             'time' => date('H:i', $this->start),
         ];
     }
-    
+
 
     public static function boot()
     {
