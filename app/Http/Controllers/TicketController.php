@@ -414,7 +414,7 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        $this->addParticipantFromEventCount($event, Auth::user());
+        $event->updateUniqueUsersCount();
 
         if (count($prepaid_tickets) > 0) {
             Session::put('prepaid_tickets', $event->id);
@@ -432,23 +432,5 @@ class TicketController extends Controller
         }
 
         return Redirect::back();
-    }
-
-    private function addParticipantFromEventCount(Event $event, User $user)
-    {
-        //only increase the unique_users_count if the user is not already participating or has not bought a ticket
-        if ($event->activity->users->where('id', $user->id)->count() == 0 && $event->getTicketPurchasesFor($user)->count() == 0) {
-            $event->unique_users_count = $event->unique_users_count + 1;
-            $event->save();
-        }
-    }
-
-    public static function removeParticipantFromEventCount(Event $event, User $user)
-    {
-        //only decrease the unique_users_count if the user is not already participating
-        if ($event->activity->users->where('id', $user->id)->count() == 0 && $event->getTicketPurchasesFor($user)->count() == 0) {
-            $event->unique_users_count = $event->unique_users_count - 1;
-            $event->save();
-        }
     }
 }

@@ -139,7 +139,7 @@ class MollieTransaction extends Model
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
-                    TicketController::removeParticipantFromEventCount($orderline->product->ticket->event, $orderline->user);
+                    $orderline->product->ticket->event->updateUniqueUsersCount();
                     $orderline->product->stock += 1;
                     $orderline->product->save();
                     $orderline->delete();

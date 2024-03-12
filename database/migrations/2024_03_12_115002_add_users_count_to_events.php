@@ -23,19 +23,7 @@ return new class extends Migration {
         });
 
         foreach (Event::all() as $event) {
-            $allUserIds = collect();
-            foreach ($event->tickets as $ticket) {
-                if ($ticket->show_participants) {
-                    $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
-                }
-            }
-
-            if ($event->activity) {
-                $allUserIds = $allUserIds->merge($event->activity->users->pluck('id'));
-            }
-            
-            $event->unique_users_count = $allUserIds->unique()->count();
-            $event->save();
+            $event->updateUniqueUsersCount();
         }
     }
 

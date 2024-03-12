@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Models\Dinnerform;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
+use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
@@ -27,7 +28,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (! Auth::user()?->is_member) {
+        if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()
@@ -68,7 +69,16 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
+        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
+            $q->whereHas('user', function ($q) {
+                $q->where('id', Auth::id());
+            });
+        })->whereHas('event', function ($q) {
+            $q->where('start', '>=', strtotime('now'))
+                ->where('start', '<=', strtotime('+1 month'));
+        })->pluck('event_id');
+
+        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, 'myTicketsEventIDs' => $myTicketsEventIDs]);
     }
 
     /** @return View Display the most important page of the whole site. */

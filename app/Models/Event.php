@@ -302,9 +302,9 @@ class Event extends Model
         });
     }
 
-    public function usersCount()
+    public function updateUniqueUsersCount()
     {
-        $allUserIds = collect([]);
+        $allUserIds = collect();
         foreach ($this->tickets as $ticket) {
             if ($ticket->show_participants) {
                 $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
@@ -315,7 +315,8 @@ class Event extends Model
             $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
         }
 
-        return $allUserIds->unique()->count();
+        $this->unique_users_count = $allUserIds->unique()->count();
+        $this->save();
     }
 
     /** @return string[] */

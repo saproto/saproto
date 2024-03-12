@@ -58,7 +58,6 @@ class ParticipationController extends Controller
                 Session::flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
-                $this->addParticipantToEventCount($event, Auth::user());
                 Session::flash('flash_message', 'You claimed a spot for ' . $event->title . '.');
             }
         } else {
@@ -70,6 +69,8 @@ class ParticipationController extends Controller
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
+
+        $event->updateUniqueUsersCount();
 
         if (!$is_web) {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
@@ -179,7 +180,7 @@ class ParticipationController extends Controller
 
             $participation->delete();
 
-            $this->removeParticipantFromEventCount($participation->activity->event, $participation->user);
+            $participation->activity->event->updateUniqueUsersCount();
 
 
             if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->spots) {
@@ -191,7 +192,7 @@ class ParticipationController extends Controller
                 Session::flash('flash_message', $message);
             }
             $participation->delete();
-            $this->removeParticipantFromEventCount($participation->activity->event, $participation->user);
+            $participation->activity->event->updateUniqueUsersCount();
         }
 
         if ($is_web) {
@@ -256,7 +257,7 @@ class ParticipationController extends Controller
             $backup_participation->backup = false;
             $backup_participation->save();
 
-            ParticipationController::addParticipantToEventCount($backup_participation->activity->event, $backup_participation->user);
+            $backup_participation->activity->event->updateUniqueUsersCount();
 
             Mail::to($backup_participation->user)->queue((new ActivityMovedFromBackup($backup_participation))->onQueue('high'));
         }

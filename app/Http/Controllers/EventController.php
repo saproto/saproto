@@ -12,6 +12,8 @@ use App\Models\HelpingCommittee;
 use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
+use App\Models\Ticket;
+use App\Models\TicketPurchase;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
@@ -67,9 +69,18 @@ class EventController extends Controller
             $reminder = null;
         }
 
+        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
+            $q->whereHas('user', function ($q) {
+                $q->where('id', Auth::id());
+            });
+        })->whereHas('event', function ($q) {
+            $q->where('start', '>=', strtotime('now'))
+                ->where('start', '<=', strtotime('+1 month'));
+        })->pluck('event_id');
+
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs]);
     }
 
     /** @return View */
@@ -229,7 +240,15 @@ class EventController extends Controller
             }
         }
 
-        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category]);
+        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) use ($year) {
+            $q->whereHas('user', function ($q) {
+                $q->where('id', Auth::id());
+            });
+        })->whereHas('event', function ($q) use ($year) {
+            $q->where('start', '>', strtotime($year . '-01-01 00:00:01'))->where('start', '<', strtotime($year . '-12-31 23:59:59'));
+        })->pluck('event_id');
+
+        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category, 'myTicketsEventIDs' => $myTicketsEventIDs]);
     }
 
     /**

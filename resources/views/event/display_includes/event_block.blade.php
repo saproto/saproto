@@ -39,7 +39,7 @@
             @endif
 
             {{-- Ticket --}}
-            @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
+            @if (Auth::check() && $myTicketsEventIDs->contains($event->id))
                 <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
             @endif
@@ -110,11 +110,11 @@
                         </span>
                 @endif
 
-                {{--                @if($event->activity && $event->activity->canSubscribe())--}}
-                {{--                    <span>--}}
-                {{--                            <i class="fas fa-lock-open"></i>--}}
-                {{--                        </span>--}}
-                {{--                @endif--}}
+                @if($event->activity && $event->activity->canSubscribe())
+                    <span>
+                            <i class="fas fa-lock-open"></i>
+                        </span>
+                @endif
             </div>
 
         </div>

@@ -242,7 +242,7 @@ class OrderLineController extends Controller
         if ($ticketPurchase->count() > 0) {
             $ticketPurchase = $ticketPurchase->first();
             $ticketPurchase->delete();
-            TicketController::removeParticipantFromEventCount($ticketPurchase->ticket->event, $ticketPurchase->user);
+            $ticketPurchase->ticket->event->updateUniqueUsersCount();
         }
 
         FailedWithdrawal::where('correction_orderline_id', $id)->delete();
