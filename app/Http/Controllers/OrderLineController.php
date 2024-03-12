@@ -22,7 +22,7 @@ use Session;
 class OrderLineController extends Controller
 {
     /**
-     * @param string $date
+     * @param  string  $date
      * @return View
      */
     public function index($date = null)
@@ -94,7 +94,7 @@ class OrderLineController extends Controller
      */
     public function adminindex(Request $request)
     {
-        if (Auth::user()->can('alfred') && !Auth::user()->hasRole('sysadmin')) {
+        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', (Carbon::today()));
@@ -131,7 +131,7 @@ class OrderLineController extends Controller
     {
         $date = Carbon::parse($request->input('date'))->format('d-m-Y');
 
-        if (Auth::user()->can('alfred') && !Auth::user()->hasRole('sysadmin')) {
+        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
@@ -158,7 +158,7 @@ class OrderLineController extends Controller
     {
         $user = $request->input('user');
 
-        if (Auth::user()->can('alfred') && !Auth::user()->hasRole('sysadmin')) {
+        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->where('user_id', $user);
@@ -219,7 +219,7 @@ class OrderLineController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -229,7 +229,7 @@ class OrderLineController extends Controller
         /** @var OrderLine $order */
         $order = OrderLine::findOrFail($id);
 
-        if (!$order->canBeDeleted()) {
+        if (! $order->canBeDeleted()) {
             Session::flash('flash_message', 'The orderline cannot be deleted.');
 
             return Redirect::back();
