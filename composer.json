@@ -106,6 +106,12 @@
     "fix": [
       "./vendor/bin/pint"
     ],
+    "test": [
+      "phpunit"
+    ],
+    "rector": [
+      "vendor/bin/rector process"
+    ],
     "ide-helper": [
       "php artisan cache:clear",
       "php artisan ide-helper:generate",
