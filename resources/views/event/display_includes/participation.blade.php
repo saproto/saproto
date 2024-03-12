@@ -93,20 +93,10 @@
                     @if($event->activity->participants != -1)
                         {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
                         out of {{ $event->activity->participants }} places available
-                    @else
-                        <i class="fas fa-infinity fa-fw"></i> Unlimited places available.
+         	    @else
+                         <i class="fas fa-infinity fa-fw"></i> Unlimited places available.
                     @endif
                 </li>
-            @else
-                <li class="list-group-item">
-                    @if($event->activity->participants != -1)
-                        {{ $event->activity->participants }} people can sign up.
-                    @else
-                        <i class="fas fa-infinity fa-fw"></i> No limit on signups.
-                    @endif
-                </li>
-
-
             @endif
         </ul>
 
@@ -119,6 +109,11 @@
                 <br>
                 <strong>Sign out possible
                     until:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
+		<br>
+	        @if($event->activity->participants != -1 && !$event->activity->canSubscribe())
+	           <strong>Sign up limit: </strong> {{ $event->activity->participants }}
+		@endif
+	    </span>
             </p>
 
         </div>
