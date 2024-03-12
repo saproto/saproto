@@ -44,4 +44,7 @@
     <!-- Modal for setting membership type -->
     @includeWhen($user->is_member, 'users.admin.admin_includes.setmembershiptype-modal')
 
+    <!-- Modal for changing a users email -->
+    @include('users.admin.admin_includes.changemail-modal')
+
 @endsection
