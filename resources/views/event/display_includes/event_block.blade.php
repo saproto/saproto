@@ -10,7 +10,8 @@
             @if(!empty($countdown))
                 <div class="btn btn-info btn-block mb-3 ">
                     <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
-                    <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
+                    <span class="proto-countdown" data-countdown-start="{{ $event->start }}"
+                          data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
                         Counting down...
                     </span>
                 </div>
@@ -24,13 +25,13 @@
 
             {{-- Participating --}}
             @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
-                    @if($event->activity->isOnBackupList(Auth::user()))
-                        <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
-                    @else
-                        <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
-                    @endif
+                @if($event->activity->isOnBackupList(Auth::user()))
+                    <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
+                @else
+                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
+                @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
@@ -41,12 +42,6 @@
             @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
                 <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
-            @endif
-
-            {{-- Helper --}}
-            @if (Auth::user()?->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
-                <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif
 
             {{-- Title --}}
@@ -107,20 +102,20 @@
             @endif
 
             {{-- Signup Icon --}}
-                <div class= "d-flex justify-content-between">
-                    @if($event->usersCount()>0)
-                        <span>
+            <div class="d-flex justify-content-between">
+                @if($event->users_count>0)
+                    <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                            {{$event->usersCount()}}
+                            {{$event->users_count}}
                         </span>
-                    @endif
+                @endif
 
-                    @if($event->activity && $event->activity->canSubscribe())
-                        <span>
-                            <i class="fas fa-lock-open"></i>
-                        </span>
-                    @endif
-                </div>
+                {{--                @if($event->activity && $event->activity->canSubscribe())--}}
+                {{--                    <span>--}}
+                {{--                            <i class="fas fa-lock-open"></i>--}}
+                {{--                        </span>--}}
+                {{--                @endif--}}
+            </div>
 
         </div>
 
