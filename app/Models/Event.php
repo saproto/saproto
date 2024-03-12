@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Auth;
 use Carbon;
 use Eloquent;
 use Hashids;
@@ -344,18 +343,6 @@ class Event extends Model
             'month' => date('M Y', $this->start),
             'time' => date('H:i', $this->start),
         ];
-    }
-
-    public static function countEventsPerYear(int $year)
-    {
-        $yearStart = strtotime('January 1, '.$year);
-        $yearEnd = strtotime('January 1, '.($year + 1));
-        $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::user()?->can('board')) {
-            $events = $events->where('secret', 0);
-        }
-
-        return $events->count();
     }
 
     public static function boot()
