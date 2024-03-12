@@ -9,6 +9,7 @@ use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
+use App\Models\TicketPurchase;
 use App\Models\User;
 use Auth;
 use Exception;
@@ -57,6 +58,7 @@ class ParticipationController extends Controller
                 Session::flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
+                $this->addParticipantToEventCount($event, Auth::user());
                 Session::flash('flash_message', 'You claimed a spot for ' . $event->title . '.');
             }
         } else {
@@ -68,10 +70,6 @@ class ParticipationController extends Controller
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
-
-        if (!$data['committees_activities_id']) {
-            $event->activity::update(['users_count' => $event->users_count + 1]);
-        }
 
         if (!$is_web) {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
@@ -123,15 +121,16 @@ class ParticipationController extends Controller
         }
 
         Session::flash('flash_message', 'You added ' . $user->name . ' for ' . $event->title . '.');
+
+        if (!isset($data['committees_activities_id']) || !$data['committees_activities_id']) {
+            $this->addParticipantToEventCount($event, $user);
+        }
+
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
 
         $help_committee = ($helping->committee->name ?? null);
-
-        if (!$data['committees_activities_id']) {
-            $event->activity::update(['users_count' => $event->users_count + 1]);
-        }
 
         Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $help_committee))->onQueue('high'));
 
@@ -180,7 +179,7 @@ class ParticipationController extends Controller
 
             $participation->delete();
 
-            $participation->activity::update(['users_count' => $participation->activity->users_count - 1]);
+            $this->removeParticipantFromEventCount($participation->activity->event, $participation->user);
 
 
             if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->spots) {
@@ -191,8 +190,8 @@ class ParticipationController extends Controller
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
-
             $participation->delete();
+            $this->removeParticipantFromEventCount($participation->activity->event, $participation->user);
         }
 
         if ($is_web) {
@@ -202,6 +201,24 @@ class ParticipationController extends Controller
                 'success' => true,
                 'message' => $message,
             ]));
+        }
+    }
+
+    private function addParticipantToEventCount(Event $event, User $user)
+    {
+        //only increase the count if the user is not yet counted with a ticket
+        if ($event->getTicketPurchasesFor($user)->count() == 0) {
+            $event->unique_users_count = $event->unique_users_count + 1;
+            $event->save();
+        }
+    }
+
+    private function removeParticipantFromEventCount(Event $event, User $user)
+    {
+        //only decrease the count if the user is not counted with a ticket
+        if ($event->getTicketPurchasesFor($user)->count() == 0) {
+            $event->unique_users_count = $event->unique_users_count - 1;
+            $event->save();
         }
     }
 
@@ -239,7 +256,7 @@ class ParticipationController extends Controller
             $backup_participation->backup = false;
             $backup_participation->save();
 
-            $backup_participation->activity::update(['users_count' => $backup_participation->activity?->event->users_count + 1]);
+            ParticipationController::addParticipantToEventCount($backup_participation->activity->event, $backup_participation->user);
 
             Mail::to($backup_participation->user)->queue((new ActivityMovedFromBackup($backup_participation))->onQueue('high'));
         }

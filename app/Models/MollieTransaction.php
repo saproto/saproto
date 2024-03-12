@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\TicketController;
 use Carbon;
 use Eloquent;
 use Exception;
@@ -67,7 +68,7 @@ class MollieTransaction extends Model
     }
 
     /**
-     * @param  string  $status
+     * @param string $status
      * @return string
      */
     public static function translateStatus($status)
@@ -132,12 +133,13 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    ! $orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
+                    !$orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
+                    TicketController::removeParticipantFromEventCount($orderline->product->ticket->event, $orderline->user);
                     $orderline->product->stock += 1;
                     $orderline->product->save();
                     $orderline->delete();
@@ -150,7 +152,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status == 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
+                if ($orderline->ticketPurchase && !$orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }

@@ -38,7 +38,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property int $users_count
+ * @property int $unique_users_count
  * @property-read object $formatted_date
  * @property-read bool $is_future
  * @property-read Activity|null $activity
@@ -176,7 +176,7 @@ class Event extends Model
     /** @return HasMany */
     public function tickets()
     {
-        return $this->hasMany(\App\Models\Ticket::class, 'event_id');
+        return $this->hasMany(Ticket::class, 'event_id');
     }
 
     /** @return HasMany */

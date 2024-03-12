@@ -69,9 +69,9 @@ class Ticket extends Model
     /** @return Collection */
     public function getUsers()
     {
-        $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
-
-        return User::whereIn('id', array_unique($ids))->get();
+        return User::whereHas('tickets', function ($query) {
+            $query->where('ticket_id', $this->id);
+        })->get();
     }
 
     /** @return int */
@@ -91,7 +91,7 @@ class Ticket extends Model
      */
     public function canBeSoldTo(User $user)
     {
-        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
+        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
     }
 
     /**

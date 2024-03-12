@@ -14,16 +14,16 @@ return new class extends Migration {
     {
         Schema::table('activities', function (Blueprint $table) {
             //rename participants to spots
-//            $table->renameColumn('participants', 'spots');
+            $table->renameColumn('participants', 'spots');
         });
 
         Schema::table('events', function (Blueprint $table) {
             //add a new column that counts the amount of users who signed up called users_count
-//            $table->unsignedInteger('users_count')->default(0);
+            $table->unsignedInteger('unique_users_count')->after('publication')->default(0);
         });
 
         foreach (Event::all() as $event) {
-            $allUserIds = collect([]);
+            $allUserIds = collect();
             foreach ($event->tickets as $ticket) {
                 if ($ticket->show_participants) {
                     $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
@@ -33,7 +33,9 @@ return new class extends Migration {
             if ($event->activity) {
                 $allUserIds = $allUserIds->merge($event->activity->users->pluck('id'));
             }
-            $event->update(['users_count', $allUserIds->count()]);
+            
+            $event->unique_users_count = $allUserIds->unique()->count();
+            $event->save();
         }
     }
 
@@ -49,7 +51,7 @@ return new class extends Migration {
 
         Schema::table('events', function (Blueprint $table) {
             //reverse the up
-            $table->dropColumn('users_count');
+            $table->dropColumn('unique_users_count');
         });
     }
 };
