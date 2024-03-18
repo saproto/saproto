@@ -9,7 +9,6 @@ use App\Models\Dinnerform;
 use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
-use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
@@ -29,7 +28,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (!Auth::user()?->is_member) {
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()

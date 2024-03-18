@@ -12,7 +12,6 @@ use App\Models\HelpingCommittee;
 use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
-use App\Models\Ticket;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
@@ -220,8 +219,8 @@ class EventController extends Controller
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
         $events = Event::getEventBlockQuery()
-            ->where('start', '>', strtotime($year . '-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year . '-12-31 23:59:59'))
+            ->where('start', '>', strtotime($year.'-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
             ->get();
 
         $category = EventCategory::find($request->category);
