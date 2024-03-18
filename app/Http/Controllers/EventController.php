@@ -34,29 +34,17 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $data = [[], [], []];
-        $data[0] = Event::query()
+        $data[0] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')
-            ->with('activity', function ($q) {
-                $q->withCount('users');
-            })
             ->where('start', '<=', strtotime('+1 week'));
 
-        $data[1] = Event::query()
+        $data[1] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')
-            ->with('activity', function ($q) {
-                $q->withCount('users');
-            })
             ->where('start', '>', strtotime('+1 week'))
             ->where('start', '<=', strtotime('+1 month'));
 
-        $data[2] = Event::query()
+        $data[2] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')
-            ->with('activity', function ($q) {
-                $q->withCount('users');
-            })
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
@@ -76,24 +64,6 @@ class EventController extends Controller
         } else {
             $reminder = null;
         }
-        //get all the IDs of the events where we have bought a ticket to show the ticket icon on the event card
-        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
-            $q->whereHas('user', function ($q) {
-                $q->where('id', Auth::id());
-            });
-        })->whereHas('event', function ($q) {
-            $q->where('start', '>=', strtotime('now'))
-                ->where('start', '<=', strtotime('+1 month'));
-        })->pluck('event_id');
-
-        //get all the IDs of the events where we have participated to show the participation icon on the event card
-        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
-            $q->whereHas('participation', function ($q) {
-                $q->where('user_id', Auth::id())
-                    ->whereNull('committees_activities_id');
-            });
-        })->where('start', '>=', strtotime('now'))
-            ->where('start', '<=', strtotime('+1 month'))->pluck('id');
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
@@ -103,8 +73,6 @@ class EventController extends Controller
             'ical_url' => $calendar_url,
             'reminder' => $reminder,
             'cur_category' => $category,
-            'myTicketsEventIDs' => $myTicketsEventIDs,
-            'myParticipatingEventIDs' => $myParticipatingEventIDs,
         ]);
     }
 
@@ -251,12 +219,11 @@ class EventController extends Controller
     public function archive(Request $request, $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-        $events = Event::orderBy('start')
+        $events = Event::getEventBlockQuery()
             ->where('start', '>', strtotime($year . '-01-01 00:00:01'))
             ->where('start', '<', strtotime($year . '-12-31 23:59:59'))
-            ->with('activity', function ($q) {
-                $q->withCount('users');
-            })->get();
+            ->get();
+
         $category = EventCategory::find($request->category);
 
         $months = [];
@@ -270,30 +237,11 @@ class EventController extends Controller
             }
         }
 
-        //get all the IDs of the events where we have bought a ticket to show the ticket icon on the event card
-        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
-            $q->whereHas('user', function ($q) {
-                $q->where('id', Auth::id());
-            });
-        })->whereHas('event', function ($q) use ($year) {
-            $q->where('start', '>', strtotime($year . '-01-01 00:00:01'))->where('start', '<', strtotime($year . '-12-31 23:59:59'));
-        })->pluck('event_id');
-
-        //get all the IDs of the events where we have participated to show the participation icon on the event card
-        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
-            $q->whereHas('participation', function ($q) {
-                $q->where('user_id', Auth::id())
-                    ->whereNull('committees_activities_id');
-            });
-        })->where('start', '>', strtotime($year . '-01-01 00:00:01'))->where('start', '<', strtotime($year . '-12-31 23:59:59'))->pluck('id');
-
         return view('event.archive', [
             'years' => $years,
             'year' => $year,
             'months' => $months,
             'cur_category' => $category,
-            'myTicketsEventIDs' => $myTicketsEventIDs,
-            'myParticipatingEventIDs' => $myParticipatingEventIDs,
         ]);
     }
 

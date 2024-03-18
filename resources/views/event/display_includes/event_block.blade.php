@@ -24,22 +24,22 @@
             @endif
 
             {{-- Participating --}}
-            @if(Auth::check() && $myParticipatingEventIDs->contains($event->id))
-                @if($event->activity->isOnBackupList(Auth::user()))
+            @if(Auth::check() && $event->activity?->myParticipationCount > 0)
+                @if($event->activity->myBackupParticipationCount > 0)
                     <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
                 @else
                     <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
                 @endif
-                @if($event->activity->isHelping(Auth::user()))
+                @if($event->activity->myHelperParticipationCount > 0)
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
                 @endif
             @endif
 
             {{-- Ticket --}}
-            @if (Auth::check() && $myTicketsEventIDs->contains($event->id))
+            @if (Auth::check() && $event->myTicketCount>0)
                 <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
             @endif

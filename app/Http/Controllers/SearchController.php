@@ -31,11 +31,11 @@ class SearchController extends Controller
 
         $users = [];
         if (Auth::user()?->is_member) {
-            $presearch_users = $this->getGenericSearch(
+            $presearch_users = $this->getGenericSearchQuery(
                 User::class,
                 $term,
                 Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
-            );
+            )->get();
             foreach ($presearch_users as $user) {
                 if ($user->is_member) {
                     $users[] = $user;
@@ -44,23 +44,23 @@ class SearchController extends Controller
         }
 
         $pages = [];
-        $presearch_pages = $this->getGenericSearch(
+        $presearch_pages = $this->getGenericSearchQuery(
             Page::class,
             $term,
             ['slug', 'title', 'content']
-        );
+        )->get();
         foreach ($presearch_pages as $page) {
-            if (! $page->is_member_only || Auth::user()?->is_member) {
+            if (!$page->is_member_only || Auth::user()?->is_member) {
                 $pages[] = $page;
             }
         }
 
         $committees = [];
-        $presearch_committees = $this->getGenericSearch(
+        $presearch_committees = $this->getGenericSearchQuery(
             Committee::class,
             $term,
             ['id', 'name', 'slug']
-        );
+        )->get();
         foreach ($presearch_committees as $committee) {
             if ($committee->public || Auth::user()?->can('board')) {
                 $committees[] = $committee;
@@ -68,11 +68,17 @@ class SearchController extends Controller
         }
 
         $events = collect();
-        $presearch_events = $this->getGenericSearch(
+        $presearch_event_ids = $this->getGenericSearchQuery(
             Event::class,
             $term,
             ['id', 'title']
-        );
+        )->pluck('id');
+
+        $presearch_events = Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(function ($event) use ($events) {
+            if ($event->mayViewEvent(Auth::user())) {
+                $events->push($event);
+            }
+        });
 
         foreach ($presearch_events as $event) {
             if ($event->mayViewEvent(Auth::user())) {
@@ -99,13 +105,13 @@ class SearchController extends Controller
         })->pluck('event_id');
 
         $photoAlbums = [];
-        $presearch_photo_albums = $this->getGenericSearch(
+        $presearch_photo_albums = $this->getGenericSearchQuery(
             PhotoAlbum::class,
             $term,
             ['id', 'name']
-        );
+        )->get();
         foreach ($presearch_photo_albums as $album) {
-            if (! $album->secret || Auth::user()?->can('protography')) {
+            if (!$album->secret || Auth::user()?->can('protography')) {
                 $photoAlbums[] = $album;
             }
         }
@@ -152,7 +158,7 @@ class SearchController extends Controller
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array) $data,
+            'data' => (array)$data,
         ]);
     }
 
@@ -169,8 +175,8 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
-        foreach ($this->getGenericSearch(User::class, $request->get('q'), $search_attributes) as $user) {
-            $result[] = (object) [
+        foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)->get() as $user) {
+            $result[] = (object)[
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -187,7 +193,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'title'];
 
-        return $this->getGenericSearch(Event::class, $request->get('q'), $search_attributes);
+        return $this->getGenericSearchQuery(Event::class, $request->get('q'), $search_attributes)->get();
     }
 
     /**
@@ -197,7 +203,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name', 'slug'];
 
-        return $this->getGenericSearch(Committee::class, $request->get('q'), $search_attributes);
+        return $this->getGenericSearchQuery(Committee::class, $request->get('q'), $search_attributes)->get();
     }
 
     /**
@@ -207,7 +213,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name'];
 
-        return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
+        return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)->get();
     }
 
     /**
@@ -217,16 +223,16 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name'];
 
-        return $this->getGenericSearch(Achievement::class, $request->get('q'), $search_attributes);
+        return $this->getGenericSearchQuery(Achievement::class, $request->get('q'), $search_attributes)->get();
     }
 
     /**
-     * @param  class-string|Model  $model
-     * @param  string  $query
-     * @param  string[]  $attributes
+     * @param class-string|Model $model
+     * @param string $query
+     * @param string[] $attributes
      * @return Collection<Model>|array
      */
-    private function getGenericSearch($model, $query, $attributes)
+    private function getGenericSearchQuery($model, $query, $attributes)
     {
         $terms = explode(' ', str_replace('*', '%', $query));
         $query = $model::query();
@@ -239,7 +245,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (! $check_at_least_one_valid_term) {
+        if (!$check_at_least_one_valid_term) {
             return [];
         }
 
@@ -254,6 +260,6 @@ class SearchController extends Controller
             });
         }
 
-        return $query->get();
+        return $query;
     }
 }

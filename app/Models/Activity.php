@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
+use function Clue\StreamFilter\fun;
 
 /**
  * Activity Model.
@@ -29,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property ActivityParticipation[] $participation
+ * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
  * @property-read Collection|User[] $allUsers
@@ -118,13 +121,18 @@ class Activity extends Validatable
     }
 
     /** @return BelongsToMany */
-    public function backupUsers()
+    public function backupUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('backup', true)
+            ->withPivot('id')
+            ->withTimestamps();
     }
 
     /** @return BelongsToMany */
-    public function helpingCommittees()
+    public function helpingCommittees(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
@@ -136,7 +144,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  int  $help_id
+     * @param int $help_id
      * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
     public function helpingUsers($help_id)
@@ -145,8 +153,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  Committee  $committee
-     * @param  User  $user
+     * @param Committee $committee
+     * @param User $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation($committee, $user)
@@ -165,8 +173,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation($user, $h = null)
@@ -189,8 +197,13 @@ class Activity extends Validatable
         return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
 
+    public function helpingParticipations(): HasMany
+    {
+        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
+    }
+
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user participates
      */
     public function isParticipating($user)
@@ -199,17 +212,17 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function isOnBackupList($user)
     {
-        return in_array($user->id, $this->backupUsers()->pluck('users.id')->toArray());
+        return $this->backupUsers->where('id', $user->id)->first() !== null;
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return bool Whether the user or committee is helping
      */
     public function isHelping($user, $h = null)
@@ -234,7 +247,6 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return $this->participants != -1 && count($this->users) >= $this->participants;
         return $this->participants != -1 && ($this->users_count ?? $this->users->count()) >= $this->participants;
     }
 
