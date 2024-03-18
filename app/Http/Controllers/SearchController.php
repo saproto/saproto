@@ -67,25 +67,19 @@ class SearchController extends Controller
             }
         }
 
-        $events = collect();
         $presearch_event_ids = $this->getGenericSearchQuery(
             Event::class,
             $term,
             ['id', 'title']
         )->pluck('id');
 
-        $presearch_events = Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(function ($event) use ($events) {
+        $events = collect();
+        //load the events with all the correct data to show in the event block
+        Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(function ($event) use ($events) {
             if ($event->mayViewEvent(Auth::user())) {
                 $events->push($event);
             }
         });
-
-        foreach ($presearch_events as $event) {
-            if ($event->mayViewEvent(Auth::user())) {
-                //add the event to the events collection
-                $events->push($event);
-            }
-        }
 
         //get all the IDs of the events where we have participated to show the participation icon on the event card
         $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
