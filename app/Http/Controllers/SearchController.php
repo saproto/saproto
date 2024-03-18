@@ -50,7 +50,7 @@ class SearchController extends Controller
             ['slug', 'title', 'content']
         )->get();
         foreach ($presearch_pages as $page) {
-            if (! $page->is_member_only || Auth::user()?->is_member) {
+            if (!$page->is_member_only || Auth::user()?->is_member) {
                 $pages[] = $page;
             }
         }
@@ -81,23 +81,6 @@ class SearchController extends Controller
             }
         });
 
-        //get all the IDs of the events where we have participated to show the participation icon on the event card
-        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
-            $q->whereHas('participation', function ($q) {
-                $q->where('user_id', Auth::id())
-                    ->whereNull('committees_activities_id');
-            });
-        })->whereIn('id', $events->pluck('id'))->pluck('id');
-
-        //get all the IDs of the events where we have bought a ticket to show the ticket icon on the event card
-        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
-            $q->whereHas('user', function ($q) {
-                $q->where('id', Auth::id());
-            });
-        })->whereHas('event', function ($q) use ($events) {
-            $q->whereIn('id', $events->pluck('id'));
-        })->pluck('event_id');
-
         $photoAlbums = [];
         $presearch_photo_albums = $this->getGenericSearchQuery(
             PhotoAlbum::class,
@@ -105,7 +88,7 @@ class SearchController extends Controller
             ['id', 'name']
         )->get();
         foreach ($presearch_photo_albums as $album) {
-            if (! $album->secret || Auth::user()?->can('protography')) {
+            if (!$album->secret || Auth::user()?->can('protography')) {
                 $photoAlbums[] = $album;
             }
         }
@@ -117,8 +100,6 @@ class SearchController extends Controller
             'committees' => $committees,
             'events' => $events->reverse(),
             'photoAlbums' => $photoAlbums,
-            'myParticipatingEventIDs' => $myParticipatingEventIDs,
-            'myTicketsEventIDs' => $myTicketsEventIDs,
         ]);
     }
 
@@ -152,7 +133,7 @@ class SearchController extends Controller
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array) $data,
+            'data' => (array)$data,
         ]);
     }
 
@@ -170,7 +151,7 @@ class SearchController extends Controller
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
         foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)->get() as $user) {
-            $result[] = (object) [
+            $result[] = (object)[
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -221,9 +202,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @param  class-string|Model  $model
-     * @param  string  $query
-     * @param  string[]  $attributes
+     * @param class-string|Model $model
+     * @param string $query
+     * @param string[] $attributes
      * @return Collection<Model>|array
      */
     private function getGenericSearchQuery($model, $query, $attributes)
@@ -239,7 +220,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (! $check_at_least_one_valid_term) {
+        if (!$check_at_least_one_valid_term) {
             return [];
         }
 
