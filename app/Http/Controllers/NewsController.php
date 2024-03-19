@@ -37,7 +37,7 @@ class NewsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function show($id)
@@ -46,7 +46,7 @@ class NewsController extends Controller
 
         $newsitem = Newsitem::findOrFail($id);
 
-        if (! $newsitem->isPublished()) {
+        if (!$newsitem->isPublished()) {
             if (Auth::user()?->can('board')) {
                 $preview = true;
             } else {
@@ -54,29 +54,13 @@ class NewsController extends Controller
             }
         }
 
-        $events = $newsitem->events()->get();
 
-        $myTicketsEventIDs = Ticket::whereHas('purchases', function ($q) {
-            $q->whereHas('user', function ($q) {
-                $q->where('id', Auth::id());
-            });
-        })->whereHas('event', function ($q) use ($events) {
-            $q->whereIn('id', $events->pluck('id'));
-        })->pluck('event_id');
-
-        $myParticipatingEventIDs = Event::whereHas('activity', function ($q) {
-            $q->whereHas('participation', function ($q) {
-                $q->where('user_id', Auth::id())
-                    ->whereNull('committees_activities_id');
-            });
-        })->whereIn('id', $events->pluck('id'))->pluck('id');
-
+        $events = Event::whereIn('id', $newsitem->events()->pluck('id'))->get();
+        
         return view('news.show', [
             'newsitem' => $newsitem,
             'parsedContent' => Markdown::convert($newsitem->content),
             'preview' => $preview, 'events' => $events,
-            'myParticipatingEventIDs' => $myParticipatingEventIDs,
-            'myTicketsEventIDs' => $myTicketsEventIDs,
         ]);
     }
 
@@ -84,7 +68,7 @@ class NewsController extends Controller
     {
         $newsitem = Newsitem::findOrFail($id);
 
-        if (! $newsitem->published_at && ! Auth::user()?->can('board')) {
+        if (!$newsitem->published_at && !Auth::user()?->can('board')) {
             Session::flash('flash_message', 'This weekly newsletter has not been published yet.');
 
             return Redirect::back();
@@ -148,7 +132,7 @@ class NewsController extends Controller
             $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         } else {
             $newsitem->is_weekly = true;
-            $newsitem->title = 'Weekly update for week '.date('W').' of '.date('Y').'.';
+            $newsitem->title = 'Weekly update for week ' . date('W') . ' of ' . date('Y') . '.';
             $newsitem->published_at = null;
         }
         $newsitem->save();
@@ -177,7 +161,7 @@ class NewsController extends Controller
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
 
-        Session::flash('flash_message', 'Newsitem '.$newsitem->title.' has been removed.');
+        Session::flash('flash_message', 'Newsitem ' . $newsitem->title . ' has been removed.');
 
         $newsitem->delete();
 
@@ -187,7 +171,7 @@ class NewsController extends Controller
     public function sendWeeklyEmail(int $id)
     {
         $newsitem = Newsitem::findOrFail($id);
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only the board can do this.');
         }
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
