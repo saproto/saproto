@@ -73,8 +73,8 @@ class PhotoAlbum extends Model
     {
         if ($this->thumb_id) {
             return $this->thumbPhoto()->first()->thumbnail();
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

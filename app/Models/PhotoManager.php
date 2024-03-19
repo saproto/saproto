@@ -49,12 +49,10 @@ class PhotoManager extends Model
             $base = $base->where('thumb_id', '!=', 'null');
         }
         if ($max != 0) {
-            $albums = $base->paginate($max);
-        } else {
-            $albums = $base->get();
+            return $base->paginate($max);
         }
 
-        return $albums;
+        return $base->get();
     }
 
     /**

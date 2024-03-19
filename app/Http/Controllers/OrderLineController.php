@@ -277,8 +277,8 @@ class OrderLineController extends Controller
                 'total_cash' => $total_cash,
                 'total_card' => $total_card,
             ]);
-        } else {
-            return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to calculate payment totals.']);
         }
+
+        return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to calculate payment totals.']);
     }
 }
