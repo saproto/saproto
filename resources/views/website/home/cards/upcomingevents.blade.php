@@ -1,20 +1,8 @@
-
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
         <i class="fas fa-calendar-alt fa-fw me-2"></i> Upcoming events
     </div>
     <div class="card-body">
-
-        @php
-            /** @var int $n */
-            $events = App\Models\Event::query()
-                ->where('is_featured', false)
-                ->where('end', '>=', date('U'))
-                ->where('secret', false)
-                ->orderBy('start')->with('activity')
-                ->limit($n)
-                ->get()
-        @endphp
 
         @if(count($events) > 0)
 
@@ -26,19 +14,19 @@
 
                     @php $week = date('W', $event->start); @endphp
 
-               @endif
+                @endif
 
-           @endforeach
+            @endforeach
 
-       @else
+        @else
 
-           <p class="card-text text-center mt-2 mb-4">
-               We have no events coming up soon, sorry! 😟
-           </p>
+            <p class="card-text text-center mt-2 mb-4">
+                We have no events coming up soon, sorry! 😟
+            </p>
 
-       @endif
+        @endif
 
-       <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
+        <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
 
-   </div>
+    </div>
 </div>

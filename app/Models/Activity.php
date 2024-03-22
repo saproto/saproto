@@ -28,6 +28,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $hide_participants
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property ActivityParticipation[] $participation
+ * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
  * @property-read Collection|User[] $allUsers
@@ -74,19 +76,19 @@ class Activity extends Validatable
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo(\App\Models\Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     /** @return BelongsTo */
     public function closedAccount()
     {
-        return $this->belongsTo(\App\Models\Account::class, 'closed_account');
+        return $this->belongsTo(Account::class, 'closed_account');
     }
 
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'activities_users')
+        return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
@@ -97,7 +99,7 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function presentUsers()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'activities_users')
+        return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->whereNull('committees_activities_id')
@@ -109,45 +111,32 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function allUsers()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'activities_users')
+        return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
     }
 
-    /** @return BelongsToMany */
-    public function backupUsers()
+    public function backupUsers(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\User::class, 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('backup', true)
+            ->withPivot('id')
+            ->withTimestamps();
     }
 
-    /** @return BelongsToMany */
-    public function helpingCommittees()
+    public function helpingCommittees(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
+        return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
     /** @return HasMany */
     public function helpingCommitteeInstances()
     {
-        return $this->hasMany(\App\Models\HelpingCommittee::class, 'activity_id');
-    }
-
-    /**
-     * @param  User|null  $user  If a user is specified, true will only be returned if the user can actually help.
-     * @return bool Whether the activity still needs help.
-     */
-    public function inNeedOfHelp($user = null)
-    {
-        foreach ($this->helpingCommittees as $committee) {
-            $needed = $committee->pivot->amount;
-            $available = $this->helpingUsers($committee->pivot->id)->count();
-
-            return $available < $needed && ($user == null || ($committee->isMember($user) && ! $this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())));
-        }
-
-        return false;
+        return $this->hasMany(HelpingCommittee::class, 'activity_id');
     }
 
     /**
@@ -199,6 +188,16 @@ class Activity extends Validatable
             ->first();
     }
 
+    public function participation(): HasMany
+    {
+        return $this->hasMany(ActivityParticipation::class, 'activity_id');
+    }
+
+    public function helpingParticipations(): HasMany
+    {
+        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
+    }
+
     /**
      * @param  User  $user
      * @return bool Whether the user participates
@@ -214,7 +213,7 @@ class Activity extends Validatable
      */
     public function isOnBackupList($user)
     {
-        return in_array($user->id, $this->backupUsers()->pluck('users.id')->toArray());
+        return $this->backupUsers->where('id', $user->id)->first() !== null;
     }
 
     /**
@@ -244,7 +243,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return $this->participants != -1 && count($this->users) >= $this->participants;
+        return $this->participants != -1 && ($this->users_count ?? $this->users->count()) >= $this->participants;
     }
 
     /**

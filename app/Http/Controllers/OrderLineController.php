@@ -238,7 +238,13 @@ class OrderLineController extends Controller
         $order->product->stock += $order->units;
         $order->product->save();
 
-        TicketPurchase::where('orderline_id', $id)->delete();
+        $ticketPurchase = TicketPurchase::where('orderline_id', $id)->with('ticket.event')->get();
+        if ($ticketPurchase->count() > 0) {
+            $ticketPurchase = $ticketPurchase->first();
+            $ticketPurchase->delete();
+            $ticketPurchase->ticket->event->updateUniqueUsersCount();
+        }
+
         FailedWithdrawal::where('correction_orderline_id', $id)->delete();
 
         $order->delete();

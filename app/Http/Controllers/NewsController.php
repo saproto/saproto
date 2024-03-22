@@ -53,7 +53,13 @@ class NewsController extends Controller
             }
         }
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview, 'events' => $newsitem->events()->get()]);
+        $events = Event::whereIn('id', $newsitem->events()->pluck('id'))->get();
+
+        return view('news.show', [
+            'newsitem' => $newsitem,
+            'parsedContent' => Markdown::convert($newsitem->content),
+            'preview' => $preview, 'events' => $events,
+        ]);
     }
 
     public function showWeeklyPreview(int $id)

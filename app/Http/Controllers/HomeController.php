@@ -6,6 +6,7 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
 use App\Models\Dinnerform;
+use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
 use App\Models\User;
@@ -68,7 +69,26 @@ class HomeController extends Controller
             ->get();
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'weekly' => $weekly, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos]);
+        $upcomingEvents = Event::getEventBlockQuery()
+            ->where([
+                ['is_featured', false],
+                ['end', '>=', date('U')],
+                ['secret', false],
+            ])
+            ->limit(6)
+            ->get();
+
+        return view('website.home.members', [
+            'upcomingEvents' => $upcomingEvents,
+            'companies' => $companies,
+            'message' => $message,
+            'newsitems' => $newsitems,
+            'weekly' => $weekly,
+            'birthdays' => $birthdays,
+            'dinnerforms' => $dinnerforms,
+            'header' => $header,
+            'videos' => $videos,
+        ]);
     }
 
     /** @return View Display the most important page of the whole site. */
