@@ -89,12 +89,13 @@ class PhotoAdminController extends Controller
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::findOrFail($id);
-
         if (! $request->hasFile('file')) {
             return response()->json([
                 'message' => 'photo not found in request!',
             ], 404);
-        } elseif ($album->published) {
+        }
+
+        if ($album->published) {
             return response()->json([
                 'message' => 'album already published! Unpublish to add more photos!',
             ], 500);

@@ -195,12 +195,11 @@ class ParticipationController extends Controller
 
         if ($is_web) {
             return Redirect::back();
-        } else {
-            abort(200, json_encode((object) [
-                'success' => true,
-                'message' => $message,
-            ]));
         }
+        abort(200, json_encode((object) [
+            'success' => true,
+            'message' => $message,
+        ]));
     }
 
     /**

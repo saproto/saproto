@@ -321,9 +321,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if ($this->photo) {
             return $this->photo->generateImagePath($w, $h);
-        } else {
-            return asset('images/default-avatars/other.png');
         }
+
+        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -479,9 +479,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
-        } else {
-            return 'https://'.$this->website;
         }
+
+        return 'https://'.$this->website;
     }
 
     /** @return string|null */
@@ -489,9 +489,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
             return $matches[1];
-        } else {
-            return $this->website;
         }
+
+        return $this->website;
     }
 
     /** @return bool */
@@ -650,8 +650,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
         if ($welcomeMessage) {
             return $welcomeMessage->message;
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

@@ -297,9 +297,9 @@ class Event extends Model
                 ->where('activity_id', $this->activity->id)
                 ->where('committees_activities_id', $eroHelping->id)
                 ->where('user_id', $user->id)->count() > 0;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

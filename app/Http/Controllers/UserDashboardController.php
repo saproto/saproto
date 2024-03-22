@@ -89,9 +89,9 @@ class UserDashboardController extends Controller
 
                 if ($user->id == Auth::id()) {
                     return Redirect::route('user::dashboard')->withErrors($validator);
-                } else {
-                    return Redirect::route('user::admin::details', ['id' => $user->id])->withErrors($validator);
                 }
+
+                return Redirect::route('user::admin::details', ['id' => $user->id])->withErrors($validator);
             }
 
             $email = [
@@ -124,9 +124,9 @@ class UserDashboardController extends Controller
         Session::flash('flash_message', 'E-mail address changed.');
         if ($user->id == Auth::id()) {
             return Redirect::route('user::dashboard');
-        } else {
-            return Redirect::route('user::admin::details', ['id' => $user->id]);
         }
+
+        return Redirect::route('user::admin::details', ['id' => $user->id]);
     }
 
     /**
@@ -326,14 +326,13 @@ class UserDashboardController extends Controller
             Session::flash('flash_message', 'Completed profile.');
 
             return Redirect::route('becomeamember');
-        } else {
-            Session::flash('flash_userdata', $userdata);
-
-            return view(
-                'users.dashboard.completeprofile_verify',
-                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
-            );
         }
+        Session::flash('flash_userdata', $userdata);
+
+        return view(
+            'users.dashboard.completeprofile_verify',
+            ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+        );
     }
 
     /**

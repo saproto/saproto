@@ -111,9 +111,9 @@ class Committee extends Model
 
         if (Auth::user()?->can('board')) {
             return $events->get();
-        } else {
-            return $events->where('secret', '=', 0)->get();
         }
+
+        return $events->where('secret', '=', 0)->get();
     }
 
     /** @return Collection|Event[] */
@@ -123,9 +123,9 @@ class Committee extends Model
 
         if (Auth::user()?->can('board')) {
             return $events->get();
-        } else {
-            return $events->where('secret', '=', 0)->get();
         }
+
+        return $events->where('secret', '=', 0)->get();
     }
 
     /**
