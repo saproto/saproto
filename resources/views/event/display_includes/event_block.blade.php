@@ -4,13 +4,14 @@
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? 'bg-img' : 'no-img'}}"
-             style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) : '' }} background-size: cover;">
+             data-bgimage="{{(!isset($hide_photo) || !$hide_photo) ? $event?->image?->generateImagePath(800,300):''}}">
 
             {{-- Countdown --}}
             @if(!empty($countdown))
-                <div class="btn btn-info btn-block mb-3 ">
+                <div class=" btn btn-info btn-block mb-3">
                     <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
-                    <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
+                    <span class="proto-countdown" data-countdown-start="{{ $event->start }}"
+                          data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
                         Counting down...
                     </span>
                 </div>
@@ -24,13 +25,13 @@
 
             {{-- Participating --}}
             @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
-                    @if($event->activity->isOnBackupList(Auth::user()))
-                        <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
-                    @else
-                        <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
-                    @endif
+                @if($event->activity->isOnBackupList(Auth::user()))
+                    <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
+                @else
+                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
+                @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
@@ -107,20 +108,20 @@
             @endif
 
             {{-- Signup Icon --}}
-                <div class= "d-flex justify-content-between">
-                    @if($event->usersCount()>0)
-                        <span>
+            <div class="d-flex justify-content-between">
+                @if($event->usersCount()>0)
+                    <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
                             {{$event->usersCount()}}
                         </span>
-                    @endif
+                @endif
 
-                    @if($event->activity && $event->activity->canSubscribe())
-                        <span>
+                @if($event->activity && $event->activity->canSubscribe())
+                    <span>
                             <i class="fas fa-lock-open"></i>
                         </span>
-                    @endif
-                </div>
+                @endif
+            </div>
 
         </div>
 

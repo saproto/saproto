@@ -149,19 +149,19 @@ class QueryController extends Controller
             ];
 
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
-        } else {
-            return view('queries.membership_totals', [
-                'total' => $count_total,
-                'primary' => $count_primary,
-                'secondary' => $count_secondary,
-                'ut' => $count_ut,
-                'active' => $count_active,
-                'lifelong' => $count_lifelong,
-                'honorary' => $count_honorary,
-                'donor' => $count_donor,
-                'pending' => $count_pending,
-            ]);
         }
+
+        return view('queries.membership_totals', [
+            'total' => $count_total,
+            'primary' => $count_primary,
+            'secondary' => $count_secondary,
+            'ut' => $count_ut,
+            'active' => $count_active,
+            'lifelong' => $count_lifelong,
+            'honorary' => $count_honorary,
+            'donor' => $count_donor,
+            'pending' => $count_pending,
+        ]);
     }
 
     public function activityStatistics(Request $request)

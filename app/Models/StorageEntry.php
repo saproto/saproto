@@ -178,11 +178,9 @@ class StorageEntry extends Model
         }
         if ($size < pow(1024, 3)) {
             return round($size / pow(1024, 2), 1).' megabytes';
-        } else {
-            return round($size / pow(1024, 3), 1).' gigabytes';
         }
 
-        return $size;
+        return round($size / pow(1024, 3), 1).' gigabytes';
     }
 
     /** @return string */
