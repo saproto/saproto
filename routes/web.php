@@ -442,7 +442,7 @@ Route::middleware('forcedomain')->group(function () {
         // Public route
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
     });
-  
+
     /* Routes related to the wallstreet drink system (TIPCie only) */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {
         Route::get('', 'admin')->name('admin');
