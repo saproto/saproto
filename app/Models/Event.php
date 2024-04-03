@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Auth;
 use Carbon;
 use Eloquent;
 use Hashids;
@@ -114,7 +113,7 @@ class Event extends Model
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('App\Models\Committee');
+        return $this->belongsTo(\App\Models\Committee::class);
     }
 
     /** @return bool */
@@ -151,43 +150,43 @@ class Event extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('App\Models\StorageEntry');
+        return $this->belongsTo(\App\Models\StorageEntry::class);
     }
 
     /** @return HasOne */
     public function activity()
     {
-        return $this->hasOne('App\Models\Activity');
+        return $this->hasOne(\App\Models\Activity::class);
     }
 
     /** @return HasMany */
     public function videos()
     {
-        return $this->hasMany('App\Models\Video');
+        return $this->hasMany(\App\Models\Video::class);
     }
 
     /** @return HasMany */
     public function albums()
     {
-        return $this->hasMany('App\Models\PhotoAlbum', 'event_id');
+        return $this->hasMany(\App\Models\PhotoAlbum::class, 'event_id');
     }
 
     /** @return HasMany */
     public function tickets()
     {
-        return $this->hasMany('App\Models\Ticket', 'event_id');
+        return $this->hasMany(\App\Models\Ticket::class, 'event_id');
     }
 
     /** @return HasMany */
     public function dinnerforms()
     {
-        return $this->hasMany('App\Models\Dinnerform', 'event_id');
+        return $this->hasMany(\App\Models\Dinnerform::class, 'event_id');
     }
 
     /** @return BelongsTo */
     public function category()
     {
-        return $this->BelongsTo('App\Models\EventCategory');
+        return $this->BelongsTo(\App\Models\EventCategory::class);
     }
 
     /**
@@ -269,9 +268,9 @@ class Event extends Model
                 ->where('activity_id', $this->activity->id)
                 ->where('committees_activities_id', $eroHelping->id)
                 ->where('user_id', $user->id)->count() > 0;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -344,18 +343,6 @@ class Event extends Model
             'month' => date('M Y', $this->start),
             'time' => date('H:i', $this->start),
         ];
-    }
-
-    public static function countEventsPerYear(int $year)
-    {
-        $yearStart = strtotime('January 1, '.$year);
-        $yearEnd = strtotime('January 1, '.($year + 1));
-        $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::user()?->can('board')) {
-            $events = $events->where('secret', 0);
-        }
-
-        return $events->count();
     }
 
     public static function boot()

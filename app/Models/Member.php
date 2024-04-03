@@ -73,19 +73,19 @@ class Member extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function membershipForm()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'membership_form_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'membership_form_id');
     }
 
     /** @return BelongsTo */
     public function customOmnomcomSound()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'omnomcom_sound_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'omnomcom_sound_id');
     }
 
     /** @return int */
@@ -172,7 +172,7 @@ class Member extends Model
         $username = $usernameBase;
         $i = Member::where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
-            $username = "$usernameBase-$i";
+            return "$usernameBase-$i";
         }
 
         return $username;

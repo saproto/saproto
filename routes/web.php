@@ -306,7 +306,6 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('{id}/edit', 'edit')->name('edit');
             Route::post('{id}/edit', 'update')->name('edit');
             Route::post('{id}/image', 'image')->name('image');
-
         });
 
         /* --- Public routes --- */
@@ -420,6 +419,7 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to dinnerforms. */
+
     Route::prefix('dinnerform')->name('dinnerform::')->middleware(['auth'])->group(function () {
 
         /* TIPCie only */
@@ -442,7 +442,7 @@ Route::middleware('forcedomain')->group(function () {
         // Public route
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
     });
-
+  
     /* Routes related to the wallstreet drink system (TIPCie only) */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {
         Route::get('', 'admin')->name('admin');
@@ -463,6 +463,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@addEvent']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@editEvent']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@updateEvent']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroyEvent']);
             Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
                 Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addEventProducts']);
                 Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeEventProduct']);

@@ -41,7 +41,7 @@ class FeedbackController extends Controller
             ->with('votes');
 
         if ($category->review) {
-            $feedback = $feedback->where('reviewed', true);
+            return $feedback->where('reviewed', true);
         }
 
         return $feedback;
@@ -198,7 +198,8 @@ class FeedbackController extends Controller
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();
-        } elseif (! Auth::user()->can('board') && $feedback->reply) {
+        }
+        if (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
             return Redirect::back();

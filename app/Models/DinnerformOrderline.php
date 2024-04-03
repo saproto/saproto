@@ -34,13 +34,13 @@ class DinnerformOrderline extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function dinnerform()
     {
-        return $this->belongsTo('App\Models\Dinnerform');
+        return $this->belongsTo(\App\Models\Dinnerform::class);
     }
 
     /** @return float Price of orderline reduced by possible discounts. */

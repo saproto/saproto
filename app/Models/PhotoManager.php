@@ -49,12 +49,10 @@ class PhotoManager extends Model
             $base = $base->where('thumb_id', '!=', 'null');
         }
         if ($max != 0) {
-            $albums = $base->paginate($max);
-        } else {
-            $albums = $base->get();
+            return $base->paginate($max);
         }
 
-        return $albums;
+        return $base->get();
     }
 
     /**
@@ -94,7 +92,7 @@ class PhotoManager extends Model
         $album = $album->first();
         $data->album_title = $album->name;
         $data->album_date = $album->date_taken;
-        $data->event = ($album->event ? $album->event : null);
+        $data->event = ($album->event ?: null);
         $data->private = $album->private;
         $data->published = $album->published;
         $data->thumb = $album->thumb();

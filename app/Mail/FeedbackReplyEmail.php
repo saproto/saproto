@@ -13,23 +13,11 @@ class FeedbackReplyEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public Feedback $feedback;
-
-    public User $user;
-
-    public string $reply;
-
-    public bool $accepted;
-
     /**
      * Create a new message instance.
      */
-    public function __construct(Feedback $feedback, User $user, $reply, bool $accepted)
+    public function __construct(public Feedback $feedback, public User $user, public string $reply, public bool $accepted)
     {
-        $this->feedback = $feedback;
-        $this->user = $user;
-        $this->reply = $reply;
-        $this->accepted = $accepted;
     }
 
     /**

@@ -125,13 +125,12 @@ class QueryController extends Controller
                             'primary' => $is_primary_student ? 'true' : 'false',
                             'name' => $member->user->name,
                             'email' => $has_ut_mail ? $member->user->email : null,
-                            'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null,
+                            'ut_number' => $member->user->utwente_username ?: null,
                         ];
                     }
                 }
             }
         }
-
         if ($request->has('export_subsidies')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
@@ -140,7 +139,9 @@ class QueryController extends Controller
             ];
 
             return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
-        } elseif ($request->has('export_active')) {
+        }
+
+        if ($request->has('export_active')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',

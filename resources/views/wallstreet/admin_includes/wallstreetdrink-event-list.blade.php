@@ -14,9 +14,10 @@
 
                     <th>ID</th>
                     <th>Title</th>
-                    <th>Description</th>
                     <th>Percentage</th>
+                    <th>Active</th>
                     <th>Controls</th>
+
                 </tr>
                 </thead>
 
@@ -25,19 +26,25 @@
                     <tr class="align-middle text-nowrap">
                         <td class="text-muted">#{{ $wallstreetEvent->id }}</td>
                         <td class="text">{{ $wallstreetEvent->name }}</td>
-                        <td class="text text-truncate">{{ $wallstreetEvent->description }}</td>
                         <td class="text">%{{ $wallstreetEvent->percentage }}</td>
-
+                        <td>
+                            @include('components.forms.checkbox', [
+                                  'name' => 'show_only_active',
+                                  'checked' => $wallstreetEvent->active,
+                                  'label' => '',
+                                  'value' => $wallstreetEvent->id,
+                              ])
+                        </td>
 
                         <td>
                             <a href="{{ route('wallstreet::events::edit', ['id' => $wallstreetEvent->id]) }}">
                                 <i class="fas fa-edit me-4"></i>
                             </a>
                             @include('components.modals.confirm-modal', [
-                                'action' => route("wallstreet::delete", ['id' => $wallstreetEvent->id]),
+                                'action' => route("wallstreet::events::delete", ['id' => $wallstreetEvent->id]),
                                 'text' => '<i class="fas fa-trash text-danger"></i>',
                                 'title' => 'Confirm Delete',
-                                'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
+                                'message' => "Are you sure you want to remove this wallstreet event?",
                                 'confirm' => 'Delete',
                             ])
                         </td>
@@ -53,10 +60,34 @@
     @else
 
         <div class="text-center text-muted py-3">
-            There are no wallstreet drinks yet!
+            There are no wallstreet events yet!
         </div>
 
     @endif
 
 </div>
+
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        var checkboxes = document.querySelectorAll("input[type=checkbox]");
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function (event) {
+                //disable the checkbox
+                event.target.disabled = true;
+                //send the request
+                get("{{urldecode(route('api::wallstreet::toggle_event'))}}", {id: event.target.value}).then(response => {
+                    if (response.id != null) {
+                        event.target.checked = response.active;
+                        event.target.disabled = false;
+                    } else {
+                        event.target.checked = !event.target.checked;
+                        event.target.disabled = false;
+                    }
+                });
+            });
+        })
+    </script>
+@endpush
+
 
