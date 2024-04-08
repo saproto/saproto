@@ -102,7 +102,7 @@ class SpotifySync extends Command
 
         $this->info('---');
 
-        $this->info('Updating playlist with ' . count($uris) . ' songs.');
+        $this->info('Updating playlist with '.count($uris).' songs.');
 
         $spotify->replacePlaylistTracks(config('app-proto.spotify-playlist'), []);
 

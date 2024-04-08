@@ -27,7 +27,7 @@ class SpotifyController extends Controller
 
         $api = new SpotifyWebAPI();
 
-        if (!$request->has('code')) {
+        if (! $request->has('code')) {
             $options = [
                 'scope' => [
                     'playlist-modify-public',
