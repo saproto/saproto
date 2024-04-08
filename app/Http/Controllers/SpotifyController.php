@@ -27,7 +27,7 @@ class SpotifyController extends Controller
 
         $api = new SpotifyWebAPI();
 
-        if (! $request->has('code')) {
+        if (!$request->has('code')) {
             $options = [
                 'scope' => [
                     'playlist-modify-public',
@@ -39,7 +39,7 @@ class SpotifyController extends Controller
         }
         $session->requestAccessToken($request->get('code'));
         $api->setAccessToken($session->getAccessToken());
-        /** @phpstan-ignore-next-line  */
+        /** @phpstan-ignore-next-line */
         $spotify_user = $api->me()->id;
         $right_user = config('app-proto.spotify-user');
         if ($spotify_user != $right_user) {
@@ -52,8 +52,7 @@ class SpotifyController extends Controller
         return Redirect::route('homepage');
     }
 
-    /** @param  SpotifySession  $session */
-    public static function setSession($session)
+    public static function setSession(SpotifySession $session)
     {
         $dbSession = HashMapItem::where('key', 'spotify')->where('subkey', 'session')->first();
         if ($dbSession == null) {
@@ -66,8 +65,7 @@ class SpotifyController extends Controller
         $dbSession->save();
     }
 
-    /** @param  SpotifyWebAPI  $api */
-    public static function setApi($api)
+    public static function setApi(SpotifyWebAPI $api): void
     {
         $dbApi = HashMapItem::where('key', 'spotify')->where('subkey', 'api')->first();
         if ($dbApi == null) {
@@ -80,8 +78,7 @@ class SpotifyController extends Controller
         $dbApi->save();
     }
 
-    /** @return SpotifySession */
-    public static function getSession()
+    public static function getSession(): SpotifySession
     {
         return unserialize(
             HashMapItem::where('key', 'spotify')
@@ -90,8 +87,7 @@ class SpotifyController extends Controller
         );
     }
 
-    /** @return SpotifyWebAPI */
-    public static function getApi()
+    public static function getApi(): SpotifyWebAPI
     {
         return unserialize(
             HashMapItem::where('key', 'spotify')
