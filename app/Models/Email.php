@@ -114,9 +114,8 @@ class Email extends Model
             }
 
             return 'event';
-        } else {
-            throw new Exception('Email has no destination');
         }
+        throw new Exception('Email has no destination');
     }
 
     /** @return SupportCollection|User[] */
@@ -155,9 +154,9 @@ class Email extends Model
             }
 
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
-        } else {
-            return collect([]);
         }
+
+        return collect([]);
     }
 
     /** @return bool */

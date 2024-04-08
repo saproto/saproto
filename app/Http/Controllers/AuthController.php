@@ -427,12 +427,11 @@ class AuthController extends Controller
                 Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
 
                 return view('auth.passchange');
-            } else {
-                $user->setPassword($pass_new1);
-                Session::flash('flash_message', 'Your password has been changed.');
-
-                return Redirect::route('user::dashboard');
             }
+            $user->setPassword($pass_new1);
+            Session::flash('flash_message', 'Your password has been changed.');
+
+            return Redirect::route('user::dashboard');
         }
 
         Session::flash('flash_message', 'Old password incorrect.');
