@@ -111,7 +111,7 @@ class SpotifySync extends Command
         while ($slice < count($uris)) {
             $add = array_values(array_slice($uris, $slice, $batch_size));
             $slice += $batch_size;
-            $spotify->addPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
+            $spotify->addPlaylistTracks(config('app-proto.spotify-playlist'), $add);
         }
 
         $this->info('Done!');
