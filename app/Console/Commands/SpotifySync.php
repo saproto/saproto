@@ -73,7 +73,6 @@ class SpotifySync extends Command
 
         $this->info('Constructing ProTube hitlists.');
 
-
         // All-time
         $alltime = DB::table('playedvideos')
             ->selectRaw('spotify_id, count(*) as count')
@@ -122,16 +121,16 @@ class SpotifySync extends Command
     {
         $this->info('---');
 
-        $this->info('Updating playlist ' . $playlistId . ' with ' . count($spotifyUris) . ' songs.');
+        $this->info('Updating playlist '.$playlistId.' with '.count($spotifyUris).' songs.');
 
         try {
             $spotify->replacePlaylistTracks($playlistId, $spotifyUris);
         } catch (SpotifyWebAPIException $e) {
-            $this->error('Error updating playlist ' . $playlistId . ': ' . $e->getMessage());
+            $this->error('Error updating playlist '.$playlistId.': '.$e->getMessage());
 
             return;
         }
 
-        $this->info('Playlist ' . $playlistId . ' updated.');
+        $this->info('Playlist '.$playlistId.' updated.');
     }
 }
