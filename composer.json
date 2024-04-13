@@ -50,7 +50,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "globalcitizen/php-iban": "^2.6",
-    "graham-campbell/markdown": "^15.0",
+    "graham-campbell/markdown": "^15.2",
     "guzzlehttp/guzzle": "^7.5",
     "intervention/image": "^2.7",
     "intervention/imagecache": "^2.5",
