@@ -58,7 +58,6 @@
     "laravel/framework": "^10.0",
     "laravel/helpers": "^1.5",
     "laravel/passport": "^11.5",
-    "laravelcollective/html": "^6.3",
     "league/commonmark": "^2.3",
     "league/oauth1-client": "^1.7",
     "milon/barcode": "^10.0",
