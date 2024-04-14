@@ -10,6 +10,32 @@ import quagga from 'quagga';
 
 global.Quagga = quagga;
 
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+
+import Echo from 'laravel-echo';
+
+window.Echo = new Echo({
+    broadcaster: 'reverb',
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
+    wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
+});
+
+//listen to the wallstreet-prices channel
+window.Echo.channel('wallstreet-prices').listen('NewWallstreetPrice', (data) => {
+    console.log(data);
+})
+
+window.Echo.channel('test-event')
+    .listen('NewWallstreetPrice', (e) => {
+        console.log(e);
+    });
+
 import './countdown-timer'
 import './utilities'
 import './broto'

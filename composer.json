@@ -70,7 +70,8 @@
     "spipu/html2pdf": "^5.2",
     "vinkla/hashids": "^12.0",
     "laravel/legacy-factories": "^1.3",
-    "setasign/tfpdf": "^1.33"
+    "setasign/tfpdf": "^1.33",
+    "laravel/reverb": "@beta"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^3.0",
