@@ -158,7 +158,6 @@ return [
          */
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
