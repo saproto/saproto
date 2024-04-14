@@ -58,18 +58,6 @@ class FileController extends Controller
         return \Cache::remember('imagde.' . $entry->hash . '.' . $w . '.' . $h, 86400, function () use ($image, $w, $h) {
             return $image->coverDown($w, $h)->encode();
         });
-
-//        if ($opts['w'] && $opts['h']) {
-//            $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {
-//                $constraint->upsize();
-//            });
-//        } elseif ($opts['w'] || $opts['h']) {
-//            $image->make($storage['local']['root'].'/'.$entry->filename)->resize($opts['w'], $opts['h'], function ($constraint) {
-//                $constraint->aspectRatio();
-//                $constraint->upsize();
-//            });
-//        } else {
-//            $image->make($storage['local']['root'].'/'.$entry->filename);
     }
 
     /**
