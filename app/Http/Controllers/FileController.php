@@ -49,13 +49,15 @@ class FileController extends Controller
         $manager = new ImageManager(new Driver());
         $image = $manager->read($storage['local']['root'] . '/' . $entry->filename);
 
+        $cacheKey = 'image:' . $entry->hash . '; w:' . $w . '; h:' . $h;
+        
         if (!$w || !$h) {
-            return \Cache::remember('image.' . $entry->hash . '.w:' . $w . '.h:' . $h, 86400, function () use ($image, $w, $h) {
+            return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
                 return $image->scaleDown($w, $h)->encode();
             });
         }
 
-        return \Cache::remember('imagde.' . $entry->hash . '.' . $w . '.' . $h, 86400, function () use ($image, $w, $h) {
+        return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
             return $image->coverDown($w, $h)->encode();
         });
     }
