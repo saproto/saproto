@@ -16,7 +16,7 @@ window.Pusher = Pusher;
 
 import Echo from 'laravel-echo';
 
-window.Echo = new Echo({
+global.Echo = new Echo({
     broadcaster: 'reverb',
     key: import.meta.env.VITE_REVERB_APP_KEY,
     wsHost: import.meta.env.VITE_REVERB_HOST,
@@ -26,15 +26,9 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-//listen to the wallstreet-prices channel
-window.Echo.channel('wallstreet-prices').listen('NewWallstreetPrice', (data) => {
-    console.log(data);
-})
-
-window.Echo.channel('test-event')
-    .listen('NewWallstreetPrice', (e) => {
-        console.log(e);
-    });
+window.Echo.channel('test-event').listen('ExampleEvent', (e) => {
+    console.log(e);
+});
 
 import './countdown-timer'
 import './utilities'
