@@ -37,6 +37,7 @@ class WallstreetDrink extends Model
     public function orders()
     {
         $productIDs = $this->products()->pluck('id');
+
         return OrderLine::query()
             ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time))
             ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time))

@@ -95,34 +95,30 @@ class Product extends Model
         return null;
     }
 
-    /** @return BelongsToMany */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
-    /** @return HasOne */
     public function ticket(): HasOne
     {
         return $this->hasOne(Ticket::class, 'product_id');
     }
 
-    /** @return HasMany */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
-    /** @return bool */
     public function isVisible(): bool
     {
-        return !(!$this->is_visible || $this->stock <= 0 && !$this->is_visible_when_no_stock);
+        return ! (! $this->is_visible || $this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
     public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
-        if (!$active) {
+        if (! $active) {
             return $this->price;
         }
 
@@ -135,13 +131,13 @@ class Product extends Model
     }
 
     /**
-     * @param User $user
-     * @param int $amount
-     * @param float|null $total_price
-     * @param bool|null $withCash
-     * @param bool|null $withBankCard
-     * @param string|null $description
-     * @param string $auth_method
+     * @param  User  $user
+     * @param  int  $amount
+     * @param  float|null  $total_price
+     * @param  bool|null  $withCash
+     * @param  bool|null  $withBankCard
+     * @param  string|null  $description
+     * @param  string  $auth_method
      * @return int OrderLine id
      */
     public function buyForUser($user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')

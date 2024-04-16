@@ -17,28 +17,25 @@ class NewWallstreetEvent implements ShouldBroadcastNow
      * Create a new event instance.
      */
     public function __construct(
-        public int             $wallstreetDrinkId,
+        public int $wallstreetDrinkId,
         public WallstreetEvent $wallstreetEvent
-    )
-    {
+    ) {
     }
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return array
      */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('wallstreet-prices.' . $this->wallstreetDrinkId),
+            new PrivateChannel('wallstreet-prices.'.$this->wallstreetDrinkId),
         ];
     }
 
     public function broadcastWith(): array
     {
         return [
-            'data' => $this->wallstreetEvent
+            'data' => $this->wallstreetEvent,
         ];
     }
 }

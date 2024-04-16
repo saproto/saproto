@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  **/
 class WallstreetPrice extends Model
 {
-
     protected $table = 'wallstreet_drink_prices';
 
     protected $fillable = ['wallstreet_drink_id', 'product_id', 'price', 'diff'];
