@@ -107,7 +107,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      *
      * @throws Exception
@@ -116,7 +116,7 @@ class MollieController extends Controller
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::findOrFail($id);
-        if ($transaction->user->id != Auth::id() && !Auth::user()->can('board')) {
+        if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
             abort(403, 'You are unauthorized to view this transaction.');
         }
         $transaction = $transaction->updateFromWebhook();
@@ -130,13 +130,13 @@ class MollieController extends Controller
     }
 
     /**
-     * @param string $month
+     * @param  string  $month
      * @return View|RedirectResponse
      */
     public function monthly(Request $request, $month)
     {
         if (strtotime($month) === false) {
-            Session::flash('flash_message', 'Invalid date: ' . $month);
+            Session::flash('flash_message', 'Invalid date: '.$month);
 
             return Redirect::back();
         }
@@ -167,12 +167,12 @@ class MollieController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Account breakdown for Mollie transactions between ' . $start->format('d-m-Y') . ' and ' . $end->format('d-m-Y'),
+            'title' => 'Account breakdown for Mollie transactions between '.$start->format('d-m-Y').' and '.$end->format('d-m-Y'),
         ]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function receive($id)
@@ -224,7 +224,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      */
@@ -237,7 +237,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param int[] $orderlines
+     * @param  int[]  $orderlines
      * @return MollieTransaction
      */
     public static function createPaymentForOrderlines($orderlines, $selected_method)
@@ -281,7 +281,7 @@ class MollieController extends Controller
                 'value' => $total,
             ],
             'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
-            'description' => 'OmNomCom Settlement (€' . $total . ')',
+            'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
 
@@ -304,7 +304,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param string $month
+     * @param  string  $month
      * @return int
      */
     public static function getTotalForMonth($month)
@@ -345,7 +345,7 @@ class MollieController extends Controller
                 'billingCountry' => 'NL',
                 'include' => 'pricing',
             ]);
-        $methodsList = (array)$api_response;
+        $methodsList = (array) $api_response;
 
         foreach ($api_response as $index => $method) {
             if ($method->status != 'activated' || $method->resource != 'method') {
@@ -353,9 +353,9 @@ class MollieController extends Controller
             }
             if (in_array($method->id, config('omnomcom.mollie')['free_methods'])) {
                 $methodsList[$index]->pricing = null;
-                $methodsList[$index]->pricing[0] = (object)[
+                $methodsList[$index]->pricing[0] = (object) [
                     'description' => $method->description,
-                    'fixed' => (object)[
+                    'fixed' => (object) [
                         'value' => '0.00',
                         'currency' => 'EUR',
                     ],

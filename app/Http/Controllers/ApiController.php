@@ -105,7 +105,7 @@ class ApiController extends Controller
         }
 
         $random = random_int(1, 100);
-        if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
+        if ($random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
         } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
