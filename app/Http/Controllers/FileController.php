@@ -6,15 +6,15 @@ use App\Models\StorageEntry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncodedImageInterface;
 
 class FileController extends Controller
 {
     /**
-     * @param int $id
-     * @param string $hash
+     * @param  int  $id
+     * @param  string  $hash
      * @return Response
      */
     public function get($id, $hash)
@@ -37,8 +37,8 @@ class FileController extends Controller
     }
 
     /**
-     * @param int $w
-     * @param int $h
+     * @param  int  $w
+     * @param  int  $h
      * @return EncodedImageInterface
      */
     public static function makeImage(StorageEntry $entry, $w, $h)
@@ -47,22 +47,24 @@ class FileController extends Controller
 
         ini_set('memory_limit', '512M');
         $manager = new ImageManager(new Driver());
-        $image = $manager->read($storage['local']['root'] . '/' . $entry->filename);
+        $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
 
-        if (!$w || !$h) {
-            return \Cache::remember('image.' . $entry->hash . '.w:' . $w . '.h:' . $h, 86400, function () use ($image, $w, $h) {
+        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
+
+        if (! $w || ! $h) {
+            return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
                 return $image->scaleDown($w, $h)->encode();
             });
         }
 
-        return \Cache::remember('imagde.' . $entry->hash . '.' . $w . '.' . $h, 86400, function () use ($image, $w, $h) {
+        return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
             return $image->coverDown($w, $h)->encode();
         });
     }
 
     /**
-     * @param int $id
-     * @param string $hash
+     * @param  int  $id
+     * @param  string  $hash
      * @return Response
      */
     public function getImage($id, $hash, Request $request)
@@ -87,9 +89,9 @@ class FileController extends Controller
     }
 
     /**
-     * @param string $printer
-     * @param string $url
-     * @param int $copies
+     * @param  string  $printer
+     * @param  string  $url
+     * @param  int  $copies
      * @return string
      */
     public static function requestPrint($printer, $url, $copies = 1)
@@ -98,7 +100,7 @@ class FileController extends Controller
             return 'You cannot do this at the moment. Please use the network printer.';
         }
 
-        $payload = base64_encode(json_encode((object)[
+        $payload = base64_encode(json_encode((object) [
             'secret' => config('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
@@ -107,9 +109,9 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://' . config('app-proto.printer-host') . ':' . config('app-proto.printer-port') . '/?data=' . $payload);
+            $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
         } catch (\Exception $e) {
-            return 'Exception while connecting to the printer server: ' . $e->getMessage();
+            return 'Exception while connecting to the printer server: '.$e->getMessage();
         }
 
         return $result !== false ? $result : 'Something went wrong while connecting to the printer server.';

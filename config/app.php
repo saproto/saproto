@@ -162,7 +162,6 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
-        willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         nickurt\PostcodeApi\ServiceProvider::class,
