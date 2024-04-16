@@ -45,7 +45,6 @@
     "abcaeffchen/sephpa": "^2.1",
     "alaouy/youtube": "2.2.5",
     "biscolab/laravel-recaptcha": "^6",
-    "doctrine/dbal": "^3.2",
     "ext-calendar": "*",
     "ext-curl": "*",
     "ext-json": "*",
