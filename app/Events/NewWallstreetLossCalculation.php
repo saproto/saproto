@@ -2,38 +2,42 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ExampleEvent implements ShouldBroadcastNow
+class NewWallstreetLossCalculation implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(
+        public int   $wallstreetDrinkId,
+        public float $loss,
+    )
     {
-        //
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel
+     * @return array
      */
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel('test-event');
+        return [
+            new PrivateChannel('wallstreet-prices.' . $this->wallstreetDrinkId),
+        ];
     }
 
     public function broadcastWith(): array
     {
         return [
-            'data' => 'hallo'
+            'data' => $this->loss
         ];
     }
 }

@@ -32,7 +32,7 @@ class WallstreetController extends Controller
     {
         $activeDrink = WallstreetController::active();
 
-        if (! $activeDrink) {
+        if (!$activeDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
 
             return Redirect::back();
@@ -121,7 +121,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $drink->products()->syncWithoutDetaching($product);
         }
-        Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
+        Session::flash('flash_message', count($products) . ' Products added to Wallstreet drink.');
 
         return Redirect::to(route('wallstreet::edit', ['id' => $id]));
     }
@@ -147,7 +147,7 @@ class WallstreetController extends Controller
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if (! $newPrice || $product->price === 0) {
+            if (!$newPrice || $product->price === 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
 
@@ -164,26 +164,10 @@ class WallstreetController extends Controller
     {
         $drink = WallstreetDrink::findOrFail($drinkID);
         $prices = $this->getLatestPrices($drink);
-        $loss = $this->getLoss($drink);
         $events = $this->getLatestEvents($drink);
-        $wrapped = ['products' => $prices, 'loss' => $loss, 'events' => $events];
+        $wrapped = ['products' => $prices, 'events' => $events];
 
         return Response::json($wrapped);
-    }
-
-    public function getLoss(WallstreetDrink $drink)
-    {
-        $productIDs = $drink->products->pluck('id');
-
-        return OrderLine::query()
-            ->selectRaw('(original_unit_price*units)-total_price AS loss')
-            ->whereHas('product', function ($q) use ($productIDs) {
-                $q->whereIn('id', $productIDs);
-            })
-            ->where('created_at', '<', Carbon::parse($drink->end_time))
-            ->where('created_at', '>', Carbon::parse($drink->start_time))
-            ->get()
-            ->sum('loss');
     }
 
     public function getAllPrices($drinkID)
@@ -191,16 +175,6 @@ class WallstreetController extends Controller
         return WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', function ($q) use ($drinkID) {
             $q->where('wallstreet_drink_id', $drinkID)->orderBy('id', 'asc');
         })->select('id', 'image_id', 'name')->get();
-    }
-
-    public function getLatestEvents(WallstreetDrink $drink)
-    {
-        $events = $drink->events()->with('products')->get();
-        foreach ($events as $event) {
-            $event->img = $event->image?->generatePath();
-        }
-
-        return $events;
     }
 
     public function events()
@@ -271,7 +245,7 @@ class WallstreetController extends Controller
     public function toggleEvent(Request $request)
     {
         $event = WallstreetEvent::findOrFail($request->input('id'));
-        $event->active = ! $event->active;
+        $event->active = !$event->active;
         $event->save();
 
         return Response::json(['active' => $event->active, 'id' => $event->id]);
@@ -285,7 +259,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $event->products()->syncWithoutDetaching($product);
         }
-        Session::flash('flash_message', count($products).' Products added to Wallstreet event.');
+        Session::flash('flash_message', count($products) . ' Products added to Wallstreet event.');
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
     }

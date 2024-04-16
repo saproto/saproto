@@ -315,10 +315,11 @@
                         a.play().catch(() => {
                             confirm("Click somewhere within the document for the sound to play!")
                         });
-
-                        modalBody.style.backgroundImage = `url(${event.img})`;
-                        modalBody.style.backgroundSize = 'cover';
-                        modalBody.style.backgroundPosition = 'center';
+                        if (event.image) {
+                            modalBody.style.backgroundImage = `url(${event.img})`;
+                            modalBody.style.backgroundSize = 'cover';
+                            modalBody.style.backgroundPosition = 'center';
+                        }
                         modalTitle.innerText = event.name;
                         modalBody.innerHTML = event.description;
                         window.modals.eventModal.show()
@@ -327,13 +328,15 @@
                         }, 10000)
                     });
 
+                const lossDiv = document.getElementById("current_loss");
+                Echo.private(`wallstreet-prices.${id}`)
+                    .listen('NewWallstreetLossCalculation', (e) => {
+                        lossDiv.innerHTML = "€ " + e.data.toFixed(2);
+                    });
+
                 //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`)
                     .listen('NewWallstreetPrice', (e) => {
-
-                        // const lossDiv = document.getElementById("current_loss");
-                        // lossDiv.innerHTML = "€ " + response.loss.toFixed(2);
-
                         let cards = swiper.el.querySelectorAll(`#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
                         if (cards.length > 0) {
                             cards.forEach((card) => {
@@ -356,6 +359,7 @@
                                 y: e.data.price
                             });
                         } else {
+                            //if a new product is added the dataset is created
                             chart.data.datasets.push({
                                 label: e.data.product.name,
                                 data: [{

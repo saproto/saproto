@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\NewWallstreetEvent;
+use App\Events\NewWallstreetLossCalculation;
 use App\Events\NewWallstreetPrice;
 use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
@@ -148,11 +149,16 @@ class UpdateWallstreetPrices extends Command
                     $newPriceObject
                 );
             }
-            
+
             NewWallstreetEvent::dispatch(
                 $currentDrink->id,
                 $randomEvent
             );
         }
+
+        NewWallstreetLossCalculation::dispatch(
+            $currentDrink->id,
+            $currentDrink->loss()
+        );
     }
 }
