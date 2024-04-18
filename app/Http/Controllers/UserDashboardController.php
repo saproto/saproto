@@ -19,6 +19,7 @@ use PDF;
 use PragmaRX\Google2FA\Google2FA;
 use Redirect;
 use Session;
+use Spatie\Permission\Models\Permission;
 use Validator;
 
 class UserDashboardController extends Controller
@@ -43,18 +44,38 @@ class UserDashboardController extends Controller
     }
 
     /**
+     * Add a new email address to the user's account.
+     * This will send a verification email to the new address.
+     * Board members can change the email of other users, except for when they do not have a permission of that user.
+     * This is to prevent them from being able to change a sysadmin's email address and take over an account with more permissions.
+     *
      * @return RedirectResponse
      */
-    public function updateMail(Request $request)
+    public function updateMail(Request $request, int $id)
     {
-        /** @var User $user */
-        $user = Auth::user();
+        $user = User::findOrFail($id);
 
         $password = $request->input('password');
         $new_email = $request->input('email');
         $auth_check = AuthController::verifyCredentials($user->email, $password);
 
-        if ($auth_check == null || $auth_check->id != $user->id) {
+        if (Auth::user()->can('board')) {
+
+            $auth_check = AuthController::verifyCredentials(Auth::user()->email, $password);
+
+            if (! Auth::user()->can('sysadmin')) {
+                foreach ($user->roles as $role) {
+                    /** @var Permission $permission */
+                    foreach ($role->permissions as $permission) {
+                        if (! Auth::user()->can($permission->name)) {
+                            abort(403, 'You can not change the email of this person!.');
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($auth_check == null || ($auth_check->id != $user->id && ! $auth_check->can('board'))) {
             Session::flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
 
             return Redirect::back();
@@ -65,7 +86,12 @@ class UserDashboardController extends Controller
                 'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail()],
             ]);
             if ($validator->fails()) {
-                return Redirect::route('user::dashboard')->withErrors($validator);
+
+                if ($user->id == Auth::id()) {
+                    return Redirect::route('user::dashboard')->withErrors($validator);
+                }
+
+                return Redirect::route('user::admin::details', ['id' => $user->id])->withErrors($validator);
             }
 
             $email = [
@@ -96,8 +122,11 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'E-mail address changed.');
+        if ($user->id == Auth::id()) {
+            return Redirect::route('user::dashboard');
+        }
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::admin::details', ['id' => $user->id]);
     }
 
     /**
@@ -297,14 +326,13 @@ class UserDashboardController extends Controller
             Session::flash('flash_message', 'Completed profile.');
 
             return Redirect::route('becomeamember');
-        } else {
-            Session::flash('flash_userdata', $userdata);
-
-            return view(
-                'users.dashboard.completeprofile_verify',
-                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
-            );
         }
+        Session::flash('flash_userdata', $userdata);
+
+        return view(
+            'users.dashboard.completeprofile_verify',
+            ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+        );
     }
 
     /**

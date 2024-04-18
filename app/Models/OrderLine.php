@@ -129,17 +129,21 @@ class OrderLine extends Model
     {
         if ($this->payed_with_loss) {
             return 'Loss';
-        } elseif ($this->payed_with_withdrawal !== null) {
+        }
+        if ($this->payed_with_withdrawal !== null) {
             return "Withdrawal <a href='".
                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
                 "'>#".
                 $this->payed_with_withdrawal.
                 '</a>';
-        } elseif ($this->payed_with_cash !== null) {
+        }
+        if ($this->payed_with_cash !== null) {
             return 'Cash';
-        } elseif ($this->payed_with_bank_card !== null) {
+        }
+        if ($this->payed_with_bank_card !== null) {
             return 'Bank Card';
-        } elseif ($this->payed_with_mollie !== null) {
+        }
+        if ($this->payed_with_mollie !== null) {
             switch ($this->molliePayment->translatedStatus()) {
                 case 'paid':
                     return '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".

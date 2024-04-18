@@ -95,23 +95,27 @@ class Email extends Model
     {
         if ($this->to_user) {
             return 'users';
-        } elseif ($this->to_member) {
+        }
+        if ($this->to_member) {
             return 'members';
-        } elseif ($this->to_pending) {
+        }
+        if ($this->to_pending) {
             return 'pending';
-        } elseif ($this->to_active) {
+        }
+        if ($this->to_active) {
             return 'active members';
-        } elseif ($this->to_list) {
+        }
+        if ($this->to_list) {
             return 'list';
-        } elseif ($this->to_event) {
+        }
+        if ($this->to_event) {
             if ($this->to_backup) {
                 return 'event with backup';
             }
 
             return 'event';
-        } else {
-            throw new Exception('Email has no destination');
         }
+        throw new Exception('Email has no destination');
     }
 
     /** @return SupportCollection|User[] */
@@ -119,21 +123,26 @@ class Email extends Model
     {
         if ($this->to_user) {
             return User::orderBy('name')->get();
-        } elseif ($this->to_member) {
+        }
+        if ($this->to_member) {
             return User::whereHas('member', function ($q) {
                 $q->where('is_pending', false);
             })->orderBy('name')->get();
-        } elseif ($this->to_pending) {
+        }
+        if ($this->to_pending) {
             return User::whereHas('member', function ($q) {
                 $q->where('is_pending', true);
             })->orderBy('name')->get();
-        } elseif ($this->to_active) {
+        }
+        if ($this->to_active) {
             return User::whereHas('committees')->orderBy('name')->get();
-        } elseif ($this->to_list) {
+        }
+        if ($this->to_list) {
             return User::whereHas('lists', function ($q) {
-                $q->whereIn('users_mailinglists.id', $this->lists->pluck('id')->toArray());
+                $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
-        } elseif ($this->to_event) {
+        }
+        if ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event != null) {
@@ -145,9 +154,9 @@ class Email extends Model
             }
 
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
-        } else {
-            return collect([]);
         }
+
+        return collect([]);
     }
 
     /** @return bool */
@@ -174,10 +183,9 @@ class Email extends Model
         $events = [];
         if (! $this->to_event) {
             return '';
-        } else {
-            foreach ($this->events as $event) {
-                $events[] = $event->title;
-            }
+        }
+        foreach ($this->events as $event) {
+            $events[] = $event->title;
         }
 
         return implode(', ', $events);
@@ -189,10 +197,9 @@ class Email extends Model
         $lists = [];
         if (! $this->to_list) {
             return '';
-        } else {
-            foreach ($this->lists as $list) {
-                $lists[] = $list->name;
-            }
+        }
+        foreach ($this->lists as $list) {
+            $lists[] = $list->name;
         }
 
         return implode(', ', $lists);
