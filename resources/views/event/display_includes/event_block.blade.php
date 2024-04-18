@@ -4,11 +4,11 @@
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? 'bg-img' : 'no-img'}}"
-             style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) : '' }} background-size: cover;">
+             data-bgimage="{{(!isset($hide_photo) || !$hide_photo) ? $event?->image?->generateImagePath(800,300):''}}">
 
             {{-- Countdown --}}
             @if(!empty($countdown))
-                <div class="btn btn-info btn-block mb-3 ">
+                <div class=" btn btn-info btn-block mb-3">
                     <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                     <span class="proto-countdown" data-countdown-start="{{ $event->start }}"
                           data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
