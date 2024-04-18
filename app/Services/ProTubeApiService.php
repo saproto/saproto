@@ -17,9 +17,9 @@ class ProTubeApiService
 
     private static function client(): PendingRequest
     {
-        return Http::withToken(config('protube.secret'))
+        return Http::withToken(config('protube.laravel_to_protube_secret'))
             ->withOptions(['verify' => (config('app.env') === 'production')])
-            ->baseUrl(config('protube.server').self::API_PREFIX);
+            ->baseUrl(config('protube.server') . self::API_PREFIX);
     }
 
     /**
@@ -48,11 +48,11 @@ class ProTubeApiService
     public static function skipSong(): bool
     {
         //when in production don't update the protube admin status
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             return true;
         }
         $response = self::client()->post('/skipsong');
-        if (! self::assertResponse($response)) {
+        if (!self::assertResponse($response)) {
             return false;
         }
 
@@ -69,7 +69,7 @@ class ProTubeApiService
     public static function updateAdmin(int $userID, bool $admin): bool
     {
         //when in production don't update the protube admin status
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             return true;
         }
         $response = self::client()->post('/updateadmin', [
@@ -77,7 +77,7 @@ class ProTubeApiService
             'admin' => $admin,
         ]);
 
-        if (! self::assertResponse($response)) {
+        if (!self::assertResponse($response)) {
             return false;
         }
 
