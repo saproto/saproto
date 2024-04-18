@@ -19,7 +19,7 @@ class EnforceTFA
      */
     public function handle($request, $next)
     {
-        if (App::environment('production') && Auth::check() && Auth::user()->hasRole(config('proto.tfaroles')) && (! Auth::user()->hasTFAEnabled())) {
+        if (App::environment('production') && Auth::check() && (Auth::user()->hasRole(config('proto.tfaroles')) || Auth::user()->isInCommittee(config('proto.rootcommittee'))) && (! Auth::user()->hasTFAEnabled())) {
             if (! $request->is('user/dashboard') && ! $request->is('auth/logout') && ! $request->is('user/quit_impersonating') && ! $request->is('user/*/2fa/*') && ! $request->is('user/2fa/*') && ! $request->is('api/*')) {
                 Session::flash('flash_message', 'Your account permissions require you to enable Two Factor Authentication on your account before being able to use your account.');
 
