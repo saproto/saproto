@@ -80,7 +80,8 @@ class AchievementsCron extends Command
                 return $this->nThProducts($user, [487], 15);
             }, // Cry Baby
             22 => function ($user) {
-                return $this->nThProducts($user, [805, 211, 758], 20);
+                //weizen outside, grolsch weizen, weizen small, weizen big
+                return $this->nThProducts($user, [805, 211, 758, 1039], 20);
             }, // True German
             23 => function ($user) {
                 return $this->oldFart($user);
@@ -95,7 +96,7 @@ class AchievementsCron extends Command
                 return $this->nThProducts($user, $youDandy, 3);
             }, // You Dandy
             27 => function ($user) {
-                return $this->nThProducts($user, [180], 1) && ! $user->did_study_create;
+                return $this->nThProducts($user, [180], 1) && !$user->did_study_create;
             }, // Fristi Member
             28 => function ($user) {
                 return $this->bigSpender($user);
@@ -142,7 +143,7 @@ class AchievementsCron extends Command
         // Check if the specified achievements actually exist.
         $existing = Achievement::all()->pluck('id')->toArray();
         foreach (array_keys($achievements) as $id) {
-            if (! in_array($id, $existing)) {
+            if (!in_array($id, $existing)) {
                 unset($achievements[$id]);
                 $this->error("Achievement #$id does not exist, not granting this achievement.");
             }
@@ -157,10 +158,10 @@ class AchievementsCron extends Command
         $totalUsers = $users->count();
 
         foreach ($users as $index => $user) {
-            $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
+            $this->line(($index + 1) . '/' . $totalUsers . ' #' . $user->id);
             $alreadyAchieved = $user->achievements->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
-                if (! in_array($id, $alreadyAchieved) && $check($user)) {
+                if (!in_array($id, $alreadyAchieved) && $check($user)) {
                     $this->giveAchievement($user, $id);
                 }
             }
@@ -172,8 +173,8 @@ class AchievementsCron extends Command
     /**
      * Give an achievement to a user.
      *
-     * @param  User  $user
-     * @param  int  $id
+     * @param User $user
+     * @param int $id
      */
     private function giveAchievement($user, $id)
     {
@@ -200,7 +201,7 @@ class AchievementsCron extends Command
     /**
      * Achievement beast = earned 10 achievements or more.
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     private function achievementBeast($user)
@@ -211,7 +212,7 @@ class AchievementsCron extends Command
     /**
      * Old Fart = member for more than 5 years.
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     private function oldFart($user)
@@ -222,7 +223,7 @@ class AchievementsCron extends Command
     /**
      * Gotta catch 'em all! = be a member of at least 10 different committees.
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     private function gottaCatchEmAll($user)
@@ -233,7 +234,7 @@ class AchievementsCron extends Command
     /**
      * Big spender = paid more than the max. amount of money in a month (=€250).
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     private function bigSpender($user)
@@ -252,7 +253,7 @@ class AchievementsCron extends Command
     /**
      * 4ever committee member = has been a committee member for more than three years.
      *
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     private function foreverMember($user)
@@ -283,8 +284,8 @@ class AchievementsCron extends Command
     /**
      * FIRST!!!! = the first to buy a product.
      *
-     * @param  User  $user
-     * @param  int[]  $firsts
+     * @param User $user
+     * @param int[] $firsts
      * @return bool
      */
     private function first($user, $firsts)
@@ -295,8 +296,8 @@ class AchievementsCron extends Command
     /**
      * Attended a certain number of activities.
      *
-     * @param  User  $user
-     * @param  int  $n
+     * @param User $user
+     * @param int $n
      * @return bool
      */
     private function nThActivity($user, $n)
@@ -311,9 +312,9 @@ class AchievementsCron extends Command
     /**
      * Attended a certain percentage of signups in the last month.
      *
-     * @param  User  $user
-     * @param  int  $percentage
-     * @param  int  $possibleSignups
+     * @param User $user
+     * @param int $percentage
+     * @param int $possibleSignups
      * @return bool
      */
     private function percentageParticipation($user, $percentage, $possibleSignups)
@@ -341,9 +342,9 @@ class AchievementsCron extends Command
     /**
      * Bought a certain number of a set of products.
      *
-     * @param  User  $user
-     * @param  int[]  $products
-     * @param  int  $n
+     * @param User $user
+     * @param int[] $products
+     * @param int $n
      * @return bool
      */
     private function nThProducts($user, $products, $n)
@@ -354,9 +355,9 @@ class AchievementsCron extends Command
     /**
      * A percentage of purchases were of a certain set of products.
      *
-     * @param  User  $user
-     * @param  int[]  $products
-     * @param  float  $p
+     * @param User $user
+     * @param int[] $products
+     * @param float $p
      * @return bool
      */
     private function percentageProducts($user, $products, $p)
@@ -377,7 +378,7 @@ class AchievementsCron extends Command
     /**
      * Get the ids of the products in a set of categories.
      *
-     * @param  int[]  $categories
+     * @param int[] $categories
      * @return int[]
      */
     private function categoryProducts($categories)
