@@ -87,7 +87,7 @@ class Committee extends Model
     /** @return BelongsTo|Photo */
     public function photo()
     {
-        return $this->belongsTo('App\Models\Photo', 'photo_id');
+        return $this->belongsTo(\App\Models\Photo::class, 'photo_id');
     }
 
     /** @return HasMany */

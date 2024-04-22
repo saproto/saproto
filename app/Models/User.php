@@ -203,7 +203,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsTo */
     public function photo()
     {
-        return $this->belongsTo('App\Models\Photo', 'photo_id');
+        return $this->belongsTo(\App\Models\Photo::class, 'photo_id');
     }
 
     /** @return BelongsTo */
@@ -319,9 +319,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if ($this->photo) {
             return $this->photo->getTinyUrl();
-        } else {
-            return asset('images/default-avatars/other.png');
         }
+
+        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -333,9 +333,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if ($this->photo) {
             return $this->photo->getSmallUrl();
-        } else {
-            return asset('images/default-avatars/other.png');
         }
+
+        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -347,9 +347,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if ($this->photo) {
             return $this->photo->getMediumUrl();
-        } else {
-            return asset('images/default-avatars/other.png');
         }
+
+        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -361,8 +361,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         if ($this->photo) {
             return $this->photo->getLargeUrl();
-        } else {
-            return asset('images/default-avatars/other.png');
         }
 
         return asset('images/default-avatars/other.png');

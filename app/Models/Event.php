@@ -151,7 +151,7 @@ class Event extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('App\Models\Photo');
+        return $this->belongsTo(\App\Models\Photo::class);
     }
 
     /** @return HasOne */

@@ -122,24 +122,24 @@ class Photo extends Model
     /** @return HasOne */
     public function large_file()
     {
-        return $this->hasOne('App\Models\StorageEntry', 'id', 'large_file_id');
+        return $this->hasOne(\App\Models\StorageEntry::class, 'id', 'large_file_id');
     }
 
     /** @return HasOne */
     public function medium_file()
     {
-        return $this->hasOne('App\Models\StorageEntry', 'id', 'medium_file_id');
+        return $this->hasOne(\App\Models\StorageEntry::class, 'id', 'medium_file_id');
     }
 
     /** @return HasOne */
     public function small_file()
     {
-        return $this->hasOne('App\Models\StorageEntry', 'id', 'small_file_id');
+        return $this->hasOne(\App\Models\StorageEntry::class, 'id', 'small_file_id');
     }
 
     public function tiny_file(): HasOne
     {
-        return $this->hasOne('App\Models\StorageEntry', 'id', 'tiny_file_id');
+        return $this->hasOne(\App\Models\StorageEntry::class, 'id', 'tiny_file_id');
     }
 
     /**

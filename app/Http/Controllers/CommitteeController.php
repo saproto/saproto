@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
-use App\Models\HelperReminder;
 use App\Models\User;
 use Auth;
 use Carbon;
