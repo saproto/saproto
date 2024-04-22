@@ -190,14 +190,14 @@ class BankController extends Controller
                 $response->bic = self::getNlBicFromIban($iban);
             }
 
-            if ($response->bic != '' && self::verifyBic($response->bic)) {
+            if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Your BIC is not valid.';
 
                 return $response;
             }
         } catch (Exception $e) {
-            if ($response->bic != '' && self::verifyBic($response->bic)) {
+            if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Something went wrong retrieving your BIC.';
 
@@ -212,9 +212,13 @@ class BankController extends Controller
      * @param  string  $bic
      * @return bool
      */
-    public static function verifyBic($bic)
+    public static function verifyBicIsValid($bic)
     {
-        return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) !== 1;
+        if (($bic == '')) {
+            return false;
+        }
+
+        return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) === 1;
     }
 
     /**
@@ -233,19 +237,16 @@ class BankController extends Controller
     private static function getNlBicFromIban($iban)
     {
         $data = [ // Data from: https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx
-            'AABN' => 'AABNNL2A',
             'ABNA' => 'ABNANL2A',
-            'FTSB' => 'ABNANL2A',
             'ABNC' => 'ABNCNL2A',
             'ADYB' => 'ADYBNL2A',
             'AEGO' => 'AEGONL2U',
+            'AINH' => 'AINHNL22',
             'ANDL' => 'ANDLNL2A',
             'ARBN' => 'ARBNNL22',
             'ARSN' => 'ARSNNL21',
             'ASNB' => 'ASNBNL21',
-            'ATBA' => 'ATBANL2A',
             'BARC' => 'BARCNL22',
-            'BCDM' => 'BCDMNL22',
             'BCIT' => 'BCITNL2A',
             'BICK' => 'BICKNL2A',
             'BINK' => 'BINKNL21',
@@ -253,7 +254,6 @@ class BankController extends Controller
             'BKCH' => 'BKCHNL2R',
             'BKMG' => 'BKMGNL2A',
             'BLGW' => 'BLGWNL21',
-            'BMEU' => 'BMEUNL21',
             'BNDA' => 'BNDANL2A',
             'BNGH' => 'BNGHNL2G',
             'BNPA' => 'BNPANL2A',
@@ -261,6 +261,7 @@ class BankController extends Controller
             'BOFS' => 'BOFSNL21002',
             'BOTK' => 'BOTKNL2X',
             'BUNQ' => 'BUNQNL2A',
+            'CCBV' => 'CCBVNL2A',
             'CHAS' => 'CHASNL2X',
             'CITC' => 'CITCNL2A',
             'CITI' => 'CITINL2X',
@@ -268,44 +269,53 @@ class BankController extends Controller
             'DELE' => 'DELENL22',
             'DEUT' => 'DEUTNL2A',
             'DHBN' => 'DHBNNL2R',
-            'DLBK' => 'DLBKNL2A',
             'DNIB' => 'DNIBNL2G',
-            'EBUR' => 'EBURNL21',
             'EBPB' => 'EBPBNL22',
+            'EBUR' => 'EBURNL21',
             'FBHL' => 'FBHLNL2A',
             'FLOR' => 'FLORNL2A',
+            'FNOM' => 'FNOMNL22',
             'FRNX' => 'FRNXNL2A',
+            'FROM' => 'FROMNL2A',
             'FVLB' => 'FVLBNL22',
+            'FXBB' => 'FXBBNL22',
             'GILL' => 'GILLNL2A',
             'HAND' => 'HANDNL2A',
-            'HHBA' => 'HHBANL22',
+            'HIFX' => 'HIFXNL2A',
+            'HUSH' => 'HUSHNL2A',
             'HSBC' => 'HSBCNL2A',
             'ICBC' => 'ICBCNL2A',
             'ICBK' => 'ICBKNL2A',
+            'ICEP' => 'ICEPNL21',
             'INGB' => 'INGBNL2A',
             'ISAE' => 'ISAENL2A',
             'ISBK' => 'ISBKNL2A',
             'KABA' => 'KABANL2A',
-            'KASA' => 'KASANL2A',
             'KNAB' => 'KNABNL2H',
             'KOEX' => 'KOEXNL2A',
             'KRED' => 'KREDNL2X',
-            'LOCY' => 'LOCYNL2A',
             'LOYD' => 'LOYDNL2A',
             'LPLN' => 'LPLNNL2F',
             'MHCB' => 'MHCBNL2A',
-            'MOYO' => 'MOYONL21',
+            'MODR' => 'MODRNL22',
             'NNBA' => 'NNBANL2G',
             'NWAB' => 'NWABNL2G',
+            'PANX' => 'PANXNL22',
             'PCBC' => 'PCBCNL2A',
+            'PNOW' => 'PNOWNL2A',
             'RABO' => 'RABONL2U',
             'RBRB' => 'RBRBNL21',
+            'REVO' => 'REVONL22',
+            'SBOS' => 'SBOSNL2A',
             'SNSB' => 'SNSBNL2A',
             'SOGE' => 'SOGENL2A',
+            'SWNB' => 'SWNBNL22',
             'TRIO' => 'TRIONL2U',
             'UGBI' => 'UGBINL2A',
             'VOWA' => 'VOWANL21',
             'VPAY' => 'VPAYNL22',
+            'VTPS' => 'VTPSNL2R',
+            'YOUR' => 'YOURNL2A',
             'ZWLB' => 'ZWLBNL21',
         ];
 

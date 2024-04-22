@@ -76,7 +76,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Address|null $address
  * @property-read Bank|null $bank
  * @property-read Member|null $member
- * @property-read HelperReminder|null $helperReminderSubscriptions
  * @property-read Collection|Achievement[] $achievements
  * @property-read Collection|Client[] $clients
  * @property-read Collection|EmailList[] $lists
@@ -216,7 +215,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsToMany */
     private function getGroups()
     {
-        return $this->belongsToMany('App\Models\Committee', 'committees_users')
+        return $this->belongsToMany(\App\Models\Committee::class, 'committees_users')
             ->where(function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
@@ -230,13 +229,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return BelongsToMany */
     public function lists()
     {
-        return $this->belongsToMany('App\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
+        return $this->belongsToMany(\App\Models\EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
     /** @return BelongsToMany */
     public function achievements()
     {
-        return $this->belongsToMany('App\Models\Achievement', 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany */
@@ -254,61 +253,61 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return HasOne */
     public function member()
     {
-        return $this->hasOne('App\Models\Member');
+        return $this->hasOne(\App\Models\Member::class);
     }
 
     /** @return HasOne */
     public function bank()
     {
-        return $this->hasOne('App\Models\Bank');
+        return $this->hasOne(\App\Models\Bank::class);
     }
 
     /** @return HasOne */
     public function address()
     {
-        return $this->hasOne('App\Models\Address');
+        return $this->hasOne(\App\Models\Address::class);
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('App\Models\OrderLine');
+        return $this->hasMany(\App\Models\OrderLine::class);
     }
 
     /** @return HasMany */
     public function tempadmin()
     {
-        return $this->hasMany('App\Models\Tempadmin');
+        return $this->hasMany(\App\Models\Tempadmin::class);
     }
 
     /** @return HasMany */
     public function feedback()
     {
-        return $this->hasMany('App\Models\Feedback');
+        return $this->hasMany(\App\Models\Feedback::class);
     }
 
     /** @return HasMany */
     public function rfid()
     {
-        return $this->hasMany('App\Models\RfidCard');
+        return $this->hasMany(\App\Models\RfidCard::class);
     }
 
     /** @return HasMany */
     public function tokens()
     {
-        return $this->hasMany('App\Models\Token');
+        return $this->hasMany(\App\Models\Token::class);
     }
 
     /** @return HasMany */
     public function playedVideos()
     {
-        return $this->hasMany('App\Models\PlayedVideo');
+        return $this->hasMany(\App\Models\PlayedVideo::class);
     }
 
     /** @return HasMany */
     public function mollieTransactions()
     {
-        return $this->hasMany('App\Models\MollieTransaction');
+        return $this->hasMany(\App\Models\MollieTransaction::class);
     }
 
     /**
@@ -365,6 +364,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         } else {
             return asset('images/default-avatars/other.png');
         }
+
+        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -415,11 +416,33 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return false;
     }
 
-    /** @return bool */
-    public function isTempadmin()
+    /**
+     * Returns whether the user is currently tempadmin.
+     */
+    public function isTempadmin(): bool
     {
         foreach ($this->tempadmin as $tempadmin) {
             if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether the user is tempadmin between now and the end of the day.
+     */
+    public function isTempadminLaterToday(): bool
+    {
+        $now = Carbon::now();
+        foreach ($this->tempadmin as $tempadmin) {
+            // Skip all 'past' tempadmin entries
+            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) {
+                continue;
+            }
+
+            if ($now->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
                 return true;
             }
         }
@@ -493,24 +516,24 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $withdrawals;
     }
 
-    /** @return string|null*/
+    /** @return string|null */
     public function websiteUrl()
     {
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
-        } else {
-            return 'https://'.$this->website;
         }
+
+        return 'https://'.$this->website;
     }
 
-    /** @return string|null*/
+    /** @return string|null */
     public function websiteDisplay()
     {
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
             return $matches[1];
-        } else {
-            return $this->website;
         }
+
+        return $this->website;
     }
 
     /** @return bool */
@@ -519,7 +542,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
-    /** @return string*/
+    /** @return string */
     public function getDisplayEmail()
     {
         return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
@@ -606,7 +629,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_alarm;
     }
 
-    /** @param  float|null  $hours */
+    /** @param float|null $hours */
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);
@@ -663,8 +686,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
         if ($welcomeMessage) {
             return $welcomeMessage->message;
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +41,7 @@ class FeedbackController extends Controller
             ->with('votes');
 
         if ($category->review) {
-            $feedback = $feedback->where('reviewed', true);
+            return $feedback->where('reviewed', true);
         }
 
         return $feedback;
@@ -51,13 +52,15 @@ class FeedbackController extends Controller
         //find the most voted piece of feedback
         $mostVotedID = FeedbackVote::query()
             ->whereHas('feedback', function ($query) use ($category) {
-                $query->where('feedback_category_id', $category->id);
+                $query->where('feedback_category_id', $category->id)
+                    ->where('created_at', '>', Carbon::now()->subMonth());
             })
-            ->selectRaw('feedback_id, sum(vote) as votes')
             ->groupBy('feedback_id')
+            ->selectRaw('feedback_id, sum(vote) as votes')
             ->having('votes', '>=', 0)
-            ->orderBy('votes')
+            ->orderBy('votes', 'desc')
             ->first();
+
         $mostVoted = Feedback::where('id', $mostVotedID?->feedback_id)->first();
 
         return $mostVoted ?? null;
@@ -109,9 +112,7 @@ class FeedbackController extends Controller
     public function add(Request $request, $category): RedirectResponse
     {
         $category = FeedbackCategory::findOrFail($category);
-        $temp = nl2br(trim($request->input('feedback')));
-        $new = ['feedback' => $temp, 'user_id' => Auth::id(), 'feedback_category_id' => $category->id];
-        $feedback = new Feedback($new);
+        $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
         $feedback->save();
 
         $categoryTitle = str_singular($category->title);
@@ -197,7 +198,8 @@ class FeedbackController extends Controller
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();
-        } elseif (! Auth::user()->can('board') && $feedback->reply) {
+        }
+        if (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
             return Redirect::back();
@@ -284,6 +286,7 @@ class FeedbackController extends Controller
             'review' => $request->has('can_review'),
             'reviewer_id' => $request->has('can_review') ? $request->input('user_id') : null,
             'can_reply' => $request->has('can_reply'),
+            'show_publisher' => $request->has('show_publisher'),
         ]);
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');
@@ -313,6 +316,7 @@ class FeedbackController extends Controller
         $category->review = $request->has('can_review');
         $category->reviewer_id = $request->has('can_review') ? $request->input('user_id') : null;
         $category->can_reply = $request->has('can_reply');
+        $category->show_publisher = $request->has('show_publisher');
         $category->save();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');

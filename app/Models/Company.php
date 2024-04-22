@@ -65,6 +65,6 @@ class Company extends Model
     /** @return HasMany */
     public function joboffers()
     {
-        return $this->hasMany('App\Models\Joboffer', 'company_id');
+        return $this->hasMany(\App\Models\Joboffer::class, 'company_id');
     }
 }

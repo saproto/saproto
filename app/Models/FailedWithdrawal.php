@@ -40,18 +40,18 @@ class FailedWithdrawal extends Model
     /** @return BelongsTo */
     public function correctionOrderline()
     {
-        return $this->belongsTo('App\Models\OrderLine', 'correction_orderline_id');
+        return $this->belongsTo(\App\Models\OrderLine::class, 'correction_orderline_id');
     }
 
     /** @return HasOne */
     public function withdrawal()
     {
-        return $this->hasOne('App\Models\Withdrawal', 'withdrawal_id');
+        return $this->hasOne(\App\Models\Withdrawal::class, 'withdrawal_id');
     }
 
     /** @return HasOne */
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'user_id');
+        return $this->hasOne(\App\Models\User::class, 'user_id');
     }
 }

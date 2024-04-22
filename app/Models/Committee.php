@@ -27,9 +27,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Photo|null $photo
  * @property int $allow_anonymous_email
  * @property int $is_society
+ * @property int $is_active
  * @property-read string $email_address
  * @property-read StorageEntry|null $image
- * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  *
@@ -72,7 +72,7 @@ class Committee extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'committees_users')
+        return $this->belongsToMany(\App\Models\User::class, 'committees_users')
             ->where(function ($query) {
                 $query
                     ->whereNull('committees_users.deleted_at')
@@ -93,43 +93,13 @@ class Committee extends Model
     /** @return HasMany */
     public function organizedEvents()
     {
-        return $this->hasMany('App\Models\Event', 'committee_id');
-    }
-
-    /** @return HasMany */
-    public function helperReminderSubscriptions()
-    {
-        return $this->hasMany('App\Models\HelperReminder');
+        return $this->hasMany(\App\Models\Event::class, 'committee_id');
     }
 
     /** @return string */
     public function getEmailAddressAttribute()
     {
         return $this->slug.'@'.config('proto.emaildomain');
-    }
-
-    /** @return User[] */
-    public function HelperReminderSubscribers()
-    {
-        $users = [];
-        $subscriptions = $this->helperReminderSubscriptions()->get();
-        foreach ($subscriptions as $subscription) {
-            $users[] = $subscription->user;
-        }
-
-        return $users;
-    }
-
-    /**
-     * @return bool Whether the user wants to receive helper reminders.
-     */
-    public function wantsToReceiveHelperReminder(User $user): bool
-    {
-        if (! $this->isMember($user)) {
-            HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->delete();
-        }
-
-        return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
     /** @return Collection|Event[] */
@@ -139,9 +109,9 @@ class Committee extends Model
 
         if (Auth::user()?->can('board')) {
             return $events->get();
-        } else {
-            return $events->where('secret', '=', 0)->get();
         }
+
+        return $events->where('secret', '=', 0)->get();
     }
 
     /** @return Collection|Event[] */
@@ -151,9 +121,9 @@ class Committee extends Model
 
         if (Auth::user()?->can('board')) {
             return $events->get();
-        } else {
-            return $events->where('secret', '=', 0)->get();
         }
+
+        return $events->where('secret', '=', 0)->get();
     }
 
     /**
@@ -163,7 +133,7 @@ class Committee extends Model
     public function helpedEvents($includeSecret = false)
     {
         /** @var Activity[] $activities */
-        $activities = $this->belongsToMany('App\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
 
         $events = [];
         foreach ($activities as $activity) {
@@ -180,7 +150,7 @@ class Committee extends Model
     public function pastHelpedEvents()
     {
         /** @var Activity[] $activities */
-        $activities = $this->belongsToMany('App\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
 
         $events = [];
         foreach ($activities as $activity) {

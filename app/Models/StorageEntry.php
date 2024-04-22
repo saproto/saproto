@@ -73,7 +73,8 @@ class StorageEntry extends Model
             Photo::where('small_file_id', $id)->count() == 0 &&
             Photo::where('tiny_file_id', $id)->count() == 0 &&
             Photo::where('file_id', $id)->count() == 0 &&
-            Member::where('omnomcom_sound_id', $id)->count() == 0;
+            Member::where('omnomcom_sound_id', $id)->count() == 0 &&
+            WallstreetEvent::where('image_id', $id)->count() == 0;
     }
 
     /**
@@ -187,7 +188,7 @@ class StorageEntry extends Model
             $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
         }
         if (config('app-proto.assets-domain')) {
-            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
 
         return $url;
@@ -205,25 +206,26 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param  bool  $human Defaults to true.
+     * @param  bool  $human  Defaults to true.
      * @return string|int
      */
     public function getFileSize($human = true)
     {
         $size = File::size($this->generateLocalPath());
-        if ($human) {
-            if ($size < 1024) {
-                return $size.' bytes';
-            } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1).' kilobytes';
-            } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1).' megabytes';
-            } else {
-                return round($size / pow(1024, 3), 1).' gigabytes';
-            }
-        } else {
+        if (! $human) {
             return $size;
         }
+        if ($size < 1024) {
+            return $size.' bytes';
+        }
+        if ($size < pow(1024, 2)) {
+            return round($size / pow(1024, 1), 1).' kilobytes';
+        }
+        if ($size < pow(1024, 3)) {
+            return round($size / pow(1024, 2), 1).' megabytes';
+        }
+
+        return round($size / pow(1024, 3), 1).' gigabytes';
     }
 
     /** @return string */
@@ -237,7 +239,7 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param  string  $algo Defaults to md5.
+     * @param  string  $algo  Defaults to md5.
      * @return string
      */
     public function getFileHash($algo = 'md5')

@@ -106,17 +106,17 @@ class Photo extends Model
 
     public function album(): BelongsTo
     {
-        return $this->belongsTo('App\Models\PhotoAlbum', 'album_id');
+        return $this->belongsTo(\App\Models\PhotoAlbum::class, 'album_id');
     }
 
     public function likes(): HasMany
     {
-        return $this->hasMany('App\Models\PhotoLikes');
+        return $this->hasMany(\App\Models\PhotoLikes::class);
     }
 
     public function file(): HasOne
     {
-        return $this->hasOne('App\Models\StorageEntry', 'id', 'file_id');
+        return $this->hasOne(\App\Models\StorageEntry::class, 'id', 'file_id');
     }
 
     /** @return HasOne */

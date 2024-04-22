@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * UNUSED, when implemented in the new protube we want to preserve this data so for now left unused*/
+
+/**
  * Soundboard Sound Model.
  *
  * @property int $id
@@ -37,6 +40,6 @@ class SoundboardSound extends Model
     /** @return BelongsTo */
     public function file()
     {
-        return $this->belongsTo('App\Models\StorageEntry', 'file_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'file_id');
     }
 }

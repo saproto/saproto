@@ -110,26 +110,18 @@
                                         <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item disabled" href="{{ route("protube::admin") }}">ProTube
-                                            Admin</a>
                                         <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp ProTube
                                             Admin</a>
-
-                                        @can('sysadmin')
-                                            <li role="separator" class="dropdown-divider"></li>
-                                            <a class="dropdown-item" href="{{ route("protube::radio::index") }}">ProTube
-                                                Radio Stations</a>
-                                            <a class="dropdown-item" href="{{ route("protube::display::index") }}">ProTube
-                                                Displays</a>
-                                            <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">Soundboard
-                                                Sounds</a>
-                                        @endcan
+                                        <a class="dropdown-item" href="{{ config('protube.remote_url') }}">ProTube
+                                            Admin</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
                                         <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
-                                        <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
-                                        <a class="dropdown-item" href="{{ route("feedback::category::admin") }}">Feedback Categories</a>
+                                        <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event
+                                            Categories</a>
+                                        <a class="dropdown-item" href="{{ route("feedback::category::admin") }}">Feedback
+                                            Categories</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item"
@@ -140,15 +132,18 @@
                                            href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                     @endcan
 
-                                    @if(Auth::user()->hasAllPermissions(['board', 'finadmin']))
+                                    @if(Auth::user()->hasAllPermissions(['board', 'finadmin']) || Auth::user()->hasAllPermissions(['board', 'closeactivities']) )
                                         <li role="separator" class="dropdown-divider"></li>
                                     @endif
+
+                                    @can('closeactivities')
+                                        <a class="dropdown-item"
+                                           href="{{ route("event::financial::list") }}">Close Activities</a>
+                                    @endcan
 
                                     @can('finadmin')
                                         <a class="dropdown-item"
                                            href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
-                                        <a class="dropdown-item"
-                                           href="{{ route("event::financial::list") }}">Activities</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">Mollie
@@ -188,7 +183,8 @@
                                     <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                     <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
                                         Messages</a>
-                                    <a class="dropdown-item" href="{{ route("news::add", ['is_weekly'=>true]) }}">Weekly Update</a>
+                                    <a class="dropdown-item" href="{{ route("news::add", ['is_weekly'=>true]) }}">Weekly
+                                        Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
                                     <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
@@ -212,12 +208,15 @@
                         @endcanany
 
                         @cannot('board')
-                            @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
-                                <li class="nav-item">
-                                    <a class="nav-link disabled" href="{{ route("protube::admin") }}" role="button">ProTube
-                                        Admin</a>
-                                </li>
-                            @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ config('protube.remote_url') }}" target="_blank"
+                                   role="button">
+                                    ProTube
+                                    @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
+                                        Admin
+                                    @endif
+                                </a>
+                            </li>
 
                             @if(Auth::user()->hasAllPermissions(['protography', 'header-image']))
                                 <li class="nav-item dropdown">

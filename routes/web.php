@@ -120,7 +120,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);
 
-        Route::post('change_email', ['as' => 'changemail', 'middleware' => ['throttle:3,1'], 'uses' => 'UserDashboardController@updateMail']);
+        Route::post('change_email/{id}', ['as' => 'changemail', 'middleware' => ['throttle:3,1'], 'uses' => 'UserDashboardController@updateMail']);
 
         Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
         Route::post('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
@@ -215,8 +215,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@update']);
 
         Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
-
-        Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
     });
 
     /* Routes related to societies. */
@@ -301,7 +299,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::',  'middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::', 'middleware' => ['auth']], function () {
         Route::group(['middleware' => ['permission:tipcie']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'DinnerformController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'DinnerformController@store']);
@@ -331,9 +329,21 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
         Route::get('statistics/{id}', ['as' => 'statistics', 'uses' => 'WallstreetController@statistics']);
-        route::group(['prefix' => 'products', 'as' => 'products::'], function () {
+        Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
             Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addProducts']);
             Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeProduct']);
+        });
+
+        Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'WallstreetController@events']);
+            Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@addEvent']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@editEvent']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@updateEvent']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroyEvent']);
+            Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
+                Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addEventProducts']);
+                Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeEventProduct']);
+            });
         });
     });
 
@@ -342,7 +352,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
-        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:finadmin']], function () {
+        Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:closeactivities']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'EventController@finindex']);
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
@@ -426,7 +436,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to news. */
-    Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
+    Route::group(['prefix' => 'news', 'as' => 'news::', 'middleware' => ['member']], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
             Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
@@ -761,38 +771,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* The routes for Protube. */
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
-        Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
-        Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
-        Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
         Route::get('dashboard', ['as' => 'dashboard', 'middleware' => ['auth'], 'uses' => 'ProtubeController@dashboard']);
         Route::get('togglehistory', ['as' => 'togglehistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@toggleHistory']);
         Route::get('clearhistory', ['as' => 'clearhistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@clearHistory']);
         Route::get('top', ['as' => 'top', 'uses' => 'ProtubeController@topVideos']);
-        Route::get('login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'ProtubeController@loginRedirect']);
-        Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
-
-        /* Routes related to the Protube Radio */
-        Route::group(['prefix' => 'radio', 'middleware' => ['permission:sysadmin'], 'as' => 'radio::'], function () {
-            Route::get('index', ['as' => 'index', 'uses' => 'RadioController@index']);
-            Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
-        });
-
-        /* Routes related to the Protube displays */
-        Route::group(['prefix' => 'display', 'middleware' => ['permission:sysadmin'], 'as' => 'display::'], function () {
-            Route::get('index', ['as' => 'index', 'uses' => 'DisplayController@index']);
-            Route::post('store', ['as' => 'store', 'uses' => 'DisplayController@store']);
-            Route::post('update/{id}', ['as' => 'update', 'uses' => 'DisplayController@update']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DisplayController@destroy']);
-        });
-
-        /* Routes related to teh Soundboard */
-        Route::group(['prefix' => 'soundboard', 'middleware' => ['permission:sysadmin'], 'as' => 'soundboard::'], function () {
-            Route::get('index', ['as' => 'index', 'uses' => 'SoundboardController@index']);
-            Route::post('store', ['as' => 'store', 'uses' => 'SoundboardController@store']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'SoundboardController@destroy']);
-            Route::get('togglehidden/{id}', ['as' => 'togglehidden', 'uses' => 'SoundboardController@toggleHidden']);
-        });
     });
 
     /* Routes related to calendars. */
@@ -882,6 +864,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
+        Route::get('/activity_statistics', ['as' => 'activity_statistics', 'uses' => 'QueryController@activityStatistics']);
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
     });
 
@@ -928,4 +911,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('export/{id}', ['as' => 'export', 'uses' => 'CodexController@exportCodex']);
     });
+
+    /*Route related to the december theme*/
+    Route::get('/december/toggle', function () {
+        Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
+
+        return Redirect::back();
+    })->name('december::toggle');
 });

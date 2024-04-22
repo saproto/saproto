@@ -85,12 +85,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     /* Routes related to the Protube API */
     Route::group(['prefix' => 'protube', 'as' => 'protube::', 'middleware' => ['web']], function () {
-        Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
         Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
-        Route::get('radiostations', ['uses' => 'RadioController@api']);
         Route::get('userdetails', ['middleware' => ['auth:api'], 'uses' => 'ApiController@protubeUserDetails']);
-        Route::get('displays', ['uses' => 'DisplayController@api']);
-        Route::get('sounds', ['as' => 'sounds', 'uses' => 'SoundboardController@apiIndex']);
     });
 
     /* Routes related to the Search API */
@@ -111,8 +107,13 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
         Route::get('updated_prices/{id}', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPricesJSON']);
         Route::get('all_prices/{id}', ['as' => 'all_prices', 'uses' => 'WallstreetController@getAllPrices']);
+        Route::get('latest_events/{id}', ['as' => 'latest_events', 'uses' => 'WallstreetController@getLatestEvents']);
+        Route::get('toggle_event', ['as' => 'toggle_event', 'uses' => 'WallstreetController@toggleEvent', 'middleware' => ['permission:tipcie']]);
     });
 
     /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
+
+    /* Routes related to the OmNomCom Wrapped API */
+    Route::get('wrapped')->middleware('auth:api')->uses('WrappedController@index')->name('wrapped');
 });

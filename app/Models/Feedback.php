@@ -49,17 +49,17 @@ class Feedback extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\FeedbackCategory', 'feedback_category_id');
+        return $this->belongsTo(\App\Models\FeedbackCategory::class, 'feedback_category_id');
     }
 
     public function votes(): HasMany
     {
-        return $this->hasMany('App\Models\FeedbackVote');
+        return $this->hasMany(\App\Models\FeedbackVote::class);
     }
 
     public function voteScore(): int

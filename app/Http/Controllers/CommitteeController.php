@@ -31,19 +31,16 @@ class CommitteeController extends Controller
 
         if (Auth::check() && $user->can('board')) {
             return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
-        } else {
-            $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
-
-            if ($showSociety) {
-                $userGroups = Auth::check() ? $user->societies : [];
-            } else {
-                $userGroups = Auth::check() ? $user->committees : [];
-            }
-
-            $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
-
-            return view('committee.list', ['data' => $mergedGroups]);
         }
+        $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
+        if ($showSociety) {
+            $userGroups = Auth::check() ? $user->societies : [];
+        } else {
+            $userGroups = Auth::check() ? $user->committees : [];
+        }
+        $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
+
+        return view('committee.list', ['data' => $mergedGroups]);
     }
 
     /**
@@ -136,18 +133,25 @@ class CommitteeController extends Controller
      */
     public function update($id, Request $request)
     {
+        // Retrieve the committee
         $committee = Committee::find($id);
 
+        // Check if the committee is protected
         if ($committee->slug == config('proto.rootcommittee') && $request->slug != $committee->slug) {
             Session::flash('flash_message', "This committee is protected. You cannot change it's e-mail alias.");
 
             return Redirect::back();
         }
 
+        // Update the committee with the request data
         $committee->fill($request->all());
+
+        // The is_active value is either unset or 'on' so only set it to false if selected.
+        $committee->is_active = ! $request->has('is_active');
 
         $committee->save();
 
+        // Redirect back with a message
         Session::flash('flash_message', 'Changes have been saved.');
 
         return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
@@ -184,8 +188,8 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-        $user = User::findOrFail($request->user_id);
-        $committee = Committee::findOrFail($request->committee_id);
+        User::findOrFail($request->user_id);
+        Committee::findOrFail($request->committee_id);
 
         $membership = new CommitteeMembership();
         $membership->role = $request->role;
@@ -198,12 +202,13 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
             return Redirect::back();
-        } elseif ($request->end == '') {
+        }
+
+        if ($request->end == '') {
             $membership->deleted_at = null;
         }
 
@@ -240,12 +245,13 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
             return Redirect::back();
-        } elseif ($request->end == '') {
+        }
+
+        if ($request->end == '') {
             $membership->deleted_at = null;
         }
 
@@ -269,7 +275,6 @@ class CommitteeController extends Controller
         Session::flash('flash_message', 'You have removed '.$membership->user->name.' from '.$membership->committee->name.'.');
 
         $membership->forceDelete();
-        HelperReminder::where('committee_id', $committee_id)->where('user_id', $membership->user->id)->delete();
 
         return Redirect::route('committee::edit', ['id' => $committee_id]);
     }
@@ -317,8 +322,6 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-
-        $email = $committee->email_address;
         $name = $committee->name;
 
         $message_content = strip_tags($request->get('message'));
@@ -332,33 +335,6 @@ class CommitteeController extends Controller
         ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
 
         Session::flash('flash_message', sprintf('Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.', $committee->name));
-
-        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
-    }
-
-    /**
-     * @param  string  $slug
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function toggleHelperReminder($slug)
-    {
-        $committee = Committee::fromPublicId($slug);
-        $user = Auth::user();
-
-        if ($committee->wantsToReceiveHelperReminder($user)) {
-            HelperReminder::where('user_id', $user->id)->where('committee_id', $committee->id)->delete();
-            Session::flash('flash_message', sprintf('You will no longer receive helper notifications for the %s.', $committee->name));
-        } else {
-            if (! $committee->isMember($user)) {
-                Session::flash('flash_message', 'You cannot subscribe for helper notifications for a committee you are not in.');
-
-                return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
-            }
-            HelperReminder::create(['user_id' => $user->id, 'committee_id' => $committee->id]);
-            Session::flash('flash_message', sprintf('You will now receive helper notifications for the %s.', $committee->name));
-        }
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }

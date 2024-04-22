@@ -62,7 +62,7 @@ class VideoController extends Controller
             return Redirect::back();
         }
 
-        $video = Video::create([
+        Video::create([
             'title' => $youtube_video->snippet->title,
             'youtube_id' => $youtube_video->id,
             'youtube_title' => $youtube_video->snippet->title,

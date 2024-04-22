@@ -14,20 +14,14 @@ class UserMailChange extends Mailable
 
     public $user;
 
-    public $changer;
-
-    public $email;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $changer, $email)
+    public function __construct(User $user, public $changer, public $email)
     {
         $this->user = $user;
-        $this->changer = $changer;
-        $this->email = $email;
     }
 
     /**

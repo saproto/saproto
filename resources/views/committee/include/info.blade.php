@@ -1,13 +1,21 @@
 @if (!$committee->public)
     <div class="alert alert-info" role="alert">
-        This is a hidden @if($committee->is_society) society! @else committee! @endif
+        This is a hidden @if($committee->is_society)
+            society!
+        @else
+            committee!
+        @endif
     </div>
 @endif
 
 @if(Auth::check() && $committee->allow_anonymous_email)
     <a href="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}"
        class="btn btn-block btn-info mb-3">
-        <i class="fas fa-envelope-open fa-fw"></i> Send this @if($committee->is_society) society @else committee @endif an anonymous e-mail
+        <i class="fas fa-envelope-open fa-fw"></i> Send this @if($committee->is_society)
+            society
+        @else
+            committee
+        @endif an anonymous e-mail
     </a>
 @endif
 
@@ -23,21 +31,10 @@
 
             <div class="row justify-content-end">
 
-                @if($committee->isMember(Auth::user()) || $committee->wantsToReceiveHelperReminder(Auth::user()))
-                    <div class="col-8">
-
-                        <a href="{{ route('committee::toggle_helper_reminder', ['slug'=>$committee->slug]) }}"
-                           class="btn btn-block btn-{{ $committee->wantsToReceiveHelperReminder(Auth::user()) ? 'danger' : 'primary' }}">
-                            <i class="fas fa-{{ $committee->wantsToReceiveHelperReminder(Auth::user()) ? 'ban' : 'check' }} fa-fw"></i>
-                            {{ $committee->wantsToReceiveHelperReminder(Auth::user()) ? 'Don\'t get' : 'Get' }} helper reminders
-                        </a>
-
-                    </div>
-                @endif
-
                 @can('board')
                     <div class="col-4">
-                        <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-primary btn-block">
+                        <a href="{{ route("committee::edit", ["id" => $committee->id]) }}"
+                           class="btn btn-primary btn-block">
                             <i class="fas fa-edit fa-fw"></i> Edit
                         </a>
                     </div>

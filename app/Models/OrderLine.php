@@ -68,37 +68,37 @@ class OrderLine extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->belongsTo(\App\Models\Product::class);
     }
 
     /** @return BelongsTo */
     public function cashier()
     {
-        return $this->belongsTo('App\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function withdrawal()
     {
-        return $this->belongsTo('App\Models\Withdrawal', 'payed_with_withdrawal');
+        return $this->belongsTo(\App\Models\Withdrawal::class, 'payed_with_withdrawal');
     }
 
     /** @return BelongsTo */
     public function molliePayment()
     {
-        return $this->belongsTo('App\Models\MollieTransaction', 'payed_with_mollie');
+        return $this->belongsTo(\App\Models\MollieTransaction::class, 'payed_with_mollie');
     }
 
     /** @return HasOne */
     public function ticketPurchase()
     {
-        return $this->hasOne('App\Models\TicketPurchase', 'orderline_id');
+        return $this->hasOne(\App\Models\TicketPurchase::class, 'orderline_id');
     }
 
     /** @return bool */
@@ -129,17 +129,21 @@ class OrderLine extends Model
     {
         if ($this->payed_with_loss) {
             return 'Loss';
-        } elseif ($this->payed_with_withdrawal !== null) {
+        }
+        if ($this->payed_with_withdrawal !== null) {
             return "Withdrawal <a href='".
                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
                 "'>#".
                 $this->payed_with_withdrawal.
                 '</a>';
-        } elseif ($this->payed_with_cash !== null) {
+        }
+        if ($this->payed_with_cash !== null) {
             return 'Cash';
-        } elseif ($this->payed_with_bank_card !== null) {
+        }
+        if ($this->payed_with_bank_card !== null) {
             return 'Bank Card';
-        } elseif ($this->payed_with_mollie !== null) {
+        }
+        if ($this->payed_with_mollie !== null) {
             switch ($this->molliePayment->translatedStatus()) {
                 case 'paid':
                     return '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".

@@ -33,11 +33,10 @@ class PasswordController extends Controller
             Session::flash('flash_message', 'You can access this tool for 10 minutes.');
 
             return Redirect::route('passwordstore::index');
-        } else {
-            Session::flash('flash_message', 'Wrong password.');
-
-            return Redirect::route('passwordstore::auth');
         }
+        Session::flash('flash_message', 'Wrong password.');
+
+        return Redirect::route('passwordstore::auth');
     }
 
     /**
@@ -46,7 +45,7 @@ class PasswordController extends Controller
     public function index(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         return view('passwordstore.index', ['passwords' => PasswordEntry::orderBy('permission_id', 'asc')->orderBy('description', 'asc')->get()]);
@@ -58,7 +57,7 @@ class PasswordController extends Controller
     public function create(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         return view('passwordstore.edit', ['password' => null, 'type' => $request->get('type')]);
@@ -70,7 +69,7 @@ class PasswordController extends Controller
     public function store(Request $request)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         $permission = Permission::findOrFail($request->get('permission_id'));
@@ -80,7 +79,6 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->get('type') == 'password') {
             PasswordEntry::create([
                 'permission_id' => $permission->id,
@@ -90,11 +88,12 @@ class PasswordController extends Controller
                 'url' => ($request->get('url') == '' ? null : $request->get('url')),
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             Session::flash('flash_message', 'Password saved.');
 
             return Redirect::route('passwordstore::index');
-        } elseif ($request->get('type') == 'note') {
+        }
+
+        if ($request->get('type') == 'note') {
             PasswordEntry::create([
                 'permission_id' => $permission->id,
                 'description' => $request->get('description'),
@@ -103,7 +102,6 @@ class PasswordController extends Controller
                 'url' => null,
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             Session::flash('flash_message', 'Note saved.');
 
             return Redirect::route('passwordstore::index');
@@ -121,7 +119,7 @@ class PasswordController extends Controller
     public function edit(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         /** @var PasswordEntry $password */
@@ -142,7 +140,7 @@ class PasswordController extends Controller
     public function update(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         /** @var PasswordEntry $password */
@@ -161,7 +159,6 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-
         if ($request->get('type') == 'password') {
             $password->fill([
                 'permission_id' => $permission->id,
@@ -171,13 +168,13 @@ class PasswordController extends Controller
                 'url' => ($request->get('url') == '' ? null : $request->get('url')),
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             $password->save();
-
             Session::flash('flash_message', 'Password saved.');
 
             return Redirect::route('passwordstore::index');
-        } elseif ($request->get('type') == 'note') {
+        }
+
+        if ($request->get('type') == 'note') {
             $password->fill([
                 'permission_id' => $permission->id,
                 'description' => $request->get('description'),
@@ -186,9 +183,7 @@ class PasswordController extends Controller
                 'url' => null,
                 'note' => Crypt::encrypt($request->get('note')),
             ]);
-
             $password->save();
-
             Session::flash('flash_message', 'Note saved.');
 
             return Redirect::route('passwordstore::index');
@@ -208,7 +203,7 @@ class PasswordController extends Controller
     public function destroy(Request $request, $id)
     {
         if (! $this->extraVerification($request)) {
-            return $this->forwardToAuth($request);
+            return $this->forwardToAuth();
         }
 
         $password = PasswordEntry::findOrFail($id);
@@ -245,7 +240,7 @@ class PasswordController extends Controller
     /**
      * @return RedirectResponse
      */
-    private function forwardToAuth(Request $request)
+    private function forwardToAuth()
     {
         Session::flash('flash_message', 'You need to enter your password again, in order to access this feature.');
 

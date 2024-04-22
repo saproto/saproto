@@ -6,6 +6,7 @@
 
 # Development tools
 /node_modules
+.phpunit.cache
 
 # Local files
 /personal
@@ -15,6 +16,7 @@
 
 # IDE files
 /.idea
+.phpactor.json
 
 # Helper files
 .phpstorm.meta.php

@@ -13,10 +13,10 @@ use App\Models\Photo;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
-use App\Models\Token;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use stdClass;
@@ -31,33 +31,6 @@ class ApiController extends Controller
         return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
     }
 
-    /**
-     * @param  string  $token
-     * @return false|string
-     */
-    public function protubeAdmin($token)
-    {
-        $token = Token::where('token', $token)->first();
-
-        $adminInfo = new stdClass();
-
-        if (! $token) {
-            $adminInfo->is_admin = false;
-        } else {
-            $user = $token->user;
-            if (! $user) {
-                $adminInfo->is_admin = false;
-            } else {
-                $adminInfo->user_id = $user->id;
-                $adminInfo->user_name = $user->name;
-                $adminInfo->calling_name = $user->calling_name;
-                $adminInfo->is_admin = $user->can('protube') || $user->isTempadmin();
-            }
-        }
-
-        return json_encode($adminInfo);
-    }
-
     /** @return JsonResponse */
     public function protubeUserDetails()
     {
@@ -67,7 +40,7 @@ class ApiController extends Controller
             return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
-                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin(),
+                'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin() || $user->isTempadminLaterToday(),
                 'id' => $user->id,
             ]);
         }
@@ -77,7 +50,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('herbert.secret')) {
+        if ($request->secret != config('protube.protube_to_laravel_secret')) {
             abort(403);
         }
 
@@ -113,11 +86,14 @@ class ApiController extends Controller
 
         if ($request->has('callback')) {
             return response()->json($response)->setCallback($request->input('callback'));
-        } else {
-            return response()->json($response);
         }
+
+        return response()->json($response);
     }
 
+    /**
+     * @throws Exception
+     */
     public function randomPhoto(): JsonResponse
     {
         $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
@@ -128,7 +104,7 @@ class ApiController extends Controller
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
-        $random = mt_rand(1, 100);
+        $random = random_int(1, 100);
         if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
         } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago

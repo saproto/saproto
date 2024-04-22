@@ -47,20 +47,19 @@ class AuthController extends Controller
             }
 
             return Redirect::route('homepage');
-        } else {
-            if ($request->has('SAMLRequest')) {
-                Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
-            }
-
-            return view('auth.login');
         }
+        if ($request->has('SAMLRequest')) {
+            Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
+        }
+
+        return view('auth.login');
     }
 
     /**
      * Handle a submitted log-in form. Returns the application's response.
      *
-     * @param  Request  $request The request object, needed for the log-in data.
-     * @param  Google2FA  $google2fa The Google2FA object, because this is apparently the only way to access it.
+     * @param  Request  $request  The request object, needed for the log-in data.
+     * @param  Google2FA  $google2fa  The Google2FA object, because this is apparently the only way to access it.
      * @return RedirectResponse
      */
     public function postLogin(Request $request, Google2FA $google2fa)
@@ -233,27 +232,40 @@ class AuthController extends Controller
      */
     public function deleteUser(Request $request)
     {
-        $user = Auth::user();
-
-        $password = $request->input('password');
-        $auth_check = self::verifyCredentials($user->email, $password);
+        $user = User::findOrFail($request->id ?? Auth::id());
 
         if ($user->hasUnpaidOrderlines()) {
-            Session::flash('flash_message', 'You cannot deactivate your account while you have open payments!');
+            Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
 
             return Redirect::route('omnomcom::orders::list');
         }
 
-        if ($auth_check == null || $auth_check->id != $user->id) {
-            Session::flash('flash_message', 'You need to provide a valid password to delete your account.');
+        if ($user->member) {
+            Session::flash('flash_message', 'An account cannot be deactivated while it still has an active membership.');
 
             return Redirect::back();
         }
 
-        if ($user->member) {
-            Session::flash('flash_message', 'You cannot deactivate your account while you are a member.');
+        if (Auth::id() == $user->id) {
+            $password = $request->input('password');
+            $auth_check = self::verifyCredentials($user->email, $password);
+            if ($auth_check == null || $auth_check->id != $user->id) {
+                Session::flash('flash_message', 'You need to provide a valid password to deactivate your account.');
 
-            return Redirect::back();
+                return Redirect::back();
+            }
+        } else {
+            if (Auth::user()->cannot('board')) {
+                Session::flash('flash_message', 'You cannot deactivate someone else\'s account.');
+
+                return Redirect::back();
+            }
+
+            if ($user->name != $request->name) {
+                Session::flash('flash_message', 'You need to correctly input the user\'s name before the account is deactivated.');
+
+                return Redirect::back();
+            }
         }
 
         Address::where('user_id', $user->id)->delete();
@@ -289,7 +301,7 @@ class AuthController extends Controller
         $user->save();
         $user->delete();
 
-        Session::flash('flash_message', 'Your account has been deactivated.');
+        Session::flash('flash_message', 'The account has been deactivated.');
 
         return Redirect::route('homepage');
     }
@@ -316,7 +328,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param  string  $token The reset token, as e-mailed to the user.
+     * @param  string  $token  The reset token, as e-mailed to the user.
      * @return View|RedirectResponse
      *
      * @throws Exception
@@ -327,11 +339,10 @@ class AuthController extends Controller
         $reset = PasswordReset::where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
-        } else {
-            Session::flash('flash_message', 'This reset token does not exist or has expired.');
-
-            return Redirect::route('login::resetpass');
         }
+        Session::flash('flash_message', 'This reset token does not exist or has expired.');
+
+        return Redirect::route('login::resetpass');
     }
 
     /**
@@ -348,7 +359,8 @@ class AuthController extends Controller
                 Session::flash('flash_message', 'Your passwords don\'t match.');
 
                 return Redirect::back();
-            } elseif (strlen($request->password) < 10) {
+            }
+            if (strlen($request->password) < 10) {
                 Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
 
                 return Redirect::back();
@@ -358,11 +370,10 @@ class AuthController extends Controller
             Session::flash('flash_message', 'Your password has been changed.');
 
             return Redirect::route('login::show');
-        } else {
-            Session::flash('flash_message', 'This reset token does not exist or has expired.');
-
-            return Redirect::route('login::resetpass');
         }
+        Session::flash('flash_message', 'This reset token does not exist or has expired.');
+
+        return Redirect::route('login::resetpass');
     }
 
     /**
@@ -380,7 +391,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param  Request  $request The request object.
+     * @param  Request  $request  The request object.
      * @return View|RedirectResponse
      *
      * @throws Exception
@@ -406,20 +417,21 @@ class AuthController extends Controller
                 Session::flash('flash_message', 'The new passwords do not match.');
 
                 return view('auth.passchange');
-            } elseif (strlen($pass_new1) < 10) {
+            }
+            if (strlen($pass_new1) < 10) {
                 Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
 
                 return view('auth.passchange');
-            } elseif ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
+            }
+            if ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
                 Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
 
                 return view('auth.passchange');
-            } else {
-                $user->setPassword($pass_new1);
-                Session::flash('flash_message', 'Your password has been changed.');
-
-                return Redirect::route('user::dashboard');
             }
+            $user->setPassword($pass_new1);
+            Session::flash('flash_message', 'Your password has been changed.');
+
+            return Redirect::route('user::dashboard');
         }
 
         Session::flash('flash_message', 'Old password incorrect.');
@@ -461,11 +473,10 @@ class AuthController extends Controller
             Session::flash('flash_message', 'Your password was successfully synchronized.');
 
             return Redirect::route('user::dashboard');
-        } else {
-            Session::flash('flash_message', 'Password incorrect.');
-
-            return view('auth.sync');
         }
+        Session::flash('flash_message', 'Password incorrect.');
+
+        return view('auth.sync');
     }
 
     /** @return RedirectResponse */
@@ -503,7 +514,7 @@ class AuthController extends Controller
             $remoteFullName = $remoteData['givenname'].' '.$remoteData['surname'];
             $remoteCallingName = $remoteData['givenname'];
         } elseif ($remoteData['surname'] || $remoteData['givenname']) {
-            $remoteFullName = $remoteData['surname'] ? $remoteData['surname'] : $remoteData['givenname'];
+            $remoteFullName = $remoteData['surname'] ?: $remoteData['givenname'];
             $remoteCallingName = $remoteFullName;
         }
         $remoteData['name'] = $remoteFullName;
@@ -520,9 +531,9 @@ class AuthController extends Controller
             Session::flash('flash_message', "We linked your institution account $remoteEduUsername to your Proto account.");
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
-            } else {
-                return Redirect::route('user::dashboard');
             }
+
+            return Redirect::route('user::dashboard');
         }
 
         // Reason 2: we were trying to login using a university account
@@ -539,14 +550,10 @@ class AuthController extends Controller
 
                 return Redirect::route('login::show');
             }
+            Session::flash('surfconext_create_account', $remoteData);
+            $request->session()->reflash();
 
-            // Else, we'll allow them to create an account using their university account
-            else {
-                Session::flash('surfconext_create_account', $remoteData);
-                $request->session()->reflash();
-
-                return view('users.registersurfconext', ['remote_data' => $remoteData]);
-            }
+            return view('users.registersurfconext', ['remote_data' => $remoteData]);
         }
 
         $localUser->name = $remoteData['name'];
@@ -568,9 +575,9 @@ class AuthController extends Controller
             Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
 
             return Redirect::route('login::show');
-        } else {
-            return view('auth.username');
         }
+
+        return view('auth.username');
     }
 
     /* These are the static helper functions of the AuthController for more overview and modularity. Heuh! */
@@ -580,7 +587,7 @@ class AuthController extends Controller
      * and returns the associated user if the combination is valid.
      * Accepts either Proto username or e-mail and password.
      *
-     * @param  string  $username Email address or Proto username.
+     * @param  string  $username  Email address or Proto username.
      * @param  string  $password
      * @return User|null The user associated with the credentials, or null if no user could be found or credentials are invalid.
      *
@@ -610,7 +617,7 @@ class AuthController extends Controller
     /**
      * Login the supplied user and perform post-login checks and redirects.
      *
-     * @param  User  $user The user to be logged in.
+     * @param  User  $user  The user to be logged in.
      * @return RedirectResponse
      */
     public static function loginUser($user)
@@ -655,7 +662,7 @@ class AuthController extends Controller
     /**
      * We know a user has identified itself, but we still need to check for other stuff like SAML or Two Factor Authentication. We do this here.
      *
-     * @param  User  $user The username to be logged in.
+     * @param  User  $user  The username to be logged in.
      * @return View|RedirectResponse
      */
     public static function continueLogin($user)
@@ -665,15 +672,15 @@ class AuthController extends Controller
             Session::flash('2fa_user', $user);
 
             return view('auth.2fa');
-        } else {
-            return self::loginUser($user);
         }
+
+        return self::loginUser($user);
     }
 
     /**
      * Handle the submission of two factor authentication data. Return the application's response.
      *
-     * @param  Google2FA  $google2fa The Google2FA object, because this is apparently the only way to access it.
+     * @param  Google2FA  $google2fa  The Google2FA object, because this is apparently the only way to access it.
      * @return View|RedirectResponse
      */
     private static function handleTwoFactorSubmit(Request $request, Google2FA $google2fa)
@@ -686,12 +693,11 @@ class AuthController extends Controller
             // Verify if the response is valid.
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
                 return self::loginUser($user);
-            } else {
-                Session::flash('flash_message', 'Your code is invalid. Please try again.');
-                $request->session()->reflash();
-
-                return view('auth.2fa');
             }
+            Session::flash('flash_message', 'Your code is invalid. Please try again.');
+            $request->session()->reflash();
+
+            return view('auth.2fa');
         }
 
         /* Something we don't recognize */
@@ -730,8 +736,8 @@ class AuthController extends Controller
      * The function expects an authenticated user for which to complete the SAML request.
      * This function assumes the user has already been authenticated one way or another.
      *
-     * @param  User  $user The (currently logged in) user to complete the SAML request for.
-     * @param  string  $saml The SAML data (deflated and encoded).
+     * @param  User  $user  The (currently logged in) user to complete the SAML request for.
+     * @param  string  $saml  The SAML data (deflated and encoded).
      * @return View|RedirectResponse
      */
     private static function handleSAMLRequest($user, $saml)
@@ -773,8 +779,8 @@ class AuthController extends Controller
     /**
      * Another static helper function to build a SAML response based on a user and a request.
      *
-     * @param  User  $user The user to generate the SAML response for.
-     * @param  AuthnRequest  $authnRequest The request to generate a SAML response for.
+     * @param  User  $user  The user to generate the SAML response for.
+     * @param  AuthnRequest  $authnRequest  The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
     private static function buildSAMLResponse($user, $authnRequest)

@@ -12,19 +12,13 @@ class ReviewFeedbackMail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public FeedbackCategory $category;
-
-    public $feedback;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(FeedbackCategory $category, $feedback)
+    public function __construct(public FeedbackCategory $category, public $feedback)
     {
-        $this->feedback = $feedback;
-        $this->category = $category;
     }
 
     /**

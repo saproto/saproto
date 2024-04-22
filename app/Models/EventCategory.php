@@ -37,6 +37,13 @@ class EventCategory extends Model
     /** @return HasMany */
     public function events()
     {
-        return $this->hasMany('App\Models\Event', 'category_id');
+        return $this->hasMany(\App\Models\Event::class, 'category_id');
+    }
+
+    public function average_cost(): float
+    {
+        return Activity::whereHas('event', function ($q) {
+            $q->where('category_id', $this->id);
+        })->get()->average('price');
     }
 }

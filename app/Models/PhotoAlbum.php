@@ -53,19 +53,19 @@ class PhotoAlbum extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('App\Models\Event', 'event_id');
+        return $this->belongsTo(\App\Models\Event::class, 'event_id');
     }
 
     /** @return HasOne */
     public function thumbPhoto()
     {
-        return $this->hasOne('App\Models\Photo', 'id', 'thumb_id');
+        return $this->hasOne(\App\Models\Photo::class, 'id', 'thumb_id');
     }
 
     /** @return HasMany */
     public function items()
     {
-        return $this->hasMany('App\Models\Photo', 'album_id');
+        return $this->hasMany(\App\Models\Photo::class, 'album_id');
     }
 
     /** @return string|null */
@@ -76,6 +76,8 @@ class PhotoAlbum extends Model
         } else {
             return null;
         }
+
+        return null;
     }
 
     public function mayViewAlbum($user)
