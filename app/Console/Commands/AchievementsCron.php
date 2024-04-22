@@ -80,7 +80,8 @@ class AchievementsCron extends Command
                 return $this->nThProducts($user, [487], 15);
             }, // Cry Baby
             22 => function ($user) {
-                return $this->nThProducts($user, [805, 211, 758], 20);
+                //weizen outside, grolsch weizen, weizen small, weizen big
+                return $this->nThProducts($user, [805, 211, 758, 1039], 20);
             }, // True German
             23 => function ($user) {
                 return $this->oldFart($user);
