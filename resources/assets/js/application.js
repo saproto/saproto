@@ -10,25 +10,25 @@ import quagga from 'quagga';
 
 global.Quagga = quagga;
 
+import Echo from 'laravel-echo';
+
 import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-import Echo from 'laravel-echo';
-
-global.Echo = new Echo({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+window.Echo = new Echo({
+    broadcaster: import.meta.env.VITE_WEBSOCKET_BROADCASTER,
+    key: import.meta.env.VITE_WEBSOCKET_PUBLIC_KEY,
+    wsHost: import.meta.env.VITE_WEBSOCKET_HOST,
+    wsPort: import.meta.env.VITE_WEBSOCKET_PORT ?? 80,
+    wssPort: import.meta.env.VITE_WEBSOCKET_PORT ?? 443,
+    disableStats: true,
+    encrypted: true,
+    cluster: import.meta.env.VITE_WEBSOCKET_CLUSTER,
+    forceTLS: (import.meta.env.VITE_WEBSOCKET_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
 
-window.Echo.channel('test-event').listen('ExampleEvent', (e) => {
-    console.log(e);
-});
 
 import './countdown-timer'
 import './utilities'
