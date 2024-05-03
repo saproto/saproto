@@ -286,9 +286,9 @@ class OmNomController extends Controller
 
         if ($request->has('csv')) {
             return view('omnomcom.products.generateorder_csv', ['orders' => $orders]);
-        } else {
-            return view('omnomcom.products.generateorder', ['orders' => $orders]);
         }
+
+        return view('omnomcom.products.generateorder', ['orders' => $orders]);
     }
 
     private function getCategories($store)

@@ -172,7 +172,7 @@ class Member extends Model
         $username = $usernameBase;
         $i = Member::where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
-            $username = "$usernameBase-$i";
+            return "$usernameBase-$i";
         }
 
         return $username;

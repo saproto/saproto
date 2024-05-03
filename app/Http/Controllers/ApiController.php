@@ -50,7 +50,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('protube.secret')) {
+        if ($request->secret != config('protube.protube_to_laravel_secret')) {
             abort(403);
         }
 
@@ -86,9 +86,9 @@ class ApiController extends Controller
 
         if ($request->has('callback')) {
             return response()->json($response)->setCallback($request->input('callback'));
-        } else {
-            return response()->json($response);
         }
+
+        return response()->json($response);
     }
 
     /**
