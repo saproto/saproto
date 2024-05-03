@@ -137,6 +137,9 @@ class DirectAdminSync extends Command
             $data[] = $additional;
         }
 
+        //Add website smtp account
+        $data[] = substr(config('mail.username'), 0, strpos(config('mail.username'), '@'));
+
         return $data;
     }
 
@@ -259,6 +262,7 @@ class DirectAdminSync extends Command
         $data = [
             'add' => [],
             'del' => [],
+            'add_system' => [],
         ];
 
         // For each current account, we check if it should exist against the target list.
@@ -275,7 +279,12 @@ class DirectAdminSync extends Command
 
             // The account should be created!
             if (! in_array($account, $current)) {
-                $data['add'][] = $account;
+                // The account is the website smtp account
+                if (starts_with(config('mail.username'), $account.'@')) {
+                    $data['add_system'][] = $account;
+                } else {
+                    $data['add'][] = $account;
+                }
             }
         }
 
@@ -302,6 +311,21 @@ class DirectAdminSync extends Command
                     'user' => $account,
                     'passwd' => $password,
                     'passwd2' => $password,
+                    'quota' => 0, // Unlimited
+                    'limit' => 0, // Unlimited
+                ],
+            ];
+        }
+
+        foreach ($patch['add_system'] as $account) {
+            $queries[] = [
+                'cmd' => '/CMD_API_POP',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'create',
+                    'user' => $account,
+                    'passwd' => config('mail.password'),
+                    'passwd2' => config('mail.password'),
                     'quota' => 0, // Unlimited
                     'limit' => 0, // Unlimited
                 ],
