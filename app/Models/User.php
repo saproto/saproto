@@ -66,6 +66,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read string|null $proto_email
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
@@ -233,6 +234,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function achievements()
     {
         return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+    }
+
+    /** @return BelongsToMany */
+    public function groups()
+    {
+        return $this->getGroups();
     }
 
     /** @return BelongsToMany */
@@ -443,18 +450,30 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool */
     public function isActiveMember()
     {
-        return count(
-            CommitteeMembership::withTrashed()
-                ->where('user_id', $this->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })
-                ->with('committee')
-                ->get()
-                ->where('committee.is_society', false)
-        ) > 0;
+        return CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })
+            ->whereHas('committee', function ($q) {
+                $q->where('is_society', false);
+            })
+            ->exists();
+    }
+
+    /** @return bool */
+    public function isInGroup() {
+        return CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })
+            ->with('committee')
+            ->exists();
     }
 
     /**
@@ -503,9 +522,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return string */
+    public function getProtoEmailAttribute() {
+        return $this->is_member && $this->isInGroup() ? $this->member->proto_username."@".config('proto.emaildomain') : null;
+    }
+
+    /** @return string */
     public function getDisplayEmail()
     {
-        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return $this->proto_email ?? $this->email;
     }
 
     /**
