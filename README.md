@@ -91,12 +91,17 @@ docker run --rm \
 
 By default, Laravel Sail commands are invoked using the `vendor/bin/sail` script. That is a lot of characters to type
 every time you want to execute a command. So, instead you can create an alias. By adding the alias definition
-to `~/.bash_aliases` the alias will persist between terminal restarts.
+to `~/.bash_aliases` (WSL2/Linux) or `~/.zshenv` (macOS) the alias will persist between terminal restarts.
 
 *The rest of these instruction will assume that you successfully added the `sail` alias.*
 
+WSL2/Linux/macOS High Sierra or earlier:
 ```shell
 echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_aliases
+```
+macOS Catalina or newer:
+```shell
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.zshenv
 ```
 
 #### Initial application setup
