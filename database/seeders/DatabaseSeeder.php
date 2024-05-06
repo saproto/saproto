@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
         $output->task('setting roles and permissions', fn () => Artisan::call('proto:syncroles'));
 
-        $adminPassword = str_random();
+        $adminPassword = 'proto';
 
         $importSeeder = new ImportLiveDataSeeder();
         $importSeeder->run($adminPassword, $output);
