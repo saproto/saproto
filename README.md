@@ -118,6 +118,18 @@ for changes to scripts or stylesheets.
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
+#### Websockets
+
+In some parts of the website we use websockets to update the page in real-time.
+In development, we use the [Reverb](https://reverb.laravel.com/) websocket server.
+To start the websocket server run the following command:
+
+```
+sail artisan reverb:start
+```
+
+You may provide the --debug flag to get the debug output of the websocket server.
+
 #### Localhost
 
 When you have finished the above setup the following port will be exposed on localhost.
@@ -158,6 +170,12 @@ sail shell
 
 ```
 sail artisan migrate:fresh --seed
+```
+
+#### Start the reverb websocket server *(run in container)*
+
+```
+sail artisan reverb:start
 ```
 
 ### Code completion, style and static analysis
