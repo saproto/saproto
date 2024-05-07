@@ -6,7 +6,9 @@ use App\Models\StorageEntry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use Image;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\EncodedImageInterface;
 
 class FileController extends Controller
 {
@@ -37,34 +39,27 @@ class FileController extends Controller
     /**
      * @param  int  $w
      * @param  int  $h
-     * @return Image
+     * @return EncodedImageInterface
      */
     public static function makeImage(StorageEntry $entry, $w, $h)
     {
         $storage = config('filesystems.disks');
 
-        $opts = [
-            'w' => $w,
-            'h' => $h,
-        ];
-
         ini_set('memory_limit', '512M');
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
 
-        /* @phpstan-ignore-next-line */
-        return Image::cache(function ($image) use ($storage, $entry, $opts) {
-            if ($opts['w'] && $opts['h']) {
-                $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {
-                    $constraint->upsize();
-                });
-            } elseif ($opts['w'] || $opts['h']) {
-                $image->make($storage['local']['root'].'/'.$entry->filename)->resize($opts['w'], $opts['h'], function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-            } else {
-                $image->make($storage['local']['root'].'/'.$entry->filename);
-            }
-        }, 87600);
+        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
+
+        if (! $w || ! $h) {
+            return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
+                return $image->scaleDown($w, $h)->encode();
+            });
+        }
+
+        return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
+            return $image->coverDown($w, $h)->encode();
+        });
     }
 
     /**
