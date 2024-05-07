@@ -148,8 +148,9 @@ class ParticipationController extends Controller
         /** @var ActivityParticipation $participation */
         $participation = ActivityParticipation::where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
-        if(!$participation) {
+        if (! $participation) {
             Session::flash('flash_message', 'The participation is not found.');
+
             return Redirect::back();
         }
         $notify = false;
