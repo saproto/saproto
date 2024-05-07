@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use LaravelIdea\Helper\App\Models\_IH_Event_C;
 
 /**
  * Committee Model.
@@ -89,10 +89,10 @@ class Committee extends Model
         return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
     }
 
-    /** @return HasMany */
+    /** @return Builder|\LaravelIdea\Helper\App\Models\_IH_Event_QB */
     public function organizedEvents()
     {
-        return $this->hasMany(\App\Models\Event::class, 'committee_id');
+        return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
     /** @return string */
@@ -101,10 +101,13 @@ class Committee extends Model
         return $this->slug.'@'.config('proto.emaildomain');
     }
 
-    /** @return Collection|Event[] */
-    public function pastEvents()
+    /**
+     * @param  int  $n  the number of events to return
+     * @return Event[]|Collection|_IH_Event_C
+     */
+    public function pastEvents(int $n)
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
+        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
 
         if (Auth::user()?->can('board')) {
             return $events->get();
@@ -145,21 +148,22 @@ class Committee extends Model
         return $events;
     }
 
-    /** @return Event[] */
-    public function pastHelpedEvents()
+    public function pastHelpedEvents($n)
     {
-        /** @var Activity[] $activities */
-        $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
-
-        $events = [];
-        foreach ($activities as $activity) {
-            $event = $activity->event;
-            if ($event && ! $event->secret && $event->end < time()) {
-                $events[] = $event;
-            }
-        }
-
-        return $events;
+        return Event::whereHas('activity', function ($q) {
+            $q->whereHas('helpingCommittees', function ($q) {
+                $q->where('committee_id', $this->id);
+            });
+        })
+            ->where('secret', false)
+            ->where(function ($q) {
+                $q->where('publication', '<', time())
+                    ->orWhereNull('publication');
+            })
+            ->where('end', '<', time())
+            ->orderBy('created_at')
+            ->take($n)
+            ->get();
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
