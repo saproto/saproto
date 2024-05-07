@@ -90,6 +90,7 @@
                 <i class="fas fa-map-marker-alt fa-fw" aria-hidden="true"></i>
                 {{ $event->location }}
             </span>
+	    
 
             {{-- External --}}
             @if($event->is_external)
