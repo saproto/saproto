@@ -15,9 +15,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Mail;
-use Redirect;
-use Session;
 
 class ParticipationController extends Controller
 {
@@ -146,8 +146,12 @@ class ParticipationController extends Controller
     public function destroy($participation_id, Request $request)
     {
         /** @var ActivityParticipation $participation */
-        $participation = ActivityParticipation::findOrFail($participation_id)->with('activity', 'activity.event', 'user');
+        $participation = ActivityParticipation::where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
+        if(!$participation) {
+            Session::flash('flash_message', 'The participation is not found.');
+            return Redirect::back();
+        }
         $notify = false;
 
         if ($participation->user->id != Auth::id()) {
