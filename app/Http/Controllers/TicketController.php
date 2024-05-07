@@ -413,6 +413,8 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
+        $event->updateUniqueUsersCount();
+
         if (count($prepaid_tickets) > 0) {
             Session::put('prepaid_tickets', $event->id);
             $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets, $payment_method);

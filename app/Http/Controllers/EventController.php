@@ -33,20 +33,17 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $data = [[], [], []];
-        $data[0] = Event::query()
+        $data[0] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '<=', strtotime('+1 week'));
 
-        $data[1] = Event::query()
+        $data[1] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 week'))
             ->where('start', '<=', strtotime('+1 month'));
 
-        $data[2] = Event::query()
+        $data[2] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
@@ -69,7 +66,13 @@ class EventController extends Controller
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
+        return view('event.calendar', [
+            'events' => $data,
+            'years' => $years,
+            'ical_url' => $calendar_url,
+            'reminder' => $reminder,
+            'cur_category' => $category,
+        ]);
     }
 
     /** @return View */
@@ -215,7 +218,11 @@ class EventController extends Controller
     public function archive(Request $request, $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<', strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
+        $events = Event::getEventBlockQuery()
+            ->where('start', '>', strtotime($year.'-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
+            ->get();
+
         $category = EventCategory::find($request->category);
 
         $months = [];
@@ -229,7 +236,12 @@ class EventController extends Controller
             }
         }
 
-        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category]);
+        return view('event.archive', [
+            'years' => $years,
+            'year' => $year,
+            'months' => $months,
+            'cur_category' => $category,
+        ]);
     }
 
     /**
