@@ -75,7 +75,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">&euro;</span>
                             </div>
-                            <input type="number" min="0" step="0.01" class="form-control" id="no_show_fee" name="no_show_fee"
+                            <input type="number" min="0" step="0.01" class="form-control" id="no_show_fee"
+                                   name="no_show_fee"
                                    value="{{ old('no_show_fee')??($event->activity ? $event->activity->no_show_fee : '0') }}"
                                    placeholder="15"
                                    required>

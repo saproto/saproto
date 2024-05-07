@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Event Model.
@@ -37,6 +38,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property int $unique_users_count
  * @property-read object $formatted_date
  * @property-read bool $is_future
  * @property-read Activity|null $activity
@@ -87,6 +89,8 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
+    protected $with = ['category', 'activity'];
+
     protected $appends = ['is_future', 'formatted_date'];
 
     protected $casts = [
@@ -113,7 +117,7 @@ class Event extends Model
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo(\App\Models\Committee::class);
+        return $this->belongsTo(Committee::class);
     }
 
     /** @return bool */
@@ -139,6 +143,31 @@ class Event extends Model
         }
 
         return false;
+    }
+
+    public static function getEventBlockQuery()
+    {
+        return Event::query()
+            ->orderBy('start')
+            ->with('activity', function ($e) {
+                $e->withCount([
+                    'users',
+                    'backupUsers as myBackupParticipationCount' => function ($q) {
+                        $q->where('user_id', Auth::id());
+                    },
+                    'helpingParticipations as myHelperParticipationCount' => function ($q) {
+                        $q->where('user_id', Auth::id());
+                    },
+                    'participation as myParticipationCount' => function ($q) {
+                        $q->where('user_id', Auth::id())
+                            ->whereNull('committees_activities_id');
+                    },
+                ]);
+            })->withCount(['tickets as myTicketCount' => function ($q) {
+                $q->whereHas('purchases', function ($q) {
+                    $q->where('user_id', Auth::id());
+                });
+            }]);
     }
 
     /** @return bool */
@@ -174,7 +203,7 @@ class Event extends Model
     /** @return HasMany */
     public function tickets()
     {
-        return $this->hasMany(\App\Models\Ticket::class, 'event_id');
+        return $this->hasMany(Ticket::class, 'event_id');
     }
 
     /** @return HasMany */
@@ -300,9 +329,10 @@ class Event extends Model
         });
     }
 
-    public function usersCount()
+    //recounts the unique users on an event to make the fetching of the event_block way faster
+    public function updateUniqueUsersCount(): void
     {
-        $allUserIds = collect([]);
+        $allUserIds = collect();
         foreach ($this->tickets as $ticket) {
             if ($ticket->show_participants) {
                 $allUserIds = $allUserIds->merge($ticket->getUsers()->pluck('id'));
@@ -313,7 +343,8 @@ class Event extends Model
             $allUserIds = $allUserIds->merge($this->activity->users->pluck('id'));
         }
 
-        return $allUserIds->unique()->count();
+        $this->unique_users_count = $allUserIds->unique()->count();
+        $this->save();
     }
 
     /** @return string[] */
