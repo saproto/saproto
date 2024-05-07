@@ -71,19 +71,13 @@ class ExportController extends Controller
                 break;
             case 'events':
                 if ($user->can('admin')) {
-                    $data = Event::all();
+                    $data = Event::setEagerLoads([])->get();
                 } else {
-                    $data = Event::all()
+                    $data = Event::setEagerLoads([])->get()
                         ->filter(function (Event $event) use ($user) {
                             return $event->mayViewEvent($user);
                         });
                 }
-
-                // Exclude 'activity' relation
-                foreach ($data as $val) {
-                    unset($val->activity);
-                }
-
                 break;
             case 'event_categories':
                 $data = EventCategory::all();
