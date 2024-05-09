@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderLine;
 use App\Models\StorageEntry;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
@@ -164,26 +163,10 @@ class WallstreetController extends Controller
     {
         $drink = WallstreetDrink::findOrFail($drinkID);
         $prices = $this->getLatestPrices($drink);
-        $loss = $this->getLoss($drink);
         $events = $this->getLatestEvents($drink);
-        $wrapped = ['products' => $prices, 'loss' => $loss, 'events' => $events];
+        $wrapped = ['products' => $prices, 'events' => $events];
 
         return Response::json($wrapped);
-    }
-
-    public function getLoss(WallstreetDrink $drink)
-    {
-        $productIDs = $drink->products->pluck('id');
-
-        return OrderLine::query()
-            ->selectRaw('(original_unit_price*units)-total_price AS loss')
-            ->whereHas('product', function ($q) use ($productIDs) {
-                $q->whereIn('id', $productIDs);
-            })
-            ->where('created_at', '<', Carbon::parse($drink->end_time))
-            ->where('created_at', '>', Carbon::parse($drink->start_time))
-            ->get()
-            ->sum('loss');
     }
 
     public function getAllPrices($drinkID)
@@ -191,16 +174,6 @@ class WallstreetController extends Controller
         return WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', function ($q) use ($drinkID) {
             $q->where('wallstreet_drink_id', $drinkID)->orderBy('id', 'asc');
         })->select('id', 'image_id', 'name')->get();
-    }
-
-    public function getLatestEvents(WallstreetDrink $drink)
-    {
-        $events = $drink->events()->with('products')->get();
-        foreach ($events as $event) {
-            $event->img = $event->image?->generatePath();
-        }
-
-        return $events;
     }
 
     public function events()

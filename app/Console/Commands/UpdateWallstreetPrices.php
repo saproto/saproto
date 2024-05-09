@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Events\NewWallstreetEvent;
+use App\Events\NewWallstreetLossCalculation;
+use App\Events\NewWallstreetPrice;
 use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
@@ -39,6 +42,8 @@ class UpdateWallstreetPrices extends Command
     /**
      * Execute the console command.
      *
+     *
+     *
      * @return int
      */
     public function handle()
@@ -56,12 +61,18 @@ class UpdateWallstreetPrices extends Command
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
                 $this->info('No price found for product '.$product->id.' creating new price object with current price ('.$product->price.') for drink '.$currentDrink->id);
-                $latestPrice = new WallstreetPrice([
+                $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
                     'price' => $product->price,
+                    'diff' => 0,
                 ]);
-                $latestPrice->save();
+
+                $newPriceObject->save();
+
+                NewWallstreetPrice::dispatch(
+                    $newPriceObject
+                );
 
                 continue;
             }
@@ -70,12 +81,20 @@ class UpdateWallstreetPrices extends Command
             //heighten the price if there are new orders and the price is not the actual price
             if ($newOrderlines > 0) {
                 $delta = $newOrderlines * $currentDrink->price_increase;
+                $newPrice = min($latestPrice->price + $delta, $product->price * $this->maxPriceMultiplier);
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
-                    'price' => min($latestPrice->price + $delta, $product->price * $this->maxPriceMultiplier),
+                    'price' => $newPrice,
+                    'diff' => ($newPrice - $product->price) / $product->price * 100,
                 ]);
+
                 $newPriceObject->save();
+
+                NewWallstreetPrice::dispatch(
+                    $newPriceObject
+                );
+
                 $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
 
                 continue;
@@ -83,13 +102,19 @@ class UpdateWallstreetPrices extends Command
 
             //lower the price if no orders have been made and the price is not the minimum price
             if ($latestPrice->price !== $currentDrink->minimum_price) {
+                $newPrice = max($latestPrice->price - $currentDrink->price_decrease, $currentDrink->minimum_price);
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
-                    'price' => max($latestPrice->price - $currentDrink->price_decrease, $currentDrink->minimum_price),
+                    'price' => $newPrice,
+                    'diff' => ($newPrice - $product->price) / $product->price * 100,
                 ]);
 
                 $newPriceObject->save();
+
+                NewWallstreetPrice::dispatch(
+                    $newPriceObject
+                );
 
                 $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
 
@@ -110,13 +135,30 @@ class UpdateWallstreetPrices extends Command
             foreach ($randomEvent->products->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
                 $delta = ($randomEvent->percentage / 100) * $product->price;
+                $newPrice = max($currentDrink->minimum_price, min($delta + $latestPrice->price, $product->price * $this->maxPriceMultiplier));
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
-                    'price' => max($currentDrink->minimum_price, min($delta + $latestPrice->price, $product->price * $this->maxPriceMultiplier)),
+                    'price' => $newPrice,
+                    'diff' => ($newPrice - $product->price) / $product->price * 100,
                 ]);
+
                 $newPriceObject->save();
+
+                NewWallstreetPrice::dispatch(
+                    $newPriceObject
+                );
             }
+
+            NewWallstreetEvent::dispatch(
+                $currentDrink->id,
+                $randomEvent
+            );
         }
+
+        NewWallstreetLossCalculation::dispatch(
+            $currentDrink->id,
+            $currentDrink->loss()
+        );
     }
 }

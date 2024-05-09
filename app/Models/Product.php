@@ -95,31 +95,27 @@ class Product extends Model
         return null;
     }
 
-    /** @return BelongsToMany */
-    public function categories()
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\ProductCategory::class, 'products_categories', 'product_id', 'category_id');
+        return $this->belongsToMany(ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
-    /** @return HasOne */
-    public function ticket()
+    public function ticket(): HasOne
     {
-        return $this->hasOne(\App\Models\Ticket::class, 'product_id');
+        return $this->hasOne(Ticket::class, 'product_id');
     }
 
-    /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
-        return $this->hasMany(\App\Models\OrderLine::class);
+        return $this->hasMany(OrderLine::class);
     }
 
-    /** @return bool */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return ! (! $this->is_visible || $this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
-    public function omnomcomPrice()
+    public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
         if (! $active) {
@@ -129,9 +125,9 @@ class Product extends Model
         return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
-    public function wallstreetPrices()
+    public function wallstreetPrices(): HasMany
     {
-        return $this->hasMany(\App\Models\WallstreetPrice::class);
+        return $this->hasMany(WallstreetPrice::class);
     }
 
     /**
