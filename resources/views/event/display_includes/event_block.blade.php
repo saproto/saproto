@@ -24,30 +24,24 @@
             @endif
 
             {{-- Participating --}}
-            @if(Auth::check() && $event->activity?->isParticipating(Auth::user()))
-                @if($event->activity->isOnBackupList(Auth::user()))
+            @if(Auth::check() && $event->activity?->myParticipationCount > 0)
+                @if($event->activity->myBackupParticipationCount > 0)
                     <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
                 @else
                     <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
                 @endif
-                @if($event->activity->isHelping(Auth::user()))
+                @if($event->activity->myHelperParticipationCount > 0)
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
                 @endif
             @endif
 
             {{-- Ticket --}}
-            @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
+            @if (Auth::check() && $event->myTicketCount>0)
                 <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
-            @endif
-
-            {{-- Helper --}}
-            @if (Auth::user()?->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
-                <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
-                   data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif
 
             {{-- Title --}}
@@ -110,10 +104,10 @@
 
             {{-- Signup Icon --}}
             <div class="d-flex justify-content-between">
-                @if($event->usersCount()>0)
+                @if($event->unique_users_count>0)
                     <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                            {{$event->usersCount()}}
+                            {{$event->unique_users_count}}
                         </span>
                 @endif
 
