@@ -13,11 +13,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
-use Proto\Models\AchievementOwnership;
-use Proto\Models\Address;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\OrderLine;
-use Proto\Models\User;
 use Session;
 use \GuzzleHttp;
 
