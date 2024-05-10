@@ -253,12 +253,15 @@ class ApiController extends Controller
 
         return $data;
     }
-    public function discordVerifyMember($userId): JsonResponse {
+
+    public function discordVerifyMember($userId): JsonResponse
+    {
         $user = User::firstWhere('discord_id', $userId);
 
-        if(!$user) {
+        if (! $user) {
             return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
-        }else if(!$user->is_member) {
+        }
+        if (! $user->is_member) {
             return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }
 
