@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\EmailList;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\EmailList;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
@@ -21,7 +21,6 @@ class EmailListController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -33,6 +32,7 @@ class EmailListController extends Controller
         ]);
 
         Session::flash('flash_message', 'Your list has been created!');
+
         return Redirect::route('email::admin');
     }
 
@@ -43,8 +43,7 @@ class EmailListController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param  int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -58,12 +57,14 @@ class EmailListController extends Controller
         $list->save();
 
         Session::flash('flash_message', 'The list has been updated!');
+
         return Redirect::route('email::admin');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
@@ -72,12 +73,13 @@ class EmailListController extends Controller
         $list->delete();
 
         Session::flash('flash_message', 'The list has been deleted!');
+
         return Redirect::route('email::admin');
     }
 
     /**
-     * @param string $type
-     * @param User $user
+     * @param  string  $type
+     * @param  User  $user
      */
     public static function autoSubscribeToLists($type, $user)
     {
@@ -91,9 +93,9 @@ class EmailListController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function toggleSubscription(Request $request, $id)
@@ -105,20 +107,24 @@ class EmailListController extends Controller
         if ($list->isSubscribed($user)) {
             if ($list->unsubscribe($user)) {
                 Session::flash('flash_message', 'You have been unsubscribed to the list '.$list->name.'.');
+
                 return Redirect::route('user::dashboard');
             }
         } else {
             if ($list->is_member_only && ! $user->is_member) {
                 Session::flash('flash_message', 'This list is only for members.');
+
                 return Redirect::route('user::dashboard');
             }
             if ($list->subscribe($user)) {
                 Session::flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
+
                 return Redirect::route('user::dashboard');
             }
         }
 
         Session::flash('flash_message', 'Something went wrong toggling your subscription for '.$list->name.'.');
+
         return Redirect::route('user::dashboard');
     }
 }

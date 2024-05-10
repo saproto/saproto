@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|Token whereCreatedAt($value)
  * @method static Builder|Token whereId($value)
  * @method static Builder|Token whereToken($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Token newModelQuery()
  * @method static Builder|Token newQuery()
  * @method static Builder|Token query()
+ *
  * @mixin Eloquent
  */
 class Token extends Model
@@ -36,11 +38,11 @@ class Token extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return Token
      */
     public function generate($user)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * Proto\Models\LeaderboardEntry.
+ * App\Models\LeaderboardEntry.
  *
  * @property int $id
  * @property int $leaderboard_id
@@ -19,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Leaderboard $leaderboard
  * @property-read User $user
+ *
  * @method static Builder|LeaderboardEntry whereCreatedAt($value)
  * @method static Builder|LeaderboardEntry whereId($value)
  * @method static Builder|LeaderboardEntry whereLeaderboardId($value)
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|LeaderboardEntry newModelQuery()
  * @method static Builder|LeaderboardEntry newQuery()
  * @method static Builder|LeaderboardEntry query()
+ *
  * @mixin Eloquent
  */
 class LeaderboardEntry extends Model
@@ -39,12 +41,12 @@ class LeaderboardEntry extends Model
     /** @return BelongsTo */
     public function leaderboard()
     {
-        return $this->belongsTo('Proto\Models\Leaderboard', 'leaderboard_id');
+        return $this->belongsTo(\App\Models\Leaderboard::class, 'leaderboard_id');
     }
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -11,12 +11,19 @@ use Illuminate\View\View;
 class SmartXpScreenController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function show(Request $request)
     {
         return view('smartxp.screen');
+    }
+
+    /**
+     * @return View
+     */
+    public function showProtopolis(Request $request)
+    {
+        return view('smartxp.protopolis_screen');
     }
 
     /** @return array */
@@ -40,7 +47,6 @@ class SmartXpScreenController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Response|JsonResponse
      */
     public function bus(Request $request)
@@ -49,7 +55,7 @@ class SmartXpScreenController extends Controller
             return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
         } catch (Exception $e) {
             return response()->json([
-                'message'=>'OV_API not available',
+                'message' => 'OV_API not available',
             ], 503);
         }
     }
@@ -83,7 +89,7 @@ class SmartXpScreenController extends Controller
                 $name_exp[0] = '';
             }
             $name = '';
-            foreach ($name_exp as $key => $val) {
+            foreach ($name_exp as $val) {
                 $name .= $val.' ';
             }
             preg_match('/Type: (.*)/', $entry->description, $type);

@@ -1,18 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\StorageEntry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Image;
-use Proto\Models\StorageEntry;
 
 class FileController extends Controller
 {
     /**
-     * @param int $id
-     * @param string $hash
+     * @param  int  $id
+     * @param  string  $hash
      * @return Response
      */
     public function get($id, $hash)
@@ -35,9 +35,8 @@ class FileController extends Controller
     }
 
     /**
-     * @param StorageEntry $entry
-     * @param int $w
-     * @param int $h
+     * @param  int  $w
+     * @param  int  $h
      * @return Image
      */
     public static function makeImage(StorageEntry $entry, $w, $h)
@@ -50,6 +49,7 @@ class FileController extends Controller
         ];
 
         ini_set('memory_limit', '512M');
+
         /* @phpstan-ignore-next-line */
         return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
@@ -68,9 +68,8 @@ class FileController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param string $hash
-     * @param Request $request
+     * @param  int  $id
+     * @param  string  $hash
      * @return Response
      */
     public function getImage($id, $hash, Request $request)
@@ -95,9 +94,9 @@ class FileController extends Controller
     }
 
     /**
-     * @param string $printer
-     * @param string $url
-     * @param int $copies
+     * @param  string  $printer
+     * @param  string  $url
+     * @param  int  $copies
      * @return string
      */
     public static function requestPrint($printer, $url, $copies = 1)

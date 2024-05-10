@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Cookie;
@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Route;
  * @property-read bool $is_visible
  * @property-read string $hash_map_id
  * @property-read string $modal_id
+ *
  * @method static Builder|Announcement whereContent($value)
  * @method static Builder|Announcement whereCreatedAt($value)
  * @method static Builder|Announcement whereDescription($value)
@@ -54,6 +55,7 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Announcement newModelQuery()
  * @method static Builder|Announcement newQuery()
  * @method static Builder|Announcement query()
+ *
  * @mixin Eloquent
  */
 class Announcement extends Model
@@ -144,7 +146,7 @@ class Announcement extends Model
     }
 
     /**
-     * @param null|User $user
+     * @param  null|User  $user
      * @return bool
      */
     public function showForUser($user = null)
@@ -182,22 +184,21 @@ class Announcement extends Model
         if ($this->show_only_active && $user != null && $user->is_member && ! $user->isActiveMember()) {
             return false;
         }
-
         // Check if not already dismissed.
         if ($this->is_dismissable && Cookie::get($this->hash_map_id)) {
             return false;
-        } elseif (
-            $user != null &&
-            $this->is_dismissable &&
-            HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() > 0
-        ) {
+        }
+
+        if ($user != null &&
+        $this->is_dismissable &&
+        HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() > 0) {
             return false;
         }
 
         return true;
     }
 
-    /** @param User|null $user */
+    /** @param  User|null  $user */
     public function dismissForUser($user = null)
     {
         if ($user) {

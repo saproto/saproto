@@ -7,9 +7,10 @@
 
         @php
             /** @var int $n */
-            $events = Proto\Models\Event::query()
+            $events = App\Models\Event::query()
                 ->where('is_featured', false)
                 ->where('end', '>=', date('U'))
+                ->where('secret', false)
                 ->orderBy('start')->with('activity')
                 ->limit($n)
                 ->get()
@@ -19,7 +20,7 @@
 
             @foreach($events as $key => $event)
 
-                @if($event->mayViewEvent(Auth::user()) && ! $event->secret && $event->isPublished())
+                @if($event->mayViewEvent(Auth::user()) && $event->isPublished())
 
                     @include('event.display_includes.event_block', ['event'=> $event])
 

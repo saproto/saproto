@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|RfidCard whereCardId($value)
  * @method static Builder|RfidCard whereCreatedAt($value)
  * @method static Builder|RfidCard whereId($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|RfidCard newModelQuery()
  * @method static Builder|RfidCard newQuery()
  * @method static Builder|RfidCard query()
+ *
  * @mixin Eloquent
  */
 class RfidCard extends Model
@@ -38,6 +40,6 @@ class RfidCard extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

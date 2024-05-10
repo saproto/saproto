@@ -159,7 +159,7 @@
         }
 
         #protube.inactive {
-            background-image: url('{{ route('api::fishcam') }}') !important;
+            background-image: url({{env("FISHCAM_URL")}}) !important;
         }
 
         #protube-title {
@@ -335,8 +335,6 @@
         document.getElementById("ticker").style.width = ((now.format('s.SSS') / 60) * 100) + "%"
     }
 
-    setInterval(updateClock, 10);
-
     function updateTimetable() {
         const timetable = document.getElementById("timetable")
 
@@ -369,16 +367,12 @@
                 } else {
                     timetable.innerHTML = '<div class="notice">No lectures today!</div>'
                 }
-                setTimeout(updateTimetable, 60000);
             })
             .catch(err => {
                 console.error(err)
                 timetable.innerHTML = '<div class="notice">Lectures could not be found...</div>'
-                setTimeout(updateTimetable, 5000);
             })
     }
-
-    updateTimetable();
 
     function updateActivities() {
         get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
@@ -399,16 +393,12 @@
                 } else {
                     document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
                 }
-                setTimeout(updateActivities, 60000)
             })
             .catch(err => {
                 console.error(err)
                 document.getElementById("activities").innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-                setTimeout(updateActivities, 5000)
             })
     }
-
-    updateActivities();
 
     function updateBuses() {
         updateBus(43110270, 43110270, 'businfo-langen');
@@ -446,9 +436,6 @@
             })
     }
 
-    updateBuses();
-    setInterval(updateBuses, 60000);
-
     function updateProtopeners() {
         const timetable = document.getElementById("protopeners-timetable")
         const protopolisFa = document.getElementById('protopolis-fa')
@@ -482,16 +469,31 @@
                 } else {
                     timetable.innerHTML = '<div class="notice">Protopolis closed today!</div>'
                 }
-                setTimeout(updateProtopeners, 60000)
             })
             .catch(err => {
                 console.error(err)
                 timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-                setTimeout(updateProtopeners, 5000)
             })
     }
 
-    updateProtopeners()
+    window.addEventListener('load', _ => {
+
+        updateTimetable();
+        updateActivities();
+        updateProtopeners();
+        updateClock();
+        updateBuses();
+        updateProtopeners();
+
+        const everySecond = 1000;
+        const everyMinute = 60 * 1000;
+        const everyFiveMinutes = 5 * 60 * 1000;
+        setInterval(updateTimetable, everyFiveMinutes);
+        setInterval(updateActivities, everyFiveMinutes);
+        setInterval(updateProtopeners, everyMinute);
+        setInterval(updateClock, everySecond);
+        setInterval(updateBuses, everyFiveMinutes);
+    })
 </script>
 
 </body>

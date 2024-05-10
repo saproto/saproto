@@ -1,31 +1,44 @@
+window.global ||= window;
 // Vendors
-global.SignaturePad = require('signature_pad')
-global.moment = require('moment/moment')
-import quagga from 'quagga'
-global.Quagga = quagga
+import SignaturePad from "signature_pad";
+
+global.SignaturePad = SignaturePad;
+import moment from "moment/moment.js";
+
+global.moment = moment;
+import quagga from 'quagga';
+
+global.Quagga = quagga;
 
 import './countdown-timer'
 import './utilities'
 import './broto'
 import './nightMode'
 // Execute theme JavaScript
-window[config.theme]?.()
+if ((new Date().getMonth() + 1) !== 12) {
+    window[config.theme]?.()
+}
 
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
 let formList = Array.from(document.getElementsByTagName("form"))
-formList.forEach(form => form.addEventListener('submit', preventSubmitBounce, { once: true }))
+formList.forEach(form => form.addEventListener('submit', preventSubmitBounce, {once: true}))
 
 // Get online Discord users
 const discordOnlineCount = document.getElementById("discord__online")
 if (discordOnlineCount) {
     get("https://discordapp.com/api/guilds/" + config.discord_server_id + "/widget.json")
-        .then(data => { discordOnlineCount.innerHTML = data.presence_count })
-        .catch(_ => { discordOnlineCount.innerHTML = "..." })
+        .then(data => {
+            discordOnlineCount.innerHTML = data.presence_count
+        })
+        .catch(_ => {
+            discordOnlineCount.innerHTML = "..."
+        })
 }
 
 // Enables tooltips elements
-import { Tooltip } from 'bootstrap'
+import {Tooltip} from 'bootstrap'
+
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 window.tooltips = {}
 if (tooltipTriggerList.length) {
@@ -35,12 +48,14 @@ if (tooltipTriggerList.length) {
 }
 
 // Enable popover elements
-import { Popover } from 'bootstrap'
+import {Popover} from 'bootstrap'
+
 const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
 if (popoverTriggerList.length) popoverTriggerList.forEach(el => new Popover(el))
 
 // Enable modal elements
-import { Modal } from 'bootstrap'
+import {Modal} from 'bootstrap'
+
 let modalList = Array.from(document.getElementsByClassName('modal'))
 window.modals = {}
 if (modalList.length) {
@@ -63,11 +78,12 @@ if (customFileInputList.length) {
 }
 
 // Enable Swiper with default settings
-import Swiper, { Autoplay, Navigation } from 'swiper'
+import Swiper, {Autoplay, Navigation} from 'swiper'
 import 'swiper/css'
 import 'swiper/css/autoplay'
 import 'swiper/css/navigation'
-if(document.querySelectorAll('.swiper').length) {
+
+if (document.querySelectorAll('.swiper').length) {
     window.swiper = new Swiper('.swiper', {
         modules: [Autoplay, Navigation],
         loop: config.company_count > 2,
@@ -90,6 +106,7 @@ if(document.querySelectorAll('.swiper').length) {
 // Enable EasyMDE markdown fields
 import EasyMDE from 'easymde'
 import 'easymde/dist/easymde.min.css'
+
 const markdownFieldList = Array.from(document.getElementsByClassName('markdownfield'))
 if (markdownFieldList.length) {
     window.easyMDEFields = {}
@@ -106,6 +123,7 @@ if (markdownFieldList.length) {
 
 // Enable FontAwesome icon pickers
 import Iconpicker from 'codethereal-iconpicker'
+
 const iconPickerList = Array.from(document.getElementsByClassName('iconpicker-wrapper'))
 window.iconPickers = {}
 if (iconPickerList.length) {
@@ -122,22 +140,24 @@ if (iconPickerList.length) {
               }
             }`
     })
-    .then(data => {
-        const icons = data.data.release.icons.reduce((collection, icon) => {
-            const styles = icon.membership.free
-            for (const key in styles) { collection.push(`fa${styles[key].charAt(0)} fa-${icon.id}`) }
-            return collection
-        }, [])
-        iconPickerList.forEach(el => {
-            const iconpicker = el.querySelector('.iconpicker')
-            window.iconPickers[el.id] = new Iconpicker(iconpicker, {
-                icons: icons,
-                defaultValue: iconpicker.value,
-                showSelectedIn: el.querySelector('.selected-icon'),
+        .then(data => {
+            const icons = data.data.release.icons.reduce((collection, icon) => {
+                const styles = icon.membership.free
+                for (const key in styles) {
+                    collection.push(`fa${styles[key].charAt(0)} fa-${icon.id}`)
+                }
+                return collection
+            }, [])
+            iconPickerList.forEach(el => {
+                const iconpicker = el.querySelector('.iconpicker')
+                window.iconPickers[el.id] = new Iconpicker(iconpicker, {
+                    icons: icons,
+                    defaultValue: iconpicker.value,
+                    showSelectedIn: el.querySelector('.selected-icon'),
+                })
             })
-        })
-        console.log(`Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`)
-    }).catch(err => {
+            console.log(`Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`)
+        }).catch(err => {
         console.log('Error retrieving icons for icon pickers: ', err)
     })
 }
@@ -167,6 +187,7 @@ collapseList.map(el => {
 
 // Enable search autocomplete fields
 import SearchField from './search-field'
+
 const userSearchList = Array.from(document.querySelectorAll('.user-search'))
 userSearchList.forEach(el => new SearchField(el, config.routes.api_search_user, {
     optionTemplate: (el, item) => {
@@ -214,21 +235,55 @@ achievementSearchList.forEach(el => new SearchField(el, config.routes.api_search
 }))
 
 // Enable countdown timers
-global.timerList=[]
+global.timerList = []
 import CountdownTimer from "./countdown-timer"
+
 const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
-countdownList.forEach((el)=>{timerList.push(new CountdownTimer(el))})
+countdownList.forEach((el) => {
+    timerList.push(new CountdownTimer(el))
+})
 
 // Shift select
 import shiftSelect from "./shift-select";
-document.querySelectorAll('.shift-select').forEach(el => el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')): null)
+
+document.querySelectorAll('.shift-select').forEach(el => el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')) : null)
+
+//Lazy load background images 
+if ('IntersectionObserver' in window) {
+    document.addEventListener("DOMContentLoaded", function () {
+        function handleIntersection(entries) {
+            entries.map((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.backgroundPosition = "center";
+                    entry.target.style.backgroundRepeat = "no-repeat";
+                    entry.target.style.backgroundSize = "cover";
+                    entry.target.style.backgroundImage = "url('" + entry.target.dataset.bgimage + "')";
+                    observer.unobserve(entry.target);
+                }
+            });
+        }
+
+        const headers = document.querySelectorAll('.bg-img');
+        const observer = new IntersectionObserver(
+            handleIntersection,
+            {rootMargin: "100px"}
+        );
+        headers.forEach(header => observer.observe(header));
+    });
+} else {
+    // No interaction support? Load all background images automatically
+    const headers = document.querySelectorAll('.bg-img');
+    headers.forEach(header => {
+        header.style.backgroundImage = "url('" + header.dataset.bgimage + "')";
+    });
+}
 
 // Matomo Analytics
-const _paq = _paq || [];
+const _paq = [];
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (_ => {
-    let u = '//'+config.analytics_url+'/';
+    let u = '//' + config.analytics_url + '/';
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', '1']);
     let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];

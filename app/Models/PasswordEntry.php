@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use DateTime;
@@ -24,6 +24,7 @@ use Spatie\Permission\Models\Permission;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Permission|null $permission
+ *
  * @method static Builder|PasswordEntry whereCreatedAt($value)
  * @method static Builder|PasswordEntry whereDescription($value)
  * @method static Builder|PasswordEntry whereId($value)
@@ -36,6 +37,7 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder|PasswordEntry newModelQuery()
  * @method static Builder|PasswordEntry newQuery()
  * @method static Builder|PasswordEntry query()
+ *
  * @mixin Eloquent
  */
 class PasswordEntry extends Model
@@ -47,18 +49,20 @@ class PasswordEntry extends Model
     /** @return BelongsTo */
     public function permission()
     {
-        return $this->belongsTo('Spatie\Permission\Models\Permission', 'permission_id');
+        return $this->belongsTo(\Spatie\Permission\Models\Permission::class, 'permission_id');
     }
 
     /** @return bool */
     public function canAccess(User $user)
     {
         $permission = $this->permission;
+
         return $permission && $user->can($permission->name);
     }
 
     /**
      * @return float|int
+     *
      * @throws Exception
      */
     public function age()

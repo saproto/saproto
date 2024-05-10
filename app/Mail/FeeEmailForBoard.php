@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,16 +11,13 @@ class FeeEmailForBoard extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $charged_fees;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($charged_fees)
+    public function __construct(public $charged_fees)
     {
-        $this->charged_fees = $charged_fees;
     }
 
     /**

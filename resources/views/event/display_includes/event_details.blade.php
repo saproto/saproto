@@ -49,7 +49,7 @@
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
             </span>
         @endif
-        
+
     </div>
 
     <ul class="list-group list-group-flush">
@@ -57,7 +57,9 @@
         @if($event->committee)
             <li class="list-group-item">
                 <i class="fas fa-fw fa-users" aria-hidden="true"></i>
-                Organised by the @if($event->committee->is_society) society @endif
+                Organised by the @if($event->committee->is_society)
+                    society
+                @endif
                 <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">{{ $event->committee->name }}</a>
             </li>
         @endif
@@ -68,7 +70,15 @@
         </li>
 
         <li class="list-group-item">
-            <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> {{ $event->location }}
+            <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i>
+            {{ $event->location }}
+            @if($event->maps_location)
+                <a  class="btn btn-sm btn-secondary ms-3" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->maps_location) }}">
+                    <i class="fas fa-fw fa-map-marker-alt text-danger" aria-hidden="true"></i>
+                    View on Maps
+                </a>
+            @endif
+
         </li>
 
         @if ($event->involves_food == true)
@@ -86,17 +96,18 @@
         @if (!Auth::check())
             <a href="{{route('becomeamember')}}" class="list-group-item bg-info text-white text-center">
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                    To join this activity you need to be a member.
-                    <br> Become a a member by clicking on this message or log in.
+                To join this activity you need to be a member.
+                <br> Become a a member by clicking on this message or log in.
             </a>
         @endif
 
-            @if (!Auth::check() && !isset($event->activity))
-                <a href="{{route('event::login', ['id' => $event->getPublicId()])}}" class="list-group-item bg-info text-white text-center">
-                    <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                    <i>Note: this event has a sign up! Make sure to put yourself on the list when logged in!</i>
-                </a>
-            @endif
+        @if (!Auth::check() && !isset($event->activity))
+            <a href="{{route('event::login', ['id' => $event->getPublicId()])}}"
+               class="list-group-item bg-info text-white text-center">
+                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                <i>Note: this event has a sign up! Make sure to put yourself on the list when logged in!</i>
+            </a>
+        @endif
 
     </ul>
 

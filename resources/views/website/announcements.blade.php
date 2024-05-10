@@ -1,4 +1,4 @@
-@foreach(Proto\Models\Announcement::all() as $announcement)
+@foreach(App\Models\Announcement::all() as $announcement)
 
     @if($announcement->showForUser(Auth::user()))
 
@@ -25,7 +25,9 @@
             @push('javascript')
 
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-                    window.onload = modals['{{ $announcement->modal_id}}'].show()
+                    window.addEventListener('load', _ => {
+                        modals['{{ $announcement->modal_id}}'].show()
+                    });
                 </script>
 
             @endpush

@@ -3,7 +3,11 @@
 @section('greeting')
 
     <strong>Hi {{ Auth::user()->calling_name }},</strong><br>
-    @if($message != null) {!! $message->message !!} @else Nice to see you back! @endif
+    @if($message != null)
+        {!! $message->message !!}
+    @else
+        Nice to see you back!
+    @endif
 
 @endsection
 
@@ -65,22 +69,34 @@
 
         @endif
 
-        @if(Proto\Models\Newsletter::showTextOnHomepage())
-
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">
-                    <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
-                </div>
-                <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
-                    {!! Markdown::convert(Proto\Models\Newsletter::text()) !!}
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue
-                        reading</a>
-                </div>
+        <div class="card mb-3">
+            <div class="card-header bg-dark text-white">
+                <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
             </div>
 
-        @endif
+            @if($weekly)
+                <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
+                    @if($weekly->featuredImage)
+                        <img src="{{ $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500,300) : null }}"
+                             class="img-fluid img-thumbnail mb-3 w-50 mx-auto d-block" alt="Featured image">
+                    @endif
+                    {!! Markdown::convert($weekly->content) !!}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route("news::showWeeklyPreview", ['id'=>$weekly->id]) }}"
+                       class="btn btn-info btn-block my-2">Continue
+                        reading</a>
+                </div>
+
+            @else
+                <p class="card-text text-left ms-4 mt-4 mb-4">
+                    Weekly update is coming soon...
+                </p>
+
+            @endif
+
+        </div>
+
 
         @if(isset($videos) && count($videos) > 0)
 
@@ -112,6 +128,8 @@
 
     @include('website.home.cards.recentalbums', ['n' => 4])
 
+    @parent
+
     <div class="card mb-3">
         <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
         <div class="card-body">
@@ -119,19 +137,22 @@
             @if(count($newsitems) > 0)
 
                 @foreach($newsitems as $index => $newsitem)
-
-                    @include('website.home.cards.card-bg-image', [
-                    'url' => $newsitem->url,
-                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->thumbnail() : null,
-                    'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
-                    'leftborder' => 'info'
-                    ])
+                    <div style="max-height: 300px">
+                        @include('website.home.cards.card-bg-image', [
+                                    'height' => $newsitem->is_weekly ? 80 : 120,
+                                    'url' => $newsitem->url,
+                                    'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(600,300) : ($newsitem->is_weekly?url('images/weekly-cover.png'):null),
+                                    'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
+                                    'photo_pop' => $newsitem->featuredImage,
+                                    'leftborder' => 'info'
+                        ])
+                    </div>
 
                 @endforeach
 
             @else
 
-                <p class="card-text text-center mt-2 mb-4">
+                <p class="card-text text-left ms-1 mt-3 mb-4">
                     No recent news. It's
                     <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>. 😴
                 </p>
@@ -142,5 +163,4 @@
         </div>
     </div>
 
-    @parent
 @endsection

@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Providers;
+namespace App\Providers;
 
+use App\Models\MenuItem;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use Proto\Models\MenuItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();
-                if(count($newAchievements) > 0) {
+                if (count($newAchievements) > 0) {
                     $newAchievementsQuery->update(['alerted' => true]);
                     $view->with('newAchievements', $newAchievements);
                 }

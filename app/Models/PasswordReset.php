@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,12 +14,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $token
  * @property int $valid_to
  * @property-read User $user
+ *
  * @method static Builder|PasswordReset whereEmail($value)
  * @method static Builder|PasswordReset whereToken($value)
  * @method static Builder|PasswordReset whereValidTo($value)
  * @method static Builder|PasswordReset newModelQuery()
  * @method static Builder|PasswordReset newQuery()
  * @method static Builder|PasswordReset query()
+ *
  * @mixin Eloquent
  */
 class PasswordReset extends Model
@@ -33,6 +35,6 @@ class PasswordReset extends Model
     /** @return HasOne */
     public function user()
     {
-        return $this->hasOne('Proto\Models\User', 'email', 'email');
+        return $this->hasOne(\App\Models\User::class, 'email', 'email');
     }
 }

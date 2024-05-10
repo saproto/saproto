@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\SpotifyController;
+use App\Models\PlayedVideo;
 use DB;
 use Illuminate\Console\Command;
-use Proto\Http\Controllers\SpotifyController;
-use Proto\Models\PlayedVideo;
 
 class SpotifyUpdate extends Command
 {
@@ -48,6 +48,7 @@ class SpotifyUpdate extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
+
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -63,6 +64,7 @@ class SpotifyUpdate extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
+
                 return;
             }
         }
@@ -101,13 +103,14 @@ class SpotifyUpdate extends Command
 
         $this->info("Matching to Spotify music.\n---");
 
-        foreach ($videos_to_search as $t => $video) {
+        foreach ($videos_to_search as $video) {
             if (! $video->spotify_id) {
                 $sameVideo = PlayedVideo::where('video_id', $video->video_id)->whereNotNull('spotify_id')->first();
 
                 if ($sameVideo) {
                     DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => $sameVideo->spotify_id, 'spotify_name' => $sameVideo->spotify_name]);
                     $this->info("Matched { $video->title } due to earlier occurrence.");
+
                     continue;
                 }
 

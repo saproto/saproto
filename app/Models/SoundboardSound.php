@@ -1,11 +1,14 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * UNUSED, when implemented in the new protube we want to preserve this data so for now left unused*/
 
 /**
  * Soundboard Sound Model.
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool $hidden
  * @property string $name
  * @property-read StorageEntry $file
+ *
  * @method static Builder|SoundboardSound whereFileId($value)
  * @method static Builder|SoundboardSound whereHidden($value)
  * @method static Builder|SoundboardSound whereId($value)
@@ -22,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|SoundboardSound newModelQuery()
  * @method static Builder|SoundboardSound newQuery()
  * @method static Builder|SoundboardSound query()
+ *
  * @mixin Eloquent
  */
 class SoundboardSound extends Model
@@ -35,6 +40,6 @@ class SoundboardSound extends Model
     /** @return BelongsTo */
     public function file()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'file_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'file_id');
     }
 }

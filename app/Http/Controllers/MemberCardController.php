@@ -1,16 +1,15 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
-use Proto\Models\User;
 
 class MemberCardController extends Controller
 {
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return string
      */
     public function download(Request $request, $id)
@@ -29,7 +28,6 @@ class MemberCardController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return string
      */
     public function startPrint(Request $request)

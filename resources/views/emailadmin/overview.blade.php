@@ -38,21 +38,21 @@
                         <tr>
                             <td>All members</td>
                             <td></td>
-                            <td>{{ Proto\Models\Member::countValidMembers() }}</td>
+                            <td>{{ App\Models\Member::countValidMembers() }}</td>
                             <td></td>
                         </tr>
 
                         <tr>
                             <td>All pending members</td>
                             <td></td>
-                            <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
+                            <td>{{ App\Models\Member::countPendingMembers() }}</td>
                             <td></td>
                         </tr>
 
                         <tr>
                             <td>All active members</td>
                             <td></td>
-                            <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
+                            <td>{{ App\Models\Member::countActiveMembers() }}</td>
                             <td></td>
                         </tr>
 
@@ -62,7 +62,7 @@
 
                                 <td>{{ $list->name }}</td>
                                 <td>{{ ($list->is_member_only ? 'Member only' : 'Public') }}</td>
-                                <td>{{ $list->users->count() }}</td>
+                                <td>{{ $list->users_count }}</td>
                                 <td>
                                     <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
                                         <i class="fas fa-edit me-2"></i>
@@ -85,6 +85,13 @@
                 </div>
 
             </div>
+
+            @include('emailadmin.admin_includes.filter', [
+                'searchTerm' => $searchTerm ?? null,
+                'description' => $description ?? null,
+                'subject' => $subject ?? null,
+                'body' => $body ?? null,
+            ])
 
         </div>
 
@@ -191,7 +198,7 @@
                 </table>
 
                 <div class="card-footer pb-0">
-                    {!! $emails->links() !!}
+                    {!! $emails->withQueryString()->links() !!}
                 </div>
 
             </div>

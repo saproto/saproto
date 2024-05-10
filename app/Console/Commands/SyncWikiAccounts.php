@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\Committee;
+use App\Models\User;
 use Illuminate\Console\Command;
-use Proto\Models\Committee;
-use Proto\Models\User;
 
 class SyncWikiAccounts extends Command
 {
@@ -70,6 +70,7 @@ class SyncWikiAccounts extends Command
         foreach ($committees as $committee) {
             $groups[] = $this->convertCommitteeNameToGroup($committee->name);
         }
+
         return $groups;
     }
 
@@ -83,6 +84,7 @@ class SyncWikiAccounts extends Command
         if (in_array($rootCommittee, $groups)) {
             $groups[] = 'admin';
         }
+
         return implode(',', $groups);
     }
 }

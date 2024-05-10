@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -24,6 +24,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property-read Committee $committee
  * @property-read User $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|CommitteeMembership onlyTrashed()
@@ -40,12 +41,13 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|CommitteeMembership newModelQuery()
  * @method static Builder|CommitteeMembership newQuery()
  * @method static Builder|CommitteeMembership query()
+ *
  * @mixin Eloquent
  */
 class CommitteeMembership extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'committees_users';
 
@@ -60,12 +62,12 @@ class CommitteeMembership extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('Proto\Models\Committee');
+        return $this->belongsTo(\App\Models\Committee::class);
     }
 }

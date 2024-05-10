@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class UserMailChange extends Mailable
 {
@@ -13,19 +13,15 @@ class UserMailChange extends Mailable
     use SerializesModels;
 
     public $user;
-    public $changer;
-    public $email;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $changer, $email)
+    public function __construct(User $user, public $changer, public $email)
     {
         $this->user = $user;
-        $this->changer = $changer;
-        $this->email = $email;
     }
 
     /**

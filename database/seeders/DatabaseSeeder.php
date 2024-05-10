@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use App;
+use App\Console\ConsoleOutput;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
-use Proto\Console\ConsoleOutput;
-use Proto\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
 
         $output->task('setting roles and permissions', fn () => Artisan::call('proto:syncroles'));
 
-        $adminPassword = str_random();
+        $adminPassword = 'proto';
 
         $importSeeder = new ImportLiveDataSeeder();
         $importSeeder->run($adminPassword, $output);

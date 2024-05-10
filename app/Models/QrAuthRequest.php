@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $approved_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder|QrAuthRequest whereApprovedAt($value)
  * @method static Builder|QrAuthRequest whereAuthToken($value)
  * @method static Builder|QrAuthRequest whereCreatedAt($value)
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|QrAuthRequest newModelQuery()
  * @method static Builder|QrAuthRequest newQuery()
  * @method static Builder|QrAuthRequest query()
+ *
  * @mixin Eloquent
  */
 class QrAuthRequest extends Model
@@ -46,6 +48,7 @@ class QrAuthRequest extends Model
 
     /**
      * @return false|User
+     *
      * @throws Exception
      */
     public function authUser()
@@ -54,8 +57,10 @@ class QrAuthRequest extends Model
             /** @var User $user */
             $user = User::findOrFail($this->user_id);
             $this->delete();
+
             return $user;
         }
+
         return false;
     }
 }

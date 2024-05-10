@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Alias;
+use App\Models\User;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Alias;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
@@ -24,10 +24,11 @@ class AliasController extends Controller
             foreach ($aliases as $alias) {
                 $data[$alias->alias][] = $alias;
             }
+
             return view('aliases.index', ['aliases' => $data]);
-        } else {
-            return Redirect::route('alias::add');
         }
+
+        return Redirect::route('alias::add');
     }
 
     /** @return View */
@@ -37,7 +38,6 @@ class AliasController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -63,11 +63,11 @@ class AliasController extends Controller
         } else {
             Session::flash('flash_message', 'No action performed.');
         }
+
         return Redirect::route('alias::index');
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function update(Request $request)
@@ -84,13 +84,14 @@ class AliasController extends Controller
         } else {
             Session::flash('flash_message', 'No such alias ('.$from.').');
         }
+
         return Redirect::back();
     }
 
     /**
-     * @param Request $request
-     * @param mixed $id_or_alias
+     * @param  mixed  $id_or_alias
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id_or_alias)
@@ -100,6 +101,7 @@ class AliasController extends Controller
         if ($alias) {
             $alias->delete();
             Session::flash('flash_message', 'Entry deleted.');
+
             return Redirect::back();
         }
 
@@ -109,6 +111,7 @@ class AliasController extends Controller
         } else {
             Session::flash('flash_message', 'No such alias ('.$id_or_alias.').');
         }
+
         return Redirect::back();
     }
 }

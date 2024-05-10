@@ -1,10 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\SpotifyController;
 use DB;
 use Illuminate\Console\Command;
-use Proto\Http\Controllers\SpotifyController;
+use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifySync extends Command
 {
@@ -21,6 +22,8 @@ class SpotifySync extends Command
      * @var string
      */
     protected $description = 'Sync Spotify playlist etc.';
+
+    private int $spotifyUpdateLimit = 99;
 
     /**
      * Create a new command instance.
@@ -47,9 +50,10 @@ class SpotifySync extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
+
                 return;
             }
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
+        } catch (SpotifyWebAPIException $e) {
             if ($e->getMessage() == 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
@@ -62,56 +66,71 @@ class SpotifySync extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
+
                 return;
             }
         }
 
-        $this->info('Constructing ProTube hitlist.');
-
-        $videos = [];
+        $this->info('Constructing ProTube hitlists.');
 
         // All-time
-        $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
+        $alltime = DB::table('playedvideos')
+            ->selectRaw('spotify_id, count(*) as count')
+            ->whereNotNull('spotify_id')
+            ->where('spotify_id', '!=', '')
+            ->groupBy('video_title')
+            ->orderBy('count', 'desc')
+            ->limit($this->spotifyUpdateLimit)
+            ->pluck('spotify_id')
+            ->toArray();
+
+        $this->updatePlaylist($spotify, config('app-proto.spotify-alltime-playlist'), $alltime);
+
+        // Last year
+        $pastYear = DB::table('playedvideos')
+            ->selectRaw('spotify_id, count(*) as count')
+            ->whereNotNull('spotify_id')
+            ->where('spotify_id', '!=', '')
+            ->where('created_at', '>', date('Y-m-d', strtotime('-1 year')))
+            ->groupBy('video_title')
+            ->orderBy('count', 'desc')
+            ->limit($this->spotifyUpdateLimit)
+            ->pluck('spotify_id')
+            ->toArray();
+
+        $this->updatePlaylist($spotify, config('app-proto.spotify-pastyears-playlist'), $pastYear);
 
         // Last month
-        $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
+        $recent = DB::table('playedvideos')
+            ->selectRaw('spotify_id, count(*) as count')
+            ->whereNotNull('spotify_id')
+            ->where('spotify_id', '!=', '')
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
+            ->groupBy('video_title')
+            ->orderBy('count', 'desc')
+            ->limit($this->spotifyUpdateLimit)
+            ->pluck('spotify_id')
+            ->toArray();
 
-        // Last week
-        $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
-            ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
-
-        $uris = [];
-
-        foreach ($videos as $video) {
-            $uris[] = $video->spotify_id;
-        }
-
-        $uris = array_values(array_unique($uris));
-
-        $this->info('---');
-
-        $this->info('Updating playlist with '.count($uris).' songs.');
-
-        $spotify->replacePlaylistTracks(config('app-proto.spotify-playlist'), []);
-
-        $slice = 0;
-        $batch_size = 75;
-        while ($slice < count($uris)) {
-            $add = array_values(array_slice($uris, $slice, $batch_size));
-            $slice += $batch_size;
-            $spotify->addPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
-        }
+        $this->updatePlaylist($spotify, config('app-proto.spotify-recent-playlist'), $recent);
 
         $this->info('Done!');
+    }
+
+    public function updatePlaylist($spotify, $playlistId, $spotifyUris)
+    {
+        $this->info('---');
+
+        $this->info('Updating playlist '.$playlistId.' with '.count($spotifyUris).' songs.');
+
+        try {
+            $spotify->replacePlaylistTracks($playlistId, $spotifyUris);
+        } catch (SpotifyWebAPIException $e) {
+            $this->error('Error updating playlist '.$playlistId.': '.$e->getMessage());
+
+            return;
+        }
+
+        $this->info('Playlist '.$playlistId.' updated.');
     }
 }

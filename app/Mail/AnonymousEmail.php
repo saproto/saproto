@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\Committee;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\Committee;
 
 class AnonymousEmail extends Mailable
 {
@@ -14,19 +14,14 @@ class AnonymousEmail extends Mailable
 
     public $committee;
 
-    public $message_content;
-    public $hash;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Committee $committee, $message_content, $message_hash)
+    public function __construct(Committee $committee, public $message_content, public $hash)
     {
         $this->committee = $committee;
-        $this->message_content = $message_content;
-        $this->hash = $message_hash;
     }
 
     /**

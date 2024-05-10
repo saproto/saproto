@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read Activity|null $activity
  * @property-read Committee|null $committee
  * @property-read Collection|User[]|null $users
+ *
  * @method static Builder|HelpingCommittee whereActivityId($value)
  * @method static Builder|HelpingCommittee whereAmount($value)
  * @method static Builder|HelpingCommittee whereCommitteeId($value)
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|HelpingCommittee newModelQuery()
  * @method static Builder|HelpingCommittee newQuery()
  * @method static Builder|HelpingCommittee query()
+ *
  * @mixin Eloquent
  */
 class HelpingCommittee extends Validatable
@@ -49,20 +51,20 @@ class HelpingCommittee extends Validatable
     /** @return BelongsTo */
     public function activity()
     {
-        return $this->belongsTo('Proto\Models\Activity');
+        return $this->belongsTo(\App\Models\Activity::class);
     }
 
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('Proto\Models\Committee');
+        return $this->belongsTo(\App\Models\Committee::class);
     }
 
     /** @return BelongsToMany */
     public function users()
     {
         return $this
-            ->belongsToMany('Proto\Models\User', 'activities_users', 'committees_activities_id')
+            ->belongsToMany(\App\Models\User::class, 'activities_users', 'committees_activities_id')
             ->whereNull('activities_users.deleted_at')
             ->withTrashed();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Committee $committee
  * @property-read Collection|LeaderboardEntry[] $entries
+ *
  * @method static Builder|Leaderboard whereCommitteeId($value)
  * @method static Builder|Leaderboard whereCreatedAt($value)
  * @method static Builder|Leaderboard whereDescription($value)
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Leaderboard newModelQuery()
  * @method static Builder|Leaderboard newQuery()
  * @method static Builder|Leaderboard query()
+ *
  * @mixin Eloquent
  */
 class Leaderboard extends Model
@@ -47,12 +49,22 @@ class Leaderboard extends Model
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo('Proto\Models\Committee', 'committee_id');
+        return $this->belongsTo(\App\Models\Committee::class, 'committee_id');
     }
 
     /** @return HasMany */
     public function entries()
     {
-        return $this->hasMany('Proto\Models\LeaderboardEntry');
+        return $this->hasMany(\App\Models\LeaderboardEntry::class);
+    }
+
+    public static function isAdminAny(User $user): bool
+    {
+        return Leaderboard::whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
+    }
+
+    public function canEdit(User $user): bool
+    {
+        return $user->can('board') || $this->committee->users->contains($user);
     }
 }

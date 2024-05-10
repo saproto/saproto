@@ -36,6 +36,16 @@
                                    placeholder="SmartXp" value="{{ old('location',$event->location ?? '') }}" required>
                         </div>
 
+                        <!-- Maps Location -->
+                        <div class="col-md-6 mb-3">
+                            <label for="maps_">Maps location:</label>
+                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top"
+                               data-html="true"
+                               title="Fill in the Google Maps name or coordinates to add a Google Maps link."></i>
+                            <input type="text" class="form-control" id="maps_location" name="maps_location"
+                                   placeholder="52.239198, 6.857367" value="{{ old('location',$event->maps_location ?? '') }}">
+                        </div>
+
                         <!-- Start -->
                         <div class="col-md-6 mb-3">
                             @include('components.forms.datetimepicker',[
@@ -96,7 +106,7 @@
                         </div>
 
                         <!-- Category -->
-                        @php($categories = Proto\Models\EventCategory::all())
+                        @php($categories = App\Models\EventCategory::all())
                         @if(count($categories) > 0)
                             <div class="col-md-6 mb-3">
 

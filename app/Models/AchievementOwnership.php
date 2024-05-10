@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read Achievement $achievement
  * @property-read User $user
+ *
  * @method static Builder|AchievementOwnership whereAchievementId($value)
  * @method static Builder|AchievementOwnership whereCreatedAt($value)
  * @method static Builder|AchievementOwnership whereId($value)
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|AchievementOwnership newModelQuery()
  * @method static Builder|AchievementOwnership newQuery()
  * @method static Builder|AchievementOwnership query()
+ *
  * @mixin Eloquent
  */
 class AchievementOwnership extends Model
@@ -46,15 +48,13 @@ class AchievementOwnership extends Model
         'achievement_id' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 
-    /** @return BelongsTo */
-    public function achievement()
+    public function achievement(): BelongsTo
     {
-        return $this->belongsTo('Proto\Models\Achievement');
+        return $this->belongsTo(\App\Models\Achievement::class);
     }
 }

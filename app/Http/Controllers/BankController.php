@@ -1,21 +1,20 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Bank;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Bank;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
 class BankController extends Controller
 {
     /**
-     * @param Request $request
      * @return RedirectResponse|View
      */
     public function add(Request $request)
@@ -34,8 +33,8 @@ class BankController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function store(Request $request)
@@ -45,6 +44,7 @@ class BankController extends Controller
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
+
             return Redirect::back();
         }
 
@@ -80,8 +80,8 @@ class BankController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function update(Request $request)
@@ -95,6 +95,7 @@ class BankController extends Controller
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
+
             return Redirect::back();
         }
 
@@ -109,11 +110,13 @@ class BankController extends Controller
         $bank->save();
 
         Session::flash('flash_message', 'New withdrawal authorization added.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy()
@@ -122,24 +125,27 @@ class BankController extends Controller
 
         if ($user->bank == null) {
             Session::flash('flash_message', "You don't have a bank authorization to revoke.");
+
             return Redirect::route('user::dashboard');
         }
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
+
             return Redirect::back();
         }
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
+
             return Redirect::back();
         }
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
      * @return false|string
      */
     public function verifyIban(Request $request)
@@ -148,8 +154,8 @@ class BankController extends Controller
     }
 
     /**
-     * @param string $iban
-     * @param string|null $bic
+     * @param  string  $iban
+     * @param  string|null  $bic
      * @return object
      */
     public static function doVerifyIban($iban, $bic = null)
@@ -184,14 +190,14 @@ class BankController extends Controller
                 $response->bic = self::getNlBicFromIban($iban);
             }
 
-            if ($response->bic != '' && self::verifyBic($response->bic)) {
+            if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Your BIC is not valid.';
 
                 return $response;
             }
         } catch (Exception $e) {
-            if ($response->bic != '' && self::verifyBic($response->bic)) {
+            if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Something went wrong retrieving your BIC.';
 
@@ -203,16 +209,20 @@ class BankController extends Controller
     }
 
     /**
-     * @param string $bic
+     * @param  string  $bic
      * @return bool
      */
-    public static function verifyBic($bic)
+    public static function verifyBicIsValid($bic)
     {
-        return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) !== 1;
+        if (($bic == '')) {
+            return false;
+        }
+
+        return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) === 1;
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return string
      */
     public static function generateAuthorizationId($user)
@@ -221,25 +231,22 @@ class BankController extends Controller
     }
 
     /**
-     * @param string $iban
+     * @param  string  $iban
      * @return string|null
      */
     private static function getNlBicFromIban($iban)
     {
         $data = [ // Data from: https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx
-            'AABN' => 'AABNNL2A',
             'ABNA' => 'ABNANL2A',
-            'FTSB' => 'ABNANL2A',
             'ABNC' => 'ABNCNL2A',
             'ADYB' => 'ADYBNL2A',
             'AEGO' => 'AEGONL2U',
+            'AINH' => 'AINHNL22',
             'ANDL' => 'ANDLNL2A',
             'ARBN' => 'ARBNNL22',
             'ARSN' => 'ARSNNL21',
             'ASNB' => 'ASNBNL21',
-            'ATBA' => 'ATBANL2A',
             'BARC' => 'BARCNL22',
-            'BCDM' => 'BCDMNL22',
             'BCIT' => 'BCITNL2A',
             'BICK' => 'BICKNL2A',
             'BINK' => 'BINKNL21',
@@ -247,7 +254,6 @@ class BankController extends Controller
             'BKCH' => 'BKCHNL2R',
             'BKMG' => 'BKMGNL2A',
             'BLGW' => 'BLGWNL21',
-            'BMEU' => 'BMEUNL21',
             'BNDA' => 'BNDANL2A',
             'BNGH' => 'BNGHNL2G',
             'BNPA' => 'BNPANL2A',
@@ -255,6 +261,7 @@ class BankController extends Controller
             'BOFS' => 'BOFSNL21002',
             'BOTK' => 'BOTKNL2X',
             'BUNQ' => 'BUNQNL2A',
+            'CCBV' => 'CCBVNL2A',
             'CHAS' => 'CHASNL2X',
             'CITC' => 'CITCNL2A',
             'CITI' => 'CITINL2X',
@@ -262,48 +269,58 @@ class BankController extends Controller
             'DELE' => 'DELENL22',
             'DEUT' => 'DEUTNL2A',
             'DHBN' => 'DHBNNL2R',
-            'DLBK' => 'DLBKNL2A',
             'DNIB' => 'DNIBNL2G',
-            'EBUR' => 'EBURNL21',
             'EBPB' => 'EBPBNL22',
+            'EBUR' => 'EBURNL21',
             'FBHL' => 'FBHLNL2A',
             'FLOR' => 'FLORNL2A',
+            'FNOM' => 'FNOMNL22',
             'FRNX' => 'FRNXNL2A',
+            'FROM' => 'FROMNL2A',
             'FVLB' => 'FVLBNL22',
+            'FXBB' => 'FXBBNL22',
             'GILL' => 'GILLNL2A',
             'HAND' => 'HANDNL2A',
-            'HHBA' => 'HHBANL22',
+            'HIFX' => 'HIFXNL2A',
+            'HUSH' => 'HUSHNL2A',
             'HSBC' => 'HSBCNL2A',
             'ICBC' => 'ICBCNL2A',
             'ICBK' => 'ICBKNL2A',
+            'ICEP' => 'ICEPNL21',
             'INGB' => 'INGBNL2A',
             'ISAE' => 'ISAENL2A',
             'ISBK' => 'ISBKNL2A',
             'KABA' => 'KABANL2A',
-            'KASA' => 'KASANL2A',
             'KNAB' => 'KNABNL2H',
             'KOEX' => 'KOEXNL2A',
             'KRED' => 'KREDNL2X',
-            'LOCY' => 'LOCYNL2A',
             'LOYD' => 'LOYDNL2A',
             'LPLN' => 'LPLNNL2F',
             'MHCB' => 'MHCBNL2A',
-            'MOYO' => 'MOYONL21',
+            'MODR' => 'MODRNL22',
             'NNBA' => 'NNBANL2G',
             'NWAB' => 'NWABNL2G',
+            'PANX' => 'PANXNL22',
             'PCBC' => 'PCBCNL2A',
+            'PNOW' => 'PNOWNL2A',
             'RABO' => 'RABONL2U',
             'RBRB' => 'RBRBNL21',
+            'REVO' => 'REVONL22',
+            'SBOS' => 'SBOSNL2A',
             'SNSB' => 'SNSBNL2A',
             'SOGE' => 'SOGENL2A',
+            'SWNB' => 'SWNBNL22',
             'TRIO' => 'TRIONL2U',
             'UGBI' => 'UGBINL2A',
             'VOWA' => 'VOWANL21',
             'VPAY' => 'VPAYNL22',
+            'VTPS' => 'VTPSNL2R',
+            'YOUR' => 'YOURNL2A',
             'ZWLB' => 'ZWLBNL21',
         ];
 
         $bank = substr($iban, 4, 4);
+
         return array_key_exists($bank, $data) ? $data[$bank] : null;
     }
 }

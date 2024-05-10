@@ -1,14 +1,14 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\UserAdminController;
+use App\Mail\MembershipEndedForBoard;
+use App\Models\Member;
 use Carbon;
 use Exception;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Http\Controllers\UserAdminController;
-use Proto\Mail\MembershipEndedForBoard;
-use Proto\Models\Member;
 
 class EndMemberships extends Command
 {
@@ -44,15 +44,15 @@ class EndMemberships extends Command
     public function handle()
     {
         $deleted = [];
-        foreach(Member::all()->whereNotNull('until') as $member) {
-            if($member->until < Carbon::now()->timestamp) {
+        foreach (Member::all()->whereNotNull('until') as $member) {
+            if ($member->until < Carbon::now()->timestamp) {
                 (new UserAdminController())->endMembership($member->user->id);
                 $this->info("Membership from $member->proto_username ended!");
                 $deleted[] = $member;
             }
         }
 
-        if(count($deleted) > 0) {
+        if (count($deleted) > 0) {
             Mail::queue((new MembershipEndedForBoard($deleted))->onQueue('high'));
         } else {
             $this->info("No users who's membership to end!");

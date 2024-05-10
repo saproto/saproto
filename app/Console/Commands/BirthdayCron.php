@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Mail\BirthdayEmail;
+use App\Mail\BirthdayEmailForBoard;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Mail;
-use Proto\Mail\BirthdayEmail;
-use Proto\Mail\BirthdayEmailForBoard;
-use Proto\Models\User;
 
 class BirthdayCron extends Command
 {
@@ -41,9 +41,10 @@ class BirthdayCron extends Command
     {
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))
-            ->has('member')
-            ->get()
-            ->reject(function (User $user, int $index) { return $user->member->is_pending == true; });
+            ->whereHas('member', function ($q) {
+                $q->where('is_pending', false);
+            })
+            ->get();
 
         if ($users->count() > 0) {
             $this->info('Sending birthday notification to '.$users->count().' people.');

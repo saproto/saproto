@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class PasswordResetEmail extends Mailable
 {
@@ -13,17 +13,15 @@ class PasswordResetEmail extends Mailable
     use SerializesModels;
 
     public $name;
-    public $token;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $token)
+    public function __construct(User $user, public $token)
     {
         $this->name = $user->calling_name;
-        $this->token = $token;
     }
 
     /**

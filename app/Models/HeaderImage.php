@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read StorageEntry $image
  * @property-read User|null $user
+ *
  * @method static Builder|HeaderImage whereCreatedAt($value)
  * @method static Builder|HeaderImage whereCreditId($value)
  * @method static Builder|HeaderImage whereId($value)
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|HeaderImage newModelQuery()
  * @method static Builder|HeaderImage newQuery()
  * @method static Builder|HeaderImage query()
+ *
  * @mixin Eloquent
  */
 class HeaderImage extends Model
@@ -39,12 +41,12 @@ class HeaderImage extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'credit_id');
+        return $this->belongsTo(\App\Models\User::class, 'credit_id');
     }
 
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id', 'id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id', 'id');
     }
 }

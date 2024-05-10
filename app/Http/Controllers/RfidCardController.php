@@ -1,22 +1,22 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\QrAuthRequest;
+use App\Models\RfidCard;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\RfidCard;
 use Redirect;
 use Session;
 
 class RfidCardController extends Controller
 {
     /**
-     * @param Request $request
      * @return array This method returns raw HTML and is intended to be used via AJAX!
+     *
      * @throws Exception
      */
     public function store(Request $request)
@@ -50,22 +50,21 @@ class RfidCardController extends Controller
         if ($card) {
             if ($card->user->id == $user->id) {
                 return ['ok' => false, 'text' => 'This card is already registered to you!'];
-            } else {
-                return ['ok' => false, 'text' => 'This card is already registered to someone.'];
             }
-        } else {
-            $card = RfidCard::create([
-                'user_id' => $user->id,
-                'card_id' => $uid,
-            ]);
-            $card->save();
 
-            return ['ok' => true, 'text' => 'This card has been successfully registered to '.$user->name];
+            return ['ok' => false, 'text' => 'This card is already registered to someone.'];
         }
+        $card = RfidCard::create([
+            'user_id' => $user->id,
+            'card_id' => $uid,
+        ]);
+        $card->save();
+
+        return ['ok' => true, 'text' => 'This card has been successfully registered to '.$user->name];
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -80,8 +79,7 @@ class RfidCardController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -96,13 +94,14 @@ class RfidCardController extends Controller
         $rfid->save();
 
         Session::flash('flash_message', 'Your RFID card has been updated.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, $id)
@@ -115,6 +114,7 @@ class RfidCardController extends Controller
         $rfid->delete();
 
         Session::flash('flash_message', 'Your RFID card has been deleted.');
+
         return Redirect::back();
     }
 }

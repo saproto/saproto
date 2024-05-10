@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
  * @property-read User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Member onlyTrashed()
@@ -53,12 +54,13 @@ use Illuminate\Support\Str;
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
  * @method static Builder|Member query()
+ *
  * @mixin Eloquent
  */
 class Member extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'members';
 
@@ -71,40 +73,39 @@ class Member extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function membershipForm()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'membership_form_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'membership_form_id');
     }
 
     /** @return BelongsTo */
     public function customOmnomcomSound()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'omnomcom_sound_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'omnomcom_sound_id');
     }
 
     /** @return int */
     public static function countActiveMembers()
     {
-        $user_ids = [];
-        foreach (Committee::all() as $committee) {
-            $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
-        }
-
-        return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->count();
+        return User::whereHas('committees')->count();
     }
 
     public static function countPendingMembers()
     {
-        return User::whereHas('member', function ($query) { $query->where('is_pending', true); })->count();
+        return User::whereHas('member', function ($query) {
+            $query->where('is_pending', true);
+        })->count();
     }
 
     public static function countValidMembers()
     {
-        return User::whereHas('member', function ($query) { $query->where('is_pending', false); })->count();
+        return User::whereHas('member', function ($query) {
+            $query->where('is_pending', false);
+        })->count();
     }
 
     /** @return OrderLine|null */
@@ -147,7 +148,7 @@ class Member extends Model
     /**
      * Create an email alias friendly username from a full name.
      *
-     * @param $name string
+     * @param  $name  string
      * @return string
      */
     public static function createProtoUsername($name)
@@ -171,7 +172,7 @@ class Member extends Model
         $username = $usernameBase;
         $i = Member::where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
-            $username = "$usernameBase-$i";
+            return "$usernameBase-$i";
         }
 
         return $username;

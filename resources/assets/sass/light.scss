@@ -4,14 +4,16 @@
 @import 'partials/variables';
 
 //background colour
-$body-bg: #f1f1f1;
+$body-bg: #F3F3F3;
+
+$light: #fff;
 
 //links
 $link-color: $info;
 $link-hover-color: lighten($info, 10%);
 
 //import bootstrap after setting variables
-@import '~bootstrap';
+@import 'bootstrap';
 
 // Vendors (S)CSS
 @import 'partials/vendors';

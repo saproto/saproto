@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read Page|null $page
  * @property-read Collection|MenuItem[] $children
+ *
  * @method static Builder|MenuItem whereCreatedAt($value)
  * @method static Builder|MenuItem whereId($value)
  * @method static Builder|MenuItem whereIsMemberOnly($value)
@@ -37,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MenuItem newModelQuery()
  * @method static Builder|MenuItem newQuery()
  * @method static Builder|MenuItem query()
+ *
  * @mixin Eloquent
  */
 class MenuItem extends Model
@@ -48,13 +50,13 @@ class MenuItem extends Model
     /** @return BelongsTo */
     public function page()
     {
-        return $this->belongsTo('Proto\Models\Page', 'page_id', 'id');
+        return $this->belongsTo(\App\Models\Page::class, 'page_id', 'id');
     }
 
     /** @return HasMany */
     public function children()
     {
-        return $this->hasMany('Proto\Models\MenuItem', 'parent');
+        return $this->hasMany(\App\Models\MenuItem::class, 'parent');
     }
 
     /** @return string|null */
@@ -75,6 +77,7 @@ class MenuItem extends Model
     public function isFirst()
     {
         $lowest = self::where('parent', '=', $this->parent)->orderBy('order')->first();
+
         return $this->id == $lowest->id;
     }
 
@@ -82,6 +85,7 @@ class MenuItem extends Model
     public function isLast()
     {
         $highest = self::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
+
         return $this->id == $highest->id;
     }
 }

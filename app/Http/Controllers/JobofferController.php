@@ -1,13 +1,13 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Joboffer;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Company;
-use Proto\Models\Joboffer;
 use Redirect;
 use Session;
 
@@ -17,6 +17,7 @@ class JobofferController extends Controller
     public function index()
     {
         $companies = Company::has('joboffers')->get();
+
         return view('companies.joboffers.list', ['companies' => $companies]);
     }
 
@@ -24,6 +25,7 @@ class JobofferController extends Controller
     public function adminIndex()
     {
         $joboffers = Joboffer::all();
+
         return view('companies.joboffers.adminlist', ['joboffers' => $joboffers]);
     }
 
@@ -31,11 +33,11 @@ class JobofferController extends Controller
     public function create()
     {
         $companies = Company::all();
+
         return view('companies.joboffers.edit', ['joboffer' => null, 'companies' => $companies]);
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -52,6 +54,7 @@ class JobofferController extends Controller
 
         if ($description == null && $redirect_url == null) {
             Session::flash('flash_message', 'Please enter a description or redirect url.');
+
             return Redirect::back();
         }
 
@@ -62,29 +65,30 @@ class JobofferController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function show($id)
     {
         $joboffer = Joboffer::findOrFail($id);
+
         return view('companies.joboffers.show', ['joboffer' => $joboffer]);
     }
 
     /**
-     * @param  int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $joboffer = Joboffer::findOrFail($id);
         $companies = Company::all();
+
         return view('companies.joboffers.edit', ['joboffer' => $joboffer, 'companies' => $companies]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -97,12 +101,14 @@ class JobofferController extends Controller
         $joboffer->save();
 
         Session::flash('flash_message', 'Job offer has been updated.');
+
         return Redirect::route('joboffers::admin');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -111,6 +117,7 @@ class JobofferController extends Controller
         $joboffer->delete();
 
         Session::flash('flash_message', 'The job offer has been deleted.');
+
         return Redirect::back();
     }
 }

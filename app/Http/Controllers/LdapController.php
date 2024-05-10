@@ -1,12 +1,12 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
 class LdapController extends Controller
 {
     /**
-     * @param string $query
-     * @param bool $only_active
+     * @param  string  $query
+     * @param  bool  $only_active
      * @return array
      */
     public static function searchUtwente($query, $only_active = false)
@@ -15,7 +15,7 @@ class LdapController extends Controller
         $result = json_decode($response)->result;
 
         if ($only_active) {
-            $result = array_filter($result, function ($row) {
+            return array_filter($result, function ($row) {
                 if ($row->active) {
                     return true;
                 }

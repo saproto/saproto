@@ -1,18 +1,17 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class ProductBulkUpdateNotification extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    public $log;
     public $user;
 
     /**
@@ -20,9 +19,8 @@ class ProductBulkUpdateNotification extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user, $log)
+    public function __construct(User $user, public $log)
     {
-        $this->log = $log;
         $this->user = $user;
     }
 

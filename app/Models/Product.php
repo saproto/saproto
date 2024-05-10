@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
+use App\Http\Controllers\WallstreetController;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Proto\Http\Controllers\WallstreetController;
 
 /**
  * Product Model.
@@ -37,6 +37,7 @@ use Proto\Http\Controllers\WallstreetController;
  * @property-read Ticket|null $ticket
  * @property-read Collection|ProductCategory[] $categories
  * @property-read Collection|OrderLine[] $orderlines
+ *
  * @method static Builder|Product whereAccountId($value)
  * @method static Builder|Product whereCalories($value)
  * @method static Builder|Product whereCreatedAt($value)
@@ -56,6 +57,7 @@ use Proto\Http\Controllers\WallstreetController;
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
+ *
  * @mixin Eloquent
  */
 class Product extends Model
@@ -71,13 +73,13 @@ class Product extends Model
     /** @return BelongsTo */
     public function account()
     {
-        return $this->belongsTo('Proto\Models\FinancialAccount');
+        return $this->belongsTo(\App\Models\FinancialAccount::class);
     }
 
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
     }
 
     /** @raturn String */
@@ -89,25 +91,26 @@ class Product extends Model
                 return $image->generateImagePath(null, null);
             }
         }
+
         return null;
     }
 
     /** @return BelongsToMany */
     public function categories()
     {
-        return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
+        return $this->belongsToMany(\App\Models\ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
     /** @return HasOne */
     public function ticket()
     {
-        return $this->hasOne('Proto\Models\Ticket', 'product_id');
+        return $this->hasOne(\App\Models\Ticket::class, 'product_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('Proto\Models\OrderLine');
+        return $this->hasMany(\App\Models\OrderLine::class);
     }
 
     /** @return bool */
@@ -122,22 +125,23 @@ class Product extends Model
         if (! $active) {
             return $this->price;
         }
+
         return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
     public function wallstreetPrices()
     {
-        return $this->hasMany('Proto\Models\WallstreetPrice');
+        return $this->hasMany(\App\Models\WallstreetPrice::class);
     }
 
     /**
-     * @param User $user
-     * @param int $amount
-     * @param float|null $total_price
-     * @param bool|null $withCash
-     * @param bool|null $withBankCard
-     * @param string|null $description
-     * @param string $auth_method
+     * @param  User  $user
+     * @param  int  $amount
+     * @param  float|null  $total_price
+     * @param  bool|null  $withCash
+     * @param  bool|null  $withBankCard
+     * @param  string|null  $description
+     * @param  string  $auth_method
      * @return int OrderLine id
      */
     public function buyForUser($user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
@@ -163,6 +167,7 @@ class Product extends Model
         ]);
 
         $orderline->save();
+
         return $orderline->id;
     }
 }

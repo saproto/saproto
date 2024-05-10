@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Committee;
+use App\Models\CommitteeMembership;
+use App\Models\Member;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Proto\Models\Committee;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
-use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
 {
@@ -17,6 +17,7 @@ class ImportLiveDataSeeder extends Seeder
      * This seeder imports some non-sensitive data from the live environment to make your development environment more 'real'.
      *
      * @return void
+     *
      * @throws Exception
      */
     public function run($password, $output)
@@ -35,6 +36,7 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'committees_activities'],
             ['name' => 'companies'],
             ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
+            ['name' => 'event_categories'],
             ['name' => 'mailinglists'],
             ['name' => 'menuitems'],
             ['name' => 'products', 'excluded_columns' => ['image_url']],
@@ -55,7 +57,7 @@ class ImportLiveDataSeeder extends Seeder
     /**
      * Import data from the live website export API.
      *
-     * @param $tableName string The table to import from the live website.
+     * @param  $tableName  string The table to import from the live website.
      * @return mixed|null
      */
     public static function getDataFromExportApi($tableName)
@@ -66,12 +68,13 @@ class ImportLiveDataSeeder extends Seeder
         if ($response->failed()) {
             return null;
         }
+
         return json_decode($response);
     }
 
     /**
-     * @param $entries mixed
-     * @param $table array
+     * @param  $entries  mixed
+     * @param  $table  array
      * @return void
      */
     public static function createEntries($entries, $table)
@@ -90,8 +93,9 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param string $password
+     * @param  string  $password
      * @return void
+     *
      * @throws Exception
      */
     public static function createAdminUser($password)

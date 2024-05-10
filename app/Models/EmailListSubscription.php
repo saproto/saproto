@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $updated_at
  * @property-read EmailList|null $emaillist
  * @property-read User|null $user
+ *
  * @method static Builder|EmailListSubscription whereCreatedAt($value)
  * @method static Builder|EmailListSubscription whereId($value)
  * @method static Builder|EmailListSubscription whereListId($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|EmailListSubscription newModelQuery()
  * @method static Builder|EmailListSubscription newQuery()
  * @method static Builder|EmailListSubscription query()
+ *
  * @mixin Eloquent
  */
 class EmailListSubscription extends Model
@@ -38,12 +40,12 @@ class EmailListSubscription extends Model
     /** @return HasOne */
     public function user()
     {
-        return $this->hasOne('Proto\Models\User');
+        return $this->hasOne(\App\Models\User::class);
     }
 
     /** @return BelongsTo */
     public function emaillist()
     {
-        return $this->belongsTo('Proto\Models\EmailList', 'list_id');
+        return $this->belongsTo(\App\Models\EmailList::class, 'list_id');
     }
 }

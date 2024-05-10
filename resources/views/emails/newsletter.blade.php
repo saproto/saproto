@@ -1,7 +1,13 @@
 @extends('emails.template')
 
-@section('body')
+@section('page-title')
+    Weekly newsletter
+@endsection
 
+@section('body')
+    @if($image_url)
+        <img src="{{ $image_url }}" style="width: 100%;"/>
+    @endif
     <p>
         Hey {{ $user->calling_name }},
     </p>
@@ -12,12 +18,17 @@
 
     <br>
 
-    @if(Proto\Models\Event::getEventsForNewsletter()->count() > 0)
+    @if($events->count() > 0)
 
-        @foreach(Proto\Models\Event::getEventsForNewsletter() as $i => $event)
+        @foreach($events as $i => $event)
 
-            <table style="margin: 0; padding: 0; border: none; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};"
-                   width="100%">
+            @if($i % 2 == 0)
+                <table class="table bg-body" style="margin: 0; padding: 0; border: none;"
+                       width="100%">
+            @else
+                <table class="table table-light" style="margin: 0; padding: 0; border: none;"
+                       width="100%">
+            @endif
 
                 <tr style="margin: 0; padding: 0; border: none;">
 
@@ -74,7 +85,7 @@
                         @endif
 
                         <p>
-                            <a style="color: #000;" href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
+                            <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                 Learn more! >>
                             </a>
                         </p>
@@ -120,11 +131,11 @@
     </p>
 
     <p>
-        <sub>
+        <sup style="line-height: 1.5;">
             You receive this e-mail because you subscribed to the weekly newsletter of S.A. Proto. If you would like to
             stop receiving this e-mail, please click <a style="color: #00aac0;"
-                    href="{{ route('unsubscribefromlist', ['hash' => Proto\Models\EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}">here</a>.
-        </sub>
+                    href="{{ route('unsubscribefromlist', ['hash' => App\Models\EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}">here</a>.
+        </sup>
     </p>
 
 @endsection

@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Page;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -10,14 +12,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Proto\Models\Page;
-use Proto\Models\StorageEntry;
 use Session;
 
 class PageController extends Controller
 {
     /**
      * These slugs can't be used for pages, as they are used by the app.
+     *
      * @var string[]
      */
     protected $reservedSlugs = ['add', 'edit', 'delete'];
@@ -26,6 +27,7 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::orderBy('created_at', 'desc')->paginate(20);
+
         return view('pages.list', ['pages' => $pages]);
     }
 
@@ -36,7 +38,6 @@ class PageController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse|View
      */
     public function store(Request $request)
@@ -57,22 +58,25 @@ class PageController extends Controller
 
         if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
         if (Page::where('slug', $page->slug)->exists()) {
             Session::flash('flash_message', 'This URL has already been used and can\'t be used again. Please choose a different URL.');
+
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
         $page->save();
 
         Session::flash('flash_message', "Page $page->title has been created.");
+
         return Redirect::route('page::list');
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      * @return View
      */
     public function show($slug)
@@ -91,18 +95,18 @@ class PageController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
     {
         $page = Page::findOrFail($id);
+
         return view('pages.edit', ['item' => $page, 'new' => false]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse|View
      */
     public function update(Request $request, $id)
@@ -112,6 +116,7 @@ class PageController extends Controller
 
         if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->exists()) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
             return view('pages.edit', ['item' => $request, 'new' => false]);
         }
 
@@ -131,18 +136,21 @@ class PageController extends Controller
 
         if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
             return view('pages.edit', ['item' => $page, 'new' => false]);
         }
 
         $page->save();
 
         Session::flash('flash_message', 'Page '.$page->title.' has been saved.');
+
         return Redirect::route('page::list');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -158,9 +166,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function featuredImage(Request $request, $id)
@@ -181,15 +189,16 @@ class PageController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws FileNotFoundException
      */
     public function addFile(Request $request, $id)
     {
         if (! $request->file('files')) {
             Session::flash('flash_message', 'You forgot to add any files.');
+
             return Redirect::back();
         }
 
@@ -207,8 +216,8 @@ class PageController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $file_id
+     * @param  int  $id
+     * @param  int  $file_id
      * @return RedirectResponse
      */
     public function deleteFile($id, $file_id)

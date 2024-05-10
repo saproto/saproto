@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read OrderLine $orderline
  * @property-read Ticket $ticket
  * @property-read User $user
+ *
  * @method static Builder|TicketPurchase whereBarcode($value)
  * @method static Builder|TicketPurchase whereCreatedAt($value)
  * @method static Builder|TicketPurchase whereId($value)
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|TicketPurchase newModelQuery()
  * @method static Builder|TicketPurchase newQuery()
  * @method static Builder|TicketPurchase query()
+ *
  * @mixin Eloquent
  */
 class TicketPurchase extends Model
@@ -47,19 +49,19 @@ class TicketPurchase extends Model
     /** @return BelongsTo */
     public function ticket()
     {
-        return $this->belongsTo('Proto\Models\Ticket', 'ticket_id');
+        return $this->belongsTo(\App\Models\Ticket::class, 'ticket_id');
     }
 
     /** @return BelongsTo */
     public function orderline()
     {
-        return $this->belongsTo('Proto\Models\OrderLine', 'orderline_id');
+        return $this->belongsTo(\App\Models\OrderLine::class, 'orderline_id');
     }
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class, 'user_id')->withTrashed();
     }
 
     /** @return bool*/

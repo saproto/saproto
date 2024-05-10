@@ -1,11 +1,11 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\QrAuthRequest;
+use App\Models\Token;
 use DB;
 use Illuminate\Console\Command;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\Token;
 
 class ClearSessionTable extends Command
 {

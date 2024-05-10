@@ -1,7 +1,11 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Photo;
+use App\Models\PhotoAlbum;
+use App\Models\PhotoManager;
+use App\Models\StorageEntry;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -10,10 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
-use Proto\Models\Photo;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoManager;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 
@@ -32,7 +32,6 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function create(Request $request)
@@ -49,7 +48,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -65,8 +64,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -85,39 +83,41 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return JsonResponse|string
      */
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::findOrFail($id);
-
         if (! $request->hasFile('file')) {
             return response()->json([
-                'message'=>'photo not found in request!',
+                'message' => 'photo not found in request!',
             ], 404);
-        } elseif ($album->published) {
+        }
+
+        if ($album->published) {
             return response()->json([
-                'message'=>'album already published! Unpublish to add more photos!',
+                'message' => 'album already published! Unpublish to add more photos!',
             ], 500);
         }
         try {
             $uploadFile = $request->file('file');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id);
-            return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
+
+            return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
+
         } catch (Exception $e) {
             return response()->json([
-                'message'=>$e,
+                'message' => $e,
             ], 500);
         }
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function action(Request $request, $id)
@@ -161,18 +161,20 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function delete($id)
     {
         PhotoManager::deleteAlbum($id);
+
         return Redirect::route('photo::admin::index');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function publish($id)
@@ -181,6 +183,7 @@ class PhotoAdminController extends Controller
 
         if (! count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+
             return Redirect::back();
         }
 
@@ -191,7 +194,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function unpublish($id)
@@ -204,9 +207,10 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param UploadedFile $uploaded_photo
-     * @param int $album_id
+     * @param  UploadedFile  $uploaded_photo
+     * @param  int  $album_id
      * @return Photo
+     *
      * @throws FileNotFoundException
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id)

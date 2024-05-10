@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use DateInterval;
 use Eloquent;
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $youtube_thumb_url
  * @property string $video_date
  * @property-read Event|null $event
+ *
  * @method static Builder|Video whereEventId($value)
  * @method static Builder|Video whereId($value)
  * @method static Builder|Video whereTitle($value)
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video newModelQuery()
  * @method static Builder|Video newQuery()
  * @method static Builder|Video query()
+ *
  * @mixin Eloquent
  */
 class Video extends Model
@@ -49,7 +51,7 @@ class Video extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event', 'event_id');
+        return $this->belongsTo(\App\Models\Event::class, 'event_id');
     }
 
     /** @return string */
@@ -72,6 +74,7 @@ class Video extends Model
 
     /**
      * @return string
+     *
      * @throws Exception
      */
     public function getHumanDuration()
@@ -79,17 +82,21 @@ class Video extends Model
         $interval = new DateInterval($this->youtube_length);
         if ($interval->y > 0) {
             return sprintf('%s years', $interval->y);
-        } elseif ($interval->m > 0) {
-            return sprintf('%s months', $interval->m);
-        } elseif ($interval->d > 0) {
-            return sprintf('%s days', $interval->d);
-        } elseif ($interval->h > 0) {
-            return sprintf('%s:%s:%s ', $interval->h, str_pad(strval($interval->i), 2, '0', STR_PAD_LEFT), str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
-        } elseif ($interval->i > 0) {
-            return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
-        } else {
-            return sprintf('%s seconds', $interval->s);
         }
+        if ($interval->m > 0) {
+            return sprintf('%s months', $interval->m);
+        }
+        if ($interval->d > 0) {
+            return sprintf('%s days', $interval->d);
+        }
+        if ($interval->h > 0) {
+            return sprintf('%s:%s:%s ', $interval->h, str_pad(strval($interval->i), 2, '0', STR_PAD_LEFT), str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
+        }
+        if ($interval->i > 0) {
+            return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
+        }
+
+        return sprintf('%s seconds', $interval->s);
     }
 
     /** @return string|false */

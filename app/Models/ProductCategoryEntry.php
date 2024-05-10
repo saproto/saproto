@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read ProductCategory $ProductCategory
  * @property-read Product $product
+ *
  * @method static Builder|ProductCategoryEntry whereCategoryId($value)
  * @method static Builder|ProductCategoryEntry whereCreatedAt($value)
  * @method static Builder|ProductCategoryEntry whereId($value)
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|ProductCategoryEntry newModelQuery()
  * @method static Builder|ProductCategoryEntry newQuery()
  * @method static Builder|ProductCategoryEntry query()
+ *
  * @mixin Eloquent
  */
 class ProductCategoryEntry extends Model
@@ -43,12 +45,12 @@ class ProductCategoryEntry extends Model
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('Proto\Models\Product');
+        return $this->belongsTo(\App\Models\Product::class);
     }
 
     /** @return BelongsTo */
     public function ProductCategory()
     {
-        return $this->belongsTo('Proto\Models\ProductCategory');
+        return $this->belongsTo(\App\Models\ProductCategory::class);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
-use Proto\Models\User;
 
 class AddSysadmin extends Command
 {
@@ -38,12 +38,13 @@ class AddSysadmin extends Command
     {
         $user_id = (int) $this->argument('user_id');
         $user = User::find($user_id);
-        if(! $user) {
+        if (! $user) {
             $this->error('User could not be found.');
+
             return 1;
         }
 
-        if($this->confirm('Give '.$user->name.' admin right?')) {
+        if ($this->confirm('Give '.$user->name.' admin right?')) {
             $user->assignRole('sysadmin');
             $this->info('Sysadmin role granted!');
         }

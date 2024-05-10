@@ -1,7 +1,9 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\QrAuthRequest;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -9,13 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
-use Proto\Models\QrAuthRequest;
-use Proto\Models\User;
 
 class QrAuthController extends Controller
 {
     /**
-     * @param string $code
+     * @param  string  $code
      * @return Response
      */
     public function showCode($code)
@@ -30,7 +30,6 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return QrAuthRequest
      */
     public function generateRequest(Request $request)
@@ -49,7 +48,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param  string  $code
      * @return View
      */
     public function showDialog($code)
@@ -64,7 +63,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param  string  $code
      * @return View
      */
     public function approve($code)
@@ -84,7 +83,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param  string  $code
      * @return JsonResponse
      */
     public function apiApprove($code)
@@ -104,7 +103,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param  string  $code
      * @return JsonResponse
      */
     public function apiInfo($code)
@@ -119,7 +118,6 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return string
      */
     public function isApproved(Request $request)
@@ -132,14 +130,15 @@ class QrAuthController extends Controller
 
         if ($qrAuthRequest->isApproved()) {
             return 'true';
-        } else {
-            return 'false';
         }
+
+        return 'false';
     }
 
     /**
-     * @param string $authToken
+     * @param  string  $authToken
      * @return false|User
+     *
      * @throws Exception
      */
     public function getAuthUser($authToken)

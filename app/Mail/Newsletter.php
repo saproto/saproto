@@ -1,31 +1,24 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Proto\Models\User;
 
 class Newsletter extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    public $user;
-    public $list;
-    public $text;
-
     /**
-     * @param User $user
-     * @param string $list
-     * @param string $text
+     * @param  string  $list
+     * @param  string  $text
      */
-    public function __construct(User $user, $list, $text)
+    public function __construct(public User $user, public $list, public $text, public $events, public $image_url)
     {
-        $this->user = $user;
-        $this->list = $list;
-        $this->text = $text;
+        //
     }
 
     /** @return Newsletter */

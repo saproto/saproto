@@ -1,7 +1,12 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\AchievementOwnership;
+use App\Models\Address;
+use App\Models\CommitteeMembership;
+use App\Models\OrderLine;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -87,6 +92,7 @@ class UserApiController extends Controller
         if (! $request->has('from') && ! $request->has('to')) {
             $orderlines = $orderlines->limit(100);
         }
+
         return $orderlines->get();
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Auth;
 use Carbon;
@@ -23,12 +23,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float $helper_discount
  * @property float $regular_discount
  * @property float $regular_discount_percentage
+ * @property User $orderedBy
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
+ *
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
  * @method static Builder|Dinnerform whereEnd($value)
@@ -40,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Dinnerform newModelQuery()
  * @method static Builder|Dinnerform newQuery()
  * @method static Builder|Dinnerform query()
+ *
  * @mixin Eloquent
  */
 class Dinnerform extends Model
@@ -58,13 +61,18 @@ class Dinnerform extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event');
+        return $this->belongsTo(\App\Models\Event::class);
+    }
+
+    public function orderedBy(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'ordered_by_user_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany('Proto\Models\DinnerformOrderline');
+        return $this->hasMany(\App\Models\DinnerformOrderline::class);
     }
 
     /** @return float The regular discount as a percentage out of 100. */
@@ -142,7 +150,7 @@ class Dinnerform extends Model
     {
         parent::boot();
         static::deleting(function ($dinnerform) {
-            foreach($dinnerform->orderlines()->get() as $orderline) {
+            foreach ($dinnerform->orderlines()->get() as $orderline) {
                 $orderline->delete();
             }
         });

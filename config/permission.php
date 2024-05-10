@@ -49,6 +49,13 @@ return [
         'registermembers' => (object) [
             'display_name' => 'Register Members',
             'description' => 'Allows finalisation of memberships.',
+        ], 'senate' => (object) [
+            'display_name' => 'Codex Access',
+            'description' => 'Allows managing of codices.',
+        ],
+        'closeactivities' => (object) [
+            'display_name' => 'Activity Closer',
+            'description' => 'Allows closing of activities.',
         ],
     ],
 
@@ -61,7 +68,7 @@ return [
         'admin' => (object) [
             'display_name' => 'Application Administrator',
             'description' => 'Can administrate the website',
-            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums', 'registermembers'],
+            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums', 'registermembers', 'closeactivities'],
         ],
         'protube' => (object) [
             'display_name' => 'Protube Administrator',
@@ -81,7 +88,7 @@ return [
         'finadmin' => (object) [
             'display_name' => 'Financial Administrator',
             'description' => 'Can manage all financials',
-            'permissions' => ['finadmin'],
+            'permissions' => ['finadmin', 'closeactivities'],
         ],
         'tipcie' => (object) [
             'display_name' => 'TipCie',
@@ -112,6 +119,15 @@ return [
             'display_name' => 'Registration Helper',
             'description' => 'Can help register members',
             'permissions' => ['registermembers'],
+        ], 'senate' => (object) [
+            'display_name' => 'Senate',
+            'description' => 'May view and edit codexes',
+            'permissions' => ['senate'],
+        ],
+        'activity-closer' => (object) [
+            'display_name' => 'Activity Closer',
+            'description' => 'May close activities',
+            'permissions' => ['closeactivities'],
         ],
     ],
 

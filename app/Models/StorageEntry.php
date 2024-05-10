@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Carbon;
 use DB;
 use Eloquent;
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Proto\Http\Controllers\FileController;
 
 /**
  * Storage Entry Model.
@@ -23,6 +23,7 @@ use Proto\Http\Controllers\FileController;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string $hash
+ *
  * @method static Builder|StorageEntry whereCreatedAt($value)
  * @method static Builder|StorageEntry whereFilename($value)
  * @method static Builder|StorageEntry whereHash($value)
@@ -33,6 +34,7 @@ use Proto\Http\Controllers\FileController;
  * @method static Builder|StorageEntry newModelQuery()
  * @method static Builder|StorageEntry newQuery()
  * @method static Builder|StorageEntry query()
+ *
  * @mixin Eloquent
  */
 class StorageEntry extends Model
@@ -43,11 +45,13 @@ class StorageEntry extends Model
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
+     *
      * @return bool whether or not the file is orphaned (not in use, can really be deleted safely)
      */
     public function isOrphan()
     {
         $id = $this->id;
+
         return
             NarrowcastingItem::where('image_id', $id)->count() == 0 &&
             Page::where('featured_image_id', $id)->count() == 0 &&
@@ -63,12 +67,14 @@ class StorageEntry extends Model
             SoundboardSound::where('file_id', $id)->count() == 0 &&
             HeaderImage::where('image_id', $id)->count() == 0 &&
             Photo::where('file_id', $id)->count() == 0 &&
-            Member::where('omnomcom_sound_id', $id)->count() == 0;
+            Member::where('omnomcom_sound_id', $id)->count() == 0 &&
+            WallstreetEvent::where('image_id', $id)->count() == 0;
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string|null $customPath
+     * @param  UploadedFile  $file
+     * @param  string|null  $customPath
+     *
      * @throws FileNotFoundException
      */
     public function createFromFile($file, $customPath = null)
@@ -90,10 +96,10 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param resource|string $data
-     * @param string $mime
-     * @param string $name
-     * @param string|null $customPath
+     * @param  resource|string  $data
+     * @param  string  $mime
+     * @param  string  $name
+     * @param  string|null  $customPath
      */
     public function createFromData($data, $mime, $name, $customPath = null)
     {
@@ -122,28 +128,30 @@ class StorageEntry extends Model
     {
         $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
         if (config('app-proto.assets-domain')) {
-            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
+
         return $url;
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function generateImagePath($w, $h)
     {
         $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
         if (config('app-proto.assets-domain')) {
-            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
+
         return $url;
     }
 
     /**
-     * @param int|null $w
-     * @param int|null $h
+     * @param  int|null  $w
+     * @param  int|null  $h
      * @return string
      */
     public function getBase64($w = null, $h = null)
@@ -153,25 +161,26 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param bool $human Defaults to true.
+     * @param  bool  $human  Defaults to true.
      * @return string|int
      */
     public function getFileSize($human = true)
     {
         $size = File::size($this->generateLocalPath());
-        if ($human) {
-            if ($size < 1024) {
-                return $size.' bytes';
-            } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1).' kilobytes';
-            } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1).' megabytes';
-            } else {
-                return round($size / pow(1024, 3), 1).' gigabytes';
-            }
-        } else {
+        if (! $human) {
             return $size;
         }
+        if ($size < 1024) {
+            return $size.' bytes';
+        }
+        if ($size < pow(1024, 2)) {
+            return round($size / pow(1024, 1), 1).' kilobytes';
+        }
+        if ($size < pow(1024, 3)) {
+            return round($size / pow(1024, 2), 1).' megabytes';
+        }
+
+        return round($size / pow(1024, 3), 1).' gigabytes';
     }
 
     /** @return string */
@@ -181,7 +190,7 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param string $algo Defaults to md5.
+     * @param  string  $algo  Defaults to md5.
      * @return string
      */
     public function getFileHash($algo = 'md5')

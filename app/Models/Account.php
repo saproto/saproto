@@ -1,13 +1,12 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -20,6 +19,7 @@ use stdClass;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Product[] $products
+ *
  * @method static Builder|Account whereAccountNumber($value)
  * @method static Builder|Account whereCreatedAt($value)
  * @method static Builder|Account whereId($value)
@@ -28,6 +28,7 @@ use stdClass;
  * @method static Builder|Account newModelQuery()
  * @method static Builder|Account newQuery()
  * @method static Builder|Account query()
+ *
  * @mixin Eloquent
  */
 class Account extends Model
@@ -39,11 +40,11 @@ class Account extends Model
     /** @return hasMany */
     public function products()
     {
-        return $this->hasMany('Proto\Models\Product');
+        return $this->hasMany(\App\Models\Product::class);
     }
 
     /**
-     * @param Collection $orderlines
+     * @param  Collection  $orderlines
      * @return array<int, stdClass>
      */
     public static function generateAccountOverviewFromOrderlines($orderlines)
@@ -84,8 +85,8 @@ class Account extends Model
     }
 
     /**
-     * @param int $start
-     * @param int $end
+     * @param  int  $start
+     * @param  int  $end
      * @return Collection
      */
     public function generatePeriodAggregation($start, $end)

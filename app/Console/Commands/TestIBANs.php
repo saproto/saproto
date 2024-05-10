@@ -1,9 +1,9 @@
 <?php
 
-namespace Proto\Console\Commands;
+namespace App\Console\Commands;
 
+use App\Models\Bank;
 use Illuminate\Console\Command;
-use Proto\Models\Bank;
 
 class TestIBANs extends Command
 {
@@ -38,16 +38,16 @@ class TestIBANs extends Command
     {
         $this->info('Starting clean-up.');
 
-        $count = 0;
-
         foreach (Bank::all() as $bank) {
             if (! verify_iban($bank->iban)) {
                 $this->info('INVALID -- '.$bank->iban.' of '.$bank->user->name.'(#'.$bank->user->id.')');
+
                 continue;
             }
 
             if (! iban_country_is_sepa(iban_get_country_part($bank->iban))) {
                 $this->info('NONSEPA -- '.$bank->iban.' of '.$bank->user->name.'(#'.$bank->user->id.')');
+
                 continue;
             }
         }

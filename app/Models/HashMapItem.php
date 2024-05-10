@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $key
  * @property string|null $subkey
  * @property string $value
+ *
  * @method static Builder|HashMapItem key($key)
  * @method static Builder|HashMapItem subkey($subkey)
  * @method static Builder|HashMapItem whereId($value)
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static builder|hashMapItem newmodelquery()
  * @method static builder|hashMapItem newquery()
  * @method static builder|hashMapItem query()
+ *
  * @mixin Eloquent
  */
 class HashMapItem extends Model
@@ -36,8 +38,8 @@ class HashMapItem extends Model
     public $timestamps = false;
 
     /**
-     * @param Builder $query
-     * @param string $key
+     * @param  Builder  $query
+     * @param  string  $key
      * @return Builder
      */
     public function scopeKey($query, $key)
@@ -46,8 +48,8 @@ class HashMapItem extends Model
     }
 
     /**
-     * @param Builder $query
-     * @param string $subkey
+     * @param  Builder  $query
+     * @param  string  $subkey
      * @return Builder
      */
     public function scopeSubkey($query, $subkey)

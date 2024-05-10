@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,16 +11,13 @@ class UtwenteCleanup extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $unlinked;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($unlinked)
+    public function __construct(public $unlinked)
     {
-        $this->unlinked = $unlinked;
     }
 
     /**

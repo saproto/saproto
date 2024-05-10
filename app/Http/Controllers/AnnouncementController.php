@@ -1,7 +1,8 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Models\Announcement;
 
 class AnnouncementController extends Controller
 {
@@ -26,24 +26,34 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request)
     {
-        $data = $request->except('_token');
-        $data['display_from'] = date('Y-m-d H:i:s', strtotime($data['display_from']));
-        $data['display_till'] = date('Y-m-d H:i:s', strtotime($data['display_till']));
-        $announcement = Announcement::create($data);
-        $announcement->save();
+        $announcement = Announcement::create([
+            'description' => $request->input('description'),
+            'content' => $request->input('content'),
+            'display_from' => date('Y-m-d H:i:s', strtotime($request->input('display_from'))),
+            'display_till' => date('Y-m-d H:i:s', strtotime($request->input('display_till'))),
+            'show_guests' => $request->has('show_guests'),
+            'show_users' => $request->has('show_users'),
+            'show_members' => $request->has('show_members'),
+            'show_only_homepage' => $request->has('show_only_homepage'),
+            'show_only_new' => $request->has('show_only_new'),
+            'show_only_firstyear' => $request->has('show_only_firstyear'),
+            'show_only_active' => $request->has('show_only_active'),
+            'show_as_popup' => $request->has('show_as_popup'),
+            'show_style' => $request->input('show_style'),
+            'is_dismissable' => $request->has('is_dismissable'),
+        ]);
 
         Session::flash('flash_message', 'Announcement created.');
+
         return Redirect::route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit(Request $request, $id)
@@ -52,8 +62,7 @@ class AnnouncementController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -61,19 +70,32 @@ class AnnouncementController extends Controller
         /** @var Announcement $announcement */
         $announcement = Announcement::findOrFail($id);
 
-        $data = $request->except(['_token', 'id']);
-        $data['display_from'] = date('Y-m-d H:i:s', strtotime($data['display_from']));
-        $data['display_till'] = date('Y-m-d H:i:s', strtotime($data['display_till']));
-        $announcement->fill($data);
-        $announcement->save();
+        $announcement->update([
+            'description' => $request->input('description'),
+            'content' => $request->input('content'),
+            'display_from' => date('Y-m-d H:i:s', strtotime($request->input('display_from'))),
+            'display_till' => date('Y-m-d H:i:s', strtotime($request->input('display_till'))),
+            'show_guests' => $request->has('show_guests'),
+            'show_users' => $request->has('show_users'),
+            'show_members' => $request->has('show_members'),
+            'show_only_homepage' => $request->has('show_only_homepage'),
+            'show_only_new' => $request->has('show_only_new'),
+            'show_only_firstyear' => $request->has('show_only_firstyear'),
+            'show_only_active' => $request->has('show_only_active'),
+            'show_as_popup' => $request->has('show_as_popup'),
+            'show_style' => $request->input('show_style'),
+            'is_dismissable' => $request->has('is_dismissable'),
+        ]);
 
         Session::flash('flash_message', 'Announcement updated.');
+
         return Redirect::route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy($id)
@@ -83,11 +105,13 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         Session::flash('flash_message', 'Announcement deleted.');
+
         return Redirect::route('announcement::index');
     }
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function clear()
@@ -95,11 +119,12 @@ class AnnouncementController extends Controller
         Announcement::where('display_till', '<', date('Y-m-d'))->delete();
 
         Session::flash('flash_message', 'Announcements cleared.');
+
         return Redirect::route('announcement::index');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function dismiss($id)
@@ -112,6 +137,7 @@ class AnnouncementController extends Controller
         }
 
         $announcement->dismissForUser(Auth::user());
+
         return Redirect::back();
     }
 }

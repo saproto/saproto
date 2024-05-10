@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static Builder|ActivityParticipation onlyTrashed()
@@ -42,12 +43,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|ActivityParticipation newModelQuery()
  * @method static Builder|ActivityParticipation newQuery()
  * @method static Builder|ActivityParticipation query()
+ *
  * @mixin Eloquent
  */
 class ActivityParticipation extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'activities_users';
 
@@ -60,18 +62,18 @@ class ActivityParticipation extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo(\App\Models\User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function activity()
     {
-        return $this->belongsTo('Proto\Models\Activity');
+        return $this->belongsTo(\App\Models\Activity::class);
     }
 
     /** @return BelongsTo */
     public function help()
     {
-        return $this->belongsTo('Proto\Models\HelpingCommittee', 'committees_activities_id');
+        return $this->belongsTo(\App\Models\HelpingCommittee::class, 'committees_activities_id');
     }
 }

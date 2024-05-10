@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,12 +17,16 @@ use Illuminate\Support\Collection;
  * @property int $product_id
  * @property int $available_from
  * @property int $available_to
+ * @property int $buy_limit
  * @property bool $members_only
  * @property bool $is_prepaid
  * @property bool $show_participants
+ * @property bool $has_buy_limit
+ * @property string $redirect_url
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
+ *
  * @method static Builder|Ticket whereAvailableFrom($value)
  * @method static Builder|Ticket whereAvailableTo($value)
  * @method static Builder|Ticket whereEventId($value)
@@ -33,6 +37,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket newModelQuery()
  * @method static Builder|Ticket newQuery()
  * @method static Builder|Ticket query()
+ *
  * @mixin Eloquent
  */
 class Ticket extends Model
@@ -46,25 +51,26 @@ class Ticket extends Model
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('Proto\Models\Product');
+        return $this->belongsTo(\App\Models\Product::class);
     }
 
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event');
+        return $this->belongsTo(\App\Models\Event::class);
     }
 
     /** @return HasMany */
     public function purchases()
     {
-        return $this->hasMany('Proto\Models\TicketPurchase');
+        return $this->hasMany(\App\Models\TicketPurchase::class);
     }
 
     /** @return Collection */
     public function getUsers()
     {
         $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+
         return User::whereIn('id', array_unique($ids))->get();
     }
 
@@ -81,12 +87,27 @@ class Ticket extends Model
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function canBeSoldTo(User $user)
     {
-        return $user->is_member || ! $this->members_only;
+        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
+    }
+
+    /**
+     * @return bool
+     */
+    public function buyLimitReached(User $user)
+    {
+        return $this->has_buy_limit && $this->buyLimitForUser($user) <= 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function buyLimitForUser(User $user)
+    {
+        return $this->buy_limit - $this->purchases->where('user_id', $user->id)->count();
     }
 
     /** @return bool */
@@ -95,22 +116,19 @@ class Ticket extends Model
         return date('U') > $this->available_from && date('U') < $this->available_to;
     }
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function isAvailable(User $user)
+    public function isAvailable(User $user): bool
     {
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
     }
 
-    /** @return float|int*/
+    /** @return float|int */
     public function turnover()
     {
         $total = 0;
         foreach ($this->purchases as $purchase) {
             $total += $purchase->orderline->total_price;
         }
+
         return $total;
     }
 }

@@ -8,7 +8,6 @@
 
     <div id="achievement-accordion">
 
-        <?php $stars = 1; ?>
 
         @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
@@ -43,7 +42,8 @@
                                 <div class="col-xl-4 col-md-6 col-sm-12">
 
                                     @include('achievement.includes.achievement_include', [
-                                    'achievement' => $achievement
+                                    'achievement' => $achievement,
+                                    'obtained'=>$obtained?->filter(function($item) use ($achievement) { return $item->id == $achievement->id; })->first()?->pivot
                                     ])
 
                                 </div>
@@ -51,8 +51,6 @@
                             @endforeach
 
                         @endif
-
-                        <?php $stars++; ?>
 
                     </div>
 

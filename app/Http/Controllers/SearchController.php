@@ -1,7 +1,14 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Achievement;
+use App\Models\Committee;
+use App\Models\Event;
+use App\Models\Page;
+use App\Models\PhotoAlbum;
+use App\Models\Product;
+use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -10,19 +17,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
-use Proto\Models\Achievement;
-use Proto\Models\Committee;
-use Proto\Models\Event;
-use Proto\Models\Page;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\Product;
-use Proto\Models\User;
 use Session;
 
 class SearchController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function search(Request $request)
@@ -97,12 +96,11 @@ class SearchController extends Controller
             'pages' => $pages,
             'committees' => $committees,
             'events' => array_reverse($events),
-            'photoAlbums'=>$photoAlbums,
+            'photoAlbums' => $photoAlbums,
         ]);
     }
 
     /**
-     * @param Request $request
      * @return View
      */
     public function ldapSearch(Request $request)
@@ -139,11 +137,10 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getUserSearch(Request $request)
@@ -162,7 +159,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getEventSearch(Request $request)
@@ -173,7 +169,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getCommitteeSearch(Request $request)
@@ -184,7 +179,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getProductSearch(Request $request)
@@ -195,7 +189,6 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return array
      */
     public function getAchievementSearch(Request $request)
@@ -206,9 +199,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @param class-string|Model $model
-     * @param string $query
-     * @param string[] $attributes
+     * @param  class-string|Model  $model
+     * @param  string  $query
+     * @param  string[]  $attributes
      * @return Collection<Model>|array
      */
     private function getGenericSearch($model, $query, $attributes)

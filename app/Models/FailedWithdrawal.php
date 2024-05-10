@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read OrderLine $correction_orderline
  * @property-read User $user
  * @property-read Withdrawal $withdrawal
+ *
  * @method static Builder|FailedWithdrawal whereCorrectionOrderlineId($value)
  * @method static Builder|FailedWithdrawal whereId($value)
  * @method static Builder|FailedWithdrawal whereUserId($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal newModelQuery()
  * @method static Builder|FailedWithdrawal newQuery()
  * @method static Builder|FailedWithdrawal query()
+ *
  * @mixin Eloquent
  */
 class FailedWithdrawal extends Model
@@ -38,18 +40,18 @@ class FailedWithdrawal extends Model
     /** @return BelongsTo */
     public function correctionOrderline()
     {
-        return $this->belongsTo('Proto\Models\OrderLine', 'correction_orderline_id');
+        return $this->belongsTo(\App\Models\OrderLine::class, 'correction_orderline_id');
     }
 
     /** @return HasOne */
     public function withdrawal()
     {
-        return $this->hasOne('Proto\Models\Withdrawal', 'withdrawal_id');
+        return $this->hasOne(\App\Models\Withdrawal::class, 'withdrawal_id');
     }
 
     /** @return HasOne */
     public function user()
     {
-        return $this->hasOne('Proto\Models\User', 'user_id');
+        return $this->hasOne(\App\Models\User::class, 'user_id');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
- * Proto\Models\Page.
+ * App\Models\Page.
  *
  * @property int $id
  * @property string $title
@@ -28,6 +28,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string|null $deleted_at
  * @property-read StorageEntry|null $featuredImage
  * @property-read Collection|StorageEntry[] $files
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Page onlyTrashed()
@@ -46,12 +47,13 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Page newModelQuery()
  * @method static Builder|Page newQuery()
  * @method static Builder|Page query()
+ *
  * @mixin Eloquent
  */
 class Page extends Model
 {
-    use SoftDeletes;
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'pages';
 
@@ -60,13 +62,13 @@ class Page extends Model
     /** @return BelongsTo */
     public function featuredImage()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'featured_image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'featured_image_id');
     }
 
     /** @return BelongsToMany */
     public function files()
     {
-        return $this->belongsToMany('Proto\Models\StorageEntry', 'pages_files', 'page_id', 'file_id');
+        return $this->belongsToMany(\App\Models\StorageEntry::class, 'pages_files', 'page_id', 'file_id');
     }
 
     /** @return string */

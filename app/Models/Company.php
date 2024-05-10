@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read StorageEntry $image
  * @property-read Collection|Joboffer[] $joboffers
+ *
  * @method static Builder|Company whereCreatedAt($value)
  * @method static Builder|Company whereDescription($value)
  * @method static Builder|Company whereExcerpt($value)
@@ -46,6 +47,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Company newModelQuery()
  * @method static Builder|Company newQuery()
  * @method static Builder|Company query()
+ *
  * @mixin Eloquent
  */
 class Company extends Model
@@ -57,12 +59,12 @@ class Company extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
     }
 
     /** @return HasMany */
     public function joboffers()
     {
-        return $this->hasMany('Proto\Models\Joboffer', 'company_id');
+        return $this->hasMany(\App\Models\Joboffer::class, 'company_id');
     }
 }

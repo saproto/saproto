@@ -1,11 +1,10 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -18,6 +17,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $deleted_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|ProductCategory onlyTrashed()
@@ -31,6 +31,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|ProductCategory newModelQuery()
  * @method static Builder|ProductCategory newQuery()
  * @method static Builder|ProductCategory query()
+ *
  * @mixin Eloquent
  */
 class ProductCategory extends Model
@@ -45,10 +46,16 @@ class ProductCategory extends Model
         'deleted_at' => 'datetime',
     ];
 
-    /** @return Collection|Product[] */
+    /** @return \Illuminate\Database\Eloquent\Relations\BelongsToMany */
     public function products()
     {
-        $products = $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+        return $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id');
+    }
+
+    public function sortedProducts()
+    {
+        $products = $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id')->get();
+
         return $products->sortBy('name');
     }
 }

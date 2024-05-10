@@ -80,6 +80,10 @@
                                 Free!
                             @endif
                         </strong>
+                        <br>
+                        @if($event->activity->redirect_url)
+                            <i>Note: Signing up will redirect you to an external page!</i>
+                        @endif
                     </a>
                 @endif
             @endif
@@ -89,12 +93,11 @@
                     @if($event->activity->participants != -1)
                         {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
                         out of {{ $event->activity->participants }} places available
-                    @else
-                        <i class="fas fa-infinity fa-fw"></i> Unlimited places available.
+         	    @else
+                         <i class="fas fa-infinity fa-fw"></i> Unlimited places available.
                     @endif
                 </li>
             @endif
-
         </ul>
 
         <div class="card-body">
@@ -106,6 +109,11 @@
                 <br>
                 <strong>Sign out possible
                     until:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
+		<br>
+	        @if($event->activity->participants != -1 && !$event->activity->canSubscribe())
+	           <strong>Sign up limit: </strong> {{ $event->activity->participants }}
+		@endif
+	    </span>
             </p>
 
         </div>

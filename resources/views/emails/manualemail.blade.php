@@ -13,10 +13,10 @@
     </p>
 
     <p>
-        <sub>
+        <sup style="line-height: 1.5;">
             @if($destination == 'list')
                 You receive this e-mail because you are subscribed to one or more of the following e-mail lists:
-                {!! Proto\Models\Email::getListUnsubscribeFooter($user_id, $email_id) !!}.
+                {!! App\Models\Email::getListUnsubscribeFooter($user_id, $email_id) !!}.
             @elseif($destination == 'event' || $destination=='event with backup')
                 You receive this e-mail because you signed up for any of the following events as a participant, helper
                 or by buying a ticket {{$destination=='event with backup'?'or you are on the backuplist':''}}:
@@ -30,7 +30,7 @@
             @elseif($destination == 'active members')
                 You receive this e-mail because you are an active member (participate in a committee) of S.A. Proto.
             @endif
-        </sub>
+        </sup>
     </p>
 
 @endsection

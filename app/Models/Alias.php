@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
+ *
  * @method static Builder|Alias whereAlias($value)
  * @method static Builder|Alias whereCreatedAt($value)
  * @method static Builder|Alias whereDestination($value)
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Alias newModelQuery()
  * @method static Builder|Alias newQuery()
  * @method static Builder|Alias query()
+ *
  * @mixin Eloquent
  */
 class Alias extends Model
@@ -38,6 +40,6 @@ class Alias extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

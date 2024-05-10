@@ -1,15 +1,15 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Exception;
 
 class CalendarController extends Controller
 {
     /**
-     * @param string $google_calendar_id
-     * @param string $start
-     * @param string $end
+     * @param  string  $google_calendar_id
+     * @param  string  $start
+     * @param  string  $end
      * @return array
      */
     public static function returnGoogleCalendarEvents($google_calendar_id, $start, $end)
@@ -37,7 +37,7 @@ class CalendarController extends Controller
                 $name_exp[0] = '';
             }
             $name = '';
-            foreach ($name_exp as $key => $val) {
+            foreach ($name_exp as $val) {
                 $name .= $val.' ';
             }
 

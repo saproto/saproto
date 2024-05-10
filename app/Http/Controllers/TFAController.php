@@ -1,20 +1,18 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\User;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
 class TFAController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Google2FA $google2fa
      * @return RedirectResponse
      */
     public function create(Request $request, Google2FA $google2fa)
@@ -35,8 +33,6 @@ class TFAController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Google2FA $google2fa
      * @return RedirectResponse
      */
     public function destroy(Request $request, Google2FA $google2fa)
@@ -50,17 +46,18 @@ class TFAController extends Controller
                 $user->save();
             } else {
                 Session::flash('flash_message', 'Invalid code supplied, could not disable 2FA!');
+
                 return Redirect::back();
             }
         }
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
-     * @param Request $request
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function adminDestroy(Request $request, $id)
@@ -70,6 +67,7 @@ class TFAController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
+
         return Redirect::back();
     }
 }

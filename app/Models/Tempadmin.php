@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property-read User $creator
  * @property-read User $user
+ *
  * @method static Builder|Tempadmin whereCreatedAt($value)
  * @method static Builder|Tempadmin whereCreatedBy($value)
  * @method static Builder|Tempadmin whereEndAt($value)
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Tempadmin newModelQuery()
  * @method static Builder|Tempadmin newQuery()
  * @method static Builder|Tempadmin query()
+ *
  * @mixin Eloquent
  */
 class Tempadmin extends Model
@@ -41,12 +43,12 @@ class Tempadmin extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     /** @return BelongsTo */
     public function creator()
     {
-        return $this->belongsTo('Proto\Models\User', 'created_by');
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
     }
 }

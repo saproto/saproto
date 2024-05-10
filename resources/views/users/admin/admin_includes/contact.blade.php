@@ -7,7 +7,13 @@
     <div class="card-body">
 
         <p class="card-text">
-            <i class="fas fa-at fa-fw me-2"></i> <a href="mailto:{{ $user->email }}">{{ $user->email }}</a><br>
+            <i class="fas fa-at fa-fw me-2"></i> <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+            @if($user->id !== Auth::user()->id && Auth::user()->can('board'))
+                <a href="#" class="ms-1" data-bs-toggle="modal" data-bs-target="#changeEmail">
+                    <i class="fas fa-edit me-4"></i>
+                </a>
+            @endif
+            <br>
             @if($user->phone)
                 <i class="fas fa-phone fa-fw me-2"></i> <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a><br>
             @endif

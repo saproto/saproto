@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $updated_at
  * @property-read Collection|User[] $users
  * @property-read Collection|AchievementOwnership[] $achievement_ownership
+ *
  * @method static Builder|Achievement whereCreatedAt($value)
  * @method static Builder|Achievement whereDesc($value)
  * @method static Builder|Achievement whereFaIcon($value)
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Achievement newModelQuery()
  * @method static Builder|Achievement newQuery()
  * @method static Builder|Achievement query()
+ *
  * @mixin Eloquent
  */
 class Achievement extends Model
@@ -51,13 +53,12 @@ class Achievement extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'achievements_users');
+        return $this->belongsToMany(\App\Models\User::class, 'achievements_users');
     }
 
-    /** @return HasMany */
-    public function achievementOwnership()
+    public function achievementOwnership(): HasMany
     {
-        return $this->hasMany('Proto\Models\AchievementOwnership');
+        return $this->hasMany(\App\Models\AchievementOwnership::class);
     }
 
     /** @return int */
@@ -75,18 +76,17 @@ class Achievement extends Model
     }
 
     /**
-     * @param bool $is_member
-     * @return User[]
+     * @param  bool  $is_member
+     * @return BelongsToMany|Builder|User[]
      */
     public function currentOwners($is_member = true)
     {
-        $users = [];
-        foreach ($this->users as $user) {
-            if ((! $is_member || $user->is_member)) {
-                $users[] = $user;
-            }
+        if ($is_member) {
+            return $this->users()->whereHas('member', function ($query) {
+                $query->where('is_pending', false);
+            });
         }
 
-        return $users;
+        return $this->users();
     }
 }

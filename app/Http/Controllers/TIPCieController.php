@@ -1,17 +1,16 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\OrderLine;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Proto\Models\Account;
-use Proto\Models\OrderLine;
 
 class TIPCieController extends Controller
 {
     /**
-     * @param Request $request
      * @return View
      */
     public function orderIndex(Request $request)

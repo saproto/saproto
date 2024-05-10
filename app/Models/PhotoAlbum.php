@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Carbon;
 use Eloquent;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\PhotoAlbum.
+ * App\Models\PhotoAlbum.
  *
  * @property int $id
  * @property string $name
@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read Event|null $event
  * @property-read Photo $thumb_photo
  * @property-read Collection|Photo[] $items
+ *
  * @method static Builder|PhotoAlbum whereCreatedAt($value)
  * @method static Builder|PhotoAlbum whereDateCreate($value)
  * @method static Builder|PhotoAlbum whereDateTaken($value)
@@ -40,6 +41,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PhotoAlbum newModelQuery()
  * @method static Builder|PhotoAlbum newQuery()
  * @method static Builder|PhotoAlbum query()
+ *
  * @mixin Eloquent
  */
 class PhotoAlbum extends Model
@@ -51,19 +53,19 @@ class PhotoAlbum extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event', 'event_id');
+        return $this->belongsTo(\App\Models\Event::class, 'event_id');
     }
 
     /** @return HasOne */
     private function thumbPhoto()
     {
-        return $this->hasOne('Proto\Models\Photo', 'id', 'thumb_id');
+        return $this->hasOne(\App\Models\Photo::class, 'id', 'thumb_id');
     }
 
     /** @return HasMany */
     public function items()
     {
-        return $this->hasMany('Proto\Models\Photo', 'album_id');
+        return $this->hasMany(\App\Models\Photo::class, 'album_id');
     }
 
     /** @return string|null */
@@ -71,8 +73,8 @@ class PhotoAlbum extends Model
     {
         if ($this->thumb_id) {
             return $this->thumbPhoto()->first()->thumbnail();
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

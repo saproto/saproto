@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Models;
+namespace App\Models;
 
 use Crypt;
 use Eloquent;
@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $description
  * @property int $is_member_only
  * @property-read Collection|User[] $users
+ *
  * @method static Builder|EmailList whereDescription($value)
  * @method static Builder|EmailList whereId($value)
  * @method static Builder|EmailList whereIsMemberOnly($value)
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|EmailList newModelQuery()
  * @method static Builder|EmailList newQuery()
  * @method static Builder|EmailList query()
+ *
  * @mixin Eloquent
  */
 class EmailList extends Model
@@ -38,11 +40,11 @@ class EmailList extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'users_mailinglists', 'list_id', 'user_id');
+        return $this->belongsToMany(\App\Models\User::class, 'users_mailinglists', 'list_id', 'user_id');
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether user is subscribed to mailing list.
      */
     public function isSubscribed($user)
@@ -51,7 +53,7 @@ class EmailList extends Model
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
     public function subscribe($user)
@@ -61,15 +63,17 @@ class EmailList extends Model
                 'user_id' => $user->id,
                 'list_id' => $this->id,
             ]);
+
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
+     *
      * @throws Exception
      */
     public function unsubscribe($user)
@@ -79,12 +83,13 @@ class EmailList extends Model
             return false;
         }
         $s->delete();
+
         return true;
     }
 
     /**
-     * @param int $user_id
-     * @param int $list_id
+     * @param  int  $user_id
+     * @param  int  $list_id
      * @return string
      */
     public static function generateUnsubscribeHash($user_id, $list_id)

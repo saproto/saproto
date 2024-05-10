@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto\Mail;
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -11,32 +11,13 @@ class ManualEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $sender_address;
-    public $sender_name;
-    public $subject;
-    public $body;
-    public $submitted_attachments;
-    public $destination;
-    public $user_id;
-    public $events;
-    public $email_id;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($sender_address, $sender_name, $subject, $body, $attachments, $destination, $user_id, $events, $email_id)
+    public function __construct(public $sender_address, public $sender_name, public $subject, public $body, public $submitted_attachments, public $destination, public $user_id, public $events, public $email_id)
     {
-        $this->sender_address = $sender_address;
-        $this->sender_name = $sender_name;
-        $this->subject = $subject;
-        $this->body = $body;
-        $this->submitted_attachments = $attachments;
-        $this->destination = $destination;
-        $this->user_id = $user_id;
-        $this->events = $events;
-        $this->email_id = $email_id;
     }
 
     /**
@@ -56,6 +37,7 @@ class ManualEmail extends Mailable
             ];
             $mail->attach($attachment->generateLocalPath(), $options);
         }
+
         return $mail;
     }
 }

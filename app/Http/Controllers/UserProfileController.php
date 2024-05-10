@@ -1,19 +1,19 @@
 <?php
 
-namespace Proto\Http\Controllers;
+namespace App\Http\Controllers;
 
+use App\Models\ActivityParticipation;
+use App\Models\CommitteeMembership;
+use App\Models\OrderLine;
+use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
-use Proto\Models\ActivityParticipation;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\OrderLine;
-use Proto\Models\User;
 
 class UserProfileController extends Controller
 {
     /**
-     * @param string|null $id
+     * @param  string|null  $id
      * @return View
      */
     public function show($id = null)
@@ -29,12 +29,14 @@ class UserProfileController extends Controller
         $moneySpent = $this->getSpentMoney($user);
         $totalProducts = $this->getProductsPurchased($user);
         $totalSignups = $this->getTotalSignups($user);
-        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney'=>$moneySpent, 'signups'=>$totalSignups, 'totalproducts'=>$totalProducts]);
+        $achievements = $user->achievements;
+
+        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney' => $moneySpent, 'signups' => $totalSignups, 'totalproducts' => $totalProducts, 'achievements' => $achievements]);
     }
 
     /**
-     * @param User $user
-     * @param bool $with_societies
+     * @param  User  $user
+     * @param  bool  $with_societies
      * @return Collection|CommitteeMembership[]
      */
     private function getPastMemberships($user, $with_societies)

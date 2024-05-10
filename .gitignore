@@ -6,12 +6,14 @@
 
 # Development tools
 /node_modules
+.phpunit.cache
 
 # Local files
 /personal
 
 # IDE files
 /.idea
+.phpactor.json
 
 # Helper files
 .phpstorm.meta.php
@@ -23,14 +25,17 @@ phpstan.neon
 composer.phar
 
 # Generated files
-/public/css
-/public/js
-/public/fonts
-/public/mix-manifest.json
+/public/build
+/public/hot
+
+# Font metadata files
+/resources/fonts/unifont/*.cw*
+/resources/fonts/unifont/*.mtx*
 
 # Dammit, Mac users
 .DS_Store
 
+# Private stuff
 storage/oauth-private.key
 storage/oauth-public.key
 
