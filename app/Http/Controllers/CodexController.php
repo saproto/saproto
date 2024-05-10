@@ -27,7 +27,7 @@ class CodexController extends Controller
 
     public function addSong()
     {
-        if (! SongCategory::count()) {
+        if (!SongCategory::count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex::index');
@@ -41,7 +41,7 @@ class CodexController extends Controller
     {
         $song = CodexSong::findOrFail($id);
         $categories = SongCategory::orderBy('name')->get();
-        $myCategories = $song->categories->pluck('id')->toArray();
+        $myCategories = $song->category->id;
 
         return view('codex.song-edit', ['song' => $song, 'categories' => $categories, 'myCategories' => $myCategories]);
     }
@@ -68,8 +68,9 @@ class CodexController extends Controller
         $song->artist = $request->input('artist');
         $song->lyrics = $request->input('lyrics');
         $song->youtube = $request->input('youtube');
+        $song->category_id = $request->input('category');
         $song->save();
-        $song->categories()->sync($request->input('categoryids'));
+
     }
 
     public function deleteSong(int $id)
@@ -181,7 +182,7 @@ class CodexController extends Controller
 
     public function addText()
     {
-        if (! CodexTextType::count()) {
+        if (!CodexTextType::count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex::index');
@@ -349,11 +350,11 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (! preg_match('/(\d+)\./', $textValue)) {
+                        if (!preg_match('/(\d+)\./', $textValue)) {
                             $list = false;
                         }
                         $count += 1;
-                        $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
+                        $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
                     } else {
                         $count = 0;
                     }

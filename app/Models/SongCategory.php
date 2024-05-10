@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SongCategory extends Model
 {
@@ -12,9 +12,9 @@ class SongCategory extends Model
 
     protected $table = 'codex_category';
 
-    public function songs(): BelongsToMany
+    public function songs(): HasMany
     {
-        return $this->belongsToMany(CodexSong::class, 'codex_category_song', 'category', 'song');
+        return $this->hasMany(CodexSong::class, 'category_id');
     }
 
     protected static function booted()
