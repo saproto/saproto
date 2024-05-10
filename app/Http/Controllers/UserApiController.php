@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\CommitteeMembership;
 use App\Models\OrderLine;
 use App\Models\User;
+use GuzzleHttp;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Session;
-use \GuzzleHttp;
 
 class UserApiController extends Controller
 {
@@ -115,32 +115,35 @@ class UserApiController extends Controller
         return $total;
     }
 
-    public function discordLinkCallback(Request $request) {
-        $tokenURL = "https://discord.com/api/oauth2/token";
-        $apiURLBase = "https://discord.com/api/users/@me";
+    public function discordLinkCallback(Request $request)
+    {
+        $tokenURL = 'https://discord.com/api/oauth2/token';
+        $apiURLBase = 'https://discord.com/api/users/@me';
         $tokenData = [
-            "client_id" => config('proto.discord_client_id'),
-            "client_secret" => config('proto.discord_secret'),
-            "grant_type" => "authorization_code",
-            "code" => $request->get('code'),
-            "redirect_uri" => config('app.url') . 'api/discord/linked',
-            "scope" => "identify"
+            'client_id' => config('proto.discord_client_id'),
+            'client_secret' => config('proto.discord_secret'),
+            'grant_type' => 'authorization_code',
+            'code' => $request->get('code'),
+            'redirect_uri' => config('app.url').'api/discord/linked',
+            'scope' => 'identify',
         ];
 
         $client = new GuzzleHttp\Client();
         try {
-            $accessTokenData = $client->post($tokenURL, ["form_params" => $tokenData]);
-            $accessTokenData = json_decode($accessTokenData -> getBody());
+            $accessTokenData = $client->post($tokenURL, ['form_params' => $tokenData]);
+            $accessTokenData = json_decode($accessTokenData->getBody());
         } catch (\GuzzleHttp\Exception\ClientException $error) {
-            Session::flash('flash_message', 'Failed to link Discord account :(' . $error);
-            return Redirect::back();
-        };
+            Session::flash('flash_message', 'Failed to link Discord account :('.$error);
 
-        $userData = Http::withToken($accessTokenData -> access_token) -> get($apiURLBase);
+            return Redirect::back();
+        }
+
+        $userData = Http::withToken($accessTokenData->access_token)->get($apiURLBase);
         $userData = json_decode($userData);
 
-        if(User::firstWhere('discord_id', $userData->id)) {
+        if (User::firstWhere('discord_id', $userData->id)) {
             Session::flash('flash_message', 'This Discord account is already linked to a user!');
+
             return Redirect::back();
         }
 
@@ -149,15 +152,18 @@ class UserApiController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Successfully linked Discord!');
+
         return Redirect::route('user::dashboard');
     }
 
-    public function discordUnlink() {
+    public function discordUnlink()
+    {
         $user = Auth::user();
         $user->discord_id = null;
         $user->save();
 
         Session::flash('flash_message', 'Discord account has been unlinked.');
+
         return Redirect::route('user::dashboard');
     }
 }
