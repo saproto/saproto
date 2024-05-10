@@ -119,8 +119,8 @@ class UserApiController extends Controller
         $tokenURL = "https://discord.com/api/oauth2/token";
         $apiURLBase = "https://discord.com/api/users/@me";
         $tokenData = [
-            "client_id" => config('discord_client_id'),
-            "client_secret" => config('discord_secret'),
+            "client_id" => config('proto.discord_client_id'),
+            "client_secret" => config('proto.discord_secret'),
             "grant_type" => "authorization_code",
             "code" => $request->get('code'),
             "redirect_uri" => 'http://localhost:8080/api/discord/linked',
@@ -138,6 +138,11 @@ class UserApiController extends Controller
 
         $userData = Http::withToken($accessTokenData -> access_token) -> get($apiURLBase);
         $userData = json_decode($userData);
+
+        if(User::firstWhere('discord_id', $userData->id)) {
+            Session::flash('flash_message', 'This Discord account is already linked to a user!');
+            return Redirect::back();
+        }
 
         $user = Auth::user();
         $user->discord_id = $userData->id;

@@ -119,20 +119,20 @@ return [
     | Discord Client ID
     |--------------------------------------------------------------------------
     |
-    | The Discord client ID is used for OAuth authentication
+    | The Discord client ID used for OAuth authentication
     |
     */
-    'discord_client_id' => env(' DISCORD_CLIENT'),
+    'discord_client_id' => env('DISCORD_CLIENT'),
 
     /*
     |--------------------------------------------------------------------------
     | Discord Secret
     |--------------------------------------------------------------------------
     |
-    | The Discord secret is used for OAuth authentication
+    | The Discord secret used for OAuth authentication
     |
     */
-    'discord_secret' => env(' DISCORD_SECRET'),
+    'discord_secret' => env('DISCORD_SECRET'),
 
     /*
     |--------------------------------------------------------------------------
