@@ -17,7 +17,7 @@ use Session;
 class DinnerformController extends Controller
 {
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View|RedirectResponse
      */
     public function show($id)
@@ -28,7 +28,7 @@ class DinnerformController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('dinnerform_id', $dinnerform->id)
             ->first();
-        if (! $dinnerform->isCurrent() && ! isset($order)) {
+        if (!$dinnerform->isCurrent() && !isset($order)) {
             Session::flash('flash_message', 'This dinnerform is closed and you have not ordered anything.');
 
             return Redirect::back();
@@ -77,13 +77,13 @@ class DinnerformController extends Controller
             'ordered_by_user_id' => $request->input('ordered_by'),
         ]);
 
-        Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
+        Session::flash('flash_message', "Your dinnerform at '" . $dinnerform->restaurant . "' has been added.");
 
         return Redirect::route('dinnerform::add');
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View|RedirectResponse
      */
     public function edit($id)
@@ -100,7 +100,7 @@ class DinnerformController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function update(Request $request, $id)
@@ -140,16 +140,16 @@ class DinnerformController extends Controller
         ]);
 
         if ($changed_important_details) {
-            Session::flash('flash_message', "Your dinnerform for '".$dinnerform->restaurant."' has been saved. You updated some important information. Don't forget to notify your participants with this info!");
+            Session::flash('flash_message', "Your dinnerform for '" . $dinnerform->restaurant . "' has been saved. You updated some important information. Don't forget to notify your participants with this info!");
         } else {
-            Session::flash('flash_message', "Your dinnerform for '".$dinnerform->restaurant."' has been saved.");
+            Session::flash('flash_message', "Your dinnerform for '" . $dinnerform->restaurant . "' has been saved.");
         }
 
         return $this->edit($id);
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -157,8 +157,8 @@ class DinnerformController extends Controller
     public function destroy($id)
     {
         $dinnerform = Dinnerform::findOrFail($id);
-        if (! $dinnerform->closed) {
-            Session::flash('flash_message', "The dinnerform for '".$dinnerform->restaurant."' has been deleted.");
+        if (!$dinnerform->closed) {
+            Session::flash('flash_message', "The dinnerform for '" . $dinnerform->restaurant . "' has been deleted.");
             $dinnerform->delete();
         } else {
             Session::flash('flash_message', 'The dinnerform is already closed and can not be deleted!');
@@ -170,7 +170,7 @@ class DinnerformController extends Controller
     /**
      * Close the dinnerform by changing the end time to the current time.
      *
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function close($id)
@@ -185,14 +185,20 @@ class DinnerformController extends Controller
 
     public function process($id)
     {
-        if (! Auth::user()->can('finadmin')) {
+        if (!Auth::user()->can('finadmin')) {
             Session::flash('flash_message', 'You are not allowed to process dinnerforms!');
 
             return Redirect::back();
         }
         $dinnerform = Dinnerform::findOrFail($id);
-        $dinnerformOrderlines = $dinnerform->orderlines()->get();
+        $dinnerformOrderlines = $dinnerform->orderlines()->where('closed', false)->get();
         $product = Product::findOrFail(config('omnomcom.dinnerform-product'));
+
+        if ($dinnerform->closed) {
+            Session::flash('flash_message', 'This dinnerform has already been processed!');
+
+            return Redirect::back();
+        }
 
         foreach ($dinnerformOrderlines as $dinnerformOrderline) {
             $product->buyForUser(
