@@ -42,7 +42,7 @@
                 @endif
             @endforeach
 
-         background-image: url('{{ asset($bg_image) }}');
+          background-image: url('{{ asset($bg_image) }}');
             background-position: center 100%;
             background-repeat: no-repeat;
         }
@@ -99,7 +99,6 @@
     let price = []
 
     async function initializeOmNomCom() {
-        console.log("currentProductPageId", localStorage.getItem("currentProductPageId"));
         await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
             .then(data => {
                 data.forEach(product => {
