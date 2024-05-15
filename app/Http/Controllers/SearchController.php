@@ -53,7 +53,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_pages) {
             foreach ($presearch_pages as $page) {
-                if (!$page->is_member_only || Auth::user()?->is_member) {
+                if (! $page->is_member_only || Auth::user()?->is_member) {
                     $pages[] = $page;
                 }
             }
@@ -97,7 +97,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_photo_albums) {
             foreach ($presearch_photo_albums as $album) {
-                if (!$album->secret || Auth::user()?->can('protography')) {
+                if (! $album->secret || Auth::user()?->can('protography')) {
                     $photoAlbums[] = $album;
                 }
             }
@@ -143,7 +143,7 @@ class SearchController extends Controller
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array)$data,
+            'data' => (array) $data,
         ]);
     }
 
@@ -161,7 +161,7 @@ class SearchController extends Controller
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
         foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->get() ?? [] as $user) {
-            $result[] = (object)[
+            $result[] = (object) [
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -211,7 +211,7 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Achievement::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    private function getGenericSearchQuery(Model|string $model, string $query, array $attributes): Builder|null
+    private function getGenericSearchQuery(Model|string $model, string $query, array $attributes): ?Builder
     {
         $terms = explode(' ', str_replace('*', '%', $query));
         $query = $model::query();
@@ -224,7 +224,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (!$check_at_least_one_valid_term) {
+        if (! $check_at_least_one_valid_term) {
             return null;
         }
 
