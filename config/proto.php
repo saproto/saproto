@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => 'Mark Tool',
+    'treasurer' => 'Emma Burema',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,7 +189,7 @@ return [
     |
     */
 
-    'boardnumber' => '13.0',
+    'boardnumber' => '13.1',
 
     /*
     |--------------------------------------------------------------------------
@@ -276,7 +276,7 @@ return [
     |
     */
 
-    'sepa_info' => (object) [
+    'sepa_info' => (object)[
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
         'creditor_id' => env('SEPA_CI'),
