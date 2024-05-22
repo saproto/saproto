@@ -124,7 +124,7 @@ class UserApiController extends Controller
             'client_secret' => config('proto.discord_secret'),
             'grant_type' => 'authorization_code',
             'code' => $request->get('code'),
-            'redirect_uri' => config('app.url').'api/discord/linked',
+            'redirect_uri' => config('app.url').'/api/discord/linked',
             'scope' => 'identify',
         ];
 
