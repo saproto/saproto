@@ -17,9 +17,11 @@ return new class extends Migration
             $table->unsignedInteger('unique_users_count')->after('publication')->default(0);
         });
 
-        foreach (Event::all() as $event) {
-            $event->updateUniqueUsersCount();
-        }
+        Event::chunk(25, function ($events) {
+            foreach ($events as $event) {
+                $event->updateUniqueUsersCount();
+            }
+        });
 
         //add index to activities_users
         Schema::table('activities_users', function (Blueprint $table) {
