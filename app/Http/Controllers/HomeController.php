@@ -23,12 +23,13 @@ class HomeController extends Controller
     {
         $companies = Company::query()
             ->where('in_logo_bar', true)
+            ->with('image')
             ->inRandomOrder()
             ->get();
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (! Auth::user()?->is_member) {
+        if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()
@@ -78,8 +79,19 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
+        $featuredEvents = Event::getEventBlockQuery()
+            ->where([
+                ['is_featured', true],
+                ['end', '>=', date('U')],
+                ['secret', false],
+            ])
+            ->orderBy('start')
+            ->limit(6)
+            ->get();
+
         return view('website.home.members', [
             'upcomingEvents' => $upcomingEvents,
+            'featuredEvents' => $featuredEvents,
             'companies' => $companies,
             'message' => $message,
             'newsitems' => $newsitems,

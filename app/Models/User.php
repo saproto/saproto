@@ -152,6 +152,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $guarded = ['password', 'remember_token'];
 
+    protected $with = ['member'];
     protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
@@ -167,7 +168,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $public_id
+     * @param string $public_id
      * @return mixed|User|null
      */
     public static function fromPublicId($public_id)
@@ -184,7 +185,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale()
     {
-        return ! (
+        return !(
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -313,8 +314,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param  int  $w
-     * @param  int  $h
+     * @param int $w
+     * @param int $h
      * @return string Path to a resized version of someone's profile picture.
      */
     public function generatePhotoPath($w = 100, $h = 100)
@@ -327,7 +328,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $password
+     * @param string $password
      *
      * @throws Exception
      */
@@ -363,10 +364,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function hasUnpaidOrderlines()
     {
         foreach ($this->orderlines as $orderline) {
-            if (! $orderline->isPayed()) {
+            if (!$orderline->isPayed()) {
                 return true;
             }
-            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
+            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) {
                 return true;
             }
         }
@@ -419,7 +420,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  Committee  $committee
+     * @param Committee $committee
      * @return bool
      */
     public function isInCommittee($committee)
@@ -428,7 +429,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      * @return bool
      */
     public function isInCommitteeBySlug($slug)
@@ -442,21 +443,21 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isActiveMember()
     {
         return count(
-            CommitteeMembership::withTrashed()
-                ->where('user_id', $this->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })
-                ->with('committee')
-                ->get()
-                ->where('committee.is_society', false)
-        ) > 0;
+                CommitteeMembership::withTrashed()
+                    ->where('user_id', $this->id)
+                    ->where('created_at', '<', date('Y-m-d H:i:s'))
+                    ->where(function ($q) {
+                        $q->whereNull('deleted_at')
+                            ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                    })
+                    ->with('committee')
+                    ->get()
+                    ->where('committee.is_society', false)
+            ) > 0;
     }
 
     /**
-     * @param  int  $limit
+     * @param int $limit
      * @return Withdrawal[]
      */
     public function withdrawals($limit = 0)
@@ -481,7 +482,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             return $this->website;
         }
 
-        return 'https://'.$this->website;
+        return 'https://' . $this->website;
     }
 
     /** @return string|null */
@@ -604,7 +605,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return void */
     public function toggleCalendarRelevantSetting()
     {
-        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
         $this->save();
     }
 
@@ -617,7 +618,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute()
     {
-        return $this->member && ! $this->member->is_pending;
+        return $this->member && !$this->member->is_pending;
     }
 
     /** @return bool */
