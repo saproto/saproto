@@ -71,7 +71,7 @@ class Feedback extends Model
 
     public function mayViewFeedback($user): bool
     {
-        if (!$this->category->review) {
+        if (! $this->category->review) {
             return true;
         }
         if ($this->reviewed) {

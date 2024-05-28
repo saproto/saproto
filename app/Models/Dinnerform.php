@@ -86,7 +86,7 @@ class Dinnerform extends Model
     /** @return string A timespan string with format 'D H:i'. */
     public function generateTimespanText()
     {
-        return $this->start->format('D H:i') . ' - ' . Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */
