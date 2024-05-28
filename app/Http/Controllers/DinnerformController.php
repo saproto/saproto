@@ -191,8 +191,14 @@ class DinnerformController extends Controller
             return Redirect::back();
         }
         $dinnerform = Dinnerform::findOrFail($id);
-        $dinnerformOrderlines = $dinnerform->orderlines()->get();
+        $dinnerformOrderlines = $dinnerform->orderlines()->where('closed', false)->get();
         $product = Product::findOrFail(config('omnomcom.dinnerform-product'));
+
+        if ($dinnerform->closed) {
+            Session::flash('flash_message', 'This dinnerform has already been processed!');
+
+            return Redirect::back();
+        }
 
         foreach ($dinnerformOrderlines as $dinnerformOrderline) {
             $product->buyForUser(
