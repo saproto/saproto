@@ -72,7 +72,7 @@
                         <div class="collapse mt-3 ms-4 {{$ticket?->has_buy_limit?'show':''}}" id="buy_limit__collapse">
                             <div class="input-group mb-3">
                                 <input type="number" class="form-control" name="buy_limit" placeholder="15"
-                                       min="1" step="1" value="{{$ticket?->buy_limit}}">
+                                       step="1" value="{{$ticket?->buy_limit}}">
                                 <span class="input-group-text" id="basic-addon2">tickets</span>
                             </div>
                         </div>

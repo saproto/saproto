@@ -27,7 +27,7 @@ class CodexController extends Controller
 
     public function addSong()
     {
-        if (!SongCategory::count()) {
+        if (! SongCategory::count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex::index');
@@ -179,7 +179,7 @@ class CodexController extends Controller
 
     public function addText()
     {
-        if (!CodexTextType::count()) {
+        if (! CodexTextType::count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex::index');
@@ -347,11 +347,11 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (!preg_match('/(\d+)\./', $textValue)) {
+                        if (! preg_match('/(\d+)\./', $textValue)) {
                             $list = false;
                         }
                         $count += 1;
-                        $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
+                        $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
                     } else {
                         $count = 0;
                     }
