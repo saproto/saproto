@@ -21,9 +21,4 @@ class Codex extends Model
     {
         return $this->belongsToMany(CodexText::class, 'codex_codex_text', 'codex', 'text_id');
     }
-
-    public function shuffles(): BelongsToMany
-    {
-        return $this->belongsToMany(SongCategory::class, 'codex_codexshuffle', 'codex', 'category');
-    }
 }

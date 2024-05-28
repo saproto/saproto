@@ -24,6 +24,9 @@ return new class extends Migration {
         //remove the codex_category_song table
         Schema::dropIfExists('codex_category_song');
 
+        //remove the codex_codexshuffle table
+        Schema::dropIfExists('codex_codexshuffle');
+
     }
 
     /**
@@ -41,9 +44,16 @@ return new class extends Migration {
         foreach ($songs as $song) {
             DB::table('codex_category_song')->insert(['song' => $song->id, 'category' => $song->category_id]);
         }
-        
+
         Schema::table('codex_songs', function (Blueprint $table) {
             $table->dropColumn('category_id');
+        });
+
+        Schema::create('codex_codexshuffle', function (Blueprint $table) {
+            $table->id();
+            $table->integer('codex')->unsigned();
+            $table->integer('category')->unsigned();
+            $table->timestamps();
         });
     }
 };
