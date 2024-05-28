@@ -281,7 +281,7 @@ class CodexController extends Controller
         })->with(['songs' => function ($query) use ($id) {
             $query->whereHas('codices', function ($query) use ($id) {
                 $query->where('codex_codices.id', $id);
-            });
+            })->orderBy('title');
         }])->orderBy('id')->get();
 
         $textCategories = CodexTextType::whereHas('texts', function ($q) use ($id) {
