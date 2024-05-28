@@ -48,7 +48,7 @@ class DinnerformController extends Controller
     /** @return View */
     public function create()
     {
-        $dinnerformList = Dinnerform::all()->sortByDesc('end');
+        $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
@@ -94,7 +94,7 @@ class DinnerformController extends Controller
 
             return Redirect::back();
         }
-        $dinnerformList = Dinnerform::all()->sortByDesc('end');
+        $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
     }
