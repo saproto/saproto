@@ -23,6 +23,7 @@ class HomeController extends Controller
     {
         $companies = Company::query()
             ->where('in_logo_bar', true)
+            ->with('image')
             ->inRandomOrder()
             ->get();
 
@@ -73,13 +74,26 @@ class HomeController extends Controller
             ->where([
                 ['is_featured', false],
                 ['end', '>=', date('U')],
+                ['publication', '<', date('U')],
                 ['secret', false],
             ])
             ->limit(6)
             ->get();
 
+        $featuredEvents = Event::getEventBlockQuery()
+            ->where([
+                ['is_featured', true],
+                ['end', '>=', date('U')],
+                ['publication', '<', date('U')],
+                ['secret', false],
+            ])
+            ->orderBy('start')
+            ->limit(6)
+            ->get();
+
         return view('website.home.members', [
             'upcomingEvents' => $upcomingEvents,
+            'featuredEvents' => $featuredEvents,
             'companies' => $companies,
             'message' => $message,
             'newsitems' => $newsitems,

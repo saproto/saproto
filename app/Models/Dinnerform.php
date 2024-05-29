@@ -58,6 +58,8 @@ class Dinnerform extends Model
         'end' => 'datetime',
     ];
 
+    protected $with = ['event'];
+
     /** @return BelongsTo */
     public function event()
     {
