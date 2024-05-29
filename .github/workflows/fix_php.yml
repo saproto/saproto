@@ -17,15 +17,15 @@ jobs:
       - name: 🔍 Read .env
         run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v2
 
       - uses: actions/cache@v3
         with:
-          path: /tmp/rector
+          path: .tmp/rector
           key: ${{ runner.os }}-rector-${{ github.run_id }}
           restore-keys: ${{ runner.os }}-rector-
 
-      - run: mkdir -p /tmp/rector
+      - run: mkdir -p .tmp/rector
 
       - name: Run rector
         run: vendor/bin/rector --ansi
@@ -33,11 +33,11 @@ jobs:
       - name: Cache Pint
         uses: actions/cache@v3
         with:
-          path: /tmp/pint.cache
+          path: .tmp/pint.cache
           key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-pint-
 
-      - run: mkdir -p /tmp/pint
+      - run: mkdir -p .tmp/pint
 
       - name: Run pint
         run: ./vendor/bin/pint

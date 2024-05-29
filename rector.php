@@ -10,7 +10,7 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 return RectorConfig::configure()
     ->withCache(
         // ensure file system caching is used instead of in-memory
-        cacheDirectory: '/tmp/rector',
+        cacheDirectory: '.tmp/rector',
 
         // specify a path that works locally as well as on CI job runners
         cacheClass: FileCacheStorage::class
