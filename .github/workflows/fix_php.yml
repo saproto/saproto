@@ -25,7 +25,7 @@ jobs:
 
       - run: mkdir -p /tmp/rector
       - name: Rector Run
-        run: php vendor/bin/rector process
+        run: vendor/bin/rector process
 
       - name: "laravel-pint"
         uses: aglipanci/laravel-pint-action@2.2.0
