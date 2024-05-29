@@ -21,7 +21,7 @@ class TicketController extends Controller
     /** @return View */
     public function index()
     {
-        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->paginate(20)]);
+        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
     }
 
     /** @return View */
