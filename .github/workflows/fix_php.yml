@@ -25,8 +25,7 @@ jobs:
 
       - run: mkdir -p /tmp/rector
 
-      - name: "run Rector"
-        uses: "ramsey/composer-install@v2"
+      - uses: "ramsey/composer-install@v2"
         run: vendor/bin/rector --ansi
 
       - name: "laravel-pint"
