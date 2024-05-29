@@ -6,7 +6,6 @@
 
 # Development tools
 /node_modules
-.phpunit.cache
 
 # Local files
 /personal
@@ -44,4 +43,4 @@ storage/oauth-public.key
 !/docker/mariadb/.gitkeep
 /docker/nginx-log/*
 !/docker/nginx-log/.gitkeep
-.cache
+*.cache
