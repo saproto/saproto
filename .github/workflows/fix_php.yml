@@ -17,7 +17,7 @@ jobs:
       - name: 🔍 Read .env
         run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
 
-      - uses: ramsey/composer-install@v2
+      - uses: ramsey/composer-install@v3
 
       - uses: actions/cache@v3
         with:
