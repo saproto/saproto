@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
-          
+
       - name: 🔍 Read .env
         run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
 
@@ -17,8 +17,15 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: none
 
-      - uses: "ramsey/composer-install@v2"
-      - run: vendor/bin/rector --ansi
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/rector
+          key: ${{ runner.os }}-rector-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-rector-
+
+      - run: mkdir -p /tmp/rector
+      - name: Rector Run
+        run: php vendor/bin/rector process
 
       - name: "laravel-pint"
         uses: aglipanci/laravel-pint-action@2.2.0
