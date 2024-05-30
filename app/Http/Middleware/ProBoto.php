@@ -16,13 +16,14 @@ class ProBoto
     public function handle(Request $request, Closure $next): Response
     {
         $authHeader = request()->header('Authorization');
-        if($authHeader){
+        if ($authHeader) {
             //Remove the "Bearer" part from the header
             $secret = explode(' ', $authHeader)[1];
-            if($secret == config('app-proto.proboto-secret')){
+            if ($secret == config('app-proto.proboto-secret')) {
                 return $next($request);
             }
         }
+
         return response('Unauthorized.', 401);
     }
 }
