@@ -124,7 +124,7 @@ class MollieController extends Controller
         return view('omnomcom.mollie.status', [
             'transaction' => $transaction,
             'mollie' => Mollie::api()
-                ->payments()
+                ->payments
                 ->get($transaction->mollie_id),
         ]);
     }
@@ -290,7 +290,7 @@ class MollieController extends Controller
         }
 
         $mollie = Mollie::api()
-            ->payments()
+            ->payments
             ->create($properties);
 
         $transaction->mollie_id = $mollie->id;
@@ -339,7 +339,7 @@ class MollieController extends Controller
         }
 
         $api_response = Mollie::api()
-            ->methods()
+            ->methods
             ->all([
                 'locale' => 'nl_NL',
                 'billingCountry' => 'NL',
