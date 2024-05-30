@@ -115,6 +115,19 @@ class UserApiController extends Controller
         return $total;
     }
 
+    public function discordLinkRedirect(Request $request)
+    {
+        $authoriseURL = 'https://discord.com/api/oauth2/authorize?';
+        $params = [
+            'client_id' => config('proto.discord_client_id'),
+            'redirect_uri' => route('api::discord::linked'),
+            'response_type' => 'code',
+            'scope' => 'identify'
+        ];
+
+        return redirect()->away($authoriseURL . http_build_query($params));
+    }
+
     public function discordLinkCallback(Request $request)
     {
         $tokenURL = 'https://discord.com/api/oauth2/token';
@@ -124,7 +137,7 @@ class UserApiController extends Controller
             'client_secret' => config('proto.discord_secret'),
             'grant_type' => 'authorization_code',
             'code' => $request->get('code'),
-            'redirect_uri' => config('app.url').'/api/discord/linked',
+            'redirect_uri' => route('api::discord::linked'),
             'scope' => 'identify',
         ];
 
@@ -133,27 +146,27 @@ class UserApiController extends Controller
             $accessTokenData = $client->post($tokenURL, ['form_params' => $tokenData]);
             $accessTokenData = json_decode($accessTokenData->getBody());
         } catch (\GuzzleHttp\Exception\ClientException $error) {
-            Session::flash('flash_message', 'Failed to link Discord account :('.$error);
+            Session::flash('flash_message', 'Something went wrong when trying to link this Discord account. Try again later.');
 
-            return Redirect::back();
+            return redirect()->route('user::dashboard');
         }
 
         $userData = Http::withToken($accessTokenData->access_token)->get($apiURLBase);
         $userData = json_decode($userData);
 
         if (User::firstWhere('discord_id', $userData->id)) {
-            Session::flash('flash_message', 'This Discord account is already linked to a user!');
+            session()->flash('flash_message', 'This Discord account is already linked to a user!');
 
-            return Redirect::back();
+            return redirect()->route('user::dashboard');
         }
 
         $user = Auth::user();
         $user->discord_id = $userData->id;
         $user->save();
 
-        Session::flash('flash_message', 'Successfully linked Discord!');
+        session()->flash('flash_message', 'Successfully linked Discord!');
 
-        return Redirect::route('user::dashboard');
+        return redirect()->route('user::dashboard');
     }
 
     public function discordUnlink()
@@ -162,8 +175,8 @@ class UserApiController extends Controller
         $user->discord_id = null;
         $user->save();
 
-        Session::flash('flash_message', 'Discord account has been unlinked.');
+        session()->flash('flash_message', 'Discord account has been unlinked.');
 
-        return Redirect::route('user::dashboard');
+        return redirect()->route('user::dashboard');
     }
 }

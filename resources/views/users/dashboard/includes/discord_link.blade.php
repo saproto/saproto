@@ -19,7 +19,7 @@
 
     <div class="card-footer">
         @if(!$user->discord_id)
-        <a href="https://discord.com/api/oauth2/authorize?client_id=1088465589099561043&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fdiscord%2Flinked&response_type=code&scope=identify" class="btn btn-outline-info btn-block">
+        <a href="{{route('api::discord::redirect')}}" class="btn btn-outline-info btn-block">
             <i class="fa-solid fa-link"></i> Link Discord
         </a>
         @else
