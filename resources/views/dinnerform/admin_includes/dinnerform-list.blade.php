@@ -55,10 +55,10 @@
                         <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
                         <td class="text-center px-4">
                             @if($dinnerform->orderedBy)
-                                    <a class="btn btn-info badge"
-                                       href="{{ route('user::profile', ['id' => $dinnerform->orderedBy->getPublicId()]) }}">
-                                        {{$dinnerform->orderedBy->name}}
-                                    </a>
+                                <a class="btn btn-info badge"
+                                   href="{{ route('user::profile', ['id' => $dinnerform->orderedBy->getPublicId()]) }}">
+                                    {{$dinnerform->orderedBy->name}}
+                                </a>
                             @endif
                         </td>
                         <td class="text-center px-4">
@@ -106,6 +106,8 @@
         </div>
 
     @endif
+
+    <div class="card-footer pb-0">{{ $dinnerformList->links() }}</div>
 
 </div>
 
