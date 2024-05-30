@@ -152,6 +152,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $guarded = ['password', 'remember_token'];
 
+    protected $with = ['member'];
+
     protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
