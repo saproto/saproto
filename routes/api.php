@@ -38,7 +38,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('redirect', ['as' => 'redirect', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordLinkRedirect']);
         Route::get('linked', ['as' => 'linked', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordLinkCallback']);
         Route::get('unlink', ['as' => 'unlink', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordUnlink']);
-        Route::get('verify/{userId}', ['as' => 'verify', 'uses' => 'ApiController@discordVerifyMember']);
+        Route::get('verify/{userId}', ['as' => 'verify', 'middleware' => ['proboto'], 'uses' => 'ApiController@discordVerifyMember']);
     });
 
     /* Routes related to the Events API */
