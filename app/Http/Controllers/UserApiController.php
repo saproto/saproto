@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Redirect;
 use Session;
 
 class UserApiController extends Controller
@@ -122,10 +121,10 @@ class UserApiController extends Controller
             'client_id' => config('proto.discord_client_id'),
             'redirect_uri' => route('api::discord::linked'),
             'response_type' => 'code',
-            'scope' => 'identify'
+            'scope' => 'identify',
         ];
 
-        return redirect()->away($authoriseURL . http_build_query($params));
+        return redirect()->away($authoriseURL.http_build_query($params));
     }
 
     public function discordLinkCallback(Request $request)
