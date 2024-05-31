@@ -48,4 +48,9 @@ return [
      */
     'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null),
 
+    /*
+     * ProBoto config
+     */
+    'proboto-secret' => env('PROBOTO_SECRET', null),
+
 ];
