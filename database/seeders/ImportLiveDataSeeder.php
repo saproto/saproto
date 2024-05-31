@@ -35,7 +35,7 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'committees', 'excluded_columns' => ['image']],
             ['name' => 'committees_activities'],
             ['name' => 'companies'],
-            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
+            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future', 'activity', 'category']],
             ['name' => 'event_categories'],
             ['name' => 'mailinglists'],
             ['name' => 'menuitems'],
@@ -87,7 +87,7 @@ class ImportLiveDataSeeder extends Seeder
                     unset($entry[$column]);
                 }
             }
-
+            
             DB::table($table['name'])->insert($entry);
         }
     }
