@@ -87,7 +87,7 @@ class ImportLiveDataSeeder extends Seeder
                     unset($entry[$column]);
                 }
             }
-            
+
             DB::table($table['name'])->insert($entry);
         }
     }
