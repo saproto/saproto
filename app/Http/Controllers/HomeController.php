@@ -80,7 +80,7 @@ class HomeController extends Controller
                 [function ($query) {
                     $query->where('publication', '<', date('U'))
                         ->orWhereNull('publication');
-                }]
+                }],
             ])
             ->orderBy('start')
             ->limit(6);
