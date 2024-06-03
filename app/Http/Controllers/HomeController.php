@@ -32,6 +32,7 @@ class HomeController extends Controller
         if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
+
         $weekly = Newsitem::query()
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(1))
@@ -63,36 +64,33 @@ class HomeController extends Controller
             ->where('visible_home_page', true)
             ->orderBy('end')
             ->get();
+
         $videos = Video::query()
             ->orderBy('video_date', 'desc')
             ->where('video_date', '>', Carbon::now()->subMonths(3))
             ->limit(3)
             ->get();
+
         $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
-        $upcomingEvents = Event::getEventBlockQuery()
+        $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
-                ['is_featured', false],
                 ['end', '>=', date('U')],
                 ['secret', false],
-            ])->where(function ($query) {
-                $query->where('publication', '<', date('U'))
-                    ->orWhereNull('publication');
-            })
-            ->limit(6)
+                [function ($query) {
+                    $query->where('publication', '<', date('U'))
+                        ->orWhereNull('publication');
+                }]
+            ])
+            ->orderBy('start')
+            ->limit(6);
+
+        $upcomingEvents = $upcomingEventQuery->clone()
+            ->where('is_featured', false)
             ->get();
 
-        $featuredEvents = Event::getEventBlockQuery()
-            ->where([
-                ['is_featured', true],
-                ['end', '>=', date('U')],
-                ['secret', false],
-            ])->where(function ($query) {
-                $query->where('publication', '<', date('U'))
-                    ->orWhereNull('publication');
-            })
-            ->orderBy('start')
-            ->limit(6)
+        $featuredEvents = $upcomingEventQuery->clone()
+            ->where('is_featured', true)
             ->get();
 
         return view('website.home.members', [
