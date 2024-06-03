@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::inRandomOrder()->first();
 
-        if (! Auth::user()?->is_member) {
+        if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
         $weekly = Newsitem::query()
@@ -74,9 +74,11 @@ class HomeController extends Controller
             ->where([
                 ['is_featured', false],
                 ['end', '>=', date('U')],
-                ['publication', '<', date('U')],
                 ['secret', false],
-            ])
+            ])->where(function ($query) {
+                $query->where('publication', '<', date('U'))
+                    ->orWhereNull('publication');
+            })
             ->limit(6)
             ->get();
 
@@ -84,9 +86,11 @@ class HomeController extends Controller
             ->where([
                 ['is_featured', true],
                 ['end', '>=', date('U')],
-                ['publication', '<', date('U')],
                 ['secret', false],
-            ])
+            ])->where(function ($query) {
+                $query->where('publication', '<', date('U'))
+                    ->orWhereNull('publication');
+            })
             ->orderBy('start')
             ->limit(6)
             ->get();
