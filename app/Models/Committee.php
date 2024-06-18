@@ -27,7 +27,7 @@ use LaravelIdea\Helper\App\Models\_IH_Event_C;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property int $is_active
- * @property-read string $email_address
+ * @property-read string $email
  * @property-read StorageEntry|null $image
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
@@ -98,9 +98,9 @@ class Committee extends Model
     }
 
     /** @return string */
-    public function getEmailAddressAttribute()
+    public function getEmailAttribute()
     {
-        return $this->slug.'@'.config('proto.emaildomain');
+        return strtolower($this->slug.'@'.config('proto.emaildomain'));
     }
 
     /**
