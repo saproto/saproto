@@ -18,7 +18,9 @@ class FeeEmail extends Mailable
      * @param  float  $fee_amount
      * @param  null|string  $remitted_reason
      */
-    public function __construct(public $user, public $fee, public $fee_amount, public $remitted_reason) {}
+    public function __construct(public $user, public $fee, public $fee_amount, public $remitted_reason)
+    {
+    }
 
     /** @return FeeEmail */
     public function build()

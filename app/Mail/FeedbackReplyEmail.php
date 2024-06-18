@@ -16,7 +16,9 @@ class FeedbackReplyEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Feedback $feedback, public User $user, public string $reply, public bool $accepted) {}
+    public function __construct(public Feedback $feedback, public User $user, public string $reply, public bool $accepted)
+    {
+    }
 
     /**
      * Build the message.

@@ -17,7 +17,9 @@ class ReviewFeedbackMail extends Mailable
      *
      * @return void
      */
-    public function __construct(public FeedbackCategory $category, public $feedback) {}
+    public function __construct(public FeedbackCategory $category, public $feedback)
+    {
+    }
 
     /**
      * Build the message.
