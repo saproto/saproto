@@ -35,7 +35,7 @@ class LdapController extends Controller
         $emails = [];
         $usernames = [];
 
-        foreach ($ldap_students as $student) {
+        foreach ($ldap_students ?? [] as $student) {
             $names[] = strtolower($student->givenname.' '.$student->sn);
             $emails[] = strtolower($student->userprincipalname);
             $usernames[] = $student->uid;
