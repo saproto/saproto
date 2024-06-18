@@ -696,7 +696,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* Routes related to photos. */
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
-        Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
+        Route::get('/index', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
