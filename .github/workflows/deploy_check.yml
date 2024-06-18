@@ -32,8 +32,9 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
-      - name: 📥 Install back-end dependencies
-        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+      - uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist --no-dev"
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
