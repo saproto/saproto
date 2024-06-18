@@ -485,8 +485,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param $protoUser
-     * @param $password
      * @throws \Google\Service\Exception
      */
     private function syncGooglePassword($protoUser, $password)

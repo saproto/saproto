@@ -464,7 +464,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return bool */
-    public function isInGroup() {
+    public function isInGroup()
+    {
         return CommitteeMembership::withTrashed()
             ->where('user_id', $this->id)
             ->where('created_at', '<', date('Y-m-d H:i:s'))
@@ -522,8 +523,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return string */
-    public function getProtoEmailAttribute() {
-        return $this->is_member && $this->isInGroup() ? $this->member->proto_username."@".config('proto.emaildomain') : null;
+    public function getProtoEmailAttribute()
+    {
+        return $this->is_member && $this->isInGroup() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null;
     }
 
     /** @return string */
