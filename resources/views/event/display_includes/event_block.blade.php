@@ -104,7 +104,7 @@
 
             {{-- Signup Icon --}}
             <div class="d-flex justify-content-between">
-                @if($event->activity && $event->activity->participantsVisible())
+                @if($event->unique_users_count > 0 && $event->activity && $event->activity->participantsVisible())
                     <span>
                             <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
                             {{$event->unique_users_count}}
