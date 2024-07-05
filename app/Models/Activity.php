@@ -288,17 +288,17 @@ class Activity extends Validatable
     /**
      * @return bool Whether people should be able to see the participant count (In the calendar) .
      */
-    public function participantsVisible(): bool {
-        if ( $this->hide_participants 
-            || date('U') < $this->registration_start 
-            || $this->participants == 0 
+    public function participantsVisible(): bool
+    {
+        if ($this->hide_participants
+            || date('U') < $this->registration_start
+            || $this->participants == 0
         ) {
             return false;
-        } 
+        }
+
         return true;
     }
-
-
 
     /**
      * @return bool Whether people can still unsubscribe from the activity.
