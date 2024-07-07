@@ -55,7 +55,13 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        return view('committee.show', ['committee' => $committee, 'members' => $committee->allMembers()]);
+        $pastEvents = $committee->pastEvents(6);
+
+        return view('committee.show', [
+            'committee' => $committee,
+            'members' => $committee->allMembers(),
+            'pastEvents' => $pastEvents,
+        ]);
     }
 
     /** @return View */

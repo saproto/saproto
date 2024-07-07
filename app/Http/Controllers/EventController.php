@@ -33,20 +33,17 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $data = [[], [], []];
-        $data[0] = Event::query()
+        $data[0] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '<=', strtotime('+1 week'));
 
-        $data[1] = Event::query()
+        $data[1] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 week'))
             ->where('start', '<=', strtotime('+1 month'));
 
-        $data[2] = Event::query()
+        $data[2] = Event::getEventBlockQuery()
             ->where('start', '>=', strtotime('now'))
-            ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 month'));
 
         $category = EventCategory::find($request->input('category'));
@@ -69,7 +66,13 @@ class EventController extends Controller
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
+        return view('event.calendar', [
+            'events' => $data,
+            'years' => $years,
+            'ical_url' => $calendar_url,
+            'reminder' => $reminder,
+            'cur_category' => $category,
+        ]);
     }
 
     /** @return View */
@@ -83,7 +86,10 @@ class EventController extends Controller
     /** @return View */
     public function show($id)
     {
-        $event = Event::fromPublicId($id);
+        $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
+            ->with('tickets', 'tickets.product')
+            ->firstOrFail();
+
         $methods = [];
         if (config('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
@@ -215,7 +221,11 @@ class EventController extends Controller
     public function archive(Request $request, $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<', strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
+        $events = Event::getEventBlockQuery()
+            ->where('start', '>', strtotime($year.'-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
+            ->get();
+
         $category = EventCategory::find($request->category);
 
         $months = [];
@@ -229,7 +239,12 @@ class EventController extends Controller
             }
         }
 
-        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category]);
+        return view('event.archive', [
+            'years' => $years,
+            'year' => $year,
+            'months' => $months,
+            'cur_category' => $category,
+        ]);
     }
 
     /**
@@ -692,47 +707,48 @@ class EventController extends Controller
     public function copyEvent(Request $request)
     {
         $event = Event::findOrFail($request->id);
-        $newEvent = $event->replicate();
-        $newEvent->title = $newEvent->title.' [copy]';
 
         $oldStart = Carbon::createFromTimestamp($event->start);
-        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'));
-        $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
+
+        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
+            ->setHour($oldStart->hour)
+            ->setMinute($oldStart->minute)
+            ->setSecond($oldStart->second)
+            ->timestamp;
+
         $diff = $newDate - $event->start;
 
-        $newEvent->start = $newDate;
-        $newEvent->end = $event->end + $diff;
-        $newEvent->secret = true;
-        if ($event->publication) {
-            $newEvent->publication = $event->publication + $diff;
-            $newEvent->secret = false;
-        }
-
+        $newEvent = $event->withoutRelations()->replicate()->fill([
+            'title' => $event->title.' [copy]',
+            'secret' => $event->publication ? false : $event->secret,
+            'start' => $newDate,
+            'end' => $event->end + $diff,
+            'publication' => $event->publication ? $event->publication + $diff : null,
+            'unique_users_count' => 0,
+            'update_sequence' => 0,
+        ]);
         $newEvent->save();
 
         if ($event->activity) {
-            $newActivity = new Activity([
+            $newActivity = $event->activity->replicate([
+                'attendees',
+                'closed',
+                'closed_account',
+            ])->fill([
                 'event_id' => $newEvent->id,
-                'price' => $event->activity->price,
-                'participants' => $event->activity->participants,
-                'no_show_fee' => $event->activity->no_show_fee,
-                'hide_participants' => $event->activity->hide_participants,
                 'registration_start' => $event->activity->registration_start + $diff,
                 'registration_end' => $event->activity->registration_end + $diff,
                 'deregistration_end' => $event->activity->deregistration_end + $diff,
-                'comment' => $event->activity->comment,
-                'redirect_url' => $event->activity->redirect_url,
             ]);
             $newActivity->save();
 
             if ($event->activity->helpingCommitteeInstances) {
                 foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
-                    $newHelpingCommittee = new HelpingCommittee([
+                    HelpingCommittee::create([
                         'activity_id' => $newActivity->id,
                         'committee_id' => $helpingCommittee->committee_id,
                         'amount' => $helpingCommittee->amount,
                     ]);
-                    $newHelpingCommittee->save();
                 }
             }
         }

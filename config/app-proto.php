@@ -36,14 +36,21 @@ return [
     /*
      * Spotify config
      */
-    'spotify-clientkey' => env('SPOTIFY_CLIENT', null),
-    'spotify-secretkey' => env('SPOTIFY_SECRET', null),
-    'spotify-user' => env('SPOTIFY_USER', null),
-    'spotify-playlist' => env('SPOTIFY_PLAYLIST', null),
+    'spotify-clientkey' => env('SPOTIFY_CLIENT'),
+    'spotify-secretkey' => env('SPOTIFY_SECRET'),
+    'spotify-user' => env('SPOTIFY_USER'),
+    'spotify-alltime-playlist' => env('SPOTIFY_ALLTIME_PLAYLIST'),
+    'spotify-pastyears-playlist' => env('SPOTIFY_PASTYEARS_PLAYLIST'),
+    'spotify-recent-playlist' => env('SPOTIFY_RECENT_PLAYLIST'),
 
     /*
      * Sentry config
      */
     'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null),
+
+    /*
+     * ProBoto config
+     */
+    'proboto-secret' => env('PROBOTO_SECRET', null),
 
 ];

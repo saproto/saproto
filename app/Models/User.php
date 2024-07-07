@@ -81,6 +81,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|EmailList[] $lists
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
+ * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|PlayedVideo[] $playedVideos
  * @property-read Collection|Feedback[] $feedback
  * @property-read Collection|RfidCard[] $rfid
@@ -150,6 +151,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected $table = 'users';
 
     protected $guarded = ['password', 'remember_token'];
+
+    protected $with = ['member'];
 
     protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
 
@@ -302,6 +305,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function mollieTransactions()
     {
         return $this->hasMany(\App\Models\MollieTransaction::class);
+    }
+
+    public function tickets(): BelongsToMany
+    {
+        return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
 
     /**

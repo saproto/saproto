@@ -17,7 +17,7 @@ class ProTubeApiService
 
     private static function client(): PendingRequest
     {
-        return Http::withToken(config('protube.secret'))
+        return Http::withToken(config('protube.laravel_to_protube_secret'))
             ->withOptions(['verify' => (config('app.env') === 'production')])
             ->baseUrl(config('protube.server').self::API_PREFIX);
     }

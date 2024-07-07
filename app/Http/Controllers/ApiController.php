@@ -42,7 +42,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('protube.secret')) {
+        if ($request->secret != config('protube.protube_to_laravel_secret')) {
             abort(403);
         }
 
@@ -97,7 +97,7 @@ class ApiController extends Controller
         }
 
         $random = random_int(1, 100);
-        if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
+        if ($random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
         } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
@@ -225,5 +225,19 @@ class ApiController extends Controller
         }
 
         return $data;
+    }
+
+    public function discordVerifyMember($userId): JsonResponse
+    {
+        $user = User::firstWhere('discord_id', $userId);
+
+        if (! $user) {
+            return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
+        }
+        if (! $user->is_member) {
+            return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
+        }
+
+        return response()->json(['name' => $user->calling_name]);
     }
 }
