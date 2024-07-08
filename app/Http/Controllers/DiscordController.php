@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use GuzzleHttp;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use GuzzleHttp;
 use Session;
 
 class DiscordController extends Controller
@@ -22,7 +22,7 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        return redirect()->away($authoriseURL . http_build_query($params));
+        return redirect()->away($authoriseURL.http_build_query($params));
     }
 
     public function discordLinkCallback(Request $request)
