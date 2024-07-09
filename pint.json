@@ -1,0 +1,4 @@
+{
+  "preset": "laravel",
+  "cache-file": ".tmp/pint.cache"
+}

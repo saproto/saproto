@@ -41,6 +41,7 @@ class Kernel extends ConsoleKernel
         Commands\EndMemberships::class,
         Commands\UpdateWallstreetPrices::class,
         Commands\ReplaceQuestionMarkWithSingleQuoteInCodex::class,
+        Commands\RefreshEventUniqueUsers::class,
     ];
 
     /**

@@ -23,14 +23,6 @@ use stdClass;
 
 class ApiController extends Controller
 {
-    /**
-     * @return string
-     */
-    public function train(Request $request)
-    {
-        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
-    }
-
     /** @return JsonResponse */
     public function protubeUserDetails()
     {
@@ -105,7 +97,7 @@ class ApiController extends Controller
         }
 
         $random = random_int(1, 100);
-        if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
+        if ($random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
         } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
@@ -122,25 +114,6 @@ class ApiController extends Controller
         if (! $photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
-
-        return response()->JSON([
-            'url' => $photo->url,
-            'album_name' => $photo->album->name,
-            'date_taken' => Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
-        ]);
-    }
-
-    public function randomOldPhoto(): JsonResponse
-    {
-        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
-            $query->where('published', true)->where('private', false);
-        })->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
-
-        if (! $privateQuery->count()) {
-            return response()->json(['error' => 'No public photos older than 4 years found!.'], 404);
-        }
-
-        $photo = $privateQuery->inRandomOrder()->with('album')->first();
 
         return response()->JSON([
             'url' => $photo->url,
@@ -252,5 +225,19 @@ class ApiController extends Controller
         }
 
         return $data;
+    }
+
+    public function discordVerifyMember($userId): JsonResponse
+    {
+        $user = User::firstWhere('discord_id', $userId);
+
+        if (! $user) {
+            return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
+        }
+        if (! $user->is_member) {
+            return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
+        }
+
+        return response()->json(['name' => $user->calling_name]);
     }
 }
