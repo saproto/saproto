@@ -163,17 +163,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         'deleted_at' => 'datetime',
     ];
 
-    /** @return string|null */
     public function getPublicId(): ?string
     {
         return $this->is_member ? $this->member->proto_username : null;
     }
 
-    /**
-     * @param string $public_id
-     * @return User|null
-     */
-    public static function fromPublicId(string $public_id): User|null
+    public static function fromPublicId(string $public_id): ?User
     {
         return User::whereHas('member', function ($query) use ($public_id) {
             $query->where('proto_username', $public_id);
@@ -187,7 +182,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale(): bool
     {
-        return !(
+        return ! (
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -204,13 +199,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
-    /** @return BelongsTo */
     public function photo(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    /** @return BelongsToMany */
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
@@ -224,13 +217,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany */
     public function lists(): BelongsToMany
     {
         return $this->belongsToMany(EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
-    /** @return BelongsToMany */
     public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
@@ -241,31 +232,26 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
 
-    /** @return BelongsToMany */
     public function committees(): BelongsToMany
     {
         return $this->groups()->where('is_society', false);
     }
 
-    /** @return BelongsToMany */
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
     }
 
-    /** @return HasOne */
     public function bank(): HasOne
     {
         return $this->hasOne(Bank::class);
     }
 
-    /** @return HasOne */
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);
     }
 
-    /** @return HasOne */
     public function member(): HasOne
     {
         return $this->hasOne(Member::class);
@@ -276,43 +262,36 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->hasOne(WelcomeMessage::class);
     }
 
-    /** @return HasMany */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
-    /** @return HasMany */
     public function tempadmin(): HasMany
     {
         return $this->hasMany(Tempadmin::class);
     }
 
-    /** @return HasMany */
     public function feedback(): HasMany
     {
         return $this->hasMany(Feedback::class);
     }
 
-    /** @return HasMany */
     public function rfid(): HasMany
     {
         return $this->hasMany(RfidCard::class);
     }
 
-    /** @return HasMany */
     public function tokens(): HasMany
     {
         return $this->hasMany(Token::class);
     }
 
-    /** @return HasMany */
     public function playedVideos(): HasMany
     {
         return $this->hasMany(PlayedVideo::class);
     }
 
-    /** @return HasMany */
     public function mollieTransactions(): HasMany
     {
         return $this->hasMany(MollieTransaction::class);
@@ -321,8 +300,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param int $w
-     * @param int $h
      * @return string Path to a resized version of someone's profile picture.
      */
     public function generatePhotoPath(int $w = 100, int $h = 100): string
@@ -335,8 +312,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $password
-     *
      * @throws Exception
      */
     public function setPassword(string $password): void
@@ -367,14 +342,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
-    /** @return bool */
     public function hasUnpaidOrderlines(): bool
     {
         foreach ($this->orderlines as $orderline) {
-            if (!$orderline->isPayed()) {
+            if (! $orderline->isPayed()) {
                 return true;
             }
-            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) {
+            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
                 return true;
             }
         }
@@ -392,6 +366,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                 return true;
             }
         }
+
         return false;
     }
 
@@ -416,8 +391,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return int
-     *
      * @throws Exception
      */
     public function age(): int
@@ -425,19 +398,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return Carbon::instance(new DateTime($this->birthdate))->age;
     }
 
-    /**
-     * @param Committee $committee
-     * @return bool
-     */
     public function isInCommittee(Committee $committee): bool
     {
         return $this->committees()->where('committees.id', $committee->id)->exists();
     }
 
-    /**
-     * @param string $slug
-     * @return bool
-     */
     public function isInCommitteeBySlug(string $slug): bool
     {
         $committee = Committee::where('slug', $slug)->first();
@@ -445,14 +410,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $committee && $this->isInCommittee($committee);
     }
 
-    /** @return bool */
     public function isActiveMember(): bool
     {
         return $this->committees()->exists();
     }
 
     /**
-     * @param int $limit
      * @return Withdrawal[]
      */
     public function withdrawals(int $limit = 0): array
@@ -470,17 +433,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $withdrawals;
     }
 
-    /** @return string|null */
     public function websiteUrl(): ?string
     {
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
         }
 
-        return 'https://' . $this->website;
+        return 'https://'.$this->website;
     }
 
-    /** @return string|null */
     public function websiteDisplay(): ?string
     {
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
@@ -490,21 +451,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->website;
     }
 
-    /** @return bool */
     public function hasDiet(): bool
     {
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
-    /**
-     * @return string|null
-     */
     public function getProtoEmailAttribute(): ?string
     {
-        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username . '@' . config('proto.emaildomain') : null;
+        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null;
     }
 
-    /** @return string */
     public function getDisplayEmail(): string
     {
         return $this->proto_email ?? $this->email;
@@ -523,22 +479,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             && $this->did_study_create;
     }
 
-    /** @return bool */
     public function hasTFAEnabled(): bool
     {
         return $this->tfa_totp_key !== null;
     }
 
-    /** @return void */
     public function generateNewPersonalKey(): void
     {
         $this->personal_key = str_random(64);
         $this->save();
     }
 
-    /**
-     * @return string|null
-     */
     public function getPersonalKey(): ?string
     {
         if ($this->personal_key == null) {
@@ -548,7 +499,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->personal_key;
     }
 
-    /** @return Token */
     public function generateNewToken(): Token
     {
         $token = new Token();
@@ -557,7 +507,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $token;
     }
 
-    /** @return Token */
     public function getToken(): Token
     {
         if (count($this->tokens) > 0) {
@@ -587,7 +536,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $memberships;
     }
 
-    /** @return float|null */
     public function getCalendarAlarm(): ?float
     {
         return $this->pref_calendar_alarm;
@@ -601,26 +549,22 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return bool */
     public function getCalendarRelevantSetting(): bool
     {
         return $this->pref_calendar_relevant_only;
     }
 
-    /** @return void */
     public function toggleCalendarRelevantSetting(): void
     {
-        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
-    /** @return string */
     public function getIcalUrl(): string
     {
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
 
-    /** @return bool */
     public function getCompletedProfileAttribute(): bool
     {
         return $this->birthdate !== null && $this->phone !== null;
@@ -629,22 +573,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && !$this->member->is_pending;
+        return $this->member && ! $this->member->is_pending;
     }
 
-    /** @return bool */
     public function getSignedMembershipFormAttribute(): bool
     {
         return $this->member?->membershipForm !== null;
     }
 
-    /** @return bool */
     public function getIsProtubeAdminAttribute(): bool
     {
         return $this->can('protube') || $this->isTempadmin();
     }
 
-    /** @return string */
     public function getPhotoPreviewAttribute(): string
     {
         return $this->generatePhotoPath();

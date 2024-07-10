@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use LaravelIdea\Helper\App\Models\_IH_Event_C;
 
 /**
  * Committee Model.
@@ -58,19 +57,16 @@ class Committee extends Model
 
     protected $with = ['image'];
 
-    /** @return string */
     public function getPublicId(): string
     {
         return $this->slug;
     }
 
-    /** @return Committee */
     public static function fromPublicId($public_id): Committee
     {
         return self::where('slug', $public_id)->firstOrFail();
     }
 
-    /** @return BelongsToMany */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
@@ -85,7 +81,6 @@ class Committee extends Model
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsTo */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
@@ -96,14 +91,13 @@ class Committee extends Model
         return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
-    /** @return string */
     public function getEmailAttribute(): string
     {
-        return strtolower($this->slug . '@' . config('proto.emaildomain'));
+        return strtolower($this->slug.'@'.config('proto.emaildomain'));
     }
 
     /**
-     * @param int $n the number of events to return
+     * @param  int  $n  the number of events to return
      */
     public function pastEvents(int $n): Collection|array
     {
@@ -161,7 +155,7 @@ class Committee extends Model
             } else {
                 if (
                     strtotime($membership->created_at) < date('U') &&
-                    (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
+                    (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
                 ) {
                     $members['members']['current'][] = $membership;
                 } elseif (strtotime($membership->created_at) > date('U')) {
@@ -176,7 +170,6 @@ class Committee extends Model
     }
 
     /**
-     * @param User $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember(User $user): bool
