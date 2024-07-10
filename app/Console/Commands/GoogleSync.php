@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Console\ConsoleOutput;
+use App\Mail\NewWorkspaceAccount;
 use App\Models\Alias as ProtoAlias;
-use App\Models\Committee as ProtoGroup;
+use App\Models\Committee;
 use App\Models\User as ProtoUser;
 use Google\Service\Directory;
 use Google\Service\Directory\Alias as GoogleAlias;
@@ -19,6 +20,7 @@ use Google\Service\Gmail\ForwardingAddress;
 use Google_Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -58,13 +60,13 @@ class GoogleSync extends Command
      *
      * @throws Throwable
      */
-    public function handle()
+    public function handle(): int
     {
         $this->output = new ConsoleOutput();
-        if (! app()->environment('production')) {
+        if (!app()->environment('production')) {
             $this->output->warning("Don't sync your local users to Google!");
 
-            return true;
+            return 1;
         }
         $client = $this->createClient(
             'superadmin@proto.utwente.nl',
@@ -75,27 +77,20 @@ class GoogleSync extends Command
             ]
         );
         $this->directory = new Directory($client);
-        $this->syncProtoGroupsWithGoogleGroups();
-        $this->syncProtoUsersWithGoogleUsers();
+        $this->syncGoogleGroupsWithCommittees();
+        $this->syncGoogleUsersWithProtoUsers();
 
         return 0;
-    }
-
-    private function pp($message, $func = null)
-    {
-        try {
-            $this->output->task($message, $func);
-        } catch (Throwable) {
-            /* Ignored */
-        }
     }
 
     /**
      * Create Google Client for subject with given scopes.
      *
+     * @param string $subject
+     * @param array $scopes
      * @return Google_Client
      */
-    public function createClient(string $subject, array $scopes)
+    public function createClient(string $subject, array $scopes): Google_Client
     {
         $client = new Google_Client();
         $client->useApplicationDefaultCredentials();
@@ -113,50 +108,41 @@ class GoogleSync extends Command
      *
      * @throws Throwable
      */
-    public function syncProtoGroupsWithGoogleGroups()
+    public function syncGoogleGroupsWithCommittees(): void
     {
         $this->output->info('Groups:');
-        $protoGroups = ProtoGroup::all()->where('public');
+
+        $committees = Committee::all()->where('public');
         $googleGroups = $this->listGoogleGroups();
-        foreach ($protoGroups as $protoGroup) {
-            // Try to find the group in Google Workspace by email.
-            if (($googleGroup = $googleGroups->firstWhere('email', $protoGroup->email)) != null) {
-                $description = str_replace("\r", ' ', $protoGroup->description);
-                $description = str_replace('"', '', $description);
-                $description = strip_tags($description);
-                // Check whether a group in Google Workspace exists and try to update it.
-                if ($googleGroup->description != $description) {
-                    $googleGroup->setDescription($description);
-                    try {
-                        $this->pp(
-                            '<fg=blue>⟳</> '.str_pad("#$protoGroup->id", 6).str_pad("$protoGroup->name <fg=gray>", 65, '.').'</> ✎ Description',
-                            fn () => $this->directory->groups->patch($googleGroup->id, $googleGroup)
-                        );
-                    } catch (Throwable $e) {/* Ignored */
-                    }
-                } else {
-                    $this->pp('<fg=green>✓</> '.str_pad("#$protoGroup->id", 6).$protoGroup->name);
-                }
-                // Try to find the group in Google Workspace by name if it was not found by email.
-            } elseif (($googleGroup = $googleGroups->firstWhere('name', $protoGroup->name)) != null) {
-                $googleGroup->setEmail($protoGroup->email);
-                $this->pp(
-                    '<fg=blue>⟳</> '.str_pad("#$protoGroup->id", 6).str_pad("$protoGroup->name <fg=gray>", 65, '.')."</> ✎ $protoGroup->email",
-                    fn () => $this->directory->groups->patch($googleGroup->id, $googleGroup)
-                );
-                // Create the group if it was not found.
-            } else {
-                $this->pp(
-                    '<fg=yellow>+</> '.str_pad("#$protoGroup->id", 6).$protoGroup->name,
-                    fn () => $this->directory->groups->insert(
-                        new GoogleGroup([
-                            'name' => $protoGroup->name,
-                            'email' => $protoGroup->email,
-                            'description' => $protoGroup->description,
-                        ])
-                    )
-                );
+        foreach ($committees as $committee) {
+
+            // Try to find the corresponding Google Group by committee email and set the description if necessary.
+            if (($googleGroup = $googleGroups->firstWhere('email', $committee->email)) != null) {
+                $this->setGoogleGroupToCommitteeDescription($googleGroup, $committee);
+                continue;
             }
+
+            //Try to find the corresponding Google Group by committee name and set the email if necessary.
+            if (($googleGroup = $googleGroups->firstWhere('name', $committee->name)) != null) {
+                $googleGroup->setEmail($committee->email);
+                $this->pp(
+                    '<fg=blue>⟳</> ' . str_pad("#$committee->id", 6) . str_pad("$committee->name <fg=gray>", 65, '.') . "</> ✎ $committee->email",
+                    fn() => $this->directory->groups->patch($googleGroup->id, $googleGroup)
+                );
+                continue;
+            }
+
+            // Create a new Google Group for this committee if it can not be found by email or by name.
+            $this->pp(
+                '<fg=yellow>+</> ' . str_pad("#$committee->id", 6) . $committee->name,
+                fn() => $this->directory->groups->insert(
+                    new GoogleGroup([
+                        'name' => $committee->name,
+                        'email' => $committee->email,
+                        'description' => $committee->description,
+                    ])
+                )
+            );
         }
     }
 
@@ -167,16 +153,14 @@ class GoogleSync extends Command
      *
      * @throws Throwable
      */
-    public function syncProtoUsersWithGoogleUsers()
+    public function syncGoogleUsersWithProtoUsers(): void
     {
         $this->output->info('Users:');
         /* @var Collection<ProtoUser> $protoUsers */
         $protoUsers = ProtoUser::query()
             ->whereHas('member')
-            ->get()
-            ->filter(function ($user) {
-                return $user->isActiveMember();
-            });
+            ->whereHas('committees')
+            ->get();
         $googleUsers = $this->listGoogleUsers();
 
         // Remove Google Workspace users that are no longer in active member list.
@@ -186,8 +170,8 @@ class GoogleSync extends Command
             $optParams = ['domain' => 'proto.utwente.nl', 'query' => "externalId:$protoUser->id"];
             $googleUser = $this->directory->users->listUsers($optParams)->getUsers()[0];
             $this->pp(
-                '<fg=red>-</> '.str_pad("#$protoUser->id", 6).$protoUser->name,
-                fn () => $this->directory->users->delete($googleUser->id)
+                '<fg=red>-</> ' . str_pad("#$protoUser->id", 6) . $protoUser->name,
+                fn() => $this->directory->users->delete($googleUser->id)
             );
         }
 
@@ -195,7 +179,7 @@ class GoogleSync extends Command
         foreach ($protoUsers as $protoUser) {
             // Check if ProtoUser exists in Google Workspace.
             if ($googleUsers->contains($protoUser)) {
-                $this->pp('<fg=green>✓</> '.str_pad("#$protoUser->id", 6).$protoUser->name);
+                $this->pp('<fg=green>✓</> ' . str_pad("#$protoUser->id", 6) . $protoUser->name);
                 // Otherwise, create the Google Workspace user.
             } else {
                 $this->createGoogleUser($protoUser);
@@ -212,15 +196,15 @@ class GoogleSync extends Command
         }
     }
 
-    public function createGoogleUser($protoUser)
+    public function createGoogleUser($protoUser): void
     {
         try {
             $name = explode(' ', $protoUser->name);
             $password = Str::password();
             $this->pp(
-                '<fg=yellow>+</> '.str_pad("#$protoUser->id", 6).
-                str_pad("$protoUser->name <fg=gray>", 65, '.')."</> pass: $password",
-                fn () => $this->directory->users->insert(
+                '<fg=yellow>+</> ' . str_pad("#$protoUser->id", 6) .
+                str_pad("$protoUser->name <fg=gray>", 65, '.') . "</> pass: $password",
+                fn() => $this->directory->users->insert(
                     new GoogleUser([
                         'name' => new UserName([
                             'givenName' => $name[0],
@@ -237,10 +221,12 @@ class GoogleSync extends Command
                     ])
                 )
             );
+
+            Mail::to($protoUser)->send(new NewWorkspaceAccount($protoUser));
         } catch (Throwable $e) {
             $this->pp(
-                '<fg=red>x</> '.str_pad("#$protoUser->id", 6).$protoUser->name,
-                fn () => throw $e
+                '<fg=red>x</> ' . str_pad("#$protoUser->id", 6) . $protoUser->name,
+                fn() => throw $e
             );
         }
     }
@@ -278,7 +264,7 @@ class GoogleSync extends Command
      *
      * @throws Exception
      */
-    public function listGoogleUsers()
+    public function listGoogleUsers(): Collection
     {
         $users = collect();
         $optParams = ['domain' => 'proto.utwente.nl'];
@@ -303,23 +289,24 @@ class GoogleSync extends Command
     /**
      * Synchronise Google Workspace groups for user.
      *
+     * @param ProtoUser $protoUser
      * @return void
      *
-     * @throws Throwable
+     * @throws Exception
      */
-    public function syncGoogleGroupsForUser(ProtoUser $protoUser)
+    public function syncGoogleGroupsForUser(ProtoUser $protoUser): void
     {
         $indent = '        ';
-        /* @var ProtoGroup $protoGroup */
-        foreach ($protoUser->groups()->get() as $protoGroup) {
+        /* @var Committee $committee */
+        foreach ($protoUser->groups()->get() as $committee) {
             try {
-                if ($this->directory->members->hasMember($protoGroup->email, $protoUser->proto_email)->isMember) {
-                    $this->pp($indent.'<fg=green>✓</> '.str_pad("#$protoGroup->id", 6).$protoGroup->name);
+                if ($this->directory->members->hasMember($committee->email, $protoUser->proto_email)->isMember) {
+                    $this->pp($indent . '<fg=green>✓</> ' . str_pad("#$committee->id", 6) . $committee->name);
                 } else {
                     $this->pp(
-                        $indent.'<fg=yellow>+</> '.str_pad("#$protoGroup->id", 6).$protoGroup->name,
-                        fn () => $this->directory->members->insert(
-                            $protoGroup->email,
+                        $indent . '<fg=yellow>+</> ' . str_pad("#$committee->id", 6) . $committee->name,
+                        fn() => $this->directory->members->insert(
+                            $committee->email,
                             new GoogleGroupMembership([
                                 'email' => $protoUser->proto_email,
                                 'keyType' => 'USER',
@@ -329,19 +316,19 @@ class GoogleSync extends Command
                 }
             } catch (Throwable $e) {
                 $this->pp(
-                    $indent.'<fg=red>?</> '.str_pad("#$protoGroup->id", 6).$protoGroup->name,
-                    fn () => throw $e
+                    $indent . '<fg=red>?</> ' . str_pad("#$committee->id", 6) . $committee->name,
+                    fn() => throw $e
                 );
             }
         }
 
         foreach ($this->listGoogleGroups($protoUser) as $googleGroup) {
-            $protoGroup = ProtoGroup::firstWhere('slug', explode('@', $googleGroup->email)[0]);
+            $committee = Committee::firstWhere('slug', explode('@', $googleGroup->email)[0]);
             try {
-                if ($protoGroup != null && ! $protoGroup->isMember($protoUser)) {
+                if ($committee && !$committee->isMember($protoUser)) {
                     $this->pp(
-                        $indent.'<fg=red>-</> '.str_pad("#$protoGroup->id", 6)."$protoGroup->name",
-                        fn () => $this->directory->members->delete($protoGroup->email, $protoUser->proto_email)
+                        $indent . '<fg=red>-</> ' . str_pad("#$committee->id", 6) . "$committee->name",
+                        fn() => $this->directory->members->delete($committee->email, $protoUser->proto_email)
                     );
                 }
             } catch (Throwable) {/* Ignored */
@@ -350,11 +337,12 @@ class GoogleSync extends Command
     }
 
     /**
+     * @param ProtoUser $protoUser
      * @return void
      *
      * @throws Exception
      */
-    public function syncAliasesForUser(ProtoUser $protoUser)
+    public function syncAliasesForUser(ProtoUser $protoUser): void
     {
         $indent = '        ';
         $googleUserAliases = $this->directory->users_aliases->listUsersAliases($protoUser->proto_email)->getAliases();
@@ -363,13 +351,14 @@ class GoogleSync extends Command
             ->where('user_id', $protoUser->id)
             ->get()
             ->map(function ($alias) {
-                return $alias->alias.'@'.config('proto.emaildomain');
+                /** @var ProtoAlias $alias */
+                return $alias->alias . '@' . config('proto.emaildomain');
             });
 
         foreach ($protoUserAliases->diff($googleUserAliases) as $emailAlias) {
             $this->pp(
-                $indent."<fg=yellow>+</> ✉ $emailAlias",
-                fn () => $this->directory->users_aliases->insert($protoUser->proto_email, new GoogleAlias([
+                $indent . "<fg=yellow>+</> ✉ $emailAlias",
+                fn() => $this->directory->users_aliases->insert($protoUser->proto_email, new GoogleAlias([
                     'primaryEmail' => $protoUser->proto_email,
                     'alias' => $emailAlias,
                 ]))
@@ -378,8 +367,8 @@ class GoogleSync extends Command
 
         foreach ($googleUserAliases->diff($protoUserAliases) as $emailAlias) {
             $this->pp(
-                $indent."<fg=red>-</> ✉ $emailAlias",
-                fn () => $this->directory->users_aliases->delete($protoUser->proto_email, $emailAlias)
+                $indent . "<fg=red>-</> ✉ $emailAlias",
+                fn() => $this->directory->users_aliases->delete($protoUser->proto_email, $emailAlias)
             );
         }
     }
@@ -387,9 +376,10 @@ class GoogleSync extends Command
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
      *
+     * @param ProtoUser $protoUser
      * @return void
      */
-    public function patchGmailSettings(ProtoUser $protoUser)
+    public function patchGmailSettings(ProtoUser $protoUser): void
     {
         $client = $this->createClient(
             $protoUser->proto_email,
@@ -404,8 +394,8 @@ class GoogleSync extends Command
             $gmail->users_settings_forwardingAddresses->get('me', $protoUser->email);
         } catch (Throwable) {
             $this->pp(
-                $indent."<fg=yellow>+</> ✉ $protoUser->email",
-                fn () => $gmail->users_settings_forwardingAddresses->create(
+                $indent . "<fg=yellow>+</> ✉ $protoUser->email",
+                fn() => $gmail->users_settings_forwardingAddresses->create(
                     'me',
                     new ForwardingAddress(['forwardingEmail' => $protoUser->email])
                 )
@@ -414,7 +404,43 @@ class GoogleSync extends Command
             return;
         }
         $this->pp(
-            $indent."<fg=green>✓</> ✉ $protoUser->email"
+            $indent . "<fg=green>✓</> ✉ $protoUser->email"
         );
+    }
+
+    private function setGoogleGroupToCommitteeDescription(GoogleGroup $googleGroup, Committee $committee): void
+    {
+        $description = str_replace("\r", ' ', $committee->description);
+        $description = str_replace('"', '', $description);
+        $description = strip_tags($description);
+
+        if ($googleGroup->description != $description) {
+            $googleGroup->setDescription($description);
+            try {
+                $this->pp(
+                    '<fg=blue>⟳</> ' . str_pad("#$committee->id", 6) . str_pad("$committee->name <fg=gray>", 65, '.') . '</> ✎ Description',
+                    fn() => $this->directory->groups->patch($googleGroup->id, $googleGroup)
+                );
+            } catch (Throwable) {/* Ignored */
+            }
+        } else {
+            $this->pp('<fg=green>✓</> ' . str_pad("#$committee->id", 6) . $committee->name);
+        }
+    }
+
+    /**
+     * Pretty print a task with a message and a function.
+     *
+     * @param $message string
+     * @param $func callable|null
+     * @return void
+     */
+    private function pp(string $message, callable $func = null): void
+    {
+        try {
+            $this->output->task($message, $func);
+        } catch (Throwable) {
+            /* Ignored */
+        }
     }
 }
