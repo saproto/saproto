@@ -42,6 +42,7 @@ class Kernel extends ConsoleKernel
         Commands\UpdateWallstreetPrices::class,
         Commands\CodexMarkdownConverter::class,
         Commands\GoogleSync::class,
+        Commands\RefreshEventUniqueUsers::class,
     ];
 
     /**

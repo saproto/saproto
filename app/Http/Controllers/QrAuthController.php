@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\QrAuthRequest;
-use App\Models\User;
 use Auth;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -133,22 +131,5 @@ class QrAuthController extends Controller
         }
 
         return 'false';
-    }
-
-    /**
-     * @param  string  $authToken
-     * @return false|User
-     *
-     * @throws Exception
-     */
-    public function getAuthUser($authToken)
-    {
-        $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $authToken)->first();
-
-        if (! $qrAuthRequest) {
-            return false;
-        }
-
-        return $qrAuthRequest->authUser();
     }
 }
