@@ -17,7 +17,7 @@ class CodexSongController extends Controller
 
     public function create()
     {
-        if (!SongCategory::count()) {
+        if (! SongCategory::count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex.index');

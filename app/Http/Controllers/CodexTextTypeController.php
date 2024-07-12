@@ -6,7 +6,6 @@ use App\Models\CodexTextType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
-
 class CodexTextTypeController extends Controller
 {
     public function index()
