@@ -5,8 +5,8 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($song)&&$song?route('codex::edit-song', ['id'=>$song->id]):route("codex::add-song") }}"
-          method="POST">
+    <form action="{{ !empty($song) ? route('codexsong.update', ['codexsong' => $song]) : route("codexsong.store") }}"
+          method="{{ !empty($song) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -19,21 +19,21 @@
                             {{-- Title }--}}
                             <label for="type">Title:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->title??""}}" class="form-control" id="title"
+                                <input type="text" value="{{ $song->title ?? "" }}" class="form-control" id="title"
                                        name="title">
                             </div>
 
                             {{-- Artist }--}}
                             <label for="artist">Artist:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->artist??""}}" class="form-control" id="artist"
+                                <input type="text" value="{{ $song->artist ?? "" }}" class="form-control" id="artist"
                                        name="artist">
                             </div>
 
                             {{-- Youtube ID }--}}
                             <label for="youtube">Youtube ID:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->youtube??""}}" class="form-control" id="youtube"
+                                <input type="text" value="{{ $song->youtube ?? "" }}" class="form-control" id="youtube"
                                        name="youtube">
                             </div>
 
@@ -44,7 +44,7 @@
                                     name="category">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}"
-                                            {{$category->id===$myCategories?"selected":""}}>{{$category->name}}</option>
+                                            {{ $category->id === $myCategories ? "selected" : "" }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
 

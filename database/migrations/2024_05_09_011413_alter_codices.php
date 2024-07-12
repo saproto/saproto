@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,7 @@ return new class extends Migration
     {
         //add an int category_id column to codex_songs
         Schema::table('codex_songs', function (Blueprint $table) {
-            $table->integer('category_id')->after('id');
+            $table->foreignId('category_id')->after('id');
         });
 
         //get the rows from the codex_category_song table and insert them into the new category_id column

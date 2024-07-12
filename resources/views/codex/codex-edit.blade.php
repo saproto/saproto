@@ -5,16 +5,16 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($codex)&&$codex?route('codex::edit-codex', ['codex'=>$codex]):route("codex::add-codex") }}"
-          method="POST">
+    <form action="{{ !empty($codex) ? route('codex.update', ['codex' => $codex]) : route("codex.store") }}"
+          method="{{ !empty($codex) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3">
             <div class="col">
                 <div class="row">
-                    @include('codex.includes.codex-details', ['codex'=>$codex])
+                    @include('codex.includes.codex-details', ['codex' => $codex])
                 </div>
                 <div class="row">
-                    @include('codex.includes.text_types', ['edit'=>true, 'textTypes' => $textTypes, 'myTextTypes' => $myTextTypes])
+                    @include('codex.includes.text_types', ['edit' => true, 'textTypes' => $textTypes, 'myTextTypes' => $myTextTypes])
                 </div>
             </div>
             <div class="col">

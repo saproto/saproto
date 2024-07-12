@@ -19,14 +19,14 @@ class ReplaceQuestionMarkWithSingleQuoteInCodex extends Command
      *
      * @var string
      */
-    protected $description = 'Replace all thriple question marks with quotes in codex song texts.';
+    protected $description = 'Replace all triple question marks with quotes in codex song texts.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        //foreach codex song loop through the lyrics and replace all thriple question marks with quotes
+        //foreach codex song loop through the lyrics and replace all triple question marks with quotes
         $songs = CodexSong::all();
         foreach ($songs as $song) {
             $song->lyrics = str_replace('???', '\'', $song->lyrics);

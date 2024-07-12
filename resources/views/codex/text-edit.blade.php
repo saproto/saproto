@@ -5,7 +5,9 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($text)&&$text?route('codex::edit-text', ['id'=>$text->id]):route("codex::add-text") }}" method="POST">
+    {{--    {{ dd($text)}}--}}
+    <form action="{{ !empty($text) ? route('codextext.update', ['codextext'=> $text->id ]) : route("codextext.store") }}"
+          method="{{ !empty($text) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -17,7 +19,8 @@
                         <div class="card-body">
                             <label for="name">Name:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$text->name??""}}" class="form-control" id="name" name="name">
+                                <input type="text" value="{{$text->name??""}}" class="form-control" id="name"
+                                       name="name">
                             </div>
 
                             <label for="category">Text category:</label>
@@ -39,7 +42,6 @@
                             <button type="submit" class="btn btn-success btn-block">
                                 Save text!
                             </button>
-
 
 
                         </div>

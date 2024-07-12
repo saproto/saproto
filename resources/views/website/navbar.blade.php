@@ -197,7 +197,7 @@
                                            href="{{ route("announcement::index") }}">Announcements</a>
                                         <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("codex::index") }}">Codices</a>
+                                        <a class="dropdown-item" href="{{ route("codex.index") }}">Codices</a>
                                     @endcan
 
                                     <li role="separator" class="dropdown-divider"></li>
@@ -247,7 +247,7 @@
 
                             @can('senate')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('codex::index')}}" role="button"
+                                    <a class="nav-link" href="{{route('codex.index')}}" role="button"
                                        aria-haspopup="false" aria-expanded="false">Codices</a>
                                 </li>
                             @endcan
@@ -281,7 +281,7 @@
                                    role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->calling_name }}
                                     <img id="profile-picture" class="rounded-circle ms-2" alt="your profile picture"
-                                         src="{{ Auth::user()->generatePhotoPath(100, 100) }}"/>
+                                         src="{{ Auth::user()->generatePhotoPath(100, 100) }}" />
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end mt-2">
