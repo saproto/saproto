@@ -42,7 +42,7 @@
                 @endif
             @endforeach
 
-                           background-image: url('{{ asset($bg_image) }}');
+            background-image: url('{{ asset($bg_image) }}');
             background-position: center 100%;
             background-repeat: no-repeat;
         }
@@ -113,16 +113,28 @@
         const categoryBtnList = Array.from(document.getElementsByClassName('btn-category'))
         categoryBtnList.forEach(el => {
             el.addEventListener('click', _ => {
-                Array.from(document.querySelectorAll('#category-nav > .active')).forEach(el => el.classList.remove('active'))
-                el.classList.add('active')
-                const categoryViewList = Array.from(document.getElementsByClassName('category-view'))
-                const id = el.getAttribute('data-id')
-                categoryViewList.forEach(el => {
-                    if (el.getAttribute('data-id') !== id) el.classList.add('inactive')
-                    else el.classList.remove('inactive')
-                })
+                setTabActive(el)
             })
         })
+
+        let lastSelectedTab = document.querySelector(`[data-id="${localStorage.getItem("currentProductPageId")}"]`);
+        if (lastSelectedTab && "{{$store_slug}}" === "tipcie") {
+            setTabActive(lastSelectedTab);
+        } else {
+            setTabActive(categoryBtnList[0]);
+        }
+
+        function setTabActive(el) {
+            Array.from(document.querySelectorAll('#category-nav > .active')).forEach(el => el.classList.remove('active'))
+            el.classList.add('active')
+            const categoryViewList = Array.from(document.getElementsByClassName('category-view'))
+            const id = el.getAttribute('data-id')
+            localStorage.setItem("currentProductPageId", id);
+            categoryViewList.forEach(el => {
+                if (el.getAttribute('data-id') !== id) el.classList.add('inactive')
+                else el.classList.remove('inactive')
+            })
+        }
 
         const productList = Array.from(document.getElementsByClassName('product'))
         productList.forEach(el => {

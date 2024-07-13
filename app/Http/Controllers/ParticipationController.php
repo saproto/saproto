@@ -15,9 +15,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Mail;
-use Redirect;
-use Session;
 
 class ParticipationController extends Controller
 {
@@ -69,6 +69,8 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
+        $event->updateUniqueUsersCount();
+
         if (! $is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
@@ -119,6 +121,11 @@ class ParticipationController extends Controller
         }
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
+
+        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
+            $event->updateUniqueUsersCount();
+        }
+
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
@@ -139,8 +146,13 @@ class ParticipationController extends Controller
     public function destroy($participation_id, Request $request)
     {
         /** @var ActivityParticipation $participation */
-        $participation = ActivityParticipation::findOrFail($participation_id);
+        $participation = ActivityParticipation::where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
+        if (! $participation) {
+            Session::flash('flash_message', 'The participation is not found.');
+
+            return Redirect::back();
+        }
         $notify = false;
 
         if ($participation->user->id != Auth::id()) {
@@ -172,6 +184,8 @@ class ParticipationController extends Controller
 
             $participation->delete();
 
+            $participation->activity->event->updateUniqueUsersCount();
+
             if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->participants) {
                 self::transferOneBackupUser($participation->activity);
             }
@@ -180,8 +194,8 @@ class ParticipationController extends Controller
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
-
             $participation->delete();
+            $participation->activity->event->updateUniqueUsersCount();
         }
 
         if ($is_web) {
@@ -221,11 +235,17 @@ class ParticipationController extends Controller
 
     public static function transferOneBackupUser(Activity $activity)
     {
-        $backup_participation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();
+        $backup_participation = ActivityParticipation::where('activity_id', $activity->id)
+            ->whereNull('committees_activities_id')->where('backup', true)
+            ->with('user', 'activity.event')
+            ->first();
 
         if ($backup_participation !== null) {
             $backup_participation->backup = false;
             $backup_participation->save();
+
+            $backup_participation->activity->event->updateUniqueUsersCount();
+
             Mail::to($backup_participation->user)->queue((new ActivityMovedFromBackup($backup_participation))->onQueue('high'));
         }
     }

@@ -21,7 +21,7 @@ class TicketController extends Controller
     /** @return View */
     public function index()
     {
-        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->paginate(20)]);
+        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
     }
 
     /** @return View */
@@ -412,6 +412,8 @@ class TicketController extends Controller
 
             return Redirect::back();
         }
+
+        $event->updateUniqueUsersCount();
 
         if (count($prepaid_tickets) > 0) {
             Session::put('prepaid_tickets', $event->id);
