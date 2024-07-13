@@ -874,10 +874,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     Route::group(['prefix' => 'codex', 'middleware' => ['auth', 'permission:senate']], function () {
         Route::resource('codex', 'CodexController');
-        Route::resource('codexsong', 'CodexSongController')->except(['index', 'show']);
-        Route::resource('codexsongcategory', 'CodexSongCategoryController')->except(['index', 'show']);
-        Route::resource('codextext', 'CodexTextController')->except(['index', 'show']);
-        Route::resource('codextexttype', 'CodexTextTypeController')->except(['index', 'show']);
+        Route::resource('codexSong', 'CodexSongController')->except(['index', 'show']);
+        Route::resource('codexSongCategory', 'CodexSongCategoryController')->except(['index', 'show']);
+        Route::resource('codexText', 'CodexTextController')->except(['index', 'show']);
+        Route::resource('codexTextType', 'CodexTextTypeController')->except(['index', 'show']);
 //        Route::get('/', ['as' => 'index', 'uses' => 'CodexController@index']);
 //        Route::get('add-codex', ['as' => 'add-codex', 'uses' => 'CodexController@addCodex']);
 //        Route::get('add-song', ['as' => 'add-song', 'uses' => 'CodexController@addSong']);

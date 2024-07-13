@@ -3,10 +3,10 @@
         Text types
         @if(!isset($edit))
             <div>
-                <a href="{{ route('codextext.create') }}" class="btn btn-info badge">
+                <a href="{{ route('codexText.create') }}" class="btn btn-info badge">
                     New Text
                 </a>
-                <a href="{{ route('codextexttype.create') }}" class="btn btn-info badge">
+                <a href="{{ route('codexTextType.create') }}" class="btn btn-info badge">
                     New Text Type
                 </a>
             </div>
@@ -24,10 +24,10 @@
                                 </span>
                                 @if(!isset($edit))
                                     <div>
-                                        <a href="{{ route('codextexttype.edit', ['codextexttype' => $textType]) }}"
+                                        <a href="{{ route('codexTextType.edit', ['codexTextType' => $textType]) }}"
                                            class="btn btn-info badge m-1">Edit</a>
                                          @include('components.modals.confirm-modal', [
-                                            'action' => route('codextexttype.destroy', ['codextexttype' => $textType]),
+                                            'action' => route('codexTextType.destroy', ['codexTextType' => $textType]),
                                             'classes' => 'btn btn-danger badge m-1',
                                             'text' => 'Delete',
                                             'message' => "Are you sure you want to delete $textType->type? <br> This will also delete <b>all texts</b> in this category",
@@ -56,10 +56,10 @@
                                     {{ $text->name}}
                                     @if(!isset($edit))
                                         <div>
-                                                <a href="{{ route('codextext.edit', ['codextext' => $text]) }}"
+                                                <a href="{{ route('codexText.edit', ['codexText' => $text]) }}"
                                                    class="btn btn-info badge m-1">Edit</a>
                                                  @include('components.modals.confirm-modal', [
-                                                    'action' => route('codextext.destroy', ['codextext' => $text]),
+                                                    'action' => route('codexText.destroy', ['codexText' => $text]),
                                                     'classes' => 'btn btn-danger badge m-1',
                                                     'text' => 'Delete',
                                                     'message' => "Are you sure you want to delete $text->name?",

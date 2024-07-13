@@ -5,9 +5,10 @@
 @endsection
 
 @section('container')
-    {{--    {{ dd($text)}}--}}
-    <form action="{{ !empty($text) ? route('codextext.update', ['codextext'=> $text->id ]) : route("codextext.store") }}"
-          method="{{ !empty($text) ? "PUT" : "POST" }}">
+    @php /** @var \App\Models\CodexText $text */ @endphp
+    <form action="{{ !empty($text) ? route('codexText.update', ['codexText' => $text]) : route("codexText.store") }}"
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($text) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -42,8 +43,6 @@
                             <button type="submit" class="btn btn-success btn-block">
                                 Save text!
                             </button>
-
-
                         </div>
                     </div>
                 </div>

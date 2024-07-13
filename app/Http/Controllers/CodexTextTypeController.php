@@ -32,23 +32,23 @@ class CodexTextTypeController extends Controller
     {
     }
 
-    public function edit(CodexTextType $textType)
+    public function edit(CodexTextType $codexTextType)
     {
-        return view('codex.text-type-edit', ['textType' => $textType]);
+        return view('codex.text-type-edit', ['textType' => $codexTextType]);
     }
 
-    public function update(Request $request, CodexTextType $textType)
+    public function update(Request $request, CodexTextType $codexTextType)
     {
-        $textType->type = $request->input('type');
-        $textType->save();
+        $codexTextType->type = $request->input('type');
+        $codexTextType->save();
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy(CodexTextType $textType)
+    public function destroy(CodexTextType $codexTextType)
     {
-        $textType->texts()->delete();
-        $textType->delete();
+        $codexTextType->texts()->delete();
+        $codexTextType->delete();
 
         return Redirect::route('codex.index');
     }

@@ -6,13 +6,13 @@
         </a>
     </div>
     <div class="card-body">
-
+        @php /** @var \App\Models\Codex[] $codices */ @endphp
         @foreach($codices as $codex)
             <div class="card border">
                 <div class="card-header border-bottom-0 d-inline-flex justify-content-between w-100">
                     {{ $codex->name }}
                     <span>
-                        <a href="{{ route('codex.index', ['id' => $codex->id]) }}"
+                        <a href="{{ route('codex.index', ['codex' => $codex]) }}"
                            class="btn btn-primary badge">Export</a>
                         <a href="{{ route('codex.edit', ['codex' => $codex]) }}"
                            class="btn btn-info badge">Edit</a>

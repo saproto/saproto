@@ -3,11 +3,11 @@
         Songs
         @if(!isset($edit))
             <div>
-                <a href="{{ route('codexsong.create') }}" class="btn btn-info badge">
+                <a href="{{ route('codexSong.create') }}" class="btn btn-info badge">
                     New Song
                 </a>
 
-                <a href="{{ route('codexsongcategory.create') }}" class="btn btn-info badge">
+                <a href="{{ route('codexSongCategory.create') }}" class="btn btn-info badge">
                     New Song type
                 </a>
             </div>
@@ -24,10 +24,10 @@
                         </span>
                         @if(!isset($edit))
                             <div>
-                                <a href="{{ route('codexsongcategory.edit', ['codexsongcategory' => $songCategory]) }}"
+                                <a href="{{ route('codexSongCategory.edit', ['codexSongCategory' => $songCategory]) }}"
                                    class="btn btn-info badge m-1">Edit</a>
                                  @include('components.modals.confirm-modal', [
-                                    'action' => route('codexsongcategory.destroy', ['codexsongcategory' => $songCategory]),
+                                    'action' => route('codexSongCategory.destroy', ['codexSongCategory' => $songCategory]),
                                     'classes' => 'btn btn-danger badge',
                                     'text' => 'Delete',
                                     'message' => "Are you sure you want to delete the category $songCategory->name?<br> This will also delete <b>all songs</b> in this category!",
@@ -56,10 +56,10 @@
                                     {{$song->title}}
                                     @if(!isset($edit))
                                         <div>
-                                            <a href="{{ route('codexsong.edit', ['codexsong' => $song]) }}"
+                                            <a href="{{ route('codexSong.edit', ['codexSong' => $song]) }}"
                                                class="btn btn-info badge m-1">Edit</a>
                                              @include('components.modals.confirm-modal', [
-                                            'action' => route('codexsong.destroy', ['codexsong' => $song]),
+                                            'action' => route('codexSong.destroy', ['codexSong' => $song]),
                                             'classes' => 'btn btn-danger badge m-1',
                                             'text' => 'Delete',
                                             'message' => "Are you sure you want to delete $song->title?",

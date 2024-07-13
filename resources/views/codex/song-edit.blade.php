@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <form action="{{ !empty($song) ? route('codexsong.update', ['codexsong' => $song]) : route("codexsong.store") }}"
+    <form action="{{ !empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route("codexSong.store") }}"
           method="{{ !empty($song) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">

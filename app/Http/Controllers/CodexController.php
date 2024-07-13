@@ -40,9 +40,9 @@ class CodexController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function edit(int $id)
+    public function edit(Codex $codex)
     {
-        $codex = Codex::findOrFail($id);
+//        return $codex;
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
@@ -51,17 +51,15 @@ class CodexController extends Controller
         return view('codex.codex-edit', ['codex' => $codex, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => $mySongs, 'myTextTypes' => $myTexts]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, Codex $codex)
     {
-        $codex = Codex::findOrFail($id);
         $this->saveCodex($codex, $request);
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy(int $id)
+    public function destroy(Codex $codex)
     {
-        $codex = Codex::findOrFail($id);
         $codex->songs()->detach();
         $codex->texts()->detach();
         $codex->delete();
@@ -79,27 +77,25 @@ class CodexController extends Controller
         $codex->save();
     }
 
-    public function show(int $id)
+    public function show(Codex $codex)
     {
-        $codex = Codex::findOrFail($id);
-
-        $categories = SongCategory::whereHas('songs', function ($q) use ($id) {
-            $q->whereHas('codices', function ($q) use ($id) {
-                $q->where('codex', $id);
+        $categories = SongCategory::whereHas('songs', function ($q) use ($codex) {
+            $q->whereHas('codices', function ($q) use ($codex) {
+                $q->where('codex', $codex->id);
             });
-        })->with(['songs' => function ($query) use ($id) {
-            $query->whereHas('codices', function ($query) use ($id) {
-                $query->where('codex_codices.id', $id);
+        })->with(['songs' => function ($query) use ($codex) {
+            $query->whereHas('codices', function ($query) use ($codex) {
+                $query->where('codex_codices.id', $codex->id);
             })->orderBy('title');
         }])->orderBy('id')->get();
 
-        $textCategories = CodexTextType::whereHas('texts', function ($q) use ($id) {
-            $q->whereHas('codices', function ($q) use ($id) {
-                $q->where('codex_codices.id', $id);
+        $textCategories = CodexTextType::whereHas('texts', function ($q) use ($codex) {
+            $q->whereHas('codices', function ($q) use ($codex) {
+                $q->where('codex_codices.id', $codex->id);
             });
-        })->with(['texts' => function ($query) use ($id) {
-            $query->whereHas('codices', function ($query) use ($id) {
-                $query->where('codex_codices.id', $id);
+        })->with(['texts' => function ($query) use ($codex) {
+            $query->whereHas('codices', function ($query) use ($codex) {
+                $query->where('codex_codices.id', $codex->id);
             });
         }])->orderBy('type')->get();
         if (count($categories) == 0 || count($textCategories) == 0) {

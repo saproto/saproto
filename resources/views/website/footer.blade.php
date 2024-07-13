@@ -54,7 +54,8 @@
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">
                     Please familiarize yourself with our
-                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
+                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank"
+                       class="text-white">
                         privacy policy
                     </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
                         responsible disclosure policy
@@ -67,7 +68,7 @@
                 <br>
                 This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
                 <a href="{{ route('developers') }}" class="text-white">
-                    {{ App\Models\Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                    HYTTIOAOAc
                 </a>.
             </sub>
         </p>

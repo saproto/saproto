@@ -5,6 +5,7 @@
 @endsection
 
 @section('container')
+    @php /** @var \App\Models\Codex $codex */ @endphp
     <form action="{{ !empty($codex) ? route('codex.update', ['codex' => $codex]) : route("codex.store") }}"
           method="{{ !empty($codex) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
