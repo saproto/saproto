@@ -42,7 +42,7 @@ class CodexController extends Controller
 
     public function edit(Codex $codex)
     {
-//        return $codex;
+        //        return $codex;
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
