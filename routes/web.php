@@ -909,7 +909,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 //        Route::post('edit-text-type/{id}', ['as' => 'edit-text-type', 'uses' => 'CodexController@updateTextType']);
 //        Route::post('edit-text/{id}', ['as' => 'edit-text', 'uses' => 'CodexController@updateText']);
 
-//        Route::get('export/{id}', ['as' => 'export', 'uses' => 'CodexController@exportCodex']);
+        //        Route::get('export/{id}', ['as' => 'export', 'uses' => 'CodexController@exportCodex']);
     });
 
     /*Route related to the december theme*/
