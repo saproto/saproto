@@ -53,11 +53,6 @@ class Dinnerform extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $casts = [
-        'start' => 'datetime',
-        'end' => 'datetime',
-    ];
-
     protected $with = ['event'];
 
     /** @return BelongsTo */
@@ -154,5 +149,12 @@ class Dinnerform extends Model
                 $orderline->delete();
             }
         });
+    }
+    protected function casts(): array
+    {
+        return [
+            'start' => 'datetime',
+            'end' => 'datetime',
+        ];
     }
 }

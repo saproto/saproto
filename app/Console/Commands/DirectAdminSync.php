@@ -334,9 +334,11 @@ class DirectAdminSync extends Command
             if (!array_key_exists('error', $response)) {
                 continue;
             }
+
             if ($response['error'] != 1) {
                 continue;
             }
+
             $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
         }
     }

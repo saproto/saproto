@@ -43,10 +43,6 @@ class ProductCategory extends Model
 
     protected $guarded = ['id'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return BelongsToMany */
     public function products()
     {
@@ -58,5 +54,11 @@ class ProductCategory extends Model
         $products = $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id')->get();
 
         return $products->sortBy('name');
+    }
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

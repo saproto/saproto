@@ -92,6 +92,7 @@ class StockMutationController extends Controller
                     fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
                 }
             }
+
             fclose($f);
         };
 

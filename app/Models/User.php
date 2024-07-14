@@ -158,10 +158,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return string|null */
     public function getPublicId()
     {
@@ -352,15 +348,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
+
             if (!$orderline->orderline) {
                 continue;
             }
+
             if ($orderline->withdrawal->id === 1) {
                 continue;
             }
+
             if ($orderline->withdrawal->closed) {
                 continue;
             }
+
             return true;
         }
 
@@ -632,5 +632,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
 
         return null;
+    }
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

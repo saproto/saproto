@@ -123,9 +123,11 @@ class AchievementsCron extends Command
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
                 }
+
                 if (!$check($user)) {
                     continue;
                 }
+
                 $this->giveAchievement($user, $id);
             }
         }

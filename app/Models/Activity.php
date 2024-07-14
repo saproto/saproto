@@ -61,17 +61,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Activity extends Validatable
 {
-    public $id;
-    public $backupUsers;
-    public $event;
-    public $participants;
-    public $users_count;
-    public $users;
-    public $closed;
-    public $registration_start;
-    public $registration_end;
-    public $deregistration_end;
-    public $attendees;
     protected $table = 'activities';
 
     protected $guarded = ['id'];
@@ -85,19 +74,19 @@ class Activity extends Validatable
     ];
 
     /** @return BelongsTo */
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
     /** @return BelongsTo */
-    public function closedAccount()
+    public function closedAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'closed_account');
     }
 
     /** @return BelongsToMany */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
@@ -108,7 +97,7 @@ class Activity extends Validatable
     }
 
     /** @return BelongsToMany */
-    public function presentUsers()
+    public function presentUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
@@ -151,7 +140,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  int  $help_id
+     * @param int $help_id
      * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
     public function helpingUsers($help_id)
@@ -160,8 +149,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  Committee  $committee
-     * @param  User  $user
+     * @param Committee $committee
+     * @param User $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation($committee, $user)
@@ -180,8 +169,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation($user, $h = null)
@@ -210,7 +199,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user participates
      */
     public function isParticipating($user)
@@ -219,7 +208,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool
      */
     public function isOnBackupList($user)
@@ -228,8 +217,8 @@ class Activity extends Validatable
     }
 
     /**
-     * @param  User  $user
-     * @param  HelpingCommittee|null  $h
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return bool Whether the user or committee is helping
      */
     public function isHelping($user, $h = null)
@@ -252,7 +241,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether the activity is full
      */
-    public function isFull()
+    public function isFull(): bool
     {
         return $this->participants != -1 && ($this->users_count ?? $this->users->count()) >= $this->participants;
     }
@@ -290,7 +279,7 @@ class Activity extends Validatable
             return true;
         }
 
-        return ! ($this->closed || $this->participants == 0 || date('U') < $this->registration_start);
+        return !($this->closed || $this->participants == 0 || date('U') < $this->registration_start);
     }
 
     /**

@@ -301,6 +301,7 @@ class ProductController extends Controller
             foreach ($data as $row) {
                 fputcsv($f, $row);
             }
+
             fclose($f);
         };
 

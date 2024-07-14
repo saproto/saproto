@@ -55,10 +55,6 @@ class CommitteeMembership extends Model
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return BelongsTo */
     public function user()
     {
@@ -69,5 +65,11 @@ class CommitteeMembership extends Model
     public function committee()
     {
         return $this->belongsTo(Committee::class);
+    }
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

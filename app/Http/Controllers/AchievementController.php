@@ -187,9 +187,11 @@ class AchievementController extends Controller
             if (!$user) {
                 continue;
             }
+
             if (!$this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
                 continue;
             }
+
             $awarded = $awarded.' '.$user->name.',';
         }
 

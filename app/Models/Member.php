@@ -66,10 +66,6 @@ class Member extends Model
 
     protected $guarded = ['id', 'user_id'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return BelongsTo */
     public function user()
     {
@@ -166,5 +162,11 @@ class Member extends Model
         }
 
         return $username;
+    }
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

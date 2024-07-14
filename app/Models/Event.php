@@ -93,10 +93,6 @@ class Event extends Model
 
     protected $appends = ['is_future', 'formatted_date'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return string */
     public function getPublicId()
     {
@@ -377,5 +373,11 @@ class Event extends Model
         self::updating(static function ($event) {
             ++$event->update_sequence;
         });
+    }
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

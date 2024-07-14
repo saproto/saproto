@@ -89,9 +89,11 @@ class SpotifyUpdate extends Command
             if (in_array($video->video_title, array_keys($videos_to_search))) {
                 continue;
             }
+
             if (strlen($video->video_title) <= 0) {
                 continue;
             }
+
             $videos_to_search[$video->video_title] = (object) [
                 'title' => $video->video_title,
                 'video_id' => $video->video_id,

@@ -300,7 +300,7 @@ class OmNomController extends Controller
     }
 
     /**
-     * @return (object{\category: \mixed, \products: \mixed} & \stdClass)[]
+     * @return object{\category: \mixed, \products: \mixed}&stdClass[]
      */
     private function getCategories($store): array
     {

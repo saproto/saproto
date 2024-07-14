@@ -32,6 +32,7 @@ use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
 use Milon\Barcode\BarcodeServiceProvider;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Mollie\Laravel\MollieServiceProvider;
+use Symfony\Component\Console\Input\Input;
 use willvincent\Feeds\FeedsServiceProvider;
 use Vinkla\Hashids\HashidsServiceProvider;
 use Aacotroneo\Saml2\Saml2ServiceProvider;
@@ -49,7 +50,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -82,6 +82,7 @@ use Mollie\Laravel\Facades\Mollie;
 use willvincent\Feeds\Facades\FeedsFacade;
 use Vinkla\Hashids\Facades\Hashids;
 use nickurt\PwnedPasswords\Facade;
+
 return [
 
     /*
@@ -231,10 +232,8 @@ return [
          * Application Service Providers...
          */
         AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
 
         /*
          * External Service Providers
