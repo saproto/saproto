@@ -55,7 +55,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
  * @method static Builder|Activity query()
- *
  */
 class Activity extends Validatable
 {
@@ -140,8 +139,6 @@ class Activity extends Validatable
     }
 
     /**
-     * @param Committee $committee
-     * @param User $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation(Committee $committee, User $user): ?ActivityParticipation
@@ -160,11 +157,9 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
-     * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation(User $user, HelpingCommittee $h = null): ?ActivityParticipation
+    public function getParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
         if ($h == null) {
             return ActivityParticipation::query()->where('activity_id', $this->id)
@@ -190,7 +185,6 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
      * @return bool Whether the user participates
      */
     public function isParticipating(User $user): bool
@@ -198,20 +192,15 @@ class Activity extends Validatable
         return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
-    /**
-     * @param User $user
-     */
     public function isOnBackupList(User $user): bool
     {
         return $this->backupUsers->where('id', $user->id)->first() !== null;
     }
 
     /**
-     * @param User $user
-     * @param HelpingCommittee|null $h
      * @return bool Whether the user or committee is helping
      */
-    public function isHelping(User $user, HelpingCommittee $h = null): bool
+    public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
         if ($h instanceof HelpingCommittee) {
             return $this->getParticipation($user, $h) instanceof ActivityParticipation;
@@ -269,7 +258,7 @@ class Activity extends Validatable
             return true;
         }
 
-        return !($this->closed || $this->participants == 0 || date('U') < $this->registration_start);
+        return ! ($this->closed || $this->participants == 0 || date('U') < $this->registration_start);
     }
 
     /**
@@ -306,6 +295,7 @@ class Activity extends Validatable
     public function getAttendees(): int
     {
         $present = $this->getPresent();
+
         return $present > 0 ? $present : $this->attendees;
     }
 

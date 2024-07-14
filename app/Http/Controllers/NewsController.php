@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use stdClass;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsitem;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use stdClass;
 
 class NewsController extends Controller
 {

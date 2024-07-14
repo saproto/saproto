@@ -35,7 +35,7 @@ class WrappedController extends Controller
             ->orderBy('total')
             ->get();
 
-        return $totals->groupBy('product_id')->map(static fn($product) => $product->pluck('total'));
+        return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
 
     public function eventList()
@@ -86,6 +86,7 @@ class WrappedController extends Controller
                 $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
                 $event->price = $activity_price + $ticket_price;
                 $event->image_url = $images->where('event_id', $event->id)->first()->generateImagePath(null, null);
+
                 return $event->only([
                     'title',
                     'start',

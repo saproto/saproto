@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class TestEmail extends Command
 {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Event;
@@ -10,6 +9,7 @@ use App\Models\EventCategory;
 use App\Models\Member;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
@@ -79,17 +79,17 @@ class QueryController extends Controller
             $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             if ($member->is_pending) {
-                ++$count_pending;
+                $count_pending++;
             } else {
-                if (!$member->is_pet) {
-                    ++$count_total;
+                if (! $member->is_pet) {
+                    $count_total++;
                 }
 
                 if ($member->user->isActiveMember()) {
-                    ++$count_active;
+                    $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object)[
+                        $export_active[] = (object) [
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -97,29 +97,29 @@ class QueryController extends Controller
                 }
 
                 if ($member->is_lifelong) {
-                    ++$count_lifelong;
+                    $count_lifelong++;
                 }
 
                 if ($member->is_honorary) {
-                    ++$count_honorary;
+                    $count_honorary++;
                 }
 
                 if ($member->is_donor) {
-                    ++$count_donor;
+                    $count_donor++;
                 }
 
                 if ($is_primary_student) {
-                    ++$count_primary;
+                    $count_primary++;
                 } else {
-                    ++$count_secondary;
+                    $count_secondary++;
                 }
 
                 if ($is_ut) {
-                    ++$count_ut;
+                    $count_ut++;
                 }
 
                 if ($request->has('export_subsidies') && $is_ut) {
-                    $export_subsidies[] = (object)[
+                    $export_subsidies[] = (object) [
                         'primary' => $is_primary_student ? 'true' : 'false',
                         'name' => $member->user->name,
                         'email' => $has_ut_mail ? $member->user->email : null,

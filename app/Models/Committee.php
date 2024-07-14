@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,7 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use LaravelIdea\Helper\App\Models\_IH_Event_C;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Committee Model.
@@ -58,19 +57,16 @@ class Committee extends Model
 
     protected $with = ['image'];
 
-    /** @return string */
     public function getPublicId(): string
     {
         return $this->slug;
     }
 
-    /** @return Committee */
     public static function fromPublicId($public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
 
-    /** @return BelongsToMany */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
@@ -97,7 +93,7 @@ class Committee extends Model
 
     public function getEmailAddressAttribute(): string
     {
-        return $this->slug . '@' . config('proto.emaildomain');
+        return $this->slug.'@'.config('proto.emaildomain');
     }
 
     public function pastEvents(int $n): Collection
@@ -123,7 +119,6 @@ class Committee extends Model
     }
 
     /**
-     * @param bool $includeSecret
      * @return Event[]
      */
     public function helpedEvents(bool $includeSecret = false): array
@@ -134,7 +129,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event?->isPublished() || (!$event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -174,7 +169,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;
@@ -187,7 +182,6 @@ class Committee extends Model
     }
 
     /**
-     * @param User $user
      * @return bool Whether the use is a member of the committee.
      */
     public function isMember(User $user): bool

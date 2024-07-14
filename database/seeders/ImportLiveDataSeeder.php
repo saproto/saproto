@@ -110,6 +110,7 @@ class ImportLiveDataSeeder extends Seeder
                 'Otherwise you can continue without seeding the database.'
             );
         }
+
         $memberData = (array) ($userData['member'] ?? null);
         unset($userData['member']);
         unset($userData['photo']);
@@ -123,13 +124,14 @@ class ImportLiveDataSeeder extends Seeder
         unset($userData['permissions']);
         unset($memberData['created_at']);
         $userData['id'] = 1;
-        $adminUser = User::create($userData);
+        $adminUser = User::query()->create($userData);
         $adminUser->save();
         if ($memberData !== []) {
-            $newMember = Member::create($memberData);
+            $newMember = Member::query()->create($memberData);
             $newMember->user_id = 1;
             $newMember->save();
         }
+
         $adminUser->setPassword($password);
     }
 

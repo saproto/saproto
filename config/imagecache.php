@@ -1,8 +1,9 @@
 <?php
 
-use Intervention\Image\Templates\Small;
-use Intervention\Image\Templates\Medium;
 use Intervention\Image\Templates\Large;
+use Intervention\Image\Templates\Medium;
+use Intervention\Image\Templates\Small;
+
 return [
 
     /*

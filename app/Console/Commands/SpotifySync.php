@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SpotifyController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifySync extends Command

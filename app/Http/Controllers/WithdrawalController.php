@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Response;
 use AbcAeffchen\SepaUtilities\SepaUtilities;
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\Sephpa\SephpaInputException;
@@ -22,6 +17,11 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -365,7 +365,7 @@ class WithdrawalController extends Controller
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,
                 ]);
-                ++$i;
+                $i++;
             } catch (SephpaInputException $e) {
                 abort(500, sprintf('Error for user #%s: %s', $user->id, $e->getMessage()));
             }
@@ -500,7 +500,7 @@ class WithdrawalController extends Controller
                 continue;
             }
 
-            ++$total;
+            $total++;
         }
 
         return $total;

@@ -70,13 +70,11 @@ class Product extends Model
 
     protected $appends = ['image_url'];
 
-    /** @return BelongsTo */
     public function account(): BelongsTo
     {
         return $this->belongsTo(FinancialAccount::class);
     }
 
-    /** @return BelongsTo */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
@@ -95,19 +93,16 @@ class Product extends Model
         return null;
     }
 
-    /** @return BelongsToMany */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
-    /** @return HasOne */
     public function ticket(): HasOne
     {
         return $this->hasOne(Ticket::class, 'product_id');
     }
 
-    /** @return HasMany */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
@@ -115,13 +110,13 @@ class Product extends Model
 
     public function isVisible(): bool
     {
-        return $this->is_visible && !($this->stock <= 0 && !$this->is_visible_when_no_stock);
+        return $this->is_visible && ! ($this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
     public function omnomcomPrice()
     {
         $active = WallstreetController::active();
-        if (!$active) {
+        if (! $active) {
             return $this->price;
         }
 
@@ -134,16 +129,9 @@ class Product extends Model
     }
 
     /**
-     * @param User $user
-     * @param int $amount
-     * @param float|null $total_price
-     * @param bool|null $withCash
-     * @param bool|null $withBankCard
-     * @param string|null $description
-     * @param string $auth_method
      * @return int OrderLine id
      */
-    public function buyForUser(User $user, int $amount, float $total_price = null, ?bool $withCash = false, ?bool $withBankCard = false, string $description = null, string $auth_method = 'none'): int
+    public function buyForUser(User $user, int $amount, ?float $total_price = null, ?bool $withCash = false, ?bool $withBankCard = false, ?string $description = null, string $auth_method = 'none'): int
     {
         $this->stock -= $amount;
         $this->save();
@@ -159,8 +147,8 @@ class Product extends Model
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null),
-            'payed_with_bank_card' => ($withBankCard ? date('Y-m-d H:i:s') : null),
+            'payed_with_cash' => ($withCash === true ? date('Y-m-d H:i:s') : null),
+            'payed_with_bank_card' => ($withBankCard === true ? date('Y-m-d H:i:s') : null),
             'description' => $description == '' ? null : $description,
             'authenticated_by' => $auth_method,
         ]);

@@ -92,12 +92,9 @@ class DmxOverride extends Model
 
     public function justOver(): bool
     {
-        return date('U') > $this->end && date('U') < $this->end . 600;
+        return date('U') > $this->end && date('U') < $this->end. 600;
     }
 
-    /**
-     * @return array
-     */
     public function getFixtureIds(): array
     {
         return explode(',', $this->fixtures);
@@ -116,6 +113,6 @@ class DmxOverride extends Model
 
     public function getWindowSizeAttribute(): int
     {
-        return (int)$this->end - (int)$this->start;
+        return (int) $this->end - (int) $this->start;
     }
 }

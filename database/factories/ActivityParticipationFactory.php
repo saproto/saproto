@@ -20,9 +20,9 @@ class ActivityParticipationFactory extends Factory
     public function definition(): array
     {
         return [
-            'created_at' => fn($attributes) => self::createAt($attributes),
-            'deleted_at' => fn($attributes) => fake()->boolean(30) ? self::deletedAt($attributes) : null,
-            'backup' => fn($attributes) => self::Backup($attributes),
+            'created_at' => fn ($attributes): string => self::createAt($attributes),
+            'deleted_at' => fn ($attributes): ?string => fake()->boolean(30) ? self::deletedAt($attributes) : null,
+            'backup' => fn ($attributes): bool => self::Backup($attributes),
         ];
     }
 

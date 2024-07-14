@@ -98,17 +98,11 @@ class Video extends Model
         return sprintf('%s seconds', $interval->s);
     }
 
-    /**
-     * @return string
-     */
     public function getUnixTimeStamp(): string
     {
         return date('U', strtotime($this->video_date));
     }
 
-    /**
-     * @return string
-     */
     public function getFormDate(): string
     {
         return date('d-m-Y', strtotime($this->video_date));

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 class LdapController extends Controller
 {
     /**
-     * @param string $query
-     * @param bool $only_active
      * @return array
      */
     public static function searchUtwente(string $query, bool $only_active = false)
@@ -15,7 +13,7 @@ class LdapController extends Controller
         $result = json_decode($response)->result;
 
         if ($only_active) {
-            return array_filter($result, static fn($row): bool => (bool)$row->active);
+            return array_filter($result, static fn ($row): bool => (bool) $row->active);
         }
 
         return $result ?? [];
@@ -30,7 +28,7 @@ class LdapController extends Controller
         $usernames = [];
 
         foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname . ' ' . $student->sn);
+            $names[] = strtolower($student->givenname.' '.$student->sn);
             $emails[] = strtolower($student->userprincipalname);
             $usernames[] = $student->uid;
         }

@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\UserAdminController;
 use App\Mail\MembershipEndedForBoard;
 use App\Models\Member;
 use Carbon;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class EndMemberships extends Command
 {

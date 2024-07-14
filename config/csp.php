@@ -2,6 +2,7 @@
 
 use App\Csp\Policies\ProtoPolicy;
 use App\Support\LaravelViteNonceGenerator;
+
 return [
 
     /*

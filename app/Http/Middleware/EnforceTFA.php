@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Committee;
+use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
-use Closure;
-use App\Models\Committee;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class EnforceTFA
 {
@@ -16,7 +16,7 @@ class EnforceTFA
      * This middleware forces power users to use TFA before they can do anything else.
      *
      * @param  Request  $request
-     * @param Closure $next
+     * @param  Closure  $next
      * @return mixed
      */
     public function handle($request, $next)

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function () {
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {

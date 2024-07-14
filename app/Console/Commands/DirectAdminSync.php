@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Str;
 use App\Models\Alias;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Member;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Solitweb\DirectAdmin\DirectAdmin;
 
 class DirectAdminSync extends Command
@@ -332,7 +332,7 @@ class DirectAdminSync extends Command
             $da->query($query['cmd'], $query['options']);
 
             $response = $da->fetch_parsed_body();
-            if (!array_key_exists('error', $response)) {
+            if (! array_key_exists('error', $response)) {
                 continue;
             }
 

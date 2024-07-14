@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Crypt;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * Email List Model.

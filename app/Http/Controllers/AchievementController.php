@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\User;
@@ -13,6 +10,9 @@ use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class AchievementController extends Controller
@@ -184,11 +184,11 @@ class AchievementController extends Controller
         $awarded = '';
         foreach ($userIds as $userId) {
             $user = User::query()->find($userId);
-            if (!$user) {
+            if (! $user) {
                 continue;
             }
 
-            if (!$this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
+            if (! $this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
                 continue;
             }
 

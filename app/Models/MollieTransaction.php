@@ -65,24 +65,21 @@ class MollieTransaction extends Model
             ->get($this->mollie_id);
     }
 
-    /**
-     * @param string $status
-     */
     public static function translateStatus(string $status): string
     {
-        if ($status == 'open' || $status == 'pending' || $status == 'draft') {
+        if ($status === 'open' || $status === 'pending' || $status === 'draft') {
             return 'open';
         }
 
-        if ($status == 'expired' ||
-            $status == 'canceled' ||
-            $status == 'failed' ||
-            $status == 'charged_back' ||
-            $status == 'refunded') {
+        if ($status === 'expired' ||
+            $status === 'canceled' ||
+            $status === 'failed' ||
+            $status === 'charged_back' ||
+            $status === 'refunded') {
             return 'failed';
         }
 
-        if ($status == 'paid' || $status == 'paidout') {
+        if ($status === 'paid' || $status === 'paidout') {
             return 'paid';
         }
 
@@ -129,15 +126,15 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    !$orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
+                    ! $orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
 
                     $orderline->product->ticket->event->updateUniqueUsersCount();
-                    ++$orderline->product->stock;
+                    $orderline->product->stock++;
                     $orderline->product->save();
                     $orderline->delete();
 
@@ -149,7 +146,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && !$orderline->ticketPurchase->payment_complete) {
+                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }

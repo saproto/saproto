@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use App\Models\MenuItem;
 use App\Models\Page;
 use Exception;
@@ -10,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class MenuController extends Controller
@@ -159,7 +159,7 @@ class MenuController extends Controller
         foreach ($menuItems as $menuItem) {
             $menuItem->order = $i;
             $menuItem->save();
-            ++$i;
+            $i++;
         }
     }
 
@@ -184,7 +184,7 @@ class MenuController extends Controller
 
         foreach ($change as $item) {
             if ($item->order > $menuItem->order && $item->id != $menuItem->id) {
-                --$item->order;
+                $item->order--;
                 $item->save();
             }
         }
@@ -199,7 +199,7 @@ class MenuController extends Controller
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 
-        return array_filter($routes, static fn($route): bool => $route->getName() &&
+        return array_filter($routes, static fn ($route): bool => $route->getName() &&
         ! str_contains($route->uri(), '{') &&
         ! str_contains($route->getName(), 'api::') &&
         ! str_contains($route->getName(), 'login::') &&

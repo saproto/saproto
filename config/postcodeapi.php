@@ -1,6 +1,7 @@
 <?php
 
 use nickurt\PostcodeApi\Providers\nl_NL\PostcodeApiNuV3;
+
 return [
     'ApiPostcode' => [
         'url' => 'http://json.api-postcode.nl',

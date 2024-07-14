@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ManualEmail;
 use App\Models\Email;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class EmailCron extends Command
 {

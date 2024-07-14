@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Email;
 use App\Models\EmailList;
 use App\Models\EmailListSubscription;
@@ -14,6 +11,9 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class EmailController extends Controller
@@ -36,15 +36,15 @@ class EmailController extends Controller
         $searchTerm = $request->input('searchterm');
 
         if ($description) {
-            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%' . $searchTerm . '%');
+            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
         }
 
         if ($subject) {
-            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%' . $searchTerm . '%');
+            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
         }
 
         if ($body) {
-            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%' . $searchTerm . '%');
+            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
         }
 
         return view('emailadmin.overview', [
@@ -89,8 +89,8 @@ class EmailController extends Controller
     }
 
     /**
-     * @param int $id
      * @return View
+     *
      * @throws Exception
      */
     public function show(int $id)
@@ -108,7 +108,6 @@ class EmailController extends Controller
     }
 
     /**
-     * @param int $id
      * @return View|RedirectResponse
      */
     public function edit(int $id)
@@ -125,8 +124,6 @@ class EmailController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, int $id)
@@ -163,7 +160,6 @@ class EmailController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public function toggleReady(int $id)
@@ -197,8 +193,6 @@ class EmailController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -231,8 +225,6 @@ class EmailController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $file_id
      * @return RedirectResponse
      */
     public function deleteAttachment(int $id, int $file_id)
@@ -270,17 +262,16 @@ class EmailController extends Controller
 
         $sub = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $list->id)->first();
         if ($sub != null) {
-            Session::flash('flash_message', $user->name . ' has been unsubscribed from ' . $list->name);
+            Session::flash('flash_message', $user->name.' has been unsubscribed from '.$list->name);
             $sub->delete();
         } else {
-            Session::flash('flash_message', $user->name . ' was already unsubscribed from ' . $list->name);
+            Session::flash('flash_message', $user->name.' was already unsubscribed from '.$list->name);
         }
 
         return Redirect::route('homepage');
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -301,13 +292,6 @@ class EmailController extends Controller
         return Redirect::route('email::admin');
     }
 
-    /**
-     * @param Email $email
-     * @param array $type
-     * @param array $lists
-     * @param array $events
-     * @param bool $toBackup
-     */
     private function updateEmailDestination(Email $email, array $type, array $lists = [], array $events = [], bool $toBackup = false): void
     {
 
@@ -362,7 +346,7 @@ class EmailController extends Controller
                 $email->to_event = true;
                 $email->to_backup = $toBackup;
                 $email->lists()->sync([]);
-                if (!empty($events)) {
+                if ($events !== []) {
                     $email->events()->sync($events);
                 }
 

@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\App;
 use App\Console\ConsoleOutput;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder

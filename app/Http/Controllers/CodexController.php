@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use App\Libraries\PDF_TOC;
 use App\Models\Codex;
 use App\Models\CodexSong;
@@ -11,6 +10,7 @@ use App\Models\CodexTextType;
 use App\Models\SongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 define('FPDF_FONTPATH', resource_path('fonts/'));
 
@@ -358,7 +358,7 @@ class CodexController extends Controller
                             $list = false;
                         }
 
-                        ++$count;
+                        $count++;
                         $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
                     } else {
                         $count = 0;
@@ -400,7 +400,7 @@ class CodexController extends Controller
                 $lyricsArray = explode(PHP_EOL, $song->lyrics);
                 $print = true;
                 $counter = count($lyricsArray);
-                for ($index = 0; $index < $counter; ++$index) {
+                for ($index = 0; $index < $counter; $index++) {
                     $text = $lyricsArray[$index];
                     $text = str_replace('\\', '', $text);
                     if (str_contains($text, '**')) {
@@ -438,7 +438,7 @@ class CodexController extends Controller
 
         $pagesNeeded = (4 - (($pdf->PageNo() + 1) % 4)) % 4;
         if ($pagesNeeded > 0) {
-            for ($index = $pagesNeeded; $index > 0; --$index) {
+            for ($index = $pagesNeeded; $index > 0; $index--) {
                 $pdf->AddPage();
             }
         }

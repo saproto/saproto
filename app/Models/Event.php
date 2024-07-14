@@ -320,13 +320,13 @@ class Event extends Model
         }
 
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b) : int {
+            $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b): int {
                 return (int) isset($a->pivot->committees_activities_id);
                 // prefer helper participation registration
             })->unique());
         }
 
-        return $users->sort(static fn($a, $b): int => strcmp($a->name, $b->name));
+        return $users->sort(static fn ($a, $b): int => strcmp($a->name, $b->name));
     }
 
     //recounts the unique users on an event to make the fetching of the event_block way faster
@@ -379,7 +379,7 @@ class Event extends Model
         parent::boot();
 
         self::updating(static function ($event) {
-            ++$event->update_sequence;
+            $event->update_sequence++;
         });
     }
 

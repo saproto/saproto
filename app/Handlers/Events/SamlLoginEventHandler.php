@@ -2,8 +2,8 @@
 
 namespace App\Handlers\Events;
 
-use Illuminate\Support\Facades\Session;
 use Aacotroneo\Saml2\Events\Saml2LoginEvent;
+use Illuminate\Support\Facades\Session;
 
 class SamlLoginEventHandler
 {

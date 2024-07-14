@@ -124,7 +124,7 @@ class AchievementsCron extends Command
                     continue;
                 }
 
-                if (!$check($user)) {
+                if (! $check($user)) {
                     continue;
                 }
 

@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AddFeedbackFunctionality extends Migration

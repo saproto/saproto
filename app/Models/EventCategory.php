@@ -34,7 +34,6 @@ class EventCategory extends Model
 {
     protected $table = 'event_categories';
 
-    /** @return HasMany */
     public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'category_id');

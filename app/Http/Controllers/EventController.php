@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -21,8 +18,11 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class EventController extends Controller
@@ -226,7 +226,7 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->category);
 
         $months = [];
-        for ($i = 1; $i <= 12; ++$i) {
+        for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
@@ -421,11 +421,11 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn($item) => (object) [
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn($item) => (object) [
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);

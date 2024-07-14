@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class UpdateUsersTablePrivacyName extends Migration
 {

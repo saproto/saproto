@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
-use SpotifyWebAPI\SpotifyWebAPIException;
 use App\Http\Controllers\SpotifyController;
 use App\Models\PlayedVideo;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifyUpdate extends Command
 {

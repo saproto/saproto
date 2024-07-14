@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\FeedbackController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
-use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -422,8 +422,8 @@ Route::group(['middleware' => ['forcedomain']], static function () {
             Route::get('delete/{file_id}', ['as' => 'delete', 'uses' => 'EmailController@deleteAttachment']);
         });
     });
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', static fn(Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'quotes')]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', static fn(Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'goodideas')]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', static fn (Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'quotes')]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', static fn (Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'goodideas')]);
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], static function () {
         Route::group(['prefix' => '/{category}'], static function () {
@@ -760,6 +760,7 @@ Route::group(['middleware' => ['forcedomain']], static function () {
     /*Route related to the december theme*/
     Route::get('/december/toggle', static function () {
         Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
+
         return Redirect::back();
     })->name('december::toggle');
 });

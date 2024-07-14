@@ -2,34 +2,34 @@
 
 namespace App\Console;
 
-use App\Console\Commands\SyncRoles;
-use App\Console\Commands\TestEmail;
-use App\Console\Commands\EmailCron;
-use App\Console\Commands\NewsletterCron;
-use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\AchievementsCron;
-use App\Console\Commands\FileCleanup;
-use App\Console\Commands\FeeCron;
-use App\Console\Commands\UserCleanup;
+use App\Console\Commands\AddSysadmin;
+use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
+use App\Console\Commands\ClearSessionTable;
+use App\Console\Commands\CodexMarkdownConverter;
+use App\Console\Commands\DirectAdminSync;
+use App\Console\Commands\EmailCron;
+use App\Console\Commands\EndMemberships;
+use App\Console\Commands\FeeCron;
+use App\Console\Commands\FileCleanup;
+use App\Console\Commands\MakeAdmin;
+use App\Console\Commands\MemberCleanup;
+use App\Console\Commands\MemberRenewCron;
+use App\Console\Commands\NewsletterCron;
+use App\Console\Commands\OmNomComCleanup;
+use App\Console\Commands\PrintActiveMembers;
+use App\Console\Commands\RefreshEventUniqueUsers;
+use App\Console\Commands\ReviewFeedbackCron;
 use App\Console\Commands\SpotifySync;
 use App\Console\Commands\SpotifyUpdate;
-use App\Console\Commands\TestIBANs;
-use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\VerifyPersonalDetailsEmailCron;
-use App\Console\Commands\PrintActiveMembers;
-use App\Console\Commands\ReviewFeedbackCron;
-use App\Console\Commands\MemberRenewCron;
-use App\Console\Commands\OmNomComCleanup;
-use App\Console\Commands\MakeAdmin;
-use App\Console\Commands\DirectAdminSync;
+use App\Console\Commands\SyncRoles;
 use App\Console\Commands\SyncWikiAccounts;
-use App\Console\Commands\MemberCleanup;
-use App\Console\Commands\AddSysadmin;
-use App\Console\Commands\EndMemberships;
+use App\Console\Commands\TestEmail;
+use App\Console\Commands\TestIBANs;
 use App\Console\Commands\UpdateWallstreetPrices;
-use App\Console\Commands\CodexMarkdownConverter;
-use App\Console\Commands\RefreshEventUniqueUsers;
+use App\Console\Commands\UserCleanup;
+use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -96,6 +96,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn(): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
     }
 }

@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\DB;
 use App\Models\Activity;
 use App\Models\FailedWithdrawal;
 use App\Models\OrderLine;
@@ -17,6 +13,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class OrderLineController extends Controller
@@ -42,7 +42,7 @@ class OrderLineController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('product')
             ->get()
-            ->groupBy(static fn($date) => Carbon::parse($date->created_at)->format('Y-m'));
+            ->groupBy(static fn ($date) => Carbon::parse($date->created_at)->format('Y-m'));
 
         $selected_month = $date ?? date('Y-m');
 
@@ -183,7 +183,7 @@ class OrderLineController extends Controller
     public function bulkStore(Request $request)
     {
         $counter = count($request->input('user'));
-        for ($i = 0; $i < $counter; ++$i) {
+        for ($i = 0; $i < $counter; $i++) {
             /** @var Product $product */
             $product = Product::query()->findOrFail($request->input('product')[$i]);
             $user = User::query()->findOrFail($request->input('user')[$i]);
@@ -205,8 +205,8 @@ class OrderLineController extends Controller
     public function store(Request $request)
     {
         $counter = count($request->input('user'));
-        for ($u = 0; $u < $counter; ++$u) {
-            for ($p = 0; $p < count($request->input('product')); ++$p) {
+        for ($u = 0; $u < $counter; $u++) {
+            for ($p = 0; $p < count($request->input('product')); $p++) {
                 $user = User::query()->findOrFail($request->input('user')[$u]);
                 $product = Product::query()->findOrFail($request->input('product')[$p]);
 

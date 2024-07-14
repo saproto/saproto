@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Cookie;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -178,7 +178,7 @@ class Announcement extends Model
             return true;
         }
 
-        if (!$this->is_dismissable) {
+        if (! $this->is_dismissable) {
             return true;
         }
 

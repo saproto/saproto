@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Login;
-use App\Handlers\Events\AuthLoginEventHandler;
 use Aacotroneo\Saml2\Events\Saml2LoginEvent;
+use App\Handlers\Events\AuthLoginEventHandler;
 use App\Handlers\Events\SamlLoginEventHandler;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider

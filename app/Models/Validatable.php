@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\MessageBag;
 
 /**
@@ -13,7 +13,6 @@ use Illuminate\Support\MessageBag;
  * @method static Builder|Validatable newModelQuery()
  * @method static Builder|Validatable newQuery()
  * @method static Builder|Validatable query()
- *
  */
 class Validatable extends Model
 {
@@ -32,7 +31,7 @@ class Validatable extends Model
 
         return true;
     }
-    
+
     public function errors(): MessageBag
     {
         return $this->errors;

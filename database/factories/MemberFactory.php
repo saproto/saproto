@@ -25,14 +25,12 @@ class MemberFactory extends Factory
             'created_at' => $created_at,
             'deleted_at' => fake()->boolean(25) ? $deleted_at : null,
             'user_id' => User::factory()->hasBank()->hasAddress(),
-            'proto_username' => fn($attributes): string => Member::createProtoUsername(User::query()->find($attributes['user_id'])->name),
+            'proto_username' => fn ($attributes): string => Member::createProtoUsername(User::query()->find($attributes['user_id'])->name),
         ];
     }
 
     /**
      * Indicate that the member is special.
-     *
-     * @return Factory
      */
     public function special(): Factory
     {

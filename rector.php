@@ -5,8 +5,6 @@ declare(strict_types=1);
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
-use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
-use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -17,19 +15,19 @@ use RectorLaravel\Set\LaravelSetList;
 try {
     return RectorConfig::configure()
         ->withCache(
-        // ensure file system caching is used instead of in-memory
+            // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
 
             // specify a path that works locally as well as on CI job runners
             cacheClass: FileCacheStorage::class
         )
         ->withPaths([
-            __DIR__ . '/app',
-            __DIR__ . '/config',
-            __DIR__ . '/resources',
-            __DIR__ . '/routes',
-            __DIR__ . '/tests',
-            __DIR__ . '/database',
+            __DIR__.'/app',
+            __DIR__.'/config',
+            __DIR__.'/resources',
+            __DIR__.'/routes',
+            __DIR__.'/tests',
+            __DIR__.'/database',
         ])->withPhpSets(php82: true)
         ->withsets([LaravelSetList::LARAVEL_110,
             LaravelSetList::LARAVEL_CODE_QUALITY,

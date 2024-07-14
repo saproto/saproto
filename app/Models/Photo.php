@@ -46,27 +46,21 @@ class Photo extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
     public function album(): BelongsTo
     {
         return $this->belongsTo(PhotoAlbum::class, 'album_id');
     }
 
-    /** @return HasMany */
     public function likes(): HasMany
     {
         return $this->hasMany(PhotoLikes::class);
     }
 
-    /** @return hasOne */
     public function file(): hasOne
     {
         return $this->hasOne(StorageEntry::class, 'id', 'file_id');
     }
 
-    /**
-     * @return Photo
-     */
     private function getAdjacentPhoto(bool $next = true): Photo
     {
         if ($next) {
@@ -77,7 +71,7 @@ class Photo extends Model
             $comp = '<';
         }
 
-        $result = self::query()->where('album_id', $this->album_id)->where('date_taken', $comp . '=', $this->date_taken)->orderBy('date_taken', $ord)->orderBy('id', $ord);
+        $result = self::query()->where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken)->orderBy('date_taken', $ord)->orderBy('id', $ord);
         if ($result->count() > 1) {
             return $result->where('id', $comp, $this->id)->first();
         }
@@ -85,22 +79,16 @@ class Photo extends Model
         return $result->first();
     }
 
-    /** @return Photo */
     public function getNextPhoto(): Photo
     {
         return $this->getAdjacentPhoto();
     }
 
-    /** @return Photo */
     public function getPreviousPhoto(): Photo
     {
         return $this->getAdjacentPhoto(false);
     }
 
-    /**
-     * @param int $paginateLimit
-     * @return float|int
-     */
     public function getAlbumPageNumber(int $paginateLimit): float|int
     {
         $photoIndex = 1;
@@ -110,7 +98,7 @@ class Photo extends Model
                 return ceil($photoIndex / $paginateLimit);
             }
 
-            ++$photoIndex;
+            $photoIndex++;
         }
 
         return 1;
@@ -121,13 +109,11 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    /** @return string */
     public function thumbnail(): string
     {
         return $this->file->generateImagePath(400, 400);
     }
 
-    /** @return string */
     public function getUrlAttribute(): string
     {
         return $this->file->generatePath();

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
-use stdClass;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PhotoManager;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use stdClass;
 
 class PhotoController extends Controller
 {
@@ -27,7 +27,7 @@ class PhotoController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
 
-        if (!$album->published && !Auth::user()?->can('protography')) {
+        if (! $album->published && ! Auth::user()?->can('protography')) {
             Session::flash('flash_message', 'You do not have the permissions for this.');
 
             return Redirect::back();
@@ -45,7 +45,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
      * @return View
      */
     public function photo(int $id)
@@ -60,7 +59,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $photo_id
      * @return RedirectResponse
      */
     public function likePhoto(int $photo_id)
@@ -78,7 +76,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $photo_id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -99,7 +96,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
      * @return string JSON
      */
     public function apiShow(int $id)
