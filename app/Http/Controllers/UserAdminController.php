@@ -31,10 +31,10 @@ class UserAdminController extends Controller
 
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
-            'pending' => $userQuery->whereHas('member', function ($q) {
+            'pending' => $userQuery->whereHas('member', static function ($q) {
                 $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
             }),
-            'members' => $userQuery->whereHas('member', function ($q) {
+            'members' => $userQuery->whereHas('member', static function ($q) {
                 $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
             }),
             'users' => $userQuery->doesntHave('member'),
@@ -42,12 +42,12 @@ class UserAdminController extends Controller
         };
 
         if ($search) {
-            $users = $users->where(function ($q) use ($search) {
+            $users = $users->where(static function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
                     ->orWhere('calling_name', 'LIKE', "%{$search}%")
                     ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('utwente_username', 'LIKE', "%{$search}%")
-                    ->orWhereHas('member', function ($q) use ($search) {
+                    ->orWhereHas('member', static function ($q) use ($search) {
                         $q->where('proto_username', 'LIKE', "%{$search}%");
                     });
             });

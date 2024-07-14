@@ -185,10 +185,10 @@ class CompanyController extends Controller
 
         $companyAbove = Company::where('sort', $company->sort - 1)->first();
 
-        $companyAbove->sort++;
+        ++$companyAbove->sort;
         $companyAbove->save();
 
-        $company->sort--;
+        --$company->sort;
         $company->save();
 
         return Redirect::route('companies::admin');
@@ -208,10 +208,10 @@ class CompanyController extends Controller
 
         $companyAbove = Company::where('sort', $company->sort + 1)->first();
 
-        $companyAbove->sort--;
+        --$companyAbove->sort;
         $companyAbove->save();
 
-        $company->sort++;
+        ++$company->sort;
         $company->save();
 
         return Redirect::route('companies::admin');

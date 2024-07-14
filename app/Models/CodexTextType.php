@@ -19,7 +19,7 @@ class CodexTextType extends Model
 
     protected static function booted()
     {
-        static::deleting(function ($type) {
+        static::deleting(static function ($type) {
             $type->texts()->delete();
         });
     }

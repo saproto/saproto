@@ -62,12 +62,12 @@ class CommitteeMembership extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function committee()
     {
-        return $this->belongsTo(\App\Models\Committee::class);
+        return $this->belongsTo(Committee::class);
     }
 }

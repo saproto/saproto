@@ -37,7 +37,7 @@ class EventCategory extends Model
     /** @return HasMany */
     public function events()
     {
-        return $this->hasMany(\App\Models\Event::class, 'category_id');
+        return $this->hasMany(Event::class, 'category_id');
     }
 
     public function average_cost(): float

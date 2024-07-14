@@ -173,14 +173,13 @@ class Announcement extends Model
         if ($this->is_dismissable && Cookie::get($this->hash_map_id)) {
             return false;
         }
-
-        if ($user != null &&
-        $this->is_dismissable &&
-        HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() > 0) {
-            return false;
+        if ($user == null) {
+            return true;
         }
-
-        return true;
+        if (!$this->is_dismissable) {
+            return true;
+        }
+        return HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0;
     }
 
     /** @param  User|null  $user */

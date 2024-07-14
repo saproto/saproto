@@ -35,21 +35,21 @@ class WrappedController extends Controller
             ->orderBy('total')
             ->get();
 
-        return $totals->groupBy('product_id')->map(fn ($product) => $product->pluck('total'));
+        return $totals->groupBy('product_id')->map(static fn($product) => $product->pluck('total'));
     }
 
     public function eventList()
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
-            ->where(function ($query) {
-                $query->whereIn('id', function (Builder $query) {
+            ->where(static function ($query) {
+                $query->whereIn('id', static function (Builder $query) {
                     $query->select('event_id')
                         ->from('tickets')
                         ->join('ticket_purchases', 'tickets.id', '=', 'ticket_purchases.ticket_id')
                         ->where('ticket_purchases.user_id', auth()->user()->id);
                 })
-                    ->orWhereIn('id', function (Builder $query) {
+                    ->orWhereIn('id', static function (Builder $query) {
                         $query->select('event_id')
                             ->from('activities')
                             ->join('activities_users', 'activities.id', '=', 'activities_users.activity_id')
@@ -81,14 +81,11 @@ class WrappedController extends Controller
             ->get();
 
         return $events
-            ->map(function (Event $event) use ($activity_prices, $ticket_prices, $images) {
+            ->map(static function (Event $event) use ($activity_prices, $ticket_prices, $images) {
                 $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
                 $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
-
                 $event->price = $activity_price + $ticket_price;
-
                 $event->image_url = $images->where('event_id', $event->id)->first()->generateImagePath(null, null);
-
                 return $event->only([
                     'title',
                     'start',

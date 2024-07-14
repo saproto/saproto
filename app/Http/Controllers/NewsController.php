@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsitem;
@@ -101,14 +102,14 @@ class NewsController extends Controller
         return view('news.edit', ['item' => $newsitem, 'new' => false, 'upcomingEvents' => $upcomingEvents, 'events' => $events, 'is_weekly' => $newsitem->is_weekly, 'lastWeekly' => $lastWeekly]);
     }
 
-    public function store(Request $request): \Illuminate\View\View
+    public function store(Request $request): View
     {
         $newsitem = new Newsitem();
 
         return $this->storeNews($newsitem, $request);
     }
 
-    public function update(Request $request, int $id): \Illuminate\View\View
+    public function update(Request $request, int $id): View
     {
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
@@ -190,7 +191,7 @@ class NewsController extends Controller
 
         foreach ($newsitems as $newsitem) {
             if ($newsitem->isPublished()) {
-                $returnItem = new \stdClass();
+                $returnItem = new stdClass();
                 $returnItem->id = $newsitem->id;
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;

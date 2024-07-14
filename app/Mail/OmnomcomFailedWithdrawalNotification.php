@@ -14,12 +14,12 @@ class OmnomcomFailedWithdrawalNotification extends Mailable
     use SerializesModels;
 
     /**
-     * @var \App\Models\User
+     * @var User
      */
     public $user;
 
     /**
-     * @var \App\Models\Withdrawal
+     * @var Withdrawal
      */
     public $withdrawal;
 

@@ -73,19 +73,19 @@ class Member extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function membershipForm()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'membership_form_id');
+        return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
     /** @return BelongsTo */
     public function customOmnomcomSound()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'omnomcom_sound_id');
+        return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
     /** @return int */
@@ -96,14 +96,14 @@ class Member extends Model
 
     public static function countPendingMembers()
     {
-        return User::whereHas('member', function ($query) {
+        return User::whereHas('member', static function ($query) {
             $query->where('is_pending', true);
         })->count();
     }
 
     public static function countValidMembers()
     {
-        return User::whereHas('member', function ($query) {
+        return User::whereHas('member', static function ($query) {
             $query->where('is_pending', false);
         })->count();
     }

@@ -100,7 +100,7 @@ class FeeCron extends Command
                 $charged->reduced[] = $member->user->name.' (#'.$member->user->id.')';
             }
 
-            $charged->count++;
+            ++$charged->count;
 
             $product = Product::findOrFail($fee);
             $product->buyForUser($member->user, 1, null, null, null, null, 'membership_fee_cron');

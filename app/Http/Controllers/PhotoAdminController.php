@@ -215,7 +215,7 @@ class PhotoAdminController extends Controller
      *
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id): \App\Models\Photo
+    private function createPhotoFromUpload($uploaded_photo, $album_id): Photo
     {
         $path = 'photos/'.$album_id.'/';
 

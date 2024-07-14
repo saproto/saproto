@@ -51,19 +51,19 @@ class Ticket extends Model
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo(\App\Models\Product::class);
+        return $this->belongsTo(Product::class);
     }
 
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo(\App\Models\Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     /** @return HasMany */
     public function purchases()
     {
-        return $this->hasMany(\App\Models\TicketPurchase::class);
+        return $this->hasMany(TicketPurchase::class);
     }
 
     /** @return Collection */

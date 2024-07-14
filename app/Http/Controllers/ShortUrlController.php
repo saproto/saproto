@@ -70,7 +70,7 @@ class ShortUrlController extends Controller
     public function go(Request $request, $short)
     {
         $url = ShortUrl::where('url', $short)->firstOrFail();
-        $url->clicks += 1;
+        ++$url->clicks;
         $url->save();
 
         return Redirect::to(sprintf('https://%s', $url->target));

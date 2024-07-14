@@ -296,12 +296,11 @@ class ProductController extends Controller
         $data = Product::all()->toArray();
         array_unshift($data, array_keys($data[0]));
 
-        $callback = function () use ($data) {
+        $callback = static function () use ($data) {
             $f = fopen('php://output', 'w');
             foreach ($data as $row) {
                 fputcsv($f, $row);
             }
-
             fclose($f);
         };
 

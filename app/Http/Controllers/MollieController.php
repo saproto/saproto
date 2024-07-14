@@ -28,7 +28,7 @@ class MollieController extends Controller
         $user = $request->input('user_id') ? User::findOrFail($request->input('user_id')) : null;
 
         $transactions = MollieTransaction::query()
-            ->when($user, fn ($query, $user) => $query->where('user_id', $user->id))
+            ->when($user, static fn($query, $user) => $query->where('user_id', $user->id))
             ->latest()
             ->paginate(15);
 
@@ -77,7 +77,7 @@ class MollieController extends Controller
         }
 
         if ($use_fees) {
-            $selected_method = $available_methods->filter(fn ($method): bool => $method->id === $requested_method);
+            $selected_method = $available_methods->filter(static fn($method): bool => $method->id === $requested_method);
 
             if ($selected_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
@@ -154,8 +154,8 @@ class MollieController extends Controller
             ->join('products', 'orderlines.product_id', '=', 'products.id')
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
             ->select(['orderlines.*', 'accounts.account_number', 'accounts.name'])
-            ->whereHas('molliePayment', function ($query) use ($start, $end) {
-                $query->where(function ($query) {
+            ->whereHas('molliePayment', static function ($query) use ($start, $end) {
+                $query->where(static function ($query) {
                     $query->where('status', 'paid')
                         ->orWhere('status', 'paidout');
                 })
@@ -321,8 +321,8 @@ class MollieController extends Controller
             $end->nextWeekday();
         }
 
-        return OrderLine::whereHas('molliePayment', function ($query) use ($start, $end) {
-            $query->where(function ($query) {
+        return OrderLine::whereHas('molliePayment', static function ($query) use ($start, $end) {
+            $query->where(static function ($query) {
                 $query->where('status', 'paid')
                     ->orWhere('status', 'paidout');
             })

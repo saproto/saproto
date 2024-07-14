@@ -91,7 +91,7 @@ class DirectAdminSync extends Command
             $users = CommitteeMembership::withTrashed()
                 ->where('committee_id', $committee->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
+                ->where(static function ($q) {
                     $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
                 })->get();
@@ -324,16 +324,20 @@ class DirectAdminSync extends Command
      * @param  DirectAdmin  $da  The DirectAdmin instance
      * @param  array  $queries  An array containing a 'cmd' and 'options' array
      */
-    private function executeQueries(\Solitweb\DirectAdmin\DirectAdmin $da, array $queries): void
+    private function executeQueries(DirectAdmin $da, array $queries): void
     {
         foreach ($queries as $query) {
             //$this->info('Query '.$i.'/'.count($queries).': '.$query['cmd'].implode($query['options'])); //Temporarily disabled to reduce Sentry spam
             $da->query($query['cmd'], $query['options']);
 
             $response = $da->fetch_parsed_body();
-            if (array_key_exists('error', $response) && $response['error'] == 1) {
-                $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
+            if (!array_key_exists('error', $response)) {
+                continue;
             }
+            if ($response['error'] != 1) {
+                continue;
+            }
+            $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
         }
     }
 }

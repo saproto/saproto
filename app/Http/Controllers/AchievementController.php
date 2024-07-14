@@ -184,9 +184,13 @@ class AchievementController extends Controller
         $awarded = '';
         foreach ($userIds as $userId) {
             $user = User::find($userId);
-            if ($user && $this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
-                $awarded = $awarded.' '.$user->name.',';
+            if (!$user) {
+                continue;
             }
+            if (!$this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
+                continue;
+            }
+            $awarded = $awarded.' '.$user->name.',';
         }
 
         if ($awarded !== '' && $awarded !== '0') {

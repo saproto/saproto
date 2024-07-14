@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Session\Store;
+use Monolog\Logger;
 return [
 
     /*
@@ -54,20 +57,20 @@ return [
     */
 
     'extra' => [
-        'Eloquent' => [\Illuminate\Database\Eloquent\Builder::class, \Illuminate\Database\Query\Builder::class],
-        'Session' => [\Illuminate\Session\Store::class],
+        'Eloquent' => [Builder::class, \Illuminate\Database\Query\Builder::class],
+        'Session' => [Store::class],
     ],
 
     'magic' => [
         'Log' => [
-            'debug' => \Monolog\Logger::class.'::addDebug',
-            'info' => \Monolog\Logger::class.'::addInfo',
-            'notice' => \Monolog\Logger::class.'::addNotice',
-            'warning' => \Monolog\Logger::class.'::addWarning',
-            'error' => \Monolog\Logger::class.'::addError',
-            'critical' => \Monolog\Logger::class.'::addCritical',
-            'alert' => \Monolog\Logger::class.'::addAlert',
-            'emergency' => \Monolog\Logger::class.'::addEmergency',
+            'debug' => Logger::class.'::addDebug',
+            'info' => Logger::class.'::addInfo',
+            'notice' => Logger::class.'::addNotice',
+            'warning' => Logger::class.'::addWarning',
+            'error' => Logger::class.'::addError',
+            'critical' => Logger::class.'::addCritical',
+            'alert' => Logger::class.'::addAlert',
+            'emergency' => Logger::class.'::addEmergency',
         ],
     ],
 

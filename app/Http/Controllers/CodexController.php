@@ -157,7 +157,7 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
-    private function saveCodex($codex, \Illuminate\Http\Request $request): void
+    private function saveCodex($codex, Request $request): void
     {
         $codex->name = $request->input('name');
         $codex->export = $request->input('export');
@@ -278,22 +278,22 @@ class CodexController extends Controller
     {
         $codex = Codex::findOrFail($id);
 
-        $categories = SongCategory::whereHas('songs', function ($q) use ($id) {
-            $q->whereHas('codices', function ($q) use ($id) {
+        $categories = SongCategory::whereHas('songs', static function ($q) use ($id) {
+            $q->whereHas('codices', static function ($q) use ($id) {
                 $q->where('codex', $id);
             });
-        })->with(['songs' => function ($query) use ($id) {
-            $query->whereHas('codices', function ($query) use ($id) {
+        })->with(['songs' => static function ($query) use ($id) {
+            $query->whereHas('codices', static function ($query) use ($id) {
                 $query->where('codex_codices.id', $id);
             });
         }])->orderBy('id')->get();
 
-        $textCategories = CodexTextType::whereHas('texts', function ($q) use ($id) {
-            $q->whereHas('codices', function ($q) use ($id) {
+        $textCategories = CodexTextType::whereHas('texts', static function ($q) use ($id) {
+            $q->whereHas('codices', static function ($q) use ($id) {
                 $q->where('codex_codices.id', $id);
             });
-        })->with(['texts' => function ($query) use ($id) {
-            $query->whereHas('codices', function ($query) use ($id) {
+        })->with(['texts' => static function ($query) use ($id) {
+            $query->whereHas('codices', static function ($query) use ($id) {
                 $query->where('codex_codices.id', $id);
             });
         }])->orderBy('type')->get();
@@ -358,7 +358,7 @@ class CodexController extends Controller
                             $list = false;
                         }
 
-                        $count += 1;
+                        ++$count;
                         $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
                     } else {
                         $count = 0;
@@ -400,7 +400,7 @@ class CodexController extends Controller
                 $lyricsArray = explode(PHP_EOL, $song->lyrics);
                 $print = true;
                 $counter = count($lyricsArray);
-                for ($index = 0; $index < $counter; $index++) {
+                for ($index = 0; $index < $counter; ++$index) {
                     $text = $lyricsArray[$index];
                     $text = str_replace('\\', '', $text);
                     if (str_contains($text, '**')) {
@@ -438,7 +438,7 @@ class CodexController extends Controller
 
         $pagesNeeded = (4 - (($pdf->PageNo() + 1) % 4)) % 4;
         if ($pagesNeeded > 0) {
-            for ($index = $pagesNeeded; $index > 0; $index--) {
+            for ($index = $pagesNeeded; $index > 0; --$index) {
                 $pdf->AddPage();
             }
         }

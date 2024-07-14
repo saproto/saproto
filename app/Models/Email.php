@@ -71,19 +71,19 @@ class Email extends Model
     /** @return BelongsToMany */
     public function lists()
     {
-        return $this->belongsToMany(\App\Models\EmailList::class, 'emails_lists', 'email_id', 'list_id');
+        return $this->belongsToMany(EmailList::class, 'emails_lists', 'email_id', 'list_id');
     }
 
     /** @return BelongsToMany */
     public function events()
     {
-        return $this->belongsToMany(\App\Models\Event::class, 'emails_events', 'email_id', 'event_id');
+        return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
     }
 
     /** @return BelongsToMany */
     public function attachments()
     {
-        return $this->belongsToMany(\App\Models\StorageEntry::class, 'emails_files', 'email_id', 'file_id');
+        return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
 
     /**
@@ -132,13 +132,13 @@ class Email extends Model
         }
 
         if ($this->to_member) {
-            return User::whereHas('member', function ($q) {
+            return User::whereHas('member', static function ($q) {
                 $q->where('is_pending', false);
             })->orderBy('name')->get();
         }
 
         if ($this->to_pending) {
-            return User::whereHas('member', function ($q) {
+            return User::whereHas('member', static function ($q) {
                 $q->where('is_pending', true);
             })->orderBy('name')->get();
         }

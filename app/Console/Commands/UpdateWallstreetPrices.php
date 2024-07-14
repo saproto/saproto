@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon;
 use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
@@ -64,7 +65,7 @@ class UpdateWallstreetPrices extends Command
                 continue;
             }
 
-            $newOrderlines = OrderLine::query()->where('created_at', '>=', \Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
+            $newOrderlines = OrderLine::query()->where('created_at', '>=', Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
             //heighten the price if there are new orders and the price is not the actual price
             if ($newOrderlines > 0) {
                 $delta = $newOrderlines * $currentDrink->price_increase;
@@ -96,7 +97,7 @@ class UpdateWallstreetPrices extends Command
             }
         }
 
-        $randomEventQuery = WallstreetEvent::inRandomOrder()->whereHas('products', function ($q) use ($currentDrink) {
+        $randomEventQuery = WallstreetEvent::inRandomOrder()->whereHas('products', static function ($q) use ($currentDrink) {
             $q->whereIn('products.id', $currentDrink->products->pluck('id'));
         })->where('active', true);
 

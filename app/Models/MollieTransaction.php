@@ -49,13 +49,13 @@ class MollieTransaction extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany(\App\Models\OrderLine::class, 'payed_with_mollie');
+        return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
     /** @return MollieTransaction */
@@ -96,8 +96,6 @@ class MollieTransaction extends Model
     }
 
     /**
-     * @return MollieTransaction
-     *
      * @throws Exception
      */
     public function updateFromWebhook(): static
@@ -140,7 +138,7 @@ class MollieTransaction extends Model
                     }
 
                     $orderline->product->ticket->event->updateUniqueUsersCount();
-                    $orderline->product->stock += 1;
+                    ++$orderline->product->stock;
                     $orderline->product->save();
                     $orderline->delete();
 

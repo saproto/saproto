@@ -16,7 +16,7 @@ class PDF_TOC extends AlphaPDF
     {
         parent::AddPage($orientation, $size, $rotation);
         if ($this->_numbering) {
-            $this->_numPageNum++;
+            ++$this->_numPageNum;
         }
     }
 
@@ -91,17 +91,17 @@ class PDF_TOC extends AlphaPDF
         $last = [];
 
         //store toc pages
-        for ($i = $tocstart; $i <= $n; $i++) {
+        for ($i = $tocstart; $i <= $n; ++$i) {
             $last[] = $this->pages[$i];
         }
 
         //move pages
-        for ($i = $tocstart - 1; $i >= $location - 1; $i--) {
+        for ($i = $tocstart - 1; $i >= $location - 1; --$i) {
             $this->pages[$i + $n_toc] = $this->pages[$i];
         }
 
         //Put toc pages at insert point
-        for ($i = 0; $i < $n_toc; $i++) {
+        for ($i = 0; $i < $n_toc; ++$i) {
             $this->pages[$location + $i] = $last[$i];
         }
     }

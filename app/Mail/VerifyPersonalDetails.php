@@ -13,7 +13,7 @@ class VerifyPersonalDetails extends Mailable
     use SerializesModels;
 
     /**
-     * @var \App\Models\User
+     * @var User
      */
     public $user;
 

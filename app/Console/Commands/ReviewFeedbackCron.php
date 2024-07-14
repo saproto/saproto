@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon;
 use App\Mail\ReviewFeedbackMail;
 use App\Models\FeedbackCategory;
 use Illuminate\Console\Command;
@@ -46,7 +47,7 @@ class ReviewFeedbackCron extends Command
         foreach ($categories as $category) {
             $unreviewed = $category->feedback()
                 ->where('reviewed', false)
-                ->where('updated_at', '>=', \Carbon::now()->subDay()->timestamp)
+                ->where('updated_at', '>=', Carbon::now()->subDay()->timestamp)
                 ->get();
 
             if (count($unreviewed) > 0) {

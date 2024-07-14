@@ -60,7 +60,7 @@
 
                         @foreach($passwords as $password)
 
-                            <?php $i++; ?>
+                            <?php ++$i; ?>
 
                             @if($password->canAccess(Auth::user()))
 

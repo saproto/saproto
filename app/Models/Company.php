@@ -59,12 +59,12 @@ class Company extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /** @return HasMany */
     public function joboffers()
     {
-        return $this->hasMany(\App\Models\Joboffer::class, 'company_id');
+        return $this->hasMany(Joboffer::class, 'company_id');
     }
 }

@@ -73,8 +73,8 @@ class Committee extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'committees_users')
-            ->where(function ($query) {
+        return $this->belongsToMany(User::class, 'committees_users')
+            ->where(static function ($query) {
                 $query
                     ->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
@@ -88,7 +88,7 @@ class Committee extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /** @return Builder|\LaravelIdea\Helper\App\Models\_IH_Event_QB */
@@ -136,7 +136,7 @@ class Committee extends Model
     public function helpedEvents($includeSecret = false): array
     {
         /** @var Activity[] $activities */
-        $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $activities = $this->belongsToMany(Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
 
         $events = [];
         foreach ($activities as $activity) {
@@ -157,7 +157,7 @@ class Committee extends Model
             });
         })
             ->where('secret', false)
-            ->where(function ($q) {
+            ->where(static function ($q) {
                 $q->where('publication', '<', time())
                     ->orWhereNull('publication');
             })

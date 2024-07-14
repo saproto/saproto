@@ -79,14 +79,14 @@ class QueryController extends Controller
             $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             if ($member->is_pending) {
-                $count_pending++;
+                ++$count_pending;
             } else {
                 if (! $member->is_pet) {
-                    $count_total++;
+                    ++$count_total;
                 }
 
                 if ($member->user->isActiveMember()) {
-                    $count_active++;
+                    ++$count_active;
 
                     if ($request->has('export_active')) {
                         $export_active[] = (object) [
@@ -97,25 +97,25 @@ class QueryController extends Controller
                 }
 
                 if ($member->is_lifelong) {
-                    $count_lifelong++;
+                    ++$count_lifelong;
                 }
 
                 if ($member->is_honorary) {
-                    $count_honorary++;
+                    ++$count_honorary;
                 }
 
                 if ($member->is_donor) {
-                    $count_donor++;
+                    ++$count_donor;
                 }
 
                 if ($is_primary_student) {
-                    $count_primary++;
+                    ++$count_primary;
                 } else {
-                    $count_secondary++;
+                    ++$count_secondary;
                 }
 
                 if ($is_ut) {
-                    $count_ut++;
+                    ++$count_ut;
                 }
 
                 if ($request->has('export_subsidies') && $is_ut) {
@@ -174,23 +174,23 @@ class QueryController extends Controller
             $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
         }
 
-        $eventCategories = EventCategory::withCount(['events' => function ($query) use ($start, $end) {
+        $eventCategories = EventCategory::withCount(['events' => static function ($query) use ($start, $end) {
             $query->where('start', '>=', $start)->where('end', '<=', $end);
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
-            $category->spots = Activity::whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->spots = Activity::whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
                 ->sum('participants');
 
-            $category->signups = ActivityParticipation::whereHas('activity', function ($query) use ($category, $start, $end) {
-                $query->whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->signups = ActivityParticipation::whereHas('activity', static function ($query) use ($category, $start, $end) {
+                $query->whereHas('event', static function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
 
-            $category->attendees = Activity::where('participants', '>', 0)->whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->attendees = Activity::where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
         }

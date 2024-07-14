@@ -159,7 +159,7 @@ class MenuController extends Controller
         foreach ($menuItems as $menuItem) {
             $menuItem->order = $i;
             $menuItem->save();
-            $i++;
+            ++$i;
         }
     }
 
@@ -184,7 +184,7 @@ class MenuController extends Controller
 
         foreach ($change as $item) {
             if ($item->order > $menuItem->order && $item->id != $menuItem->id) {
-                $item->order -= 1;
+                --$item->order;
                 $item->save();
             }
         }
@@ -195,11 +195,11 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    private function getAllRoutes(\Illuminate\Routing\Router $router): ?array
+    private function getAllRoutes(Router $router): ?array
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 
-        return array_filter($routes, fn ($route): bool => $route->getName() &&
+        return array_filter($routes, static fn($route): bool => $route->getName() &&
         ! str_contains($route->uri(), '{') &&
         ! str_contains($route->getName(), 'api::') &&
         ! str_contains($route->getName(), 'login::') &&

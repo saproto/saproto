@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon;
 use App\Models\QrAuthRequest;
 use Auth;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class QrAuthController extends Controller
         return response((new DNS2D())->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
-    public function generateRequest(Request $request): \App\Models\QrAuthRequest
+    public function generateRequest(Request $request): QrAuthRequest
     {
         if (! $request->has('description')) {
             abort(500, 'No description was provided.');
@@ -69,7 +70,7 @@ class QrAuthController extends Controller
             abort(404);
         }
 
-        $qrAuthRequest->approved_at = \Carbon::now();
+        $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();
@@ -89,7 +90,7 @@ class QrAuthController extends Controller
             abort(403);
         }
 
-        $qrAuthRequest->approved_at = \Carbon::now();
+        $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();

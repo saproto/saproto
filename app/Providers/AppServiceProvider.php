@@ -16,12 +16,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        view()->composer('website.navbar', function ($view) {
+        view()->composer('website.navbar', static function ($view) {
             $menuItems = MenuItem::where('parent', null)->orderBy('order')->with('page')->with('children')->get();
             $view->with('menuItems', $menuItems);
         });
 
-        view()->composer('components.modals.achievement-popup', function ($view) {
+        view()->composer('components.modals.achievement-popup', static function ($view) {
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();

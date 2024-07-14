@@ -73,13 +73,13 @@ class Product extends Model
     /** @return BelongsTo */
     public function account()
     {
-        return $this->belongsTo(\App\Models\FinancialAccount::class);
+        return $this->belongsTo(FinancialAccount::class);
     }
 
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /** @raturn String */
@@ -98,19 +98,19 @@ class Product extends Model
     /** @return BelongsToMany */
     public function categories()
     {
-        return $this->belongsToMany(\App\Models\ProductCategory::class, 'products_categories', 'product_id', 'category_id');
+        return $this->belongsToMany(ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
     /** @return HasOne */
     public function ticket()
     {
-        return $this->hasOne(\App\Models\Ticket::class, 'product_id');
+        return $this->hasOne(Ticket::class, 'product_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany(\App\Models\OrderLine::class);
+        return $this->hasMany(OrderLine::class);
     }
 
     public function isVisible(): bool
@@ -130,7 +130,7 @@ class Product extends Model
 
     public function wallstreetPrices()
     {
-        return $this->hasMany(\App\Models\WallstreetPrice::class);
+        return $this->hasMany(WallstreetPrice::class);
     }
 
     /**

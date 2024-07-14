@@ -364,7 +364,7 @@ class TicketController extends Controller
         foreach ($request->get('tickets') as $ticket_id => $amount) {
             $ticket = Ticket::find($ticket_id);
 
-            for ($i = 0; $i < $amount; $i++) {
+            for ($i = 0; $i < $amount; ++$i) {
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
 
                 //Non-members can only buy prepaid tickets, as we have no way of resolving their payment otherwise.
@@ -396,7 +396,7 @@ class TicketController extends Controller
         if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
-            $payment_method = $available_methods->filter(fn ($method): bool => $method->id === $requested_method);
+            $payment_method = $available_methods->filter(static fn($method): bool => $method->id === $requested_method);
 
             if ($payment_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');

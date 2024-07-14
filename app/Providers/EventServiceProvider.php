@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Events\Login;
+use App\Handlers\Events\AuthLoginEventHandler;
+use Aacotroneo\Saml2\Events\Saml2LoginEvent;
+use App\Handlers\Events\SamlLoginEventHandler;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,11 +16,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \Illuminate\Auth\Events\Login::class => [
-            \App\Handlers\Events\AuthLoginEventHandler::class,
+        Login::class => [
+            AuthLoginEventHandler::class,
         ],
-        \Aacotroneo\Saml2\Events\Saml2LoginEvent::class => [
-            \App\Handlers\Events\SamlLoginEventHandler::class,
+        Saml2LoginEvent::class => [
+            SamlLoginEventHandler::class,
         ],
     ];
 

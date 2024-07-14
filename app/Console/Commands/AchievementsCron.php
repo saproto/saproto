@@ -110,7 +110,7 @@ class AchievementsCron extends Command
 
         // Loop over all current members and check if they should earn any new achievements.
         $users = User::withoutTrashed()
-            ->whereHas('member', function ($query) {
+            ->whereHas('member', static function ($query) {
                 $query->where('is_pending', false);
             })
             ->get();
@@ -120,9 +120,13 @@ class AchievementsCron extends Command
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
             $alreadyAchieved = $user->achievements->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
-                if (! in_array($id, $alreadyAchieved) && $check($user)) {
-                    $this->giveAchievement($user, $id);
+                if (in_array($id, $alreadyAchieved)) {
+                    continue;
                 }
+                if (!$check($user)) {
+                    continue;
+                }
+                $this->giveAchievement($user, $id);
             }
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -31,7 +32,7 @@ class ProTubeApiService
     {
         try {
             $response->throw();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             captureException($exception);
 
             return false;

@@ -51,7 +51,7 @@ class FeedbackController extends Controller
     {
         //find the most voted piece of feedback
         $mostVotedID = FeedbackVote::query()
-            ->whereHas('feedback', function ($query) use ($category) {
+            ->whereHas('feedback', static function ($query) use ($category) {
                 $query->where('feedback_category_id', $category->id)
                     ->where('created_at', '>', Carbon::now()->subMonth());
             })

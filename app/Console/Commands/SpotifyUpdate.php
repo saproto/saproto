@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use SpotifyWebAPI\SpotifyWebAPIException;
 use App\Http\Controllers\SpotifyController;
 use App\Models\PlayedVideo;
 use DB;
@@ -49,7 +50,7 @@ class SpotifyUpdate extends Command
 
                 return;
             }
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $spotifyWebAPIException) {
+        } catch (SpotifyWebAPIException $spotifyWebAPIException) {
             if ($spotifyWebAPIException->getMessage() === 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
@@ -85,18 +86,22 @@ class SpotifyUpdate extends Command
         ];
 
         foreach ($videos as $video) {
-            if (! in_array($video->video_title, array_keys($videos_to_search)) && strlen($video->video_title) > 0) {
-                $videos_to_search[$video->video_title] = (object) [
-                    'title' => $video->video_title,
-                    'video_id' => $video->video_id,
-                    'spotify_id' => $video->spotify_id,
-                    'title_formatted' => preg_replace(
-                        '/(\(.*|[^\S{2,}\s])/',
-                        '',
-                        str_replace($strip, ' ', strtolower($video->video_title))
-                    ),
-                ];
+            if (in_array($video->video_title, array_keys($videos_to_search))) {
+                continue;
             }
+            if (strlen($video->video_title) <= 0) {
+                continue;
+            }
+            $videos_to_search[$video->video_title] = (object) [
+                'title' => $video->video_title,
+                'video_id' => $video->video_id,
+                'spotify_id' => $video->spotify_id,
+                'title_formatted' => preg_replace(
+                    '/(\(.*|[^\S{2,}\s])/',
+                    '',
+                    str_replace($strip, ' ', strtolower($video->video_title))
+                ),
+            ];
         }
 
         $this->info("Matching to Spotify music.\n---");
@@ -122,7 +127,7 @@ class SpotifyUpdate extends Command
                         $this->info("Matched { $video->title } to Spotify track { {$name} }.");
                         DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => $song[0]->uri, 'spotify_name' => $name]);
                     }
-                } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
+                } catch (SpotifyWebAPIException $e) {
                     $err = $e->getCode().' error during search ('.$video->title_formatted.') for track ('.$video->title.').';
                     $this->error($err);
                 }

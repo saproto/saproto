@@ -50,7 +50,7 @@ class MenuItem extends Model
     /** @return BelongsTo */
     public function page()
     {
-        return $this->belongsTo(\App\Models\Page::class, 'page_id', 'id');
+        return $this->belongsTo(Page::class, 'page_id', 'id');
     }
 
     /** @return HasMany */

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PhotoManager;
@@ -34,7 +35,7 @@ class PhotoController extends Controller
 
         $photos = PhotoManager::getPhotos($id, 24);
 
-        if ($photos instanceof \stdClass) {
+        if ($photos instanceof stdClass) {
             return view('photos.album', ['photos' => $photos]);
         }
 

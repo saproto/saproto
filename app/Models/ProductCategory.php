@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,15 +47,15 @@ class ProductCategory extends Model
         'deleted_at' => 'datetime',
     ];
 
-    /** @return \Illuminate\Database\Eloquent\Relations\BelongsToMany */
+    /** @return BelongsToMany */
     public function products()
     {
-        return $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id');
     }
 
     public function sortedProducts()
     {
-        $products = $this->belongsToMany(\App\Models\Product::class, 'products_categories', 'category_id', 'product_id')->get();
+        $products = $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id')->get();
 
         return $products->sortBy('name');
     }

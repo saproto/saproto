@@ -45,7 +45,7 @@ class UserCleanup extends Command
                 continue;
             }
 
-            $count++;
+            ++$count;
             $user->forceDelete();
         }
 

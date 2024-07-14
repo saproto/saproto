@@ -59,7 +59,7 @@ class PhotoManager extends Model
      * @param  int  $album_id
      * @param  int|null  $max
      */
-    public static function getPhotos($album_id, $max = null): ?\stdClass
+    public static function getPhotos($album_id, $max = null): ?stdClass
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -101,7 +101,7 @@ class PhotoManager extends Model
     /**
      * @param  int  $photo_id
      */
-    public static function getPhoto($photo_id): \stdClass
+    public static function getPhoto($photo_id): stdClass
     {
         $photo = Photo::findOrFail($photo_id);
 

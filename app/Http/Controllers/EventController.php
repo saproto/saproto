@@ -49,7 +49,7 @@ class EventController extends Controller
         $category = EventCategory::find($request->input('category'));
         foreach ($data as $index => $query) {
             if ($category) {
-                $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
+                $data[$index] = $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
             }
@@ -226,7 +226,7 @@ class EventController extends Controller
         $category = EventCategory::find($request->category);
 
         $months = [];
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; ++$i) {
             $months[$i] = [];
         }
 
@@ -421,11 +421,11 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(fn ($item) => (object) [
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(fn ($item) => (object) [
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);

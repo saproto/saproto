@@ -254,7 +254,7 @@ class CommitteeController extends Controller
 
     public function endEdition(int $committeeID, string $edition)
     {
-        $memberships = CommitteeMembership::where('edition', $edition)->whereHas('committee', function ($q) use ($committeeID) {
+        $memberships = CommitteeMembership::where('edition', $edition)->whereHas('committee', static function ($q) use ($committeeID) {
             $q->where('id', $committeeID);
         })->get();
         foreach ($memberships as $membership) {

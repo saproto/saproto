@@ -2,6 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use LightSaml\Model\Context\DeserializationContext;
+use LightSaml\Binding\BindingFactory;
+use LightSaml\SamlConstants;
+use LightSaml\Context\Profile\MessageContext;
+use LightSaml\Model\Protocol\Response;
+use LightSaml\Credential\X509Certificate;
+use LightSaml\Credential\KeyHelper;
+use LightSaml\Model\Assertion\Assertion;
+use LightSaml\Helper;
+use DateTime;
+use LightSaml\Model\Assertion\Issuer;
+use LightSaml\Model\Protocol\Status;
+use LightSaml\Model\Protocol\StatusCode;
+use LightSaml\Model\XmlDSig\SignatureWriter;
+use LightSaml\Model\Assertion\Subject;
+use LightSaml\Model\Assertion\NameID;
+use LightSaml\Model\Assertion\SubjectConfirmation;
+use LightSaml\Model\Assertion\SubjectConfirmationData;
+use LightSaml\Model\Assertion\Conditions;
+use LightSaml\Model\Assertion\AudienceRestriction;
+use LightSaml\Model\Assertion\AttributeStatement;
+use LightSaml\Model\Assertion\Attribute;
+use LightSaml\Model\Assertion\AuthnStatement;
+use LightSaml\Model\Assertion\AuthnContext;
 use App\Mail\PasswordResetEmail;
 use App\Mail\PwnedPasswordNotification;
 use App\Mail\RegistrationConfirmation;
@@ -203,7 +227,7 @@ class AuthController extends Controller
     /**
      * @return User
      */
-    private function registerAccount(\Illuminate\Http\Request $request)
+    private function registerAccount(Request $request)
     {
         $user = User::create($request->only(['email', 'name', 'calling_name']));
 
@@ -765,7 +789,7 @@ class AuthController extends Controller
         $xml = gzinflate(base64_decode($saml));
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
-        $deserializationContext = new \LightSaml\Model\Context\DeserializationContext();
+        $deserializationContext = new DeserializationContext();
         $deserializationContext->getDocument()->loadXML($xml);
 
         $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest();
@@ -779,9 +803,9 @@ class AuthController extends Controller
 
         $response = self::buildSAMLResponse($user, $authnRequest);
 
-        $bindingFactory = new \LightSaml\Binding\BindingFactory();
-        $postBinding = $bindingFactory->create(\LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST);
-        $messageContext = new \LightSaml\Context\Profile\MessageContext();
+        $bindingFactory = new BindingFactory();
+        $postBinding = $bindingFactory->create(SamlConstants::BINDING_SAML2_HTTP_POST);
+        $messageContext = new MessageContext();
         $messageContext->setMessage($response)->asResponse();
 
         $httpResponse = $postBinding->send($messageContext);
@@ -796,7 +820,7 @@ class AuthController extends Controller
      * @param  AuthnRequest  $authnRequest  The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
-    private static function buildSAMLResponse($user, $authnRequest): \LightSaml\Model\Protocol\Response
+    private static function buildSAMLResponse($user, $authnRequest): Response
     {
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
@@ -804,80 +828,80 @@ class AuthController extends Controller
         $destination = $authnRequest->getAssertionConsumerServiceURL(); /** @phpstan-ignore-line */
         $issuer = config('saml-idp.idp.issuer');
 
-        $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
-        $privateKey = \LightSaml\Credential\KeyHelper::createPrivateKey(base_path().config('saml-idp.idp.key'), '', true);
+        $certificate = X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
+        $privateKey = KeyHelper::createPrivateKey(base_path().config('saml-idp.idp.key'), '', true);
 
-        $response = new \LightSaml\Model\Protocol\Response();
+        $response = new Response();
         $response
-            ->addAssertion($assertion = new \LightSaml\Model\Assertion\Assertion())
-            ->setID(\LightSaml\Helper::generateID())
-            ->setIssueInstant(new \DateTime())
+            ->addAssertion($assertion = new Assertion())
+            ->setID(Helper::generateID())
+            ->setIssueInstant(new DateTime())
             ->setDestination($destination)
-            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
-            ->setStatus(new \LightSaml\Model\Protocol\Status(new \LightSaml\Model\Protocol\StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
-            ->setSignature(new \LightSaml\Model\XmlDSig\SignatureWriter($certificate, $privateKey));
+            ->setIssuer(new Issuer($issuer))
+            ->setStatus(new Status(new StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
+            ->setSignature(new SignatureWriter($certificate, $privateKey));
 
         $email = $user->email;
 
         $assertion
-            ->setId(\LightSaml\Helper::generateID())
-            ->setIssueInstant(new \DateTime())
-            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
+            ->setId(Helper::generateID())
+            ->setIssueInstant(new DateTime())
+            ->setIssuer(new Issuer($issuer))
             ->setSubject(
-                (new \LightSaml\Model\Assertion\Subject())
-                    ->setNameID(new \LightSaml\Model\Assertion\NameID(
+                (new Subject())
+                    ->setNameID(new NameID(
                         $email,
-                        \LightSaml\SamlConstants::NAME_ID_FORMAT_EMAIL
+                        SamlConstants::NAME_ID_FORMAT_EMAIL
                     ))
                     ->addSubjectConfirmation(
-                        (new \LightSaml\Model\Assertion\SubjectConfirmation())
-                            ->setMethod(\LightSaml\SamlConstants::CONFIRMATION_METHOD_BEARER)
+                        (new SubjectConfirmation())
+                            ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER)
                             ->setSubjectConfirmationData(
-                                (new \LightSaml\Model\Assertion\SubjectConfirmationData())
+                                (new SubjectConfirmationData())
                                     ->setInResponseTo($authnRequest->getId())
-                                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                                    ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
                                     ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /* @phpstan-ignore-line */
                             )
                     )
             )
             ->setConditions(
-                (new \LightSaml\Model\Assertion\Conditions())
-                    ->setNotBefore(new \DateTime())
-                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                (new Conditions())
+                    ->setNotBefore(new DateTime())
+                    ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
                     ->addItem(
-                        new \LightSaml\Model\Assertion\AudienceRestriction($audience)
+                        new AudienceRestriction($audience)
                     )
             )
             ->addItem(
-                (new \LightSaml\Model\Assertion\AttributeStatement())
-                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                (new AttributeStatement())
+                    ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:mail',
                         $email
                     ))
-                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                    ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:displayName',
                         $user->name
                     ))
-                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                    ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:cn',
                         $user->name
                     ))
-                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                    ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:givenName',
                         $user->name
                     ))
-                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                    ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:uid',
                         $user->member->proto_username
                     ))
             )
             ->addItem(
-                (new \LightSaml\Model\Assertion\AuthnStatement())
-                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
+                (new AuthnStatement())
+                    ->setAuthnInstant(new DateTime('-10 MINUTE'))
                     ->setSessionIndex('_some_session_index')
                     ->setAuthnContext(
-                        (new \LightSaml\Model\Assertion\AuthnContext())
-                            ->setAuthnContextClassRef(\LightSaml\SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT)
+                        (new AuthnContext())
+                            ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT)
                     )
             );
 

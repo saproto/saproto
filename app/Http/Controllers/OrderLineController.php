@@ -42,7 +42,7 @@ class OrderLineController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('product')
             ->get()
-            ->groupBy(fn ($date) => Carbon::parse($date->created_at)->format('Y-m'));
+            ->groupBy(static fn($date) => Carbon::parse($date->created_at)->format('Y-m'));
 
         $selected_month = $date ?? date('Y-m');
 
@@ -62,12 +62,12 @@ class OrderLineController extends Controller
             }
         }
 
-        $outstanding = Activity::whereHas('users', function (Builder $query) {
+        $outstanding = Activity::whereHas('users', static function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
         })->where('closed', false);
 
         $outstandingAmount = $outstanding->sum('price');
-        $outstanding = $outstanding->select('event_id', 'price')->with('Event', function ($q) {
+        $outstanding = $outstanding->select('event_id', 'price')->with('Event', static function ($q) {
             $q->select('id', 'title');
         })->where('price', '>', 0)->get();
 
@@ -93,7 +93,7 @@ class OrderLineController extends Controller
     public function adminindex(Request $request)
     {
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', function ($query) {
+            $orderlines = OrderLine::whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', (Carbon::today()));
         } else {
@@ -111,7 +111,7 @@ class OrderLineController extends Controller
 
     public function orderlineWizard()
     {
-        $members = User::whereHas('member', function ($query) {
+        $members = User::whereHas('member', static function ($query) {
             $query->where('is_pending', false);
         })->orderBy('name')->get();
 
@@ -131,7 +131,7 @@ class OrderLineController extends Controller
         $date = Carbon::parse($request->input('date'))->format('d-m-Y');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', function ($query) {
+            $orderlines = OrderLine::whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
@@ -158,7 +158,7 @@ class OrderLineController extends Controller
         $user = $request->input('user');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', function ($query) {
+            $orderlines = OrderLine::whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->where('user_id', $user);
         } else {
@@ -183,7 +183,7 @@ class OrderLineController extends Controller
     public function bulkStore(Request $request)
     {
         $counter = count($request->input('user'));
-        for ($i = 0; $i < $counter; $i++) {
+        for ($i = 0; $i < $counter; ++$i) {
             /** @var Product $product */
             $product = Product::findOrFail($request->input('product')[$i]);
             $user = User::findOrFail($request->input('user')[$i]);
@@ -205,8 +205,8 @@ class OrderLineController extends Controller
     public function store(Request $request)
     {
         $counter = count($request->input('user'));
-        for ($u = 0; $u < $counter; $u++) {
-            for ($p = 0; $p < count($request->input('product')); $p++) {
+        for ($u = 0; $u < $counter; ++$u) {
+            for ($p = 0; $p < count($request->input('product')); ++$p) {
                 $user = User::findOrFail($request->input('user')[$u]);
                 $product = Product::findOrFail($request->input('product')[$p]);
 

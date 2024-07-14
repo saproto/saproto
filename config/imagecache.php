@@ -1,5 +1,8 @@
 <?php
 
+use Intervention\Image\Templates\Small;
+use Intervention\Image\Templates\Medium;
+use Intervention\Image\Templates\Large;
 return [
 
     /*
@@ -50,9 +53,9 @@ return [
     */
 
     'templates' => [
-        'small' => \Intervention\Image\Templates\Small::class,
-        'medium' => \Intervention\Image\Templates\Medium::class,
-        'large' => \Intervention\Image\Templates\Large::class,
+        'small' => Small::class,
+        'medium' => Medium::class,
+        'large' => Large::class,
     ],
 
     /*

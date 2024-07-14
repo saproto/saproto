@@ -13,7 +13,7 @@ class AnonymousEmail extends Mailable
     use SerializesModels;
 
     /**
-     * @var \App\Models\Committee
+     * @var Committee
      */
     public $committee;
 

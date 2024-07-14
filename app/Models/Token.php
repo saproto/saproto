@@ -38,12 +38,11 @@ class Token extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
      * @param  User  $user
-     * @return Token
      */
     public function generate($user): static
     {

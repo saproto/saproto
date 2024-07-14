@@ -367,7 +367,7 @@ class WithdrawalController extends Controller
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,
                 ]);
-                $i++;
+                ++$i;
             } catch (SephpaInputException $e) {
                 abort(500, sprintf('Error for user #%s: %s', $user->id, $e->getMessage()));
             }
@@ -502,7 +502,7 @@ class WithdrawalController extends Controller
                 continue;
             }
 
-            $total++;
+            ++$total;
         }
 
         return $total;

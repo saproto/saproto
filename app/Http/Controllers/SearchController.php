@@ -82,7 +82,7 @@ class SearchController extends Controller
         $events = collect();
         if ($presearch_event_ids) {
             //load the events with all the correct data to show in the event block
-            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(function ($event) use ($events) {
+            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(static function ($event) use ($events) {
                 if ($event->mayViewEvent(Auth::user())) {
                     $events->push($event);
                 }
@@ -229,7 +229,7 @@ class SearchController extends Controller
         }
 
         foreach ($attributes as $attr) {
-            $query = $query->orWhere(function ($query) use ($terms, $attr) {
+            $query = $query->orWhere(static function ($query) use ($terms, $attr) {
                 foreach ($terms as $term) {
                     if (strlen(str_replace('%', '', $term)) < 3) {
                         continue;

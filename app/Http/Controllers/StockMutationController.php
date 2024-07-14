@@ -81,12 +81,10 @@ class StockMutationController extends Controller
             'Pragma' => 'public',
         ];
 
-        $callback = function () use ($mutations) {
+        $callback = static function () use ($mutations) {
             $f = fopen('php://output', 'w');
-
             $csv_header = ['Product ID', 'Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
             fputcsv($f, $csv_header);
-
             foreach ($mutations as $row) {
                 $product = Product::find($row['product_id']);
 
@@ -94,7 +92,6 @@ class StockMutationController extends Controller
                     fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
                 }
             }
-
             fclose($f);
         };
 

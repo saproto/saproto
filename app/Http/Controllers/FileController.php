@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\StorageEntry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +15,7 @@ class FileController extends Controller
      * @param  int  $id
      * @param  string  $hash
      */
-    public function get($id, $hash): \Illuminate\Http\Response
+    public function get($id, $hash): Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::findOrFail($id);
@@ -50,13 +51,13 @@ class FileController extends Controller
         ini_set('memory_limit', '512M');
 
         /* @phpstan-ignore-next-line */
-        return Image::cache(function ($image) use ($storage, $entry, $opts) {
+        return Image::cache(static function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
-                $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {
+                $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], static function ($constraint) {
                     $constraint->upsize();
                 });
             } elseif ($opts['w'] || $opts['h']) {
-                $image->make($storage['local']['root'].'/'.$entry->filename)->resize($opts['w'], $opts['h'], function ($constraint) {
+                $image->make($storage['local']['root'].'/'.$entry->filename)->resize($opts['w'], $opts['h'], static function ($constraint) {
                     $constraint->aspectRatio();
                     $constraint->upsize();
                 });
@@ -70,7 +71,7 @@ class FileController extends Controller
      * @param  int  $id
      * @param  string  $hash
      */
-    public function getImage($id, $hash, Request $request): \Illuminate\Http\Response
+    public function getImage($id, $hash, Request $request): Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::findOrFail($id);
@@ -108,7 +109,7 @@ class FileController extends Controller
         $result = null;
         try {
             $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return 'Exception while connecting to the printer server: '.$exception->getMessage();
         }
 

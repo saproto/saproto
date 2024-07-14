@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use stdClass;
 use App\Models\Account;
 use App\Models\OrderLine;
 use Carbon;
@@ -38,7 +39,7 @@ class TIPCieController extends Controller
                 $pid = (string) $order->product_id;
 
                 if (! array_key_exists($pid, $tipcieOrders)) {
-                    $productInfo = new \stdClass();
+                    $productInfo = new stdClass();
                     $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds, true)];
                     $productInfo->amount = 0;
                     $productInfo->totalPrice = 0;

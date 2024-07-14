@@ -63,18 +63,18 @@ class Dinnerform extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo(\App\Models\Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     public function orderedBy(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'ordered_by_user_id');
+        return $this->belongsTo(User::class, 'ordered_by_user_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany(\App\Models\DinnerformOrderline::class);
+        return $this->hasMany(DinnerformOrderline::class);
     }
 
     /** @return float The regular discount as a percentage out of 100. */
@@ -111,7 +111,7 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
+            ->sum(static fn(DinnerformOrderline $orderline) => $orderline->price_with_discount);
     }
 
     /** @return int Number of orders. */
@@ -149,7 +149,7 @@ class Dinnerform extends Model
     protected static function boot()
     {
         parent::boot();
-        static::deleting(function ($dinnerform) {
+        static::deleting(static function ($dinnerform) {
             foreach ($dinnerform->orderlines()->get() as $orderline) {
                 $orderline->delete();
             }

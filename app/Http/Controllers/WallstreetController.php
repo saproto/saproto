@@ -180,7 +180,7 @@ class WallstreetController extends Controller
 
         return OrderLine::query()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')
-            ->whereHas('product', function ($q) use ($productIDs) {
+            ->whereHas('product', static function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             })
             ->where('created_at', '<', Carbon::parse($drink->end_time))
@@ -191,7 +191,7 @@ class WallstreetController extends Controller
 
     public function getAllPrices($drinkID)
     {
-        return WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', function ($q) use ($drinkID) {
+        return WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', static function ($q) use ($drinkID) {
             $q->where('wallstreet_drink_id', $drinkID)->orderBy('id', 'asc');
         })->select('id', 'image_id', 'name')->get();
     }

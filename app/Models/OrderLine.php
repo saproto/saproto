@@ -68,37 +68,37 @@ class OrderLine extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo(\App\Models\Product::class);
+        return $this->belongsTo(Product::class);
     }
 
     /** @return BelongsTo */
     public function cashier()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function withdrawal()
     {
-        return $this->belongsTo(\App\Models\Withdrawal::class, 'payed_with_withdrawal');
+        return $this->belongsTo(Withdrawal::class, 'payed_with_withdrawal');
     }
 
     /** @return BelongsTo */
     public function molliePayment()
     {
-        return $this->belongsTo(\App\Models\MollieTransaction::class, 'payed_with_mollie');
+        return $this->belongsTo(MollieTransaction::class, 'payed_with_mollie');
     }
 
     /** @return HasOne */
     public function ticketPurchase()
     {
-        return $this->hasOne(\App\Models\TicketPurchase::class, 'orderline_id');
+        return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
     public function isPayed(): bool

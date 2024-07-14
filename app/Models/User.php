@@ -174,7 +174,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public static function fromPublicId($public_id)
     {
-        return User::whereHas('member', function ($query) use ($public_id) {
+        return User::whereHas('member', static function ($query) use ($public_id) {
             $query->where('proto_username', $public_id);
         })->first();
     }
@@ -205,13 +205,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function photo(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     private function getGroups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
-            ->where(function ($query) {
+            ->where(static function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
@@ -243,53 +243,53 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function member(): HasOne
     {
-        return $this->hasOne(\App\Models\Member::class);
+        return $this->hasOne(Member::class);
     }
 
     public function bank(): HasOne
     {
-        return $this->hasOne(\App\Models\Bank::class);
+        return $this->hasOne(Bank::class);
     }
 
     public function address(): HasOne
     {
-        return $this->hasOne(\App\Models\Address::class);
+        return $this->hasOne(Address::class);
     }
 
     /** @return HasMany */
     public function orderlines(): HasOne
     {
-        return $this->hasMany(\App\Models\OrderLine::class);
+        return $this->hasMany(OrderLine::class);
     }
 
     public function tempadmin(): HasMany
     {
-        return $this->hasMany(\App\Models\Tempadmin::class);
+        return $this->hasMany(Tempadmin::class);
     }
 
     public function feedback(): HasMany
     {
-        return $this->hasMany(\App\Models\Feedback::class);
+        return $this->hasMany(Feedback::class);
     }
 
     public function rfid(): HasMany
     {
-        return $this->hasMany(\App\Models\RfidCard::class);
+        return $this->hasMany(RfidCard::class);
     }
 
     public function tokens(): HasMany
     {
-        return $this->hasMany(\App\Models\Token::class);
+        return $this->hasMany(Token::class);
     }
 
     public function playedVideos(): HasMany
     {
-        return $this->hasMany(\App\Models\PlayedVideo::class);
+        return $this->hasMany(PlayedVideo::class);
     }
 
     public function mollieTransactions(): HasMany
     {
-        return $this->hasMany(\App\Models\MollieTransaction::class);
+        return $this->hasMany(MollieTransaction::class);
     }
 
     public function tickets(): BelongsToMany
@@ -352,10 +352,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
-
-            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
-                return true;
+            if (!$orderline->orderline) {
+                continue;
             }
+            if ($orderline->withdrawal->id === 1) {
+                continue;
+            }
+            if ($orderline->withdrawal->closed) {
+                continue;
+            }
+            return true;
         }
 
         return false;
@@ -429,7 +435,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             CommitteeMembership::withTrashed()
                 ->where('user_id', $this->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
+                ->where(static function ($q) {
                     $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
                 })
@@ -523,7 +529,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->personal_key;
     }
 
-    public function generateNewToken(): \App\Models\Token
+    public function generateNewToken(): Token
     {
         $token = new Token();
         $token->generate($this);

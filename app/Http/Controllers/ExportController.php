@@ -47,7 +47,7 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                $data = Activity::has('event')->with('event')->get()->filter(fn ($activity) => $activity->event->mayViewEvent($user));
+                $data = Activity::has('event')->with('event')->get()->filter(static fn($activity) => $activity->event->mayViewEvent($user));
                 foreach ($data as $val) {
                     unset($val->event);
                 }
@@ -75,7 +75,7 @@ class ExportController extends Controller
                     $data = Event::setEagerLoads([])->get();
                 } else {
                     $data = Event::setEagerLoads([])->get()
-                        ->filter(fn (Event $event): bool => $event->mayViewEvent($user));
+                        ->filter(static fn(Event $event): bool => $event->mayViewEvent($user));
                 }
 
                 break;

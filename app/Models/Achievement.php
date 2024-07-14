@@ -53,12 +53,12 @@ class Achievement extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'achievements_users');
+        return $this->belongsToMany(User::class, 'achievements_users');
     }
 
     public function achievementOwnership(): HasMany
     {
-        return $this->hasMany(\App\Models\AchievementOwnership::class);
+        return $this->hasMany(AchievementOwnership::class);
     }
 
     public function numberOfStars(): int
@@ -81,7 +81,7 @@ class Achievement extends Model
     public function currentOwners($is_member = true)
     {
         if ($is_member) {
-            return $this->users()->whereHas('member', function ($query) {
+            return $this->users()->whereHas('member', static function ($query) {
                 $query->where('is_pending', false);
             });
         }

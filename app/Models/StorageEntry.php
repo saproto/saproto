@@ -202,7 +202,7 @@ class StorageEntry extends Model
     {
         parent::boot();
 
-        static::deleting(function ($file) {
+        static::deleting(static function ($file) {
             Storage::disk('local')->delete($file->filename);
         });
     }

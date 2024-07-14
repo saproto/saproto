@@ -146,22 +146,22 @@ class Event extends Model
         return Event::query()
             ->orderBy('start')
             ->with('image')
-            ->with('activity', function ($e) {
+            ->with('activity', static function ($e) {
                 $e->withCount([
                     'users',
-                    'backupUsers as myBackupParticipationCount' => function ($q) {
+                    'backupUsers as myBackupParticipationCount' => static function ($q) {
                         $q->where('user_id', Auth::id());
                     },
-                    'helpingParticipations as myHelperParticipationCount' => function ($q) {
+                    'helpingParticipations as myHelperParticipationCount' => static function ($q) {
                         $q->where('user_id', Auth::id());
                     },
-                    'participation as myParticipationCount' => function ($q) {
+                    'participation as myParticipationCount' => static function ($q) {
                         $q->where('user_id', Auth::id())
                             ->whereNull('committees_activities_id');
                     },
                 ]);
-            })->withCount(['tickets as myTicketCount' => function ($q) {
-                $q->whereHas('purchases', function ($q) {
+            })->withCount(['tickets as myTicketCount' => static function ($q) {
+                $q->whereHas('purchases', static function ($q) {
                     $q->where('user_id', Auth::id());
                 });
             }]);
@@ -175,25 +175,25 @@ class Event extends Model
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class);
+        return $this->belongsTo(StorageEntry::class);
     }
 
     /** @return HasOne */
     public function activity()
     {
-        return $this->hasOne(\App\Models\Activity::class);
+        return $this->hasOne(Activity::class);
     }
 
     /** @return HasMany */
     public function videos()
     {
-        return $this->hasMany(\App\Models\Video::class);
+        return $this->hasMany(Video::class);
     }
 
     /** @return HasMany */
     public function albums()
     {
-        return $this->hasMany(\App\Models\PhotoAlbum::class, 'event_id');
+        return $this->hasMany(PhotoAlbum::class, 'event_id');
     }
 
     /** @return HasMany */
@@ -205,13 +205,13 @@ class Event extends Model
     /** @return HasMany */
     public function dinnerforms()
     {
-        return $this->hasMany(\App\Models\Dinnerform::class, 'event_id');
+        return $this->hasMany(Dinnerform::class, 'event_id');
     }
 
     /** @return BelongsTo */
     public function category()
     {
-        return $this->BelongsTo(\App\Models\EventCategory::class);
+        return $this->BelongsTo(EventCategory::class);
     }
 
     /**
@@ -302,7 +302,7 @@ class Event extends Model
     /**
      * @return bool Whether the user has bought a ticket for the event.
      */
-    public function hasBoughtTickets(\App\Models\User $user): bool
+    public function hasBoughtTickets(User $user): bool
     {
         return $this->getTicketPurchasesFor($user)->count() > 0;
     }
@@ -316,12 +316,13 @@ class Event extends Model
         }
 
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers->sort(function ($a, $b): int {
-                return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
+            $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b) : int {
+                return (int) isset($a->pivot->committees_activities_id);
+                // prefer helper participation registration
             })->unique());
         }
 
-        return $users->sort(fn ($a, $b): int => strcmp($a->name, $b->name));
+        return $users->sort(static fn($a, $b): int => strcmp($a->name, $b->name));
     }
 
     //recounts the unique users on an event to make the fetching of the event_block way faster
@@ -373,8 +374,8 @@ class Event extends Model
     {
         parent::boot();
 
-        self::updating(function ($event) {
-            $event->update_sequence += 1;
+        self::updating(static function ($event) {
+            ++$event->update_sequence;
         });
     }
 }

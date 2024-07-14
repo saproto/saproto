@@ -61,6 +61,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Activity extends Validatable
 {
+    public $id;
+    public $backupUsers;
+    public $event;
+    public $participants;
+    public $users_count;
+    public $users;
+    public $closed;
+    public $registration_start;
+    public $registration_end;
+    public $deregistration_end;
+    public $attendees;
     protected $table = 'activities';
 
     protected $guarded = ['id'];
