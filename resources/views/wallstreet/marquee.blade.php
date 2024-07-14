@@ -258,119 +258,118 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
             nonce='{{ csp_nonce() }}'></script>
     <script type='text/javascript' nonce='{{ csp_nonce() }}'>
-        window.addEventListener('load', _ => {
-            const swiper = new Swiper("#swiper-container", {
-                loop: true,
-                observer: true,
-                autoplay: {
-                    delay: 1,
-                    disableOnInteraction: false,
+      window.addEventListener('load', _ => {
+        const swiper = new Swiper('#swiper-container', {
+          loop: true,
+          observer: true,
+          autoplay: {
+            delay: 1,
+            disableOnInteraction: false,
+          },
+          slidesPerView: 'auto',
+          speed: 5000,
+        });
+
+        const ctx = document.getElementById('wallstreet-graph-canvas');
+
+        get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
+
+          var chart = new Chart(ctx, {
+            type: 'line',
+            options: {
+              maintainAspectRatio: false,
+              spanGaps: true,
+              scales: {
+                x: {
+                  type: 'time',
+                  parsing: false,
                 },
-                slidesPerView: 'auto',
-                speed: 5000,
+              },
+              responsive: true,
+            },
+            data: {
+              datasets: products.map((product) => {
+                return {
+                  label: product.name,
+                  data: product.wallstreet_prices.map((price) => {
+                    return {
+                      x: Date.parse(price.created_at),
+                      y: price.price,
+                    };
+                  }),
+                };
+              }),
+            },
+          });
+
+          let id = {{$activeDrink->id}};
+
+          const modalTitle = document.getElementById('modal-title');
+          const modalBody = document.getElementById('modal-body');
+          const a = new Audio("{{$sound_path}}");
+          //listen to a new wallstreet event
+          window.Echo.private(`wallstreet-prices.${id}`)
+            .listen('NewWallstreetEvent', (e) => {
+              const event = e.data;
+              a.play().catch(() => {
+                confirm('Click somewhere within the document for the sound to play!');
+              });
+              if (event.image) {
+                modalBody.style.backgroundImage = `url(${event.img})`;
+                modalBody.style.backgroundSize = 'cover';
+                modalBody.style.backgroundPosition = 'center';
+              }
+              modalTitle.innerText = event.name;
+              modalBody.innerHTML = event.description;
+              window.modals.eventModal.show();
+              setTimeout(() => {
+                window.modals.eventModal.hide();
+              }, 10000);
             });
 
-            const ctx = document.getElementById('wallstreet-graph-canvas');
+          const lossDiv = document.getElementById('current_loss');
+          Echo.private(`wallstreet-prices.${id}`)
+            .listen('NewWallstreetLossCalculation', (e) => {
+              lossDiv.innerHTML = '€ ' + e.data.toFixed(2);
+            });
 
-            get(`{{route('api::wallstreet::all_prices', ['id'=>$activeDrink->id])}}`).then((products) => {
-
-                var chart = new Chart(ctx, {
-                    type: "line",
-                    options: {
-                        maintainAspectRatio: false,
-                        spanGaps: true,
-                        scales: {
-                            x: {
-                                type: "time",
-                                parsing: false
-                            }
-                        },
-                        responsive: true,
-                    },
-                    data: {
-                        datasets: products.map((product) => {
-                            return {
-                                label: product.name,
-                                data: product.wallstreet_prices.map((price) => {
-                                    return {
-                                        x: Date.parse(price.created_at),
-                                        y: price.price
-                                    }
-                                })
-                            }
-                        })
-                    },
+          //listen to a new wallstreet price
+          Echo.private(`wallstreet-prices.${id}`)
+            .listen('NewWallstreetPrice', (e) => {
+              let cards = swiper.el.querySelectorAll(`#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`);
+              if (cards.length > 0) {
+                cards.forEach((card) => {
+                  card.querySelector('#price span').innerText = e.data.price.toFixed(2);
+                  card.querySelector('#diff').innerText = `${e.data.diff < 0 ? '▼' : '▲'} ${e.data.diff.toFixed(2)}%`;
+                  if (e.data.diff < 0) {
+                    card.querySelector('#diff').classList.add('text-danger');
+                    card.querySelector('#diff').classList.remove('text-green');
+                  } else {
+                    card.querySelector('#diff').classList.add('text-green');
+                    card.querySelector('#diff').classList.remove('text-danger');
+                  }
                 });
+              }
 
-                let id = {{$activeDrink->id}};
-
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                const a = new Audio("{{$sound_path}}");
-
-                //listen to a new wallstreet event
-                Echo.private(`wallstreet-prices.${id}`)
-                    .listen('NewWallstreetEvent', (e) => {
-                        const event = e.data;
-                        a.play().catch(() => {
-                            confirm("Click somewhere within the document for the sound to play!")
-                        });
-                        if (event.image) {
-                            modalBody.style.backgroundImage = `url(${event.img})`;
-                            modalBody.style.backgroundSize = 'cover';
-                            modalBody.style.backgroundPosition = 'center';
-                        }
-                        modalTitle.innerText = event.name;
-                        modalBody.innerHTML = event.description;
-                        window.modals.eventModal.show()
-                        setTimeout(() => {
-                            window.modals.eventModal.hide()
-                        }, 10000)
-                    });
-
-                const lossDiv = document.getElementById("current_loss");
-                Echo.private(`wallstreet-prices.${id}`)
-                    .listen('NewWallstreetLossCalculation', (e) => {
-                        lossDiv.innerHTML = "€ " + e.data.toFixed(2);
-                    });
-
-                //listen to a new wallstreet price
-                Echo.private(`wallstreet-prices.${id}`)
-                    .listen('NewWallstreetPrice', (e) => {
-                        let cards = swiper.el.querySelectorAll(`#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, "")}`);
-                        if (cards.length > 0) {
-                            cards.forEach((card) => {
-                                card.querySelector("#price span").innerText = e.data.price.toFixed(2);
-                                card.querySelector("#diff").innerText = `${e.data.diff < 0 ? "▼" : "▲"} ${e.data.diff.toFixed(2)}%`;
-                                if (e.data.diff < 0) {
-                                    card.querySelector("#diff").classList.add("text-danger");
-                                    card.querySelector("#diff").classList.remove("text-green");
-                                } else {
-                                    card.querySelector("#diff").classList.add("text-green");
-                                    card.querySelector("#diff").classList.remove("text-danger");
-                                }
-                            })
-                        }
-
-                        const dataset = chart.data.datasets.find((dataset) => dataset.label === e.data.product.name)
-                        if (dataset) {
-                            dataset.data.push({
-                                x: Date.parse(e.data.created_at),
-                                y: e.data.price
-                            });
-                        } else {
-                            //if a new product is added the dataset is created
-                            chart.data.datasets.push({
-                                label: e.data.product.name,
-                                data: [{
-                                    x: Date.parse(e.data.created_at),
-                                    y: e.data.price
-                                }]
-                            })
-                        }
-                        chart.update('none');
-                    });
+              const dataset = chart.data.datasets.find((dataset) => dataset.label === e.data.product.name);
+              if (dataset) {
+                dataset.data.push({
+                  x: Date.parse(e.data.created_at),
+                  y: e.data.price,
+                });
+              } else {
+                //if a new product is added the dataset is created
+                chart.data.datasets.push({
+                  label: e.data.product.name,
+                  data: [{
+                    x: Date.parse(e.data.created_at),
+                    y: e.data.price,
+                  }],
+                });
+              }
+              chart.update('none');
             });
         });
+      });
     </script>
 @endpush
