@@ -49,7 +49,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -65,7 +65,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -73,7 +73,7 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::find($id);
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
-        $album->private = (bool)$request->input('private');
+        $album->private = (bool) $request->input('private');
 
         $album->save();
 
@@ -81,13 +81,13 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return JsonResponse|string
      */
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::findOrFail($id);
-        if (!$request->hasFile('file')) {
+        if (! $request->hasFile('file')) {
             return response()->json([
                 'message' => 'photo not found in request!',
             ], 404);
@@ -114,7 +114,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -127,7 +127,7 @@ class PhotoAdminController extends Controller
         if ($photos) {
             $album = PhotoAlbum::findOrFail($id);
 
-            if ($album->published && !Auth::user()->can('publishalbums')) {
+            if ($album->published && ! Auth::user()->can('publishalbums')) {
                 abort(403, 'Unauthorized action.');
             }
 
@@ -140,7 +140,7 @@ class PhotoAdminController extends Controller
                     break;
 
                 case 'thumbnail':
-                    $album->thumb_id = (int)$photos[0];
+                    $album->thumb_id = (int) $photos[0];
                     break;
 
                 case 'private':
@@ -150,7 +150,7 @@ class PhotoAdminController extends Controller
                             continue;
                         }
 
-                        $photo->private = !$photo->private;
+                        $photo->private = ! $photo->private;
                         $photo->save();
                     }
 
@@ -164,7 +164,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -177,7 +177,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function publish($id)
@@ -197,7 +197,7 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function unpublish($id)
@@ -210,14 +210,14 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param UploadedFile $uploaded_photo
-     * @param int $album_id
+     * @param  UploadedFile  $uploaded_photo
+     * @param  int  $album_id
      *
      * @throws FileNotFoundException
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id): \App\Models\Photo
     {
-        $path = 'photos/' . $album_id . '/';
+        $path = 'photos/'.$album_id.'/';
 
         $file = new StorageEntry();
         $file->createFromFile($uploaded_photo, $path);

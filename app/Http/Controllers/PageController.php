@@ -167,7 +167,7 @@ class PageController extends Controller
         } else {
             $page->featuredImage()->dissociate();
         }
-        
+
         $page->save();
 
         return Redirect::route('page::edit', ['id' => $id]);

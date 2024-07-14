@@ -53,7 +53,7 @@ class EventController extends Controller
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
             }
-            
+
             $data[$index] = $query->get();
         }
 
@@ -421,11 +421,11 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(fn($item) => (object) [
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(fn($item) => (object) [
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
@@ -621,7 +621,7 @@ CALSCALE:GREGORIAN
                 $replace = ['\;', '\,'];
                 $line = str_replace($search, $replace, $line);
             }
-            
+
             $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
         }
 
@@ -686,7 +686,7 @@ CALSCALE:GREGORIAN
                 $event->category()->dissociate();
             }
         }
-        
+
         $category->delete();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');

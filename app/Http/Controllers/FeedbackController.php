@@ -104,7 +104,7 @@ class FeedbackController extends Controller
 
             return Redirect::back();
         }
-        
+
         $feedback = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->orderBy('created_at', 'desc');
 
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
@@ -195,12 +195,12 @@ class FeedbackController extends Controller
     public function delete(int $id): RedirectResponse
     {
         $feedback = Feedback::withTrashed()->findOrFail($id);
-        if (!Auth::user()->can('board') && Auth::user()->id != $feedback->user->id) {
+        if (! Auth::user()->can('board') && Auth::user()->id != $feedback->user->id) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();
         }
-        
+
         if (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
@@ -252,7 +252,7 @@ class FeedbackController extends Controller
 
             return Redirect::back();
         }
-        
+
         $feedback->reviewed = true;
         $feedback->save();
         Session::flash('flash_message', 'Feedback Approved to be public!');
@@ -339,7 +339,7 @@ class FeedbackController extends Controller
                 $item->category()->dissociate();
             }
         }
-        
+
         $category->delete();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');

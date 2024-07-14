@@ -28,7 +28,7 @@ class MollieController extends Controller
         $user = $request->input('user_id') ? User::findOrFail($request->input('user_id')) : null;
 
         $transactions = MollieTransaction::query()
-            ->when($user, fn($query, $user) => $query->where('user_id', $user->id))
+            ->when($user, fn ($query, $user) => $query->where('user_id', $user->id))
             ->latest()
             ->paginate(15);
 
@@ -77,7 +77,7 @@ class MollieController extends Controller
         }
 
         if ($use_fees) {
-            $selected_method = $available_methods->filter(fn($method): bool => $method->id === $requested_method);
+            $selected_method = $available_methods->filter(fn ($method): bool => $method->id === $requested_method);
 
             if ($selected_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
@@ -115,7 +115,7 @@ class MollieController extends Controller
         if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
             abort(403, 'You are unauthorized to view this transaction.');
         }
-        
+
         $transaction = $transaction->updateFromWebhook();
 
         return view('omnomcom.mollie.status', [
@@ -143,7 +143,7 @@ class MollieController extends Controller
         if ($start->isWeekend()) {
             $start->nextWeekday();
         }
-        
+
         $end = $month->copy()->addMonth()->startOfMonth();
         if ($end->isWeekend()) {
             $end->nextWeekday();
@@ -190,7 +190,7 @@ class MollieController extends Controller
                     $flash_message = 'Your payment was completed successfully!';
                     break;
             }
-            
+
             Session::flash('flash_message', $flash_message);
         }
 
@@ -206,7 +206,7 @@ class MollieController extends Controller
                     } else {
                         $flash_message = 'Your payment has failed, the tickets have not been added to your account, please retry the purchase.';
                     }
-                    
+
                     break;
                 case 'open':
                     $flash_message = 'Your payment is still open, the payment can still be completed.';
@@ -215,7 +215,7 @@ class MollieController extends Controller
                     $flash_message = 'Your payment was completed successfully! The tickets have been mailed to you!';
                     break;
             }
-            
+
             Session::flash('flash_message', $flash_message);
 
             return Redirect::route('event::show', ['id' => Event::findOrFail($event_id)->getPublicId()]);
@@ -315,7 +315,7 @@ class MollieController extends Controller
         if ($start->isWeekend()) {
             $start->nextWeekday();
         }
-        
+
         $end = $month->copy()->addMonth()->startOfMonth();
         if ($end->isWeekend()) {
             $end->nextWeekday();
@@ -353,7 +353,7 @@ class MollieController extends Controller
             if ($method->status != 'activated' || $method->resource != 'method') {
                 unset($methodsList[$index]);
             }
-            
+
             if (in_array($method->id, config('omnomcom.mollie')['free_methods'])) {
                 $methodsList[$index]->pricing = null;
                 $methodsList[$index]->pricing[0] = (object) [

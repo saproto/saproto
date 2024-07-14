@@ -32,7 +32,7 @@ class CodexController extends Controller
 
             return Redirect::route('codex::index');
         }
-        
+
         $categories = SongCategory::orderBy('name')->get();
 
         return view('codex.song-edit', ['song' => null, 'textType' => null, 'categories' => $categories, 'myCategories' => []]);
@@ -187,7 +187,7 @@ class CodexController extends Controller
 
             return Redirect::route('codex::index');
         }
-        
+
         $textTypes = CodexTextType::orderBy('type')->get();
 
         return view('codex.text-edit', ['text' => null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
@@ -302,7 +302,7 @@ class CodexController extends Controller
 
             return Redirect::route('codex::index');
         }
-        
+
         $A6 = [105, 148];
 
         $pdf = new PDF_TOC('P', 'mm', $A6);
@@ -325,10 +325,10 @@ class CodexController extends Controller
         $pdf->SetFont('old', '', 52);
         $pdf->Image(public_path('images/logo/codex_logo.png'), 10, 10, 85, 48);
         $pdf->Ln(50);
-        
+
         $codex_name = str_replace('’', "'", $codex->name);
         $codex_name = str_replace('‘', "'", $codex_name);
-        
+
         $pdf->MultiCell(0, 22, $codex_name, 0, 'C');
         $pdf->SetAlpha(0.1);
         $pdf->Image(public_path('images/logo/codex_logo.png'), -100, 47, 210);
@@ -357,13 +357,13 @@ class CodexController extends Controller
                         if (preg_match('/(\d+)\./', $textValue) === 0 || preg_match('/(\d+)\./', $textValue) === false) {
                             $list = false;
                         }
-                        
+
                         $count += 1;
                         $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
                     } else {
                         $count = 0;
                     }
-                    
+
                     if (str_contains($textValue, '**')) {
                         $textValue = str_replace('**', '', $textValue);
                         $pdf->SetFont('minion', 'B', $textSize);
@@ -374,7 +374,7 @@ class CodexController extends Controller
                         $textValue = str_replace('*', '', $textValue);
                         $pdf->SetFont('minion', 'I', $textSize);
                     }
-                    
+
                     $pdf->MultiCell(0, $textHeight, $textValue, 0, 'L');
                     $pdf->SetFont('minion', '', $textSize);
                 }
@@ -419,15 +419,15 @@ class CodexController extends Controller
                         $pdf->Cell($pdf->GetStringWidth($subString2), $textHeight, $subString2, 0, 1);
                         $print = false;
                     }
-                    
+
                     if ($print) {
                         $pdf->MultiCell(0, $textHeight, $text, 0, 'L');
                         $pdf->SetFont('minion', '', $textSize);
                     }
-                    
+
                     $print = true;
                 }
-                
+
                 $pdf->Ln($textHeight);
             }
         }
@@ -453,6 +453,7 @@ class CodexController extends Controller
         $pdf->SetAlpha(1);
 
         $pdf->Output();
+
         return null;
     }
 }

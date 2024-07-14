@@ -15,7 +15,7 @@ class LdapController extends Controller
         $result = json_decode($response)->result;
 
         if ($only_active) {
-            return array_filter($result, fn($row): bool => (bool) $row->active);
+            return array_filter($result, fn ($row): bool => (bool) $row->active);
         }
 
         return $result;

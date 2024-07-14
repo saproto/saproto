@@ -82,7 +82,7 @@ class ProductController extends Controller
                 }
             }
         }
-        
+
         $product->categories()->sync($categories);
 
         $product->save();
@@ -176,7 +176,7 @@ class ProductController extends Controller
                 }
             }
         }
-        
+
         $product->categories()->sync($categories);
 
         $product->save();
@@ -259,7 +259,7 @@ class ProductController extends Controller
 
             return Redirect::back();
         }
-        
+
         /** @var Product $product */
         $product = Product::findOrFail($id);
 
@@ -301,7 +301,7 @@ class ProductController extends Controller
             foreach ($data as $row) {
                 fputcsv($f, $row);
             }
-            
+
             fclose($f);
         };
 

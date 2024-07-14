@@ -90,6 +90,7 @@ class AliasController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function destroy(Request $request, mixed $id_or_alias)

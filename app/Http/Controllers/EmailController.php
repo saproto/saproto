@@ -73,7 +73,7 @@ class EmailController extends Controller
 
             return Redirect::route('email::admin');
         }
-        
+
         $email = Email::create([
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
@@ -185,7 +185,7 @@ class EmailController extends Controller
 
                 return Redirect::route('email::admin');
             }
-            
+
             $email->ready = true;
             $email->save();
             Session::flash('flash_message', 'The e-mail has been queued for deliver at the specified time.');
@@ -254,6 +254,7 @@ class EmailController extends Controller
 
     /**
      * @return RedirectResponse
+     *
      * @throws Exception
      */
     public function unsubscribeLink(Request $request, string $hash)
@@ -290,7 +291,7 @@ class EmailController extends Controller
 
             return Redirect::route('email::admin');
         }
-        
+
         $email->delete();
         Session::flash('flash_message', 'The e-mail has been deleted.');
 
@@ -363,7 +364,7 @@ class EmailController extends Controller
                 if (! empty($events)) {
                     $email->events()->sync($events);
                 }
-                
+
                 break;
 
             case 'lists':
@@ -395,7 +396,7 @@ class EmailController extends Controller
                 break;
 
         }
-        
+
         $email->save();
     }
 }

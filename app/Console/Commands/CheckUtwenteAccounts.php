@@ -69,17 +69,17 @@ class CheckUtwenteAccounts extends Command
                 if (strpos($remoteusers[0]->department, 'CREA') > 0) {
                     $user->did_study_create = true;
                 }
-                
+
                 // See if user studies ITech
                 if (strpos($remoteusers[0]->department, 'ITECH') > 0) {
                     $user->did_study_itech = true;
                 }
-                
+
                 $user->utwente_department = $remoteusers[0]->department;
             } else {
                 $user->utwente_department = null;
             }
-            
+
             $user->save();
 
             // Act

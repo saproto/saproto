@@ -97,13 +97,13 @@ class AddressController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($user->is_member) {
             Session::flash('flash_message', "You are a member. You can't delete your address!");
 
             return Redirect::back();
         }
-        
+
         $user->address->delete();
 
         Session::flash('flash_message', 'Your address has been deleted.');
@@ -168,7 +168,7 @@ class AddressController extends Controller
             if (! $address->validate($addressdata)) {
                 return Redirect::route('user::address::edit')->withErrors($address->errors());
             }
-            
+
             $address->fill($request->except(['zipcode-nl', 'number-nl']));
             Session::flash('flash_message', 'Your address has been saved!');
         }

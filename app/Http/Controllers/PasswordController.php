@@ -34,7 +34,7 @@ class PasswordController extends Controller
 
             return Redirect::route('passwordstore::index');
         }
-        
+
         Session::flash('flash_message', 'Wrong password.');
 
         return Redirect::route('passwordstore::auth');
@@ -80,7 +80,7 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($request->get('type') == 'password') {
             PasswordEntry::create([
                 'permission_id' => $permission->id,
@@ -161,7 +161,7 @@ class PasswordController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($request->get('type') == 'password') {
             $password->fill([
                 'permission_id' => $permission->id,
@@ -215,7 +215,7 @@ class PasswordController extends Controller
 
             return Redirect::route('passwordstore::index');
         }
-        
+
         $password->delete();
 
         Session::flash('flash_message', 'Password entry deleted.');
@@ -228,7 +228,7 @@ class PasswordController extends Controller
         if (! $request->session()->has('passwordstore-verify')) {
             return false;
         }
-        
+
         $verify = $request->session()->get('passwordstore-verify');
         if ($verify < date('U')) {
             $request->session()->forget('passwordstore-verify');

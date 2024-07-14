@@ -44,7 +44,7 @@ class UserCleanup extends Command
             if (! $user->isStale()) {
                 continue;
             }
-            
+
             $count++;
             $user->forceDelete();
         }

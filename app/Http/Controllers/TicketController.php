@@ -87,7 +87,7 @@ class TicketController extends Controller
         if ($request->has('event')) {
             $ticket->event_id = Event::findOrFail($request->input('event'))->id;
         }
-        
+
         if ($request->has('product')) {
             $ticket->product_id = Product::findOrFail($request->input('product'))->id;
         }
@@ -121,7 +121,7 @@ class TicketController extends Controller
 
             return Redirect::back();
         }
-        
+
         $ticket->delete();
 
         Session::flash('flash_message', 'The ticket has been deleted!');
@@ -141,7 +141,7 @@ class TicketController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($ticket) {
             $ticket->scanned = date('Y-m-d H:i:s');
             $ticket->save();
@@ -197,7 +197,7 @@ class TicketController extends Controller
                     'data' => null,
                 ];
             }
-            
+
             if (! $unscan && $ticket->scanned !== null) {
                 return [
                     'code' => 403,
@@ -205,7 +205,7 @@ class TicketController extends Controller
                     'data' => $ticket,
                 ];
             }
-            
+
             if ($unscan && $ticket->scanned == null) {
                 return [
                     'code' => 403,
@@ -213,7 +213,7 @@ class TicketController extends Controller
                     'data' => $ticket,
                 ];
             }
-            
+
             if ($ticket->canBeDownloaded() === false) {
                 return [
                     'code' => 500,
@@ -221,12 +221,12 @@ class TicketController extends Controller
                     'data' => $ticket,
                 ];
             }
-            
+
             $ticket->scanned = date('Y-m-d H:i:s');
             if ($unscan) {
                 $ticket->scanned = null;
             }
-            
+
             $ticket->save();
 
             return [
@@ -324,13 +324,13 @@ class TicketController extends Controller
 
                 return Redirect::back();
             }
-            
+
             if ($ticket->members_only && ! Auth::user()->is_member) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is only available to members. You are not a member. Entire order cancelled.");
 
                 return Redirect::back();
             }
-            
+
             if ($ticket->event->id != $event->id) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is not a ticket for event '".$event->title."'. Entire order cancelled.");
 
@@ -348,7 +348,7 @@ class TicketController extends Controller
 
                 return Redirect::back();
             }
-            
+
             if ($amount > $ticket->product->stock) {
                 Session::flash('flash_message', "You tried to buy {$amount} of ticket '".$ticket->product->name."', but only ".$ticket->product->stock.' are available. Entire order cancelled.');
 
@@ -396,14 +396,14 @@ class TicketController extends Controller
         if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
-            $payment_method = $available_methods->filter(fn($method): bool => $method->id === $requested_method);
+            $payment_method = $available_methods->filter(fn ($method): bool => $method->id === $requested_method);
 
             if ($payment_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
 
                 return Redirect::back();
             }
-            
+
             $payment_method = $payment_method->first();
 
             if (

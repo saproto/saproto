@@ -4,7 +4,7 @@ use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__ . '/minisites.php';
+require __DIR__.'/minisites.php';
 
 /* Pass view name to body class */
 View::composer('*', function ($view) {
@@ -513,9 +513,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Illuminate\Http\Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'quotes')]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn (Illuminate\Http\Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'quotes')]);
 
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Illuminate\Http\Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'goodideas')]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn (Illuminate\Http\Request $request): \Illuminate\View\View => (new FeedbackController())->index($request, 'goodideas')]);
 
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {

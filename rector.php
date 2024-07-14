@@ -14,18 +14,18 @@ use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnR
 
 return RectorConfig::configure()
     ->withCache(
-    // ensure file system caching is used instead of in-memory
+        // ensure file system caching is used instead of in-memory
         cacheDirectory: '.tmp/rector',
 
         // specify a path that works locally as well as on CI job runners
         cacheClass: FileCacheStorage::class
     )
     ->withPaths([
-        __DIR__ . '/app',
-        __DIR__ . '/config',
-        __DIR__ . '/public',
-        __DIR__ . '/resources',
-        __DIR__ . '/routes',
+        __DIR__.'/app',
+        __DIR__.'/config',
+        __DIR__.'/public',
+        __DIR__.'/resources',
+        __DIR__.'/routes',
     ])->withPhpSets(php82: true)
     ->withRules(
         [
@@ -42,9 +42,6 @@ return RectorConfig::configure()
         instanceOf: true,
         earlyReturn: true,
         strictBooleans: true,
-        carbon: false,
-        rectorPreset: false,
-        phpunitCodeQuality: false,
     )
     ->withSkip(
         [

@@ -63,13 +63,13 @@ class PDF_TOC extends AlphaPDF
             if ($level > 0) {
                 $this->Cell($level * 8);
             }
-            
+
             $weight = '';
             if ($level == 0) {
                 $weight = 'B';
                 $this->Ln(1);
             }
-            
+
             $str = $t['t'];
             $this->SetFont($tocfont, $weight, $entrySize);
             $strsize = $this->GetStringWidth($str);
@@ -111,7 +111,7 @@ class PDF_TOC extends AlphaPDF
         if (! $this->_numberingFooter) {
             return;
         }
-        
+
         //Go to 1.5 cm from bottom
         $this->SetY(-15);
         //Select Arial italic 8

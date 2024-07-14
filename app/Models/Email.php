@@ -96,23 +96,23 @@ class Email extends Model
         if ($this->to_user) {
             return 'users';
         }
-        
+
         if ($this->to_member) {
             return 'members';
         }
-        
+
         if ($this->to_pending) {
             return 'pending';
         }
-        
+
         if ($this->to_active) {
             return 'active members';
         }
-        
+
         if ($this->to_list) {
             return 'list';
         }
-        
+
         if ($this->to_event) {
             if ($this->to_backup) {
                 return 'event with backup';
@@ -120,7 +120,7 @@ class Email extends Model
 
             return 'event';
         }
-        
+
         throw new Exception('Email has no destination');
     }
 
@@ -130,29 +130,29 @@ class Email extends Model
         if ($this->to_user) {
             return User::orderBy('name')->get();
         }
-        
+
         if ($this->to_member) {
             return User::whereHas('member', function ($q) {
                 $q->where('is_pending', false);
             })->orderBy('name')->get();
         }
-        
+
         if ($this->to_pending) {
             return User::whereHas('member', function ($q) {
                 $q->where('is_pending', true);
             })->orderBy('name')->get();
         }
-        
+
         if ($this->to_active) {
             return User::whereHas('committees')->orderBy('name')->get();
         }
-        
+
         if ($this->to_list) {
             return User::whereHas('lists', function ($q) {
                 $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         }
-        
+
         if ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
@@ -193,7 +193,7 @@ class Email extends Model
         if (! $this->to_event) {
             return '';
         }
-        
+
         foreach ($this->events as $event) {
             $events[] = $event->title;
         }
@@ -207,7 +207,7 @@ class Email extends Model
         if (! $this->to_list) {
             return '';
         }
-        
+
         foreach ($this->lists as $list) {
             $lists[] = $list->name;
         }

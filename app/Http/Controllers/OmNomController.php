@@ -131,7 +131,7 @@ class OmNomController extends Controller
 
                     return json_encode($result);
                 }
-                
+
                 $card->touch();
                 $user = $card->user;
                 if (! $user) {
@@ -139,7 +139,7 @@ class OmNomController extends Controller
 
                     return json_encode($result);
                 }
-                
+
                 break;
 
             case 'qr':
@@ -157,7 +157,7 @@ class OmNomController extends Controller
 
                     return json_encode($result);
                 }
-                
+
                 break;
 
             default:
@@ -207,25 +207,25 @@ class OmNomController extends Controller
 
                     return json_encode($result);
                 }
-                
+
                 if (! $product->isVisible()) {
                     $result->message = 'You tried to buy a product that is not available!';
 
                     return json_encode($result);
                 }
-                
+
                 if ($product->stock < $amount) {
                     $result->message = 'You tried to buy more of a product than was in stock!';
 
                     return json_encode($result);
                 }
-                
+
                 if ($product->is_alcoholic && $user->age() < 18) {
                     $result->message = 'You tried to buy alcohol, youngster!';
 
                     return json_encode($result);
                 }
-                
+
                 if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', config('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', config('omnomcom.alcohol-end')))) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
 
@@ -244,7 +244,7 @@ class OmNomController extends Controller
                         continue;
                     }
                 }
-                
+
                 $product->buyForUser($user, $amount, $amount * $product->omnomcomPrice(), $payedCash == 'true', $payedCard == 'true', null, $auth_method);
             }
         }

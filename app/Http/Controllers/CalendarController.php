@@ -26,12 +26,12 @@ class CalendarController extends Controller
             $startTime = isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime;
 
             $name = property_exists($entry, 'summary') ? $entry->summary : '(no name)';
-            
+
             $name_exp = explode(' ', $name);
             if (is_numeric($name_exp[0])) {
                 $name_exp[0] = '';
             }
-            
+
             $name = '';
             foreach ($name_exp as $val) {
                 $name .= $val.' ';

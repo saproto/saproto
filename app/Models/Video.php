@@ -78,19 +78,19 @@ class Video extends Model
         if ($interval->y > 0) {
             return sprintf('%s years', $interval->y);
         }
-        
+
         if ($interval->m > 0) {
             return sprintf('%s months', $interval->m);
         }
-        
+
         if ($interval->d > 0) {
             return sprintf('%s days', $interval->d);
         }
-        
+
         if ($interval->h > 0) {
             return sprintf('%s:%s:%s ', $interval->h, str_pad(strval($interval->i), 2, '0', STR_PAD_LEFT), str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
         }
-        
+
         if ($interval->i > 0) {
             return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
         }

@@ -199,10 +199,10 @@ class MenuController extends Controller
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 
-        return array_filter($routes, fn($route): bool => $route->getName() &&
-        !str_contains($route->uri(), '{') &&
-        !str_contains($route->getName(), 'api::') &&
-        !str_contains($route->getName(), 'login::') &&
-        !str_contains($route->uri(), 'oauth'));
+        return array_filter($routes, fn ($route): bool => $route->getName() &&
+        ! str_contains($route->uri(), '{') &&
+        ! str_contains($route->getName(), 'api::') &&
+        ! str_contains($route->getName(), 'login::') &&
+        ! str_contains($route->uri(), 'oauth'));
     }
 }

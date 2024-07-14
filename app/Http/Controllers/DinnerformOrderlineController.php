@@ -59,7 +59,7 @@ class DinnerformOrderlineController extends Controller
 
             return Redirect::back();
         }
-        
+
         if (! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')) {
             Session::flash('flash_message', 'You are not authorized to delete this order!');
             Redirect::back();
@@ -111,7 +111,7 @@ class DinnerformOrderlineController extends Controller
             'helper' => $helper,
         ]);
         $dinnerOrderline->save();
-        
+
         $dinnerform = Dinnerform::findOrFail($dinnerOrderline->dinnerform_id);
         Session::flash('flash_message', 'Your order has been updated!');
 

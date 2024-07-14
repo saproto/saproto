@@ -37,7 +37,7 @@ class AlphaPDF extends tFpdf
         if (! empty($this->extgstates) && $this->PDFVersion < '1.4') {
             $this->PDFVersion = '1.4';
         }
-        
+
         parent::_enddoc();
     }
 
@@ -64,7 +64,7 @@ class AlphaPDF extends tFpdf
         foreach ($this->extgstates as $k => $extgstate) {
             $this->_put('/GS'.$k.' '.$extgstate['n'].' 0 R');
         }
-        
+
         $this->_put('>>');
     }
 

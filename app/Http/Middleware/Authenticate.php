@@ -31,7 +31,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
         if (! $this->auth->guest()) {
             return $next($request);
         }
-        
+
         if ($request->ajax()) {
             return response('Unauthorized.', 401);
         }

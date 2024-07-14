@@ -115,7 +115,7 @@ class EmailListController extends Controller
 
                 return Redirect::route('user::dashboard');
             }
-            
+
             if ($list->subscribe($user)) {
                 Session::flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
 

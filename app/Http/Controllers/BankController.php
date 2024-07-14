@@ -128,19 +128,19 @@ class BankController extends Controller
 
             return Redirect::route('user::dashboard');
         }
-        
+
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
 
             return Redirect::back();
         }
-        
+
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
 
             return Redirect::back();
         }
-        
+
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');

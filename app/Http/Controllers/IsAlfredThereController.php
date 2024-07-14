@@ -54,7 +54,7 @@ class IsAlfredThereController extends Controller
             $text->value = $request->input('is_alfred_there_text');
             $status->value = 'unknown';
         }
-        
+
         $status->save();
         $text->save();
 
@@ -87,7 +87,7 @@ class IsAlfredThereController extends Controller
 
             return $result;
         }
-        
+
         if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
@@ -95,7 +95,7 @@ class IsAlfredThereController extends Controller
 
             return $result;
         }
-        
+
         $result->status = 'unknown';
 
         return $result;

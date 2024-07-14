@@ -51,7 +51,7 @@ class ProTubeApiService
         if (! app()->environment('production')) {
             return true;
         }
-        
+
         $response = self::client()->post('/skipsong');
         if (! self::assertResponse($response)) {
             return false;
@@ -73,7 +73,7 @@ class ProTubeApiService
         if (! app()->environment('production')) {
             return true;
         }
-        
+
         $response = self::client()->post('/updateadmin', [
             'user_id' => $userID,
             'admin' => $admin,

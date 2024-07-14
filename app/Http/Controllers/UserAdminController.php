@@ -81,7 +81,7 @@ class UserAdminController extends Controller
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
         $user->birthdate = strtotime($request->birthdate) !== false ? date('Y-m-d', strtotime($request->birthdate)) : null;
-        
+
         $user->save();
 
         Session::flash('flash_message', 'User updated!');
@@ -229,7 +229,7 @@ class UserAdminController extends Controller
 
             return Redirect::back();
         }
-        
+
         $user->member->until = null;
         $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
@@ -352,7 +352,7 @@ class UserAdminController extends Controller
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
-        
+
         Session::flash('flash_message', 'Sound deleted');
 
         return Redirect::back();

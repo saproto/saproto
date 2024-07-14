@@ -123,7 +123,7 @@ class AchievementController extends Controller
 
             return Redirect::route('achievement::list');
         }
-        
+
         $achievement->delete();
         Session::flash('flash_message', "Achievement '".$achievement->name."' has been removed.");
 
@@ -188,7 +188,7 @@ class AchievementController extends Controller
                 $awarded = $awarded.' '.$user->name.',';
             }
         }
-        
+
         if ($awarded !== '' && $awarded !== '0') {
             Session::flash('flash_message', "Achievement $achievement->name has been newly given to:".$awarded);
         } else {
@@ -277,12 +277,12 @@ class AchievementController extends Controller
             if ($achievedOn) {
                 $relation->created_at = Carbon::parse($achievedOn);
             }
-            
+
             $relation->save();
 
             return true;
         }
-        
+
         if ($description) {
             $achieved->pivot->description = $description;
             $achievement->save();

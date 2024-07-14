@@ -32,14 +32,14 @@ class CommitteeController extends Controller
         if (Auth::check() && $user->can('board')) {
             return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
         }
-        
+
         $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
         if ($showSociety) {
             $userGroups = Auth::check() ? $user->societies : [];
         } else {
             $userGroups = Auth::check() ? $user->committees : [];
         }
-        
+
         $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
 
         return view('committee.list', ['data' => $mergedGroups]);
@@ -146,7 +146,7 @@ class CommitteeController extends Controller
         } else {
             $committee->image()->dissociate();
         }
-        
+
         $committee->save();
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
@@ -173,7 +173,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
@@ -217,7 +217,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-        
+
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
@@ -260,7 +260,7 @@ class CommitteeController extends Controller
         foreach ($memberships as $membership) {
             $membership->delete();
         }
-        
+
         Session::flash('flash_message', 'all members from the edition ended!');
 
         return Redirect::back();
@@ -296,7 +296,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
-        
+
         $name = $committee->name;
 
         $message_content = strip_tags($request->get('message'));

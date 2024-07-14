@@ -203,16 +203,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
-    /** @return BelongsTo */
-    public function photo()
+    public function photo(): BelongsTo
     {
         return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
     }
 
-    /** @return BelongsToMany */
-    private function getGroups()
+    private function getGroups(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Committee::class, 'committees_users')
+        return $this->belongsToMany(Committee::class, 'committees_users')
             ->where(function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
@@ -223,86 +221,73 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany */
-    public function lists()
+    public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
+        return $this->belongsToMany(EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
-    /** @return BelongsToMany */
-    public function achievements(): \Illuminate\Database\Query\Builder
+    public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany */
-    public function committees(): \Illuminate\Database\Eloquent\Builder
+    public function committees(): BelongsToMany
     {
         return $this->getGroups()->where('is_society', false);
     }
 
-    /** @return BelongsToMany */
-    public function societies(): \Illuminate\Database\Eloquent\Builder
+    public function societies(): BelongsToMany
     {
         return $this->getGroups()->where('is_society', true);
     }
 
-    /** @return HasOne */
-    public function member()
+    public function member(): HasOne
     {
         return $this->hasOne(\App\Models\Member::class);
     }
 
-    /** @return HasOne */
-    public function bank()
+    public function bank(): HasOne
     {
         return $this->hasOne(\App\Models\Bank::class);
     }
 
-    /** @return HasOne */
-    public function address()
+    public function address(): HasOne
     {
         return $this->hasOne(\App\Models\Address::class);
     }
 
     /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasOne
     {
         return $this->hasMany(\App\Models\OrderLine::class);
     }
 
-    /** @return HasMany */
-    public function tempadmin()
+    public function tempadmin(): HasMany
     {
         return $this->hasMany(\App\Models\Tempadmin::class);
     }
 
-    /** @return HasMany */
-    public function feedback()
+    public function feedback(): HasMany
     {
         return $this->hasMany(\App\Models\Feedback::class);
     }
 
-    /** @return HasMany */
-    public function rfid()
+    public function rfid(): HasMany
     {
         return $this->hasMany(\App\Models\RfidCard::class);
     }
 
-    /** @return HasMany */
-    public function tokens()
+    public function tokens(): HasMany
     {
         return $this->hasMany(\App\Models\Token::class);
     }
 
-    /** @return HasMany */
-    public function playedVideos()
+    public function playedVideos(): HasMany
     {
         return $this->hasMany(\App\Models\PlayedVideo::class);
     }
 
-    /** @return HasMany */
-    public function mollieTransactions()
+    public function mollieTransactions(): HasMany
     {
         return $this->hasMany(\App\Models\MollieTransaction::class);
     }
@@ -367,7 +352,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
-            
+
             if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
                 return true;
             }
@@ -538,7 +523,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->personal_key;
     }
 
-    /** @return Token */
     public function generateNewToken(): \App\Models\Token
     {
         $token = new Token();
@@ -551,7 +535,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function getToken()
     {
         $token = count($this->tokens) > 0 ? $this->tokens->last() : $this->generateNewToken();
-        
+
         $token->touch();
 
         return $token;

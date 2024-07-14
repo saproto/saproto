@@ -95,15 +95,15 @@ class QueryController extends Controller
                         ];
                     }
                 }
-                
+
                 if ($member->is_lifelong) {
                     $count_lifelong++;
                 }
-                
+
                 if ($member->is_honorary) {
                     $count_honorary++;
                 }
-                
+
                 if ($member->is_donor) {
                     $count_donor++;
                 }
@@ -128,7 +128,7 @@ class QueryController extends Controller
                 }
             }
         }
-        
+
         if ($request->has('export_subsidies')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',

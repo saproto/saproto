@@ -27,12 +27,12 @@ class RfidCardController extends Controller
                 if (! $qrAuthRequest) {
                     return ['ok' => false, 'text' => 'Invalid authentication token.'];
                 }
-                
+
                 $user = $qrAuthRequest->authUser();
                 if (! $user) {
                     return ['ok' => false, 'text' => "QR authentication hasn't been completed."];
                 }
-                
+
                 break;
 
             default:
@@ -56,7 +56,7 @@ class RfidCardController extends Controller
 
             return ['ok' => false, 'text' => 'This card is already registered to someone.'];
         }
-        
+
         $card = RfidCard::create([
             'user_id' => $user->id,
             'card_id' => $uid,
@@ -114,7 +114,7 @@ class RfidCardController extends Controller
         if ($rfid->user->id != Auth::id()) {
             abort(403);
         }
-        
+
         $rfid->delete();
 
         Session::flash('flash_message', 'Your RFID card has been deleted.');

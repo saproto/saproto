@@ -94,7 +94,7 @@ class DinnerformController extends Controller
 
             return Redirect::back();
         }
-        
+
         $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
@@ -191,7 +191,7 @@ class DinnerformController extends Controller
 
             return Redirect::back();
         }
-        
+
         $dinnerform = Dinnerform::findOrFail($id);
         $dinnerformOrderlines = $dinnerform->orderlines()->where('closed', false)->get();
         $product = Product::findOrFail(config('omnomcom.dinnerform-product'));
@@ -215,7 +215,7 @@ class DinnerformController extends Controller
             $dinnerformOrderline->closed = true;
             $dinnerformOrderline->save();
         }
-        
+
         $dinnerform->closed = true;
         $dinnerform->save();
 

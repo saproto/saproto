@@ -217,12 +217,12 @@ class DmxController extends Controller
             if (! $override->active() && ! $override->justOver()) {
                 continue;
             }
-            
+
             foreach ($override->getFixtures() as $fixture) {
                 if ($override->justOver() && $fixture->follow_timetable) {
                     continue;
                 }
-                
+
                 $colors = ($override->justOver() && ! $fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
                 $channel_values = self::setFixtureChannels($fixture, $channel_values, $colors);
             }
@@ -243,17 +243,17 @@ class DmxController extends Controller
         foreach ($fixture->getChannels('red') as $channel) {
             $channel_values[$channel->id] = $colors[0];
         }
-        
+
         // Set green
         foreach ($fixture->getChannels('green') as $channel) {
             $channel_values[$channel->id] = $colors[1];
         }
-        
+
         // Set blue
         foreach ($fixture->getChannels('blue') as $channel) {
             $channel_values[$channel->id] = $colors[2];
         }
-        
+
         // Set brightness
         foreach ($fixture->getChannels('brightness') as $channel) {
             $channel_values[$channel->id] = $colors[3];

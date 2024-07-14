@@ -60,14 +60,14 @@ return [
 
     'magic' => [
         'Log' => [
-            'debug' => \Monolog\Logger::class . '::addDebug',
-            'info' => \Monolog\Logger::class . '::addInfo',
-            'notice' => \Monolog\Logger::class . '::addNotice',
-            'warning' => \Monolog\Logger::class . '::addWarning',
-            'error' => \Monolog\Logger::class . '::addError',
-            'critical' => \Monolog\Logger::class . '::addCritical',
-            'alert' => \Monolog\Logger::class . '::addAlert',
-            'emergency' => \Monolog\Logger::class . '::addEmergency',
+            'debug' => \Monolog\Logger::class.'::addDebug',
+            'info' => \Monolog\Logger::class.'::addInfo',
+            'notice' => \Monolog\Logger::class.'::addNotice',
+            'warning' => \Monolog\Logger::class.'::addWarning',
+            'error' => \Monolog\Logger::class.'::addError',
+            'critical' => \Monolog\Logger::class.'::addCritical',
+            'alert' => \Monolog\Logger::class.'::addAlert',
+            'emergency' => \Monolog\Logger::class.'::addEmergency',
         ],
     ],
 

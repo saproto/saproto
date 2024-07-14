@@ -35,7 +35,7 @@ class WrappedController extends Controller
             ->orderBy('total')
             ->get();
 
-        return $totals->groupBy('product_id')->map(fn($product) => $product->pluck('total'));
+        return $totals->groupBy('product_id')->map(fn ($product) => $product->pluck('total'));
     }
 
     public function eventList()

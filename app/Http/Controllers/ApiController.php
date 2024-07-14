@@ -108,7 +108,7 @@ class ApiController extends Controller
         } else {//20% chance the photo is older than 4 years
             $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
         }
-        
+
         $photo = $query->inRandomOrder()->with('album')->first();
 
         //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
@@ -169,7 +169,7 @@ class ApiController extends Controller
             } elseif ($orderline->withdrawal) {
                 $payment_method = sprintf('withdrawal_%s', $orderline->withdrawal->id);
             }
-            
+
             $data['orders'][] = [
                 'product' => $orderline->product->name,
                 'units' => $orderline->units,
@@ -235,7 +235,7 @@ class ApiController extends Controller
         if (! $user) {
             return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
         }
-        
+
         if (! $user->is_member) {
             return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }

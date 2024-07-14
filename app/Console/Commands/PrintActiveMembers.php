@@ -40,7 +40,7 @@ class PrintActiveMembers extends Command
             if (! $member->user->isActiveMember()) {
                 continue;
             }
-            
+
             $this->info(sprintf('%s: %s', $member->user->name, implode(', ', $member->user->committees->pluck('name')->toArray())));
         }
     }

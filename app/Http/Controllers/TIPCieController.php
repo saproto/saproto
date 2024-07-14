@@ -55,7 +55,7 @@ class TIPCieController extends Controller
                     if (! array_key_exists($time, $pinOrders)) {
                         $pinOrders[$time] = 0;
                     }
-                    
+
                     $pinOrders[$time] += $order->total_price;
                     $pinTotal += $order->total_price;
                 }

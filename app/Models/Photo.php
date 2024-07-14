@@ -108,7 +108,7 @@ class Photo extends Model
             if ($this->id == $photoItem->id) {
                 return ceil($photoIndex / $paginateLimit);
             }
-            
+
             $photoIndex++;
         }
 
