@@ -21,7 +21,7 @@ class StockMutationController extends Controller
             $search = $rq->get('product_name');
             $mutations = $mutations
                 ->join('products', 'products.id', '=', 'stock_mutations.product_id', 'inner')
-                ->where('products.name', 'like', "%$search%");
+                ->where('products.name', 'like', "%{$search}%");
         }
 
         // Find mutations by authoring User
@@ -29,7 +29,7 @@ class StockMutationController extends Controller
             $search = $rq->get('author_name');
             $mutations = $mutations
                 ->join('users', 'users.id', '=', 'stock_mutations.user_id', 'inner')
-                ->where('users.name', 'like', "%$search%");
+                ->where('users.name', 'like', "%{$search}%");
         }
 
         // Find mutations before given date
@@ -94,6 +94,7 @@ class StockMutationController extends Controller
                     fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
                 }
             }
+            
             fclose($f);
         };
 

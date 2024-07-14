@@ -368,6 +368,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
+            
             if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
                 return true;
             }
@@ -561,6 +562,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         } else {
             $token = $this->generateNewToken();
         }
+        
         $token->touch();
 
         return $token;

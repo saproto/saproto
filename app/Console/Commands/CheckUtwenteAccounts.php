@@ -48,17 +48,17 @@ class CheckUtwenteAccounts extends Command
 
             // Find remote user
             $utwente_username = $user->utwente_username;
-            $remoteusers = LdapController::searchUtwente("cn=$utwente_username");
+            $remoteusers = LdapController::searchUtwente("cn={$utwente_username}");
 
             // See if user is active
             $active = true;
             if (count($remoteusers) < 1) {
-                $msg = "Not found: $utwente_username (".$user->name.')';
+                $msg = "Not found: {$utwente_username} (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;
             } elseif (! $remoteusers[0]->active) {
-                $msg = "Inactive: $utwente_username (".$user->name.')';
+                $msg = "Inactive: {$utwente_username} (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;
@@ -69,14 +69,17 @@ class CheckUtwenteAccounts extends Command
                 if (strpos($remoteusers[0]->department, 'CREA') > 0) {
                     $user->did_study_create = true;
                 }
+                
                 // See if user studies ITech
                 if (strpos($remoteusers[0]->department, 'ITECH') > 0) {
                     $user->did_study_itech = true;
                 }
+                
                 $user->utwente_department = $remoteusers[0]->department;
             } else {
                 $user->utwente_department = null;
             }
+            
             $user->save();
 
             // Act

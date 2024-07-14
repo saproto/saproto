@@ -28,7 +28,7 @@ class ProductController extends Controller
     {
         if ($request->has('search') && strlen($request->get('search')) > 2) {
             $search = $request->get('search');
-            $products = Product::where('name', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
+            $products = Product::where('name', 'like', "%{$search}%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
             switch ($request->get('filter')) {
                 case 'invisible':
@@ -86,6 +86,7 @@ class ProductController extends Controller
                 }
             }
         }
+        
         $product->categories()->sync($categories);
 
         $product->save();
@@ -179,6 +180,7 @@ class ProductController extends Controller
                 }
             }
         }
+        
         $product->categories()->sync($categories);
 
         $product->save();
@@ -213,7 +215,7 @@ class ProductController extends Controller
                     $old_stock = $product->stock;
                     $new_stock = $old_stock + $delta;
 
-                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from $old_stock to <strong>$new_stock</strong>.<br>";
+                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
 
                     $products[] = $product->id;
                     $deltas[] = $delta;
@@ -261,6 +263,7 @@ class ProductController extends Controller
 
             return Redirect::back();
         }
+        
         /** @var Product $product */
         $product = Product::findOrFail($id);
 
@@ -302,6 +305,7 @@ class ProductController extends Controller
             foreach ($data as $row) {
                 fputcsv($f, $row);
             }
+            
             fclose($f);
         };
 

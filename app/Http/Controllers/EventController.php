@@ -53,6 +53,7 @@ class EventController extends Controller
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
             }
+            
             $data[$index] = $query->get();
         }
 
@@ -633,6 +634,7 @@ class EventController extends Controller
                 $replace = ['\;', '\,'];
                 $line = str_replace($search, $replace, $line);
             }
+            
             $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
         }
 
@@ -697,6 +699,7 @@ class EventController extends Controller
                 $event->category()->dissociate();
             }
         }
+        
         $category->delete();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');

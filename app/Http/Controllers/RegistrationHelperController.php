@@ -24,12 +24,12 @@ class RegistrationHelperController extends Controller
 
         if ($search) {
             $users = $users->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%$search%")
-                    ->orWhere('calling_name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%")
-                    ->orWhere('utwente_username', 'LIKE', "%$search%")
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
                     ->orWhereHas('member', function ($q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%$search%");
+                        $q->where('proto_username', 'LIKE', "%{$search}%");
                     });
             });
         }

@@ -51,8 +51,8 @@ class SpotifyUpdate extends Command
 
                 return;
             }
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-            if ($e->getMessage() == 'The access token expired') {
+        } catch (\SpotifyWebAPI\SpotifyWebAPIException $spotifyWebAPIException) {
+            if ($spotifyWebAPIException->getMessage() == 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
                 $refreshToken = $session->getRefreshToken();
@@ -121,7 +121,7 @@ class SpotifyUpdate extends Command
                         DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => '', 'spotify_name' => 'Unknown on Spotify']);
                     } else {
                         $name = $song[0]->artists[0]->name.' - '.$song[0]->name;
-                        $this->info("Matched { $video->title } to Spotify track { $name }.");
+                        $this->info("Matched { $video->title } to Spotify track { {$name} }.");
                         DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => $song[0]->uri, 'spotify_name' => $name]);
                     }
                 } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {

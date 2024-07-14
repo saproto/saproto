@@ -74,9 +74,11 @@ class Feedback extends Model
         if (! $this->category->review) {
             return true;
         }
+        
         if ($this->reviewed) {
             return true;
         }
+        
         if ($this->category->reviewer_id === $user->id) {
             return true;
         }

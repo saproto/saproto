@@ -26,6 +26,7 @@ class EnforceWizard
             if (! $request->is('becomeamember')) {
                 return Redirect::route('becomeamember');
             }
+            
             HashMapItem::key('wizard')->subkey(Auth::user()->id)->first()->delete();
         }
 

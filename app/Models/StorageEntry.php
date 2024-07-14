@@ -170,12 +170,15 @@ class StorageEntry extends Model
         if (! $human) {
             return $size;
         }
+        
         if ($size < 1024) {
             return $size.' bytes';
         }
+        
         if ($size < pow(1024, 2)) {
             return round($size / pow(1024, 1), 1).' kilobytes';
         }
+        
         if ($size < pow(1024, 3)) {
             return round($size / pow(1024, 2), 1).' megabytes';
         }
@@ -198,7 +201,7 @@ class StorageEntry extends Model
         return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 

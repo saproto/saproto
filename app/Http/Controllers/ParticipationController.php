@@ -48,9 +48,11 @@ class ParticipationController extends Controller
             if (! $helping->committee->isMember(Auth::user())) {
                 abort(403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
             }
+            
             if ($helping->users->count() >= $helping->amount) {
                 abort(403, 'There are already enough people of your committee helping, thanks though!');
             }
+            
             $data['committees_activities_id'] = $helping->id;
         } elseif ($is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -109,6 +111,7 @@ class ParticipationController extends Controller
             if (! $helping->committee->isMember($user)) {
                 abort(403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
             }
+            
             $data['committees_activities_id'] = $helping->id;
         }
 
@@ -153,12 +156,14 @@ class ParticipationController extends Controller
 
             return Redirect::back();
         }
+        
         $notify = false;
 
         if ($participation->user->id != Auth::id()) {
             if (! Auth::user()->can('board')) {
                 abort(403);
             }
+            
             $notify = true;
         }
 
@@ -194,6 +199,7 @@ class ParticipationController extends Controller
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
+            
             $participation->delete();
             $participation->activity->event->updateUniqueUsersCount();
         }
@@ -201,6 +207,7 @@ class ParticipationController extends Controller
         if ($is_web) {
             return Redirect::back();
         }
+        
         abort(200, json_encode((object) [
             'success' => true,
             'message' => $message,

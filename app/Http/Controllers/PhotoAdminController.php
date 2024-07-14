@@ -42,6 +42,7 @@ class PhotoAdminController extends Controller
         if ($request->input('private')) {
             $album->private = true;
         }
+        
         $album->save();
 
         return Redirect::route('photo::admin::edit', ['id' => $album->id]);
@@ -77,6 +78,7 @@ class PhotoAdminController extends Controller
         } else {
             $album->private = false;
         }
+        
         $album->save();
 
         return Redirect::route('photo::admin::edit', ['id' => $id]);
@@ -100,6 +102,7 @@ class PhotoAdminController extends Controller
                 'message' => 'album already published! Unpublish to add more photos!',
             ], 500);
         }
+        
         try {
             $uploadFile = $request->file('file');
 
@@ -107,9 +110,9 @@ class PhotoAdminController extends Controller
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
 
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return response()->json([
-                'message' => $e,
+                'message' => $exception,
             ], 500);
         }
     }
@@ -137,6 +140,7 @@ class PhotoAdminController extends Controller
                     foreach ($photos as $photoId) {
                         Photo::find($photoId)->delete();
                     }
+                    
                     break;
 
                 case 'thumbnail':
@@ -149,11 +153,14 @@ class PhotoAdminController extends Controller
                         if ($album->published && $photo->private) {
                             continue;
                         }
+                        
                         $photo->private = ! $photo->private;
                         $photo->save();
                     }
+                    
                     break;
             }
+            
             $album->save();
         }
 

@@ -109,6 +109,7 @@ class Photo extends Model
             if ($this->id == $photoItem->id) {
                 return ceil($photoIndex / $paginateLimit);
             }
+            
             $photoIndex++;
         }
 
@@ -133,7 +134,7 @@ class Photo extends Model
         return $this->file->generatePath();
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 

@@ -34,6 +34,7 @@ class ExportController extends Controller
         if (! $user || ! $user->is_member || ! $user->signed_nda) {
             abort(403, 'You do not have access to this data. You need a membership of a relevant committee to access it.');
         }
+        
         $data = null;
         switch ($table) {
             case 'user':
@@ -52,6 +53,7 @@ class ExportController extends Controller
                 foreach ($data as $val) {
                     unset($val->event);
                 }
+                
                 break;
             case 'committees':
                 if ($user->can('admin')) {
@@ -62,6 +64,7 @@ class ExportController extends Controller
                         ->orWhereIn('id', array_values(config('proto.committee')))
                         ->get();
                 }
+                
                 break;
             case 'committees_activities':
                 $data = HelpingCommittee::all();
@@ -78,6 +81,7 @@ class ExportController extends Controller
                             return $event->mayViewEvent($user);
                         });
                 }
+                
                 break;
             case 'event_categories':
                 $data = EventCategory::all();

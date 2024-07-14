@@ -53,7 +53,7 @@ class SmartXpScreenController extends Controller
     {
         try {
             return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return response()->json([
                 'message' => 'OV_API not available',
             ], 503);
@@ -76,7 +76,7 @@ class SmartXpScreenController extends Controller
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return (object) ['roster' => $roster, 'occupied' => $occupied];
         }
 
@@ -88,15 +88,18 @@ class SmartXpScreenController extends Controller
             if (is_numeric($name_exp[0])) {
                 $name_exp[0] = '';
             }
+            
             $name = '';
             foreach ($name_exp as $val) {
                 $name .= $val.' ';
             }
+            
             preg_match('/Type: (.*)/', $entry->description, $type);
             $current = strtotime($start_time) < time() && strtotime($end_time) > time();
             if ($current) {
                 $occupied = true;
             }
+            
             $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))));
             $roster[$day][] = (object) [
                 'title' => $name,

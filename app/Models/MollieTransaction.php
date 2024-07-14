@@ -75,6 +75,7 @@ class MollieTransaction extends Model
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
             return 'open';
         }
+        
         if ($status == 'expired' ||
         $status == 'canceled' ||
         $status == 'failed' ||
@@ -82,6 +83,7 @@ class MollieTransaction extends Model
         $status == 'refunded') {
             return 'failed';
         }
+        
         if ($status == 'paid' || $status == 'paidout') {
             return 'paid';
         }
@@ -138,6 +140,7 @@ class MollieTransaction extends Model
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
+                    
                     $orderline->product->ticket->event->updateUniqueUsersCount();
                     $orderline->product->stock += 1;
                     $orderline->product->save();

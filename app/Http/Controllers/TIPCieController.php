@@ -39,7 +39,7 @@ class TIPCieController extends Controller
 
                 if (! array_key_exists($pid, $tipcieOrders)) {
                     $productInfo = new \stdClass();
-                    $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
+                    $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds, true)];
                     $productInfo->amount = 0;
                     $productInfo->totalPrice = 0;
                     $tipcieOrders[$pid] = $productInfo;
@@ -55,6 +55,7 @@ class TIPCieController extends Controller
                     if (! array_key_exists($time, $pinOrders)) {
                         $pinOrders[$time] = 0;
                     }
+                    
                     $pinOrders[$time] += $order->total_price;
                     $pinTotal += $order->total_price;
                 }

@@ -92,6 +92,7 @@ class Announcement extends Model
         if ($this->show_guests) {
             $flags[] = 'All guests';
         }
+        
         if ($this->show_users) {
             if ($this->show_only_new) {
                 $flags[] = 'New users';
@@ -99,6 +100,7 @@ class Announcement extends Model
                 $flags[] = 'All users';
             }
         }
+        
         if ($this->show_members) {
             if ($this->show_only_firstyear && $this->show_only_active) {
                 $flags[] = 'First-year and active members';
@@ -184,6 +186,7 @@ class Announcement extends Model
         if ($this->show_only_active && $user != null && $user->is_member && ! $user->isActiveMember()) {
             return false;
         }
+        
         // Check if not already dismissed.
         if ($this->is_dismissable && Cookie::get($this->hash_map_id)) {
             return false;

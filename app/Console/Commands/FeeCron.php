@@ -45,7 +45,7 @@ class FeeCron extends Command
     public function handle()
     {
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
-            $this->info('We don\'t charge membership fees in August or September.');
+            $this->info("We don't charge membership fees in August or September.");
 
             return 0;
         }
@@ -94,7 +94,8 @@ class FeeCron extends Command
                     $reason = 'Donor';
                     $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
                 }
-                $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - $reason";
+                
+                $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - {$reason}";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
                 $fee = config('omnomcom.fee')['regular'];
                 $email_fee = 'regular';

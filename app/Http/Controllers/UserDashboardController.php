@@ -327,6 +327,7 @@ class UserDashboardController extends Controller
 
             return Redirect::route('becomeamember');
         }
+        
         Session::flash('flash_userdata', $userdata);
 
         return view(
@@ -365,6 +366,7 @@ class UserDashboardController extends Controller
         if ($user->member?->is_pending) {
             $user->member->delete();
         }
+        
         $member = Member::create();
         $member->user()->associate($user);
         $member->is_pending = true;
@@ -391,6 +393,7 @@ class UserDashboardController extends Controller
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
+        
         if ($user->is_member) {
             abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
@@ -406,6 +409,7 @@ class UserDashboardController extends Controller
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
+        
         if ($user->is_member) {
             abort(403, 'You cannot clear your membership profile while your membership is active.');
         }

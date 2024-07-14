@@ -50,12 +50,12 @@ class UserAdminController extends Controller
 
         if ($search) {
             $users = $users->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%$search%")
-                    ->orWhere('calling_name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%")
-                    ->orWhere('utwente_username', 'LIKE', "%$search%")
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
                     ->orWhereHas('member', function ($q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%$search%");
+                        $q->where('proto_username', 'LIKE', "%{$search}%");
                     });
             });
         }
@@ -92,6 +92,7 @@ class UserAdminController extends Controller
         } else {
             $user->birthdate = null;
         }
+        
         $user->save();
 
         Session::flash('flash_message', 'User updated!');
@@ -239,6 +240,7 @@ class UserAdminController extends Controller
 
             return Redirect::back();
         }
+        
         $user->member->until = null;
         $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
@@ -361,6 +363,7 @@ class UserAdminController extends Controller
             $user->member->omnomcom_sound_id = null;
             $user->member->save();
         }
+        
         Session::flash('flash_message', 'Sound deleted');
 
         return Redirect::back();
@@ -446,6 +449,6 @@ class UserAdminController extends Controller
 
         $result = FileController::requestPrint('document', route('memberform::download', ['id' => $user->id]));
 
-        return "The printer service responded: $result";
+        return "The printer service responded: {$result}";
     }
 }

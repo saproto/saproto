@@ -37,6 +37,7 @@ class WallstreetController extends Controller
 
             return Redirect::back();
         }
+        
         $prices = $this->getLatestPrices($activeDrink);
         $sound_path = asset('sounds/kaching.mp3');
 
@@ -121,6 +122,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $drink->products()->syncWithoutDetaching($product);
         }
+        
         Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
 
         return Redirect::to(route('wallstreet::edit', ['id' => $id]));
@@ -153,6 +155,7 @@ class WallstreetController extends Controller
 
                 continue;
             }
+            
             $product->diff = ($newPrice->price - $product->price) / $product->price * 100;
             $product->price = $newPrice->price;
         }
@@ -244,6 +247,7 @@ class WallstreetController extends Controller
         } else {
             $event->image()->dissociate();
         }
+        
         $event->save();
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
@@ -285,6 +289,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             $event->products()->syncWithoutDetaching($product);
         }
+        
         Session::flash('flash_message', count($products).' Products added to Wallstreet event.');
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));

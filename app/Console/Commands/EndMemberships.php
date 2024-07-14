@@ -52,7 +52,7 @@ class EndMemberships extends Command
             }
         }
 
-        if (count($deleted) > 0) {
+        if ($deleted !== []) {
             Mail::queue((new MembershipEndedForBoard($deleted))->onQueue('high'));
         } else {
             $this->info("No users who's membership to end!");

@@ -104,6 +104,7 @@ class FeedbackController extends Controller
 
             return Redirect::back();
         }
+        
         $feedback = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->orderBy('created_at', 'desc');
 
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
@@ -117,9 +118,9 @@ class FeedbackController extends Controller
 
         $categoryTitle = str_singular($category->title);
         if ($category->review) {
-            Session::flash('flash_message', "$categoryTitle added. This first needs to be reviewed by the board so it might take some time to show up!");
+            Session::flash('flash_message', "{$categoryTitle} added. This first needs to be reviewed by the board so it might take some time to show up!");
         } else {
-            Session::flash('flash_message', "$categoryTitle added.");
+            Session::flash('flash_message', "{$categoryTitle} added.");
         }
 
         return Redirect::back();
@@ -131,7 +132,7 @@ class FeedbackController extends Controller
 
         $categoryTitle = str_singular($feedback->category->title);
         if (! Auth::user()->can('board')) {
-            Session::flash('flash_message', "You are not allowed to reply to this $categoryTitle.");
+            Session::flash('flash_message', "You are not allowed to reply to this {$categoryTitle}.");
 
             return Redirect::back();
         }
@@ -149,7 +150,7 @@ class FeedbackController extends Controller
         $feedback->save();
 
         $acceptText = $accepted ? 'accepted' : 'rejected';
-        Session::flash('flash_message', "You have $acceptText this $categoryTitle with a reply.");
+        Session::flash('flash_message', "You have {$acceptText} this {$categoryTitle} with a reply.");
 
         return Redirect::back();
     }
@@ -160,7 +161,7 @@ class FeedbackController extends Controller
         $categoryTitle = str_singular($feedback->category->title);
 
         if (! Auth::user()->can('board')) {
-            Session::flash('flash_message', "You are not allowed to archive this $categoryTitle.");
+            Session::flash('flash_message', "You are not allowed to archive this {$categoryTitle}.");
 
             return Redirect::back();
         }
@@ -199,6 +200,7 @@ class FeedbackController extends Controller
 
             return Redirect::back();
         }
+        
         if (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
@@ -250,6 +252,7 @@ class FeedbackController extends Controller
 
             return Redirect::back();
         }
+        
         $feedback->reviewed = true;
         $feedback->save();
         Session::flash('flash_message', 'Feedback Approved to be public!');
@@ -336,6 +339,7 @@ class FeedbackController extends Controller
                 $item->category()->dissociate();
             }
         }
+        
         $category->delete();
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');

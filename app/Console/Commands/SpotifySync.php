@@ -53,8 +53,8 @@ class SpotifySync extends Command
 
                 return;
             }
-        } catch (SpotifyWebAPIException $e) {
-            if ($e->getMessage() == 'The access token expired') {
+        } catch (SpotifyWebAPIException $spotifyWebAPIException) {
+            if ($spotifyWebAPIException->getMessage() == 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
                 $refreshToken = $session->getRefreshToken();
@@ -125,8 +125,8 @@ class SpotifySync extends Command
 
         try {
             $spotify->replacePlaylistTracks($playlistId, $spotifyUris);
-        } catch (SpotifyWebAPIException $e) {
-            $this->error('Error updating playlist '.$playlistId.': '.$e->getMessage());
+        } catch (SpotifyWebAPIException $spotifyWebAPIException) {
+            $this->error('Error updating playlist '.$playlistId.': '.$spotifyWebAPIException->getMessage());
 
             return;
         }

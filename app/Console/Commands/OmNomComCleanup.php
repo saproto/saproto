@@ -48,6 +48,6 @@ class OmNomComCleanup extends Command
             ->where('created_at', '<', date('Y-m-d', strtotime('-7 years')))
             ->update(['user_id' => null]);
 
-        $this->info("Found and anonymised $affected orderlines.");
+        $this->info("Found and anonymised {$affected} orderlines.");
     }
 }

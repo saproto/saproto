@@ -32,7 +32,8 @@ class QueryController extends Controller
             } else {
                 $year_start = intval(date('Y')) - 1;
             }
-            $start = strtotime("$year_start-09-01 00:00:01");
+            
+            $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
             $start = strtotime($request->start);
@@ -99,12 +100,15 @@ class QueryController extends Controller
                         ];
                     }
                 }
+                
                 if ($member->is_lifelong) {
                     $count_lifelong++;
                 }
+                
                 if ($member->is_honorary) {
                     $count_honorary++;
                 }
+                
                 if ($member->is_donor) {
                     $count_donor++;
                 }
@@ -131,6 +135,7 @@ class QueryController extends Controller
                 }
             }
         }
+        
         if ($request->has('export_subsidies')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
@@ -173,7 +178,8 @@ class QueryController extends Controller
             } else {
                 $year_start = intval(date('Y')) - 1;
             }
-            $start = strtotime("$year_start-09-01 00:00:01");
+            
+            $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
             $start = strtotime($request->start);

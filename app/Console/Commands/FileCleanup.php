@@ -49,6 +49,6 @@ class FileCleanup extends Command
             }
         }
 
-        $this->info("Found and deleted $count orphaned files.");
+        $this->info("Found and deleted {$count} orphaned files.");
     }
 }

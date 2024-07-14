@@ -289,12 +289,15 @@ class Event extends Model
         if ($user->can('board')) {
             return true;
         }
+        
         if (date('U') > $this->end) {
             return false;
         }
+        
         if (! $this->activity) {
             return false;
         }
+        
         $eroHelping = HelpingCommittee::query()
             ->where('activity_id', $this->activity->id)
             ->where('committee_id', config('proto.committee')['ero'])->first();
@@ -324,6 +327,7 @@ class Event extends Model
         foreach ($this->tickets as $ticket) {
             $users = $users->merge($ticket->getUsers());
         }
+        
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
                 return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
@@ -382,7 +386,7 @@ class Event extends Model
         ];
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 

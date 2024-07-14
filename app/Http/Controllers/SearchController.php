@@ -125,16 +125,18 @@ class SearchController extends Controller
             if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
                 abort(400, 'You cannot use special characters in your search query.');
             }
+            
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
                 $search = '&';
                 foreach ($terms as $term) {
                     if (Auth::user()->can('board')) {
-                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(userPrincipalName={$term}@utwente.nl)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
                     } else {
-                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
                     }
                 }
+                
                 $data = LdapController::searchUtwente($search, true);
             } else {
                 Session::flash('flash_message', 'Please make your search term more than three characters.');
@@ -221,6 +223,7 @@ class SearchController extends Controller
             if (strlen(str_replace('%', '', $term)) < 3) {
                 continue;
             }
+            
             $check_at_least_one_valid_term = true;
         }
 
@@ -234,6 +237,7 @@ class SearchController extends Controller
                     if (strlen(str_replace('%', '', $term)) < 3) {
                         continue;
                     }
+                    
                     $query = $query->where($attr, 'LIKE', sprintf('%%%s%%', $term));
                 }
             });

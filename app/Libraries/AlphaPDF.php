@@ -32,11 +32,12 @@ class AlphaPDF extends tFpdf
         $this->_out(sprintf('/GS%d gs', $gs));
     }
 
-    public function _enddoc()
+    protected function _enddoc()
     {
         if (! empty($this->extgstates) && $this->PDFVersion < '1.4') {
             $this->PDFVersion = '1.4';
         }
+        
         parent::_enddoc();
     }
 
@@ -55,17 +56,18 @@ class AlphaPDF extends tFpdf
         }
     }
 
-    public function _putresourcedict()
+    protected function _putresourcedict()
     {
         parent::_putresourcedict();
         $this->_put('/ExtGState <<');
         foreach ($this->extgstates as $k => $extgstate) {
             $this->_put('/GS'.$k.' '.$extgstate['n'].' 0 R');
         }
+        
         $this->_put('>>');
     }
 
-    public function _putresources()
+    protected function _putresources()
     {
         $this->_putextgstates();
         parent::_putresources();

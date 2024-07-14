@@ -37,17 +37,21 @@ class PhotoManager extends Model
         if (! $include_private) {
             $base = $base->where('private', '=', false);
         }
+        
         if ($query) {
             $base = $base->where('name', 'LIKE', '%'.$query.'%');
         }
+        
         if ($unpublished) {
             $base = $base->where('published', '=', false);
         } else {
             $base = $base->where('published', '=', true);
         }
+        
         if (! $no_thumb) {
             $base = $base->where('thumb_id', '!=', 'null');
         }
+        
         if ($max != 0) {
             return $base->paginate($max);
         }
@@ -68,6 +72,7 @@ class PhotoManager extends Model
         if (! $include_private) {
             $album->where('private', '=', false);
         }
+        
         $album = $album->get();
 
         if ($album->count() == 0) {
@@ -79,6 +84,7 @@ class PhotoManager extends Model
         if (! $include_private) {
             $items = $items->where('private', '=', false);
         }
+        
         $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc');
         if ($max != 0) {
             $items = $items->paginate($max);
@@ -148,6 +154,7 @@ class PhotoManager extends Model
         foreach ($photos as $photo) {
             $photo->delete();
         }
+        
         $album->delete();
     }
 }

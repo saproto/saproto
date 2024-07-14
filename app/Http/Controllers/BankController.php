@@ -128,16 +128,19 @@ class BankController extends Controller
 
             return Redirect::route('user::dashboard');
         }
+        
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
 
             return Redirect::back();
         }
+        
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
 
             return Redirect::back();
         }
+        
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');
@@ -178,7 +181,7 @@ class BankController extends Controller
 
         if (! iban_country_is_sepa(iban_get_country_part($response->iban))) {
             $response->status = false;
-            $response->message = 'Your bank is not a member of SEPA (Single Euro Payments Area) so you can\'t use this bank account here. Please try another one.';
+            $response->message = "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use this bank account here. Please try another one.";
 
             return $response;
         }
@@ -196,7 +199,7 @@ class BankController extends Controller
 
                 return $response;
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Something went wrong retrieving your BIC.';

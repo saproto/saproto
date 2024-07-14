@@ -175,7 +175,7 @@ class MenuController extends Controller
         $menuItem = MenuItem::findOrfail($id);
 
         if ($menuItem->children->count() > 0) {
-            Session::flash('flash_message', 'A menu item with children can\'t be removed.');
+            Session::flash('flash_message', "A menu item with children can't be removed.");
 
             return Redirect::route('menu::list');
         }

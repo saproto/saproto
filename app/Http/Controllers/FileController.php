@@ -115,8 +115,8 @@ class FileController extends Controller
         $result = null;
         try {
             $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
-        } catch (\Exception $e) {
-            return 'Exception while connecting to the printer server: '.$e->getMessage();
+        } catch (\Exception $exception) {
+            return 'Exception while connecting to the printer server: '.$exception->getMessage();
         }
 
         return $result !== false ? $result : 'Something went wrong while connecting to the printer server.';

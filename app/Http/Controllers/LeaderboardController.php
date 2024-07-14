@@ -24,6 +24,7 @@ class LeaderboardController extends Controller
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
+        
         Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
 
         return Redirect::back();
@@ -120,6 +121,7 @@ class LeaderboardController extends Controller
             if ($request->has('featured') && Leaderboard::where('featured', true)->first() != null) {
                 Leaderboard::where('featured', true)->update(['featured' => false]);
             }
+            
             $leaderboard->featured = $request->has('featured');
             $committee = Committee::findOrFail($request->input('committee'));
             if ($committee != $leaderboard->committee) {

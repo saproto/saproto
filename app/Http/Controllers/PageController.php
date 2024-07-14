@@ -57,13 +57,13 @@ class PageController extends Controller
         }
 
         if (in_array($request->slug, $this->reservedSlugs)) {
-            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+            Session::flash('flash_message', "This URL has been reserved and can't be used. Please choose a different URL.");
 
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
         if (Page::where('slug', $page->slug)->exists()) {
-            Session::flash('flash_message', 'This URL has already been used and can\'t be used again. Please choose a different URL.');
+            Session::flash('flash_message', "This URL has already been used and can't be used again. Please choose a different URL.");
 
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
@@ -115,7 +115,7 @@ class PageController extends Controller
         $page = Page::findOrFail($id);
 
         if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->exists()) {
-            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+            Session::flash('flash_message', "This URL has been reserved and can't be used. Please choose a different URL.");
 
             return view('pages.edit', ['item' => $request, 'new' => false]);
         }
@@ -135,7 +135,7 @@ class PageController extends Controller
         }
 
         if (in_array($request->slug, $this->reservedSlugs)) {
-            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+            Session::flash('flash_message', "This URL has been reserved and can't be used. Please choose a different URL.");
 
             return view('pages.edit', ['item' => $page, 'new' => false]);
         }
@@ -183,6 +183,7 @@ class PageController extends Controller
         } else {
             $page->featuredImage()->dissociate();
         }
+        
         $page->save();
 
         return Redirect::route('page::edit', ['id' => $id]);

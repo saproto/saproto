@@ -82,6 +82,7 @@ class EmailList extends Model
         if ($s == null) {
             return false;
         }
+        
         $s->delete();
 
         return true;

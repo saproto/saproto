@@ -40,6 +40,7 @@ class ActivityController extends Controller
 
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
+        
         if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
@@ -131,6 +132,7 @@ class ActivityController extends Controller
         if (! Auth::check() || ! (Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
             abort(403, 'You may not see this page.');
         }
+        
         if (! $event->activity) {
             abort(404, 'This event has no activity.');
         }
@@ -190,6 +192,7 @@ class ActivityController extends Controller
         $amount = $request->input('amount');
 
         $help->amount = ($amount > 0 ? $amount : $help->amount);
+        
         $help->notification_sent = false;
         $help->save();
 

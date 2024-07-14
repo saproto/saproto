@@ -462,9 +462,11 @@ class WithdrawalController extends Controller
 
                 continue;
             }
+            
             if ($orderline->user->bank) {
                 continue;
             }
+            
             if (! in_array($orderline->user->id, array_keys($users))) {
                 $users[$orderline->user->id] = (object) [
                     'user' => $orderline->user,
@@ -488,6 +490,7 @@ class WithdrawalController extends Controller
             if ($orderline->isPayed()) {
                 continue;
             }
+            
             $sum += $orderline->total_price;
         }
 
@@ -502,6 +505,7 @@ class WithdrawalController extends Controller
             if ($orderline->isPayed()) {
                 continue;
             }
+            
             $total++;
         }
 

@@ -101,6 +101,7 @@ class OrderLineController extends Controller
         } else {
             $orderlines = OrderLine::whereDate('created_at', Carbon::today());
         }
+        
         $orderlines = $orderlines->with('user', 'product')->orderBy('created_at', 'desc')->paginate(20);
 
         return view('omnomcom.orders.adminhistory', [

@@ -145,7 +145,7 @@ class AchievementsCron extends Command
         foreach (array_keys($achievements) as $id) {
             if (! in_array($id, $existing)) {
                 unset($achievements[$id]);
-                $this->error("Achievement #$id does not exist, not granting this achievement.");
+                $this->error("Achievement #{$id} does not exist, not granting this achievement.");
             }
         }
 
@@ -271,8 +271,10 @@ class AchievementsCron extends Command
                 } else {
                     $diff = Carbon::now()->diff($membership->created_at);
                 }
+                
                 $days += $diff->days;
             }
+            
             if ($days >= 1095) {
                 return true;
             }
@@ -322,6 +324,7 @@ class AchievementsCron extends Command
         if ($this->notFirstOfMonth()) {
             return false;
         }
+        
         if ($possibleSignups < 5) {
             return false;
         }

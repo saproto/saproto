@@ -148,7 +148,7 @@ class Dinnerform extends Model
     }
 
     /** Delete related orders with dinnerform. */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
         static::deleting(function ($dinnerform) {

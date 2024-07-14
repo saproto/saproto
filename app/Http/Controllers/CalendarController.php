@@ -17,7 +17,7 @@ class CalendarController extends Controller
         try {
             $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return [];
         }
 
@@ -32,10 +32,12 @@ class CalendarController extends Controller
             } else {
                 $name = '(no name)';
             }
+            
             $name_exp = explode(' ', $name);
             if (is_numeric($name_exp[0])) {
                 $name_exp[0] = '';
             }
+            
             $name = '';
             foreach ($name_exp as $val) {
                 $name .= $val.' ';

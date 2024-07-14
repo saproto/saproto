@@ -31,12 +31,12 @@ return [
             'description' => 'Gives access to the relevant tools for drafters.',
         ],
         'alfred' => (object) [
-            'display_name' => 'Alfred\'s Workshop',
+            'display_name' => "Alfred's Workshop",
             'description' => 'Manages OmNomCom for workshop functionality.',
         ],
         'header-image' => (object) [
             'display_name' => 'Update Header Image',
-            'description' => 'Allows updating the site\'s header images.',
+            'description' => "Allows updating the site's header images.",
         ],
         'protography' => (object) [
             'display_name' => 'Photo Access',

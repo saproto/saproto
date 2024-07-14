@@ -25,6 +25,7 @@ class CompanyController extends Controller
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         }
+        
         Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
 
         return Redirect::back();
@@ -41,6 +42,7 @@ class CompanyController extends Controller
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         }
+        
         Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
 
         return Redirect::back();

@@ -37,14 +37,16 @@ class SpotifyController extends Controller
 
             return Redirect::to($session->getAuthorizeUrl($options));
         }
+        
         $session->requestAccessToken($request->get('code'));
         $api->setAccessToken($session->getAccessToken());
         /** @phpstan-ignore-next-line */
         $spotify_user = $api->me()->id;
         $right_user = config('app-proto.spotify-user');
         if ($spotify_user != $right_user) {
-            abort(404, "You authenticated as the wrong user. (Authenticated as $spotify_user but should authenticate as $right_user.)");
+            abort(404, "You authenticated as the wrong user. (Authenticated as {$spotify_user} but should authenticate as {$right_user}.)");
         }
+        
         self::setSession($session);
         self::setApi($api);
         Session::flash('flash_message', 'Successfully saved Spotify credentials.');
@@ -61,6 +63,7 @@ class SpotifyController extends Controller
                 'subkey' => 'session',
             ]);
         }
+        
         $dbSession->value = serialize($session);
         $dbSession->save();
     }
@@ -74,6 +77,7 @@ class SpotifyController extends Controller
                 'subkey' => 'api',
             ]);
         }
+        
         $dbApi->value = serialize($api);
         $dbApi->save();
     }

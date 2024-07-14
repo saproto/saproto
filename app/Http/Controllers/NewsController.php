@@ -133,6 +133,7 @@ class NewsController extends Controller
             $newsitem->title = 'Weekly update for week '.date('W').' of '.date('Y').'.';
             $newsitem->published_at = null;
         }
+        
         $newsitem->save();
 
         $newsitem->events()->sync($request->input('event'));
@@ -144,6 +145,7 @@ class NewsController extends Controller
             $file->save();
             $newsitem->featuredImage()->associate($file);
         }
+        
         $newsitem->save();
 
         return $this->edit($newsitem->id);
@@ -172,6 +174,7 @@ class NewsController extends Controller
         if (! Auth::user()->can('board')) {
             abort(403, 'Only the board can do this.');
         }
+        
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
         $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);

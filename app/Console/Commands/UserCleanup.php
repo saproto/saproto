@@ -44,10 +44,11 @@ class UserCleanup extends Command
             if (! $user->isStale()) {
                 continue;
             }
+            
             $count++;
             $user->forceDelete();
         }
 
-        $this->info("Found and deleted $count stale users.");
+        $this->info("Found and deleted {$count} stale users.");
     }
 }

@@ -39,6 +39,7 @@ class ProfilePictureController extends Controller
 
             return Redirect::back();
         }
+        
         Session::flash('flash_message', 'Your profile picture has been updated!');
 
         return Redirect::back();

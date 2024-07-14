@@ -130,6 +130,7 @@ class OrderLine extends Model
         if ($this->payed_with_loss) {
             return 'Loss';
         }
+        
         if ($this->payed_with_withdrawal !== null) {
             return "Withdrawal <a href='".
                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
@@ -137,12 +138,15 @@ class OrderLine extends Model
                 $this->payed_with_withdrawal.
                 '</a>';
         }
+        
         if ($this->payed_with_cash !== null) {
             return 'Cash';
         }
+        
         if ($this->payed_with_bank_card !== null) {
             return 'Bank Card';
         }
+        
         if ($this->payed_with_mollie !== null) {
             switch ($this->molliePayment->translatedStatus()) {
                 case 'paid':

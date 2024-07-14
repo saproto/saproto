@@ -52,7 +52,7 @@ class PlayedVideo extends Model
      */
     public static function generateYoutubeThumbnail(string $youtube_id)
     {
-        return "https://img.youtube.com/vi/$youtube_id/mqdefault.jpg";
+        return "https://img.youtube.com/vi/{$youtube_id}/mqdefault.jpg";
     }
 
     /**
@@ -62,7 +62,7 @@ class PlayedVideo extends Model
     {
         $spotify_id = str_replace('spotify:track:', '', $spotify_id);
 
-        return "https://open.spotify.com/track/$spotify_id";
+        return "https://open.spotify.com/track/{$spotify_id}";
     }
 
     /**
@@ -70,6 +70,6 @@ class PlayedVideo extends Model
      */
     public static function generateYoutubeUrl(string $youtube_id)
     {
-        return "https://www.youtube.com/watch?v=$youtube_id";
+        return "https://www.youtube.com/watch?v={$youtube_id}";
     }
 }

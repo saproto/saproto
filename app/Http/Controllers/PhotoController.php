@@ -31,6 +31,7 @@ class PhotoController extends Controller
 
             return Redirect::back();
         }
+        
         $photos = PhotoManager::getPhotos($id, 24);
 
         if ($photos) {
@@ -52,6 +53,7 @@ class PhotoController extends Controller
         if ($photo != null) {
             return view('photos.photopage', ['photo' => $photo]);
         }
+        
         abort(404, 'Photo not found.');
     }
 
