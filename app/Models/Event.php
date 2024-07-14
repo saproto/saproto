@@ -109,9 +109,14 @@ class Event extends Model
      */
     public static function fromPublicId($public_id)
     {
+        return self::findOrFail(self::getIdFromPublicId($public_id));
+    }
+
+    public static function getIdFromPublicId($public_id)
+    {
         $id = Hashids::connection('event')->decode($public_id);
 
-        return self::findOrFail(count($id) > 0 ? $id[0] : 0);
+        return count($id) > 0 ? $id[0] : 0;
     }
 
     /** @return BelongsTo */
@@ -149,6 +154,7 @@ class Event extends Model
     {
         return Event::query()
             ->orderBy('start')
+            ->with('image')
             ->with('activity', function ($e) {
                 $e->withCount([
                     'users',
