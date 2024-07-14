@@ -59,7 +59,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function details($id)
@@ -71,7 +71,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -90,7 +90,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function impersonate($id)
@@ -98,11 +98,11 @@ class UserAdminController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($id);
 
-        if (! Auth::user()->can('sysadmin')) {
+        if (!Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
                 /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
-                    if (! Auth::user()->can($permission->name)) {
+                    if (!Auth::user()->can($permission->name)) {
                         abort(403, 'You may not impersonate this person.');
                     }
                 }
@@ -133,7 +133,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function addMembership($id, Request $request)
@@ -147,7 +147,7 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        if (! ($user->address && $user->bank)) {
+        if (!($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
 
             return Redirect::back();
@@ -177,7 +177,7 @@ class UserAdminController extends Controller
         // Disabled because ProTube is down.
         // Removed; Here should the playsound new-member be played
 
-        Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
+        Session::flash('flash_message', 'Congratulations! ' . $user->name . ' is now our newest member!');
 
         return Redirect::back();
     }
@@ -186,7 +186,7 @@ class UserAdminController extends Controller
      * Adds membership end date to member object.
      * Member object will be removed by cron job on end date.
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      */
@@ -199,7 +199,7 @@ class UserAdminController extends Controller
 
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
-        Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
+        Session::flash('flash_message', 'Membership of ' . $user->name . ' has been terminated.');
 
         return Redirect::back();
     }
@@ -207,13 +207,13 @@ class UserAdminController extends Controller
     public function EndMembershipInSeptember($id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
             return Redirect::back();
         }
 
-        $user->member->until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->until = Carbon::parse('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
@@ -224,7 +224,7 @@ class UserAdminController extends Controller
     public function removeMembershipEnd($id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
             return Redirect::back();
@@ -238,11 +238,11 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function setMembershipType(Request $request, $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
         }
 
@@ -256,32 +256,32 @@ class UserAdminController extends Controller
         $member->is_pet = $type == 'pet';
         $member->save();
 
-        Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
+        Session::flash('flash_message', $user->name . ' is now a ' . $type . ' member.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function toggleNda($id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
         }
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->signed_nda = ! $user->signed_nda;
+        $user->signed_nda = !$user->signed_nda;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
+        Session::flash('flash_message', 'Toggled NDA status of ' . $user->name . '. Please verify if it is correct.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function unblockOmnomcom($id): RedirectResponse
     {
@@ -290,37 +290,37 @@ class UserAdminController extends Controller
         $user->disable_omnomcom = false;
         $user->save();
 
-        Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
+        Session::flash('flash_message', 'OmNomCom unblocked for ' . $user->name . '.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function toggleStudiedCreate($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->did_study_create = ! $user->did_study_create;
+        $user->did_study_create = !$user->did_study_create;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
+        Session::flash('flash_message', 'Toggled CreaTe status of ' . $user->name . '.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function toggleStudiedITech($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->did_study_itech = ! $user->did_study_itech;
+        $user->did_study_itech = !$user->did_study_itech;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+        Session::flash('flash_message', 'Toggled ITech status of ' . $user->name . '.');
 
         return Redirect::back();
     }
@@ -363,7 +363,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
+        if ($user->id != $member->user_id && !$user->can('registermembers')) {
             abort(403);
         }
 
@@ -373,7 +373,7 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return string
      */
     public function getNewMemberForm($id)
@@ -401,12 +401,12 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function destroyMemberForm($id)
     {
-        if ((! Auth::check() || ! Auth::user()->can('board'))) {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
             abort(403);
         }
 
@@ -415,19 +415,19 @@ class UserAdminController extends Controller
 
         $member->forceDelete();
 
-        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+        Session::flash('flash_message', 'The digital membership form of ' . $user->name . ' signed on ' . $member->created_at . 'has been deleted!');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      */
     public function printMemberForm($id): string
     {
         $user = User::query()->find($id);
 
-        if (! $user) {
+        if (!$user) {
             return 'This user could not be found!';
         }
 

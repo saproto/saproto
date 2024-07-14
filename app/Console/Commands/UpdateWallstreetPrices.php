@@ -25,7 +25,7 @@ class UpdateWallstreetPrices extends Command
      */
     protected $description = 'Update the prices when a wallstreet drink is active';
 
-    protected $maxPriceMultiplier = 1.2;
+    protected float $maxPriceMultiplier = 1.2;
 
     /**
      * Create a new command instance.
@@ -49,12 +49,12 @@ class UpdateWallstreetPrices extends Command
 
             return 0;
         }
-
-        foreach ($currentDrink->products as $product) {
+        /** @var WallstreetDrink $currentDrink */
+        foreach ($currentDrink->products() as $product) {
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
-                $this->info('No price found for product '.$product->id.' creating new price object with current price ('.$product->price.') for drink '.$currentDrink->id);
+                $this->info('No price found for product ' . $product->id . ' creating new price object with current price (' . $product->price . ') for drink ' . $currentDrink->id);
                 $latestPrice = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
@@ -75,7 +75,7 @@ class UpdateWallstreetPrices extends Command
                     'price' => min($latestPrice->price + $delta, $product->price * $this->maxPriceMultiplier),
                 ]);
                 $newPriceObject->save();
-                $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
+                $this->info($product->id . ' has ' . $newOrderlines . ' new orderlines, increasing price by ' . $delta . ' to ' . $newPriceObject->price);
 
                 continue;
             }
@@ -90,10 +90,10 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
+                $this->info($product->id . ' has no new orderlines, lowering price by ' . $currentDrink->price_decrease . ' to ' . $newPriceObject->price);
 
             } else {
-                $this->info($product->id.' has no new orderlines and the price is already the minimum price');
+                $this->info($product->id . ' has no new orderlines and the price is already the minimum price');
             }
         }
 
@@ -103,10 +103,11 @@ class UpdateWallstreetPrices extends Command
 
         //chance of 1 in random_events_chance (so about every random_events_chance minutes that a random event is triggered)
         if ($currentDrink->random_events_chance > 0 && $randomEventQuery->count() > 0 && random_int(1, $currentDrink->random_events_chance) === 1) {
+            /** @var WallstreetEvent $randomEvent */
             $randomEvent = $randomEventQuery->first();
-            $this->info('Random event '.$randomEvent->name.' triggered');
+            $this->info('Random event ' . $randomEvent->name . ' triggered');
             $currentDrink->events()->attach($randomEvent->id);
-            foreach ($randomEvent->products->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
+            foreach ($randomEvent->products()->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
                 $delta = ($randomEvent->percentage / 100) * $product->price;
                 $newPriceObject = new WallstreetPrice([

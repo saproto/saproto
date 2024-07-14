@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -7,10 +8,8 @@ class Makeactivityeventidnullable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('activities', function (Blueprint $table) {
             $table->integer('event_id')->nullable()->default(null)->change();
@@ -19,10 +18,8 @@ class Makeactivityeventidnullable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         // We cannot undo nullable in Laravel migrations... :')
     }

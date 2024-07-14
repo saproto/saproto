@@ -58,8 +58,7 @@ class MollieTransaction extends Model
         return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
-    /** @return MollieTransaction */
-    public function transaction()
+    public function transaction(): MollieTransaction
     {
         return Mollie::api()
             ->payments()
@@ -67,19 +66,19 @@ class MollieTransaction extends Model
     }
 
     /**
-     * @param  string  $status
+     * @param string $status
      */
-    public static function translateStatus($status): string
+    public static function translateStatus(string $status): string
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
             return 'open';
         }
 
         if ($status == 'expired' ||
-        $status == 'canceled' ||
-        $status == 'failed' ||
-        $status == 'charged_back' ||
-        $status == 'refunded') {
+            $status == 'canceled' ||
+            $status == 'failed' ||
+            $status == 'charged_back' ||
+            $status == 'refunded') {
             return 'failed';
         }
 
@@ -130,8 +129,8 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    ! $orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
+                    !$orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
@@ -150,7 +149,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
+                if ($orderline->ticketPurchase && !$orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }

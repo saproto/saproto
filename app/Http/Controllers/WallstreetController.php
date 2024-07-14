@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Response;
 use App\Models\OrderLine;
 use App\Models\StorageEntry;
@@ -32,7 +34,7 @@ class WallstreetController extends Controller
     {
         $activeDrink = WallstreetController::active();
 
-        if (! $activeDrink) {
+        if (!$activeDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
 
             return Redirect::back();
@@ -106,6 +108,7 @@ class WallstreetController extends Controller
 
     public function close($id): RedirectResponse
     {
+        /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
         $drink->end_time = time();
         $drink->save();
@@ -116,6 +119,7 @@ class WallstreetController extends Controller
 
     public function addProducts($id, Request $request)
     {
+        /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
         $products = $request->input('product');
         $products = array_unique($products);
@@ -123,13 +127,14 @@ class WallstreetController extends Controller
             $drink->products()->syncWithoutDetaching($product);
         }
 
-        Session::flash('flash_message', count($products).' Products added to Wallstreet drink.');
+        Session::flash('flash_message', count($products) . ' Products added to Wallstreet drink.');
 
         return Redirect::to(route('wallstreet::edit', ['id' => $id]));
     }
 
     public function removeProduct($id, $productId)
     {
+        /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
         $drink->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet drink.');
@@ -146,10 +151,11 @@ class WallstreetController extends Controller
     {
         $products = $drink->products()->select('name', 'price', 'id', 'image_id')->get();
         foreach ($products as $product) {
+            /** @var Product $product */
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::query()->where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if (! $newPrice || $product->price === 0) {
+            if (!$newPrice || $product->price === 0) {
                 $product->price = $newPrice->price ?? $product->price;
                 $product->diff = 0;
 
@@ -176,7 +182,7 @@ class WallstreetController extends Controller
 
     public function getLoss(WallstreetDrink $drink)
     {
-        $productIDs = $drink->products->pluck('id');
+        $productIDs = $drink->products()->pluck('id');
 
         return OrderLine::query()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')
@@ -213,6 +219,9 @@ class WallstreetController extends Controller
         return view('wallstreet.admin_includes.wallstreetdrink-events', ['allEvents' => $allEvents, 'currentEvent' => null]);
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     public function addEvent(Request $request)
     {
         $event = new WallstreetEvent();
@@ -233,9 +242,13 @@ class WallstreetController extends Controller
         return Redirect::to(route('wallstreet::events::edit', ['id' => $event->id]));
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     public function updateEvent(Request $request, int $id)
     {
         $event = WallstreetEvent::query()->findOrFail($id);
+        /** @var WallstreetEvent $event */
         $event->name = $request->input('title');
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
@@ -264,6 +277,7 @@ class WallstreetController extends Controller
     public function destroyEvent($id)
     {
         $currentEvent = WallstreetEvent::query()->findOrFail($id);
+        /** @var WallstreetEvent $currentEvent */
         $currentEvent->products()->detach();
         $currentEvent->image()->dissociate();
         $currentEvent->save();
@@ -275,7 +289,8 @@ class WallstreetController extends Controller
     public function toggleEvent(Request $request)
     {
         $event = WallstreetEvent::query()->findOrFail($request->input('id'));
-        $event->active = ! $event->active;
+        /** @var WallstreetEvent $event */
+        $event->active = !$event->active;
         $event->save();
 
         return Response::json(['active' => $event->active, 'id' => $event->id]);
@@ -284,13 +299,14 @@ class WallstreetController extends Controller
     public function addEventProducts($id, Request $request)
     {
         $event = WallstreetEvent::query()->findOrFail($id);
+        /** @var WallstreetEvent $event */
         $products = $request->input('product');
         $products = array_unique($products);
         foreach ($products as $product) {
             $event->products()->syncWithoutDetaching($product);
         }
 
-        Session::flash('flash_message', count($products).' Products added to Wallstreet event.');
+        Session::flash('flash_message', count($products) . ' Products added to Wallstreet event.');
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
     }
@@ -298,6 +314,7 @@ class WallstreetController extends Controller
     public function removeEventProduct($id, $productId)
     {
         $event = WallstreetEvent::query()->findOrFail($id);
+        /** @var WallstreetEvent $event */
         $event->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet Event.');
 

@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 class AddPrintFile extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('files', function ($table) {
             $table->boolean('is_print_file')->default(false);
@@ -18,10 +17,8 @@ class AddPrintFile extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('files', function ($table) {
             $table->dropColumn('is_print_file');

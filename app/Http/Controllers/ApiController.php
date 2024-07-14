@@ -92,18 +92,18 @@ class ApiController extends Controller
             $query->where('published', true)->where('private', false);
         });
 
-        if (! $privateQuery->count()) {
+        if (!$privateQuery->count()) {
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
         $random = random_int(1, 100);
         if ($random <= 30) { //30% chance the photo is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
-        } elseif ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
+        } elseif ($random <= 55) { //25% chance the photo is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
-        } elseif ($random > 55 && $random <= 70) {//15% chance the photo is from two years ago
+        } elseif ($random <= 70) {//15% chance the photo is from two years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
-        } elseif ($random > 70 && $random <= 80) {//10% chance the photo is from three years ago
+        } elseif ($random <= 80) {//10% chance the photo is from three years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
         } else {//20% chance the photo is older than 4 years
             $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
@@ -112,7 +112,7 @@ class ApiController extends Controller
         $photo = $query->inRandomOrder()->with('album')->first();
 
         //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
-        if (! $photo) {
+        if (!$photo) {
             $photo = $privateQuery->inRandomOrder()->with('album')->first();
         }
 
@@ -232,11 +232,11 @@ class ApiController extends Controller
     {
         $user = User::query()->firstWhere('discord_id', $userId);
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
         }
 
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }
 

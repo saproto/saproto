@@ -59,19 +59,19 @@ class Committee extends Model
     protected $with = ['image'];
 
     /** @return string */
-    public function getPublicId()
+    public function getPublicId(): string
     {
         return $this->slug;
     }
 
     /** @return Committee */
-    public static function fromPublicId($public_id)
+    public static function fromPublicId($public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
 
     /** @return BelongsToMany */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
             ->where(static function ($query) {
@@ -85,28 +85,22 @@ class Committee extends Model
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsTo */
-    public function image()
+    public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    /** @return Builder|\LaravelIdea\Helper\App\Models\_IH_Event_QB */
-    public function organizedEvents()
+    public function organizedEvents(): Builder
     {
         return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
     public function getEmailAddressAttribute(): string
     {
-        return $this->slug.'@'.config('proto.emaildomain');
+        return $this->slug . '@' . config('proto.emaildomain');
     }
 
-    /**
-     * @param  int  $n  the number of events to return
-     * @return Event[]|Collection|_IH_Event_C
-     */
-    public function pastEvents(int $n)
+    public function pastEvents(int $n): Collection
     {
         $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
 
@@ -117,8 +111,7 @@ class Committee extends Model
         return $events->where('secret', '=', 0)->get();
     }
 
-    /** @return Collection|Event[] */
-    public function upcomingEvents()
+    public function upcomingEvents(): Collection
     {
         $events = $this->organizedEvents()->where('end', '>', time());
 
@@ -130,10 +123,10 @@ class Committee extends Model
     }
 
     /**
-     * @param  bool  $includeSecret
+     * @param bool $includeSecret
      * @return Event[]
      */
-    public function helpedEvents($includeSecret = false): array
+    public function helpedEvents(bool $includeSecret = false): array
     {
         /** @var Activity[] $activities */
         $activities = $this->belongsToMany(Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
@@ -141,7 +134,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (!$event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -149,7 +142,7 @@ class Committee extends Model
         return $events;
     }
 
-    public function pastHelpedEvents($n)
+    public function pastHelpedEvents($n): Collection
     {
         return Event::query()->whereHas('activity', function ($q) {
             $q->whereHas('helpingCommittees', function ($q) {
@@ -181,7 +174,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-            (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;
@@ -194,10 +187,10 @@ class Committee extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember($user): bool
+    public function isMember(User $user): bool
     {
         return $user->isInCommittee($this);
     }

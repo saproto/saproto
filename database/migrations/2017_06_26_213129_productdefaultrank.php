@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 class Productdefaultrank extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('products_categories', function ($table) {
             $table->unsignedInteger('rank')->nullable(false)->default(0)->change();
@@ -18,10 +17,8 @@ class Productdefaultrank extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('products_categories', function ($table) {
             $table->unsignedInteger('rank')->nullable(false)->default(1)->change();

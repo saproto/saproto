@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
+use Ramsey\Collection\Collection;
 
 class SearchController extends Controller
 {
@@ -38,6 +39,7 @@ class SearchController extends Controller
 
             if ($presearch_users) {
                 foreach ($presearch_users as $user) {
+                    /** @var User $user */
                     if ($user->is_member) {
                         $users[] = $user;
                     }
@@ -53,7 +55,8 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_pages) {
             foreach ($presearch_pages as $page) {
-                if (! $page->is_member_only || Auth::user()?->is_member) {
+                /** @var Page $page */
+                if (!$page->is_member_only || Auth::user()?->is_member) {
                     $pages[] = $page;
                 }
             }
@@ -67,6 +70,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_committees) {
             foreach ($presearch_committees as $committee) {
+                /** @var Committee $committee */
                 if ($committee->public || Auth::user()?->can('board')) {
                     $committees[] = $committee;
                 }
@@ -97,7 +101,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_photo_albums) {
             foreach ($presearch_photo_albums as $album) {
-                if (! $album->secret || Auth::user()?->can('protography')) {
+                if (!$album->secret || Auth::user()?->can('protography')) {
                     $photoAlbums[] = $album;
                 }
             }
@@ -113,10 +117,7 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * @return View
-     */
-    public function ldapSearch(Request $request)
+    public function ldapSearch(Request $request): View
     {
         $query = null;
         $data = null;
@@ -145,7 +146,7 @@ class SearchController extends Controller
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array) $data,
+            'data' => (array)$data,
         ]);
     }
 
@@ -155,12 +156,12 @@ class SearchController extends Controller
         return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
-    public function getUserSearch(Request $request): array
+    public function getUserSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
         foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->get() ?? [] as $user) {
-            $result[] = (object) [
+            $result[] = (object)[
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -170,10 +171,7 @@ class SearchController extends Controller
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public function getEventSearch(Request $request)
+    public function getEventSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'title'];
 
@@ -181,9 +179,10 @@ class SearchController extends Controller
     }
 
     /**
-     * @return array
+     * @param Request $request
+     * @return array|Collection
      */
-    public function getCommitteeSearch(Request $request)
+    public function getCommitteeSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'name', 'slug'];
 
@@ -191,19 +190,17 @@ class SearchController extends Controller
     }
 
     /**
-     * @return array
+     * @param Request $request
+     * @return array|Collection
      */
-    public function getProductSearch(Request $request)
+    public function getProductSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'name'];
 
         return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    /**
-     * @return array
-     */
-    public function getAchievementSearch(Request $request)
+    public function getAchievementSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'name'];
 
@@ -224,7 +221,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (! $check_at_least_one_valid_term) {
+        if (!$check_at_least_one_valid_term) {
             return null;
         }
 

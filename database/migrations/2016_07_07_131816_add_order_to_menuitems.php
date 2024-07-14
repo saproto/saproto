@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 class AddOrderToMenuitems extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('menuitems', function ($table) {
             $table->integer('order');
@@ -18,10 +17,8 @@ class AddOrderToMenuitems extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('menuitems', function ($table) {
             $table->dropColumn('order');

@@ -36,10 +36,10 @@ class DmxFixture extends Model
     public $timestamps = false;
 
     /**
-     * @param  string|null  $special_func
+     * @param string|null $special_func
      * @return Collection|DmxChannel[]
      */
-    public function getChannels($special_func = null)
+    public function getChannels(string $special_func = null): Collection|array
     {
         $channels = DmxChannel::query()->where('id', '>=', $this->channel_start)
             ->where('id', '<=', $this->channel_end);

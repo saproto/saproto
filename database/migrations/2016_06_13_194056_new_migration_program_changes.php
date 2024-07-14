@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 class NewMigrationProgramChanges extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('members', function ($table) {
             $table->dropColumn('type');
@@ -35,10 +34,8 @@ class NewMigrationProgramChanges extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('members', function ($table) {
             $table->date('till')->change();

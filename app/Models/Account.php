@@ -55,11 +55,11 @@ class Account extends Model
             $sortDate = Carbon::createFromFormat('Y-m-d H:i:s', $orderline->created_at)->subHours(6)->toDateString();
 
             // Abbreviate variable names.
-            $nr = $orderline->account_number;
+            $account_nr = $orderline->account_number;
 
             // Add account to dataset if not existing yet.
-            if (!isset($accounts[$nr])) {
-                $accounts[$nr] = (object)[
+            if (!isset($accounts[$account_nr])) {
+                $accounts[$account_nr] = (object)[
                     'byDate' => [],
                     'name' => $orderline->name,
                     'total' => 0,
@@ -67,15 +67,15 @@ class Account extends Model
             }
 
             // Add orderline to total account price.
-            $accounts[$nr]->total += $orderline->total_price;
+            $accounts[$account_nr]->total += $orderline->total_price;
 
             // Add date to account data if not existing yet.
-            if (!isset($accounts[$nr]->byDate[$sortDate])) {
-                $accounts[$nr]->byDate[$sortDate] = 0;
+            if (!isset($accounts[$account_nr]->byDate[$sortDate])) {
+                $accounts[$account_nr]->byDate[$sortDate] = 0;
             }
 
             // Add orderline to account-on-date total.
-            $accounts[$nr]->byDate[$sortDate] += $orderline->total_price;
+            $accounts[$account_nr]->byDate[$sortDate] += $orderline->total_price;
         }
 
         ksort($accounts);

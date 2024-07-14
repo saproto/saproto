@@ -63,7 +63,7 @@ class Activity extends Validatable
 
     protected $guarded = ['id'];
 
-    protected $rules = [
+    protected array $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',
         'deregistration_end' => 'required|integer',
@@ -305,7 +305,8 @@ class Activity extends Validatable
      */
     public function getAttendees(): int
     {
-        return $this->getPresent() ?? $this->attendees;
+        $present = $this->getPresent();
+        return $present > 0 ? $present : $this->attendees;
     }
 
     public function getPresent(): int

@@ -27,7 +27,7 @@ class PhotoController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
 
-        if (! $album->published && ! Auth::user()?->can('protography')) {
+        if (!$album->published && !Auth::user()?->can('protography')) {
             Session::flash('flash_message', 'You do not have the permissions for this.');
 
             return Redirect::back();
@@ -45,19 +45,12 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
-    public function photo($id)
+    public function photo(int $id)
     {
-        $photo = PhotoManager::getPhoto($id);
-        if ($photo != null) {
-            return view('photos.photopage', ['photo' => $photo]);
-        }
-
-        abort(404, 'Photo not found.');
-
-        return null;
+        return view('photos.photopage', ['photo' => PhotoManager::getPhoto($id)]);
     }
 
     /** @return View */
@@ -67,10 +60,10 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $photo_id
+     * @param int $photo_id
      * @return RedirectResponse
      */
-    public function likePhoto($photo_id)
+    public function likePhoto(int $photo_id)
     {
         $exist = PhotoLikes::query()->where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
 
@@ -85,12 +78,12 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $photo_id
+     * @param int $photo_id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function dislikePhoto($photo_id)
+    public function dislikePhoto(int $photo_id)
     {
         PhotoLikes::query()->where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
 
@@ -106,10 +99,10 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return string JSON
      */
-    public function apiShow($id)
+    public function apiShow(int $id)
     {
         $photos = PhotoManager::getPhotos($id);
 

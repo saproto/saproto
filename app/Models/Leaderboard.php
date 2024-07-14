@@ -68,6 +68,7 @@ class Leaderboard extends Model
         if ($user->can('board')) {
             return true;
         }
+
         return $this->committee->users->contains($user);
     }
 }

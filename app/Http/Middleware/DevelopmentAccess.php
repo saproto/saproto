@@ -33,6 +33,7 @@ class DevelopmentAccess
         if (auth()->guest()) {
             return true;
         }
+
         return ! $isAllowedIP;
     }
 

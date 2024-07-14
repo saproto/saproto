@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 
@@ -7,10 +8,8 @@ class UpdateUsersTablePrivacyName extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('users', function ($table) {
             $table->date('birthdate')->nullable()->default(null)->change();
@@ -35,10 +34,8 @@ class UpdateUsersTablePrivacyName extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('users', function ($table) {
             $table->string('name_first')->after('id');

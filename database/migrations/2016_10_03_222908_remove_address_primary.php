@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 
 class RemoveAddressPrimary extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('addresses', function ($table) {
             $table->dropColumn('is_primary');
@@ -18,10 +17,8 @@ class RemoveAddressPrimary extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('addresses', function ($table) {
             $table->boolean('is_primary');

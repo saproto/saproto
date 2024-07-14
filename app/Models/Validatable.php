@@ -14,13 +14,12 @@ use Illuminate\Support\MessageBag;
  * @method static Builder|Validatable newQuery()
  * @method static Builder|Validatable query()
  *
- * @mixin Eloquent
  */
 class Validatable extends Model
 {
-    protected $rules = [];
+    protected array $rules = [];
 
-    protected $errors;
+    protected MessageBag $errors;
 
     public function validate($data): bool
     {
@@ -33,9 +32,8 @@ class Validatable extends Model
 
         return true;
     }
-
-    /** @return MessageBag */
-    public function errors()
+    
+    public function errors(): MessageBag
     {
         return $this->errors;
     }

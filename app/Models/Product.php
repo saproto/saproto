@@ -71,19 +71,19 @@ class Product extends Model
     protected $appends = ['image_url'];
 
     /** @return BelongsTo */
-    public function account()
+    public function account(): BelongsTo
     {
         return $this->belongsTo(FinancialAccount::class);
     }
 
     /** @return BelongsTo */
-    public function image()
+    public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /** @raturn String */
-    public function getImageUrlAttribute()
+    public function getImageUrlAttribute(): ?string
     {
         if ($this->image_id) {
             $image = StorageEntry::query()->find($this->image_id);
@@ -96,54 +96,54 @@ class Product extends Model
     }
 
     /** @return BelongsToMany */
-    public function categories()
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'products_categories', 'product_id', 'category_id');
     }
 
     /** @return HasOne */
-    public function ticket()
+    public function ticket(): HasOne
     {
         return $this->hasOne(Ticket::class, 'product_id');
     }
 
     /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
     public function isVisible(): bool
     {
-        return $this->is_visible && ! ($this->stock <= 0 && ! $this->is_visible_when_no_stock);
+        return $this->is_visible && !($this->stock <= 0 && !$this->is_visible_when_no_stock);
     }
 
     public function omnomcomPrice()
     {
         $active = WallstreetController::active();
-        if (! $active) {
+        if (!$active) {
             return $this->price;
         }
 
         return WallstreetPrice::query()->where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
-    public function wallstreetPrices()
+    public function wallstreetPrices(): HasMany
     {
         return $this->hasMany(WallstreetPrice::class);
     }
 
     /**
-     * @param  User  $user
-     * @param  int  $amount
-     * @param  float|null  $total_price
-     * @param  bool|null  $withCash
-     * @param  bool|null  $withBankCard
-     * @param  string|null  $description
-     * @param  string  $auth_method
+     * @param User $user
+     * @param int $amount
+     * @param float|null $total_price
+     * @param bool|null $withCash
+     * @param bool|null $withBankCard
+     * @param string|null $description
+     * @param string $auth_method
      * @return int OrderLine id
      */
-    public function buyForUser($user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
+    public function buyForUser(User $user, int $amount, float $total_price = null, ?bool $withCash = false, ?bool $withBankCard = false, string $description = null, string $auth_method = 'none'): int
     {
         $this->stock -= $amount;
         $this->save();

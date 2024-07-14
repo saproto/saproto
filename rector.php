@@ -26,9 +26,10 @@ try {
         ->withPaths([
             __DIR__ . '/app',
             __DIR__ . '/config',
-            __DIR__ . '/public',
             __DIR__ . '/resources',
             __DIR__ . '/routes',
+            __DIR__ . '/tests',
+            __DIR__ . '/database',
         ])->withPhpSets(php82: true)
         ->withsets([LaravelSetList::LARAVEL_110,
             LaravelSetList::LARAVEL_CODE_QUALITY,

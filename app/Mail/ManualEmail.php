@@ -25,7 +25,7 @@ class ManualEmail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         $mail = $this->view('emails.manualemail')
             ->from($this->sender_address, $this->sender_name)
