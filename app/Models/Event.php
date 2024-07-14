@@ -261,7 +261,15 @@ class Event extends Model
      */
     public function isEventAdmin($user): bool
     {
-        return $user->can('board') || ($this->committee?->isMember($user)) || $this->isEventEro($user);
+        if ($user->can('board')) {
+            return true;
+        }
+
+        if ($this->committee?->isMember($user)) {
+            return true;
+        }
+
+        return $this->isEventEro($user);
     }
 
     /**

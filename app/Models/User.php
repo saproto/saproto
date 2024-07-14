@@ -609,7 +609,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function getIsProtubeAdminAttribute(): bool
     {
-        return $this->can('protube') || $this->isTempadmin();
+        if ($this->can('protube')) {
+            return true;
+        }
+        return $this->isTempadmin();
     }
 
     /** @return string */

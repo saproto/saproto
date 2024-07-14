@@ -56,8 +56,6 @@ try {
         )
         ->withSkip(
             [
-                ChangeOrIfContinueToMultiContinueRector::class,
-                ReturnBinaryOrToEarlyReturnRector::class,
                 EncapsedStringsToSprintfRector::class,
                 NullToStrictStringFuncCallArgRector::class,
                 AddClosureVoidReturnTypeWhereNoReturnRector::class,
