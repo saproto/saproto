@@ -70,33 +70,33 @@ class AchievementsCron extends Command
 
         // Define the automatic achievements and their conditions.
         $achievements = [
-            19 => fn($user) => $this->achievementBeast($user), // Achievement Beast
-            20 => fn($user) => $this->nThProducts($user, [2], 5), // Hangry
-            21 => fn($user) => $this->nThProducts($user, [487], 15), // Cry Baby
-            22 => fn($user) =>
+            19 => fn($user): bool => $this->achievementBeast($user), // Achievement Beast
+            20 => fn($user): bool => $this->nThProducts($user, [2], 5), // Hangry
+            21 => fn($user): bool => $this->nThProducts($user, [487], 15), // Cry Baby
+            22 => fn($user): bool =>
                 //weizen outside, grolsch weizen, weizen small, weizen big
                 $this->nThProducts($user, [805, 211, 758, 1039], 20), // True German
-            23 => fn($user) => $this->oldFart($user), // Old Fart
+            23 => fn($user): bool => $this->oldFart($user), // Old Fart
             24 => function ($user) {
                 $this->nThProducts($user, [22, 219, 419], 100);
             }, // I Am Bread
-            25 => fn($user) => $this->gottaCatchEmAll($user), // Gotta Catch em All
-            26 => fn($user) => $this->nThProducts($user, $youDandy, 3), // You Dandy
+            25 => fn($user): bool => $this->gottaCatchEmAll($user), // Gotta Catch em All
+            26 => fn($user): bool => $this->nThProducts($user, $youDandy, 3), // You Dandy
             27 => fn($user): bool => $this->nThProducts($user, [180], 1) && ! $user->did_study_create, // Fristi Member
-            28 => fn($user) => $this->bigSpender($user), // Big Spender
-            29 => fn($user) => $this->percentageProducts($user, $fourOClock, 0.25), // Four 'O Clock
+            28 => fn($user): bool => $this->bigSpender($user), // Big Spender
+            29 => fn($user): bool => $this->percentageProducts($user, $fourOClock, 0.25), // Four 'O Clock
             // 30 => function($user) { return $this->percentageProducts($user, $this->categoriesProductIds([11, 15, 18, 19]), 0.25); }, # You're Special
-            32 => fn($user) => $this->percentageProducts($user, $bigKid, 0.25), // Big Kid
-            38 => fn($user) => $this->foreverMember($user), // Forever Member
-            51 => fn($user) => $this->first($user, $first), // First
-            52 => fn($user) => $this->nThProducts($user, [987], 777), // No Life
-            53 => fn($user) => $this->nThProducts($user, $goodHuman, 1), // Good Human
-            54 => fn($user) => $this->nThProducts($user, [39], 100), // I Am Noodle
-            63 => fn($user) => $this->nThActivity($user, 1), // First Activity
-            64 => fn($user) => $this->nThActivity($user, 100), // Hundredth Activity
-            66 => fn($user) => $this->percentageParticipation($user, 25, $AmountOfSignupsThisMonth), // 25% Participation Trophee
-            67 => fn($user) => $this->percentageParticipation($user, 50, $AmountOfSignupsThisMonth), // 50% Participation Trophee
-            68 => fn($user) => $this->percentageParticipation($user, 75, $AmountOfSignupsThisMonth), // 75% Participation Trophee
+            32 => fn($user): bool => $this->percentageProducts($user, $bigKid, 0.25), // Big Kid
+            38 => fn($user): bool => $this->foreverMember($user), // Forever Member
+            51 => fn($user): bool => $this->first($user, $first), // First
+            52 => fn($user): bool => $this->nThProducts($user, [987], 777), // No Life
+            53 => fn($user): bool => $this->nThProducts($user, $goodHuman, 1), // Good Human
+            54 => fn($user): bool => $this->nThProducts($user, [39], 100), // I Am Noodle
+            63 => fn($user): bool => $this->nThActivity($user, 1), // First Activity
+            64 => fn($user): bool => $this->nThActivity($user, 100), // Hundredth Activity
+            66 => fn($user): bool => $this->percentageParticipation($user, 25, $AmountOfSignupsThisMonth), // 25% Participation Trophee
+            67 => fn($user): bool => $this->percentageParticipation($user, 50, $AmountOfSignupsThisMonth), // 50% Participation Trophee
+            68 => fn($user): bool => $this->percentageParticipation($user, 75, $AmountOfSignupsThisMonth), // 75% Participation Trophee
         ];
 
         // Check if the specified achievements actually exist.
@@ -294,7 +294,7 @@ class AchievementsCron extends Command
      * @param  User  $user
      * @param  int[]  $products
      */
-    private function nThProducts($user, $products, int $n): bool
+    private function nThProducts($user, array $products, int $n): bool
     {
         return $user->orderlines()->whereIn('product_id', $products)->sum('units') > $n;
     }
@@ -305,7 +305,7 @@ class AchievementsCron extends Command
      * @param  User  $user
      * @param  int[]  $products
      */
-    private function percentageProducts($user, $products, float $p): bool
+    private function percentageProducts($user, array $products, float $p): bool
     {
         $orders = OrderLine::query()
             ->where('updated_at', '>', Carbon::now()->subMonths())

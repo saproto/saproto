@@ -75,7 +75,7 @@ class ExportController extends Controller
                     $data = Event::setEagerLoads([])->get();
                 } else {
                     $data = Event::setEagerLoads([])->get()
-                        ->filter(fn(Event $event) => $event->mayViewEvent($user));
+                        ->filter(fn(Event $event): bool => $event->mayViewEvent($user));
                 }
                 
                 break;

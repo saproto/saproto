@@ -197,7 +197,7 @@ class Committee extends Model
      * @param  User  $user
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember($user)
+    public function isMember($user): bool
     {
         return $user->isInCommittee($this);
     }

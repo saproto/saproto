@@ -90,8 +90,7 @@ class MollieTransaction extends Model
         return 'unknown';
     }
 
-    /** @return string */
-    public function translatedStatus()
+    public function translatedStatus(): string
     {
         return self::translateStatus($this->status);
     }
@@ -110,13 +109,13 @@ class MollieTransaction extends Model
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
-        if ($new_status != 'open') {
+        if ($new_status !== 'open') {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
 
         $this->save();
 
-        if ($new_status == 'failed') {
+        if ($new_status === 'failed') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->product_id == config('omnomcom.mollie')['fee_id']) {
                     $orderline->delete();
@@ -151,7 +150,7 @@ class MollieTransaction extends Model
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
             }
-        } elseif ($new_status == 'paid') {
+        } elseif ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;

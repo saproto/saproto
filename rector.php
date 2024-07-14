@@ -37,11 +37,20 @@ return RectorConfig::configure()
         codeQuality: true,
         codingStyle: true,
         typeDeclarations: true,
-        privatization: false,
+        privatization: true,
         naming: false,
         instanceOf: false,
         earlyReturn: true,
-        strictBooleans: false)
+        strictBooleans: false,
+        carbon: false,
+        rectorPreset: false,
+        phpunitCodeQuality: false,
+        doctrineCodeQuality: false,
+        symfonyCodeQuality: false,
+        symfonyConfigs: false,
+        twig: false,
+        phpunit: false,
+    )
     ->withSkip(
         [
             ChangeOrIfContinueToMultiContinueRector::class,

@@ -107,8 +107,7 @@ class DmxOverride extends Model
         return DmxFixture::whereIn('id', $this->getFixtureIds())->get();
     }
 
-    /** @return bool */
-    public function getIsActiveAttribute()
+    public function getIsActiveAttribute(): bool
     {
         return $this->active();
     }

@@ -18,6 +18,9 @@ class MembershipEnded extends Mailable
      */
     public $user;
 
+    /**
+     * @var string
+     */
     public $lists;
 
     /** @return void */

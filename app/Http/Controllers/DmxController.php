@@ -185,8 +185,7 @@ class DmxController extends Controller
         return Redirect::route('dmx::override::index');
     }
 
-    /** @return array */
-    public function valueApi()
+    public function valueApi(): array
     {
         // Get the events.
         $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));

@@ -26,8 +26,7 @@ class SmartXpScreenController extends Controller
         return view('smartxp.protopolis_screen');
     }
 
-    /** @return array */
-    public function timetable()
+    public function timetable(): array
     {
         return CalendarController::returnGoogleCalendarEvents(
             config('proto.google-timetable-id'),
@@ -36,8 +35,7 @@ class SmartXpScreenController extends Controller
         );
     }
 
-    /** @return array */
-    public function protopenersTimetable()
+    public function protopenersTimetable(): array
     {
         return CalendarController::returnGoogleCalendarEvents(
             config('proto.protopeners-google-timetable-id'),

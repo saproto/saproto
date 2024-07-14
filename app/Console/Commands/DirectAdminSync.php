@@ -250,7 +250,7 @@ class DirectAdminSync extends Command
      * @param  array  $target  The target list of accounts
      * @return array An accounts patch list containing an 'add' and 'del' array
      */
-    private function constructAccountPatchList($current, $target): array
+    private function constructAccountPatchList($current, array $target): array
     {
         $data = [
             'add' => [],
