@@ -39,17 +39,12 @@ return RectorConfig::configure()
         typeDeclarations: true,
         privatization: true,
         naming: false,
-        instanceOf: false,
+        instanceOf: true,
         earlyReturn: true,
-        strictBooleans: false,
+        strictBooleans: true,
         carbon: false,
         rectorPreset: false,
         phpunitCodeQuality: false,
-        doctrineCodeQuality: false,
-        symfonyCodeQuality: false,
-        symfonyConfigs: false,
-        twig: false,
-        phpunit: false,
     )
     ->withSkip(
         [

@@ -354,7 +354,7 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (! preg_match('/(\d+)\./', $textValue)) {
+                        if (preg_match('/(\d+)\./', $textValue) === 0 || preg_match('/(\d+)\./', $textValue) === false) {
                             $list = false;
                         }
                         
