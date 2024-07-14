@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\UserMailChange;
 use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
-use Auth;
 use Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Mail;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
-use Redirect;
-use Session;
 use Spatie\Permission\Models\Permission;
-use Validator;
 
 class UserDashboardController extends Controller
 {
@@ -53,7 +53,7 @@ class UserDashboardController extends Controller
      */
     public function updateMail(Request $request, int $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         $password = $request->input('password');
         $new_email = $request->input('email');
@@ -363,7 +363,7 @@ class UserDashboardController extends Controller
             $user->member->delete();
         }
 
-        $member = Member::create();
+        $member = Member::query()->create();
         $member->user()->associate($user);
         $member->is_pending = true;
 

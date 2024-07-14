@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Carbon;
 use DateTime;
 use Eloquent;
 use Exception;
-use Hash;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -170,7 +171,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public static function fromPublicId($public_id)
     {
-        return User::whereHas('member', static function ($query) use ($public_id) {
+        return \App\Models\User::query()->whereHas('member', static function ($query) use ($public_id) {
             $query->where('proto_username', $public_id);
         })->first();
     }
@@ -187,15 +188,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
-            Bank::where('user_id', $this->id)->first() ||
-            Address::where('user_id', $this->id)->first() ||
-            OrderLine::where('user_id', $this->id)->count() > 0 ||
+            Bank::query()->where('user_id', $this->id)->first() ||
+            Address::query()->where('user_id', $this->id)->first() ||
+            OrderLine::query()->where('user_id', $this->id)->count() > 0 ||
             CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0 ||
-            Feedback::where('user_id', $this->id)->count() > 0 ||
-            EmailListSubscription::where('user_id', $this->id)->count() > 0 ||
-            RfidCard::where('user_id', $this->id)->count() > 0 ||
-            PlayedVideo::where('user_id', $this->id)->count() > 0 ||
-            AchievementOwnership::where('user_id', $this->id)->count() > 0
+            Feedback::query()->where('user_id', $this->id)->count() > 0 ||
+            EmailListSubscription::query()->where('user_id', $this->id)->count() > 0 ||
+            RfidCard::query()->where('user_id', $this->id)->count() > 0 ||
+            PlayedVideo::query()->where('user_id', $this->id)->count() > 0 ||
+            AchievementOwnership::query()->where('user_id', $this->id)->count() > 0
         );
     }
 
@@ -339,7 +340,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
 
         // Remove breach notification flag
-        HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
+        HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
     public function hasUnpaidOrderlines(): bool
@@ -424,7 +425,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isInCommitteeBySlug($slug): bool
     {
-        $committee = Committee::where('slug', $slug)->first();
+        $committee = Committee::query()->where('slug', $slug)->first();
 
         return $committee && $this->isInCommittee($committee);
     }
@@ -452,7 +453,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function withdrawals($limit = 0): array
     {
         $withdrawals = [];
-        foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
+        foreach (Withdrawal::query()->orderBy('date', 'desc')->get() as $withdrawal) {
             if ($withdrawal->orderlinesForUser($this)->count() > 0) {
                 $withdrawals[] = $withdrawal;
                 if ($limit > 0 && count($withdrawals) > $limit) {
@@ -515,7 +516,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function generateNewPersonalKey(): void
     {
-        $this->personal_key = str_random(64);
+        $this->personal_key = Str::random(64);
         $this->save();
     }
 
@@ -626,13 +627,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return string|null */
     public function getWelcomeMessageAttribute()
     {
-        $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
+        $welcomeMessage = WelcomeMessage::query()->where('user_id', $this->id)->first();
         if ($welcomeMessage) {
             return $welcomeMessage->message;
         }
 
         return null;
     }
+
     protected function casts(): array
     {
         return [

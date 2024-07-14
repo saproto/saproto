@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;

@@ -2,13 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use Closure;
-use App;
 use App\Models\Committee;
-use Auth;
 use Illuminate\Http\Request;
-use Redirect;
-use Session;
 
 class EnforceTFA
 {

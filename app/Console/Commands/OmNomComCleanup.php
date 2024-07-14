@@ -40,7 +40,7 @@ class OmNomComCleanup extends Command
     {
         $this->info('Starting clean-up.');
 
-        $users = User::where('keep_omnomcom_history', false)->pluck('id')->toArray();
+        $users = User::query()->where('keep_omnomcom_history', false)->pluck('id')->toArray();
         $orderlinesTable = (new OrderLine())->getTable();
 
         $affected = DB::table($orderlinesTable)

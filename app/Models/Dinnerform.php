@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -150,6 +150,7 @@ class Dinnerform extends Model
             }
         });
     }
+
     protected function casts(): array
     {
         return [

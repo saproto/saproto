@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -9,8 +11,6 @@ use App\Models\QrAuthRequest;
 use App\Models\RfidCard;
 use App\Models\User;
 use App\Services\ProTubeApiService;
-use Auth;
-use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -125,7 +125,7 @@ class OmNomController extends Controller
         switch ($request->input('credential_type')) {
             case 'card':
                 $auth_method = sprintf('omnomcom_rfid_%s', $request->input('credentials'));
-                $card = RfidCard::where('card_id', $request->input('credentials'))->first();
+                $card = RfidCard::query()->where('card_id', $request->input('credentials'))->first();
                 if (! $card) {
                     $result->message = 'Unknown card.';
 
@@ -143,7 +143,7 @@ class OmNomController extends Controller
                 break;
 
             case 'qr':
-                $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
+                $qrAuthRequest = QrAuthRequest::query()->where('auth_token', $request->input('credentials'))->first();
                 $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
                 if (! $qrAuthRequest) {
                     $result->message = 'Invalid authentication token.';
@@ -201,7 +201,7 @@ class OmNomController extends Controller
 
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
-                $product = Product::find($id);
+                $product = Product::query()->find($id);
                 if (! $product) {
                     $result->message = "You tried to buy a product that didn't exist!";
 
@@ -236,7 +236,7 @@ class OmNomController extends Controller
 
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
-                $product = Product::find($id);
+                $product = Product::query()->find($id);
 
                 if ($product->id == config('omnomcom.protube-skip')) {
                     $skipped = ProTubeApiService::skipSong();
@@ -254,12 +254,12 @@ class OmNomController extends Controller
             $result->message = '';
 
             if ($user->show_omnomcom_total) {
-                $result->message = sprintf('You have spent a total of <strong>€%0.2f</strong>', OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf('%s %%', date('Y-m-d')))->sum('total_price'));
+                $result->message = sprintf('You have spent a total of <strong>€%0.2f</strong>', OrderLine::query()->where('user_id', $user->id)->where('created_at', 'LIKE', sprintf('%s %%', date('Y-m-d')))->sum('total_price'));
             }
 
             if ($user->show_omnomcom_calories) {
                 $result->message .= $user->show_omnomcom_total ? '<br>and ' : 'You have ';
-                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf('%s %%', date('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
+                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf('%s %%', date('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
             }
 
             if (strlen($result->message) > 0) {
@@ -275,7 +275,7 @@ class OmNomController extends Controller
      */
     public function generateOrder(Request $request)
     {
-        $products = Product::where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
+        $products = Product::query()->where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
         $orders = [];
         foreach ($products as $product) {
             $order_collo = ($product->supplier_collo > 0 ? ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo) : 0);
@@ -306,7 +306,7 @@ class OmNomController extends Controller
     {
         $categories = [];
         foreach ($store->categories as $category) {
-            $cat = ProductCategory::find($category);
+            $cat = ProductCategory::query()->find($category);
             if ($cat) {
                 $prods = $cat->sortedProducts();
                 $categories[] = (object) [

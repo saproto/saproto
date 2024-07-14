@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use App\Models\Bank;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class BankController extends Controller
 {
@@ -48,7 +48,7 @@ class BankController extends Controller
             return Redirect::back();
         }
 
-        $bank = Bank::create([
+        $bank = Bank::query()->create([
             'iban' => $bankdata->iban,
             'bic' => $bankdata->bic,
             'machtigingid' => self::generateAuthorizationId($user),
@@ -99,7 +99,7 @@ class BankController extends Controller
             return Redirect::back();
         }
 
-        $bank = Bank::create([
+        $bank = Bank::query()->create([
             'iban' => $bankdata->iban,
             'bic' => $bankdata->bic,
             'machtigingid' => self::generateAuthorizationId($user),

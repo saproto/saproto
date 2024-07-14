@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon;
-use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -67,7 +67,7 @@ class Committee extends Model
     /** @return Committee */
     public static function fromPublicId($public_id)
     {
-        return self::where('slug', $public_id)->firstOrFail();
+        return self::query()->where('slug', $public_id)->firstOrFail();
     }
 
     /** @return BelongsToMany */
@@ -151,7 +151,7 @@ class Committee extends Model
 
     public function pastHelpedEvents($n)
     {
-        return Event::whereHas('activity', function ($q) {
+        return Event::query()->whereHas('activity', function ($q) {
             $q->whereHas('helpingCommittees', function ($q) {
                 $q->where('committee_id', $this->id);
             });

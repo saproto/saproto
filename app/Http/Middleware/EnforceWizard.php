@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\HashMapItem;
-use Auth;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Redirect;
 
 class EnforceWizard
 {

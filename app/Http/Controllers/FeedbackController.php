@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\Mail\FeedbackReplyEmail;
 use App\Models\Feedback;
 use App\Models\FeedbackCategory;
@@ -26,7 +27,7 @@ class FeedbackController extends Controller
 {
     public function index(Request $request, string $category): View
     {
-        $category = FeedbackCategory::where('url', $category)->firstOrFail();
+        $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
 
         $unreviewed = $this->getUnreviewed($category);
@@ -61,7 +62,7 @@ class FeedbackController extends Controller
             ->orderBy('votes', 'desc')
             ->first();
 
-        $mostVoted = Feedback::where('id', $mostVotedID?->feedback_id)->first();
+        $mostVoted = Feedback::query()->where('id', $mostVotedID?->feedback_id)->first();
 
         return $mostVoted ?? null;
     }
@@ -69,7 +70,7 @@ class FeedbackController extends Controller
     private function getUnreviewed(FeedbackCategory $category): array|Collection
     {
         if ($category->review) {
-            $unreviewed = Feedback::where('reviewed', false)->where('feedback_category_id', $category->id);
+            $unreviewed = Feedback::query()->where('reviewed', false)->where('feedback_category_id', $category->id);
 
             //get all unreviewed feedback for authorized users
             if (Auth::user()->id === $category->reviewer_id || Auth::user()->can('sysadmin')) {
@@ -85,7 +86,7 @@ class FeedbackController extends Controller
     public function search(Request $request, string $category): View
     {
         $searchTerm = $request->input('searchTerm');
-        $category = FeedbackCategory::where('url', $category)->firstOrFail();
+        $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
         $unreviewed = $this->getUnreviewed($category);
         $feedback = $this->getFeedbackQuery($category)->where('feedback', 'LIKE', "%{$searchTerm}%");
@@ -98,7 +99,7 @@ class FeedbackController extends Controller
      */
     public function archived($category): View|RedirectResponse
     {
-        $category = FeedbackCategory::where('url', $category)->firstOrFail();
+        $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to view archived feedback.');
 
@@ -112,11 +113,11 @@ class FeedbackController extends Controller
 
     public function add(Request $request, $category): RedirectResponse
     {
-        $category = FeedbackCategory::findOrFail($category);
+        $category = FeedbackCategory::query()->findOrFail($category);
         $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
         $feedback->save();
 
-        $categoryTitle = str_singular($category->title);
+        $categoryTitle = Str::singular($category->title);
         if ($category->review) {
             Session::flash('flash_message', "{$categoryTitle} added. This first needs to be reviewed by the board so it might take some time to show up!");
         } else {
@@ -128,9 +129,9 @@ class FeedbackController extends Controller
 
     public function reply(int $id, Request $request): RedirectResponse
     {
-        $feedback = Feedback::findOrFail($id);
+        $feedback = Feedback::query()->findOrFail($id);
 
-        $categoryTitle = str_singular($feedback->category->title);
+        $categoryTitle = Str::singular($feedback->category->title);
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', "You are not allowed to reply to this {$categoryTitle}.");
 
@@ -141,7 +142,7 @@ class FeedbackController extends Controller
         $accepted = $request->input('responseBtn') === 'accept';
 
         if ($feedback->reply == null && $reply != null) {
-            $user = User::findOrFail($feedback->user_id);
+            $user = User::query()->findOrFail($feedback->user_id);
             Mail::to($user)->queue((new FeedbackReplyEmail($feedback, $user, $reply, $accepted))->onQueue('low'));
         }
 
@@ -158,7 +159,7 @@ class FeedbackController extends Controller
     public function archive(int $id): RedirectResponse
     {
         $feedback = Feedback::withTrashed()->findOrFail($id);
-        $categoryTitle = str_singular($feedback->category->title);
+        $categoryTitle = Str::singular($feedback->category->title);
 
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', "You are not allowed to archive this {$categoryTitle}.");
@@ -216,7 +217,7 @@ class FeedbackController extends Controller
 
     public function archiveAll(string $category): RedirectResponse
     {
-        $category = FeedbackCategory::where('url', $category)->firstOrFail();
+        $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $feedback = $category->feedback;
         foreach ($feedback as $item) {
             $item->delete();
@@ -227,10 +228,10 @@ class FeedbackController extends Controller
 
     public function vote(Request $request): JsonResponse
     {
-        $feedback = Feedback::findOrFail($request->input('id'));
+        $feedback = Feedback::query()->findOrFail($request->input('id'));
 
         /** @var FeedbackVote $vote */
-        $vote = FeedbackVote::firstOrCreate(['user_id' => Auth::id(), 'feedback_id' => $request->input('id')]);
+        $vote = FeedbackVote::query()->firstOrCreate(['user_id' => Auth::id(), 'feedback_id' => $request->input('id')]);
         if ($vote->vote === $request->input('voteValue')) {
             $vote->delete();
         } else {
@@ -246,7 +247,7 @@ class FeedbackController extends Controller
 
     public function approve(int $id): RedirectResponse
     {
-        $feedback = Feedback::findOrFail($id);
+        $feedback = Feedback::query()->findOrFail($id);
         if ($feedback->category->reviewer_id !== Auth::user()->id && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Feedback may only be approved by the dedicated reviewer!');
 
@@ -262,7 +263,7 @@ class FeedbackController extends Controller
 
     public function categoryAdmin(Request $request): View
     {
-        $category = FeedbackCategory::find($request->id);
+        $category = FeedbackCategory::query()->find($request->id);
 
         return view('feedbackboards.categories', ['categories' => FeedbackCategory::all(), 'cur_category' => $category]);
     }
@@ -271,7 +272,7 @@ class FeedbackController extends Controller
     {
         //regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
-        if (FeedbackCategory::where('url', $newUrl)->first()) {
+        if (FeedbackCategory::query()->where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
             return Redirect::back();
@@ -283,7 +284,7 @@ class FeedbackController extends Controller
             return Redirect::back();
         }
 
-        $category = FeedbackCategory::create([
+        $category = FeedbackCategory::query()->create([
             'title' => $request->input('name'),
             'url' => $newUrl,
             'review' => $request->has('can_review'),
@@ -301,7 +302,7 @@ class FeedbackController extends Controller
     {
         //regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));
-        if (FeedbackCategory::where('url', $newUrl)->first() && FeedbackCategory::where('url', $newUrl)->first()->id !== $id) {
+        if (FeedbackCategory::query()->where('url', $newUrl)->first() && FeedbackCategory::query()->where('url', $newUrl)->first()->id !== $id) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
             return Redirect::back();
@@ -313,7 +314,7 @@ class FeedbackController extends Controller
             return Redirect::back();
         }
 
-        $category = FeedbackCategory::findOrFail($id);
+        $category = FeedbackCategory::query()->findOrFail($id);
         $category->title = $request->input('name');
         $category->url = $newUrl;
         $category->review = $request->has('can_review');
@@ -332,7 +333,7 @@ class FeedbackController extends Controller
      */
     public function categoryDestroy(int $id): RedirectResponse
     {
-        $category = FeedbackCategory::findOrFail($id);
+        $category = FeedbackCategory::query()->findOrFail($id);
         $feedback = $category->feedback;
         if ($feedback) {
             foreach ($feedback as $item) {

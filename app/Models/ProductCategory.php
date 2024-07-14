@@ -55,6 +55,7 @@ class ProductCategory extends Model
 
         return $products->sortBy('name');
     }
+
     protected function casts(): array
     {
         return [

@@ -54,7 +54,7 @@ class QrAuthRequest extends Model
     {
         if ($this->approved_at) {
             /** @var User $user */
-            $user = User::findOrFail($this->user_id);
+            $user = User::query()->findOrFail($this->user_id);
             $this->delete();
 
             return $user;

@@ -41,7 +41,7 @@ class MemberCleanup extends Command
      */
     public function handle(): int
     {
-        $old_pending_memberships = Member::where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth())->get();
+        $old_pending_memberships = Member::query()->where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth())->get();
         foreach ($old_pending_memberships as $pending_membership) {
             $pending_membership->delete();
         }

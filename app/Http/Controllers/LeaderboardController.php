@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Committee;
 use App\Models\Leaderboard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class LeaderboardController extends Controller
 {
@@ -40,7 +40,7 @@ class LeaderboardController extends Controller
         if (Auth::user()->can('board')) {
             $leaderboards = Leaderboard::all();
         } else {
-            $leaderboards = Leaderboard::whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
+            $leaderboards = Leaderboard::query()->whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
         }
 
         return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
@@ -64,7 +64,7 @@ class LeaderboardController extends Controller
     public function store(Request $request)
     {
         $leaderboard = new Leaderboard();
-        $committee = Committee::findOrFail($request->input('committee'));
+        $committee = Committee::query()->findOrFail($request->input('committee'));
         $leaderboard->committee()->associate($committee);
         $leaderboard->name = $request->input('name');
         $leaderboard->featured = $request->has('featured');
@@ -86,7 +86,7 @@ class LeaderboardController extends Controller
      */
     public function edit($id)
     {
-        $leaderboard = Leaderboard::findOrFail($id);
+        $leaderboard = Leaderboard::query()->findOrFail($id);
 
         if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
@@ -103,7 +103,7 @@ class LeaderboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $leaderboard = Leaderboard::findOrFail($id);
+        $leaderboard = Leaderboard::query()->findOrFail($id);
 
         if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
@@ -118,12 +118,12 @@ class LeaderboardController extends Controller
 
         //Only editable for board permission
         if (Auth::user()->can('board')) {
-            if ($request->has('featured') && Leaderboard::where('featured', true)->first() != null) {
-                Leaderboard::where('featured', true)->update(['featured' => false]);
+            if ($request->has('featured') && Leaderboard::query()->where('featured', true)->first() != null) {
+                Leaderboard::query()->where('featured', true)->update(['featured' => false]);
             }
 
             $leaderboard->featured = $request->has('featured');
-            $committee = Committee::findOrFail($request->input('committee'));
+            $committee = Committee::query()->findOrFail($request->input('committee'));
             if ($committee != $leaderboard->committee) {
                 $leaderboard->committee()->associate($committee);
             }
@@ -142,7 +142,7 @@ class LeaderboardController extends Controller
      */
     public function destroy($id)
     {
-        $leaderboard = Leaderboard::findOrFail($id);
+        $leaderboard = Leaderboard::query()->findOrFail($id);
 
         Session::flash('flash_message', "The leaderboard '".$leaderboard->name."' has been deleted.");
         $leaderboard->delete();

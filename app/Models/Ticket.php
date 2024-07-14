@@ -69,7 +69,7 @@ class Ticket extends Model
     /** @return Collection */
     public function getUsers()
     {
-        return User::whereHas('tickets', function ($query) {
+        return User::query()->whereHas('tickets', function ($query) {
             $query->where('ticket_id', $this->id);
         })->get();
     }

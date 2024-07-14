@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\LdapController;
 use App\Mail\UtwenteCleanup;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Mail;
 
 class CheckUtwenteAccounts extends Command
 {
@@ -39,7 +39,7 @@ class CheckUtwenteAccounts extends Command
      */
     public function handle(): void
     {
-        $users = User::whereNotNull('utwente_username')->get();
+        $users = User::query()->whereNotNull('utwente_username')->get();
         $this->info('Checking '.$users->count().' UTwente accounts.');
 
         $unlinked = [];

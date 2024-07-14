@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use LightSaml\Model\Context\DeserializationContext;
 use LightSaml\Binding\BindingFactory;
 use LightSaml\SamlConstants;
@@ -42,19 +48,14 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Models\WelcomeMessage;
 use App\Rules\NotUtwenteEmail;
-use Auth;
 use Exception;
-use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Mail;
 use nickurt\PwnedPasswords\PwnedPasswords;
 use OneLogin\Saml2\AuthnRequest;
 use PragmaRX\Google2FA\Google2FA;
-use Redirect;
-use Session;
 
 class AuthController extends Controller
 {
@@ -212,7 +213,7 @@ class AuthController extends Controller
         $new_user->save();
 
         if (Session::get('wizard')) {
-            HashMapItem::create([
+            HashMapItem::query()->create([
                 'key' => 'wizard',
                 'subkey' => $new_user->id,
                 'value' => 1,
@@ -229,10 +230,10 @@ class AuthController extends Controller
      */
     private function registerAccount(Request $request)
     {
-        $user = User::create($request->only(['email', 'name', 'calling_name']));
+        $user = User::query()->create($request->only(['email', 'name', 'calling_name']));
 
         if (Session::get('wizard')) {
-            HashMapItem::create([
+            HashMapItem::query()->create([
                 'key' => 'wizard',
                 'subkey' => $user->id,
                 'value' => 1,
@@ -257,7 +258,7 @@ class AuthController extends Controller
      */
     public function deleteUser(Request $request)
     {
-        $user = User::findOrFail($request->id ?? Auth::id());
+        $user = User::query()->findOrFail($request->id ?? Auth::id());
 
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
@@ -293,13 +294,13 @@ class AuthController extends Controller
             }
         }
 
-        Address::where('user_id', $user->id)->delete();
-        Bank::where('user_id', $user->id)->delete();
-        EmailListSubscription::where('user_id', $user->id)->delete();
-        AchievementOwnership::where('user_id', $user->id)->delete();
-        Alias::where('user_id', $user->id)->delete();
-        RfidCard::where('user_id', $user->id)->delete();
-        WelcomeMessage::where('user_id', $user->id)->delete();
+        Address::query()->where('user_id', $user->id)->delete();
+        Bank::query()->where('user_id', $user->id)->delete();
+        EmailListSubscription::query()->where('user_id', $user->id)->delete();
+        AchievementOwnership::query()->where('user_id', $user->id)->delete();
+        Alias::query()->where('user_id', $user->id)->delete();
+        RfidCard::query()->where('user_id', $user->id)->delete();
+        WelcomeMessage::query()->where('user_id', $user->id)->delete();
 
         if ($user->photo) {
             $user->photo->delete();
@@ -342,7 +343,7 @@ class AuthController extends Controller
      */
     public function postPasswordResetEmail(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::query()->where('email', $request->email)->first();
         if ($user !== null) {
             self::dispatchPasswordEmailFor($user);
         }
@@ -360,8 +361,8 @@ class AuthController extends Controller
      */
     public function getPasswordReset(Request $request, $token)
     {
-        PasswordReset::where('valid_to', '<', date('U'))->delete();
-        $reset = PasswordReset::where('token', $token)->first();
+        PasswordReset::query()->where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::query()->where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
         }
@@ -378,8 +379,8 @@ class AuthController extends Controller
      */
     public function postPasswordReset(Request $request)
     {
-        PasswordReset::where('valid_to', '<', date('U'))->delete();
-        $reset = PasswordReset::where('token', $request->token)->first();
+        PasswordReset::query()->where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::query()->where('token', $request->token)->first();
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
                 Session::flash('flash_message', "Your passwords don't match.");
@@ -394,7 +395,7 @@ class AuthController extends Controller
             }
 
             $reset->user->setPassword($request->password);
-            PasswordReset::where('token', $request->token)->delete();
+            PasswordReset::query()->where('token', $request->token)->delete();
             Session::flash('flash_message', 'Your password has been changed.');
 
             return Redirect::route('login::show');
@@ -572,11 +573,11 @@ class AuthController extends Controller
 
         // Reason 2: we were trying to login using a university account
         Session::keep('incoming_saml_request');
-        $localUser = User::where('edu_username', $remoteEduUsername)->first();
+        $localUser = User::query()->where('edu_username', $remoteEduUsername)->first();
 
         // If we can't find a user account to login to, we have to options:
         if ($localUser == null) {
-            $localUser = User::where('email', $remoteData['mail'])->first();
+            $localUser = User::query()->where('email', $remoteData['mail'])->first();
 
             // If we recognize the e-mail address, reminder the user they may already have an account.
             if ($localUser) {
@@ -631,17 +632,17 @@ class AuthController extends Controller
      */
     public static function verifyCredentials($username, $password)
     {
-        $user = User::where('email', $username)->first();
+        $user = User::query()->where('email', $username)->first();
 
         if ($user == null) {
-            $member = Member::where('proto_username', $username)->first();
+            $member = Member::query()->where('proto_username', $username)->first();
             $user = ($member ? $member->user : null);
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if (HashMapItem::where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords())->setPassword($password)->isPwnedPassword()) {
+            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords())->setPassword($password)->isPwnedPassword()) {
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
+                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
             }
 
             return $user;
@@ -751,9 +752,9 @@ class AuthController extends Controller
      */
     public static function dispatchPasswordEmailFor($user): void
     {
-        $reset = PasswordReset::create([
+        $reset = PasswordReset::query()->create([
             'email' => $user->email,
-            'token' => str_random(128),
+            'token' => Str::random(128),
             'valid_to' => strtotime('+1 hour'),
         ]);
 

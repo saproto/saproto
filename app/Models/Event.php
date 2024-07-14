@@ -105,7 +105,7 @@ class Event extends Model
      */
     public static function fromPublicId($public_id)
     {
-        return self::findOrFail(self::getIdFromPublicId($public_id));
+        return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
 
     public static function getIdFromPublicId($public_id)
@@ -374,6 +374,7 @@ class Event extends Model
             ++$event->update_sequence;
         });
     }
+
     protected function casts(): array
     {
         return [

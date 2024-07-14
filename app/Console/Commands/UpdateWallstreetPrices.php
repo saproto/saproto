@@ -43,7 +43,7 @@ class UpdateWallstreetPrices extends Command
     public function handle(): ?int
     {
         //get the wallstreet drink that is currently active
-        $currentDrink = WallstreetDrink::where('start_time', '<=', time())->where('end_time', '>=', time())->first();
+        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
 
@@ -97,7 +97,7 @@ class UpdateWallstreetPrices extends Command
             }
         }
 
-        $randomEventQuery = WallstreetEvent::inRandomOrder()->whereHas('products', static function ($q) use ($currentDrink) {
+        $randomEventQuery = WallstreetEvent::query()->inRandomOrder()->whereHas('products', static function ($q) use ($currentDrink) {
             $q->whereIn('products.id', $currentDrink->products->pluck('id'));
         })->where('active', true);
 

@@ -75,14 +75,14 @@ class MenuItem extends Model
 
     public function isFirst(): bool
     {
-        $lowest = self::where('parent', '=', $this->parent)->orderBy('order')->first();
+        $lowest = self::query()->where('parent', '=', $this->parent)->orderBy('order')->first();
 
         return $this->id == $lowest->id;
     }
 
     public function isLast(): bool
     {
-        $highest = self::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
+        $highest = self::query()->where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
 
         return $this->id == $highest->id;
     }

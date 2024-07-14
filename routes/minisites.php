@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 $domains = config('proto.domains');
 
 foreach ($domains['smartxp'] as $domain) {

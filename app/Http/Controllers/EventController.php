@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -13,7 +16,6 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -22,8 +24,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Response;
-use Session;
 
 class EventController extends Controller
 {
@@ -46,7 +46,7 @@ class EventController extends Controller
             ->where('start', '>=', strtotime('now'))
             ->where('start', '>', strtotime('+1 month'));
 
-        $category = EventCategory::find($request->input('category'));
+        $category = EventCategory::query()->find($request->input('category'));
         foreach ($data as $index => $query) {
             if ($category) {
                 $data[$index] = $query->whereHas('Category', static function ($q) use ($category) {
@@ -75,7 +75,7 @@ class EventController extends Controller
     /** @return View */
     public function finindex()
     {
-        $activities = Activity::where('closed', false)->orderBy('registration_end', 'asc')->get();
+        $activities = Activity::query()->where('closed', false)->orderBy('registration_end', 'asc')->get();
 
         return view('event.notclosed', ['activities' => $activities]);
     }
@@ -108,7 +108,7 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
-        $event = Event::create([
+        $event = Event::query()->create([
             'title' => $request->title,
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
@@ -129,9 +129,9 @@ class EventController extends Controller
             $event->image()->associate($file);
         }
 
-        $committee = Committee::find($request->input('committee'));
+        $committee = Committee::query()->find($request->input('committee'));
         $event->committee()->associate($committee);
-        $category = EventCategory::find($request->input('category'));
+        $category = EventCategory::query()->find($request->input('category'));
         $event->category()->associate($category);
         $event->save();
 
@@ -146,7 +146,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
 
         return view('event.edit', ['event' => $event]);
     }
@@ -160,7 +160,7 @@ class EventController extends Controller
     public function update(StoreEventRequest $request, $id)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -189,12 +189,12 @@ class EventController extends Controller
         }
 
         if ($request->has('committee')) {
-            $committee = Committee::find($request->input('committee'));
+            $committee = Committee::query()->find($request->input('committee'));
             $event->committee()->associate($committee);
         }
 
         if ($request->has('category')) {
-            $category = EventCategory::find($request->input('category'));
+            $category = EventCategory::query()->find($request->input('category'));
             $event->category()->associate($category);
         }
 
@@ -223,7 +223,7 @@ class EventController extends Controller
             ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
             ->get();
 
-        $category = EventCategory::find($request->category);
+        $category = EventCategory::query()->find($request->category);
 
         $months = [];
         for ($i = 1; $i <= 12; ++$i) {
@@ -253,7 +253,7 @@ class EventController extends Controller
     public function destroy($id)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
 
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
@@ -283,7 +283,7 @@ class EventController extends Controller
      */
     public function admin($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -300,7 +300,7 @@ class EventController extends Controller
      */
     public function scan($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -318,7 +318,7 @@ class EventController extends Controller
     public function finclose(Request $request, $id)
     {
         /** @var Activity $activity */
-        $activity = Activity::findOrFail($id);
+        $activity = Activity::query()->findOrFail($id);
 
         if ($activity->event && ! $activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
@@ -334,7 +334,7 @@ class EventController extends Controller
 
         $activity->attendees = $request->input('attendees');
 
-        $account = Account::findOrFail($request->input('account'));
+        $account = Account::query()->findOrFail($request->input('account'));
 
         if (count($activity->users) == 0 || $activity->price == 0) {
             $activity->closed = true;
@@ -346,7 +346,7 @@ class EventController extends Controller
             return Redirect::back();
         }
 
-        $product = Product::create([
+        $product = Product::query()->create([
             'account_id' => $account->id,
             'name' => 'Activity: '.($activity->event ? $activity->event->title : $activity->comment),
             'price' => $activity->price,
@@ -373,9 +373,9 @@ class EventController extends Controller
     public function linkAlbum(Request $request, $event)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($event);
+        $event = Event::query()->findOrFail($event);
         /** @var PhotoAlbum $album */
-        $album = PhotoAlbum::findOrFail($request->album_id);
+        $album = PhotoAlbum::query()->findOrFail($request->album_id);
 
         $album->event()->associate($event);
         $album->save();
@@ -392,7 +392,7 @@ class EventController extends Controller
     public function unlinkAlbum($album)
     {
         /** @var PhotoAlbum $album */
-        $album = PhotoAlbum::findOrFail($album);
+        $album = PhotoAlbum::query()->findOrFail($album);
         $album->event()->dissociate();
         $album->save();
 
@@ -409,7 +409,7 @@ class EventController extends Controller
         $user = Auth::user() ?? null;
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
 
-        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::query()->where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {
@@ -508,7 +508,7 @@ class EventController extends Controller
      */
     public function icalCalendar($personal_key = null)
     {
-        $user = ($personal_key ? User::where('personal_key', $personal_key)->first() : null);
+        $user = ($personal_key ? User::query()->where('personal_key', $personal_key)->first() : null);
 
         $calendar_name = $user ? sprintf('S.A. Proto Calendar for %s', $user->calling_name) : 'S.A. Proto Calendar';
 
@@ -541,7 +541,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
-        foreach (Event::where('start', '>', strtotime('-6 months'))->get() as $event) {
+        foreach (Event::query()->where('start', '>', strtotime('-6 months'))->get() as $event) {
             if (! $event->mayViewEvent(Auth::user())) {
                 continue;
             }
@@ -635,7 +635,7 @@ CALSCALE:GREGORIAN
      */
     public function categoryAdmin(Request $request)
     {
-        $category = EventCategory::find($request->id);
+        $category = EventCategory::query()->find($request->id);
 
         return view('event.categories', ['cur_category' => $category]);
     }
@@ -661,7 +661,7 @@ CALSCALE:GREGORIAN
      */
     public function categoryUpdate(Request $request, $id)
     {
-        $category = EventCategory::findOrFail($id);
+        $category = EventCategory::query()->findOrFail($id);
         $category->name = $request->input('name');
         $category->icon = $request->input('icon');
         $category->save();
@@ -679,7 +679,7 @@ CALSCALE:GREGORIAN
      */
     public function categoryDestroy($id)
     {
-        $category = EventCategory::findOrFail($id);
+        $category = EventCategory::query()->findOrFail($id);
         $events = $category->events;
         if ($events) {
             foreach ($events as $event) {
@@ -696,7 +696,7 @@ CALSCALE:GREGORIAN
 
     public function copyEvent(Request $request)
     {
-        $event = Event::findOrFail($request->id);
+        $event = Event::query()->findOrFail($request->id);
 
         $oldStart = Carbon::createFromTimestamp($event->start);
 
@@ -734,7 +734,7 @@ CALSCALE:GREGORIAN
 
             if ($event->activity->helpingCommitteeInstances) {
                 foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
-                    HelpingCommittee::create([
+                    HelpingCommittee::query()->create([
                         'activity_id' => $newActivity->id,
                         'committee_id' => $helpingCommittee->committee_id,
                         'amount' => $helpingCommittee->amount,

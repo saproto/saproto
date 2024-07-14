@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Company;
 use App\Models\StorageEntry;
 use Exception;
@@ -9,8 +11,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class CompanyController extends Controller
 {
@@ -21,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::where('on_carreer_page', true)->inRandomOrder()->get();
+        $companies = Company::query()->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         }
@@ -38,7 +38,7 @@ class CompanyController extends Controller
      */
     public function indexMembercard()
     {
-        $companies = Company::where('on_membercard', true)->inRandomOrder()->get();
+        $companies = Company::query()->where('on_membercard', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         }
@@ -55,7 +55,7 @@ class CompanyController extends Controller
      */
     public function adminIndex()
     {
-        return view('companies.adminlist', ['companies' => Company::orderBy('sort')->paginate(20)]);
+        return view('companies.adminlist', ['companies' => Company::query()->orderBy('sort')->paginate(20)]);
     }
 
     /**
@@ -110,7 +110,7 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        return view('companies.show', ['company' => Company::findOrFail($id)]);
+        return view('companies.show', ['company' => Company::query()->findOrFail($id)]);
     }
 
     /**
@@ -121,7 +121,7 @@ class CompanyController extends Controller
      */
     public function showMembercard($id)
     {
-        return view('companies.showmembercard', ['company' => Company::findOrFail($id)]);
+        return view('companies.showmembercard', ['company' => Company::query()->findOrFail($id)]);
     }
 
     /**
@@ -132,7 +132,7 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::query()->findOrFail($id);
 
         return view('companies.edit', ['company' => $company]);
     }
@@ -147,7 +147,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::query()->findOrFail($id);
         $company->name = $request->name;
         $company->url = $request->url;
         $company->excerpt = $request->excerpt;
@@ -177,13 +177,13 @@ class CompanyController extends Controller
      */
     public function orderUp($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::query()->findOrFail($id);
 
         if ($company->sort <= 0) {
             abort(500);
         }
 
-        $companyAbove = Company::where('sort', $company->sort - 1)->first();
+        $companyAbove = Company::query()->where('sort', $company->sort - 1)->first();
 
         ++$companyAbove->sort;
         $companyAbove->save();
@@ -200,13 +200,13 @@ class CompanyController extends Controller
      */
     public function orderDown($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::query()->findOrFail($id);
 
-        if ($company->sort >= Company::count() - 1) {
+        if ($company->sort >= Company::query()->count() - 1) {
             abort(500);
         }
 
-        $companyAbove = Company::where('sort', $company->sort + 1)->first();
+        $companyAbove = Company::query()->where('sort', $company->sort + 1)->first();
 
         --$companyAbove->sort;
         $companyAbove->save();
@@ -227,7 +227,7 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        $company = Company::findOrFail($id);
+        $company = Company::query()->findOrFail($id);
 
         Session::flash('flash_message', "The company '".$company->name."' has been deleted.");
         $company->delete();

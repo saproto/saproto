@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Cookie;
 use Carbon;
-use Cookie;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -182,14 +182,14 @@ class Announcement extends Model
             return true;
         }
 
-        return HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0;
+        return HashMapItem::query()->where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0;
     }
 
     /** @param  User|null  $user */
     public function dismissForUser($user = null): void
     {
         if ($user) {
-            HashMapItem::create(['key' => $this->hash_map_id, 'subkey' => $user->id]);
+            HashMapItem::query()->create(['key' => $this->hash_map_id, 'subkey' => $user->id]);
         } else {
             Cookie::queue($this->hash_map_id, true, 525600);
         }

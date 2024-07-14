@@ -64,9 +64,9 @@ class IsAlfredThereController extends Controller
     /** @return HashMapItem */
     public static function getOrCreateHasMapItem($key)
     {
-        $item = HashMapItem::where('key', $key)->first();
+        $item = HashMapItem::query()->where('key', $key)->first();
         if (! $item) {
-            return HashMapItem::create([
+            return HashMapItem::query()->create([
                 'key' => $key,
                 'value' => '',
             ]);

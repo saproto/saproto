@@ -50,7 +50,7 @@ class AchievementsCron extends Command
 
         // Get data that will be the same for every user.
         $first = [];
-        foreach (Product::where('is_visible')->get() as $product) {
+        foreach (Product::query()->where('is_visible')->get() as $product) {
             /** @var OrderLine $orderline */
             $orderline = $product->orderlines()->first();
             $first[] = $orderline->user_id;
@@ -142,9 +142,9 @@ class AchievementsCron extends Command
      */
     private function giveAchievement($user, int $id): void
     {
-        $achievement = Achievement::find($id);
+        $achievement = Achievement::query()->find($id);
 
-        AchievementOwnership::updateOrCreate([
+        AchievementOwnership::query()->updateOrCreate([
             'user_id' => $user->id,
             'achievement_id' => $id,
         ]);
@@ -258,9 +258,9 @@ class AchievementsCron extends Command
      */
     private function nThActivity($user, int $n): bool
     {
-        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
-        $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
-        $events = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
+        $participated = ActivityParticipation::query()->where('user_id', $user->id)->pluck('activity_id');
+        $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
+        $events = Event::query()->whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
 
         return $events->count() >= $n;
     }
@@ -281,8 +281,8 @@ class AchievementsCron extends Command
             return false;
         }
 
-        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
-        $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+        $participated = ActivityParticipation::query()->where('user_id', $user->id)->pluck('activity_id');
+        $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
         $EventsParticipated = Event::query()
             ->whereHas('activity')
             ->where('secret', false)
@@ -336,7 +336,7 @@ class AchievementsCron extends Command
     {
         $products = [];
         foreach ($categories as $category) {
-            $products = array_merge($products, ProductCategory::find($category)->sortedProducts()->pluck('id')->toArray());
+            $products = array_merge($products, ProductCategory::query()->find($category)->sortedProducts()->pluck('id')->toArray());
         }
 
         return $products;

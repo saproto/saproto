@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Crypt;
+use Illuminate\Support\Facades\Crypt;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,7 +49,7 @@ class EmailList extends Model
      */
     public function isSubscribed($user): bool
     {
-        return EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
+        return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
     /**
@@ -59,7 +59,7 @@ class EmailList extends Model
     public function subscribe($user): bool
     {
         if (! $this->isSubscribed($user)) {
-            EmailListSubscription::create([
+            EmailListSubscription::query()->create([
                 'user_id' => $user->id,
                 'list_id' => $this->id,
             ]);
@@ -78,7 +78,7 @@ class EmailList extends Model
      */
     public function unsubscribe($user): bool
     {
-        $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
+        $s = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id);
         if ($s == null) {
             return false;
         }

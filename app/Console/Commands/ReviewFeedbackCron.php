@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\Mail;
 use Carbon;
 use App\Mail\ReviewFeedbackMail;
 use App\Models\FeedbackCategory;
 use Illuminate\Console\Command;
-use Mail;
 
 class ReviewFeedbackCron extends Command
 {

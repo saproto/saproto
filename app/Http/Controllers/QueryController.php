@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -174,33 +174,33 @@ class QueryController extends Controller
             $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
         }
 
-        $eventCategories = EventCategory::withCount(['events' => static function ($query) use ($start, $end) {
+        $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {
             $query->where('start', '>=', $start)->where('end', '<=', $end);
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
-            $category->spots = Activity::whereHas('event', static function ($query) use ($category, $start, $end) {
+            $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
                 ->sum('participants');
 
-            $category->signups = ActivityParticipation::whereHas('activity', static function ($query) use ($category, $start, $end) {
+            $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
                 $query->whereHas('event', static function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
 
-            $category->attendees = Activity::where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
+            $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
         }
 
-        $events = Event::selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
+        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
 
-        $totalEvents = Event::where('start', '>=', $start)->where('end', '<=', $end)->count();
+        $totalEvents = Event::query()->where('start', '>=', $start)->where('end', '<=', $end)->count();
 
         $changeGMM = Carbon::create('01-09-2010');
         foreach ($events as $event) {

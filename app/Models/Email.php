@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Carbon;
-use DB;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -128,27 +128,27 @@ class Email extends Model
     public function recipients()
     {
         if ($this->to_user) {
-            return User::orderBy('name')->get();
+            return User::query()->orderBy('name')->get();
         }
 
         if ($this->to_member) {
-            return User::whereHas('member', static function ($q) {
+            return User::query()->whereHas('member', static function ($q) {
                 $q->where('is_pending', false);
             })->orderBy('name')->get();
         }
 
         if ($this->to_pending) {
-            return User::whereHas('member', static function ($q) {
+            return User::query()->whereHas('member', static function ($q) {
                 $q->where('is_pending', true);
             })->orderBy('name')->get();
         }
 
         if ($this->to_active) {
-            return User::whereHas('committees')->orderBy('name')->get();
+            return User::query()->whereHas('committees')->orderBy('name')->get();
         }
 
         if ($this->to_list) {
-            return User::whereHas('lists', function ($q) {
+            return User::query()->whereHas('lists', function ($q) {
                 $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         }
@@ -164,7 +164,7 @@ class Email extends Model
                 }
             }
 
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::query()->whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         }
 
         return collect([]);

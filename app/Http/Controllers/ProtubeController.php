@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use App\Models\PlayedVideo;
 use App\Models\User;
-use Auth;
-use DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Session;
 
 class ProtubeController extends Controller
 {
@@ -28,7 +28,7 @@ class ProtubeController extends Controller
     /** @return View */
     public function dashboard()
     {
-        $user_count = PlayedVideo::where('user_id', Auth::user()->id)->count();
+        $user_count = PlayedVideo::query()->where('user_id', Auth::user()->id)->count();
 
         return view('protube.dashboard', [
             'history' => $this->getHistory(),
@@ -93,7 +93,7 @@ class ProtubeController extends Controller
     public function clearHistory()
     {
         $user = Auth::user();
-        PlayedVideo::where('user_id', $user->id)->update(['user_id' => null]);
+        PlayedVideo::query()->where('user_id', $user->id)->update(['user_id' => null]);
 
         Session::flash('flash_message', 'History cleared.');
 

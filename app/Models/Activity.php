@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -57,7 +56,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Activity newQuery()
  * @method static Builder|Activity query()
  *
- * @mixin Eloquent
  */
 class Activity extends Validatable
 {
@@ -73,19 +71,16 @@ class Activity extends Validatable
         'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
     ];
 
-    /** @return BelongsTo */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
-    /** @return BelongsTo */
     public function closedAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'closed_account');
     }
 
-    /** @return BelongsToMany */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -96,7 +91,6 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
-    /** @return BelongsToMany */
     public function presentUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -108,8 +102,7 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
-    /** @return BelongsToMany */
-    public function allUsers()
+    public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
@@ -133,19 +126,17 @@ class Activity extends Validatable
         return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
-    /** @return HasMany */
-    public function helpingCommitteeInstances()
+    public function helpingCommitteeInstances(): HasMany
     {
         return $this->hasMany(HelpingCommittee::class, 'activity_id');
     }
 
     /**
-     * @param int $help_id
      * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
      */
-    public function helpingUsers($help_id)
+    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
     }
 
     /**
@@ -153,9 +144,9 @@ class Activity extends Validatable
      * @param User $user
      * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
-    public function getHelpingParticipation($committee, $user)
+    public function getHelpingParticipation(Committee $committee, User $user): ?ActivityParticipation
     {
-        $h = HelpingCommittee::where('activity_id', $this->id)
+        $h = HelpingCommittee::query()->where('activity_id', $this->id)
             ->where('committee_id', $committee->id)
             ->first();
 
@@ -163,7 +154,7 @@ class Activity extends Validatable
             return null;
         }
 
-        return ActivityParticipation::where('activity_id', $this->id)
+        return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)->first();
     }
@@ -173,16 +164,16 @@ class Activity extends Validatable
      * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation($user, $h = null)
+    public function getParticipation(User $user, HelpingCommittee $h = null): ?ActivityParticipation
     {
         if ($h == null) {
-            return ActivityParticipation::where('activity_id', $this->id)
+            return ActivityParticipation::query()->where('activity_id', $this->id)
                 ->where('user_id', $user->id)
                 ->whereNull('committees_activities_id')
                 ->first();
         }
 
-        return ActivityParticipation::where('activity_id', $this->id)
+        return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)
             ->first();
@@ -202,16 +193,15 @@ class Activity extends Validatable
      * @param User $user
      * @return bool Whether the user participates
      */
-    public function isParticipating($user)
+    public function isParticipating(User $user): bool
     {
-        return $this->getParticipation($user) !== null;
+        return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
     /**
      * @param User $user
-     * @return bool
      */
-    public function isOnBackupList($user)
+    public function isOnBackupList(User $user): bool
     {
         return $this->backupUsers->where('id', $user->id)->first() !== null;
     }
@@ -221,19 +211,19 @@ class Activity extends Validatable
      * @param HelpingCommittee|null $h
      * @return bool Whether the user or committee is helping
      */
-    public function isHelping($user, $h = null)
+    public function isHelping(User $user, HelpingCommittee $h = null): bool
     {
-        if ($h) {
-            return $this->getParticipation($user, $h) !== null;
+        if ($h instanceof HelpingCommittee) {
+            return $this->getParticipation($user, $h) instanceof ActivityParticipation;
         }
 
-        return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
+        return ActivityParticipation::query()->where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
     }
 
     /**
      * @return bool Whether the user is organising
      */
-    public function isOrganising(User $user)
+    public function isOrganising(User $user): ?bool
     {
         return $this->event?->committee?->isMember($user);
     }
@@ -249,7 +239,7 @@ class Activity extends Validatable
     /**
      * @return int The number of free spots
      */
-    public function freeSpots()
+    public function freeSpots(): int
     {
         if ($this->participants <= 0) {
             return -1;
@@ -261,7 +251,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether people can still subscribed to the activity.
      */
-    public function canSubscribe()
+    public function canSubscribe(): bool
     {
         if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
@@ -273,7 +263,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether people can still subscribe to the activity's backup list.
      */
-    public function canSubscribeBackup()
+    public function canSubscribeBackup(): bool
     {
         if ($this->canSubscribe()) {
             return true;
@@ -285,7 +275,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether people can still unsubscribe from the activity.
      */
-    public function canUnsubscribe()
+    public function canUnsubscribe(): bool
     {
         if ($this->closed) {
             return false;
@@ -297,7 +287,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether the activity has started yet.
      */
-    public function hasStarted()
+    public function hasStarted(): bool
     {
         return $this->event->start < date('U');
     }
@@ -305,7 +295,7 @@ class Activity extends Validatable
     /**
      * @return bool Whether the activity has participants.
      */
-    public function withParticipants()
+    public function withParticipants(): bool
     {
         return $this->participants !== 0;
     }
@@ -320,7 +310,7 @@ class Activity extends Validatable
 
     public function getPresent(): int
     {
-        return ActivityParticipation::where('activity_id', $this->id)
+        return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('is_present', true)
             ->where('backup', false)
             ->whereNull('deleted_at')

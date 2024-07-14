@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPIException;
 use App\Http\Controllers\SpotifyController;
 use App\Models\PlayedVideo;
-use DB;
 use Illuminate\Console\Command;
 
 class SpotifyUpdate extends Command
@@ -70,7 +70,7 @@ class SpotifyUpdate extends Command
 
         $this->info('Constructing ProTube hitlist.');
 
-        $videos = PlayedVideo::whereNull('spotify_id')->orderBy('id', 'desc')->limit(1000)->get();
+        $videos = PlayedVideo::query()->whereNull('spotify_id')->orderBy('id', 'desc')->limit(1000)->get();
 
         $videos_to_search = [];
 
@@ -110,7 +110,7 @@ class SpotifyUpdate extends Command
 
         foreach ($videos_to_search as $video) {
             if (! $video->spotify_id) {
-                $sameVideo = PlayedVideo::where('video_id', $video->video_id)->whereNotNull('spotify_id')->first();
+                $sameVideo = PlayedVideo::query()->where('video_id', $video->video_id)->whereNotNull('spotify_id')->first();
 
                 if ($sameVideo) {
                     DB::table('playedvideos')->where('video_id', $video->video_id)->update(['spotify_id' => $sameVideo->spotify_id, 'spotify_name' => $sameVideo->spotify_name]);

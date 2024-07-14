@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 use App\Models\Activity;
 use App\Models\FailedWithdrawal;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
-use Auth;
 use Carbon;
-use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class OrderLineController extends Controller
 {
@@ -62,7 +62,7 @@ class OrderLineController extends Controller
             }
         }
 
-        $outstanding = Activity::whereHas('users', static function (Builder $query) {
+        $outstanding = Activity::query()->whereHas('users', static function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
         })->where('closed', false);
 
@@ -93,11 +93,11 @@ class OrderLineController extends Controller
     public function adminindex(Request $request)
     {
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', static function ($query) {
+            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', (Carbon::today()));
         } else {
-            $orderlines = OrderLine::whereDate('created_at', Carbon::today());
+            $orderlines = OrderLine::query()->whereDate('created_at', Carbon::today());
         }
 
         $orderlines = $orderlines->with('user', 'product')->orderBy('created_at', 'desc')->paginate(20);
@@ -111,11 +111,11 @@ class OrderLineController extends Controller
 
     public function orderlineWizard()
     {
-        $members = User::whereHas('member', static function ($query) {
+        $members = User::query()->whereHas('member', static function ($query) {
             $query->where('is_pending', false);
         })->orderBy('name')->get();
 
-        $products = Product::where('is_visible', true)->orderBy('name')->get();
+        $products = Product::query()->where('is_visible', true)->orderBy('name')->get();
 
         return view('omnomcom.orders.admin_includes.orderline-wizard', [
             'members' => $members,
@@ -131,11 +131,11 @@ class OrderLineController extends Controller
         $date = Carbon::parse($request->input('date'))->format('d-m-Y');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', static function ($query) {
+            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
-            $orderlines = OrderLine::whereDate('created_at', Carbon::parse($date));
+            $orderlines = OrderLine::query()->whereDate('created_at', Carbon::parse($date));
         }
 
         $orderlines = $orderlines->with('user', 'product')
@@ -158,11 +158,11 @@ class OrderLineController extends Controller
         $user = $request->input('user');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::whereHas('product', static function ($query) {
+            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->where('user_id', $user);
         } else {
-            $orderlines = OrderLine::where('user_id', $user);
+            $orderlines = OrderLine::query()->where('user_id', $user);
         }
 
         $orderlines = $orderlines->with('user', 'product')
@@ -172,7 +172,7 @@ class OrderLineController extends Controller
 
         return view('omnomcom.orders.adminhistory', [
             'date' => null,
-            'user' => User::findOrFail($user)->name,
+            'user' => User::query()->findOrFail($user)->name,
             'orderlines' => $orderlines,
         ]);
     }
@@ -185,8 +185,8 @@ class OrderLineController extends Controller
         $counter = count($request->input('user'));
         for ($i = 0; $i < $counter; ++$i) {
             /** @var Product $product */
-            $product = Product::findOrFail($request->input('product')[$i]);
-            $user = User::findOrFail($request->input('user')[$i]);
+            $product = Product::query()->findOrFail($request->input('product')[$i]);
+            $user = User::query()->findOrFail($request->input('user')[$i]);
             $price = ($request->input('price')[$i] != '' ? floatval(str_replace(',', '.', $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
             $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'), sprintf('bulk_add_by_%u', Auth::user()->id));
@@ -207,8 +207,8 @@ class OrderLineController extends Controller
         $counter = count($request->input('user'));
         for ($u = 0; $u < $counter; ++$u) {
             for ($p = 0; $p < count($request->input('product')); ++$p) {
-                $user = User::findOrFail($request->input('user')[$u]);
-                $product = Product::findOrFail($request->input('product')[$p]);
+                $user = User::query()->findOrFail($request->input('user')[$u]);
+                $product = Product::query()->findOrFail($request->input('product')[$p]);
 
                 $product->buyForUser($user, 1, null, null, null, null, sprintf('simple_add_by_%u', Auth::user()->id));
             }
@@ -228,7 +228,7 @@ class OrderLineController extends Controller
     public function destroy(Request $request, $id)
     {
         /** @var OrderLine $order */
-        $order = OrderLine::findOrFail($id);
+        $order = OrderLine::query()->findOrFail($id);
 
         if (! $order->canBeDeleted()) {
             Session::flash('flash_message', 'The orderline cannot be deleted.');
@@ -239,14 +239,14 @@ class OrderLineController extends Controller
         $order->product->stock += $order->units;
         $order->product->save();
 
-        $ticketPurchase = TicketPurchase::where('orderline_id', $id)->with('ticket.event')->get();
+        $ticketPurchase = TicketPurchase::query()->where('orderline_id', $id)->with('ticket.event')->get();
         if ($ticketPurchase->count() > 0) {
             $ticketPurchase = $ticketPurchase->first();
             $ticketPurchase->delete();
             $ticketPurchase->ticket->event->updateUniqueUsersCount();
         }
 
-        FailedWithdrawal::where('correction_orderline_id', $id)->delete();
+        FailedWithdrawal::query()->where('correction_orderline_id', $id)->delete();
 
         $order->delete();
 

@@ -18,7 +18,7 @@ class RegistrationHelperController extends Controller
     {
         $search = $request->input('query');
 
-        $users = User::whereHas('member', static function ($q) {
+        $users = User::query()->whereHas('member', static function ($q) {
             $q->where('is_pending', true);
         });
 
@@ -47,7 +47,7 @@ class RegistrationHelperController extends Controller
      */
     public function details($id)
     {
-        $user = User::whereHas('member', static function ($q) {
+        $user = User::query()->whereHas('member', static function ($q) {
             $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
         $memberships = $user->getMemberships();

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Redirect;
 use App\Models\HashMapItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Redirect;
-use Session;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -49,16 +48,16 @@ class SpotifyController extends Controller
 
         self::setSession($session);
         self::setApi($api);
-        Session::flash('flash_message', 'Successfully saved Spotify credentials.');
+        \Illuminate\Support\Facades\Session::flash('flash_message', 'Successfully saved Spotify credentials.');
 
         return Redirect::route('homepage');
     }
 
     public static function setSession(SpotifySession $session): void
     {
-        $dbSession = HashMapItem::where('key', 'spotify')->where('subkey', 'session')->first();
+        $dbSession = HashMapItem::query()->where('key', 'spotify')->where('subkey', 'session')->first();
         if ($dbSession == null) {
-            $dbSession = HashMapItem::create([
+            $dbSession = HashMapItem::query()->create([
                 'key' => 'spotify',
                 'subkey' => 'session',
             ]);
@@ -70,9 +69,9 @@ class SpotifyController extends Controller
 
     public static function setApi(SpotifyWebAPI $api): void
     {
-        $dbApi = HashMapItem::where('key', 'spotify')->where('subkey', 'api')->first();
+        $dbApi = HashMapItem::query()->where('key', 'spotify')->where('subkey', 'api')->first();
         if ($dbApi == null) {
-            $dbApi = HashMapItem::create([
+            $dbApi = HashMapItem::query()->create([
                 'key' => 'spotify',
                 'subkey' => 'api',
             ]);
@@ -85,7 +84,7 @@ class SpotifyController extends Controller
     public static function getSession(): SpotifySession
     {
         return unserialize(
-            HashMapItem::where('key', 'spotify')
+            HashMapItem::query()->where('key', 'spotify')
                 ->where('subkey', 'session')
                 ->first()->value
         );
@@ -94,7 +93,7 @@ class SpotifyController extends Controller
     public static function getApi(): SpotifyWebAPI
     {
         return unserialize(
-            HashMapItem::where('key', 'spotify')
+            HashMapItem::query()->where('key', 'spotify')
                 ->where('subkey', 'api')
                 ->first()->value
         );

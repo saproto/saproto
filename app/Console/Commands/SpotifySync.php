@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\SpotifyController;
-use DB;
 use Illuminate\Console\Command;
 use SpotifyWebAPI\SpotifyWebAPIException;
 

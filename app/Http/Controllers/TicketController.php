@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\Ticket;
 use App\Models\TicketPurchase;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use PDF;
-use Redirect;
-use Session;
 
 class TicketController extends Controller
 {
     /** @return View */
     public function index()
     {
-        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
+        return view('tickets.index', ['tickets' => Ticket::query()->orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
     }
 
     /** @return View */
@@ -42,8 +42,8 @@ class TicketController extends Controller
         }
 
         $ticket = new Ticket();
-        $ticket->event_id = Event::findOrFail($request->input('event'))->id;
-        $ticket->product_id = Product::findOrFail($request->input('product'))->id;
+        $ticket->event_id = Event::query()->findOrFail($request->input('event'))->id;
+        $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
@@ -64,7 +64,7 @@ class TicketController extends Controller
      */
     public function edit($id)
     {
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::query()->findOrFail($id);
 
         return view('tickets.edit', ['ticket' => $ticket]);
     }
@@ -82,14 +82,14 @@ class TicketController extends Controller
         }
 
         /** @var Ticket $ticket */
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::query()->findOrFail($id);
 
         if ($request->has('event')) {
-            $ticket->event_id = Event::findOrFail($request->input('event'))->id;
+            $ticket->event_id = Event::query()->findOrFail($request->input('event'))->id;
         }
 
         if ($request->has('product')) {
-            $ticket->product_id = Product::findOrFail($request->input('product'))->id;
+            $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
         }
 
         $ticket->members_only = $request->has('is_members_only');
@@ -115,7 +115,7 @@ class TicketController extends Controller
     public function destroy($id)
     {
         /** @var Ticket $ticket */
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket::query()->findOrFail($id);
         if ($ticket->purchases()->count() > 0) {
             Session::flash('flash_message', 'This ticket has already been sold, you cannot remove it!');
 
@@ -135,7 +135,7 @@ class TicketController extends Controller
      */
     public function scan($barcode)
     {
-        $ticket = TicketPurchase::where('barcode', $barcode)->first();
+        $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');
 
@@ -168,7 +168,7 @@ class TicketController extends Controller
 
         $unscan = $request->has('unscan');
 
-        $event = Event::find($event);
+        $event = Event::query()->find($event);
         if ($event === null) {
             return [
                 'code' => 500,
@@ -178,7 +178,7 @@ class TicketController extends Controller
         }
 
         /** @var TicketPurchase|null $ticket */
-        $ticket = TicketPurchase::where('barcode', $request->barcode)->first();
+        $ticket = TicketPurchase::query()->where('barcode', $request->barcode)->first();
 
         if ($ticket != null && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             return [
@@ -255,7 +255,7 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        $ticket = TicketPurchase::where('barcode', $barcode)->first();
+        $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');
 
@@ -280,7 +280,7 @@ class TicketController extends Controller
     public function download($id)
     {
         /** @var TicketPurchase $ticket */
-        $ticket = TicketPurchase::findOrFail($id);
+        $ticket = TicketPurchase::query()->findOrFail($id);
         if ($ticket->user->id != Auth::id()) {
             abort(403, 'This is not your ticket!');
         } elseif (! $ticket->canBeDownloaded()) {
@@ -302,7 +302,7 @@ class TicketController extends Controller
     public function buyForEvent(Request $request, $id)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
 
         if ($event->tickets->count() < 1) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
@@ -317,8 +317,8 @@ class TicketController extends Controller
         }
 
         foreach ($request->get('tickets') as $ticket_id => $amount) {
-            $ticket = Ticket::find($ticket_id);
-            $user_owns = TicketPurchase::where('user_id', Auth::id())->where('ticket_id', $ticket_id)->count();
+            $ticket = Ticket::query()->find($ticket_id);
+            $user_owns = TicketPurchase::query()->where('user_id', Auth::id())->where('ticket_id', $ticket_id)->count();
             if (! $ticket) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is not an existing ticket. Entire order cancelled.");
 
@@ -362,7 +362,7 @@ class TicketController extends Controller
 
         $total_cost = 0;
         foreach ($request->get('tickets') as $ticket_id => $amount) {
-            $ticket = Ticket::find($ticket_id);
+            $ticket = Ticket::query()->find($ticket_id);
 
             for ($i = 0; $i < $amount; ++$i) {
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
@@ -373,7 +373,7 @@ class TicketController extends Controller
                     $total_cost += $ticket->product->price;
                 }
 
-                $purchase = TicketPurchase::create([
+                $purchase = TicketPurchase::query()->create([
                     'ticket_id' => $ticket_id,
                     'orderline_id' => $oid,
                     'user_id' => Auth::id(),
@@ -428,7 +428,7 @@ class TicketController extends Controller
             Session::put('prepaid_tickets', $event->id);
             $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets, $payment_method);
 
-            OrderLine::whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
+            OrderLine::query()->whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
 
             return Redirect::to($transaction->payment_url);
         }

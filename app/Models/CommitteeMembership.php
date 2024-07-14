@@ -66,6 +66,7 @@ class CommitteeMembership extends Model
     {
         return $this->belongsTo(Committee::class);
     }
+
     protected function casts(): array
     {
         return [

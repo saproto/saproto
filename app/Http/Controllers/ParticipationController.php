@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -10,14 +12,12 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Mail;
 
 class ParticipationController extends Controller
 {
@@ -28,10 +28,10 @@ class ParticipationController extends Controller
     public function create($id, Request $request)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($id);
+        $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
             abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
@@ -44,7 +44,7 @@ class ParticipationController extends Controller
         $is_web = Auth::guard('web')->user();
 
         if ($request->has('helping_committee_id')) {
-            $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
+            $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
             if (! $helping->committee->isMember(Auth::user())) {
                 abort(403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
             }
@@ -99,13 +99,13 @@ class ParticipationController extends Controller
     public function createFor($id, Request $request)
     {
         /** @var Event $event */
-        $event = Event::findOrFail($id);
-        $user = User::findOrFail($request->user_id);
+        $event = Event::query()->findOrFail($id);
+        $user = User::query()->findOrFail($request->user_id);
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
 
         if ($request->has('helping_committee_id')) {
-            $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
+            $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
             if (! $helping->committee->isMember($user)) {
                 abort(403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
             }
@@ -115,7 +115,7 @@ class ParticipationController extends Controller
 
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+        } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif ($event->activity->closed) {
             abort(403, 'This activity is closed, you cannot change participation anymore.');
@@ -147,7 +147,7 @@ class ParticipationController extends Controller
     public function destroy($participation_id, Request $request)
     {
         /** @var ActivityParticipation $participation */
-        $participation = ActivityParticipation::where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
+        $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
         if (! $participation) {
             Session::flash('flash_message', 'The participation is not found.');
@@ -221,7 +221,7 @@ class ParticipationController extends Controller
     public function togglePresence($participation_id, Request $request)
     {
         /** @var ActivityParticipation $participation */
-        $participation = ActivityParticipation::findOrFail($participation_id);
+        $participation = ActivityParticipation::query()->findOrFail($participation_id);
 
         if (! $participation->activity->event->isEventAdmin(Auth::user())) {
             abort(403, 'You are not an organizer for this event.');
@@ -242,7 +242,7 @@ class ParticipationController extends Controller
 
     public static function transferOneBackupUser(Activity $activity): void
     {
-        $backup_participation = ActivityParticipation::where('activity_id', $activity->id)
+        $backup_participation = ActivityParticipation::query()->where('activity_id', $activity->id)
             ->whereNull('committees_activities_id')->where('backup', true)
             ->with('user', 'activity.event')
             ->first();

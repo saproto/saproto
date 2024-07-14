@@ -14,7 +14,7 @@ class StockMutationController extends Controller
      */
     public function filterMutations(Request $rq, ?array $selection = null)
     {
-        $mutations = StockMutation::orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
+        $mutations = StockMutation::query()->orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
 
         // Find mutations by Pwoduct
         if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
@@ -86,7 +86,7 @@ class StockMutationController extends Controller
             $csv_header = ['Product ID', 'Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
             fputcsv($f, $csv_header);
             foreach ($mutations as $row) {
-                $product = Product::find($row['product_id']);
+                $product = Product::query()->find($row['product_id']);
 
                 if (! is_null($product)) {
                     fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);

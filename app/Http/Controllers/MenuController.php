@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
 use App\Models\MenuItem;
 use App\Models\Page;
 use Exception;
@@ -10,14 +11,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Session;
 
 class MenuController extends Controller
 {
     /** @return View */
     public function index()
     {
-        $menuItems = MenuItem::where('parent', null)->with('children', 'page')->orderBy('order')->get();
+        $menuItems = MenuItem::query()->where('parent', null)->with('children', 'page')->orderBy('order')->get();
 
         return view('menu.list', ['menuItems' => $menuItems]);
     }
@@ -26,7 +26,7 @@ class MenuController extends Controller
     public function create(Router $router)
     {
         $pages = Page::all();
-        $topMenuItems = MenuItem::where('parent')->orderBy('order')->get();
+        $topMenuItems = MenuItem::query()->where('parent')->orderBy('order')->get();
 
         return view('menu.edit', ['item' => null, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
@@ -41,8 +41,8 @@ class MenuController extends Controller
         $menuItem->parent = $request->input('parent') ?: null;
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
-        $menuItem->url = $menuItem->page_id ? Page::find($menuItem->page_id)->getUrl() : $request->input('url');
-        $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
+        $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+        $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
 
@@ -57,9 +57,9 @@ class MenuController extends Controller
      */
     public function edit(Router $router, $id)
     {
-        $menuItem = MenuItem::findOrFail($id);
+        $menuItem = MenuItem::query()->findOrFail($id);
         $pages = Page::all();
-        $topMenuItems = MenuItem::where('parent', null)->orderBy('order')->get();
+        $topMenuItems = MenuItem::query()->where('parent', null)->orderBy('order')->get();
 
         return view('menu.edit', ['item' => $menuItem, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
@@ -71,7 +71,7 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         /** @var MenuItem $menuItem */
-        $menuItem = MenuItem::findOrFail($id);
+        $menuItem = MenuItem::query()->findOrFail($id);
 
         if ($request->input('parent') != $menuItem->parent) {
             $oldparent = $menuItem->parent;
@@ -81,8 +81,8 @@ class MenuController extends Controller
         $menuItem->parent = $request->input('parent') ?: null;
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
-        $menuItem->url = $menuItem->page_id ? Page::find($menuItem->page_id)->getUrl() : $request->input('url');
-        $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
+        $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+        $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
 
@@ -102,8 +102,8 @@ class MenuController extends Controller
     public function orderUp($id)
     {
         /** @var MenuItem $menuItem */
-        $menuItem = MenuItem::findOrFail($id);
-        $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
+        $menuItem = MenuItem::query()->findOrFail($id);
+        $menuItemAbove = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
         if (! $menuItemAbove) {
             abort(400, 'Item is already top item.');
@@ -122,8 +122,8 @@ class MenuController extends Controller
     public function orderDown($id)
     {
         /** @var MenuItem $menuItem */
-        $menuItem = MenuItem::findOrFail($id);
-        $menuItemBelow = MenuItem::where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
+        $menuItem = MenuItem::query()->findOrFail($id);
+        $menuItemBelow = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
         if (! $menuItemBelow) {
             abort(400, 'Item is already bottom item.');
@@ -154,7 +154,7 @@ class MenuController extends Controller
     /** @param  int  $parent */
     private function fixDuplicateMenuItemsOrder($parent): void
     {
-        $menuItems = MenuItem::where('parent', $parent)->orderBy('order', 'asc')->get();
+        $menuItems = MenuItem::query()->where('parent', $parent)->orderBy('order', 'asc')->get();
         $i = 0;
         foreach ($menuItems as $menuItem) {
             $menuItem->order = $i;
@@ -172,7 +172,7 @@ class MenuController extends Controller
     public function destroy($id)
     {
         /** @var MenuItem $menuItem */
-        $menuItem = MenuItem::findOrfail($id);
+        $menuItem = MenuItem::query()->findOrfail($id);
 
         if ($menuItem->children->count() > 0) {
             Session::flash('flash_message', "A menu item with children can't be removed.");
@@ -180,7 +180,7 @@ class MenuController extends Controller
             return Redirect::route('menu::list');
         }
 
-        $change = MenuItem::where('parent', '=', $menuItem->parent)->get();
+        $change = MenuItem::query()->where('parent', '=', $menuItem->parent)->get();
 
         foreach ($change as $item) {
             if ($item->order > $menuItem->order && $item->id != $menuItem->id) {

@@ -84,22 +84,21 @@ class Member extends Model
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
-    /** @return int */
-    public static function countActiveMembers()
+    public static function countActiveMembers(): int
     {
-        return User::whereHas('committees')->count();
+        return User::query()->whereHas('committees')->count();
     }
 
-    public static function countPendingMembers()
+    public static function countPendingMembers(): int
     {
-        return User::whereHas('member', static function ($query) {
+        return User::query()->whereHas('member', static function ($query) {
             $query->where('is_pending', true);
         })->count();
     }
 
-    public static function countValidMembers()
+    public static function countValidMembers(): int
     {
-        return User::whereHas('member', static function ($query) {
+        return User::query()->whereHas('member', static function ($query) {
             $query->where('is_pending', false);
         })->count();
     }
@@ -156,13 +155,14 @@ class Member extends Model
         $usernameBase = substr($usernameBase, 0, 17);
 
         $username = $usernameBase;
-        $i = Member::where('proto_username', $username)->withTrashed()->count();
+        $i = \App\Models\Member::query()->where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
             return "{$usernameBase}-{$i}";
         }
 
         return $username;
     }
+
     protected function casts(): array
     {
         return [

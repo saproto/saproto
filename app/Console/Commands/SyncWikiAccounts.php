@@ -37,7 +37,7 @@ class SyncWikiAccounts extends Command
      */
     public function handle(): void
     {
-        $users = User::get();
+        $users = User::query()->get();
 
         $configlines = [];
 

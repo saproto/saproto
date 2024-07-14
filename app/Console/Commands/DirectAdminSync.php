@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Support\Str;
 use App\Models\Alias;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
@@ -289,7 +290,7 @@ class DirectAdminSync extends Command
         $queries = [];
 
         foreach ($patch['add'] as $account) {
-            $password = str_random(32);
+            $password = Str::random(32);
             $queries[] = [
                 'cmd' => '/CMD_API_POP',
                 'options' => [

@@ -40,7 +40,7 @@ class MakeAdmin extends Command
             $this->error('Cannot do this on production.');
         }
 
-        $user = User::where('email', $this->argument('email'))->firstOrFail();
+        $user = User::query()->where('email', $this->argument('email'))->firstOrFail();
 
         if (! $user->hasRole('sysadmin')) {
             $user->assignRole('sysadmin');

@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
-use Auth;
 use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Mollie;
-use Redirect;
-use Session;
 
 class MollieController extends Controller
 {
@@ -25,7 +25,7 @@ class MollieController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->input('user_id') ? User::findOrFail($request->input('user_id')) : null;
+        $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
 
         $transactions = MollieTransaction::query()
             ->when($user, static fn($query, $user) => $query->where('user_id', $user->id))
@@ -111,7 +111,7 @@ class MollieController extends Controller
     public function status($id)
     {
         /** @var MollieTransaction $transaction */
-        $transaction = MollieTransaction::findOrFail($id);
+        $transaction = MollieTransaction::query()->findOrFail($id);
         if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
             abort(403, 'You are unauthorized to view this transaction.');
         }
@@ -175,7 +175,7 @@ class MollieController extends Controller
      */
     public function receive($id)
     {
-        $transaction = MollieTransaction::findOrFail($id);
+        $transaction = MollieTransaction::query()->findOrFail($id);
 
         $flash_message = 'Unknown error';
         if ($transaction->user_id == Auth::id()) {
@@ -218,7 +218,7 @@ class MollieController extends Controller
 
             Session::flash('flash_message', $flash_message);
 
-            return Redirect::route('event::show', ['id' => Event::findOrFail($event_id)->getPublicId()]);
+            return Redirect::route('event::show', ['id' => Event::query()->findOrFail($event_id)->getPublicId()]);
         }
 
         return Redirect::route('omnomcom::orders::list');
@@ -232,7 +232,7 @@ class MollieController extends Controller
     public function webhook($id): void
     {
         /** @var MollieTransaction $transaction */
-        $transaction = MollieTransaction::findOrFail($id);
+        $transaction = MollieTransaction::query()->findOrFail($id);
         $transaction->updateFromWebhook();
         abort(200, 'Mollie webhook processed correctly!');
     }
@@ -243,7 +243,7 @@ class MollieController extends Controller
      */
     public static function createPaymentForOrderlines($orderlines, $selected_method)
     {
-        $total = OrderLine::whereIn('id', $orderlines)->sum('total_price');
+        $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
 
         if (config('omnomcom.mollie')['use_fees']) {
             $fee = round(
@@ -252,24 +252,22 @@ class MollieController extends Controller
                 2
             );
             if ($fee > 0) {
-                $orderline = OrderLine::findOrFail(
-                    Product::findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(
-                        Auth::user(),
-                        1,
-                        $fee,
-                        null,
-                        null,
-                        null,
-                        'mollie_transaction_fee'
-                    )
-                );
+                $orderline = OrderLine::query()->findOrFail(Product::query()->findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(
+                    Auth::user(),
+                    1,
+                    $fee,
+                    null,
+                    null,
+                    null,
+                    'mollie_transaction_fee'
+                ));
                 $orderline->save();
                 $orderlines[] = $orderline->id;
                 $total += $fee;
             }
         }
 
-        $transaction = MollieTransaction::create([
+        $transaction = MollieTransaction::query()->create([
             'user_id' => Auth::id(),
             'mollie_id' => 'temp',
             'status' => 'draft',
@@ -299,7 +297,7 @@ class MollieController extends Controller
         $transaction->payment_url = $mollie->getCheckoutUrl();
         $transaction->save();
 
-        OrderLine::whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
+        OrderLine::query()->whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
 
         return $transaction;
     }
@@ -321,7 +319,7 @@ class MollieController extends Controller
             $end->nextWeekday();
         }
 
-        return OrderLine::whereHas('molliePayment', static function ($query) use ($start, $end) {
+        return OrderLine::query()->whereHas('molliePayment', static function ($query) use ($start, $end) {
             $query->where(static function ($query) {
                 $query->where('status', 'paid')
                     ->orWhere('status', 'paidout');

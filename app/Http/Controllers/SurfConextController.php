@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Redirect;
-use Session;
 
 class SurfConextController extends Controller
 {

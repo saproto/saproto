@@ -72,6 +72,7 @@ class ActivityParticipation extends Model
     {
         return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
     }
+
     protected function casts(): array
     {
         return [

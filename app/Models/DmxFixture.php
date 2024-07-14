@@ -41,7 +41,7 @@ class DmxFixture extends Model
      */
     public function getChannels($special_func = null)
     {
-        $channels = DmxChannel::where('id', '>=', $this->channel_start)
+        $channels = DmxChannel::query()->where('id', '>=', $this->channel_start)
             ->where('id', '<=', $this->channel_end);
 
         if ($special_func) {

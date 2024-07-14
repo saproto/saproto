@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Eloquent;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -32,7 +32,7 @@ class PhotoManager extends Model
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
-        $base = PhotoAlbum::orderBy('date_taken', 'desc');
+        $base = PhotoAlbum::query()->orderBy('date_taken', 'desc');
 
         if (! $include_private) {
             $base = $base->where('private', '=', false);
@@ -63,7 +63,7 @@ class PhotoManager extends Model
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
-        $album = PhotoAlbum::where('id', $album_id);
+        $album = PhotoAlbum::query()->where('id', $album_id);
         if (! $include_private) {
             $album->where('private', '=', false);
         }
@@ -74,7 +74,7 @@ class PhotoManager extends Model
             return null;
         }
 
-        $items = Photo::where('album_id', $album_id);
+        $items = Photo::query()->where('album_id', $album_id);
 
         if (! $include_private) {
             $items = $items->where('private', '=', false);
@@ -103,7 +103,7 @@ class PhotoManager extends Model
      */
     public static function getPhoto($photo_id): stdClass
     {
-        $photo = Photo::findOrFail($photo_id);
+        $photo = Photo::query()->findOrFail($photo_id);
 
         $data = new stdClass();
         $data->photo_url = $photo->url;
@@ -111,7 +111,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::query()->where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
         $data->next = $photo->getNextPhoto() != null ? $photo->getNextPhoto()->id : null;
 
@@ -130,7 +130,7 @@ class PhotoManager extends Model
      */
     public static function deleteAlbum($album_id): void
     {
-        $album = PhotoAlbum::find($album_id);
+        $album = PhotoAlbum::query()->find($album_id);
         $photos = $album->items;
 
         foreach ($photos as $photo) {

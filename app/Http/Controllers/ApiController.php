@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
 use App\Models\EmailListSubscription;
@@ -14,7 +15,6 @@ use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
-use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -47,7 +47,7 @@ class ApiController extends Controller
         }
 
         $playedVideo = new PlayedVideo();
-        $user = User::findOrFail($request->user_id);
+        $user = User::query()->findOrFail($request->user_id);
 
         if ($user->keep_protube_history) {
             $playedVideo->user()->associate($user);
@@ -58,7 +58,7 @@ class ApiController extends Controller
 
         $playedVideo->save();
 
-        PlayedVideo::where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
+        PlayedVideo::query()->where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
     }
 
     /**
@@ -136,7 +136,7 @@ class ApiController extends Controller
 
         $data['bank_account'] = $user->bank ? $user->bank->makeHidden(['id', 'user_id']) : null;
 
-        foreach (RfidCard::where('user_id', $user->id)->get() as $rfid_card) {
+        foreach (RfidCard::query()->where('user_id', $user->id)->get() as $rfid_card) {
             $data['rfid_cards'][] = [
                 'card_id' => $rfid_card->card_id,
                 'name' => $rfid_card->name,
@@ -144,7 +144,7 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (ActivityParticipation::where('user_id', $user->id)->get() as $activity_participation) {
+        foreach (ActivityParticipation::query()->where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
                 'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
@@ -158,7 +158,7 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (OrderLine::where('user_id', $user->id)->get() as $orderline) {
+        foreach (OrderLine::query()->where('user_id', $user->id)->get() as $orderline) {
             $payment_method = null;
             if ($orderline->payed_with_cash) {
                 $payment_method = 'cash_cashier';
@@ -179,7 +179,7 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (PlayedVideo::where('user_id', $user->id)->get() as $playedvideo) {
+        foreach (PlayedVideo::query()->where('user_id', $user->id)->get() as $playedvideo) {
             $data['played_videos'][] = [
                 'youtube_id' => $playedvideo->video_id,
                 'youtube_name' => $playedvideo->video_title,
@@ -189,11 +189,11 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (EmailListSubscription::where('user_id', $user->id)->get() as $list_subscription) {
+        foreach (EmailListSubscription::query()->where('user_id', $user->id)->get() as $list_subscription) {
             $data['list_subscription'][] = $list_subscription->emaillist ? $list_subscription->emaillist->name : null;
         }
 
-        foreach (AchievementOwnership::where('user_id', $user->id)->get() as $achievement_granted) {
+        foreach (AchievementOwnership::query()->where('user_id', $user->id)->get() as $achievement_granted) {
             $data['achievements'][] = [
                 'name' => $achievement_granted->achievement->name,
                 'description' => $achievement_granted->achievement->desc,
@@ -201,12 +201,12 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (PhotoLikes::where('user_id', $user->id)->get() as $photo_like) {
+        foreach (PhotoLikes::query()->where('user_id', $user->id)->get() as $photo_like) {
             $data['liked_photos'][] = $photo_like->photo->url;
         }
 
         foreach (FeedbackCategory::all() as $category) {
-            foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $feedback) {
+            foreach (Feedback::query()->where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $feedback) {
                 $data["placed_$category->url"][] = [
                     'feedback' => $feedback->feedback,
                     'created_at' => $feedback->created_at,
@@ -215,7 +215,7 @@ class ApiController extends Controller
                 ];
             }
 
-            foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
+            foreach (FeedbackVote::query()->where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
             })->get() as $feedbackVote) {
                 $data["liked_$category->url"][] = [
@@ -230,7 +230,7 @@ class ApiController extends Controller
 
     public function discordVerifyMember($userId): JsonResponse
     {
-        $user = User::firstWhere('discord_id', $userId);
+        $user = User::query()->firstWhere('discord_id', $userId);
 
         if (! $user) {
             return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);

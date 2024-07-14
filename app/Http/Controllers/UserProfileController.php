@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\ActivityParticipation;
 use App\Models\CommitteeMembership;
 use App\Models\OrderLine;
 use App\Models\User;
-use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
 
@@ -49,16 +49,16 @@ class UserProfileController extends Controller
 
     private function getSpentMoney($user)
     {
-        return OrderLine::where('user_id', $user->id)->pluck('total_price')->sum();
+        return OrderLine::query()->where('user_id', $user->id)->pluck('total_price')->sum();
     }
 
     private function getProductsPurchased($user)
     {
-        return OrderLine::where('user_id', $user->id)->pluck('units')->sum();
+        return OrderLine::query()->where('user_id', $user->id)->pluck('units')->sum();
     }
 
-    private function getTotalSignups($user)
+    private function getTotalSignups($user): int
     {
-        return ActivityParticipation::where('user_id', $user->id)->count();
+        return ActivityParticipation::query()->where('user_id', $user->id)->count();
     }
 }

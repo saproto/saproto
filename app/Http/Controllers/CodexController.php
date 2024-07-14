@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
 use App\Libraries\PDF_TOC;
 use App\Models\Codex;
 use App\Models\CodexSong;
@@ -10,7 +11,6 @@ use App\Models\CodexTextType;
 use App\Models\SongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Session;
 
 define('FPDF_FONTPATH', resource_path('fonts/'));
 
@@ -18,30 +18,30 @@ class CodexController extends Controller
 {
     public function index()
     {
-        $codices = Codex::orderBy('name')->get();
+        $codices = Codex::query()->orderBy('name')->get();
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = SongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.index', ['codices' => $codices, 'textTypes' => $textTypes, 'songTypes' => $songTypes]);
     }
 
     public function addSong()
     {
-        if (! SongCategory::count()) {
+        if (! SongCategory::query()->count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex::index');
         }
 
-        $categories = SongCategory::orderBy('name')->get();
+        $categories = SongCategory::query()->orderBy('name')->get();
 
         return view('codex.song-edit', ['song' => null, 'textType' => null, 'categories' => $categories, 'myCategories' => []]);
     }
 
     public function editSong(int $id)
     {
-        $song = CodexSong::findOrFail($id);
-        $categories = SongCategory::orderBy('name')->get();
+        $song = CodexSong::query()->findOrFail($id);
+        $categories = SongCategory::query()->orderBy('name')->get();
         $myCategories = $song->categories->pluck('id')->toArray();
 
         return view('codex.song-edit', ['song' => $song, 'categories' => $categories, 'myCategories' => $myCategories]);
@@ -57,7 +57,7 @@ class CodexController extends Controller
 
     public function updateSong(Request $request, int $id)
     {
-        $song = CodexSong::findOrFail($id);
+        $song = CodexSong::query()->findOrFail($id);
         $this->saveSong($song, $request);
 
         return Redirect::route('codex::index');
@@ -75,7 +75,7 @@ class CodexController extends Controller
 
     public function deleteSong(int $id)
     {
-        $song = CodexSong::findOrFail($id);
+        $song = CodexSong::query()->findOrFail($id);
         $song->delete();
 
         return Redirect::route('codex::index');
@@ -88,7 +88,7 @@ class CodexController extends Controller
 
     public function editSongCategory(int $id)
     {
-        $category = SongCategory::findOrFail($id);
+        $category = SongCategory::query()->findOrFail($id);
 
         return view('codex.song-category-edit', ['category' => $category]);
     }
@@ -104,7 +104,7 @@ class CodexController extends Controller
 
     public function updateSongCategory(Request $request, int $id)
     {
-        $category = SongCategory::findOrFail($id);
+        $category = SongCategory::query()->findOrFail($id);
         $category->name = $request->input('name');
         $category->save();
 
@@ -113,7 +113,7 @@ class CodexController extends Controller
 
     public function deleteSongCategory(int $id)
     {
-        $category = SongCategory::findOrFail($id);
+        $category = SongCategory::query()->findOrFail($id);
         $category->songs()->delete();
         $category->delete();
 
@@ -123,16 +123,16 @@ class CodexController extends Controller
     public function addCodex()
     {
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = SongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.codex-edit', ['codex' => null, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => [], 'myTexts' => [], 'myShuffles' => [], 'myTextTypes' => []]);
     }
 
     public function editCodex(int $id)
     {
-        $codex = Codex::findOrFail($id);
+        $codex = Codex::query()->findOrFail($id);
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = SongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
         $myTexts = $codex->texts->pluck('id')->toArray();
         $myShuffles = $codex->shuffles->pluck('id')->toArray();
@@ -151,7 +151,7 @@ class CodexController extends Controller
 
     public function updateCodex(Request $request, int $id)
     {
-        $codex = Codex::findOrFail($id);
+        $codex = Codex::query()->findOrFail($id);
         $this->saveCodex($codex, $request);
 
         return Redirect::route('codex::index');
@@ -171,7 +171,7 @@ class CodexController extends Controller
 
     public function deleteCodex(int $id)
     {
-        $codex = Codex::findOrFail($id);
+        $codex = Codex::query()->findOrFail($id);
         $codex->songs()->detach();
         $codex->texts()->detach();
         $codex->shuffles()->detach();
@@ -182,21 +182,21 @@ class CodexController extends Controller
 
     public function addText()
     {
-        if (! CodexTextType::count()) {
+        if (! CodexTextType::query()->count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex::index');
         }
 
-        $textTypes = CodexTextType::orderBy('type')->get();
+        $textTypes = CodexTextType::query()->orderBy('type')->get();
 
         return view('codex.text-edit', ['text' => null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
     }
 
     public function editText(int $id)
     {
-        $text = CodexText::findOrFail($id);
-        $textTypes = CodexTextType::orderBy('type')->get();
+        $text = CodexText::query()->findOrFail($id);
+        $textTypes = CodexTextType::query()->orderBy('type')->get();
         $selectedTextType = $text->type;
 
         return view('codex.text-edit', ['text' => $text, 'textTypes' => $textTypes, 'selectedTextType' => $selectedTextType]);
@@ -212,7 +212,7 @@ class CodexController extends Controller
 
     public function updateText(Request $request, int $id)
     {
-        $text = CodexText::findOrFail($id);
+        $text = CodexText::query()->findOrFail($id);
         $this->saveText($text, $request);
 
         return Redirect::route('codex::index');
@@ -228,7 +228,7 @@ class CodexController extends Controller
 
     public function deleteText(int $id)
     {
-        $text = CodexText::findOrFail($id);
+        $text = CodexText::query()->findOrFail($id);
         $text->codices()->detach();
         $text->delete();
 
@@ -242,7 +242,7 @@ class CodexController extends Controller
 
     public function editTextType(int $id)
     {
-        $textType = CodexTextType::findOrFail($id);
+        $textType = CodexTextType::query()->findOrFail($id);
 
         return view('codex.text-type-edit', ['textType' => $textType]);
     }
@@ -258,7 +258,7 @@ class CodexController extends Controller
 
     public function updateTextType(Request $request, int $id)
     {
-        $type = CodexTextType::findOrFail($id);
+        $type = CodexTextType::query()->findOrFail($id);
         $type->type = $request->input('type');
         $type->save();
 
@@ -267,7 +267,7 @@ class CodexController extends Controller
 
     public function deleteTextType(int $id)
     {
-        $type = CodexTextType::findOrFail($id);
+        $type = CodexTextType::query()->findOrFail($id);
         $type->texts()->delete();
         $type->delete();
 
@@ -276,9 +276,9 @@ class CodexController extends Controller
 
     public function exportCodex(int $id)
     {
-        $codex = Codex::findOrFail($id);
+        $codex = Codex::query()->findOrFail($id);
 
-        $categories = SongCategory::whereHas('songs', static function ($q) use ($id) {
+        $categories = SongCategory::query()->whereHas('songs', static function ($q) use ($id) {
             $q->whereHas('codices', static function ($q) use ($id) {
                 $q->where('codex', $id);
             });
@@ -288,7 +288,7 @@ class CodexController extends Controller
             });
         }])->orderBy('id')->get();
 
-        $textCategories = CodexTextType::whereHas('texts', static function ($q) use ($id) {
+        $textCategories = CodexTextType::query()->whereHas('texts', static function ($q) use ($id) {
             $q->whereHas('codices', static function ($q) use ($id) {
                 $q->where('codex_codices.id', $id);
             });

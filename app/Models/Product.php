@@ -86,7 +86,7 @@ class Product extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image_id) {
-            $image = StorageEntry::find($this->image_id);
+            $image = StorageEntry::query()->find($this->image_id);
             if ($image) {
                 return $image->generateImagePath(null, null);
             }
@@ -125,7 +125,7 @@ class Product extends Model
             return $this->price;
         }
 
-        return WallstreetPrice::where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
+        return WallstreetPrice::query()->where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
     }
 
     public function wallstreetPrices()
@@ -152,7 +152,7 @@ class Product extends Model
 
         $has_cashier = $withCash || $withBankCard;
 
-        $orderline = OrderLine::create([
+        $orderline = OrderLine::query()->create([
             'user_id' => ($has_cashier ? null : $user->id),
             'cashier_id' => ($has_cashier || $total_price == 0 ? $user->id : null),
             'product_id' => $this->id,

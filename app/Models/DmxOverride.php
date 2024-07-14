@@ -40,19 +40,19 @@ class DmxOverride extends Model
     /** @return Collection|DmxOverride[] */
     public static function getActiveSorted()
     {
-        return self::where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
+        return self::query()->where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getUpcomingSorted()
     {
-        return self::where('start', '>', date('U'))->get()->sortByDesc('start');
+        return self::query()->where('start', '>', date('U'))->get()->sortByDesc('start');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getPastSorted()
     {
-        return self::where('end', '<', date('U'))->get()->sortByDesc('start');
+        return self::query()->where('end', '<', date('U'))->get()->sortByDesc('start');
     }
 
     /** @return array<int, int> */
@@ -104,7 +104,7 @@ class DmxOverride extends Model
     /** @return Collection */
     public function getFixtures()
     {
-        return DmxFixture::whereIn('id', $this->getFixtureIds())->get();
+        return DmxFixture::query()->whereIn('id', $this->getFixtureIds())->get();
     }
 
     public function getIsActiveAttribute(): bool

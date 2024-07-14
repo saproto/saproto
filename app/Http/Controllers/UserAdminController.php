@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
 use App\Mail\MembershipEndSet;
@@ -10,16 +14,12 @@ use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Auth;
 use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Mail;
 use PDF;
-use Redirect;
-use Session;
 use Spatie\Permission\Models\Permission;
 
 class UserAdminController extends Controller
@@ -64,7 +64,7 @@ class UserAdminController extends Controller
      */
     public function details($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $memberships = $user->getMemberships();
 
         return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
@@ -77,7 +77,7 @@ class UserAdminController extends Controller
     public function update(Request $request, $id)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
         $user->birthdate = strtotime($request->birthdate) !== false ? date('Y-m-d', strtotime($request->birthdate)) : null;
@@ -96,7 +96,7 @@ class UserAdminController extends Controller
     public function impersonate($id)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         if (! Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
@@ -121,7 +121,7 @@ class UserAdminController extends Controller
         if (Session::has('impersonator')) {
             $redirect_user = Auth::id();
 
-            $impersonator = User::findOrFail(Session::get('impersonator'));
+            $impersonator = User::query()->findOrFail(Session::get('impersonator'));
             Session::pull('impersonator');
 
             Auth::login($impersonator);
@@ -139,7 +139,7 @@ class UserAdminController extends Controller
     public function addMembership($id, Request $request)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         if ($user->is_member) {
             Session::flash('flash_message', 'This user is already a member!');
@@ -154,7 +154,7 @@ class UserAdminController extends Controller
         }
 
         if ($user->member == null) {
-            $member = Member::create();
+            $member = Member::query()->create();
             $member->user()->associate($user);
         }
 
@@ -168,7 +168,7 @@ class UserAdminController extends Controller
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
-        HashMapItem::create([
+        HashMapItem::query()->create([
             'key' => 'wizard',
             'subkey' => $user->id,
             'value' => 1,
@@ -193,7 +193,7 @@ class UserAdminController extends Controller
     public function endMembership($id): RedirectResponse
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->member()->delete();
         $user->clearMemberProfile();
 
@@ -206,7 +206,7 @@ class UserAdminController extends Controller
 
     public function EndMembershipInSeptember($id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
@@ -223,7 +223,7 @@ class UserAdminController extends Controller
 
     public function removeMembershipEnd($id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
@@ -246,7 +246,7 @@ class UserAdminController extends Controller
             abort(403, 'Only board members can do this.');
         }
 
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $member = $user->member;
         $type = $request->input('type');
 
@@ -271,7 +271,7 @@ class UserAdminController extends Controller
         }
 
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->signed_nda = ! $user->signed_nda;
         $user->save();
 
@@ -286,7 +286,7 @@ class UserAdminController extends Controller
     public function unblockOmnomcom($id): RedirectResponse
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->disable_omnomcom = false;
         $user->save();
 
@@ -301,7 +301,7 @@ class UserAdminController extends Controller
     public function toggleStudiedCreate($id): RedirectResponse
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->did_study_create = ! $user->did_study_create;
         $user->save();
 
@@ -316,7 +316,7 @@ class UserAdminController extends Controller
     public function toggleStudiedITech($id): RedirectResponse
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->did_study_itech = ! $user->did_study_itech;
         $user->save();
 
@@ -327,7 +327,7 @@ class UserAdminController extends Controller
 
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
@@ -346,7 +346,7 @@ class UserAdminController extends Controller
 
     public function deleteOmnomcomSound(int $id): RedirectResponse
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
             $user->member->omnomcom_sound_id = null;
@@ -379,7 +379,7 @@ class UserAdminController extends Controller
     public function getNewMemberForm($id)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         if ($user->address === null) {
             Session::flash('flash_message', 'This user has no address!');
@@ -410,7 +410,7 @@ class UserAdminController extends Controller
             abort(403);
         }
 
-        $member = Member::where('membership_form_id', '=', $id)->first();
+        $member = Member::query()->where('membership_form_id', '=', $id)->first();
         $user = $member->user;
 
         $member->forceDelete();
@@ -425,7 +425,7 @@ class UserAdminController extends Controller
      */
     public function printMemberForm($id): string
     {
-        $user = User::find($id);
+        $user = User::query()->find($id);
 
         if (! $user) {
             return 'This user could not be found!';

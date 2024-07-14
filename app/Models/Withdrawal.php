@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Carbon;
-use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -70,7 +70,7 @@ class Withdrawal extends Model
      */
     public function orderlinesForUser($user)
     {
-        return OrderLine::where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->get();
+        return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->get();
     }
 
     /**
@@ -79,7 +79,7 @@ class Withdrawal extends Model
      */
     public function totalForUser($user)
     {
-        return OrderLine::where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
+        return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
     /**
@@ -88,7 +88,7 @@ class Withdrawal extends Model
      */
     public function getFailedWithdrawal($user)
     {
-        return FailedWithdrawal::where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
+        return FailedWithdrawal::query()->where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
     }
 
     public function userCount(): int
@@ -105,7 +105,7 @@ class Withdrawal extends Model
     /** @return Collection|User[] */
     public function users()
     {
-        $users = array_unique(OrderLine::where('payed_with_withdrawal', $this->id)->get()->pluck('user_id')->toArray());
+        $users = array_unique(OrderLine::query()->where('payed_with_withdrawal', $this->id)->get()->pluck('user_id')->toArray());
 
         return User::withTrashed()->whereIn('id', $users)->orderBy('id', 'asc')->get();
     }
@@ -113,7 +113,7 @@ class Withdrawal extends Model
     /** @return int */
     public function total()
     {
-        return OrderLine::where('payed_with_withdrawal', $this->id)->sum('total_price');
+        return OrderLine::query()->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
     public function withdrawalId(): string

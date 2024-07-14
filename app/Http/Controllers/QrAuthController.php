@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Carbon;
 use App\Models\QrAuthRequest;
-use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,7 +20,7 @@ class QrAuthController extends Controller
      */
     public function showCode($code)
     {
-        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
         if ($qrAuthRequest == null) {
             abort(404);
@@ -36,8 +37,8 @@ class QrAuthController extends Controller
 
         $qrAuthRequest = new QrAuthRequest();
         $qrAuthRequest->description = $request->description;
-        $qrAuthRequest->qr_token = str_random(8);
-        $qrAuthRequest->auth_token = md5(str_random(40));
+        $qrAuthRequest->qr_token = Str::random(8);
+        $qrAuthRequest->auth_token = md5(Str::random(40));
         $qrAuthRequest->save();
 
         return $qrAuthRequest;
@@ -49,7 +50,7 @@ class QrAuthController extends Controller
      */
     public function showDialog($code)
     {
-        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
         if (! $qrAuthRequest) {
             abort(404);
@@ -64,7 +65,7 @@ class QrAuthController extends Controller
      */
     public function approve($code)
     {
-        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
         if (! $qrAuthRequest) {
             abort(404);
@@ -84,7 +85,7 @@ class QrAuthController extends Controller
      */
     public function apiApprove($code)
     {
-        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
         if (! $qrAuthRequest) {
             abort(403);
@@ -104,7 +105,7 @@ class QrAuthController extends Controller
      */
     public function apiInfo($code)
     {
-        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
         if (! $qrAuthRequest) {
             abort(404);
@@ -115,7 +116,7 @@ class QrAuthController extends Controller
 
     public function isApproved(Request $request): string
     {
-        $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $request->code)->first();
+        $qrAuthRequest = QrAuthRequest::query()->where('auth_token', '=', $request->code)->first();
 
         if (! $qrAuthRequest) {
             abort(404);

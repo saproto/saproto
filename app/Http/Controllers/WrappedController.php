@@ -14,7 +14,7 @@ class WrappedController extends Controller
     public function index()
     {
         $timespan = [now()->startOfYear(), now()->endOfYear()];
-        $total_spent = round(OrderLine::whereBetween('created_at', $timespan)->sum('total_price'), 2);
+        $total_spent = round(OrderLine::query()->whereBetween('created_at', $timespan)->sum('total_price'), 2);
 
         return response()->json([
             'total_spent' => $total_spent,

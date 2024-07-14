@@ -27,7 +27,7 @@ class HomeController extends Controller
             ->inRandomOrder()
             ->get();
 
-        $header = HeaderImage::inRandomOrder()->first();
+        $header = HeaderImage::query()->inRandomOrder()->first();
 
         if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
@@ -71,7 +71,7 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
+        $message = WelcomeMessage::query()->where('user_id', Auth::user()->id)->first();
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
@@ -110,7 +110,7 @@ class HomeController extends Controller
     /** @return View Display the most important page of the whole site. */
     public function developers()
     {
-        $committee = Committee::where('slug', '=', config('proto.rootcommittee'))->first();
+        $committee = Committee::query()->where('slug', '=', config('proto.rootcommittee'))->first();
         $developers = [
             'current' => CommitteeMembership::query()
                 ->where('committee_id', $committee->id)
