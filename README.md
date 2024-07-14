@@ -96,10 +96,13 @@ to `~/.bash_aliases` (WSL2/Linux) or `~/.zshenv` (macOS) the alias will persist 
 *The rest of these instruction will assume that you successfully added the `sail` alias.*
 
 WSL2/Linux/macOS High Sierra or earlier:
+
 ```shell
 echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_aliases
 ```
+
 macOS Catalina or newer:
+
 ```shell
 echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.zshenv
 ```
@@ -126,14 +129,10 @@ and the stylesheet in `vendor.scss`.
 #### Websockets
 
 In some parts of the website we use websockets to update the page in real-time.
-In development, we use the [Reverb](https://reverb.laravel.com/) websocket server.
-To start the websocket server run the following command:
+For this we use a soketi server. This runs in a docker container in your sail setup.
 
-```
-sail artisan reverb:start
-```
-
-You may provide the --debug flag to get the debug output of the websocket server.
+For the frontend we use the [Laravel Echo](https://laravel.com/docs/broadcasting) library to connect to the
+websocket server.
 
 #### Localhost
 
@@ -175,12 +174,6 @@ sail shell
 
 ```
 sail artisan migrate:fresh --seed
-```
-
-#### Start the reverb websocket server *(run in container)*
-
-```
-sail artisan reverb:start
 ```
 
 ### Code completion, style and static analysis

@@ -9,19 +9,20 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 
 return RectorConfig::configure()
     ->withCache(
-        // ensure file system caching is used instead of in-memory
+    // ensure file system caching is used instead of in-memory
         cacheDirectory: '.tmp/rector',
 
         // specify a path that works locally as well as on CI job runners
         cacheClass: FileCacheStorage::class
     )
     ->withPaths([
-        __DIR__.'/app',
-        __DIR__.'/config',
-        __DIR__.'/public',
-        __DIR__.'/resources',
-        __DIR__.'/routes',
+        __DIR__ . '/app',
+        __DIR__ . '/config',
+        __DIR__ . '/public',
+        __DIR__ . '/resources',
+        __DIR__ . '/routes',
     ])->withPhpSets(php53: true)
+    //php82,
     ->withRules(
         [
             ClassPropertyAssignToConstructorPromotionRector::class,
@@ -36,7 +37,7 @@ return RectorConfig::configure()
         naming: false,
         instanceOf: false,
         earlyReturn: true,
-        strictBooleans: false)
+        strictBooleans: true)
     ->withSkip(
         [
             Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector::class,
