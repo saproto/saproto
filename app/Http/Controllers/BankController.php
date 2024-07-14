@@ -189,7 +189,7 @@ class BankController extends Controller
         try {
             $country = substr($iban, 0, 2);
 
-            if ($country == 'NL') {
+            if ($country === 'NL') {
                 $response->bic = self::getNlBicFromIban($iban);
             }
 
@@ -324,6 +324,6 @@ class BankController extends Controller
 
         $bank = substr($iban, 4, 4);
 
-        return array_key_exists($bank, $data) ? $data[$bank] : null;
+        return $data[$bank] ?? null;
     }
 }

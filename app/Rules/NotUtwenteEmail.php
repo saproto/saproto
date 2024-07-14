@@ -29,12 +29,7 @@ class NotUtwenteEmail implements Rule
         if (! $domainPart) {
             return false;
         }
-
-        if (str_contains(strtolower($domainPart), 'utwente')) {
-            return false;
-        }
-
-        return true;
+        return !str_contains(strtolower($domainPart), 'utwente');
     }
 
     /**

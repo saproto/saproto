@@ -27,12 +27,7 @@ class QueryController extends Controller
     public function activityOverview(Request $request)
     {
         if ($request->missing('start') || $request->missing('end')) {
-            if (intval(date('n')) >= 9) {
-                $year_start = intval(date('Y'));
-            } else {
-                $year_start = intval(date('Y')) - 1;
-            }
-            
+            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
             $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
@@ -123,15 +118,13 @@ class QueryController extends Controller
                     $count_ut++;
                 }
 
-                if ($request->has('export_subsidies')) {
-                    if ($is_ut) {
-                        $export_subsidies[] = (object) [
-                            'primary' => $is_primary_student ? 'true' : 'false',
-                            'name' => $member->user->name,
-                            'email' => $has_ut_mail ? $member->user->email : null,
-                            'ut_number' => $member->user->utwente_username ?: null,
-                        ];
-                    }
+                if ($request->has('export_subsidies') && $is_ut) {
+                    $export_subsidies[] = (object) [
+                        'primary' => $is_primary_student ? 'true' : 'false',
+                        'name' => $member->user->name,
+                        'email' => $has_ut_mail ? $member->user->email : null,
+                        'ut_number' => $member->user->utwente_username ?: null,
+                    ];
                 }
             }
         }
@@ -173,12 +166,7 @@ class QueryController extends Controller
     {
 
         if ($request->missing('start') || $request->missing('end')) {
-            if (intval(date('n')) >= 9) {
-                $year_start = intval(date('Y'));
-            } else {
-                $year_start = intval(date('Y')) - 1;
-            }
-            
+            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
             $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {

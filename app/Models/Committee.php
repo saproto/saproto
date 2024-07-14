@@ -181,17 +181,13 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
+            } elseif (strtotime($membership->created_at) < date('U') &&
+            (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                $members['members']['current'][] = $membership;
+            } elseif (strtotime($membership->created_at) > date('U')) {
+                $members['members']['future'][] = $membership;
             } else {
-                if (
-                    strtotime($membership->created_at) < date('U') &&
-                    (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
-                ) {
-                    $members['members']['current'][] = $membership;
-                } elseif (strtotime($membership->created_at) > date('U')) {
-                    $members['members']['future'][] = $membership;
-                } else {
-                    $members['members']['past'][] = $membership;
-                }
+                $members['members']['past'][] = $membership;
             }
         }
 

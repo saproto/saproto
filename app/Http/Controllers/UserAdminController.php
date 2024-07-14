@@ -80,11 +80,7 @@ class UserAdminController extends Controller
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        if (strtotime($request->birthdate) !== false) {
-            $user->birthdate = date('Y-m-d', strtotime($request->birthdate));
-        } else {
-            $user->birthdate = null;
-        }
+        $user->birthdate = strtotime($request->birthdate) !== false ? date('Y-m-d', strtotime($request->birthdate)) : null;
         
         $user->save();
 

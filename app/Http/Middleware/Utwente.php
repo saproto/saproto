@@ -22,5 +22,6 @@ class Utwente
         }
         
         abort(403, 'You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.');
+        return null;
     }
 }

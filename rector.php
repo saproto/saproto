@@ -33,7 +33,7 @@ return RectorConfig::configure()
         ]
     )
     ->withPreparedSets(deadCode: true,
-        codeQuality: false,
+        codeQuality: true,
         codingStyle: true,
         typeDeclarations: false,
         privatization: false,

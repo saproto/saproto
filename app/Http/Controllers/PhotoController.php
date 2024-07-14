@@ -55,6 +55,7 @@ class PhotoController extends Controller
         }
         
         abort(404, 'Photo not found.');
+        return null;
     }
 
     /** @return View */

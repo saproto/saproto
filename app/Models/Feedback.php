@@ -78,12 +78,7 @@ class Feedback extends Model
         if ($this->reviewed) {
             return true;
         }
-        
-        if ($this->category->reviewer_id === $user->id) {
-            return true;
-        }
-
-        return false;
+        return $this->category->reviewer_id === $user->id;
     }
 
     public function userVote(User $user): int

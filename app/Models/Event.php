@@ -134,20 +134,11 @@ class Event extends Model
         }
 
         //only show secret events if the user is participating, helping or organising
-        if ($this->secret) {
-            if ($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))) {
-                return true;
-            }
+        if ($this->secret && ($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user)))) {
+            return true;
         }
-
         //show non-secret events only when published
-        if (! $this->secret) {
-            if (! $this->publication || $this->isPublished()) {
-                return true;
-            }
-        }
-
-        return false;
+        return !$this->secret && (! $this->publication || $this->isPublished());
     }
 
     public static function getEventBlockQuery()
@@ -389,7 +380,7 @@ class Event extends Model
         parent::boot();
 
         self::updating(function ($event) {
-            $event->update_sequence = $event->update_sequence + 1;
+            $event->update_sequence += 1;
         });
     }
 }

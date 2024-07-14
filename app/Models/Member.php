@@ -111,11 +111,7 @@ class Member extends Model
     /** @return OrderLine|null */
     public function getMembershipOrderline()
     {
-        if (intval(date('n')) >= 9) {
-            $year_start = intval(date('Y'));
-        } else {
-            $year_start = intval(date('Y')) - 1;
-        }
+        $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))

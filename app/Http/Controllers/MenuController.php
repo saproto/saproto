@@ -184,7 +184,7 @@ class MenuController extends Controller
 
         foreach ($change as $item) {
             if ($item->order > $menuItem->order && $item->id != $menuItem->id) {
-                $item->order = $item->order - 1;
+                $item->order -= 1;
                 $item->save();
             }
         }

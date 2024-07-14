@@ -129,7 +129,7 @@ class ActivityController extends Controller
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
-        if (! Auth::check() || ! (Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
+        if (! Auth::check() || !Auth::user()->can('board') && !$event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');
         }
         

@@ -182,7 +182,8 @@ class OrderLineController extends Controller
      */
     public function bulkStore(Request $request)
     {
-        for ($i = 0; $i < count($request->input('user')); $i++) {
+        $counter = count($request->input('user'));
+        for ($i = 0; $i < $counter; $i++) {
             /** @var Product $product */
             $product = Product::findOrFail($request->input('product')[$i]);
             $user = User::findOrFail($request->input('user')[$i]);
@@ -203,7 +204,8 @@ class OrderLineController extends Controller
      */
     public function store(Request $request)
     {
-        for ($u = 0; $u < count($request->input('user')); $u++) {
+        $counter = count($request->input('user'));
+        for ($u = 0; $u < $counter; $u++) {
             for ($p = 0; $p < count($request->input('product')); $p++) {
                 $user = User::findOrFail($request->input('user')[$u]);
                 $product = Product::findOrFail($request->input('product')[$p]);

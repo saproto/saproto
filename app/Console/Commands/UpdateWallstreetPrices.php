@@ -118,5 +118,6 @@ class UpdateWallstreetPrices extends Command
                 $newPriceObject->save();
             }
         }
+        return null;
     }
 }

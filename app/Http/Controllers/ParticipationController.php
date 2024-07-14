@@ -61,10 +61,8 @@ class ParticipationController extends Controller
             } else {
                 Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
             }
-        } else {
-            if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                $data['backup'] = true;
-            }
+        } elseif ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
+            $data['backup'] = true;
         }
 
         $participation = new ActivityParticipation();
@@ -212,6 +210,7 @@ class ParticipationController extends Controller
             'success' => true,
             'message' => $message,
         ]));
+        return null;
     }
 
     /**

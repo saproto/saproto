@@ -378,7 +378,7 @@ class EmailController extends Controller
                 $email->to_event = false;
                 $email->to_backup = false;
 
-                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
+                $email->lists()->sync((gettype($lists) === 'array' ? $lists : []));
                 $email->events()->sync([]);
                 break;
 

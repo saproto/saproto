@@ -41,14 +41,12 @@ class AuthLoginEventHandler
         ];
 
         foreach ($committees as $committee) {
-            if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] or $user->signed_nda)) {
+            if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] || $user->signed_nda)) {
                 if (! $user->hasRole($committee['role'])) {
                     $user->assignRole($committee['role']);
                 }
-            } else {
-                if ($user->hasRole($committee['role'])) {
-                    $user->removeRole($committee['role']);
-                }
+            } elseif ($user->hasRole($committee['role'])) {
+                $user->removeRole($committee['role']);
             }
         }
     }

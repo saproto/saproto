@@ -59,11 +59,7 @@ class EventController extends Controller
 
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
-        if (Auth::check()) {
-            $reminder = Auth::user()->getCalendarAlarm();
-        } else {
-            $reminder = null;
-        }
+        $reminder = Auth::check() ? Auth::user()->getCalendarAlarm() : null;
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
@@ -204,7 +200,7 @@ class EventController extends Controller
 
         $event->save();
 
-        $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location;
+        $changed_important_details = $event->start !== strtotime($request->start) || $event->end !== strtotime($request->end) || $event->location != $request->location;
 
         if ($changed_important_details) {
             Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
@@ -515,16 +511,13 @@ class EventController extends Controller
     {
         $user = ($personal_key ? User::where('personal_key', $personal_key)->first() : null);
 
-        if ($user) {
-            $calendar_name = sprintf('S.A. Proto Calendar for %s', $user->calling_name);
-        } else {
-            $calendar_name = 'S.A. Proto Calendar';
-        }
+        $calendar_name = $user ? sprintf('S.A. Proto Calendar for %s', $user->calling_name) : 'S.A. Proto Calendar';
 
-        $calendar = 'BEGIN:VCALENDAR'."\r\n".
-            'VERSION:2.0'."\r\n".
-            'PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN'."\r\n".
-            'CALSCALE:GREGORIAN'."\r\n".
+        $calendar = 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN
+CALSCALE:GREGORIAN
+'.
             'X-WR-CALNAME:'.$calendar_name."\r\n".
             "X-WR-CALDESC:All of Proto's events, straight from the website!"."\r\n".
             'BEGIN:VTIMEZONE'."\r\n".
@@ -545,11 +538,7 @@ class EventController extends Controller
             'END:DAYLIGHT'."\r\n".
             'END:VTIMEZONE'."\r\n";
 
-        if ($user) {
-            $reminder = $user->getCalendarAlarm();
-        } else {
-            $reminder = null;
-        }
+        $reminder = $user ? $user->getCalendarAlarm() : null;
 
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
@@ -594,7 +583,8 @@ class EventController extends Controller
                 }
             }
 
-            $calendar .= 'BEGIN:VEVENT'."\r\n".
+            $calendar .= 'BEGIN:VEVENT
+'.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
                 sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
                 sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
@@ -611,14 +601,16 @@ class EventController extends Controller
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
-                $calendar .= 'BEGIN:VALARM'."\r\n".
+                $calendar .= 'BEGIN:VALARM
+'.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
                     sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
-            $calendar .= 'END:VEVENT'."\r\n";
+            $calendar .= 'END:VEVENT
+';
         }
 
         $calendar .= 'END:VCALENDAR';

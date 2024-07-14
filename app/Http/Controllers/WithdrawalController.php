@@ -76,10 +76,8 @@ class WithdrawalController extends Controller
                 $totalPerUser[$orderline->user->id] = 0;
             }
 
-            if ($max != null) {
-                if ($max < $totalPerUser[$orderline->user->id] + $orderline->total_price) {
-                    continue;
-                }
+            if ($max != null && $max < $totalPerUser[$orderline->user->id] + $orderline->total_price) {
+                continue;
             }
 
             //only add the tickets to the withdrawal if the ticket can not be bought anymore
@@ -337,7 +335,7 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            if (! isset($user->bank)) {
+            if ($user->bank === null) {
                 Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
 
                 return Redirect::back();

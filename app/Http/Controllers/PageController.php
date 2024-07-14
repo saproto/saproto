@@ -44,17 +44,9 @@ class PageController extends Controller
     {
         $page = new Page($request->all());
 
-        if ($request->has('is_member_only')) {
-            $page->is_member_only = true;
-        } else {
-            $page->is_member_only = false;
-        }
+        $page->is_member_only = $request->has('is_member_only');
 
-        if ($request->has('show_attachments')) {
-            $page->show_attachments = true;
-        } else {
-            $page->show_attachments = false;
-        }
+        $page->show_attachments = $request->has('show_attachments');
 
         if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', "This URL has been reserved and can't be used. Please choose a different URL.");
@@ -122,17 +114,9 @@ class PageController extends Controller
 
         $page->fill($request->all());
 
-        if ($request->has('is_member_only')) {
-            $page->is_member_only = true;
-        } else {
-            $page->is_member_only = false;
-        }
+        $page->is_member_only = $request->has('is_member_only');
 
-        if ($request->has('show_attachments')) {
-            $page->show_attachments = true;
-        } else {
-            $page->show_attachments = false;
-        }
+        $page->show_attachments = $request->has('show_attachments');
 
         if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', "This URL has been reserved and can't be used. Please choose a different URL.");

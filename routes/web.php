@@ -4,7 +4,7 @@ use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require 'minisites.php';
+require __DIR__ . '/minisites.php';
 
 /* Pass view name to body class */
 View::composer('*', function ($view) {

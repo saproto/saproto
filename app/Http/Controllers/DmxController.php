@@ -202,11 +202,7 @@ class DmxController extends Controller
         // Determine what preset to use.
         $preset = 'free';
         if ($current_event !== null) {
-            if (in_array($current_event['type'], config('dmx.lecture_types'))) {
-                $preset = 'lecture';
-            } else {
-                $preset = 'tutorial';
-            }
+            $preset = in_array($current_event['type'], config('dmx.lecture_types')) ? 'lecture' : 'tutorial';
         }
 
         $channel_values = [];

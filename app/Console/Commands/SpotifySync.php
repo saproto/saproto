@@ -54,7 +54,7 @@ class SpotifySync extends Command
                 return;
             }
         } catch (SpotifyWebAPIException $spotifyWebAPIException) {
-            if ($spotifyWebAPIException->getMessage() == 'The access token expired') {
+            if ($spotifyWebAPIException->getMessage() === 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
                 $refreshToken = $session->getRefreshToken();

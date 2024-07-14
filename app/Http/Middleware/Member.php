@@ -22,5 +22,6 @@ class Member
         }
         
         abort(403, 'You need to be a member of S.A. Proto to see this page.');
+        return null;
     }
 }

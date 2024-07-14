@@ -43,7 +43,8 @@ class AlphaPDF extends tFpdf
 
     public function _putextgstates()
     {
-        for ($i = 1; $i <= count($this->extgstates); $i++) {
+        $counter = count($this->extgstates);
+        for ($i = 1; $i <= $counter; $i++) {
             $this->_newobj();
             $this->extgstates[$i]['n'] = $this->n;
             $this->_put('<</Type /ExtGState');

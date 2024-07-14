@@ -83,22 +83,14 @@ class Announcement extends Model
     {
         $flags = [];
 
-        if ($this->show_only_homepage) {
-            $flags[] = 'Homepage only';
-        } else {
-            $flags[] = 'Entire site';
-        }
+        $flags[] = $this->show_only_homepage ? 'Homepage only' : 'Entire site';
 
         if ($this->show_guests) {
             $flags[] = 'All guests';
         }
         
         if ($this->show_users) {
-            if ($this->show_only_new) {
-                $flags[] = 'New users';
-            } else {
-                $flags[] = 'All users';
-            }
+            $flags[] = $this->show_only_new ? 'New users' : 'All users';
         }
         
         if ($this->show_members) {
@@ -117,11 +109,7 @@ class Announcement extends Model
             $flags[] = 'Pop-up';
         } else {
             $flags[] = 'Banner';
-            if ($this->is_dismissable) {
-                $flags[] = 'Dismissable';
-            } else {
-                $flags[] = 'Persistent';
-            }
+            $flags[] = $this->is_dismissable ? 'Dismissable' : 'Persistent';
         }
 
         $flags[] = sprintf('Style: %s', $this->bootstrap_style);

@@ -73,11 +73,7 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::find($id);
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
-        if ($request->input('private')) {
-            $album->private = true;
-        } else {
-            $album->private = false;
-        }
+        $album->private = (bool) $request->input('private');
         
         $album->save();
 

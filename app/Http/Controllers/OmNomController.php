@@ -226,7 +226,7 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
                 
-                if ($product->is_alcoholic && $store->alcohol_time_constraint && ! (date('Hi') > str_replace(':', '', config('omnomcom.alcohol-start')) || date('Hi') < str_replace(':', '', config('omnomcom.alcohol-end')))) {
+                if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', config('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', config('omnomcom.alcohol-end')))) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
 
                     return json_encode($result);

@@ -195,7 +195,7 @@ class FeedbackController extends Controller
     public function delete(int $id): RedirectResponse
     {
         $feedback = Feedback::withTrashed()->findOrFail($id);
-        if (! (Auth::user()->can('board') || Auth::user()->id == $feedback->user->id)) {
+        if (!Auth::user()->can('board') && Auth::user()->id != $feedback->user->id) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
             return Redirect::back();

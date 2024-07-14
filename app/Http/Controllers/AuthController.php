@@ -74,11 +74,11 @@ class AuthController extends Controller
         
         // Catch a login form submission for two-factor authentication.
         if ($request->session()->has('2fa_user')) {
-            return self::handleTwofactorSubmit($request, $google2fa);
+            return $this->handleTwoFactorSubmit($request, $google2fa);
         }
 
         // Otherwise, this is a regular login.
-        return self::handleRegularLogin($request);
+        return $this->handleRegularLogin($request);
     }
 
     /** @return RedirectResponse */
@@ -656,7 +656,7 @@ class AuthController extends Controller
     /**
      * @return RedirectResponse
      */
-    private static function handleRegularLogin(Request $request)
+    private function handleRegularLogin(Request $request)
     {
         $username = $request->input('email');
         $password = $request->input('password');
@@ -696,7 +696,7 @@ class AuthController extends Controller
      * @param  Google2FA  $google2fa  The Google2FA object, because this is apparently the only way to access it.
      * @return View|RedirectResponse
      */
-    private static function handleTwoFactorSubmit(Request $request, Google2FA $google2fa)
+    private function handleTwoFactorSubmit(Request $request, Google2FA $google2fa)
     {
         $user = $request->session()->get('2fa_user');
 

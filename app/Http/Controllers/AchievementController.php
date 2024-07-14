@@ -184,14 +184,12 @@ class AchievementController extends Controller
         $awarded = '';
         foreach ($userIds as $userId) {
             $user = User::find($userId);
-            if ($user) {
-                if ($this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
-                    $awarded = $awarded.' '.$user->name.',';
-                }
+            if ($user && $this->giveAchievement($achievement, $user, $request->input('description'), $request->input('achieved_on'))) {
+                $awarded = $awarded.' '.$user->name.',';
             }
         }
         
-        if ($awarded) {
+        if ($awarded !== '' && $awarded !== '0') {
             Session::flash('flash_message', "Achievement $achievement->name has been newly given to:".$awarded);
         } else {
             Session::flash('flash_message', "Achievement $achievement->name had already been achieved by all users!");

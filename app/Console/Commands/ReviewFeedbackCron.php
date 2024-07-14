@@ -51,7 +51,7 @@ class ReviewFeedbackCron extends Command
                 ->where('updated_at', '>=', \Carbon::now()->subDay()->timestamp)
                 ->get();
 
-            if (count($unreviewed)) {
+            if (count($unreviewed) > 0) {
                 $this->info("Sending a review reminder mail for $category->title");
                 Mail::queue((new ReviewFeedbackMail($category, $unreviewed))->onQueue('low'));
             } else {

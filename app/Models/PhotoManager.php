@@ -42,11 +42,7 @@ class PhotoManager extends Model
             $base = $base->where('name', 'LIKE', '%'.$query.'%');
         }
         
-        if ($unpublished) {
-            $base = $base->where('published', '=', false);
-        } else {
-            $base = $base->where('published', '=', true);
-        }
+        $base = $unpublished ? $base->where('published', '=', false) : $base->where('published', '=', true);
         
         if (! $no_thumb) {
             $base = $base->where('thumb_id', '!=', 'null');
@@ -86,11 +82,7 @@ class PhotoManager extends Model
         }
         
         $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc');
-        if ($max != 0) {
-            $items = $items->paginate($max);
-        } else {
-            $items = $items->get();
-        }
+        $items = $max != 0 ? $items->paginate($max) : $items->get();
 
         $data = new stdClass();
         $data->album_id = $album_id;
@@ -123,17 +115,9 @@ class PhotoManager extends Model
         $data->likes = $photo->getLikes();
         $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
-        if ($photo->getNextPhoto() != null) {
-            $data->next = $photo->getNextPhoto()->id;
-        } else {
-            $data->next = null;
-        }
+        $data->next = $photo->getNextPhoto() != null ? $photo->getNextPhoto()->id : null;
 
-        if ($photo->getPreviousPhoto() != null) {
-            $data->previous = $photo->getPreviousPhoto()->id;
-        } else {
-            $data->previous = null;
-        }
+        $data->previous = $photo->getPreviousPhoto() != null ? $photo->getPreviousPhoto()->id : null;
 
         $data->id = $photo_id;
         $data->albumPage = $photo->getAlbumPageNumber(24);

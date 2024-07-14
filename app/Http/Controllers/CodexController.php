@@ -399,7 +399,8 @@ class CodexController extends Controller
                 $pdf->TOC_Entry($song->title, 1);
                 $lyricsArray = explode(PHP_EOL, $song->lyrics);
                 $print = true;
-                for ($index = 0; $index < count($lyricsArray); $index++) {
+                $counter = count($lyricsArray);
+                for ($index = 0; $index < $counter; $index++) {
                     $text = $lyricsArray[$index];
                     $text = str_replace('\\', '', $text);
                     if (str_contains($text, '**')) {
@@ -452,5 +453,6 @@ class CodexController extends Controller
         $pdf->SetAlpha(1);
 
         $pdf->Output();
+        return null;
     }
 }

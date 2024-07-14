@@ -557,11 +557,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return Token */
     public function getToken()
     {
-        if (count($this->tokens) > 0) {
-            $token = $this->tokens->last();
-        } else {
-            $token = $this->generateNewToken();
-        }
+        $token = count($this->tokens) > 0 ? $this->tokens->last() : $this->generateNewToken();
         
         $token->touch();
 
