@@ -35,7 +35,7 @@ class TestEmail extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $email = $this->ask('What is the destination for this e-mail?');
 

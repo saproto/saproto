@@ -184,7 +184,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @return bool whether the user is stale (not in use, can really be deleted safely).
      */
-    public function isStale()
+    public function isStale(): bool
     {
         return ! (
             $this->password ||
@@ -230,19 +230,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return BelongsToMany */
-    public function achievements()
+    public function achievements(): \Illuminate\Database\Query\Builder
     {
         return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany */
-    public function committees()
+    public function committees(): \Illuminate\Database\Eloquent\Builder
     {
         return $this->getGroups()->where('is_society', false);
     }
 
     /** @return BelongsToMany */
-    public function societies()
+    public function societies(): \Illuminate\Database\Eloquent\Builder
     {
         return $this->getGroups()->where('is_society', true);
     }
@@ -333,7 +333,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @throws Exception
      */
-    public function setPassword($password)
+    public function setPassword($password): void
     {
         // Update Laravel Password
         $this->password = Hash::make($password);
@@ -361,8 +361,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
-    /** @return bool */
-    public function hasUnpaidOrderlines()
+    public function hasUnpaidOrderlines(): bool
     {
         foreach ($this->orderlines as $orderline) {
             if (! $orderline->isPayed()) {
@@ -423,26 +422,23 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * @param  Committee  $committee
-     * @return bool
      */
-    public function isInCommittee($committee)
+    public function isInCommittee($committee): bool
     {
         return in_array($this->id, $committee->users->pluck('id')->toArray());
     }
 
     /**
      * @param  string  $slug
-     * @return bool
      */
-    public function isInCommitteeBySlug($slug)
+    public function isInCommitteeBySlug($slug): bool
     {
         $committee = Committee::where('slug', $slug)->first();
 
         return $committee && $this->isInCommittee($committee);
     }
 
-    /** @return bool */
-    public function isActiveMember()
+    public function isActiveMember(): bool
     {
         return count(
             CommitteeMembership::withTrashed()
@@ -462,7 +458,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      * @param  int  $limit
      * @return Withdrawal[]
      */
-    public function withdrawals($limit = 0)
+    public function withdrawals($limit = 0): array
     {
         $withdrawals = [];
         foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
@@ -497,8 +493,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->website;
     }
 
-    /** @return bool */
-    public function hasDiet()
+    public function hasDiet(): bool
     {
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
@@ -515,21 +510,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @return bool Whether the system thinks the user is a first year.
      */
-    public function isFirstYear()
+    public function isFirstYear(): bool
     {
         return $this->is_member
             && Carbon::createFromTimestamp($this->member->created_at)->age < 1
             && $this->did_study_create;
     }
 
-    /** @return bool */
-    public function hasTFAEnabled()
+    public function hasTFAEnabled(): bool
     {
         return $this->tfa_totp_key !== null;
     }
 
-    /** @return void */
-    public function generateNewPersonalKey()
+    public function generateNewPersonalKey(): void
     {
         $this->personal_key = str_random(64);
         $this->save();
@@ -546,7 +539,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return Token */
-    public function generateNewToken()
+    public function generateNewToken(): \App\Models\Token
     {
         $token = new Token();
         $token->generate($this);
@@ -565,7 +558,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** Removes user's birthdate and phone number. */
-    public function clearMemberProfile()
+    public function clearMemberProfile(): void
     {
         $this->birthdate = null;
         $this->phone = null;
@@ -588,7 +581,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @param float|null $hours */
-    public function setCalendarAlarm($hours)
+    public function setCalendarAlarm($hours): void
     {
         $hours = floatval($hours);
         $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
@@ -601,33 +594,29 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_relevant_only;
     }
 
-    /** @return void */
-    public function toggleCalendarRelevantSetting()
+    public function toggleCalendarRelevantSetting(): void
     {
         $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
-    /** @return bool */
-    public function getCompletedProfileAttribute()
+    public function getCompletedProfileAttribute(): bool
     {
         return $this->birthdate !== null && $this->phone !== null;
     }
 
     /** @return bool Whether user has a current membership that is not pending. */
-    public function getIsMemberAttribute()
+    public function getIsMemberAttribute(): bool
     {
         return $this->member && ! $this->member->is_pending;
     }
 
-    /** @return bool */
-    public function getSignedMembershipFormAttribute()
+    public function getSignedMembershipFormAttribute(): bool
     {
         return $this->member?->membershipForm !== null;
     }
 
-    /** @return bool */
-    public function getIsProtubeAdminAttribute()
+    public function getIsProtubeAdminAttribute(): bool
     {
         return $this->can('protube') || $this->isTempadmin();
     }

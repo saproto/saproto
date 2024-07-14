@@ -155,9 +155,8 @@ class TicketController extends Controller
 
     /**
      * @param  int  $event
-     * @return array
      */
-    public function scanApi($event, Request $request)
+    public function scanApi($event, Request $request): array
     {
         if (! $request->has('barcode')) {
             return [
@@ -397,7 +396,7 @@ class TicketController extends Controller
         if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
-            $payment_method = $available_methods->filter(fn($method) => $method->id === $requested_method);
+            $payment_method = $available_methods->filter(fn($method): bool => $method->id === $requested_method);
 
             if ($payment_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');

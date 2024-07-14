@@ -40,8 +40,7 @@ class QrAuthRequest extends Model
 
     protected $guarded = ['id'];
 
-    /** @return bool */
-    public function isApproved()
+    public function isApproved(): bool
     {
         return $this->approved_at !== null;
     }

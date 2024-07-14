@@ -54,30 +54,25 @@ class Video extends Model
         return $this->belongsTo(\App\Models\Event::class, 'event_id');
     }
 
-    /** @return string */
-    public function getYouTubeUrl()
+    public function getYouTubeUrl(): string
     {
         return sprintf('https://www.youtube.com/watch?v=%s', $this->youtube_id);
     }
 
-    /** @return string */
-    public function getYouTubeChannelUrl()
+    public function getYouTubeChannelUrl(): string
     {
         return sprintf('https://www.youtube.com/channel/%s', $this->youtube_user_id);
     }
 
-    /** @return string */
-    public function getYouTubeEmbedUrl()
+    public function getYouTubeEmbedUrl(): string
     {
         return sprintf('https://www.youtube.com/embed/%s?rel=0', $this->youtube_id);
     }
 
     /**
-     * @return string
-     *
      * @throws Exception
      */
-    public function getHumanDuration()
+    public function getHumanDuration(): string
     {
         $interval = new DateInterval($this->youtube_length);
         if ($interval->y > 0) {
@@ -104,13 +99,13 @@ class Video extends Model
     }
 
     /** @return string|false */
-    public function getUnixTimeStamp()
+    public function getUnixTimeStamp(): string
     {
         return date('U', strtotime($this->video_date));
     }
 
     /** @return string|false */
-    public function getFormDate()
+    public function getFormDate(): string
     {
         return date('d-m-Y', strtotime($this->video_date));
     }

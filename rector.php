@@ -10,6 +10,7 @@ use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 
 return RectorConfig::configure()
     ->withCache(
@@ -35,7 +36,7 @@ return RectorConfig::configure()
     ->withPreparedSets(deadCode: true,
         codeQuality: true,
         codingStyle: true,
-        typeDeclarations: false,
+        typeDeclarations: true,
         privatization: false,
         naming: false,
         instanceOf: false,
@@ -47,4 +48,5 @@ return RectorConfig::configure()
             ReturnBinaryOrToEarlyReturnRector::class,
             EncapsedStringsToSprintfRector::class,
             NullToStrictStringFuncCallArgRector::class,
+            AddClosureVoidReturnTypeWhereNoReturnRector::class,
         ]);

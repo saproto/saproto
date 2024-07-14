@@ -157,7 +157,7 @@ class NarrowcastingController extends Controller
     }
 
     /** @return array Return a JSON object of all currently active campaigns. */
-    public function indexApi()
+    public function indexApi(): array
     {
         $data = [];
         foreach (

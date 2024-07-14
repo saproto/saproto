@@ -403,9 +403,8 @@ class EventController extends Controller
 
     /**
      * @param  int  $limit
-     * @return array
      */
-    public function apiUpcomingEvents($limit, Request $request)
+    public function apiUpcomingEvents($limit, Request $request): array
     {
         $user = Auth::user() ?? null;
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);

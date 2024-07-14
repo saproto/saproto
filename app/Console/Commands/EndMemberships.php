@@ -41,7 +41,7 @@ class EndMemberships extends Command
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $deleted = [];
         foreach (Member::all()->whereNotNull('until') as $member) {

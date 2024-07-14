@@ -232,14 +232,14 @@ class ParticipationController extends Controller
         return response()->json($participation->activity->getPresent());
     }
 
-    public static function processBackupQueue(Activity $activity)
+    public static function processBackupQueue(Activity $activity): void
     {
         while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
             self::transferOneBackupUser($activity);
         }
     }
 
-    public static function transferOneBackupUser(Activity $activity)
+    public static function transferOneBackupUser(Activity $activity): void
     {
         $backup_participation = ActivityParticipation::where('activity_id', $activity->id)
             ->whereNull('committees_activities_id')->where('backup', true)

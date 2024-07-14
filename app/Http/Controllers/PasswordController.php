@@ -223,10 +223,7 @@ class PasswordController extends Controller
         return Redirect::route('passwordstore::index');
     }
 
-    /**
-     * @return bool
-     */
-    private function extraVerification(Request $request)
+    private function extraVerification(Request $request): bool
     {
         if (! $request->session()->has('passwordstore-verify')) {
             return false;

@@ -7,12 +7,10 @@ use Exception;
 class CalendarController extends Controller
 {
     /**
-     * @param  string  $google_calendar_id
      * @param  string  $start
      * @param  string  $end
-     * @return array
      */
-    public static function returnGoogleCalendarEvents($google_calendar_id, $start, $end)
+    public static function returnGoogleCalendarEvents(string $google_calendar_id, $start, $end): array
     {
         try {
             $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';

@@ -170,8 +170,7 @@ class Email extends Model
         return collect([]);
     }
 
-    /** @return bool */
-    public function hasRecipientList(EmailList $list)
+    public function hasRecipientList(EmailList $list): bool
     {
         return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->count() > 0;
     }
@@ -180,7 +179,7 @@ class Email extends Model
      * @param  User  $user
      * @return string Email body with variables parsed.
      */
-    public function parseBodyFor($user)
+    public function parseBodyFor($user): string
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
@@ -188,8 +187,7 @@ class Email extends Model
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
-    /** @return string */
-    public function getEventName()
+    public function getEventName(): string
     {
         $events = [];
         if (! $this->to_event) {
@@ -203,8 +201,7 @@ class Email extends Model
         return implode(', ', $events);
     }
 
-    /** @return string */
-    public function getListName()
+    public function getListName(): string
     {
         $lists = [];
         if (! $this->to_list) {
@@ -218,8 +215,7 @@ class Email extends Model
         return implode(', ', $lists);
     }
 
-    /** @return string */
-    public static function getListUnsubscribeFooter($user_id, $email_id)
+    public static function getListUnsubscribeFooter($user_id, $email_id): string
     {
         $footer = [];
         $lists = self::whereId($email_id)->firstOrFail()->lists;

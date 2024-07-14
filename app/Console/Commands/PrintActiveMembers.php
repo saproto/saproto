@@ -33,10 +33,8 @@ class PrintActiveMembers extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (Member::all() as $member) {
             if (! $member->user->isActiveMember()) {

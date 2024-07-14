@@ -155,10 +155,7 @@ class SearchController extends Controller
         return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
-    /**
-     * @return array
-     */
-    public function getUserSearch(Request $request)
+    public function getUserSearch(Request $request): array
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];

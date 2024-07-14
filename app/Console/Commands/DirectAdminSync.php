@@ -38,7 +38,7 @@ class DirectAdminSync extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $da = new DirectAdmin();
         $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
@@ -70,10 +70,8 @@ class DirectAdminSync extends Command
 
     /**
      * Generate the user, committee and manually defined mail forwarders.
-     *
-     * @return array
      */
-    private function constructForwarderList()
+    private function constructForwarderList(): array
     {
         $data = [];
 
@@ -119,10 +117,8 @@ class DirectAdminSync extends Command
 
     /**
      * Generate the list of accounts for all members.
-     *
-     * @return array
      */
-    private function constructAccountList()
+    private function constructAccountList(): array
     {
         $data = [];
 
@@ -147,7 +143,7 @@ class DirectAdminSync extends Command
      * @param  array  $target  The target list of forwarders
      * @return array A forwarders patch list containing an 'add', 'mod' and 'del' array
      */
-    private function constructForwarderPatchList($current, $target)
+    private function constructForwarderPatchList($current, array $target): array
     {
         $data = [
             'add' => [],
@@ -205,7 +201,7 @@ class DirectAdminSync extends Command
      * @param  array  $patch  The forwarders patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the forwarders patch
      */
-    private function applyForwarderPatchList($patch)
+    private function applyForwarderPatchList(array $patch): array
     {
         $queries = [];
 
@@ -254,7 +250,7 @@ class DirectAdminSync extends Command
      * @param  array  $target  The target list of accounts
      * @return array An accounts patch list containing an 'add' and 'del' array
      */
-    private function constructAccountPatchList($current, $target)
+    private function constructAccountPatchList($current, $target): array
     {
         $data = [
             'add' => [],
@@ -288,7 +284,7 @@ class DirectAdminSync extends Command
      * @param  array  $patch  The accounts patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the accounts patch
      */
-    private function applyAccountPatchList($patch)
+    private function applyAccountPatchList(array $patch): array
     {
         $queries = [];
 
@@ -328,7 +324,7 @@ class DirectAdminSync extends Command
      * @param  DirectAdmin  $da  The DirectAdmin instance
      * @param  array  $queries  An array containing a 'cmd' and 'options' array
      */
-    private function executeQueries($da, $queries)
+    private function executeQueries(\Solitweb\DirectAdmin\DirectAdmin $da, array $queries): void
     {
         foreach ($queries as $query) {
             //$this->info('Query '.$i.'/'.count($queries).': '.$query['cmd'].implode($query['options'])); //Temporarily disabled to reduce Sentry spam

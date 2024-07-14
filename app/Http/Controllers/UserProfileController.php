@@ -36,10 +36,9 @@ class UserProfileController extends Controller
 
     /**
      * @param  User  $user
-     * @param  bool  $with_societies
      * @return Collection|CommitteeMembership[]
      */
-    private function getPastMemberships($user, $with_societies)
+    private function getPastMemberships($user, bool $with_societies)
     {
         return CommitteeMembership::onlyTrashed()
             ->with('committee')

@@ -257,7 +257,7 @@ class AchievementController extends Controller
      *
      * @throws Exception
      */
-    public static function staticTakeAll($id)
+    public static function staticTakeAll($id): void
     {
         $achieved = AchievementOwnership::where('achievement_id', $id)->get();
         foreach ($achieved as $entry) {
@@ -265,7 +265,7 @@ class AchievementController extends Controller
         }
     }
 
-    private function giveAchievement($achievement, $user, $description, $achievedOn)
+    private function giveAchievement($achievement, $user, $description, $achievedOn): bool
     {
         $achieved = $user->achievements()->where('achievement_id', $achievement->id)->first();
         if (! $achieved) {

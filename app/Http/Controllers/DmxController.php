@@ -238,7 +238,7 @@ class DmxController extends Controller
      * @param  int[]  $colors
      * @return int[]
      */
-    private function setFixtureChannels($fixture, $channel_values, $colors)
+    private function setFixtureChannels($fixture, array $channel_values, array $colors): array
     {
         // Set red
         foreach ($fixture->getChannels('red') as $channel) {

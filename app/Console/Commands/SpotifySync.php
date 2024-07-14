@@ -37,10 +37,8 @@ class SpotifySync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $spotify = SpotifyController::getApi();
         $session = SpotifyController::getSession();
@@ -117,7 +115,7 @@ class SpotifySync extends Command
         $this->info('Done!');
     }
 
-    public function updatePlaylist($spotify, $playlistId, $spotifyUris)
+    public function updatePlaylist($spotify, string $playlistId, $spotifyUris): void
     {
         $this->info('---');
 

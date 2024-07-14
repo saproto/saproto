@@ -26,10 +26,8 @@ class DevelopmentAccess
 
     /**
      * Whether the current request client is allowed to access the app.
-     *
-     * @return bool
      */
-    protected function clientNotAllowed()
+    protected function clientNotAllowed(): bool
     {
         $isAllowedIP = in_array(request()->ip(), $this->ipWhitelist);
 

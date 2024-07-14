@@ -139,7 +139,7 @@ class MenuController extends Controller
      * @param  MenuItem  $item1
      * @param  MenuItem  $item2
      */
-    private function switchMenuItems($item1, $item2)
+    private function switchMenuItems($item1, $item2): void
     {
         $newOrderForItem1 = $item2->order;
         $newOrderForItem2 = $item1->order;
@@ -152,7 +152,7 @@ class MenuController extends Controller
     }
 
     /** @param  int  $parent */
-    private function fixDuplicateMenuItemsOrder($parent)
+    private function fixDuplicateMenuItemsOrder($parent): void
     {
         $menuItems = MenuItem::where('parent', $parent)->orderBy('order', 'asc')->get();
         $i = 0;
@@ -195,11 +195,11 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    private function getAllRoutes($router)
+    private function getAllRoutes(\Illuminate\Routing\Router $router): ?array
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 
-        return array_filter($routes, fn($route) => $route->getName() &&
+        return array_filter($routes, fn($route): bool => $route->getName() &&
         !str_contains($route->uri(), '{') &&
         !str_contains($route->getName(), 'api::') &&
         !str_contains($route->getName(), 'login::') &&

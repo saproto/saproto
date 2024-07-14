@@ -34,7 +34,7 @@ class PhotoController extends Controller
         
         $photos = PhotoManager::getPhotos($id, 24);
 
-        if ($photos) {
+        if ($photos instanceof \stdClass) {
             return view('photos.album', ['photos' => $photos]);
         }
 

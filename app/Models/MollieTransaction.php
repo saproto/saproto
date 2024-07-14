@@ -68,9 +68,8 @@ class MollieTransaction extends Model
 
     /**
      * @param  string  $status
-     * @return string
      */
-    public static function translateStatus($status)
+    public static function translateStatus($status): string
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
             return 'open';
@@ -102,7 +101,7 @@ class MollieTransaction extends Model
      *
      * @throws Exception
      */
-    public function updateFromWebhook()
+    public function updateFromWebhook(): static
     {
         $mollie = Mollie::api()
             ->payments()

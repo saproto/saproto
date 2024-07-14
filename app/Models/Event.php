@@ -125,8 +125,7 @@ class Event extends Model
         return $this->belongsTo(Committee::class);
     }
 
-    /** @return bool */
-    public function mayViewEvent($user)
+    public function mayViewEvent($user): bool
     {
         //board may always view events
         if ($user?->can('board')) {
@@ -137,6 +136,7 @@ class Event extends Model
         if ($this->secret && ($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user)))) {
             return true;
         }
+
         //show non-secret events only when published
         return !$this->secret && (! $this->publication || $this->isPublished());
     }
@@ -167,8 +167,7 @@ class Event extends Model
             }]);
     }
 
-    /** @return bool */
-    public function isPublished()
+    public function isPublished(): bool
     {
         return $this->publication < Carbon::now()->timestamp;
     }
@@ -219,7 +218,7 @@ class Event extends Model
      * @param  User  $user
      * @return bool Whether the user is organising the activity.
      */
-    public function isOrganising($user)
+    public function isOrganising($user): bool
     {
         return $this->committee && $user->isInCommittee($this->committee);
     }
@@ -233,14 +232,12 @@ class Event extends Model
             ->get();
     }
 
-    /** @return bool */
-    public function current()
+    public function current(): bool
     {
         return $this->start < date('U') && $this->end > date('U');
     }
 
-    /** @return bool */
-    public function over()
+    public function over(): bool
     {
         return $this->end < date('U');
     }
@@ -251,7 +248,7 @@ class Event extends Model
      * @param  string  $combiner  Character to separate start and end time.
      * @return string Timespan text in given format
      */
-    public function generateTimespanText($long_format, $short_format, $combiner)
+    public function generateTimespanText($long_format, $short_format, string $combiner): string
     {
         return date($long_format, $this->start).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
@@ -266,7 +263,7 @@ class Event extends Model
      * @param  User  $user
      * @return bool Whether the user is an admin of the event.
      */
-    public function isEventAdmin($user)
+    public function isEventAdmin($user): bool
     {
         return $user->can('board') || ($this->committee?->isMember($user)) || $this->isEventEro($user);
     }
@@ -275,7 +272,7 @@ class Event extends Model
      * @param  User  $user
      * @return bool Whether the user is an ERO at the event
      */
-    public function isEventEro($user)
+    public function isEventEro($user): bool
     {
         if ($user->can('board')) {
             return true;
@@ -306,7 +303,7 @@ class Event extends Model
      * @param  User  $user
      * @return bool Whether the user has bought a ticket for the event.
      */
-    public function hasBoughtTickets($user)
+    public function hasBoughtTickets(\App\Models\User $user): bool
     {
         return $this->getTicketPurchasesFor($user)->count() > 0;
     }
@@ -320,12 +317,12 @@ class Event extends Model
         }
         
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
+            $users = $users->merge($this->activity->allUsers->sort(function ($a, $b): int {
                 return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
             })->unique());
         }
 
-        return $users->sort(fn($a, $b) => strcmp($a->name, $b->name));
+        return $users->sort(fn($a, $b): int => strcmp($a->name, $b->name));
     }
 
     //recounts the unique users on an event to make the fetching of the event_block way faster
@@ -352,14 +349,12 @@ class Event extends Model
         return $this->allUsers()->pluck('email')->toArray();
     }
 
-    /** @return bool */
-    public function shouldShowDietInfo()
+    public function shouldShowDietInfo(): bool
     {
         return $this->involves_food && $this->end > strtotime('-1 week');
     }
 
-    /** @return bool */
-    public function getIsFutureAttribute()
+    public function getIsFutureAttribute(): bool
     {
         return date('U') < $this->start;
     }

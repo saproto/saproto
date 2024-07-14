@@ -36,11 +36,10 @@ class MemberCleanup extends Command
     /**
      * Execute the console command.
      *
-     * @return int
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         $old_pending_memberships = Member::where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth())->get();
         foreach ($old_pending_memberships as $pending_membership) {

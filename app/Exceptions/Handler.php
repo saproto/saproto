@@ -44,11 +44,10 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @return void
      *
      * @throws Throwable
      */
-    public function report(Throwable $e)
+    public function report(Throwable $e): void
     {
         if ($this->shouldReport($e) && app()->bound('sentry') && App::environment('production')) {
             app('sentry')->captureException($e);

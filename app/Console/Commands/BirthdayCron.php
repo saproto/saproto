@@ -37,7 +37,7 @@ class BirthdayCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))

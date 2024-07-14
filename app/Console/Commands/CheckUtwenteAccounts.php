@@ -37,7 +37,7 @@ class CheckUtwenteAccounts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $users = User::whereNotNull('utwente_username')->get();
         $this->info('Checking '.$users->count().' UTwente accounts.');

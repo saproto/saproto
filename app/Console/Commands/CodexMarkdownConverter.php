@@ -25,7 +25,7 @@ class CodexMarkdownConverter extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (CodexText::all() as $text) {
             $text->text = $this->reformat($text->text);

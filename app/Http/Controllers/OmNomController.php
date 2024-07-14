@@ -299,7 +299,10 @@ class OmNomController extends Controller
         return view('omnomcom.products.generateorder', ['orders' => $orders]);
     }
 
-    private function getCategories($store)
+    /**
+     * @return (object{\category: \mixed, \products: \mixed} & \stdClass)[]
+     */
+    private function getCategories($store): array
     {
         $categories = [];
         foreach ($store->categories as $category) {

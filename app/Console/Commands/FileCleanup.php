@@ -35,7 +35,7 @@ class FileCleanup extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting clean-up.');
 

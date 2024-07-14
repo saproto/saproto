@@ -63,7 +63,7 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
-    private function saveSong(CodexSong $song, Request $request)
+    private function saveSong(CodexSong $song, Request $request): void
     {
         $song->title = $request->input('title');
         $song->artist = $request->input('artist');
@@ -157,7 +157,7 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
-    private function saveCodex($codex, $request)
+    private function saveCodex($codex, \Illuminate\Http\Request $request): void
     {
         $codex->name = $request->input('name');
         $codex->export = $request->input('export');
@@ -218,7 +218,7 @@ class CodexController extends Controller
         return Redirect::route('codex::index');
     }
 
-    private function saveText(CodexText $text, Request $request)
+    private function saveText(CodexText $text, Request $request): void
     {
         $text->name = $request->input('name');
         $text->type_id = $request->input('category');

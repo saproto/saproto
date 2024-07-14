@@ -58,12 +58,10 @@ class ProtubeController extends Controller
     }
 
     /**
-     * @param  int  $limit
-     * @param  string|null  $since
      * @param  User|null  $user
      * @return array
      */
-    private function getTopVideos($limit = 10, $since = '2011-04-20', $user = null)
+    private function getTopVideos(int $limit = 10, ?string $since = '2011-04-20', $user = null)
     {
         $query = DB::table('playedvideos')
             ->select(DB::raw('video_id, video_title, spotify_id, spotify_name, count(*) as played_count'))

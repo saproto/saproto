@@ -47,28 +47,19 @@ class PlayedVideo extends Model
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    /**
-     * @return string
-     */
-    public static function generateYoutubeThumbnail(string $youtube_id)
+    public static function generateYoutubeThumbnail(string $youtube_id): string
     {
         return "https://img.youtube.com/vi/{$youtube_id}/mqdefault.jpg";
     }
 
-    /**
-     * @return string
-     */
-    public static function generateSpotifyUri(string $spotify_id)
+    public static function generateSpotifyUri(string $spotify_id): string
     {
         $spotify_id = str_replace('spotify:track:', '', $spotify_id);
 
         return "https://open.spotify.com/track/{$spotify_id}";
     }
 
-    /**
-     * @return string
-     */
-    public static function generateYoutubeUrl(string $youtube_id)
+    public static function generateYoutubeUrl(string $youtube_id): string
     {
         return "https://www.youtube.com/watch?v={$youtube_id}";
     }

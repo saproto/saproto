@@ -52,7 +52,7 @@ class DmxFixture extends Model
     }
 
     /** @return int[] */
-    public function getChannelNumbers()
+    public function getChannelNumbers(): array
     {
         return range($this->channel_start, $this->channel_end);
     }

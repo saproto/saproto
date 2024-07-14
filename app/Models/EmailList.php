@@ -47,7 +47,7 @@ class EmailList extends Model
      * @param  User  $user
      * @return bool Whether user is subscribed to mailing list.
      */
-    public function isSubscribed($user)
+    public function isSubscribed($user): bool
     {
         return EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
@@ -56,7 +56,7 @@ class EmailList extends Model
      * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
-    public function subscribe($user)
+    public function subscribe($user): bool
     {
         if (! $this->isSubscribed($user)) {
             EmailListSubscription::create([
@@ -76,7 +76,7 @@ class EmailList extends Model
      *
      * @throws Exception
      */
-    public function unsubscribe($user)
+    public function unsubscribe($user): bool
     {
         $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
         if ($s == null) {
@@ -91,9 +91,8 @@ class EmailList extends Model
     /**
      * @param  int  $user_id
      * @param  int  $list_id
-     * @return string
      */
-    public static function generateUnsubscribeHash($user_id, $list_id)
+    public static function generateUnsubscribeHash($user_id, $list_id): string
     {
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));
     }

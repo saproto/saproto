@@ -38,7 +38,7 @@ class SyncRoles extends Command
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
         Artisan::call('config:cache');

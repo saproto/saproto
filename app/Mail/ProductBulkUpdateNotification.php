@@ -12,6 +12,9 @@ class ProductBulkUpdateNotification extends Mailable
     use Queueable;
     use SerializesModels;
 
+    /**
+     * @var \App\Models\User
+     */
     public $user;
 
     /**

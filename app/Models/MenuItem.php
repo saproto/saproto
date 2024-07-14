@@ -73,16 +73,14 @@ class MenuItem extends Model
         }
     }
 
-    /** @return bool */
-    public function isFirst()
+    public function isFirst(): bool
     {
         $lowest = self::where('parent', '=', $this->parent)->orderBy('order')->first();
 
         return $this->id == $lowest->id;
     }
 
-    /** @return bool */
-    public function isLast()
+    public function isLast(): bool
     {
         $highest = self::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
 

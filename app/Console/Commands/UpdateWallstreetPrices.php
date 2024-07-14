@@ -41,7 +41,7 @@ class UpdateWallstreetPrices extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): ?int
     {
         //get the wallstreet drink that is currently active
         $currentDrink = WallstreetDrink::where('start_time', '<=', time())->where('end_time', '>=', time())->first();
@@ -118,6 +118,7 @@ class UpdateWallstreetPrices extends Command
                 $newPriceObject->save();
             }
         }
+
         return null;
     }
 }

@@ -64,10 +64,9 @@ class Photo extends Model
     }
 
     /**
-     * @param  bool  $next
      * @return Photo
      */
-    private function getAdjacentPhoto($next = true)
+    private function getAdjacentPhoto(bool $next = true)
     {
         if ($next) {
             $ord = 'ASC';
@@ -101,7 +100,7 @@ class Photo extends Model
      * @param  int  $paginateLimit
      * @return false|float|int
      */
-    public function getAlbumPageNumber($paginateLimit)
+    public function getAlbumPageNumber($paginateLimit): float|int
     {
         $photoIndex = 1;
         $photos = self::where('album_id', $this->album_id)->orderBy('date_taken', 'ASC')->orderBy('id', 'ASC')->get();
@@ -116,8 +115,7 @@ class Photo extends Model
         return 1;
     }
 
-    /** @return int */
-    public function getLikes()
+    public function getLikes(): int
     {
         return $this->likes()->count();
     }

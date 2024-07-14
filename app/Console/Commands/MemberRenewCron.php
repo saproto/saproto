@@ -36,7 +36,7 @@ class MemberRenewCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (Member::all() as $member) {
             Mail::to($member->user)->queue((new MembershipRenew($member->user))->onQueue('low'));

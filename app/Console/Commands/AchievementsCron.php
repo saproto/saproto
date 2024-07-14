@@ -44,7 +44,7 @@ class AchievementsCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Automatically granting achievements to users...');
 
@@ -82,7 +82,7 @@ class AchievementsCron extends Command
             }, // I Am Bread
             25 => fn($user) => $this->gottaCatchEmAll($user), // Gotta Catch em All
             26 => fn($user) => $this->nThProducts($user, $youDandy, 3), // You Dandy
-            27 => fn($user) => $this->nThProducts($user, [180], 1) && ! $user->did_study_create, // Fristi Member
+            27 => fn($user): bool => $this->nThProducts($user, [180], 1) && ! $user->did_study_create, // Fristi Member
             28 => fn($user) => $this->bigSpender($user), // Big Spender
             29 => fn($user) => $this->percentageProducts($user, $fourOClock, 0.25), // Four 'O Clock
             // 30 => function($user) { return $this->percentageProducts($user, $this->categoriesProductIds([11, 15, 18, 19]), 0.25); }, # You're Special
@@ -133,9 +133,8 @@ class AchievementsCron extends Command
      * Give an achievement to a user.
      *
      * @param  User  $user
-     * @param  int  $id
      */
-    private function giveAchievement($user, $id)
+    private function giveAchievement($user, int $id): void
     {
         $achievement = Achievement::find($id);
 
@@ -149,10 +148,8 @@ class AchievementsCron extends Command
 
     /**
      * Check if it is NOT the first of the month.
-     *
-     * @return bool
      */
-    private function notFirstOfMonth()
+    private function notFirstOfMonth(): bool
     {
         return Carbon::now()->day != 1;
     }
@@ -161,9 +158,8 @@ class AchievementsCron extends Command
      * Achievement beast = earned 10 achievements or more.
      *
      * @param  User  $user
-     * @return bool
      */
-    private function achievementBeast($user)
+    private function achievementBeast($user): bool
     {
         return $user->achievements->count() >= 10;
     }
@@ -172,9 +168,8 @@ class AchievementsCron extends Command
      * Old Fart = member for more than 5 years.
      *
      * @param  User  $user
-     * @return bool
      */
-    private function oldFart($user)
+    private function oldFart($user): bool
     {
         return $user->is_member && $user->member->created_at < Carbon::now()->subYears(5);
     }
@@ -183,9 +178,8 @@ class AchievementsCron extends Command
      * Gotta catch 'em all! = be a member of at least 10 different committees.
      *
      * @param  User  $user
-     * @return bool
      */
-    private function gottaCatchEmAll($user)
+    private function gottaCatchEmAll($user): bool
     {
         return $user->committees()->count() >= 10;
     }
@@ -194,9 +188,8 @@ class AchievementsCron extends Command
      * Big spender = paid more than the max. amount of money in a month (=€250).
      *
      * @param  User  $user
-     * @return bool
      */
-    private function bigSpender($user)
+    private function bigSpender($user): bool
     {
         if ($this->notFirstOfMonth()) {
             return false;
@@ -213,9 +206,8 @@ class AchievementsCron extends Command
      * 4ever committee member = has been a committee member for more than three years.
      *
      * @param  User  $user
-     * @return bool
      */
-    private function foreverMember($user)
+    private function foreverMember($user): bool
     {
         foreach ($user->committees as $committee) {
             $memberships = CommitteeMembership::withTrashed()
@@ -247,9 +239,8 @@ class AchievementsCron extends Command
      *
      * @param  User  $user
      * @param  int[]  $firsts
-     * @return bool
      */
-    private function first($user, $firsts)
+    private function first($user, array $firsts): bool
     {
         return in_array($user->id, $firsts);
     }
@@ -258,10 +249,8 @@ class AchievementsCron extends Command
      * Attended a certain number of activities.
      *
      * @param  User  $user
-     * @param  int  $n
-     * @return bool
      */
-    private function nThActivity($user, $n)
+    private function nThActivity($user, int $n): bool
     {
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
@@ -274,11 +263,9 @@ class AchievementsCron extends Command
      * Attended a certain percentage of signups in the last month.
      *
      * @param  User  $user
-     * @param  int  $percentage
      * @param  int  $possibleSignups
-     * @return bool
      */
-    private function percentageParticipation($user, $percentage, $possibleSignups)
+    private function percentageParticipation($user, int $percentage, $possibleSignups): bool
     {
         if ($this->notFirstOfMonth()) {
             return false;
@@ -306,10 +293,8 @@ class AchievementsCron extends Command
      *
      * @param  User  $user
      * @param  int[]  $products
-     * @param  int  $n
-     * @return bool
      */
-    private function nThProducts($user, $products, $n)
+    private function nThProducts($user, $products, int $n): bool
     {
         return $user->orderlines()->whereIn('product_id', $products)->sum('units') > $n;
     }
@@ -319,10 +304,8 @@ class AchievementsCron extends Command
      *
      * @param  User  $user
      * @param  int[]  $products
-     * @param  float  $p
-     * @return bool
      */
-    private function percentageProducts($user, $products, $p)
+    private function percentageProducts($user, $products, float $p): bool
     {
         $orders = OrderLine::query()
             ->where('updated_at', '>', Carbon::now()->subMonths())
@@ -343,7 +326,7 @@ class AchievementsCron extends Command
      * @param  int[]  $categories
      * @return int[]
      */
-    private function categoryProducts($categories)
+    private function categoryProducts(array $categories): array
     {
         $products = [];
         foreach ($categories as $category) {

@@ -40,7 +40,7 @@ class ApiController extends Controller
         return response()->json(['authenticated' => false]);
     }
 
-    public function protubePlayed(Request $request)
+    public function protubePlayed(Request $request): void
     {
         if ($request->secret != config('protube.protube_to_laravel_secret')) {
             abort(403);
@@ -123,8 +123,7 @@ class ApiController extends Controller
         ]);
     }
 
-    /** @return array */
-    public function gdprExport()
+    public function gdprExport(): array
     {
         $user = Auth::user();
         $data = [];

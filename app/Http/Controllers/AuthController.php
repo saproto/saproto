@@ -201,10 +201,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return User
      */
-    private function registerAccount($request)
+    private function registerAccount(\Illuminate\Http\Request $request)
     {
         $user = User::create($request->only(['email', 'name', 'calling_name']));
 
@@ -726,7 +725,7 @@ class AuthController extends Controller
      *
      * @param  User  $user
      */
-    public static function dispatchPasswordEmailFor($user)
+    public static function dispatchPasswordEmailFor($user): void
     {
         $reset = PasswordReset::create([
             'email' => $user->email,
@@ -740,7 +739,7 @@ class AuthController extends Controller
     /**
      * Static helper function that will dispatch a username reminder email for a user.
      */
-    public static function dispatchUsernameEmailFor(User $user)
+    public static function dispatchUsernameEmailFor(User $user): void
     {
         Mail::to($user)->queue((new UsernameReminderEmail($user))->onQueue('high'));
     }
@@ -797,7 +796,7 @@ class AuthController extends Controller
      * @param  AuthnRequest  $authnRequest  The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
-    private static function buildSAMLResponse($user, $authnRequest)
+    private static function buildSAMLResponse($user, $authnRequest): \LightSaml\Model\Protocol\Response
     {
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/

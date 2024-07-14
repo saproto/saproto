@@ -45,7 +45,7 @@ class Token extends Model
      * @param  User  $user
      * @return Token
      */
-    public function generate($user)
+    public function generate($user): static
     {
         $this->user_id = $user->id;
         $this->token = uniqid();

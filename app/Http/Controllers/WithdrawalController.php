@@ -480,8 +480,7 @@ class WithdrawalController extends Controller
         return view('omnomcom.unwithdrawable', ['users' => $users]);
     }
 
-    /** @return float|int */
-    public static function openOrderlinesSum()
+    public static function openOrderlinesSum(): int|float
     {
         $sum = 0;
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
@@ -495,8 +494,7 @@ class WithdrawalController extends Controller
         return $sum;
     }
 
-    /** @return int */
-    public static function openOrderlinesTotal()
+    public static function openOrderlinesTotal(): int
     {
         $total = 0;
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {

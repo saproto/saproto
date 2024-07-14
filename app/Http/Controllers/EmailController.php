@@ -253,12 +253,10 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  string  $hash
      * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function unsubscribeLink(Request $request, $hash)
+    public function unsubscribeLink(Request $request, string $hash)
     {
         $data = EmailList::parseUnsubscribeHash($hash);
 
@@ -305,7 +303,7 @@ class EmailController extends Controller
      * @param  array  $events
      * @param  bool  $toBackup
      */
-    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup = false)
+    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup = false): void
     {
 
         switch ($type) {

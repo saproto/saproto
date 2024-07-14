@@ -58,9 +58,8 @@ class PhotoManager extends Model
     /**
      * @param  int  $album_id
      * @param  int|null  $max
-     * @return stdClass|null
      */
-    public static function getPhotos($album_id, $max = null)
+    public static function getPhotos($album_id, $max = null): ?\stdClass
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -101,9 +100,8 @@ class PhotoManager extends Model
 
     /**
      * @param  int  $photo_id
-     * @return stdClass
      */
-    public static function getPhoto($photo_id)
+    public static function getPhoto($photo_id): \stdClass
     {
         $photo = Photo::findOrFail($photo_id);
 
@@ -130,7 +128,7 @@ class PhotoManager extends Model
      *
      * @throws Exception
      */
-    public static function deleteAlbum($album_id)
+    public static function deleteAlbum($album_id): void
     {
         $album = PhotoAlbum::find($album_id);
         $photos = $album->items;

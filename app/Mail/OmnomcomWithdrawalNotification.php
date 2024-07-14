@@ -13,8 +13,14 @@ class OmnomcomWithdrawalNotification extends Mailable
     use Queueable;
     use SerializesModels;
 
+    /**
+     * @var \App\Models\User
+     */
     public $user;
 
+    /**
+     * @var \App\Models\Withdrawal
+     */
     public $withdrawal;
 
     /**

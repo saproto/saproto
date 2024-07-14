@@ -113,8 +113,7 @@ class Product extends Model
         return $this->hasMany(\App\Models\OrderLine::class);
     }
 
-    /** @return bool */
-    public function isVisible()
+    public function isVisible(): bool
     {
         return $this->is_visible && !($this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }

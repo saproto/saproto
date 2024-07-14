@@ -61,8 +61,7 @@ class Achievement extends Model
         return $this->hasMany(\App\Models\AchievementOwnership::class);
     }
 
-    /** @return int */
-    public function numberOfStars()
+    public function numberOfStars(): int
     {
         $map = [
             'COMMON' => 1,

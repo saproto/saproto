@@ -48,7 +48,7 @@ class StorageEntry extends Model
      *
      * @return bool whether or not the file is orphaned (not in use, can really be deleted safely)
      */
-    public function isOrphan()
+    public function isOrphan(): bool
     {
         $id = $this->id;
 
@@ -77,7 +77,7 @@ class StorageEntry extends Model
      *
      * @throws FileNotFoundException
      */
-    public function createFromFile($file, $customPath = null)
+    public function createFromFile($file, $customPath = null): void
     {
         $this->hash = $this->generateHash();
 
@@ -101,7 +101,7 @@ class StorageEntry extends Model
      * @param  string  $name
      * @param  string|null  $customPath
      */
-    public function createFromData($data, $mime, $name, $customPath = null)
+    public function createFromData($data, $mime, $name, $customPath = null): void
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -117,8 +117,7 @@ class StorageEntry extends Model
         $this->save();
     }
 
-    /** @return string */
-    private function generateHash()
+    private function generateHash(): string
     {
         return sha1(date('U').mt_rand(1, intval(99999999999)));
     }
@@ -152,9 +151,8 @@ class StorageEntry extends Model
     /**
      * @param  int|null  $w
      * @param  int|null  $h
-     * @return string
      */
-    public function getBase64($w = null, $h = null)
+    public function getBase64($w = null, $h = null): string
     {
         /* @phpstan-ignore-next-line */
         return base64_encode(FileController::makeImage($this, $w, $h));
@@ -194,9 +192,8 @@ class StorageEntry extends Model
 
     /**
      * @param  string  $algo  Defaults to md5.
-     * @return string
      */
-    public function getFileHash($algo = 'md5')
+    public function getFileHash(string $algo = 'md5'): string
     {
         return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }

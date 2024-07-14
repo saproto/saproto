@@ -34,7 +34,7 @@ class MakeAdmin extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if (getenv('APP_ENV') == 'production') {
             $this->error('Cannot do this on production.');

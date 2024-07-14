@@ -27,10 +27,7 @@ class QrAuthController extends Controller
         return response((new DNS2D())->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
-    /**
-     * @return QrAuthRequest
-     */
-    public function generateRequest(Request $request)
+    public function generateRequest(Request $request): \App\Models\QrAuthRequest
     {
         if (! $request->has('description')) {
             abort(500, 'No description was provided.');
@@ -115,10 +112,7 @@ class QrAuthController extends Controller
         return response()->json(['description' => $qrAuthRequest->description], 200);
     }
 
-    /**
-     * @return string
-     */
-    public function isApproved(Request $request)
+    public function isApproved(Request $request): string
     {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $request->code)->first();
 

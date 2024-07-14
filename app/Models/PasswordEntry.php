@@ -52,8 +52,7 @@ class PasswordEntry extends Model
         return $this->belongsTo(\Spatie\Permission\Models\Permission::class, 'permission_id');
     }
 
-    /** @return bool */
-    public function canAccess(User $user)
+    public function canAccess(User $user): bool
     {
         $permission = $this->permission;
 

@@ -54,7 +54,7 @@ class SpotifyController extends Controller
         return Redirect::route('homepage');
     }
 
-    public static function setSession(SpotifySession $session)
+    public static function setSession(SpotifySession $session): void
     {
         $dbSession = HashMapItem::where('key', 'spotify')->where('subkey', 'session')->first();
         if ($dbSession == null) {

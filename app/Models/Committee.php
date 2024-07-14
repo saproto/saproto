@@ -97,8 +97,7 @@ class Committee extends Model
         return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
-    /** @return string */
-    public function getEmailAddressAttribute()
+    public function getEmailAddressAttribute(): string
     {
         return $this->slug.'@'.config('proto.emaildomain');
     }
@@ -134,7 +133,7 @@ class Committee extends Model
      * @param  bool  $includeSecret
      * @return Event[]
      */
-    public function helpedEvents($includeSecret = false)
+    public function helpedEvents($includeSecret = false): array
     {
         /** @var Activity[] $activities */
         $activities = $this->belongsToMany(\App\Models\Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
@@ -169,7 +168,7 @@ class Committee extends Model
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
-    public function allMembers()
+    public function allMembers(): array
     {
         $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];
         $memberships = CommitteeMembership::withTrashed()->where('committee_id', $this->id)

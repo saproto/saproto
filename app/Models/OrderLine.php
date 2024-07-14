@@ -101,8 +101,7 @@ class OrderLine extends Model
         return $this->hasOne(\App\Models\TicketPurchase::class, 'orderline_id');
     }
 
-    /** @return bool */
-    public function isPayed()
+    public function isPayed(): bool
     {
         $mollie_payment = false;
         if ($this->payed_with_mollie !== null) {
@@ -118,14 +117,12 @@ class OrderLine extends Model
             $this->payed_with_bank_card !== null;
     }
 
-    /** @return bool */
-    public function canBeDeleted()
+    public function canBeDeleted(): bool
     {
         return $this->total_price == 0 || ! $this->isPayed();
     }
 
-    /** @return string */
-    public function generateHistoryStatus()
+    public function generateHistoryStatus(): string
     {
         if ($this->payed_with_loss) {
             return 'Loss';
@@ -175,6 +172,7 @@ class OrderLine extends Model
         if ($this->total_price == 0) {
             return 'Free!';
         }
+
         return 'Unpaid';
     }
 }

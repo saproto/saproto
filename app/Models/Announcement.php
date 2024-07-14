@@ -64,8 +64,7 @@ class Announcement extends Model
 
     protected $guarded = ['id'];
 
-    /** @return string */
-    public function getBootstrapStyleAttribute()
+    public function getBootstrapStyleAttribute(): string
     {
         $map = [
             'primary',
@@ -78,8 +77,7 @@ class Announcement extends Model
         return $map[$this->show_style];
     }
 
-    /** @return string */
-    public function getIsVisibleAttribute()
+    public function getIsVisibleAttribute(): string
     {
         $flags = [];
 
@@ -117,29 +115,25 @@ class Announcement extends Model
         return implode(', ', $flags);
     }
 
-    /** @return string */
-    public function getHashMapIdAttribute()
+    public function getHashMapIdAttribute(): string
     {
         return sprintf('dismiss-announcement-%s', $this->id);
     }
 
-    /** @return string */
-    public function getModalIdAttribute()
+    public function getModalIdAttribute(): string
     {
         return sprintf('modal-announcement-%s', $this->id);
     }
 
-    /** @return bool */
-    public function getShowByTimeAttribute()
+    public function getShowByTimeAttribute(): bool
     {
         return strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U');
     }
 
     /**
      * @param  null|User  $user
-     * @return bool
      */
-    public function showForUser($user = null)
+    public function showForUser($user = null): bool
     {
         // Check for homepage.
         if ($this->show_only_homepage && Route::current()->getName() != 'homepage') {
@@ -190,7 +184,7 @@ class Announcement extends Model
     }
 
     /** @param  User|null  $user */
-    public function dismissForUser($user = null)
+    public function dismissForUser($user = null): void
     {
         if ($user) {
             HashMapItem::create(['key' => $this->hash_map_id, 'subkey' => $user->id]);

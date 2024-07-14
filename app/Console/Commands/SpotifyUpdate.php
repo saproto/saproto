@@ -35,10 +35,8 @@ class SpotifyUpdate extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $spotify = SpotifyController::getApi();
         $session = SpotifyController::getSession();

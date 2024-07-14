@@ -101,17 +101,14 @@ class NewsController extends Controller
         return view('news.edit', ['item' => $newsitem, 'new' => false, 'upcomingEvents' => $upcomingEvents, 'events' => $events, 'is_weekly' => $newsitem->is_weekly, 'lastWeekly' => $lastWeekly]);
     }
 
-    /**
-     * @return View
-     */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\View\View
     {
         $newsitem = new Newsitem();
 
         return $this->storeNews($newsitem, $request);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): \Illuminate\View\View
     {
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
@@ -185,8 +182,7 @@ class NewsController extends Controller
         return Redirect::route('news::admin');
     }
 
-    /** @return array */
-    public function apiIndex()
+    public function apiIndex(): array
     {
         $newsitems = Newsitem::all()->sortByDesc('published_at');
 

@@ -120,8 +120,7 @@ class Member extends Model
             ->first();
     }
 
-    /** @return string|null */
-    public function getMemberType()
+    public function getMemberType(): ?string
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
@@ -141,9 +140,8 @@ class Member extends Model
      * Create an email alias friendly username from a full name.
      *
      * @param  $name  string
-     * @return string
      */
-    public static function createProtoUsername($name)
+    public static function createProtoUsername($name): string
     {
         $name = explode(' ', $name);
         if (count($name) > 1) {

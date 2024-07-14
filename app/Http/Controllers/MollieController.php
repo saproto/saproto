@@ -77,7 +77,7 @@ class MollieController extends Controller
         }
 
         if ($use_fees) {
-            $selected_method = $available_methods->filter(fn($method) => $method->id === $requested_method);
+            $selected_method = $available_methods->filter(fn($method): bool => $method->id === $requested_method);
 
             if ($selected_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
@@ -229,7 +229,7 @@ class MollieController extends Controller
      *
      * @throws Exception
      */
-    public function webhook($id)
+    public function webhook($id): void
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::findOrFail($id);

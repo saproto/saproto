@@ -56,7 +56,7 @@ class DmxOverride extends Model
     }
 
     /** @return array<int, int> */
-    public function colorArray()
+    public function colorArray(): array
     {
         return array_map(intval(...), explode(',', $this->color));
     }
@@ -85,20 +85,18 @@ class DmxOverride extends Model
         return $this->colorArray()[3];
     }
 
-    /** @return bool */
-    public function active()
+    public function active(): bool
     {
         return $this->start < date('U') && date('U') < $this->end;
     }
 
-    /** @return bool */
-    public function justOver()
+    public function justOver(): bool
     {
         return date('U') > $this->end && date('U') < $this->end. 600;
     }
 
     /** @return false|string[] */
-    public function getFixtureIds()
+    public function getFixtureIds(): array
     {
         return explode(',', $this->fixtures);
     }
@@ -115,8 +113,7 @@ class DmxOverride extends Model
         return $this->active();
     }
 
-    /** @return int */
-    public function getWindowSizeAttribute()
+    public function getWindowSizeAttribute(): int
     {
         return (int) $this->end - (int) $this->start;
     }

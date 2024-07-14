@@ -19,7 +19,7 @@ class RfidCardController extends Controller
      *
      * @throws Exception
      */
-    public function store(Request $request)
+    public function store(Request $request): array
     {
         switch ($request->input('credentialtype')) {
             case 'qr':

@@ -212,11 +212,10 @@ class PhotoAdminController extends Controller
     /**
      * @param  UploadedFile  $uploaded_photo
      * @param  int  $album_id
-     * @return Photo
      *
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id)
+    private function createPhotoFromUpload($uploaded_photo, $album_id): \App\Models\Photo
     {
         $path = 'photos/'.$album_id.'/';
 

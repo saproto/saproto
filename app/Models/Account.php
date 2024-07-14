@@ -47,7 +47,7 @@ class Account extends Model
      * @param  Collection  $orderlines
      * @return array<int, stdClass>
      */
-    public static function generateAccountOverviewFromOrderlines($orderlines)
+    public static function generateAccountOverviewFromOrderlines($orderlines): array
     {
         $accounts = [];
 

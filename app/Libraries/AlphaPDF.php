@@ -12,14 +12,14 @@ class AlphaPDF extends tFpdf
     // bm:    blend mode, one of the following:
     //          Normal, Multiply, Screen, Overlay, Darken, Lighten, ColorDodge, ColorBurn,
     //          HardLight, SoftLight, Difference, Exclusion, Hue, Saturation, Color, Luminosity
-    public function SetAlpha($alpha, $bm = 'Normal')
+    public function SetAlpha($alpha, string $bm = 'Normal'): void
     {
         // set alpha for stroking (CA) and non-stroking (ca) operations
         $gs = $this->AddExtGState(['ca' => $alpha, 'CA' => $alpha, 'BM' => '/'.$bm]);
         $this->SetExtGState($gs);
     }
 
-    public function AddExtGState($parms)
+    public function AddExtGState($parms): int
     {
         $n = count($this->extgstates) + 1;
         $this->extgstates[$n]['parms'] = $parms;
@@ -27,7 +27,7 @@ class AlphaPDF extends tFpdf
         return $n;
     }
 
-    public function SetExtGState($gs)
+    public function SetExtGState($gs): void
     {
         $this->_out(sprintf('/GS%d gs', $gs));
     }
@@ -41,7 +41,7 @@ class AlphaPDF extends tFpdf
         parent::_enddoc();
     }
 
-    public function _putextgstates()
+    public function _putextgstates(): void
     {
         $counter = count($this->extgstates);
         for ($i = 1; $i <= $counter; $i++) {

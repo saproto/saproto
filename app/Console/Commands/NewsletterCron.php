@@ -37,7 +37,7 @@ class NewsletterCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
 

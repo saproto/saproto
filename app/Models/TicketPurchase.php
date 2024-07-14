@@ -64,8 +64,7 @@ class TicketPurchase extends Model
         return $this->belongsTo(\App\Models\User::class, 'user_id')->withTrashed();
     }
 
-    /** @return bool*/
-    public function canBeDownloaded()
+    public function canBeDownloaded(): bool
     {
         return
             (! $this->ticket->is_prepaid) ||
@@ -73,8 +72,7 @@ class TicketPurchase extends Model
             ($this->orderline->molliePayment?->translatedStatus() == 'paid');
     }
 
-    /** @return array */
-    public function getApiAttributesAttribute()
+    public function getApiAttributesAttribute(): array
     {
         return [
             'id' => $this->id,

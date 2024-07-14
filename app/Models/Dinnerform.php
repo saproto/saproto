@@ -78,19 +78,19 @@ class Dinnerform extends Model
     }
 
     /** @return float The regular discount as a percentage out of 100. */
-    public function getRegularDiscountPercentageAttribute()
+    public function getRegularDiscountPercentageAttribute(): int|float
     {
         return 100 - ($this->regular_discount * 100);
     }
 
     /** @return string A timespan string with format 'D H:i'. */
-    public function generateTimespanText()
+    public function generateTimespanText(): string
     {
         return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */
-    public function isCurrent()
+    public function isCurrent(): bool
     {
         return $this->start->isPast() && $this->end->isFuture();
     }
@@ -115,7 +115,7 @@ class Dinnerform extends Model
     }
 
     /** @return int Number of orders. */
-    public function orderCount()
+    public function orderCount(): int
     {
         return $this->orderlines()->count();
     }
@@ -127,20 +127,20 @@ class Dinnerform extends Model
     }
 
     /** @return bool Whether the current user is a helper for the event related to the dinnerform or has marked themselves as a helper. */
-    public function isHelping()
+    public function isHelping(): bool
     {
         return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
             || ($this->event?->activity && $this->event->activity->isHelping(Auth::user()));
     }
 
     /** @return bool Whether the current user has any discounts. */
-    public function hasDiscount()
+    public function hasDiscount(): bool
     {
         return $this->regular_discount_percentage || ($this->helper_discount && $this->isHelping());
     }
 
     /** @return bool Whether the current user has made an order yet. */
-    public function hasOrdered()
+    public function hasOrdered(): bool
     {
         return $this->orderlines()->where('user_id', Auth::id())->exists();
     }

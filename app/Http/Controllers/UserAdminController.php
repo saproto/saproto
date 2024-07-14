@@ -422,9 +422,8 @@ class UserAdminController extends Controller
 
     /**
      * @param  int  $id
-     * @return string
      */
-    public function printMemberForm($id)
+    public function printMemberForm($id): string
     {
         $user = User::find($id);
 

@@ -13,6 +13,9 @@ class MembershipEnded extends Mailable
     use Queueable;
     use SerializesModels;
 
+    /**
+     * @var \App\Models\User
+     */
     public $user;
 
     public $lists;
@@ -33,8 +36,7 @@ class MembershipEnded extends Mailable
             ->view('emails.membershipend');
     }
 
-    /** @return string */
-    public function getSubscriptionList()
+    public function getSubscriptionList(): string
     {
         $footer = [];
         $lists = $this->user->lists;

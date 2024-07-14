@@ -213,9 +213,8 @@ class BankController extends Controller
 
     /**
      * @param  string  $bic
-     * @return bool
      */
-    public static function verifyBicIsValid($bic)
+    public static function verifyBicIsValid($bic): bool
     {
         if (($bic == '')) {
             return false;
@@ -226,18 +225,13 @@ class BankController extends Controller
 
     /**
      * @param  User  $user
-     * @return string
      */
-    public static function generateAuthorizationId($user)
+    public static function generateAuthorizationId($user): string
     {
         return 'PROTOX'.str_pad(strval($user->id), 5, '0', STR_PAD_LEFT).'X'.str_pad(strval(mt_rand(0, 99999)), 5, '0');
     }
 
-    /**
-     * @param  string  $iban
-     * @return string|null
-     */
-    private static function getNlBicFromIban($iban)
+    private static function getNlBicFromIban(string $iban): ?string
     {
         $data = [ // Data from: https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx
             'ABNA' => 'ABNANL2A',

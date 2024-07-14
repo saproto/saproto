@@ -13,9 +13,8 @@ class FileController extends Controller
     /**
      * @param  int  $id
      * @param  string  $hash
-     * @return Response
      */
-    public function get($id, $hash)
+    public function get($id, $hash): \Illuminate\Http\Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::findOrFail($id);
@@ -70,9 +69,8 @@ class FileController extends Controller
     /**
      * @param  int  $id
      * @param  string  $hash
-     * @return Response
      */
-    public function getImage($id, $hash, Request $request)
+    public function getImage($id, $hash, Request $request): \Illuminate\Http\Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::findOrFail($id);
@@ -93,9 +91,8 @@ class FileController extends Controller
      * @param  string  $printer
      * @param  string  $url
      * @param  int  $copies
-     * @return string
      */
-    public static function requestPrint($printer, $url, $copies = 1)
+    public static function requestPrint($printer, $url, $copies = 1): string
     {
         if ($printer == 'document') {
             return 'You cannot do this at the moment. Please use the network printer.';

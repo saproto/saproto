@@ -22,9 +22,8 @@ class AuthLoginEventHandler
      * Handle the event.
      *
      * @param  Login  $event
-     * @return void
      */
-    public function handle($event)
+    public function handle($event): void
     {
         /** @var User $user */
         $user = $event->user;
