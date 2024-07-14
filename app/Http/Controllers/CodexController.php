@@ -396,7 +396,7 @@ class CodexController extends Controller
                 $pdf->SetFont('minion', '', $textSize);
                 $link = $pdf->AddLink();
                 $pdf->SetLink($link, -1, -1);
-                $pdf->TOC_Entry($song->title, 1, $link);
+                $pdf->TOC_Entry($song->title, 1);
                 $lyricsArray = explode(PHP_EOL, $song->lyrics);
                 $print = true;
                 for ($index = 0; $index < count($lyricsArray); $index++) {

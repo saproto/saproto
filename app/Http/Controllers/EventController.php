@@ -426,18 +426,14 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(function ($item) {
-                return (object) [
-                    'name' => $item->name,
-                    'photo' => $item->photo_preview,
-                ];
-            }) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
-                return (object) [
-                    'name' => $item->name,
-                    'photo' => $item->photo_preview,
-                ];
-            }) : null);
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(fn($item) => (object) [
+                'name' => $item->name,
+                'photo' => $item->photo_preview,
+            ]) : null);
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(fn($item) => (object) [
+                'name' => $item->name,
+                'photo' => $item->photo_preview,
+            ]) : null);
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,

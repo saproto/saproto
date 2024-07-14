@@ -146,37 +146,35 @@ class OrderLine extends Model
         if ($this->payed_with_bank_card !== null) {
             return 'Bank Card';
         }
-        
         if ($this->payed_with_mollie !== null) {
-            switch ($this->molliePayment->translatedStatus()) {
-                case 'paid':
-                    return '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                case 'failed':
-                    return '<i class="fas fa-times ml-2 text-danger"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                case 'open':
-                    return '<i class="fas fa-spinner ml-2 text-normal"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                default:
-                    return '<i class="fas fa-question ml-2 text-normal"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-            }
-        } elseif ($this->total_price == 0) {
+            return match ($this->molliePayment->translatedStatus()) {
+                'paid' => '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                'failed' => '<i class="fas fa-times ml-2 text-danger"></i>'." - <a href='".
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                'open' => '<i class="fas fa-spinner ml-2 text-normal"></i>'." - <a href='".
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                default => '<i class="fas fa-question ml-2 text-normal"></i>'." - <a href='".
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+            };
+        }
+        
+        if ($this->total_price == 0) {
             return 'Free!';
-        } else {
+        }
+        else {
             return 'Unpaid';
         }
     }

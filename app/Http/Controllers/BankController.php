@@ -199,7 +199,7 @@ class BankController extends Controller
 
                 return $response;
             }
-        } catch (Exception $exception) {
+        } catch (Exception) {
             if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Something went wrong retrieving your BIC.';

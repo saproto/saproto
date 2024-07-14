@@ -81,11 +81,7 @@ class FileController extends Controller
             abort(404);
         }
 
-        $response = new Response($this->makeImage(
-            $entry,
-            ($request->has('w') ? $request->input('w') : null),
-            ($request->has('h') ? $request->input('h') : null)
-        ), 200);
+        $response = new Response(static::makeImage($entry, ($request->has('w') ? $request->input('w') : null), ($request->has('h') ? $request->input('h') : null)), 200);
         $response->header('Content-Type', $entry->mime);
         $response->header('Cache-Control', 'max-age=86400, public');
         $response->header('Content-Disposition', sprintf('filename="%s"', $entry->original_filename));

@@ -334,9 +334,7 @@ class Event extends Model
             })->unique());
         }
 
-        return $users->sort(function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
+        return $users->sort(fn($a, $b) => strcmp($a->name, $b->name));
     }
 
     //recounts the unique users on an event to make the fetching of the event_block way faster

@@ -130,16 +130,12 @@ class Member extends Model
         $membershipOrderline = $this->getMembershipOrderline();
 
         if ($membershipOrderline) {
-            switch ($this->getMembershipOrderline()->product->id) {
-                case config('omnomcom.fee')['regular']:
-                    return 'primary';
-                case config('omnomcom.fee')['reduced']:
-                    return 'secondary';
-                case config('omnomcom.fee')['remitted']:
-                    return 'non-paying';
-                default:
-                    return 'unknown';
-            }
+            return match ($this->getMembershipOrderline()->product->id) {
+                config('omnomcom.fee')['regular'] => 'primary',
+                config('omnomcom.fee')['reduced'] => 'secondary',
+                config('omnomcom.fee')['remitted'] => 'non-paying',
+                default => 'unknown',
+            };
         }
 
         return null;

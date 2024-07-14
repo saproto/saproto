@@ -30,14 +30,10 @@ class ProductController extends Controller
             $search = $request->get('search');
             $products = Product::where('name', 'like', "%{$search}%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
-            switch ($request->get('filter')) {
-                case 'invisible':
-                    $products = Product::where('is_visible', false)->orderBy('name', 'asc')->get();
-                    break;
-                default:
-                    $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
-                    break;
-            }
+            $products = match ($request->get('filter')) {
+                'invisible' => Product::where('is_visible', false)->orderBy('name', 'asc')->get(),
+                default => Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20),
+            };
         } else {
             $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
         }

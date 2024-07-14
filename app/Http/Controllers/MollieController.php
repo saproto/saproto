@@ -28,9 +28,7 @@ class MollieController extends Controller
         $user = $request->input('user_id') ? User::findOrFail($request->input('user_id')) : null;
 
         $transactions = MollieTransaction::query()
-            ->when($user, function ($query, $user) {
-                return $query->where('user_id', $user->id);
-            })
+            ->when($user, fn($query, $user) => $query->where('user_id', $user->id))
             ->latest()
             ->paginate(15);
 
@@ -79,9 +77,7 @@ class MollieController extends Controller
         }
 
         if ($use_fees) {
-            $selected_method = $available_methods->filter(function ($method) use ($requested_method) {
-                return $method->id === $requested_method;
-            });
+            $selected_method = $available_methods->filter(fn($method) => $method->id === $requested_method);
 
             if ($selected_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');

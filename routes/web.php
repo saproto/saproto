@@ -513,13 +513,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController())->index($request, 'quotes');
-    }]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Illuminate\Http\Request $request) => (new FeedbackController())->index($request, 'quotes')]);
 
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController())->index($request, 'goodideas');
-    }]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Illuminate\Http\Request $request) => (new FeedbackController())->index($request, 'goodideas')]);
 
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {

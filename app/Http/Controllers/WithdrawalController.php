@@ -375,7 +375,7 @@ class WithdrawalController extends Controller
             }
         }
 
-        $response = $direct_debit->generateOutput([], false)[0];
+        $response = $direct_debit->generateOutput([])[0];
 
         $headers = [
             'Content-Encoding' => 'UTF-8',

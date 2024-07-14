@@ -42,9 +42,7 @@ class OrderLineController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('product')
             ->get()
-            ->groupBy(function ($date) {
-                return Carbon::parse($date->created_at)->format('Y-m');
-            });
+            ->groupBy(fn($date) => Carbon::parse($date->created_at)->format('Y-m'));
 
         $selected_month = $date ?? date('Y-m');
 

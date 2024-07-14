@@ -149,7 +149,7 @@ class Product extends Model
         $this->stock -= $amount;
         $this->save();
 
-        $total_price = $total_price ?? $this->price * $amount;
+        $total_price ??= $this->price * $amount;
 
         $has_cashier = $withCash || $withBankCard;
 

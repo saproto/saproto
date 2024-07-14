@@ -62,10 +62,10 @@ class MenuItem extends Model
     /** @return string|null */
     public function getUrl()
     {
-        if (substr($this->url, 0, 8) == '(route) ') {
+        if (str_starts_with($this->url, '(route) ')) {
             try {
                 return route(substr($this->url, 8));
-            } catch (Exception $e) {
+            } catch (Exception) {
                 return '#';
             }
         } else {

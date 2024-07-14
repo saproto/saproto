@@ -53,7 +53,7 @@ class SmartXpScreenController extends Controller
     {
         try {
             return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return response()->json([
                 'message' => 'OV_API not available',
             ], 503);
@@ -76,7 +76,7 @@ class SmartXpScreenController extends Controller
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return (object) ['roster' => $roster, 'occupied' => $occupied];
         }
 

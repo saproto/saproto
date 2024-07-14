@@ -70,74 +70,33 @@ class AchievementsCron extends Command
 
         // Define the automatic achievements and their conditions.
         $achievements = [
-            19 => function ($user) {
-                return $this->achievementBeast($user);
-            }, // Achievement Beast
-            20 => function ($user) {
-                return $this->nThProducts($user, [2], 5);
-            }, // Hangry
-            21 => function ($user) {
-                return $this->nThProducts($user, [487], 15);
-            }, // Cry Baby
-            22 => function ($user) {
+            19 => fn($user) => $this->achievementBeast($user), // Achievement Beast
+            20 => fn($user) => $this->nThProducts($user, [2], 5), // Hangry
+            21 => fn($user) => $this->nThProducts($user, [487], 15), // Cry Baby
+            22 => fn($user) =>
                 //weizen outside, grolsch weizen, weizen small, weizen big
-                return $this->nThProducts($user, [805, 211, 758, 1039], 20);
-            }, // True German
-            23 => function ($user) {
-                return $this->oldFart($user);
-            }, // Old Fart
+                $this->nThProducts($user, [805, 211, 758, 1039], 20), // True German
+            23 => fn($user) => $this->oldFart($user), // Old Fart
             24 => function ($user) {
                 $this->nThProducts($user, [22, 219, 419], 100);
             }, // I Am Bread
-            25 => function ($user) {
-                return $this->gottaCatchEmAll($user);
-            }, // Gotta Catch em All
-            26 => function ($user) use ($youDandy) {
-                return $this->nThProducts($user, $youDandy, 3);
-            }, // You Dandy
-            27 => function ($user) {
-                return $this->nThProducts($user, [180], 1) && ! $user->did_study_create;
-            }, // Fristi Member
-            28 => function ($user) {
-                return $this->bigSpender($user);
-            }, // Big Spender
-            29 => function ($user) use ($fourOClock) {
-                return $this->percentageProducts($user, $fourOClock, 0.25);
-            }, // Four 'O Clock
+            25 => fn($user) => $this->gottaCatchEmAll($user), // Gotta Catch em All
+            26 => fn($user) => $this->nThProducts($user, $youDandy, 3), // You Dandy
+            27 => fn($user) => $this->nThProducts($user, [180], 1) && ! $user->did_study_create, // Fristi Member
+            28 => fn($user) => $this->bigSpender($user), // Big Spender
+            29 => fn($user) => $this->percentageProducts($user, $fourOClock, 0.25), // Four 'O Clock
             // 30 => function($user) { return $this->percentageProducts($user, $this->categoriesProductIds([11, 15, 18, 19]), 0.25); }, # You're Special
-            32 => function ($user) use ($bigKid) {
-                return $this->percentageProducts($user, $bigKid, 0.25);
-            }, // Big Kid
-            38 => function ($user) {
-                return $this->foreverMember($user);
-            }, // Forever Member
-            51 => function ($user) use ($first) {
-                return $this->first($user, $first);
-            }, // First
-            52 => function ($user) {
-                return $this->nThProducts($user, [987], 777);
-            }, // No Life
-            53 => function ($user) use ($goodHuman) {
-                return $this->nThProducts($user, $goodHuman, 1);
-            }, // Good Human
-            54 => function ($user) {
-                return $this->nThProducts($user, [39], 100);
-            }, // I Am Noodle
-            63 => function ($user) {
-                return $this->nThActivity($user, 1);
-            }, // First Activity
-            64 => function ($user) {
-                return $this->nThActivity($user, 100);
-            }, // Hundredth Activity
-            66 => function ($user) use ($AmountOfSignupsThisMonth) {
-                return $this->percentageParticipation($user, 25, $AmountOfSignupsThisMonth);
-            }, // 25% Participation Trophee
-            67 => function ($user) use ($AmountOfSignupsThisMonth) {
-                return $this->percentageParticipation($user, 50, $AmountOfSignupsThisMonth);
-            }, // 50% Participation Trophee
-            68 => function ($user) use ($AmountOfSignupsThisMonth) {
-                return $this->percentageParticipation($user, 75, $AmountOfSignupsThisMonth);
-            }, // 75% Participation Trophee
+            32 => fn($user) => $this->percentageProducts($user, $bigKid, 0.25), // Big Kid
+            38 => fn($user) => $this->foreverMember($user), // Forever Member
+            51 => fn($user) => $this->first($user, $first), // First
+            52 => fn($user) => $this->nThProducts($user, [987], 777), // No Life
+            53 => fn($user) => $this->nThProducts($user, $goodHuman, 1), // Good Human
+            54 => fn($user) => $this->nThProducts($user, [39], 100), // I Am Noodle
+            63 => fn($user) => $this->nThActivity($user, 1), // First Activity
+            64 => fn($user) => $this->nThActivity($user, 100), // Hundredth Activity
+            66 => fn($user) => $this->percentageParticipation($user, 25, $AmountOfSignupsThisMonth), // 25% Participation Trophee
+            67 => fn($user) => $this->percentageParticipation($user, 50, $AmountOfSignupsThisMonth), // 50% Participation Trophee
+            68 => fn($user) => $this->percentageParticipation($user, 75, $AmountOfSignupsThisMonth), // 75% Participation Trophee
         ];
 
         // Check if the specified achievements actually exist.

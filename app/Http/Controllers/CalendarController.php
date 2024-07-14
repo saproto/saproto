@@ -17,7 +17,7 @@ class CalendarController extends Controller
         try {
             $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return [];
         }
 
@@ -55,11 +55,11 @@ class CalendarController extends Controller
             $studyShort = null;
             if ($study) {
                 $study = $study[1];
-                if (substr($study, 0, 3) == 'CRE') {
+                if (str_starts_with($study, 'CRE')) {
                     $year = ceil(intval(str_replace('CRE MOD', '', $study)) / 4);
                     $study = 'Creative Technology';
                     $studyShort = 'CreaTe';
-                } elseif (substr($study, 0, 5) == 'ITECH') {
+                } elseif (str_starts_with($study, 'ITECH')) {
                     $study = 'Interaction Technology';
                     $studyShort = 'ITech';
                 }

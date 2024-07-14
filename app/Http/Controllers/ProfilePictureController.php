@@ -23,7 +23,7 @@ class ProfilePictureController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            if (substr($image->getMimeType(), 0, 5) == 'image') {
+            if (str_starts_with($image->getMimeType(), 'image')) {
                 $file = new StorageEntry();
                 $file->createFromFile($image);
 

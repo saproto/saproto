@@ -89,12 +89,10 @@ class AliasController extends Controller
     }
 
     /**
-     * @param  mixed  $id_or_alias
      * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(Request $request, $id_or_alias)
+    public function destroy(Request $request, mixed $id_or_alias)
     {
         $alias = Alias::find($id_or_alias);
 

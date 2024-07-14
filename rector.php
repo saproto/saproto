@@ -9,6 +9,7 @@ use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 return RectorConfig::configure()
     ->withCache(
@@ -24,7 +25,7 @@ return RectorConfig::configure()
         __DIR__ . '/public',
         __DIR__ . '/resources',
         __DIR__ . '/routes',
-    ])->withPhpSets(php53: true)
+    ])->withPhpSets(php82: true)
     ->withRules(
         [
             ClassPropertyAssignToConstructorPromotionRector::class,
@@ -45,4 +46,5 @@ return RectorConfig::configure()
             ChangeOrIfContinueToMultiContinueRector::class,
             ReturnBinaryOrToEarlyReturnRector::class,
             EncapsedStringsToSprintfRector::class,
+            NullToStrictStringFuncCallArgRector::class,
         ]);

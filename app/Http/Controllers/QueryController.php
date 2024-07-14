@@ -80,7 +80,7 @@ class QueryController extends Controller
             $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
                 in_array($member->user->utwente_username, $usernames) ||
                 in_array(strtolower($member->user->name), $names);
-            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
+            $has_ut_mail = str_ends_with($member->user->email, 'utwente.nl');
             $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             if ($member->is_pending) {

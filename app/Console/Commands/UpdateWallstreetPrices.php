@@ -103,7 +103,7 @@ class UpdateWallstreetPrices extends Command
         })->where('active', true);
 
         //chance of 1 in random_events_chance (so about every random_events_chance minutes that a random event is triggered)
-        if ($currentDrink->random_events_chance > 0 && $randomEventQuery->count() > 0 && rand(1, $currentDrink->random_events_chance) === 1) {
+        if ($currentDrink->random_events_chance > 0 && $randomEventQuery->count() > 0 && random_int(1, $currentDrink->random_events_chance) === 1) {
             $randomEvent = $randomEventQuery->first();
             $this->info('Random event '.$randomEvent->name.' triggered');
             $currentDrink->events()->attach($randomEvent->id);

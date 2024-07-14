@@ -155,7 +155,7 @@ class AddressController extends Controller
                     $address->city,
                     $address->country
                 ));
-            } catch (Exception $e) {
+            } catch (Exception) {
                 Session::flash('flash_message', sprintf(
                     'No address could be found for %s, %s.',
                     $addressdata['zipcode-nl'],

@@ -30,23 +30,16 @@ class UserAdminController extends Controller
         $filter = $request->input('filter');
 
         $userQuery = User::withTrashed()->with('tempadmin');
-        switch ($filter) {
-            case 'pending':
-                $users = $userQuery->whereHas('member', function ($q) {
-                    $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
-                });
-                break;
-            case 'members':
-                $users = $userQuery->whereHas('member', function ($q) {
-                    $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
-                });
-                break;
-            case 'users':
-                $users = $userQuery->doesntHave('member');
-                break;
-            default:
-                $users = $userQuery;
-        }
+        $users = match ($filter) {
+            'pending' => $userQuery->whereHas('member', function ($q) {
+                $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
+            }),
+            'members' => $userQuery->whereHas('member', function ($q) {
+                $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
+            }),
+            'users' => $userQuery->doesntHave('member'),
+            default => $userQuery,
+        };
 
         if ($search) {
             $users = $users->where(function ($q) use ($search) {

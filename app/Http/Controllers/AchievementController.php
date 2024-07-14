@@ -231,7 +231,7 @@ class AchievementController extends Controller
      */
     public function takeAll($achievement_id)
     {
-        $this->staticTakeAll($achievement_id);
+        static::staticTakeAll($achievement_id);
         $achievement = Achievement::findOrFail($achievement_id);
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
 
