@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mollie;
+use Mollie\Api\Resources\Payment;
 
 /**
  * Mollie Transaction Model.
@@ -47,18 +48,18 @@ class MollieTransaction extends Model
     protected $guarded = ['id'];
 
     /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
-    public function transaction(): MollieTransaction
+    public function transaction(): Payment
     {
         return Mollie::api()
             ->payments()
@@ -126,8 +127,8 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    ! $orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
+                    !$orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
@@ -146,7 +147,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
+                if ($orderline->ticketPurchase && !$orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }

@@ -12,8 +12,7 @@ class EventServiceProvider extends ServiceProvider
 {
     /**
      * The event listener mappings for the application.
-     *
-     * @var array
+     * @var array<string, array<string>>
      */
     protected $listen = [
         Login::class => [
