@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class BankController extends Controller
 {
@@ -48,7 +48,7 @@ class BankController extends Controller
             return Redirect::back();
         }
 
-        $bank = Bank::create([
+        $bank = Bank::query()->create([
             'iban' => $bankdata->iban,
             'bic' => $bankdata->bic,
             'machtigingid' => self::generateAuthorizationId($user),
@@ -99,7 +99,7 @@ class BankController extends Controller
             return Redirect::back();
         }
 
-        $bank = Bank::create([
+        $bank = Bank::query()->create([
             'iban' => $bankdata->iban,
             'bic' => $bankdata->bic,
             'machtigingid' => self::generateAuthorizationId($user),
@@ -128,16 +128,19 @@ class BankController extends Controller
 
             return Redirect::route('user::dashboard');
         }
+
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
 
             return Redirect::back();
         }
+
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
 
             return Redirect::back();
         }
+
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');
@@ -178,7 +181,7 @@ class BankController extends Controller
 
         if (! iban_country_is_sepa(iban_get_country_part($response->iban))) {
             $response->status = false;
-            $response->message = 'Your bank is not a member of SEPA (Single Euro Payments Area) so you can\'t use this bank account here. Please try another one.';
+            $response->message = "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use this bank account here. Please try another one.";
 
             return $response;
         }
@@ -186,7 +189,7 @@ class BankController extends Controller
         try {
             $country = substr($iban, 0, 2);
 
-            if ($country == 'NL') {
+            if ($country === 'NL') {
                 $response->bic = self::getNlBicFromIban($iban);
             }
 
@@ -196,7 +199,7 @@ class BankController extends Controller
 
                 return $response;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             if (! self::verifyBicIsValid($response->bic)) {
                 $response->status = false;
                 $response->message = 'Something went wrong retrieving your BIC.';
@@ -210,9 +213,8 @@ class BankController extends Controller
 
     /**
      * @param  string  $bic
-     * @return bool
      */
-    public static function verifyBicIsValid($bic)
+    public static function verifyBicIsValid($bic): bool
     {
         if (($bic == '')) {
             return false;
@@ -223,18 +225,13 @@ class BankController extends Controller
 
     /**
      * @param  User  $user
-     * @return string
      */
-    public static function generateAuthorizationId($user)
+    public static function generateAuthorizationId($user): string
     {
         return 'PROTOX'.str_pad(strval($user->id), 5, '0', STR_PAD_LEFT).'X'.str_pad(strval(mt_rand(0, 99999)), 5, '0');
     }
 
-    /**
-     * @param  string  $iban
-     * @return string|null
-     */
-    private static function getNlBicFromIban($iban)
+    private static function getNlBicFromIban(string $iban): ?string
     {
         $data = [ // Data from: https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx
             'ABNA' => 'ABNANL2A',
@@ -321,6 +318,6 @@ class BankController extends Controller
 
         $bank = substr($iban, 4, 4);
 
-        return array_key_exists($bank, $data) ? $data[$bank] : null;
+        return $data[$bank] ?? null;
     }
 }

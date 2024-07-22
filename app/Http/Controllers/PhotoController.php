@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PhotoManager;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Redirect;
-use Session;
+use stdClass;
 
 class PhotoController extends Controller
 {
@@ -24,16 +25,17 @@ class PhotoController extends Controller
 
     public function show(int $id): View|RedirectResponse
     {
-        $album = PhotoAlbum::findOrFail($id);
+        $album = PhotoAlbum::query()->findOrFail($id);
 
         if (! $album->published && ! Auth::user()?->can('protography')) {
             Session::flash('flash_message', 'You do not have the permissions for this.');
 
             return Redirect::back();
         }
+
         $photos = PhotoManager::getPhotos($id, 24);
 
-        if ($photos) {
+        if ($photos instanceof stdClass) {
             return view('photos.album', ['photos' => $photos]);
         }
 
@@ -43,16 +45,11 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function photo($id)
+    public function photo(int $id)
     {
-        $photo = PhotoManager::getPhoto($id);
-        if ($photo != null) {
-            return view('photos.photopage', ['photo' => $photo]);
-        }
-        abort(404, 'Photo not found.');
+        return view('photos.photopage', ['photo' => PhotoManager::getPhoto($id)]);
     }
 
     /** @return View */
@@ -62,15 +59,14 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $photo_id
      * @return RedirectResponse
      */
-    public function likePhoto($photo_id)
+    public function likePhoto(int $photo_id)
     {
-        $exist = PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
+        $exist = PhotoLikes::query()->where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
 
         if ($exist == null) {
-            PhotoLikes::create([
+            PhotoLikes::query()->create([
                 'photo_id' => $photo_id,
                 'user_id' => Auth::user()->id,
             ]);
@@ -80,14 +76,13 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $photo_id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function dislikePhoto($photo_id)
+    public function dislikePhoto(int $photo_id)
     {
-        PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
+        PhotoLikes::query()->where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
 
         return Redirect::route('photo::view', ['id' => $photo_id]);
     }
@@ -101,10 +96,9 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return string JSON
      */
-    public function apiShow($id)
+    public function apiShow(int $id)
     {
         $photos = PhotoManager::getPhotos($id);
 

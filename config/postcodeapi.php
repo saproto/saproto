@@ -1,5 +1,7 @@
 <?php
 
+use nickurt\PostcodeApi\Providers\nl_NL\PostcodeApiNuV3;
+
 return [
     'ApiPostcode' => [
         'url' => 'http://json.api-postcode.nl',
@@ -33,7 +35,7 @@ return [
         'code' => 'nl_NL',
     ],
     'PostcodeApiNuV3Sandbox' => [
-        'alias' => \nickurt\PostcodeApi\Providers\nl_NL\PostcodeApiNuV3::class,
+        'alias' => PostcodeApiNuV3::class,
         'url' => 'https://sandbox.postcodeapi.nu/v3/lookup/%s/%s',
         'key' => '',
         'code' => 'nl_NL',

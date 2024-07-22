@@ -8,7 +8,7 @@ use App\Models\Member;
 use Carbon;
 use Exception;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class EndMemberships extends Command
 {
@@ -41,7 +41,7 @@ class EndMemberships extends Command
      *
      * @throws Exception
      */
-    public function handle()
+    public function handle(): void
     {
         $deleted = [];
         foreach (Member::all()->whereNotNull('until') as $member) {
@@ -52,7 +52,7 @@ class EndMemberships extends Command
             }
         }
 
-        if (count($deleted) > 0) {
+        if ($deleted !== []) {
             Mail::queue((new MembershipEndedForBoard($deleted))->onQueue('high'));
         } else {
             $this->info("No users who's membership to end!");

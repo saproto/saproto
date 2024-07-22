@@ -49,23 +49,22 @@ class TicketPurchase extends Model
     /** @return BelongsTo */
     public function ticket()
     {
-        return $this->belongsTo(\App\Models\Ticket::class, 'ticket_id');
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
     /** @return BelongsTo */
     public function orderline()
     {
-        return $this->belongsTo(\App\Models\OrderLine::class, 'orderline_id');
+        return $this->belongsTo(OrderLine::class, 'orderline_id');
     }
 
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id')->withTrashed();
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 
-    /** @return bool*/
-    public function canBeDownloaded()
+    public function canBeDownloaded(): bool
     {
         return
             (! $this->ticket->is_prepaid) ||
@@ -73,8 +72,7 @@ class TicketPurchase extends Model
             ($this->orderline->molliePayment?->translatedStatus() == 'paid');
     }
 
-    /** @return array */
-    public function getApiAttributesAttribute()
+    public function getApiAttributesAttribute(): array
     {
         return [
             'id' => $this->id,

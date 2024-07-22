@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use PostcodeApi;
-use Redirect;
-use Session;
 
 class AddressController extends Controller
 {
@@ -97,11 +97,13 @@ class AddressController extends Controller
 
             return Redirect::back();
         }
+
         if ($user->is_member) {
             Session::flash('flash_message', "You are a member. You can't delete your address!");
 
             return Redirect::back();
         }
+
         $user->address->delete();
 
         Session::flash('flash_message', 'Your address has been deleted.');
@@ -153,7 +155,7 @@ class AddressController extends Controller
                     $address->city,
                     $address->country
                 ));
-            } catch (Exception $e) {
+            } catch (Exception) {
                 Session::flash('flash_message', sprintf(
                     'No address could be found for %s, %s.',
                     $addressdata['zipcode-nl'],
@@ -166,6 +168,7 @@ class AddressController extends Controller
             if (! $address->validate($addressdata)) {
                 return Redirect::route('user::address::edit')->withErrors($address->errors());
             }
+
             $address->fill($request->except(['zipcode-nl', 'number-nl']));
             Session::flash('flash_message', 'Your address has been saved!');
         }

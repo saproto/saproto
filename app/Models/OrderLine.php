@@ -65,44 +65,37 @@ class OrderLine extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    /** @return BelongsTo */
-    public function cashier()
+    public function cashier(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
-    public function withdrawal()
+    public function withdrawal(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Withdrawal::class, 'payed_with_withdrawal');
+        return $this->belongsTo(Withdrawal::class, 'payed_with_withdrawal');
     }
 
-    /** @return BelongsTo */
-    public function molliePayment()
+    public function molliePayment(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\MollieTransaction::class, 'payed_with_mollie');
+        return $this->belongsTo(MollieTransaction::class, 'payed_with_mollie');
     }
 
-    /** @return HasOne */
-    public function ticketPurchase()
+    public function ticketPurchase(): HasOne
     {
-        return $this->hasOne(\App\Models\TicketPurchase::class, 'orderline_id');
+        return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
-    /** @return bool */
-    public function isPayed()
+    public function isPayed(): bool
     {
         $mollie_payment = false;
         if ($this->payed_with_mollie !== null) {
@@ -118,18 +111,17 @@ class OrderLine extends Model
             $this->payed_with_bank_card !== null;
     }
 
-    /** @return bool */
-    public function canBeDeleted()
+    public function canBeDeleted(): bool
     {
         return $this->total_price == 0 || ! $this->isPayed();
     }
 
-    /** @return string */
-    public function generateHistoryStatus()
+    public function generateHistoryStatus(): string
     {
         if ($this->payed_with_loss) {
             return 'Loss';
         }
+
         if ($this->payed_with_withdrawal !== null) {
             return "Withdrawal <a href='".
                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
@@ -137,43 +129,44 @@ class OrderLine extends Model
                 $this->payed_with_withdrawal.
                 '</a>';
         }
+
         if ($this->payed_with_cash !== null) {
             return 'Cash';
         }
+
         if ($this->payed_with_bank_card !== null) {
             return 'Bank Card';
         }
+
         if ($this->payed_with_mollie !== null) {
-            switch ($this->molliePayment->translatedStatus()) {
-                case 'paid':
-                    return '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                case 'failed':
-                    return '<i class="fas fa-times ml-2 text-danger"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                case 'open':
-                    return '<i class="fas fa-spinner ml-2 text-normal"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-                default:
-                    return '<i class="fas fa-question ml-2 text-normal"></i>'." - <a href='".
-                        route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                        "'>#".
-                        $this->payed_with_mollie.
-                        '</a>';
-            }
-        } elseif ($this->total_price == 0) {
-            return 'Free!';
-        } else {
-            return 'Unpaid';
+            return match ($this->molliePayment->translatedStatus()) {
+                'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                'failed' => '<i class="fas fa-times ml-2 text-danger"></i> - <a href=\''.
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                'open' => '<i class="fas fa-spinner ml-2 text-normal"></i> - <a href=\''.
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+                default => '<i class="fas fa-question ml-2 text-normal"></i> - <a href=\''.
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
+                    "'>#".
+                    $this->payed_with_mollie.
+                    '</a>',
+            };
         }
+
+        if ($this->total_price == 0) {
+            return 'Free!';
+        }
+
+        return 'Unpaid';
     }
 }

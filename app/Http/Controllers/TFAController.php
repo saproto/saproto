@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use PragmaRX\Google2FA\Google2FA;
-use Redirect;
-use Session;
 
 class TFAController extends Controller
 {
@@ -62,7 +62,7 @@ class TFAController extends Controller
      */
     public function adminDestroy(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
         $user->tfa_totp_key = null;
         $user->save();
 

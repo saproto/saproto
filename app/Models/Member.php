@@ -66,44 +66,39 @@ class Member extends Model
 
     protected $guarded = ['id', 'user_id'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /** @return BelongsTo */
     public function membershipForm()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'membership_form_id');
+        return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
     /** @return BelongsTo */
     public function customOmnomcomSound()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'omnomcom_sound_id');
+        return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
-    /** @return int */
-    public static function countActiveMembers()
+    public static function countActiveMembers(): int
     {
-        return User::whereHas('committees')->count();
+        return User::query()->whereHas('committees')->count();
     }
 
-    public static function countPendingMembers()
+    public static function countPendingMembers(): int
     {
-        return User::whereHas('member', function ($query) {
+        return User::query()->whereHas('member', static function ($query) {
             $query->where('is_pending', true);
         })->count();
     }
 
-    public static function countValidMembers()
+    public static function countValidMembers(): int
     {
-        return User::whereHas('member', function ($query) {
+        return User::query()->whereHas('member', static function ($query) {
             $query->where('is_pending', false);
         })->count();
     }
@@ -111,11 +106,7 @@ class Member extends Model
     /** @return OrderLine|null */
     public function getMembershipOrderline()
     {
-        if (intval(date('n')) >= 9) {
-            $year_start = intval(date('Y'));
-        } else {
-            $year_start = intval(date('Y')) - 1;
-        }
+        $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
@@ -124,22 +115,17 @@ class Member extends Model
             ->first();
     }
 
-    /** @return string|null */
-    public function getMemberType()
+    public function getMemberType(): ?string
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
         if ($membershipOrderline) {
-            switch ($this->getMembershipOrderline()->product->id) {
-                case config('omnomcom.fee')['regular']:
-                    return 'primary';
-                case config('omnomcom.fee')['reduced']:
-                    return 'secondary';
-                case config('omnomcom.fee')['remitted']:
-                    return 'non-paying';
-                default:
-                    return 'unknown';
-            }
+            return match ($this->getMembershipOrderline()->product->id) {
+                config('omnomcom.fee')['regular'] => 'primary',
+                config('omnomcom.fee')['reduced'] => 'secondary',
+                config('omnomcom.fee')['remitted'] => 'non-paying',
+                default => 'unknown',
+            };
         }
 
         return null;
@@ -149,9 +135,8 @@ class Member extends Model
      * Create an email alias friendly username from a full name.
      *
      * @param  $name  string
-     * @return string
      */
-    public static function createProtoUsername($name)
+    public static function createProtoUsername($name): string
     {
         $name = explode(' ', $name);
         if (count($name) > 1) {
@@ -170,11 +155,18 @@ class Member extends Model
         $usernameBase = substr($usernameBase, 0, 17);
 
         $username = $usernameBase;
-        $i = Member::where('proto_username', $username)->withTrashed()->count();
+        $i = \App\Models\Member::query()->where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
-            return "$usernameBase-$i";
+            return "{$usernameBase}-{$i}";
         }
 
         return $username;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

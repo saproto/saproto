@@ -47,7 +47,7 @@ class Address extends Validatable
 
     protected $hidden = ['id'];
 
-    protected $rules = [
+    protected array $rules = [
         'user_id' => 'required|integer',
         'street' => 'required|string',
         'number' => 'required|string',
@@ -59,6 +59,6 @@ class Address extends Validatable
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 }

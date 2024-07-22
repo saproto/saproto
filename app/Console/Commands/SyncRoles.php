@@ -38,7 +38,7 @@ class SyncRoles extends Command
     /**
      * @throws Exception
      */
-    public function handle()
+    public function handle(): int
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
         Artisan::call('config:cache');
@@ -64,7 +64,7 @@ class SyncRoles extends Command
                     'guard_name' => $permission->guard_name ?? 'web',
                 ]
             );
-            $this->info("Added/Updated '$name' permission.");
+            $this->info("Added/Updated '{$name}' permission.");
         }
 
         $this->line('Syncing roles.');
@@ -88,10 +88,10 @@ class SyncRoles extends Command
                     'guard_name' => $role->guard_name ?? 'web',
                 ]
             );
-            $this->info("Added/Updated '$name' role.");
+            $this->info("Added/Updated '{$name}' role.");
 
             $roles[$name]->syncPermissions($role->permissions == '*' ? array_keys($permissions) : $role->permissions);
-            $this->info("Synced permissions for '$name' role.");
+            $this->info("Synced permissions for '{$name}' role.");
         }
 
         $this->line('Finished syncing permissions and roles.');

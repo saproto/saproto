@@ -41,12 +41,12 @@ class HeaderImage extends Model
     /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'credit_id');
+        return $this->belongsTo(User::class, 'credit_id');
     }
 
     /** @return BelongsTo */
     public function image()
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id', 'id');
+        return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
     }
 }

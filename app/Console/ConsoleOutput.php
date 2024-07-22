@@ -32,6 +32,6 @@ class ConsoleOutput
             'Console component [%s] not found.', $method
         )));
 
-        return with(new $component($this->output))->render(...$parameters);
+        return (new $component($this->output))->render(...$parameters);
     }
 }

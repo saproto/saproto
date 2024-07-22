@@ -7,20 +7,20 @@ use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
-use Auth;
 use Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
-use Mail;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
-use Redirect;
-use Session;
 use Spatie\Permission\Models\Permission;
-use Validator;
 
 class UserDashboardController extends Controller
 {
@@ -53,7 +53,7 @@ class UserDashboardController extends Controller
      */
     public function updateMail(Request $request, int $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         $password = $request->input('password');
         $new_email = $request->input('email');
@@ -193,11 +193,7 @@ class UserDashboardController extends Controller
     public function becomeAMemberOf()
     {
         /* @var null|User $user */
-        if (Auth::check()) {
-            $user = Auth::user();
-        } else {
-            $user = null;
-        }
+        $user = Auth::check() ? Auth::user() : null;
 
         $steps = [
             [
@@ -327,6 +323,7 @@ class UserDashboardController extends Controller
 
             return Redirect::route('becomeamember');
         }
+
         Session::flash('flash_userdata', $userdata);
 
         return view(
@@ -365,7 +362,8 @@ class UserDashboardController extends Controller
         if ($user->member?->is_pending) {
             $user->member->delete();
         }
-        $member = Member::create();
+
+        $member = Member::query()->create();
         $member->user()->associate($user);
         $member->is_pending = true;
 
@@ -391,6 +389,7 @@ class UserDashboardController extends Controller
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
+
         if ($user->is_member) {
             abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
@@ -406,6 +405,7 @@ class UserDashboardController extends Controller
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
+
         if ($user->is_member) {
             abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
