@@ -1057,7 +1057,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
             // Public routes
             Route::get('/', 'showMiniSite')->name('index');
-            
+
             // Board only
             Route::get('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
             Route::post('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
