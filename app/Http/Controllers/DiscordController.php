@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use GuzzleHttp;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class DiscordController extends Controller
 {
@@ -38,7 +38,7 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        $client = new GuzzleHttp\Client();
+        $client = new Client();
         try {
             $accessTokenData = $client->post($tokenURL, ['form_params' => $tokenData]);
             $accessTokenData = json_decode($accessTokenData->getBody());
@@ -51,7 +51,7 @@ class DiscordController extends Controller
         $userData = Http::withToken($accessTokenData->access_token)->get($apiURLBase);
         $userData = json_decode($userData);
 
-        if (User::firstWhere('discord_id', $userData->id)) {
+        if (User::query()->firstWhere('discord_id', $userData->id)) {
             session()->flash('flash_message', 'This Discord account is already linked to a user!');
 
             return redirect()->route('user::dashboard');
