@@ -45,14 +45,14 @@ class NarrowcastingController extends Controller
             return Redirect::back();
         }
 
-        $narrowcasting = new NarrowcastingItem();
+        $narrowcasting = new NarrowcastingItem;
         $narrowcasting->name = $request->name;
         $narrowcasting->campaign_start = strtotime($request->campaign_start);
         $narrowcasting->campaign_end = strtotime($request->campaign_end);
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $narrowcasting->image()->associate($file);
@@ -100,7 +100,7 @@ class NarrowcastingController extends Controller
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $narrowcasting->image()->associate($file);

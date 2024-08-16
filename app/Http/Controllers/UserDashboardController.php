@@ -33,7 +33,7 @@ class UserDashboardController extends Controller
         $qrcode = null;
         $tfakey = null;
         if (! $user->tfa_totp_key) {
-            $google2fa = new Google2FA();
+            $google2fa = new Google2FA;
             $tfakey = $google2fa->generateSecretKey(32);
             $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
         }
@@ -83,7 +83,7 @@ class UserDashboardController extends Controller
 
         if ($new_email !== $user->email) {
             $validator = Validator::make($request->only(['email']), [
-                'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail()],
+                'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             ]);
             if ($validator->fails()) {
 
@@ -372,7 +372,7 @@ class UserDashboardController extends Controller
         $form = new PDF('P', 'A4', 'en');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
-        $file = new StorageEntry();
+        $file = new StorageEntry;
         $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf', 'S'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
 
         $member->membershipForm()->associate($file);

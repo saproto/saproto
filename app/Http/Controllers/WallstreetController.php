@@ -53,7 +53,7 @@ class WallstreetController extends Controller
 
     public function store(Request $request)
     {
-        $drink = new WallstreetDrink();
+        $drink = new WallstreetDrink;
         $drink->start_time = Carbon::parse($request->input('start_time'))->timestamp;
         $drink->end_time = Carbon::parse($request->input('end_time'))->timestamp;
         $drink->minimum_price = $request->input('minimum_price');
@@ -212,14 +212,14 @@ class WallstreetController extends Controller
 
     public function addEvent(Request $request)
     {
-        $event = new WallstreetEvent();
+        $event = new WallstreetEvent;
         $event->name = $request->input('title');
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $event->image()->associate($file);
         }
@@ -238,7 +238,7 @@ class WallstreetController extends Controller
         $event->percentage = $request->integer('percentage');
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $event->image()->associate($file);
         } else {

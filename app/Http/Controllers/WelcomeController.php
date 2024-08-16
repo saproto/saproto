@@ -25,7 +25,7 @@ class WelcomeController extends Controller
     {
         $message = WelcomeMessage::where('user_id', $request->user_id)->first();
         if (! $message) {
-            $message = new WelcomeMessage();
+            $message = new WelcomeMessage;
             $message->user_id = $request->user_id;
             $message->message = $request->message;
             $message->save();

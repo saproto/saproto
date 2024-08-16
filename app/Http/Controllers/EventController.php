@@ -127,7 +127,7 @@ class EventController extends Controller
         ]);
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
             $event->image()->associate($file);
         }
@@ -185,7 +185,7 @@ class EventController extends Controller
         }
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $event->image()->associate($file);
@@ -656,7 +656,7 @@ class EventController extends Controller
      */
     public function categoryStore(Request $request)
     {
-        $category = new EventCategory();
+        $category = new EventCategory;
         $category->name = $request->input('name');
         $category->icon = $request->input('icon');
         $category->save();

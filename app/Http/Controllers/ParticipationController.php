@@ -65,7 +65,7 @@ class ParticipationController extends Controller
             }
         }
 
-        $participation = new ActivityParticipation();
+        $participation = new ActivityParticipation;
         $participation->fill($data);
         $participation->save();
 
@@ -126,7 +126,7 @@ class ParticipationController extends Controller
             $event->updateUniqueUsersCount();
         }
 
-        $participation = new ActivityParticipation();
+        $participation = new ActivityParticipation;
         $participation->fill($data);
         $participation->save();
 

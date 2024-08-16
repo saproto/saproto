@@ -86,7 +86,7 @@ class PhotoManager extends Model
             $items = $items->get();
         }
 
-        $data = new stdClass();
+        $data = new stdClass;
         $data->album_id = $album_id;
 
         $album = $album->first();
@@ -109,7 +109,7 @@ class PhotoManager extends Model
     {
         $photo = Photo::findOrFail($photo_id);
 
-        $data = new stdClass();
+        $data = new stdClass;
         $data->photo_url = $photo->url;
         $data->album_id = $photo->album_id;
         $data->album_name = $photo->album->name;

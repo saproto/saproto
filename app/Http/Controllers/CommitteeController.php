@@ -75,7 +75,7 @@ class CommitteeController extends Controller
      */
     public function store(Request $request)
     {
-        $committee = new Committee();
+        $committee = new Committee;
 
         $committee->fill($request->all());
         $committee->save();
@@ -138,7 +138,7 @@ class CommitteeController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $committee->image()->associate($file);
         } else {
@@ -159,7 +159,7 @@ class CommitteeController extends Controller
         User::findOrFail($request->user_id);
         Committee::findOrFail($request->committee_id);
 
-        $membership = new CommitteeMembership();
+        $membership = new CommitteeMembership;
         $membership->role = $request->role;
         $membership->edition = $request->edition;
         $membership->user_id = $request->user_id;

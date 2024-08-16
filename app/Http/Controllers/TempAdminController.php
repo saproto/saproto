@@ -25,7 +25,7 @@ class TempAdminController extends Controller
         /** @var User */
         $user = User::findOrFail($id);
 
-        $tempAdmin = new Tempadmin();
+        $tempAdmin = new Tempadmin;
         $tempAdmin->created_by = Auth::user()->id;
         $tempAdmin->start_at = Carbon::today();
         $tempAdmin->end_at = Carbon::tomorrow();
@@ -106,7 +106,7 @@ class TempAdminController extends Controller
         /** @var User */
         $tempAdminUser = User::findOrFail($request->user_id);
 
-        $tempadmin = new Tempadmin();
+        $tempadmin = new Tempadmin;
         $tempadmin->user()->associate($tempAdminUser);
         $tempadmin->creator()->associate(Auth::user());
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));

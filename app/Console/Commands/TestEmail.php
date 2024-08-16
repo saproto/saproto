@@ -39,7 +39,7 @@ class TestEmail extends Command
     {
         $email = $this->ask('What is the destination for this e-mail?');
 
-        Mail::to($email)->queue((new TestMail())->onQueue('high'));
+        Mail::to($email)->queue((new TestMail)->onQueue('high'));
 
         $this->info('Sent!');
     }

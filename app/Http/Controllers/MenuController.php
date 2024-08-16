@@ -36,7 +36,7 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $menuItem = new MenuItem();
+        $menuItem = new MenuItem;
         $menuItem->menuname = $request->input('name');
         $menuItem->parent = $request->input('parent') ?: null;
         $menuItem->is_member_only = $request->has('is_member_only');

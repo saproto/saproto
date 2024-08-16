@@ -106,7 +106,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $newsitem = new Newsitem();
+        $newsitem = new Newsitem;
 
         return $this->storeNews($newsitem, $request);
     }
@@ -139,7 +139,7 @@ class NewsController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $file->save();
             $newsitem->featuredImage()->associate($file);
@@ -191,7 +191,7 @@ class NewsController extends Controller
 
         foreach ($newsitems as $newsitem) {
             if ($newsitem->isPublished()) {
-                $returnItem = new \stdClass();
+                $returnItem = new \stdClass;
                 $returnItem->id = $newsitem->id;
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
