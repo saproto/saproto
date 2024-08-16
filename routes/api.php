@@ -23,10 +23,11 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
             Route::get('dev_export/{table}/{personal_key}', ['as' => 'dev_export', 'uses' => 'ExportController@export']);
         });
     });
-    Route::group(['prefix' => 'discord', 'as' => 'discord::'], static function () {
-        Route::get('redirect', ['as' => 'redirect', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordLinkRedirect']);
-        Route::get('linked', ['as' => 'linked', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordLinkCallback']);
-        Route::get('unlink', ['as' => 'unlink', 'middleware' => ['auth'], 'uses' => 'UserApiController@discordUnlink']);
+
+    Route::group(['prefix' => 'discord', 'as' => 'discord::'], function () {
+        Route::get('redirect', ['as' => 'redirect', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordLinkRedirect']);
+        Route::get('linked', ['as' => 'linked', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordLinkCallback']);
+        Route::get('unlink', ['as' => 'unlink', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordUnlink']);
         Route::get('verify/{userId}', ['as' => 'verify', 'middleware' => ['proboto'], 'uses' => 'ApiController@discordVerifyMember']);
     });
     /* Routes related to the Events API */
