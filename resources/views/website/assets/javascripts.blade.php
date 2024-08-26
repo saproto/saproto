@@ -19,4 +19,5 @@
 
 @vite('resources/assets/js/application.js')
 
+{{-- Deprecated: The website self-hosts font awesome now  --}}
 {{-- <script src="https://kit.fontawesome.com/63e98a7060.js" crossorigin="anonymous"></script> --}}
