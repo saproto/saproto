@@ -25,7 +25,7 @@ class ProtoPolicy extends Policy
                     'https://www.mollie.com/checkout/',
                     'https://wrapped.omnomcom.nl',
                     ...config('proto.domains.protube'),
-                    ...(!App::environment('production') ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
@@ -40,14 +40,14 @@ class ProtoPolicy extends Policy
                     'https://kit.fontawesome.com/63e98a7060.js',
                     'https://ka-f.fontawesome.com/',
                     'blob:',
-                    ...(!App::environment('production') ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
                     Keyword::SELF,
                     Keyword::UNSAFE_INLINE,
                     'https://fonts.googleapis.com/css',
-                    ...(!App::environment('production') ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::IMG, [
                     Keyword::SELF,
@@ -85,7 +85,7 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
-                    ...(!App::environment('production') ? ['ws://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['ws://localhost:*'] : []),
                 ]);
         } catch (InvalidValueSet|InvalidDirective $e) {
             captureException($e);

@@ -43,11 +43,11 @@ class MakeAdmin extends Command
 
         $user = User::where('email', $this->argument('email'))->firstOrFail();
 
-        if (!$user->hasRole('sysadmin')) {
+        if (! $user->hasRole('sysadmin')) {
             $user->assignRole('sysadmin');
-            $this->info('User ' . $user->name . ' now has sysadmin role.');
+            $this->info('User '.$user->name.' now has sysadmin role.');
         } else {
-            $this->info('User ' . $user->name . ' already had sysadmin role.');
+            $this->info('User '.$user->name.' already had sysadmin role.');
         }
     }
 }
