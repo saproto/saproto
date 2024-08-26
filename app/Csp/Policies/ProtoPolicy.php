@@ -68,7 +68,9 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'data:',
                     'https://fonts.gstatic.com',
-                    'https://ka-f.fontawesome.com/',
+                    'https://proto.utwente.nl',
+                    'https://www.proto.utwente.nl',
+                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::CONNECT, [
                     Keyword::SELF,
@@ -82,8 +84,6 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://cdn.jsdelivr.net/npm/chart.js',
-                    'https://ka-f.fontawesome.com/',
-                    'https://api.fontawesome.com/',
                     ...(getenv('APP_ENV') != 'production' ? ['ws://localhost:*'] : []),
                 ]);
         } catch (InvalidValueSet|InvalidDirective $e) {
