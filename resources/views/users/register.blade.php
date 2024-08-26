@@ -16,9 +16,9 @@
             @include('users.registerwizard_macro')
         @endif
 
-        <a href="{{ route('login::edu') }}" class="btn btn-success w-100">
+        <!-- <a href="{{ route('login::edu') }}" class="btn btn-success w-100">
             Create an account with your university account
-        </a>
+        </a> -->
 
         <hr>
 
