@@ -250,7 +250,7 @@ class UserDashboardController extends Controller
             ],
             [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
-                'unlocked' => Auth::check(),
+                'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address && Auth::user()->signed_membership_form,
                 'done' => Auth::check() && Auth::user()->is_member,
                 'heading' => 'Become a member!',
                 'icon' => 'fas fa-trophy',
