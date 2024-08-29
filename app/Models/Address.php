@@ -57,8 +57,8 @@ class Address extends Validatable
     ];
 
     /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 }
