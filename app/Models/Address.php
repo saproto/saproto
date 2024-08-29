@@ -56,7 +56,6 @@ class Address extends Validatable
         'country' => 'required|string',
     ];
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
