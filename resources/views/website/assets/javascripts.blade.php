@@ -19,4 +19,4 @@
 
 @vite('resources/assets/js/application.js')
 
-<script src="https://kit.fontawesome.com/63e98a7060.js" crossorigin="anonymous"></script>
+<script src="{{ config('proto.fontawesome_kit') }}" crossorigin="anonymous"></script>
