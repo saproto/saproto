@@ -180,7 +180,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale(): bool
     {
-        return ! (
+        return !(
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -293,8 +293,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param  int  $w
-     * @param  int  $h
+     * @param int $w
+     * @param int $h
      * @return string Path to a resized version of someone's profile picture.
      */
     public function generatePhotoPath($w = 100, $h = 100)
@@ -307,7 +307,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $password
+     * @param string $password
      *
      * @throws Exception
      */
@@ -410,7 +410,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  Committee  $committee
+     * @param Committee $committee
+     * @return bool
      */
     public function isInCommittee($committee): bool
     {
@@ -418,7 +419,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
+     * @return bool
      */
     public function isInCommitteeBySlug($slug): bool
     {
@@ -429,22 +431,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function isActiveMember(): bool
     {
-        return count(
-            CommitteeMembership::withTrashed()
-                ->where('user_id', $this->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(static function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })
-                ->with('committee')
-                ->get()
-                ->where('committee.is_society', false)
-        ) > 0;
+        return $this->committees->count() > 0;
     }
 
     /**
-     * @param  int  $limit
+     * @param int $limit
      * @return Withdrawal[]
      */
     public function withdrawals($limit = 0): array
@@ -469,7 +460,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             return $this->website;
         }
 
-        return 'https://'.$this->website;
+        return 'https://' . $this->website;
     }
 
     /** @return string|null */
@@ -584,7 +575,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function toggleCalendarRelevantSetting(): void
     {
-        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
         $this->save();
     }
 
@@ -596,7 +587,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && ! $this->member->is_pending;
+        return $this->member && !$this->member->is_pending;
     }
 
     public function getSignedMembershipFormAttribute(): bool

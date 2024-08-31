@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +22,7 @@ use Illuminate\Support\Str;
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
  * @property bool $is_lifelong
+ * @property MembershipTypeEnum $membership_type
  * @property bool $is_honorary
  * @property bool $is_donor
  * @property bool $is_pending
@@ -28,7 +30,7 @@ use Illuminate\Support\Str;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read User $user
+ * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
  *
@@ -65,6 +67,11 @@ class Member extends Model
     protected $table = 'members';
 
     protected $guarded = ['id', 'user_id'];
+
+    protected $casts = [
+        'deleted_at' => 'datetime',
+        'membership_type' => MembershipTypeEnum::class,
+    ];
 
     /** @return BelongsTo */
     public function user()
@@ -110,7 +117,7 @@ class Member extends Model
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
@@ -142,7 +149,7 @@ class Member extends Model
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                .'.'.
+                . '.' .
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {
