@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Event;
@@ -9,7 +10,9 @@ use App\Models\EventCategory;
 use App\Models\Member;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
@@ -70,6 +73,7 @@ class QueryController extends Controller
         $count_honorary = 0;
         $count_donor = 0;
         $count_pending = 0;
+        $count_pet = 0;
 
         $export_subsidies = [];
         $export_active = [];
@@ -85,15 +89,17 @@ class QueryController extends Controller
             if ($member->is_pending) {
                 $count_pending++;
             } else {
-                if (! $member->is_pet) {
+                if (!$member->is_pet) {
                     $count_total++;
+                } else {
+                    $count_pet++;
                 }
 
                 if ($member->user->isActiveMember()) {
                     $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object) [
+                        $export_active[] = (object)[
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -121,7 +127,7 @@ class QueryController extends Controller
 
                 if ($request->has('export_subsidies')) {
                     if ($is_ut) {
-                        $export_subsidies[] = (object) [
+                        $export_subsidies[] = (object)[
                             'primary' => $is_primary_student ? 'true' : 'false',
                             'name' => $member->user->name,
                             'email' => $has_ut_mail ? $member->user->email : null,
@@ -161,6 +167,70 @@ class QueryController extends Controller
             'honorary' => $count_honorary,
             'donor' => $count_donor,
             'pending' => $count_pending,
+            'pet' => $count_pet,
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\Response|View
+     */
+    public function newMembershipTotals()
+    {
+        $count_total = Member::where(function (Builder $query) {
+            $query->whereNot('membership_type', MembershipTypeEnum::PET)
+                ->whereNot('membership_type', MembershipTypeEnum::PENDING);
+        })->count();
+        $count_active = Member::whereHas('user', function ($query) {
+            $query->whereHas('committees');
+        })->count();
+        $count_lifelong = Member::where('membership_type', MembershipTypeEnum::LIFELONG)->count();
+        $count_honorary = Member::where('membership_type', MembershipTypeEnum::HONORARY)->count();
+        $count_donor = Member::where('membership_type', MembershipTypeEnum::DONOR)->count();
+        $count_pending = Member::where('membership_type', MembershipTypeEnum::PENDING)->count();
+        $count_pet = Member::where('membership_type', MembershipTypeEnum::PET)->count();
+
+        $count_primary = 0;
+        $count_secondary = 0;
+        $count_ut = 0;
+        // Get a list of all CreaTe students.
+        if (!App::environment('local')) {
+            $students = LdapController::searchStudents();
+            $names = $students['names'];
+            $emails = $students['emails'];
+            $usernames = $students['usernames'];
+
+            // Loop over all members and determine if they are studying CreaTe.
+            foreach (Member::where('membership_type', MembershipTypeEnum::REGULAR)->get() as $member) {
+                $is_primary_member = in_array(strtolower($member->user->email), $emails) ||
+                    in_array($member->user->utwente_username, $usernames) ||
+                    in_array(strtolower($member->user->name), $names);
+                if ($is_primary_member) {
+                    $count_primary++;
+                } else {
+                    $count_secondary++;
+                }
+            }
+        } else {
+            $count_primary = Member::where('membership_type', MembershipTypeEnum::REGULAR)
+                ->whereHas('user', function ($query) {
+                    $query->where('did_study_create', 1)
+                        ->orWhere('did_study_itech', 1);
+                })->count();
+
+            $count_secondary = $count_total - $count_primary;
+        }
+
+        return view('queries.membership_totals', [
+            'total' => $count_total,
+            'primary' => $count_primary,
+            'secondary' => $count_secondary,
+            'ut' => $count_ut,
+            'active' => $count_active,
+            'lifelong' => $count_lifelong,
+            'honorary' => $count_honorary,
+            'donor' => $count_donor,
+            'pending' => $count_pending,
+            'pet' => $count_pet,
         ]);
     }
 

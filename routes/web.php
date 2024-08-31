@@ -861,6 +861,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
         Route::get('/activity_statistics', ['as' => 'activity_statistics', 'uses' => 'QueryController@activityStatistics']);
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
+        Route::get('/new_membership_totals', ['as' => 'new_membership_totals', 'uses' => 'QueryController@newMembershipTotals']);
     });
 
     /* Routes related to the Minisites */
