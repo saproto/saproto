@@ -63,10 +63,18 @@
 
                     <tr>
                         <td>
-                            <strong>Total number of pending members</strong>
+                            <strong>Total number of pending members</strong><br>
                             <sup>For this overview pending members are not counted as members.</sup>
                         </td>
                         <td>{{ $pending }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <strong>Total number of pet members</strong><br>
+                            <sup>For this overview pet members are not counted as members.</sup>
+                        </td>
+                        <td>{{ $pet }}</td>
                     </tr>
 
                 </table>
