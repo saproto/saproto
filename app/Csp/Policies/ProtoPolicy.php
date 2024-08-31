@@ -35,9 +35,9 @@ class ProtoPolicy extends Policy
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com',
                     'https://www.google.com/recaptcha/api.js',
-                    'https://kit.fontawesome.com/63e98a7060.js',
-                    'https://ka-f.fontawesome.com/',
                     'blob:',
+                    'https://ka-f.fontawesome.com/',
+                    ...([config('proto.fontawesome_kit')] ?? []),  // Avoid adding empty string or null.
                     ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
