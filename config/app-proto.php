@@ -19,7 +19,7 @@ return [
     /*
      * Personal Proto key
      */
-    'personal-proto-key' => env('PERSONAL_PROTO_KEY', null),
+    'personal-proto-key' => env('PERSONAL_PROTO_KEY'),
 
     /*
      * Printer server settings
@@ -47,11 +47,11 @@ return [
     /*
      * Sentry config
      */
-    'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null),
+    'sentry-dsn' => env('SENTRY_PUBLIC_DSN'),
 
     /*
      * ProBoto config
      */
-    'proboto-secret' => env('PROBOTO_SECRET', null),
+    'proboto-secret' => env('PROBOTO_SECRET'),
 
 ];

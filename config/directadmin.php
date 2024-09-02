@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'da-password' => getenv('DA_PASSWORD'),
-    'da-username' => getenv('DA_USERNAME'),
-    'da-hostname' => getenv('DA_HOSTNAME'),
-    'da-port' => getenv('DA_PORT'),
-    'da-domain' => getenv('DA_DOMAIN'),
+    'da-password' => env('DA_PASSWORD'),
+    'da-username' => env('DA_USERNAME'),
+    'da-hostname' => env('DA_HOSTNAME'),
+    'da-port' => env('DA_PORT'),
+    'da-domain' => env('DA_DOMAIN'),
 ];
