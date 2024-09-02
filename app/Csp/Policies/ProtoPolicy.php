@@ -2,6 +2,7 @@
 
 namespace App\Csp\Policies;
 
+use Illuminate\Support\Facades\App;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
@@ -24,7 +25,7 @@ class ProtoPolicy extends Policy
                     'https://www.mollie.com/checkout/',
                     'https://wrapped.omnomcom.nl',
                     ...config('proto.domains.protube'),
-                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
@@ -39,14 +40,14 @@ class ProtoPolicy extends Policy
                     'blob:',
                     'https://ka-f.fontawesome.com/',
                     ...([config('proto.fontawesome_kit')] ?? []),  // Avoid adding empty string or null.
-                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
                     Keyword::SELF,
                     Keyword::UNSAFE_INLINE,
                     'https://fonts.googleapis.com/css',
-                    ...(getenv('APP_ENV') != 'production' ? ['http://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['http://localhost:*'] : []),
                 ])
                 ->addDirective(Directive::IMG, [
                     Keyword::SELF,
@@ -84,7 +85,7 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
-                    ...(getenv('APP_ENV') != 'production' ? ['ws://localhost:*'] : []),
+                    ...(! App::environment('production') ? ['ws://localhost:*'] : []),
                 ]);
         } catch (InvalidValueSet|InvalidDirective $e) {
             captureException($e);

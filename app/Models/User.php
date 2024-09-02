@@ -342,12 +342,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         // Update DirectAdmin Password
         if ($this->is_member) {
             $da = new DirectAdmin();
-            $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
-            $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
+            $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
+            $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
             $da->set_method('POST');
             $da->query('/CMD_API_POP', [
                 'action' => 'modify',
-                'domain' => env('DA_DOMAIN'),
+                'domain' => config('directadmin.da-domain'),
                 'user' => $this->member->proto_username,
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,
