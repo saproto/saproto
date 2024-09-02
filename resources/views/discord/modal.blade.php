@@ -11,11 +11,14 @@
                     <b>
                         We have a Discord server!
                     </b>
-                    Whenever you want to chill, join online activities or study together, you can join our Discord server.
+                    Whenever you want to chill, join online activities or study together, you can join our Discord
+                    server.
                 </p>
                 <p>
-                    If this is your first time joining the Discord server, you'll have to get verified as a Proto member by the board.
-                    Send them a personal message on Discord, and you'll get verified. Don't forget to read the "Rules and Info"
+                    If this is your first time joining the Discord server, you'll have to get verified as a Proto member
+                    by the board.
+                    Send them a personal message on Discord, and you'll get verified. Don't forget to read the "Rules
+                    and Info"
                     channel to be sure you know what you should and shouldn't do!
                 </p>
 
@@ -26,7 +29,7 @@
                     About Discord
                 </a>
 
-                <a href="https://invite.gg/proto" class="btn btn-success" target="_blank">
+                <a href="https://saproto.nl/go/discord" class="btn btn-success" target="_blank">
                     Join the Discord server!
                 </a>
 
