@@ -25,7 +25,7 @@ class SpotifyController extends Controller
             route('spotify::oauth')
         );
 
-        $api = new SpotifyWebAPI();
+        $api = new SpotifyWebAPI;
 
         if (! $request->has('code')) {
             $options = [

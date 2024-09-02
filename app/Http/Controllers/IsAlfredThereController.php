@@ -77,7 +77,7 @@ class IsAlfredThereController extends Controller
     /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $result = new stdClass();
+        $result = new stdClass;
         $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
 
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);

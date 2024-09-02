@@ -40,7 +40,7 @@ class DirectAdminSync extends Command
      */
     public function handle()
     {
-        $da = new DirectAdmin();
+        $da = new DirectAdmin;
         $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
         $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 

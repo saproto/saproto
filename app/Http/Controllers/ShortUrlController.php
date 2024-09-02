@@ -39,7 +39,7 @@ class ShortUrlController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $url = $id == 'new' ? new ShortUrl() : ShortUrl::findOrFail($id);
+        $url = $id == 'new' ? new ShortUrl : ShortUrl::findOrFail($id);
         $url->fill($request->all());
         $url->save();
         Session::flash('flash_message', 'Short URL updated!');

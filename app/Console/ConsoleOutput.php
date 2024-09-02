@@ -12,7 +12,7 @@ class ConsoleOutput
 
     public function __construct()
     {
-        $this->output = new SymfonyConsoleOutput();
+        $this->output = new SymfonyConsoleOutput;
     }
 
     /**

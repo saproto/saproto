@@ -106,7 +106,7 @@ class OmNomController extends Controller
     public function buy(Request $request, $store_slug)
     {
         $stores = config('omnomcom.stores');
-        $result = new stdClass();
+        $result = new stdClass;
         $result->status = 'ERROR';
 
         if (array_key_exists($store_slug, $stores)) {

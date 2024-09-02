@@ -48,7 +48,7 @@ class CodexController extends Controller
 
     public function storeSong(Request $request)
     {
-        $song = new CodexSong();
+        $song = new CodexSong;
         $this->saveSong($song, $request);
 
         return Redirect::route('codex::index');
@@ -94,7 +94,7 @@ class CodexController extends Controller
 
     public function storeSongCategory(Request $request)
     {
-        $category = new SongCategory();
+        $category = new SongCategory;
         $category->name = $request->input('name');
         $category->save();
 
@@ -141,7 +141,7 @@ class CodexController extends Controller
 
     public function storeCodex(Request $request)
     {
-        $codex = new Codex();
+        $codex = new Codex;
         $codex->save();
         $this->saveCodex($codex, $request);
 
@@ -202,7 +202,7 @@ class CodexController extends Controller
 
     public function storeText(Request $request)
     {
-        $text = new CodexText();
+        $text = new CodexText;
         $this->saveText($text, $request);
 
         return Redirect::route('codex::index');
@@ -247,7 +247,7 @@ class CodexController extends Controller
 
     public function storeTextType(Request $request)
     {
-        $type = new CodexTextType();
+        $type = new CodexTextType;
         $type->type = $request->input('type');
         $type->save();
 

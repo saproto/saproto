@@ -41,7 +41,7 @@ class AddressController extends Controller
         $user = Auth::user();
 
         // Establish new address
-        $address = new Address();
+        $address = new Address;
 
         return self::saveAddressData($request, $address, $user);
     }

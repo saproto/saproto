@@ -343,7 +343,7 @@ class UserAdminController extends Controller
             $user->member->save();
         }
 
-        $file = new StorageEntry();
+        $file = new StorageEntry;
         $file->createFromFile($request->file('sound'));
 
         $user->member->customOmnomcomSound()->associate($file);

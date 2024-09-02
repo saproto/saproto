@@ -27,7 +27,7 @@ class ActivityController extends Controller
         $event = Event::findOrFail($id);
 
         $new = $event->activity === null;
-        $activity = ($new ? new Activity() : $event->activity);
+        $activity = ($new ? new Activity : $event->activity);
 
         $newPrice = floatval(str_replace(',', '.', $request->price));
         $newNoShow = floatval(str_replace(',', '.', $request->no_show_fee));

@@ -177,7 +177,7 @@ class PageController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $page->featuredImage()->associate($file);
         } else {
@@ -205,7 +205,7 @@ class PageController extends Controller
         $page = Page::find($id);
 
         foreach ($request->file('files') as $file) {
-            $newFile = new StorageEntry();
+            $newFile = new StorageEntry;
             $newFile->createFromFile($file);
 
             $page->files()->attach($newFile);

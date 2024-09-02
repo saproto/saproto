@@ -36,7 +36,7 @@ class PhotoAdminController extends Controller
      */
     public function create(Request $request)
     {
-        $album = new PhotoAlbum();
+        $album = new PhotoAlbum;
         $album->name = $request->input('name');
         $album->date_taken = strtotime($request->input('date'));
         if ($request->input('private')) {
@@ -217,11 +217,11 @@ class PhotoAdminController extends Controller
     {
         $path = 'photos/'.$album_id.'/';
 
-        $file = new StorageEntry();
+        $file = new StorageEntry;
         $file->createFromFile($uploaded_photo, $path);
         $file->save();
 
-        $photo = new Photo();
+        $photo = new Photo;
         $photo->date_taken = $uploaded_photo->getCTime();
         $photo->album_id = $album_id;
         $photo->file_id = $file->id;

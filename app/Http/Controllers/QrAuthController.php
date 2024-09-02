@@ -24,7 +24,7 @@ class QrAuthController extends Controller
             abort(404);
         }
 
-        return response((new DNS2D())->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
+        return response((new DNS2D)->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
     /**
@@ -36,7 +36,7 @@ class QrAuthController extends Controller
             abort(500, 'No description was provided.');
         }
 
-        $qrAuthRequest = new QrAuthRequest();
+        $qrAuthRequest = new QrAuthRequest;
         $qrAuthRequest->description = $request->description;
         $qrAuthRequest->qr_token = str_random(8);
         $qrAuthRequest->auth_token = md5(str_random(40));

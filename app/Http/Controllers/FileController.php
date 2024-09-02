@@ -46,7 +46,7 @@ class FileController extends Controller
         $storage = config('filesystems.disks');
 
         ini_set('memory_limit', '512M');
-        $manager = new ImageManager(new Driver());
+        $manager = new ImageManager(new Driver);
         $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
 
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;

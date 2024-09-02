@@ -16,9 +16,7 @@ class ManualEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(public $sender_address, public $sender_name, public $subject, public $body, public $submitted_attachments, public $destination, public $user_id, public $events, public $email_id)
-    {
-    }
+    public function __construct(public $sender_address, public $sender_name, public $subject, public $body, public $submitted_attachments, public $destination, public $user_id, public $events, public $email_id) {}
 
     /**
      * Build the message.

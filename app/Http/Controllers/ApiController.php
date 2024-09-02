@@ -46,7 +46,7 @@ class ApiController extends Controller
             abort(403);
         }
 
-        $playedVideo = new PlayedVideo();
+        $playedVideo = new PlayedVideo;
         $user = User::findOrFail($request->user_id);
 
         if ($user->keep_protube_history) {
@@ -66,7 +66,7 @@ class ApiController extends Controller
      */
     public function getToken(Request $request)
     {
-        $response = new stdClass();
+        $response = new stdClass;
 
         if (Auth::check()) {
             $response->name = Auth::user()->name;

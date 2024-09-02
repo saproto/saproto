@@ -71,7 +71,7 @@ class ProductController extends Controller
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $product->image()->associate($file);
@@ -162,7 +162,7 @@ class ProductController extends Controller
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $product->image()->associate($file);

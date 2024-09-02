@@ -38,7 +38,7 @@ class TIPCieController extends Controller
                 $pid = (string) $order->product_id;
 
                 if (! array_key_exists($pid, $tipcieOrders)) {
-                    $productInfo = new \stdClass();
+                    $productInfo = new \stdClass;
                     $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
                     $productInfo->amount = 0;
                     $productInfo->totalPrice = 0;

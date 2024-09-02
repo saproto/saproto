@@ -75,7 +75,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $company = new Company();
+        $company = new Company;
         $company->name = $request->name;
         $company->url = $request->url;
         $company->excerpt = $request->excerpt;
@@ -88,7 +88,7 @@ class CompanyController extends Controller
         $company->sort = Company::with('sort')->max('sort') + 1;
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
             $company->image()->associate($file);
         }
@@ -157,7 +157,7 @@ class CompanyController extends Controller
         $company->on_membercard = $request->has('on_membercard');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
             $company->image()->associate($file);
         }

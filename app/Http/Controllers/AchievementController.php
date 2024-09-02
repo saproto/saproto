@@ -59,7 +59,7 @@ class AchievementController extends Controller
      */
     public function store(Request $request)
     {
-        $achievement = new Achievement();
+        $achievement = new Achievement;
         $achievement->name = $request->name;
         $achievement->desc = $request->desc;
         $achievement->fa_icon = $request->fa_icon;

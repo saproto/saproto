@@ -210,7 +210,7 @@ class EmailController extends Controller
 
         $upload = $request->file('attachment');
         if ($upload) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($upload);
             $email->attachments()->attach($file);
             $email->save();

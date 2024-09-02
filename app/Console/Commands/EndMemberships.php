@@ -46,7 +46,7 @@ class EndMemberships extends Command
         $deleted = [];
         foreach (Member::all()->whereNotNull('until') as $member) {
             if ($member->until < Carbon::now()->timestamp) {
-                (new UserAdminController())->endMembership($member->user->id);
+                (new UserAdminController)->endMembership($member->user->id);
                 $this->info("Membership from $member->proto_username ended!");
                 $deleted[] = $member;
             }

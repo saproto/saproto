@@ -514,11 +514,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController())->index($request, 'quotes');
+        return (new FeedbackController)->index($request, 'quotes');
     }]);
 
     Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController())->index($request, 'goodideas');
+        return (new FeedbackController)->index($request, 'goodideas');
     }]);
 
     /* Routes related to the Feedback Boards. */
