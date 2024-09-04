@@ -61,6 +61,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $utwente_username
  * @property string|null $edu_username
  * @property string|null $utwente_department
+ * @property UtAccount|null $UtAccount
  * @property string|null $tfa_totp_key
  * @property string|null $personal_key
  * @property Carbon|null $created_at

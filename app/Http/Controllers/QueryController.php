@@ -8,6 +8,8 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
+use App\Models\User;
+use App\Models\UtAccount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -114,6 +116,9 @@ class QueryController extends Controller
 
                 if ($is_primary_student) {
                     $count_primary++;
+                    $member->update([
+                        'primary' => true,
+                    ]);
                 } else {
                     $count_secondary++;
                 }
@@ -167,11 +172,15 @@ class QueryController extends Controller
         ]);
     }
 
-    /**
-     * @return \Illuminate\Http\Response|View
-     */
     public function newMembershipTotals()
     {
+        return ['missed' => User::whereHas('member', function ($query) {
+            $query->where('primary', true);
+        })->whereDoesntHave('UtAccount')->pluck('name'),
+            'found' => User::whereHas('member', function ($query) {
+                $query->where('primary', false);
+            })->whereHas('UtAccount')->pluck('name')];
+
         $count_total = Member::where(function (Builder $query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PET)
                 ->whereNot('membership_type', MembershipTypeEnum::PENDING);
@@ -185,36 +194,15 @@ class QueryController extends Controller
         $count_pending = Member::where('membership_type', MembershipTypeEnum::PENDING)->count();
         $count_pet = Member::where('membership_type', MembershipTypeEnum::PET)->count();
 
-        $count_primary = 0;
-        $count_secondary = 0;
-        $count_ut = 0;
-        // Get a list of all CreaTe students.
-        if (!App::environment('local')) {
-            $students = LdapController::searchStudents();
-            $names = $students['names'];
-            $emails = $students['emails'];
-            $usernames = $students['usernames'];
-
-            // Loop over all members and determine if they are studying CreaTe.
-            foreach (Member::where('membership_type', MembershipTypeEnum::REGULAR)->get() as $member) {
-                $is_primary_member = in_array(strtolower($member->user->email), $emails) ||
-                    in_array($member->user->utwente_username, $usernames) ||
-                    in_array(strtolower($member->user->name), $names);
-                if ($is_primary_member) {
-                    $count_primary++;
-                } else {
-                    $count_secondary++;
-                }
-            }
-        } else {
-            $count_primary = Member::where('membership_type', MembershipTypeEnum::REGULAR)
-                ->whereHas('user', function ($query) {
-                    $query->where('did_study_create', 1)
-                        ->orWhere('did_study_itech', 1);
-                })->count();
-
-            $count_secondary = $count_total - $count_primary;
-        }
+        $count_primary = Member::where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
+            $query->whereHas('UtAccount');
+        })->count();
+        $count_secondary = $count_total - $count_primary;
+        $count_ut = Member::where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
+            $query->whereHas('UtAccount')->orWhere(function ($query) {
+                $query->where('did_study_itech', true)->orWhere('did_study_create', true);
+            });
+        })->count();
 
         return view('queries.membership_totals', [
             'total' => $count_total,
@@ -228,6 +216,31 @@ class QueryController extends Controller
             'pending' => $count_pending,
             'pet' => $count_pet,
         ]);
+
+    }
+
+    public function primaryExport()
+    {
+        $export_subsidies = [];
+        $users = User::whereHas('member', function ($query) {
+            $query->where('membership_type', MembershipTypeEnum::REGULAR);
+        })->whereHas('UtAccount')->with('UtAccount')->get();
+        foreach ($users as $user) {
+            $export_subsidies[] = (object)[
+                'name' => $user->name,
+                'primary' => 'true',
+                'email' => $user->UtAccount()->first()->mail,
+                'ut_number' => $user->UtAccount()->first()->number,
+            ];
+        }
+
+        $headers = [
+            'Content-Encoding' => 'UTF-8',
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
+        ];
+
+        return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
     }
 
     public function activityStatistics(Request $request)
