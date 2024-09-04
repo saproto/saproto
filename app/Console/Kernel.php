@@ -43,6 +43,7 @@ class Kernel extends ConsoleKernel
         Commands\CodexMarkdownConverter::class,
         Commands\RefreshEventUniqueUsers::class,
         Commands\MoveMembersToMembershipType::class,
+        Commands\moveUTAccounts::class,
     ];
 
     /**

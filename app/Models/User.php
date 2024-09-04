@@ -61,6 +61,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $utwente_username
  * @property string|null $edu_username
  * @property string|null $utwente_department
+ * @property UtAccount|null $UtAccount
  * @property string|null $tfa_totp_key
  * @property string|null $personal_key
  * @property Carbon|null $created_at
@@ -207,6 +208,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function photo()
     {
         return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function UtAccount(): HasMany
+    {
+        return $this->hasMany(UtAccount::class, 'user_id', 'id');
     }
 
     /** @return BelongsToMany */
