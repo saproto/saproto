@@ -174,13 +174,6 @@ class QueryController extends Controller
 
     public function newMembershipTotals()
     {
-        return ['missed' => User::whereHas('member', function ($query) {
-            $query->where('primary', true);
-        })->whereDoesntHave('UtAccount')->pluck('name'),
-            'found' => User::whereHas('member', function ($query) {
-                $query->where('primary', false);
-            })->whereHas('UtAccount')->pluck('name')];
-
         $count_total = Member::where(function (Builder $query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PET)
                 ->whereNot('membership_type', MembershipTypeEnum::PENDING);
@@ -199,9 +192,7 @@ class QueryController extends Controller
         })->count();
         $count_secondary = $count_total - $count_primary;
         $count_ut = Member::where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
-            $query->whereHas('UtAccount')->orWhere(function ($query) {
-                $query->where('did_study_itech', true)->orWhere('did_study_create', true);
-            });
+            $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
         })->count();
 
         return view('queries.membership_totals', [
@@ -216,7 +207,6 @@ class QueryController extends Controller
             'pending' => $count_pending,
             'pet' => $count_pet,
         ]);
-
     }
 
     public function primaryExport()

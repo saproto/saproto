@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MembershipTypeEnum;
 use App\Http\Controllers\LdapController;
 use App\Models\Member;
 use App\Models\User;
@@ -32,8 +33,15 @@ class moveUTAccounts extends Command
      */
     public function handle()
     {
-        \DB::table('ut_accounts')->truncate();
-        $query = User::whereHas('member')->whereDoesntHave('UtAccount');
+//        \DB::table('ut_accounts')->truncate();
+        $query = User::whereHas('member', function ($member) {
+            $member->where('membership_type', MembershipTypeEnum::REGULAR);
+        })->where(function (Builder $query) {
+            $query->whereHas('UtAccount', function ($q) {
+                $q->where('updated_at', '<', Carbon::now()->subHour());
+            })->orDoesntHave('UtAccount');
+        });
+
         $this->syncCreaters((clone $query), '(|(department=*B-CREA*)(department=*M-ITECH*))');
 
         $pastCreaTersQuery = (clone $query)->where(function (Builder $query) {
@@ -44,9 +52,9 @@ class moveUTAccounts extends Command
 
     public function syncCreaters($query, $constraints = '')
     {
-        $pastCreaTers = (clone $query)->whereNotNull('utwente_username')->get();
-        $this->info('Checking' . $pastCreaTers->count() . ' by Student number');
-        $newAccounts = $this->syncColumnToUTTrait($pastCreaTers, 'uid', 'utwente_username', $constraints);
+        $accountsByNumber = (clone $query)->whereNotNull('utwente_username')->get();
+        $this->info('Checking' . $accountsByNumber->count() . ' by Student number');
+        $newAccounts = $this->syncColumnToUTTrait($accountsByNumber, 'uid', 'utwente_username', $constraints);
         UTAccount::insert($newAccounts->toArray());
 
         $pastCreaTers = (clone $query)->whereNotNull('email')->get();
@@ -127,7 +135,6 @@ class moveUTAccounts extends Command
             'givenname' => $student['givenname'],
             'middlename' => $student['middlename'] ?? null,
             'surname' => $student['sn'],
-            'initials' => $student['initials'] ?? null,
             'account_expires_at' => $student['accountexpires'],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -145,34 +152,4 @@ class moveUTAccounts extends Command
         }
         return $result->result;
     }
-
-    /*private function syncCurrentCreaTers()
-    {
-        $result = LdapController::searchUtwentePost('(|(department=*B-CREA*)(department=*M-ITECH*))');
-        if (isset($result->error)) {
-            $this->error('Error: ' . $result->error);
-            exit();
-        }
-        $students = collect($result->result);
-        $bar = $this->output->createProgressBar(Member::count());
-        $bar->start();
-        // Loop over all members and determine if they are studying CreaTe.
-        Member::chunk(100, function ($members) use ($students, $bar) {
-            $newUTAccounts = collect();
-            foreach ($members as $member) {
-                $student = $students->first(function ($student) use ($member, $newUTAccounts) {
-                    return $student['uid'] == $member->user->utwente_username
-                        || $student['userprincipalname'] == strtolower($member->user->email)
-                        || strtolower($member->user->name) == strtolower($student['givenname'] . ' ' . $student['sn']);
-                });
-                if ($student) {
-                    $newUTAccounts->push($this->formatUserInfo($member->user, $student));
-                }
-                $bar->advance();
-            }
-            UTAccount::insert($newUTAccounts->toArray());
-        });
-        $bar->finish();
-        $this->info('Created ' . UtAccount::count() . ' UT accounts for members who currently study create or ITech.');
-    }*/
 }
