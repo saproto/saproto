@@ -16,7 +16,6 @@ return new class extends Migration {
             $table->string('givenname');
             $table->string('middlename')->nullable();
             $table->string('surname');
-            $table->string('initials')->nullable();
             $table->integer('account_expires_at');
             $table->softDeletes();
             $table->timestamps();

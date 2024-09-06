@@ -13,7 +13,7 @@ class MoveMembersToMembershipType extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:move_members_to_membership_type';
+    protected $signature = 'proto:movememberstomembershiptype';
 
     /**
      * The console command description.
@@ -34,7 +34,7 @@ class MoveMembersToMembershipType extends Command
         Member::chunk(25, function ($members) use ($bar) {
             foreach ($members as $member) {
                 if (!$member->is_pending) {
-                    $member->membership_type = MembershipTypeEnum::REGULAR;
+                    $member->membership_type = MembershipTypeEnum::PENDING;
                 }
 
                 if ($member->is_pet) {

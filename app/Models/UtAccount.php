@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string givenname
  * @property string|null middlename
  * @property string surname
- * @property string initials
  * @property User user
  * @property mixed id
  * @property mixed created_at
@@ -35,7 +34,6 @@ class UtAccount extends Model
         'givenname',
         'middlename',
         'surname',
-        'initials',
         'account_expires_at',
     ];
 
