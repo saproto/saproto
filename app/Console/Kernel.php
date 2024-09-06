@@ -44,6 +44,7 @@ class Kernel extends ConsoleKernel
         Commands\RefreshEventUniqueUsers::class,
         Commands\MoveMembersToMembershipType::class,
         Commands\moveUTAccounts::class,
+        Commands\MarkMembersAsPrimary::class,
     ];
 
     /**
