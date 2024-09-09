@@ -168,10 +168,8 @@ return [
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-        nickurt\PostcodeApi\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
-
     ],
 
     /*
@@ -245,8 +243,6 @@ return [
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
-
-        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
     ],
 

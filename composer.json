@@ -65,7 +65,6 @@
     "mollie/laravel-mollie": "^2.15",
     "nesbot/carbon": "^2.62",
     "nickurt/laravel-pwned-passwords": "1.10",
-    "nickurt/laravel-postcodeapi": "^1.18",
     "pragmarx/google2fa": "^0.7",
     "sentry/sentry-laravel": "3.2",
     "solitweb/directadmin": "^3.0",

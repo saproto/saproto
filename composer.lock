@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "04ffaeb5cbd2f62576be16b9734ff178",
+  "content-hash": "d79cd8543833dcdcbb279e3ff86e59a2",
   "packages": [
     {
       "name": "aacotroneo/laravel-saml2",
@@ -4770,67 +4770,6 @@
         "source": "https://github.com/nette/utils/tree/v4.0.4"
       },
       "time": "2024-01-17T16:50:36+00:00"
-    },
-    {
-      "name": "nickurt/laravel-postcodeapi",
-      "version": "1.21",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/nickurt/laravel-postcodeapi.git",
-        "reference": "8f1a792cc544e26e323866a7aff82028ac06c8db"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/nickurt/laravel-postcodeapi/zipball/8f1a792cc544e26e323866a7aff82028ac06c8db",
-        "reference": "8f1a792cc544e26e323866a7aff82028ac06c8db",
-        "shasum": ""
-      },
-      "require": {
-        "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.8.1",
-        "laravel/framework": "^10.0|^11.0",
-        "php": "^8.2"
-      },
-      "require-dev": {
-        "orchestra/testbench": "^8.0|^9.0",
-        "phpunit/phpunit": "^10.5.12"
-      },
-      "type": "library",
-      "extra": {
-        "laravel": {
-          "providers": [
-            "nickurt\\PostcodeApi\\ServiceProvider"
-          ],
-          "aliases": {
-            "PostcodeApi": "nickurt\\PostcodeApi\\Facade"
-          }
-        }
-      },
-      "autoload": {
-        "files": [
-          "src/helpers.php"
-        ],
-        "psr-4": {
-          "nickurt\\PostcodeApi\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "description": "Universal PostcodeApi for Laravel 10.x & 11.x",
-      "keywords": [
-        "api",
-        "laravel",
-        "postcode",
-        "postcodeapi",
-        "universal"
-      ],
-      "support": {
-        "issues": "https://github.com/nickurt/laravel-postcodeapi/issues",
-        "source": "https://github.com/nickurt/laravel-postcodeapi/tree/1.21"
-      },
-      "time": "2024-03-09T14:10:40+00:00"
     },
     {
       "name": "nickurt/laravel-pwned-passwords",
