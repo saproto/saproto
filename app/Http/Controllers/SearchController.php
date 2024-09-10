@@ -213,6 +213,10 @@ class SearchController extends Controller
 
     private function getGenericSearchQuery(Model|string $model, string|null $query, array $attributes): ?Builder
     {
+        if (!$query) {
+            return null;
+        }
+
         $terms = explode(' ', str_replace('*', '%', $query));
         $query = $model::query();
 
