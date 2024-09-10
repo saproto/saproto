@@ -211,7 +211,7 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Achievement::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    private function getGenericSearchQuery(Model|string $model, string $query, array $attributes): ?Builder
+    private function getGenericSearchQuery(Model|string $model, string|null $query, array $attributes): ?Builder
     {
         $terms = explode(' ', str_replace('*', '%', $query));
         $query = $model::query();
