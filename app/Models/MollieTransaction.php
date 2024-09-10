@@ -62,7 +62,7 @@ class MollieTransaction extends Model
     public function transaction()
     {
         return Mollie::api()
-            ->payments()
+            ->payments
             ->get($this->mollie_id);
     }
 
@@ -76,10 +76,10 @@ class MollieTransaction extends Model
             return 'open';
         }
         if ($status == 'expired' ||
-        $status == 'canceled' ||
-        $status == 'failed' ||
-        $status == 'charged_back' ||
-        $status == 'refunded') {
+            $status == 'canceled' ||
+            $status == 'failed' ||
+            $status == 'charged_back' ||
+            $status == 'refunded') {
             return 'failed';
         }
         if ($status == 'paid' || $status == 'paidout') {
@@ -103,7 +103,7 @@ class MollieTransaction extends Model
     public function updateFromWebhook()
     {
         $mollie = Mollie::api()
-            ->payments()
+            ->payments
             ->get($this->mollie_id);
 
         $new_status = self::translateStatus($mollie->status);
