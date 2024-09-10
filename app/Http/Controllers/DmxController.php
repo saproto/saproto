@@ -36,7 +36,7 @@ class DmxController extends Controller
 
         foreach (range($fixture->channel_start, $fixture->channel_end) as $channel_id) {
             $channel = DmxChannel::find($channel_id);
-            if (! $channel) {
+            if (!$channel) {
                 DmxChannel::create(['id' => $channel_id, 'name' => 'Unnamed Channel']);
             }
         }
@@ -47,7 +47,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -56,7 +56,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -83,7 +83,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -141,11 +141,11 @@ class DmxController extends Controller
     public function overrideEdit($id)
     {
         return view('dmx.override.edit', ['override' => DmxOverride::findOrFail($id),
-            'fixtures' => DmxFixture::orderBy('name', 'asc')->get(), ]);
+            'fixtures' => DmxFixture::orderBy('name', 'asc')->get(),]);
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function overrideUpdate(Request $request, $id)
@@ -171,7 +171,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -189,7 +189,7 @@ class DmxController extends Controller
     public function valueApi()
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
+        $events = CalendarController::returnGoogleCalendarEvents(config('proto.google-calendar.smartxp-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
 
         // Determine if any event is currently going on.
         $current_event = null;
@@ -219,14 +219,14 @@ class DmxController extends Controller
 
         // And we apply the overrides.
         foreach (DmxOverride::getActiveSorted()->reverse() as $override) {
-            if (! $override->active() && ! $override->justOver()) {
+            if (!$override->active() && !$override->justOver()) {
                 continue;
             }
             foreach ($override->getFixtures() as $fixture) {
                 if ($override->justOver() && $fixture->follow_timetable) {
                     continue;
                 }
-                $colors = ($override->justOver() && ! $fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
+                $colors = ($override->justOver() && !$fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
                 $channel_values = self::setFixtureChannels($fixture, $channel_values, $colors);
             }
         }
@@ -235,9 +235,9 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  DmxFixture  $fixture
-     * @param  int[]  $channel_values
-     * @param  int[]  $colors
+     * @param DmxFixture $fixture
+     * @param int[] $channel_values
+     * @param int[] $colors
      * @return int[]
      */
     private function setFixtureChannels($fixture, $channel_values, $colors)
