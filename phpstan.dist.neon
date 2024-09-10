@@ -1,5 +1,5 @@
 includes:
-    - ./vendor/larastan/larastan/extension.neon
+    - ./vendor/nunomaduro/larastan/extension.neon
 
 parameters:
 
