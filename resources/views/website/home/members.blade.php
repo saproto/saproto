@@ -15,7 +15,7 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.home.cards.featuredevents', ['n' => 6])
+        @include('website.home.cards.featuredevents', ['featuredEvents' => $featuredEvents])
 
         @include('website.home.cards.leaderboards')
 

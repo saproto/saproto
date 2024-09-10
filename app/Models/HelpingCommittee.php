@@ -48,30 +48,21 @@ class HelpingCommittee extends Validatable
         'amount' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
-    public function activity()
+    public function activity(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Activity::class);
+        return $this->belongsTo(Activity::class);
     }
 
-    /** @return BelongsTo */
-    public function committee()
+    public function committee(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Committee::class);
+        return $this->belongsTo(Committee::class);
     }
 
-    /** @return BelongsToMany */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this
-            ->belongsToMany(\App\Models\User::class, 'activities_users', 'committees_activities_id')
+            ->belongsToMany(User::class, 'activities_users', 'committees_activities_id')
             ->whereNull('activities_users.deleted_at')
             ->withTrashed();
-    }
-
-    /** @return int */
-    public function helperCount()
-    {
-        return ActivityParticipation::where('activity_id', $this->activity->id)->where('committees_activities_id', $this->id)->count();
     }
 }

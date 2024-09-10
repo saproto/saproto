@@ -72,6 +72,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read bool $photo_preview
  * @property-read bool $signed_membership_form
  * @property-read string|null $welcome_message
+ * @property-read string|null $discord_id
  * @property-read StorageEntry|null $photo
  * @property-read Address|null $address
  * @property-read Bank|null $bank
@@ -151,6 +152,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected $table = 'users';
 
     protected $guarded = ['password', 'remember_token'];
+
+    protected $with = ['member'];
 
     protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
 
@@ -340,12 +343,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         // Update DirectAdmin Password
         if ($this->is_member) {
             $da = new DirectAdmin();
-            $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
-            $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
+            $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
+            $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
             $da->set_method('POST');
             $da->query('/CMD_API_POP', [
                 'action' => 'modify',
-                'domain' => env('DA_DOMAIN'),
+                'domain' => config('directadmin.da-domain'),
                 'user' => $this->member->proto_username,
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,

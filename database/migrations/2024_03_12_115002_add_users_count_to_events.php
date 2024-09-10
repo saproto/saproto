@@ -12,14 +12,23 @@ return new class extends Migration
      */
     public function up(): void
     {
+
+        if (Schema::hasColumn('events', 'unique_users_count')) {
+            Schema::table('events', function (Blueprint $table) {
+                $table->dropColumn('unique_users_count');
+            });
+        }
+
         Schema::table('events', function (Blueprint $table) {
             //add a new column that counts the amount of users who signed up called users_count for the event_block number
             $table->unsignedInteger('unique_users_count')->after('publication')->default(0);
         });
 
-        foreach (Event::all() as $event) {
-            $event->updateUniqueUsersCount();
-        }
+        Event::chunk(25, function ($events) {
+            foreach ($events as $event) {
+                $event->updateUniqueUsersCount();
+            }
+        });
 
         //add index to activities_users
         Schema::table('activities_users', function (Blueprint $table) {

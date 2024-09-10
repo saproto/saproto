@@ -41,6 +41,7 @@ class Kernel extends ConsoleKernel
         Commands\EndMemberships::class,
         Commands\UpdateWallstreetPrices::class,
         Commands\CodexMarkdownConverter::class,
+        Commands\RefreshEventUniqueUsers::class,
     ];
 
     /**

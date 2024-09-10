@@ -86,7 +86,10 @@ class EventController extends Controller
     /** @return View */
     public function show($id)
     {
-        $event = Event::fromPublicId($id);
+        $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
+            ->with('tickets', 'tickets.product')
+            ->firstOrFail();
+
         $methods = [];
         if (config('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
@@ -704,47 +707,48 @@ class EventController extends Controller
     public function copyEvent(Request $request)
     {
         $event = Event::findOrFail($request->id);
-        $newEvent = $event->replicate();
-        $newEvent->title = $newEvent->title.' [copy]';
 
         $oldStart = Carbon::createFromTimestamp($event->start);
-        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'));
-        $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
+
+        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
+            ->setHour($oldStart->hour)
+            ->setMinute($oldStart->minute)
+            ->setSecond($oldStart->second)
+            ->timestamp;
+
         $diff = $newDate - $event->start;
 
-        $newEvent->start = $newDate;
-        $newEvent->end = $event->end + $diff;
-        $newEvent->secret = true;
-        if ($event->publication) {
-            $newEvent->publication = $event->publication + $diff;
-            $newEvent->secret = false;
-        }
-
+        $newEvent = $event->withoutRelations()->replicate()->fill([
+            'title' => $event->title.' [copy]',
+            'secret' => $event->publication ? false : $event->secret,
+            'start' => $newDate,
+            'end' => $event->end + $diff,
+            'publication' => $event->publication ? $event->publication + $diff : null,
+            'unique_users_count' => 0,
+            'update_sequence' => 0,
+        ]);
         $newEvent->save();
 
         if ($event->activity) {
-            $newActivity = new Activity([
+            $newActivity = $event->activity->replicate([
+                'attendees',
+                'closed',
+                'closed_account',
+            ])->fill([
                 'event_id' => $newEvent->id,
-                'price' => $event->activity->price,
-                'participants' => $event->activity->participants,
-                'no_show_fee' => $event->activity->no_show_fee,
-                'hide_participants' => $event->activity->hide_participants,
                 'registration_start' => $event->activity->registration_start + $diff,
                 'registration_end' => $event->activity->registration_end + $diff,
                 'deregistration_end' => $event->activity->deregistration_end + $diff,
-                'comment' => $event->activity->comment,
-                'redirect_url' => $event->activity->redirect_url,
             ]);
             $newActivity->save();
 
             if ($event->activity->helpingCommitteeInstances) {
                 foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
-                    $newHelpingCommittee = new HelpingCommittee([
+                    HelpingCommittee::create([
                         'activity_id' => $newActivity->id,
                         'committee_id' => $helpingCommittee->committee_id,
                         'amount' => $helpingCommittee->amount,
                     ]);
-                    $newHelpingCommittee->save();
                 }
             }
         }

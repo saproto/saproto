@@ -293,8 +293,9 @@
                                             member!</a>
                                     @endif
 
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#discord-modal"
+                                    <a href="https://saproto.nl/go/discord" target="_blank"
                                        class="dropdown-item">
+                                        <span class="fa-brands fa-discord"></span>
                                         Discord
                                         <span class="badge bg-secondary" style="transform: translateY(-1px)">
                                             <i class="fas fa-user me-1"></i> <span id="discord__online">...</span>

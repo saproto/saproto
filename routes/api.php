@@ -13,20 +13,9 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('info', ['uses' => 'UserApiController@getUser']);
-            Route::get('profile_picture', ['uses' => 'UserApiController@getUserProfilePicture']);
-            Route::get('address', ['uses' => 'UserApiController@getAddress']);
-            Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
-            Route::get('societies', ['uses' => 'UserApiController@getSocieties']);
-            Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
             Route::get('qr_auth_approve/{code}', ['uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['uses' => 'QrAuthController@apiInfo']);
             Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
-            Route::group(['prefix' => 'orders'], function () {
-                Route::get('', ['uses' => 'UserApiController@getPurchases']);
-                Route::get('total_month', ['uses' => 'UserApiController@getPurchasesMonth']);
-                Route::get('next_withdrawal', ['uses' => 'UserApiController@getNextWithdrawal']);
-            });
         });
         Route::group(['middleware' => ['web']], function () {
             Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
@@ -34,43 +23,29 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
+    Route::group(['prefix' => 'discord', 'as' => 'discord::'], function () {
+        Route::get('redirect', ['as' => 'redirect', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordLinkRedirect']);
+        Route::get('linked', ['as' => 'linked', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordLinkCallback']);
+        Route::get('unlink', ['as' => 'unlink', 'middleware' => ['auth'], 'uses' => 'DiscordController@discordUnlink']);
+        Route::get('verify/{userId}', ['as' => 'verify', 'middleware' => ['proboto'], 'uses' => 'ApiController@discordVerifyMember']);
+    });
+
     /* Routes related to the Events API */
-    Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('upcoming/for_user/{limit?}', ['as' => 'list_for_user', 'uses' => 'EventController@apiUpcomingEvents']);
-            Route::get('signup/{id}', ['middleware' => ['member'], 'uses' => 'ParticipationController@create']);
-            Route::get('signout/{participation_id}', ['middleware' => ['member'], 'uses' => 'ParticipationController@destroy']);
-        });
-        Route::group(['middleware' => ['web']], function () {
-            Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
-        });
+    Route::group(['prefix' => 'events', 'as' => 'events::', 'middleware' => ['web']], function () {
+        Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
     });
 
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('photos_api', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
-            Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
-        });
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
-        Route::get('random_old_photo', ['as' => 'randomOldPhoto', 'uses' => 'ApiController@randomOldPhoto']);
-        Route::group(['middleware' => ['web']], function () {
+
+        Route::group(['middleware' => ['auth:api']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
     });
 
-    /* Routes related to the Committees API */
-    Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
-        });
-        Route::group(['middleware' => ['web']], function () {
-            Route::get('unauthenticated', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
-        });
-    });
-
-    Route::group(['prefix' => 'screen', 'as' => 'screen::'], function () {
+    Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], function () {
         Route::get('bus', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);

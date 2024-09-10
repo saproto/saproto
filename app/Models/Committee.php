@@ -56,6 +56,8 @@ class Committee extends Model
 
     protected $hidden = ['image_id'];
 
+    protected $with = ['image'];
+
     /** @return string */
     public function getPublicId()
     {

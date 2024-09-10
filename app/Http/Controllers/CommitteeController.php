@@ -64,43 +64,6 @@ class CommitteeController extends Controller
         ]);
     }
 
-    /**
-     * @return array
-     */
-    public function indexApi(Request $request)
-    {
-        $showSocieties = filter_var($request->get('show_societies', false), FILTER_VALIDATE_BOOLEAN);
-
-        $data = [];
-        foreach (Committee::where('public', 1)->where('is_society', $showSocieties)->orderBy('name', 'asc')->get() as $committee) {
-            if (Auth::user() && Auth::user()->is_member) {
-                $current_members = [];
-                foreach ($committee->users as $user) {
-                    $current_members[] = (object) [
-                        'name' => $user->name,
-                        'photo' => $user->photo_preview,
-                        'edition' => $user->pivot->edition,
-                        'role' => $user->pivot->role,
-                        'since' => strval($user->pivot->created_at),
-                    ];
-                }
-            } else {
-                $current_members = null;
-            }
-
-            $data[] = (object) [
-                'id' => $committee->id,
-                'name' => $committee->name,
-                'description' => $committee->description,
-                'email' => sprintf('%s@%s', $committee->slug, config('proto.emaildomain')),
-                'photo' => $committee->image->generateImagePath(null, null),
-                'current_members' => $current_members,
-            ];
-        }
-
-        return $data;
-    }
-
     /** @return View */
     public function add()
     {

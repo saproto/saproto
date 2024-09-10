@@ -49,6 +49,8 @@
 
             @include('users.dashboard.includes.maillists')
 
+            @include('users.dashboard.includes.discord_link')
+
             @include('users.dashboard.includes.personal_key')
 
         </div>

@@ -59,6 +59,8 @@ class Newsitem extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['featuredImage'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'user_id');

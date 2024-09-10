@@ -30,8 +30,9 @@ jobs:
         with:
           php-version: ${{ env.PHP_VERSION }}
 
-      - name: 📥 Install back-end dependencies
-        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
+      - uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist --no-dev"
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
@@ -56,10 +57,10 @@ jobs:
           SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
         with:
           environment: production
-        
+
       - name: 📁 Create build directory
         run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
-          
+
       - name: 🗄️ ZIP Build
         uses: TheDoctor0/zip-release@0.6.1
         with:

@@ -2,7 +2,31 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ApiMiddleware;
+use App\Http\Middleware\DevelopmentAccess;
+use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnforceHTTPS;
+use App\Http\Middleware\EnforceTFA;
+use App\Http\Middleware\EnforceWizard;
+use App\Http\Middleware\ForceDomain;
+use App\Http\Middleware\Member;
+use App\Http\Middleware\ProBoto;
+use App\Http\Middleware\Saml;
+use App\Http\Middleware\Utwente;
+use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Spatie\Csp\AddCspHeaders;
+use Spatie\Permission\Middlewares\PermissionMiddleware;
+use Spatie\Permission\Middlewares\RoleMiddleware;
+use Spatie\Permission\Middlewares\RoleOrPermissionMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -12,24 +36,24 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Http\Middleware\HandleCors::class,
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \Illuminate\Session\Middleware\StartSession::class,
+        HandleCors::class,
+        CheckForMaintenanceMode::class,
+        ValidatePostSize::class,
+        StartSession::class,
     ];
 
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
-            \App\Http\Middleware\EnforceHTTPS::class,
-            \App\Http\Middleware\DevelopmentAccess::class,
-            \App\Http\Middleware\EnforceTFA::class,
-            \App\Http\Middleware\EnforceWizard::class,
-            \App\Http\Middleware\ApiMiddleware::class,
-            \Spatie\Csp\AddCspHeaders::class,
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            EnforceHTTPS::class,
+            DevelopmentAccess::class,
+            EnforceTFA::class,
+            EnforceWizard::class,
+            ApiMiddleware::class,
+            AddCspHeaders::class,
         ],
         'api' => [
             'throttle:60,1',
@@ -42,14 +66,15 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareAliases = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'member' => \App\Http\Middleware\Member::class,
-        'utwente' => \App\Http\Middleware\Utwente::class,
-        'forcedomain' => \App\Http\Middleware\ForceDomain::class,
-        'saml' => \App\Http\Middleware\Saml::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        'auth' => Authenticate::class,
+        'member' => Member::class,
+        'utwente' => Utwente::class,
+        'forcedomain' => ForceDomain::class,
+        'saml' => Saml::class,
+        'throttle' => ThrottleRequests::class,
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
+        'role_or_permission' => RoleOrPermissionMiddleware::class,
+        'proboto' => ProBoto::class,
     ];
 }

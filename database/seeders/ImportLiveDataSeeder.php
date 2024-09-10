@@ -32,10 +32,10 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'accounts'],
             ['name' => 'achievement'],
             ['name' => 'activities'],
-            ['name' => 'committees'],
+            ['name' => 'committees', 'excluded_columns' => ['image']],
             ['name' => 'committees_activities'],
             ['name' => 'companies'],
-            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
+            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future', 'activity', 'category']],
             ['name' => 'event_categories'],
             ['name' => 'mailinglists'],
             ['name' => 'menuitems'],
@@ -63,7 +63,7 @@ class ImportLiveDataSeeder extends Seeder
     public static function getDataFromExportApi($tableName)
     {
         $local_url = route('api::user::dev_export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $tableName]);
-        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl/', $local_url);
+        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl', $local_url);
         $response = Http::get($remote_url);
         if ($response->failed()) {
             return null;
