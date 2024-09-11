@@ -189,7 +189,7 @@ class DmxController extends Controller
     public function valueApi()
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
+        $events = CalendarController::returnGoogleCalendarEvents(config('proto.google-calendar.smartxp-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
 
         // Determine if any event is currently going on.
         $current_event = null;
