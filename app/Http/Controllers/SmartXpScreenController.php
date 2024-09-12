@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Cache;
+use Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,62 +30,35 @@ class SmartXpScreenController extends Controller
     }
 
     /** @return array */
-    public function timetable()
+    public function timetable(int $daysBefore = 0, int $daysAfter = 1)
     {
-        $studies = [
-            'Create Year 1' => [
-                'short' => 'CreaTe Y1',
-                'year' => 1,
-                'type' => 'CRE MOD',
-                'ical' => 'https://cloud.timeedit.net/nl_utwente/web/student/ri69dQ34X34ZXtQ5uQ8ZZ074y1Z84YZ6Q929w08QQ62uj6109l9n443j50Z3kj1B21DB136B0m7D9Dt6029QFlAF36Eo944AF6CE26DB.ics',
-            ],
-
-            'Create Year 2' => [
-                'short' => 'CreaTe Y2',
-                'year' => 2,
-                'type' => 'CRE MOD',
-                'ical' => 'https://cloud.timeedit.net/nl_utwente/web/public/ri65Q304518Z5uQ3555X64Q95Z044XZ5n4Q5317Q0Y72y3wXZ86Xn804.ics',
-            ],
-        ];
-
-        foreach ($studies as $study => $value) {
-            $events = Cache::remember("timetable-$study", 3600, function () use ($value) {
-                $ical = new ICal(false, array(
-                    'defaultSpan' => 2,     // Default value
-                    'defaultTimeZone' => 'UTC',
-                    'defaultWeekStart' => 'MO',  // Default value
-                    'disableCharacterReplacement' => false, // Default value
-                    'filterDaysAfter' => null,  // Default value
-                    'filterDaysBefore' => null,  // Default value
-                    'httpUserAgent' => null,  // Default value
-                    'skipRecurrence' => false, // Default value
-                ));
-
-                $ical->initUrl($value['ical']);
-
-                return collect($ical->events());
-            });
+        $allEvents = [];
+        foreach (config('proto.google-calendar.studies') as $study) {
+            $icalEvents = CalendarController::returnIcalEvents($study['ical'], $daysBefore, $daysAfter);
+            $allEvents = array_merge(array_map(function ($event) use ($study) {
+                return [
+                    ...$event,
+                    'year' => $study['year'],
+                    'study' => $study['study'],
+                    'studyShort' => $study['short'],
+                ];
+            }, $icalEvents), $allEvents);
         }
 
-
-        return $events->map(function ($event) {
+        usort($allEvents, fn($a, $b) => $a['start'] <=> $b['start']);
+        
+        return array_map(function ($event) {
             return [
-                'title' => $event->summary,
-                'place' => $event->location,
-                'start' => $event->dtstart_array[2],
-                'end' => $event->dtend_array[2],
-                'type' => null,
-                'year' => null,
-                'study' => null,
-                'studyShort' => null,
-                'over' => strtotime($event->dtend) < time(),
-                'current' => strtotime($event->dtstart) < time() && strtotime($event->dtend) > time(),
+                ...$event,
+                'over' => $event['end'] < time(),
+                'current' => $event['start'] < time() && $event['end'] > time(),
             ];
-        });
+        }, $allEvents);
     }
 
     /** @return array */
-    public function protopenersTimetable()
+    public
+    function protopenersTimetable()
     {
         return CalendarController::returnGoogleCalendarEvents(
             config('proto.google-calendar.protopeners-id'),
@@ -96,7 +70,8 @@ class SmartXpScreenController extends Controller
     /**
      * @return Response|JsonResponse
      */
-    public function bus(Request $request)
+    public
+    function bus(Request $request)
     {
         try {
             return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
@@ -108,7 +83,8 @@ class SmartXpScreenController extends Controller
     }
 
     /** @return object */
-    public function smartxpTimetable()
+    public
+    function smartxpTimetable()
     {
         $roster = [
             'monday' => [],
@@ -159,7 +135,8 @@ class SmartXpScreenController extends Controller
     }
 
     /** @return View */
-    public function canWork()
+    public
+    function canWork()
     {
         return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()->roster,
             'occupied' => $this->smartxpTimetable()->occupied,]);

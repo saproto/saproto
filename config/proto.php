@@ -154,7 +154,26 @@ return [
     */
 
     'google-calendar' => [
-        'timetable-id' => env('TIMETABLE_GOOGLE_CALENDAR_ID'),
+        'studies' => [
+            [
+                'study' => 'Creative Technology',
+                'short' => 'CreaTe',
+                'year' => 1,
+                'ical' => env('TIMETABLE_ICAL_LINK_Y1'),
+            ],
+            [
+                'study' => 'Creative Technology',
+                'short' => 'CreaTe',
+                'year' => 2,
+                'ical' => env('TIMETABLE_ICAL_LINK_Y2'),
+            ],
+            [
+                'study' => 'Creative Technology',
+                'short' => 'CreaTe',
+                'year' => 3,
+                'ical' => env('TIMETABLE_ICAL_LINK_Y3'),
+            ],
+        ],
         'smartxp-id' => env('SMARTXP_GOOGLE_CALENDAR_ID'),
         'protopeners-id' => env('PROTOPENERS_GOOGLE_CALENDAR_ID'),
     ],
@@ -288,7 +307,7 @@ return [
     |
     */
 
-    'sepa_info' => (object) [
+    'sepa_info' => (object)[
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
         'creditor_id' => env('SEPA_CI'),
