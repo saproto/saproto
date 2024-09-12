@@ -10,15 +10,12 @@ use Illuminate\Support\Str;
 class CalendarController extends Controller
 {
     /**
-     * @param string $google_calendar_id
-     * @param string $start
-     * @param string $end
      * @return array
      */
     public static function returnGoogleCalendarEvents(string $google_calendar_id, string $start, string $end)
     {
         try {
-            $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $google_calendar_id . '/events?singleEvents=true&orderBy=startTime&key=' . config('app-proto.google-key-private') . '&timeMin=' . urlencode($start) . '&timeMax=' . urlencode($end) . '';
+            $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
         } catch (Exception) {
             return [];
@@ -41,7 +38,7 @@ class CalendarController extends Controller
             }
             $name = '';
             foreach ($name_exp as $val) {
-                $name .= $val . ' ';
+                $name .= $val.' ';
             }
 
             if (property_exists($entry, 'description')) {
@@ -83,13 +80,12 @@ class CalendarController extends Controller
         return $results;
     }
 
-
     public static function returnIcalEvents(string $icalLink, int $daysBefore = 0, int $daysAfter = 1, int $cacheSeconds = 0)
     {
-        $cacheKey = "timetable-" . $icalLink . "-" . $daysBefore . "-" . $daysAfter;
+        $cacheKey = 'timetable-'.$icalLink.'-'.$daysBefore.'-'.$daysAfter;
 
         return Cache::remember($cacheKey, $cacheSeconds, function () use ($icalLink, $daysBefore, $daysAfter) {
-            $ical = new ICal(false, array(
+            $ical = new ICal(false, [
                 'defaultSpan' => 2,
                 'defaultTimeZone' => 'DST',
                 'defaultWeekStart' => 'MO',
@@ -98,7 +94,7 @@ class CalendarController extends Controller
                 'filterDaysBefore' => $daysBefore,
                 'httpUserAgent' => null,
                 'skipRecurrence' => false,
-            ));
+            ]);
 
             $ical->initUrl($icalLink, $username = null, $password = null, $userAgent = null);
 
