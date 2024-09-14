@@ -254,7 +254,16 @@ class UserDashboardController extends Controller
                 'done' => Auth::check() && Auth::user()->is_member,
                 'heading' => 'Become a member!',
                 'icon' => 'fas fa-trophy',
-                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server (invite.gg/proto).",
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. You can usually find them in the Protopolis (Zilverling A230).",
+            ],
+            [
+                'url' => 'https://saproto.nl/go/discord',
+                'unlocked' => Auth::check() && Auth::user()->is_member,
+                'done' => Auth::check() && Auth::user()->discord_id,
+                'heading' => 'Join the Discord server',
+                'icon' => 'fa-brands fa-discord',
+                'text' => 'Join our Discord server to chat with other students, play some games, send memes and more!',
+                'shouldOpenInNewTab' => true,
             ],
             [
                 'url' => route('user::dashboard', ['wizard' => 1]),

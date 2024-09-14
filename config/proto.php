@@ -136,36 +136,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Public Timetable Calendar
+    | FontAwesome Kit URL
     |--------------------------------------------------------------------------
     |
-    | The Google calendar ID for the imported timetable.
+    | The URL to the Proto FontAwesome kit.
     |
     */
-
-    'google-timetable-id' => '2mmp2tp6atcdjhnptr4k58n9qhq4ht88@import.calendar.google.com',
+    'fontawesome_kit' => env('FONTAWESOME_KIT'),
 
     /*
     |--------------------------------------------------------------------------
-    | SmartXp Timetable Calendar
+    | Google Calendar
     |--------------------------------------------------------------------------
     |
-    | The Google calendar ID for the imported timetable.
+    | The Google calendar ID's for the imported CreaTe timetable, SmartXp calendar and ProtOpener calendar.
     |
     */
 
-    'smartxp-google-timetable-id' => 'jf5coo8stv8ju2jiukg8t0alakuu3ifo@import.calendar.google.com',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Protopeners Calendar
-    |--------------------------------------------------------------------------
-    |
-    | The Google calendar ID for the ProtOpeners.
-    |
-    */
-
-    'protopeners-google-timetable-id' => '0u65jbm7rgtqq6m7aoni69v4vk@group.calendar.google.com',
+    'google-calendar' => [
+        'timetable-id' => env('TIMETABLE_GOOGLE_CALENDAR_ID'),
+        'smartxp-id' => env('SMARTXP_GOOGLE_CALENDAR_ID'),
+        'protopeners-id' => env('PROTOPENERS_GOOGLE_CALENDAR_ID'),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -176,7 +168,7 @@ return [
     |
     */
 
-    'internal' => 'Joris Agtereek',
+    'internal' => 'Jona Patig',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +179,7 @@ return [
     |
     */
 
-    'treasurer' => 'Emma Burema',
+    'treasurer' => 'Badr Boubric',
 
     /*
     |--------------------------------------------------------------------------
@@ -198,7 +190,7 @@ return [
     |
     */
 
-    'secretary' => 'Ilse de Haan',
+    'secretary' => 'Bart van Dorst',
 
     /*
     |--------------------------------------------------------------------------
@@ -209,7 +201,7 @@ return [
     |
     */
 
-    'boardnumber' => '13.1',
+    'boardnumber' => '14.0',
 
     /*
     |--------------------------------------------------------------------------
