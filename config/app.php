@@ -1,17 +1,11 @@
 <?php
 
-use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
 use Biscolab\ReCaptcha\Facades\ReCaptcha;
-use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
 use Carbon\Carbon;
-use Collective\Html\FormFacade;
-use Collective\Html\HtmlFacade;
-use Collective\Html\HtmlServiceProvider;
 use GrahamCampbell\Markdown\Facades\Markdown;
-use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
 use Illuminate\Broadcasting\BroadcastServiceProvider;
@@ -19,69 +13,28 @@ use Illuminate\Bus\BusServiceProvider;
 use Illuminate\Cache\CacheServiceProvider;
 use Illuminate\Cookie\CookieServiceProvider;
 use Illuminate\Database\DatabaseServiceProvider;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Encryption\EncryptionServiceProvider;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Foundation\Providers\ConsoleSupportServiceProvider;
 use Illuminate\Foundation\Providers\FoundationServiceProvider;
 use Illuminate\Hashing\HashServiceProvider;
-use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Notifications\NotificationServiceProvider;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Pipeline\PipelineServiceProvider;
 use Illuminate\Queue\QueueServiceProvider;
 use Illuminate\Redis\RedisServiceProvider;
 use Illuminate\Session\SessionServiceProvider;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
-use Intervention\Image\Facades\Image;
-use Intervention\Image\ImageServiceProvider;
-use Milon\Barcode\BarcodeServiceProvider;
 use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
-use Mollie\Laravel\MollieServiceProvider;
 use nickurt\PwnedPasswords\Facade;
-use PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
-use Symfony\Component\Console\Input\Input;
 use Vinkla\Hashids\Facades\Hashids;
-use Vinkla\Hashids\HashidsServiceProvider;
-use willvincent\Feeds\Facades\FeedsFacade;
-use willvincent\Feeds\FeedsServiceProvider;
 
 return [
 
@@ -216,7 +169,6 @@ return [
         FilesystemServiceProvider::class,
         FoundationServiceProvider::class,
         HashServiceProvider::class,
-        HtmlServiceProvider::class,
         PaginationServiceProvider::class,
         PipelineServiceProvider::class,
         QueueServiceProvider::class,
@@ -243,7 +195,6 @@ return [
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
-        Mollie\Laravel\MollieServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
@@ -313,8 +264,6 @@ return [
         'ReCaptcha' => ReCaptcha::class,
 
         'Mollie' => Mollie::class,
-
-        'Feeds' => FeedsFacade::class,
 
         'Hashids' => Hashids::class,
 

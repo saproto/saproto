@@ -59,7 +59,7 @@
     "league/commonmark": "^2.3",
     "league/oauth1-client": "^1.7",
     "milon/barcode": "^11.0",
-    "mollie/laravel-mollie": "^3",
+    "mollie/laravel-mollie": "^3.0",
     "nesbot/carbon": "^2.62",
     "nickurt/laravel-pwned-passwords": "^1.11",
     "pragmarx/google2fa": "^0.7",
@@ -82,7 +82,6 @@
     "symfony/dom-crawler": "~4.0",
     "laravel/sail": "^1.16",
     "laravel/pint": "^1.10",
-    "rector/rector": "^1.2",
     "phpunit/phpunit": "^10.5",
     "driftingly/rector-laravel": "^1.2"
   },
