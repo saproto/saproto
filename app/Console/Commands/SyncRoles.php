@@ -40,7 +40,7 @@ class SyncRoles extends Command
      */
     public function handle(): int
     {
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+        app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
         Artisan::call('config:cache');
 
         $this->line('Syncing permissions.');

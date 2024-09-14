@@ -9,6 +9,7 @@ use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelLevelSetList;
@@ -32,15 +33,15 @@ try {
         ])->withPhpSets(php82: true)
         ->withsets([
             LaravelLevelSetList::UP_TO_LARAVEL_110,
-            LaravelSetList::LARAVEL_110,
             LaravelSetList::LARAVEL_CODE_QUALITY,
             LaravelSetList::LARAVEL_ARRAY_STR_FUNCTION_TO_STATIC_CALL,
             LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
             LaravelSetList::LARAVEL_FACADE_ALIASES_TO_FULL_NAMES,
             LaravelSetList::LARAVEL_LEGACY_FACTORIES_TO_CLASSES,
-            LaravelSetList::LARAVEL_IF_HELPERS,
-            LaravelSetList::LARAVEL_COLLECTION
+            LaravelSetList::LARAVEL_COLLECTION,
+            LaravelSetList::LARAVEL_ARRAYACCESS_TO_METHOD_CALL,
         ])
+        ->withAttributesSets(symfony: true, doctrine: true, phpunit: true)
         ->withImportNames(removeUnusedImports: true)
         ->withRules(
             [
@@ -63,7 +64,8 @@ try {
                 EncapsedStringsToSprintfRector::class,
                 NullToStrictStringFuncCallArgRector::class,
                 AddClosureVoidReturnTypeWhereNoReturnRector::class,
-                __DIR__ . 'app/Libraries',
+                RenamePropertyRector::class,
+                __DIR__ . '/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {
 }

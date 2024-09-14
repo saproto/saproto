@@ -87,11 +87,9 @@ class Email extends Model
     }
 
     /**
-     * @return string
-     *
      * @throws Exception
      */
-    public function destinationForBody()
+    public function destinationForBody(): string
     {
         if ($this->to_user) {
             return 'users';
