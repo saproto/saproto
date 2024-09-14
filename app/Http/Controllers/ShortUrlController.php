@@ -17,7 +17,7 @@ class ShortUrlController extends Controller
      */
     public function index(Request $request)
     {
-        $urls = ShortUrl::orderBy('url')->paginate(25);
+        $urls = ShortUrl::query()->orderBy('url')->paginate(25);
 
         return view('short_url.index', ['urls' => $urls]);
     }
@@ -28,7 +28,7 @@ class ShortUrlController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $url = $id == 'new' ? null : ShortUrl::findOrFail($id);
+        $url = $id == 'new' ? null : ShortUrl::query()->findOrFail($id);
 
         return view('short_url.edit', ['url' => $url]);
     }
@@ -39,7 +39,7 @@ class ShortUrlController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $url = $id == 'new' ? new ShortUrl : ShortUrl::findOrFail($id);
+        $url = $id == 'new' ? new ShortUrl() : ShortUrl::query()->findOrFail($id);
         $url->fill($request->all());
         $url->save();
         Session::flash('flash_message', 'Short URL updated!');
@@ -55,7 +55,7 @@ class ShortUrlController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $url = ShortUrl::findOrFail($id);
+        $url = ShortUrl::query()->findOrFail($id);
         $url->delete();
 
         Session::flash('flash_message', 'Short URL deleted!');
@@ -69,8 +69,8 @@ class ShortUrlController extends Controller
      */
     public function go(Request $request, $short)
     {
-        $url = ShortUrl::where('url', $short)->firstOrFail();
-        $url->clicks = $url->clicks + 1;
+        $url = ShortUrl::query()->where('url', $short)->firstOrFail();
+        $url->clicks++;
         $url->save();
 
         return Redirect::to(sprintf('https://%s', $url->target));

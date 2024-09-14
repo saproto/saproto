@@ -6,7 +6,6 @@ use Carbon;
 use DateTime;
 use Eloquent;
 use Exception;
-use Hash;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -20,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Solitweb\DirectAdmin\DirectAdmin;
@@ -159,23 +160,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
-
     /** @return string|null */
     public function getPublicId()
     {
         return $this->is_member ? $this->member->proto_username : null;
     }
 
-    /**
-     * @param  string  $public_id
-     * @return mixed|User|null
-     */
-    public static function fromPublicId($public_id)
+    public static function fromPublicId(string $public_id): ?User
     {
-        return User::whereHas('member', function ($query) use ($public_id) {
+        return User::query()->whereHas('member', static function ($query) use ($public_id) {
             $query->where('proto_username', $public_id);
         })->first();
     }
@@ -185,36 +178,34 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @return bool whether the user is stale (not in use, can really be deleted safely).
      */
-    public function isStale()
+    public function isStale(): bool
     {
         return ! (
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
-            Bank::where('user_id', $this->id)->first() ||
-            Address::where('user_id', $this->id)->first() ||
-            OrderLine::where('user_id', $this->id)->count() > 0 ||
+            Bank::query()->where('user_id', $this->id)->first() ||
+            Address::query()->where('user_id', $this->id)->first() ||
+            OrderLine::query()->where('user_id', $this->id)->count() > 0 ||
             CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0 ||
-            Feedback::where('user_id', $this->id)->count() > 0 ||
-            EmailListSubscription::where('user_id', $this->id)->count() > 0 ||
-            RfidCard::where('user_id', $this->id)->count() > 0 ||
-            PlayedVideo::where('user_id', $this->id)->count() > 0 ||
-            AchievementOwnership::where('user_id', $this->id)->count() > 0
+            Feedback::query()->where('user_id', $this->id)->count() > 0 ||
+            EmailListSubscription::query()->where('user_id', $this->id)->count() > 0 ||
+            RfidCard::query()->where('user_id', $this->id)->count() > 0 ||
+            PlayedVideo::query()->where('user_id', $this->id)->count() > 0 ||
+            AchievementOwnership::query()->where('user_id', $this->id)->count() > 0
         );
     }
 
-    /** @return BelongsTo */
-    public function photo()
+    public function photo(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\StorageEntry::class, 'image_id');
+        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    /** @return BelongsToMany */
-    private function getGroups()
+    private function getGroups(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Committee::class, 'committees_users')
-            ->where(function ($query) {
+        return $this->belongsToMany(Committee::class, 'committees_users')
+            ->where(static function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
@@ -224,88 +215,74 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany */
-    public function lists()
+    public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
+        return $this->belongsToMany(EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
-    /** @return BelongsToMany */
-    public function achievements()
+    public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany */
-    public function committees()
+    public function committees(): BelongsToMany
     {
         return $this->getGroups()->where('is_society', false);
     }
 
-    /** @return BelongsToMany */
-    public function societies()
+    public function societies(): BelongsToMany
     {
         return $this->getGroups()->where('is_society', true);
     }
 
-    /** @return HasOne */
-    public function member()
+    public function member(): HasOne
     {
-        return $this->hasOne(\App\Models\Member::class);
+        return $this->hasOne(Member::class);
     }
 
-    /** @return HasOne */
-    public function bank()
+    public function bank(): HasOne
     {
-        return $this->hasOne(\App\Models\Bank::class);
+        return $this->hasOne(Bank::class);
     }
 
-    /** @return HasOne */
-    public function address()
+    public function address(): HasOne
     {
-        return $this->hasOne(\App\Models\Address::class);
+        return $this->hasOne(Address::class);
     }
 
-    /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
-        return $this->hasMany(\App\Models\OrderLine::class);
+        return $this->hasMany(OrderLine::class);
     }
 
-    /** @return HasMany */
-    public function tempadmin()
+    public function tempadmin(): HasMany
     {
-        return $this->hasMany(\App\Models\Tempadmin::class);
+        return $this->hasMany(Tempadmin::class);
     }
 
-    /** @return HasMany */
-    public function feedback()
+    public function feedback(): HasMany
     {
-        return $this->hasMany(\App\Models\Feedback::class);
+        return $this->hasMany(Feedback::class);
     }
 
-    /** @return HasMany */
-    public function rfid()
+    public function rfid(): HasMany
     {
-        return $this->hasMany(\App\Models\RfidCard::class);
+        return $this->hasMany(RfidCard::class);
     }
 
-    /** @return HasMany */
-    public function tokens()
+    public function tokens(): HasMany
     {
-        return $this->hasMany(\App\Models\Token::class);
+        return $this->hasMany(Token::class);
     }
 
-    /** @return HasMany */
-    public function playedVideos()
+    public function playedVideos(): HasMany
     {
-        return $this->hasMany(\App\Models\PlayedVideo::class);
+        return $this->hasMany(PlayedVideo::class);
     }
 
-    /** @return HasMany */
-    public function mollieTransactions()
+    public function mollieTransactions(): HasMany
     {
-        return $this->hasMany(\App\Models\MollieTransaction::class);
+        return $this->hasMany(MollieTransaction::class);
     }
 
     public function tickets(): BelongsToMany
@@ -334,7 +311,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @throws Exception
      */
-    public function setPassword($password)
+    public function setPassword($password): void
     {
         // Update Laravel Password
         $this->password = Hash::make($password);
@@ -359,19 +336,30 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
 
         // Remove breach notification flag
-        HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
+        HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
-    /** @return bool */
-    public function hasUnpaidOrderlines()
+    public function hasUnpaidOrderlines(): bool
     {
         foreach ($this->orderlines as $orderline) {
+            /** @var OrderLine $orderline */
             if (! $orderline->isPayed()) {
                 return true;
             }
-            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
-                return true;
+
+            if (! $orderline->orderline) {
+                continue;
             }
+
+            if ($orderline->withdrawal->id === 1) {
+                continue;
+            }
+
+            if ($orderline->withdrawal->closed) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;
@@ -423,32 +411,29 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * @param  Committee  $committee
-     * @return bool
      */
-    public function isInCommittee($committee)
+    public function isInCommittee($committee): bool
     {
         return in_array($this->id, $committee->users->pluck('id')->toArray());
     }
 
     /**
      * @param  string  $slug
-     * @return bool
      */
-    public function isInCommitteeBySlug($slug)
+    public function isInCommitteeBySlug($slug): bool
     {
-        $committee = Committee::where('slug', $slug)->first();
+        $committee = Committee::query()->where('slug', $slug)->first();
 
         return $committee && $this->isInCommittee($committee);
     }
 
-    /** @return bool */
-    public function isActiveMember()
+    public function isActiveMember(): bool
     {
         return count(
             CommitteeMembership::withTrashed()
                 ->where('user_id', $this->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
+                ->where(static function ($q) {
                     $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
                 })
@@ -462,10 +447,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      * @param  int  $limit
      * @return Withdrawal[]
      */
-    public function withdrawals($limit = 0)
+    public function withdrawals($limit = 0): array
     {
         $withdrawals = [];
-        foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
+        foreach (Withdrawal::query()->orderBy('date', 'desc')->get() as $withdrawal) {
             if ($withdrawal->orderlinesForUser($this)->count() > 0) {
                 $withdrawals[] = $withdrawal;
                 if ($limit > 0 && count($withdrawals) > $limit) {
@@ -497,8 +482,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->website;
     }
 
-    /** @return bool */
-    public function hasDiet()
+    public function hasDiet(): bool
     {
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
@@ -515,23 +499,21 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      *
      * @return bool Whether the system thinks the user is a first year.
      */
-    public function isFirstYear()
+    public function isFirstYear(): bool
     {
         return $this->is_member
             && Carbon::createFromTimestamp($this->member->created_at)->age < 1
             && $this->did_study_create;
     }
 
-    /** @return bool */
-    public function hasTFAEnabled()
+    public function hasTFAEnabled(): bool
     {
         return $this->tfa_totp_key !== null;
     }
 
-    /** @return void */
-    public function generateNewPersonalKey()
+    public function generateNewPersonalKey(): void
     {
-        $this->personal_key = str_random(64);
+        $this->personal_key = Str::random(64);
         $this->save();
     }
 
@@ -545,8 +527,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->personal_key;
     }
 
-    /** @return Token */
-    public function generateNewToken()
+    public function generateNewToken(): Token
     {
         $token = new Token;
         $token->generate($this);
@@ -557,18 +538,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return Token */
     public function getToken()
     {
-        if (count($this->tokens) > 0) {
-            $token = $this->tokens->last();
-        } else {
-            $token = $this->generateNewToken();
-        }
+        $token = count($this->tokens) > 0 ? $this->tokens->last() : $this->generateNewToken();
+
         $token->touch();
 
         return $token;
     }
 
     /** Removes user's birthdate and phone number. */
-    public function clearMemberProfile()
+    public function clearMemberProfile(): void
     {
         $this->birthdate = null;
         $this->phone = null;
@@ -591,7 +569,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @param float|null $hours */
-    public function setCalendarAlarm($hours)
+    public function setCalendarAlarm($hours): void
     {
         $hours = floatval($hours);
         $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
@@ -604,35 +582,35 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_relevant_only;
     }
 
-    /** @return void */
-    public function toggleCalendarRelevantSetting()
+    public function toggleCalendarRelevantSetting(): void
     {
         $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
-    /** @return bool */
-    public function getCompletedProfileAttribute()
+    public function getCompletedProfileAttribute(): bool
     {
         return $this->birthdate !== null && $this->phone !== null;
     }
 
     /** @return bool Whether user has a current membership that is not pending. */
-    public function getIsMemberAttribute()
+    public function getIsMemberAttribute(): bool
     {
         return $this->member && ! $this->member->is_pending;
     }
 
-    /** @return bool */
-    public function getSignedMembershipFormAttribute()
+    public function getSignedMembershipFormAttribute(): bool
     {
         return $this->member?->membershipForm !== null;
     }
 
-    /** @return bool */
-    public function getIsProtubeAdminAttribute()
+    public function getIsProtubeAdminAttribute(): bool
     {
-        return $this->can('protube') || $this->isTempadmin();
+        if ($this->can('protube')) {
+            return true;
+        }
+
+        return $this->isTempadmin();
     }
 
     /** @return string */
@@ -650,11 +628,18 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return string|null */
     public function getWelcomeMessageAttribute()
     {
-        $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
+        $welcomeMessage = WelcomeMessage::query()->where('user_id', $this->id)->first();
         if ($welcomeMessage) {
             return $welcomeMessage->message;
         }
 
         return null;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
     }
 }

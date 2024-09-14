@@ -35,13 +35,13 @@ class MakeAdmin extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         if (App::environment('production')) {
             $this->error('Cannot do this on production.');
         }
 
-        $user = User::where('email', $this->argument('email'))->firstOrFail();
+        $user = User::query()->where('email', $this->argument('email'))->firstOrFail();
 
         if (! $user->hasRole('sysadmin')) {
             $user->assignRole('sysadmin');

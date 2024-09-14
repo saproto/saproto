@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Redirect;
 use Session;
@@ -96,11 +98,13 @@ class AddressController extends Controller
 
             return Redirect::back();
         }
+
         if ($user->is_member) {
             Session::flash('flash_message', "You are a member. You can't delete your address!");
 
             return Redirect::back();
         }
+
         $user->address->delete();
 
         Session::flash('flash_message', 'Your address has been deleted.');

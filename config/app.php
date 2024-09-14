@@ -1,5 +1,88 @@
 <?php
 
+use Aacotroneo\Saml2\Saml2ServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\RouteServiceProvider;
+use Biscolab\ReCaptcha\Facades\ReCaptcha;
+use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
+use Carbon\Carbon;
+use Collective\Html\FormFacade;
+use Collective\Html\HtmlFacade;
+use Collective\Html\HtmlServiceProvider;
+use GrahamCampbell\Markdown\Facades\Markdown;
+use GrahamCampbell\Markdown\MarkdownServiceProvider;
+use Illuminate\Auth\AuthServiceProvider;
+use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
+use Illuminate\Broadcasting\BroadcastServiceProvider;
+use Illuminate\Bus\BusServiceProvider;
+use Illuminate\Cache\CacheServiceProvider;
+use Illuminate\Cookie\CookieServiceProvider;
+use Illuminate\Database\DatabaseServiceProvider;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Encryption\EncryptionServiceProvider;
+use Illuminate\Filesystem\FilesystemServiceProvider;
+use Illuminate\Foundation\Providers\ConsoleSupportServiceProvider;
+use Illuminate\Foundation\Providers\FoundationServiceProvider;
+use Illuminate\Hashing\HashServiceProvider;
+use Illuminate\Mail\MailServiceProvider;
+use Illuminate\Notifications\NotificationServiceProvider;
+use Illuminate\Pagination\PaginationServiceProvider;
+use Illuminate\Pipeline\PipelineServiceProvider;
+use Illuminate\Queue\QueueServiceProvider;
+use Illuminate\Redis\RedisServiceProvider;
+use Illuminate\Session\SessionServiceProvider;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
+use Illuminate\Translation\TranslationServiceProvider;
+use Illuminate\Validation\ValidationServiceProvider;
+use Illuminate\View\ViewServiceProvider;
+use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageServiceProvider;
+use Milon\Barcode\BarcodeServiceProvider;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Milon\Barcode\Facades\DNS2DFacade;
+use Mollie\Laravel\Facades\Mollie;
+use Mollie\Laravel\MollieServiceProvider;
+use nickurt\PwnedPasswords\Facade;
+use PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spipu\Html2Pdf\Html2Pdf;
+use Symfony\Component\Console\Input\Input;
+use Vinkla\Hashids\Facades\Hashids;
+use Vinkla\Hashids\HashidsServiceProvider;
+use willvincent\Feeds\Facades\FeedsFacade;
+use willvincent\Feeds\FeedsServiceProvider;
+
 return [
 
     /*
@@ -122,36 +205,35 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Auth\AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        Illuminate\Bus\BusServiceProvider::class,
-        Illuminate\Cache\CacheServiceProvider::class,
-        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Cookie\CookieServiceProvider::class,
-        Illuminate\Database\DatabaseServiceProvider::class,
-        Illuminate\Encryption\EncryptionServiceProvider::class,
-        Illuminate\Filesystem\FilesystemServiceProvider::class,
-        Illuminate\Foundation\Providers\FoundationServiceProvider::class,
-        Illuminate\Hashing\HashServiceProvider::class,
-        Illuminate\Pagination\PaginationServiceProvider::class,
-        Illuminate\Pipeline\PipelineServiceProvider::class,
-        Illuminate\Queue\QueueServiceProvider::class,
-        Illuminate\Redis\RedisServiceProvider::class,
-        Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
-        Illuminate\Session\SessionServiceProvider::class,
-        Illuminate\Translation\TranslationServiceProvider::class,
-        Illuminate\Validation\ValidationServiceProvider::class,
-        Illuminate\View\ViewServiceProvider::class,
-        Illuminate\Notifications\NotificationServiceProvider::class,
+        AuthServiceProvider::class,
+        BroadcastServiceProvider::class,
+        BusServiceProvider::class,
+        CacheServiceProvider::class,
+        ConsoleSupportServiceProvider::class,
+        CookieServiceProvider::class,
+        DatabaseServiceProvider::class,
+        EncryptionServiceProvider::class,
+        FilesystemServiceProvider::class,
+        FoundationServiceProvider::class,
+        HashServiceProvider::class,
+        HtmlServiceProvider::class,
+        PaginationServiceProvider::class,
+        PipelineServiceProvider::class,
+        QueueServiceProvider::class,
+        RedisServiceProvider::class,
+        PasswordResetServiceProvider::class,
+        SessionServiceProvider::class,
+        TranslationServiceProvider::class,
+        ValidationServiceProvider::class,
+        ViewServiceProvider::class,
+        NotificationServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
+        AppServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
 
         /*
          * External Service Providers
@@ -214,29 +296,29 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Role' => Spatie\Permission\Models\Role::class,
-        'Permission' => Spatie\Permission\Models\Permission::class,
+        'Role' => Role::class,
+        'Permission' => Permission::class,
 
-        'Image' => Intervention\Image\Facades\Image::class,
+        'Image' => Image::class,
 
-        'PDF' => Spipu\Html2Pdf\Html2Pdf::class,
+        'PDF' => Html2Pdf::class,
 
-        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
-        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'DNS1D' => DNS1DFacade::class,
+        'DNS2D' => DNS2DFacade::class,
 
-        'Carbon' => Carbon\Carbon::class,
+        'Carbon' => Carbon::class,
 
-        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'Markdown' => Markdown::class,
 
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'ReCaptcha' => ReCaptcha::class,
 
-        'Mollie' => Mollie\Laravel\Facades\Mollie::class,
+        'Mollie' => Mollie::class,
 
-        'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
+        'Feeds' => FeedsFacade::class,
 
-        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
+        'Hashids' => Hashids::class,
 
-        'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
+        'PwnedPasswords' => Facade::class,
 
     ],
 

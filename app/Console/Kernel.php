@@ -2,6 +2,34 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AchievementsCron;
+use App\Console\Commands\AddSysadmin;
+use App\Console\Commands\BirthdayCron;
+use App\Console\Commands\CheckUtwenteAccounts;
+use App\Console\Commands\ClearSessionTable;
+use App\Console\Commands\CodexMarkdownConverter;
+use App\Console\Commands\DirectAdminSync;
+use App\Console\Commands\EmailCron;
+use App\Console\Commands\EndMemberships;
+use App\Console\Commands\FeeCron;
+use App\Console\Commands\FileCleanup;
+use App\Console\Commands\MakeAdmin;
+use App\Console\Commands\MemberCleanup;
+use App\Console\Commands\MemberRenewCron;
+use App\Console\Commands\NewsletterCron;
+use App\Console\Commands\OmNomComCleanup;
+use App\Console\Commands\PrintActiveMembers;
+use App\Console\Commands\RefreshEventUniqueUsers;
+use App\Console\Commands\ReviewFeedbackCron;
+use App\Console\Commands\SpotifySync;
+use App\Console\Commands\SpotifyUpdate;
+use App\Console\Commands\SyncRoles;
+use App\Console\Commands\SyncWikiAccounts;
+use App\Console\Commands\TestEmail;
+use App\Console\Commands\TestIBANs;
+use App\Console\Commands\UpdateWallstreetPrices;
+use App\Console\Commands\UserCleanup;
+use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,34 +42,34 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SyncRoles::class,
-        Commands\TestEmail::class,
-        Commands\EmailCron::class,
-        Commands\NewsletterCron::class,
-        Commands\BirthdayCron::class,
-        Commands\AchievementsCron::class,
-        Commands\FileCleanup::class,
-        Commands\FeeCron::class,
-        Commands\UserCleanup::class,
-        Commands\CheckUtwenteAccounts::class,
-        Commands\SpotifySync::class,
-        Commands\SpotifyUpdate::class,
-        Commands\TestIBANs::class,
-        Commands\ClearSessionTable::class,
-        Commands\VerifyPersonalDetailsEmailCron::class,
-        Commands\PrintActiveMembers::class,
-        Commands\ReviewFeedbackCron::class,
-        Commands\MemberRenewCron::class,
-        Commands\OmNomComCleanup::class,
-        Commands\MakeAdmin::class,
-        Commands\DirectAdminSync::class,
-        Commands\SyncWikiAccounts::class,
-        Commands\MemberCleanup::class,
-        Commands\AddSysadmin::class,
-        Commands\EndMemberships::class,
-        Commands\UpdateWallstreetPrices::class,
-        Commands\CodexMarkdownConverter::class,
-        Commands\RefreshEventUniqueUsers::class,
+        SyncRoles::class,
+        TestEmail::class,
+        EmailCron::class,
+        NewsletterCron::class,
+        BirthdayCron::class,
+        AchievementsCron::class,
+        FileCleanup::class,
+        FeeCron::class,
+        UserCleanup::class,
+        CheckUtwenteAccounts::class,
+        SpotifySync::class,
+        SpotifyUpdate::class,
+        TestIBANs::class,
+        ClearSessionTable::class,
+        VerifyPersonalDetailsEmailCron::class,
+        PrintActiveMembers::class,
+        ReviewFeedbackCron::class,
+        MemberRenewCron::class,
+        OmNomComCleanup::class,
+        MakeAdmin::class,
+        DirectAdminSync::class,
+        SyncWikiAccounts::class,
+        MemberCleanup::class,
+        AddSysadmin::class,
+        EndMemberships::class,
+        UpdateWallstreetPrices::class,
+        CodexMarkdownConverter::class,
+        RefreshEventUniqueUsers::class,
     ];
 
     /**
@@ -68,8 +96,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(function () {
-            return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0;
-        });
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
     }
 }

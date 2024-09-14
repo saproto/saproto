@@ -7,6 +7,7 @@ use App\Models\OrderLine;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use stdClass;
 
 class TIPCieController extends Controller
 {
@@ -17,7 +18,7 @@ class TIPCieController extends Controller
     {
         $date = $request->has('date') ? $request->date : null;
 
-        $tipcieProducts = Account::find(config('omnomcom.tipcie-account'))->products;
+        $tipcieProducts = Account::query()->find(config('omnomcom.tipcie-account'))->products;
         $tipcieProductIds = $tipcieProducts->pluck('id')->toArray();
         $tipcieProductNames = $tipcieProducts->pluck('name')->toArray();
 
@@ -29,7 +30,7 @@ class TIPCieController extends Controller
         $pinOrders = [];
         $pinTotal = 0;
 
-        $orders = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
+        $orders = OrderLine::query()->where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
             ->where('created_at', '<', ($date ? Carbon::parse($date)->addHours(30)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
             ->get();
 
@@ -38,8 +39,8 @@ class TIPCieController extends Controller
                 $pid = (string) $order->product_id;
 
                 if (! array_key_exists($pid, $tipcieOrders)) {
-                    $productInfo = new \stdClass;
-                    $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
+                    $productInfo = new stdClass();
+                    $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds, true)];
                     $productInfo->amount = 0;
                     $productInfo->totalPrice = 0;
                     $tipcieOrders[$pid] = $productInfo;
@@ -55,6 +56,7 @@ class TIPCieController extends Controller
                     if (! array_key_exists($time, $pinOrders)) {
                         $pinOrders[$time] = 0;
                     }
+
                     $pinOrders[$time] += $order->total_price;
                     $pinTotal += $order->total_price;
                 }

@@ -69,7 +69,7 @@
     "spatie/laravel-permission": "^6",
     "spipu/html2pdf": "^5.2",
     "vinkla/hashids": "^12.0",
-    "laravel/legacy-factories": "^1.3",
+    "willvincent/feeds": "^2.4",
     "setasign/tfpdf": "^1.33"
   },
   "require-dev": {
@@ -82,8 +82,9 @@
     "symfony/dom-crawler": "~4.0",
     "laravel/sail": "^1.16",
     "laravel/pint": "^1.10",
-    "rector/rector": "^1.0.0",
-    "phpunit/phpunit": "^10.5"
+    "rector/rector": "^1.2",
+    "phpunit/phpunit": "^10.5",
+    "driftingly/rector-laravel": "^1.2"
   },
   "autoload": {
     "psr-4": {

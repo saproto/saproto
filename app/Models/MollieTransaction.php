@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mollie;
+use Mollie\Api\Resources\Payment;
 
 /**
  * Mollie Transaction Model.
@@ -46,61 +47,53 @@ class MollieTransaction extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class)->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
-        return $this->hasMany(\App\Models\OrderLine::class, 'payed_with_mollie');
+        return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
-    /** @return MollieTransaction */
-    public function transaction()
+    public function transaction(): Payment
     {
         return Mollie::api()
             ->payments
             ->get($this->mollie_id);
     }
 
-    /**
-     * @param  string  $status
-     * @return string
-     */
-    public static function translateStatus($status)
+    public static function translateStatus(string $status): string
     {
-        if ($status == 'open' || $status == 'pending' || $status == 'draft') {
+        if ($status === 'open' || $status === 'pending' || $status === 'draft') {
             return 'open';
         }
-        if ($status == 'expired' ||
-            $status == 'canceled' ||
-            $status == 'failed' ||
-            $status == 'charged_back' ||
-            $status == 'refunded') {
+
+        if ($status === 'expired' ||
+            $status === 'canceled' ||
+            $status === 'failed' ||
+            $status === 'charged_back' ||
+            $status === 'refunded') {
             return 'failed';
         }
-        if ($status == 'paid' || $status == 'paidout') {
+
+        if ($status === 'paid' || $status === 'paidout') {
             return 'paid';
         }
 
         return 'unknown';
     }
 
-    /** @return string */
-    public function translatedStatus()
+    public function translatedStatus(): string
     {
         return self::translateStatus($this->status);
     }
 
     /**
-     * @return MollieTransaction
-     *
      * @throws Exception
      */
-    public function updateFromWebhook()
+    public function updateFromWebhook(): static
     {
         $mollie = Mollie::api()
             ->payments
@@ -109,13 +102,13 @@ class MollieTransaction extends Model
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
-        if ($new_status != 'open') {
+        if ($new_status !== 'open') {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
 
         $this->save();
 
-        if ($new_status == 'failed') {
+        if ($new_status === 'failed') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->product_id == config('omnomcom.mollie')['fee_id']) {
                     $orderline->delete();
@@ -138,8 +131,9 @@ class MollieTransaction extends Model
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
+
                     $orderline->product->ticket->event->updateUniqueUsersCount();
-                    $orderline->product->stock += 1;
+                    $orderline->product->stock++;
                     $orderline->product->save();
                     $orderline->delete();
 
@@ -149,7 +143,7 @@ class MollieTransaction extends Model
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
             }
-        } elseif ($new_status == 'paid') {
+        } elseif ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Auth;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Dinnerform Model.
@@ -53,44 +53,39 @@ class Dinnerform extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $casts = [
-        'start' => 'datetime',
-        'end' => 'datetime',
-    ];
-
     protected $with = ['event'];
 
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo(\App\Models\Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     public function orderedBy(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'ordered_by_user_id');
+        return $this->belongsTo(User::class, 'ordered_by_user_id');
     }
 
     /** @return HasMany */
     public function orderlines()
     {
-        return $this->hasMany(\App\Models\DinnerformOrderline::class);
+        return $this->hasMany(DinnerformOrderline::class);
     }
 
     /** @return float The regular discount as a percentage out of 100. */
-    public function getRegularDiscountPercentageAttribute()
+    public function getRegularDiscountPercentageAttribute(): int|float
     {
         return 100 - ($this->regular_discount * 100);
     }
 
     /** @return string A timespan string with format 'D H:i'. */
-    public function generateTimespanText()
+    public function generateTimespanText(): string
     {
         return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */
-    public function isCurrent()
+    public function isCurrent(): bool
     {
         return $this->start->isPast() && $this->end->isFuture();
     }
@@ -111,13 +106,11 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(function (DinnerformOrderline $orderline) {
-                return $orderline->price_with_discount;
-            });
+            ->sum(static fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
     }
 
     /** @return int Number of orders. */
-    public function orderCount()
+    public function orderCount(): int
     {
         return $this->orderlines()->count();
     }
@@ -129,32 +122,43 @@ class Dinnerform extends Model
     }
 
     /** @return bool Whether the current user is a helper for the event related to the dinnerform or has marked themselves as a helper. */
-    public function isHelping()
+    public function isHelping(): bool
     {
-        return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
-            || ($this->event?->activity && $this->event->activity->isHelping(Auth::user()));
+        if ($this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()) {
+            return true;
+        }
+
+        return $this->event?->activity && $this->event->activity->isHelping(Auth::user());
     }
 
     /** @return bool Whether the current user has any discounts. */
-    public function hasDiscount()
+    public function hasDiscount(): bool
     {
         return $this->regular_discount_percentage || ($this->helper_discount && $this->isHelping());
     }
 
     /** @return bool Whether the current user has made an order yet. */
-    public function hasOrdered()
+    public function hasOrdered(): bool
     {
         return $this->orderlines()->where('user_id', Auth::id())->exists();
     }
 
     /** Delete related orders with dinnerform. */
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
-        static::deleting(function ($dinnerform) {
+        static::deleting(static function ($dinnerform) {
             foreach ($dinnerform->orderlines()->get() as $orderline) {
                 $orderline->delete();
             }
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'start' => 'datetime',
+            'end' => 'datetime',
+        ];
     }
 }

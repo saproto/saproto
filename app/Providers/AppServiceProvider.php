@@ -11,19 +11,17 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Paginator::useBootstrapFive();
 
-        view()->composer('website.navbar', function ($view) {
-            $menuItems = MenuItem::where('parent', null)->orderBy('order')->with('page')->with('children')->get();
+        view()->composer('website.navbar', static function ($view) {
+            $menuItems = MenuItem::query()->where('parent', null)->orderBy('order')->with('page')->with('children')->get();
             $view->with('menuItems', $menuItems);
         });
 
-        view()->composer('components.modals.achievement-popup', function ($view) {
+        view()->composer('components.modals.achievement-popup', static function ($view) {
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();
@@ -40,7 +38,5 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-    }
+    public function register() {}
 }

@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\TestMail;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class TestEmail extends Command
 {
@@ -35,7 +35,7 @@ class TestEmail extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $email = $this->ask('What is the destination for this e-mail?');
 

@@ -7,16 +7,16 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class AccountController extends Controller
 {
     /** @return View */
     public function index()
     {
-        return view('omnomcom.accounts.index', ['accounts' => Account::orderBy('account_number', 'asc')->get()]);
+        return view('omnomcom.accounts.index', ['accounts' => Account::query()->orderBy('account_number', 'asc')->get()]);
     }
 
     /**
@@ -26,9 +26,9 @@ class AccountController extends Controller
     public function show($id)
     {
         /** @var Account $account */
-        $account = Account::findOrFail($id);
+        $account = Account::query()->findOrFail($id);
 
-        return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::where('account_id', $account->id)->paginate(10)]);
+        return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::query()->where('account_id', $account->id)->paginate(10)]);
     }
 
     /** @return View */
@@ -43,7 +43,7 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         /** @var Account $account */
-        $account = Account::create($request->all());
+        $account = Account::query()->create($request->all());
         $account->save();
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') created.');
@@ -57,7 +57,7 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-        return view('omnomcom.accounts.edit', ['account' => Account::findOrFail($id)]);
+        return view('omnomcom.accounts.edit', ['account' => Account::query()->findOrFail($id)]);
     }
 
     /**
@@ -67,7 +67,7 @@ class AccountController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Account $account */
-        $account = Account::findOrFail($id);
+        $account = Account::query()->findOrFail($id);
         $account->fill($request->all());
         $account->save();
 
@@ -85,7 +85,7 @@ class AccountController extends Controller
     public function destroy(Request $request, $id)
     {
         /** @var Account $account */
-        $account = Account::findOrFail($id);
+        $account = Account::query()->findOrFail($id);
 
         if ($account->products->count() > 0) {
             Session::flash('flash_message', 'Could not delete account '.$account->account_number.' ('.$account->name.') since there are products associated with this account.');
@@ -108,7 +108,7 @@ class AccountController extends Controller
     public function showAggregation(Request $request, $account)
     {
         /** @var Account $account */
-        $account = Account::findOrFail($account);
+        $account = Account::query()->findOrFail($account);
 
         return view('omnomcom.accounts.aggregation', [
             'aggregation' => $account->generatePeriodAggregation($request->start, $request->end),
@@ -124,7 +124,7 @@ class AccountController extends Controller
     public function showOmnomcomStatistics(Request $request)
     {
         if ($request->has('start') && $request->has('end')) {
-            $account = Account::findOrFail(config('omnomcom.omnomcom-account'));
+            $account = Account::query()->findOrFail(config('omnomcom.omnomcom-account'));
 
             return view('omnomcom.accounts.aggregation', [
                 'aggregation' => $account->generatePeriodAggregation($request->start, $request->end),

@@ -24,7 +24,7 @@ class CodexSong extends Model
 
     protected static function booted()
     {
-        static::deleting(function ($song) {
+        static::deleting(static function ($song) {
             $song->categories()->detach();
             $song->codices()->detach();
         });

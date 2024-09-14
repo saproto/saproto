@@ -13,8 +13,7 @@ use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
 {
-    /** @return void */
-    public function configure()
+    public function configure(): void
     {
         try {
             $this
