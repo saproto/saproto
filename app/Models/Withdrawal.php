@@ -77,7 +77,7 @@ class Withdrawal extends Model
      * @param  User  $user
      * @return int
      */
-    public function totalForUser($user)
+    public function totalForUser($user): mixed
     {
         return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
@@ -111,7 +111,7 @@ class Withdrawal extends Model
     }
 
     /** @return int */
-    public function total()
+    public function total(): mixed
     {
         return OrderLine::query()->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }

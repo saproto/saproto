@@ -306,7 +306,7 @@ class MollieController extends Controller
      * @param  string  $month
      * @return int
      */
-    public static function getTotalForMonth($month)
+    public static function getTotalForMonth($month): mixed
     {
         $month = Carbon::parse($month);
         $start = $month->copy()->startOfMonth();

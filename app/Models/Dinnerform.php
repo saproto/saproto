@@ -97,7 +97,7 @@ class Dinnerform extends Model
     }
 
     /** @return float Total amount of dinnerform orders without discounts. */
-    public function totalAmount()
+    public function totalAmount(): mixed
     {
         return $this->orderlines()->sum('price');
     }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
-use App\Mail\MembershipEndSet;
 use App\Mail\MembershipStarted;
 use App\Models\HashMapItem;
 use App\Models\Member;

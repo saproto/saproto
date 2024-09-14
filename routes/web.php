@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\ActivityController;
@@ -67,7 +70,7 @@ use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require 'minisites.php';
+require __DIR__ . '/minisites.php';
 
 /* Route block convention:
  *
@@ -668,12 +671,8 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Public Routes for e-mail --- */
     Route::get('togglelist/{id}', [EmailListController::class, 'toggleSubscription'])->middleware(['auth'])->name('togglelist');
     Route::get('unsubscribe/{hash}', [EmailController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController)->index($request, 'quotes');
-    }]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', function (Illuminate\Http\Request $request) {
-        return (new FeedbackController)->index($request, 'goodideas');
-    }]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
 
     /* --- Routes related to the Feedback Boards --- */
     Route::controller(FeedbackController::class)->prefix('feedback')->middleware(['member'])->name('feedback::')->group(function () {

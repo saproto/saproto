@@ -97,7 +97,7 @@ class EmailList extends Model
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));
     }
 
-    public static function parseUnsubscribeHash(string $hash)
+    public static function parseUnsubscribeHash(string $hash): mixed
     {
         return json_decode(Crypt::decrypt(base64_decode($hash)));
     }

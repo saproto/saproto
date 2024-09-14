@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\Login;
 use App\Mail\PasswordResetEmail;
 use App\Mail\PwnedPasswordNotification;
 use App\Mail\RegistrationConfirmation;
@@ -78,7 +79,7 @@ class AuthController extends Controller
             Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
         }
 
-        return view('auth.login');
+        return view(Login::class);
     }
 
     /**

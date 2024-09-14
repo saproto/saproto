@@ -21,9 +21,9 @@ class NewsitemFactory extends Factory
 
         return [
             'user_id' => 1,
-            'title' => $this->faker->sentence(),
-            'content' => $this->faker->paragraphs(3, true),
-            'is_weekly' => $this->faker->boolean(),
+            'title' => fake()->sentence(),
+            'content' => fake()->paragraphs(3, true),
+            'is_weekly' => fake()->boolean(),
             'published_at' => $published_at,
         ];
     }
