@@ -30,7 +30,7 @@
                             <td>Url</td>
                             <td>Clicks</td>
                             <td class="text-center">Target</td>
-                            <td></td>
+                            <td>QR Code</td>
                         </tr>
 
                         </thead>
@@ -56,15 +56,24 @@
                                 </td>
                                 <td class="text-center">
                                     <button
-                                       data-bs-toggle="popover"
-                                       data-bs-placement="right"
-                                       data-bs-trigger="focus"
-                                       data-bs-content="{{ $url->target }}"
-                                       class="btn badge bg-info">
+                                            data-bs-toggle="popover"
+                                            data-bs-placement="right"
+                                            data-bs-trigger="focus"
+                                            data-bs-content="{{ $url->target }}"
+                                            class="btn badge bg-info">
                                         <i class="fas fa-link text-white"></i>
                                     </button>
                                 </td>
 
+                                <td>
+                                    <a href="#" id="url-{{ $url->id }}"
+                                       class="qr-button"
+                                       data-url="{{ $url->url }}"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#qr-modal">
+                                        Open QR
+                                    </a>
+                                </td>
                             </tr>
 
                         @endforeach
@@ -84,3 +93,61 @@
     </div>
 
 @endsection
+
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+      document.querySelectorAll('.qr-button').forEach(el => el.addEventListener('click', e => {
+        const modal = document.querySelector(el.getAttribute('data-bs-target'));
+        modal.querySelector('#qr-modal-url').src = "{{ route('short_url::qr_code', '') }}" + '/?url=' + encodeURI("{{route('short_url::go')}}" + '/' + el.getAttribute('data-url'));
+        console.log(document.getElementById('qr-modal-url').src);
+      }));
+
+      document.querySelector('#qr-modal-copy').addEventListener('click', e => {
+        const image = document.getElementById('qr-modal-url');
+        const canvas = document.createElement('canvas');
+        const margin = 10;//the margin of the QR code in the image in percentage
+        const scale = 10;
+        canvas.width = image.width * scale;
+        canvas.height = image.height * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, (image.width * (margin / 100) * scale) / 2, (image.height * (margin / 100) * scale) / 2, (1 - margin / 100) * image.width * scale, (1 - margin / 100) * image.height * scale);
+        canvas.toBlob((blob) => {
+          navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': blob }),
+          ]);
+        }, 'image/png');
+      });
+    </script>
+@endpush
+
+@once
+    @push('modals')
+        <div class="modal fade" id="qr-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog model-sm" role="document">
+                <form>
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Short Url QR Code</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img id="qr-modal-url" alt="QR code" class="bg-white p-2" src=""
+                                 style="margin-left: auto; margin-right: auto; display: block;"
+                                 width="400px"
+                                 height="400px">
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                            <span>Right click QR to save as svg</span>
+                            <button type="button" id="qr-modal-copy" class="btn btn-primary">Copy as png with background
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endpush
+@endonce
