@@ -79,7 +79,7 @@ class AuthController extends Controller
             Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
         }
 
-        return view(Login::class);
+        return view('auth.login');
     }
 
     /**

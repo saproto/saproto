@@ -82,8 +82,9 @@
     "symfony/dom-crawler": "~4.0",
     "laravel/sail": "^1.16",
     "laravel/pint": "^1.10",
-    "phpunit/phpunit": "^10.5",
-    "driftingly/rector-laravel": "^1.2"
+    "driftingly/rector-laravel": "^1.2",
+    "pestphp/pest": "^3.0",
+    "mockery/mockery": "^1.6"
   },
   "autoload": {
     "psr-4": {
@@ -140,7 +141,8 @@
   "config": {
     "preferred-install": "dist",
     "allow-plugins": {
-      "php-http/discovery": true
+      "php-http/discovery": true,
+      "pestphp/pest-plugin": true
     }
   }
 }

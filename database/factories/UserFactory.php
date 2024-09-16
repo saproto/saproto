@@ -27,7 +27,7 @@ class UserFactory extends Factory
         return [
             'name' => $name,
             'calling_name' => $callingName,
-            'email' => strtolower(Str::transliterate("{$callingName}.{$lastName}@")).fake()->freeEmailDomain(),
+            'email' => strtolower(Str::transliterate("{$callingName}.{$lastName}@")) . fake()->freeEmailDomain(),
             'password' => bcrypt(Str::random()),
             'remember_token' => Str::random(10),
             'birthdate' => fake()->dateTimeBetween('-40 years', '-16 years')->format('Y-m-d'),
@@ -43,7 +43,7 @@ class UserFactory extends Factory
             'show_omnomcom_total' => fake()->boolean(),
             'show_omnomcom_calories' => fake()->boolean(),
             'disable_omnomcom' => fake()->boolean(),
-            'theme' => fake()->randomElement(config('proto.themes')),
+            'theme' => fake()->randomElement(array_keys(config('proto.themes'))),
             'did_study_create' => fake()->boolean(25),
             'did_study_itech' => fake()->boolean(25),
         ];

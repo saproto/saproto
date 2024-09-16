@@ -19,13 +19,13 @@ class MemberFactory extends Factory
     public function definition(): array
     {
         $created_at = fake()->dateTimeBetween('2011-04-20')->format('Y-m-d H:i:s');
-        $deleted_at = fake()->dateTimeBetween($created_at)->format('Y-m-d H:i:s');
 
         return [
             'created_at' => $created_at,
-            'deleted_at' => fake()->boolean(25) ? $deleted_at : null,
+            'deleted_at' => null,
             'user_id' => User::factory()->hasBank()->hasAddress(),
-            'proto_username' => fn ($attributes): string => Member::createProtoUsername(User::query()->find($attributes['user_id'])->name),
+            'proto_username' => fn($attributes): string => Member::createProtoUsername(User::query()->find($attributes['user_id'])->name),
+            'is_pet' => 0,
         ];
     }
 
