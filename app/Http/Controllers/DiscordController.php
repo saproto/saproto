@@ -38,7 +38,7 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        $client = new Client();
+        $client = new Client;
         try {
             $accessTokenData = $client->post($tokenURL, ['form_params' => $tokenData]);
             $accessTokenData = json_decode($accessTokenData->getBody());

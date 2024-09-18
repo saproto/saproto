@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Auth\Events\Login;
 use App\Mail\PasswordResetEmail;
 use App\Mail\PwnedPasswordNotification;
 use App\Mail\RegistrationConfirmation;
@@ -21,6 +20,7 @@ use App\Models\WelcomeMessage;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
 use Exception;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +79,7 @@ class AuthController extends Controller
             Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
         }
 
-        return view('auth.login');
+        return view(Login::class);
     }
 
     /**
@@ -456,7 +456,7 @@ class AuthController extends Controller
                 return view('auth.passchange');
             }
 
-            if ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
+            if ((new PwnedPasswords)->setPassword($pass_new1)->isPwnedPassword()) {
                 Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
 
                 return view('auth.passchange');
@@ -641,7 +641,7 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords())->setPassword($password)->isPwnedPassword()) {
+            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
                 HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
             }
@@ -791,7 +791,7 @@ class AuthController extends Controller
         $xml = gzinflate(base64_decode($saml));
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
-        $deserializationContext = new DeserializationContext();
+        $deserializationContext = new DeserializationContext;
         $deserializationContext->getDocument()->loadXML($xml);
 
         $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest;
@@ -805,9 +805,9 @@ class AuthController extends Controller
 
         $response = self::buildSAMLResponse($user, $authnRequest);
 
-        $bindingFactory = new BindingFactory();
+        $bindingFactory = new BindingFactory;
         $postBinding = $bindingFactory->create(SamlConstants::BINDING_SAML2_HTTP_POST);
-        $messageContext = new MessageContext();
+        $messageContext = new MessageContext;
         $messageContext->setMessage($response)->asResponse();
 
         $httpResponse = $postBinding->send($messageContext);
@@ -833,11 +833,11 @@ class AuthController extends Controller
         $certificate = X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
         $privateKey = KeyHelper::createPrivateKey(base_path().config('saml-idp.idp.key'), '', true);
 
-        $response = new Response();
+        $response = new Response;
         $response
-            ->addAssertion($assertion = new Assertion())
+            ->addAssertion($assertion = new Assertion)
             ->setID(Helper::generateID())
-            ->setIssueInstant(new DateTime())
+            ->setIssueInstant(new DateTime)
             ->setDestination($destination)
             ->setIssuer(new Issuer($issuer))
             ->setStatus(new Status(new StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
@@ -847,19 +847,19 @@ class AuthController extends Controller
 
         $assertion
             ->setId(Helper::generateID())
-            ->setIssueInstant(new DateTime())
+            ->setIssueInstant(new DateTime)
             ->setIssuer(new Issuer($issuer))
             ->setSubject(
-                (new Subject())
+                (new Subject)
                     ->setNameID(new NameID(
                         $email,
                         SamlConstants::NAME_ID_FORMAT_EMAIL
                     ))
                     ->addSubjectConfirmation(
-                        (new SubjectConfirmation())
+                        (new SubjectConfirmation)
                             ->setMethod(SamlConstants::CONFIRMATION_METHOD_BEARER)
                             ->setSubjectConfirmationData(
-                                (new SubjectConfirmationData())
+                                (new SubjectConfirmationData)
                                     ->setInResponseTo($authnRequest->getId())
                                     ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
                                     ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /* @phpstan-ignore-line */
@@ -867,15 +867,15 @@ class AuthController extends Controller
                     )
             )
             ->setConditions(
-                (new Conditions())
-                    ->setNotBefore(new DateTime())
+                (new Conditions)
+                    ->setNotBefore(new DateTime)
                     ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
                     ->addItem(
                         new AudienceRestriction($audience)
                     )
             )
             ->addItem(
-                (new AttributeStatement())
+                (new AttributeStatement)
                     ->addAttribute(new Attribute(
                         'urn:mace:dir:attribute-def:mail',
                         $email
@@ -898,11 +898,11 @@ class AuthController extends Controller
                     ))
             )
             ->addItem(
-                (new AuthnStatement())
+                (new AuthnStatement)
                     ->setAuthnInstant(new DateTime('-10 MINUTE'))
                     ->setSessionIndex('_some_session_index')
                     ->setAuthnContext(
-                        (new AuthnContext())
+                        (new AuthnContext)
                             ->setAuthnContextClassRef(SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT)
                     )
             );

@@ -41,7 +41,7 @@ class DirectAdminSync extends Command
      */
     public function handle(): void
     {
-        $da = new DirectAdmin();
+        $da = new DirectAdmin;
         $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
         $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
 
