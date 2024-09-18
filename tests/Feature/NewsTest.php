@@ -35,18 +35,18 @@ it('lets admins create news', function ($article) {
         ->post('/news/add', $article);
 
     $this->assertDatabaseHas('newsitems', [
-        'title' => $article['title'] ?? 'Weekly update for week ' . date('W') . ' of ' . date('Y') . '.',
+        'title' => $article['title'] ?? 'Weekly update for week '.date('W').' of '.date('Y').'.',
         'content' => $article['content'],
         'is_weekly' => $article['is_weekly'],
     ]);
 
-    $id = Newsitem::where('content', $article['content'])->first()->id;
+    $id = Newsitem::query()->where('content', $article['content'])->first()->id;
 
-    $response->assertRedirect('/news/edit/' . $id);
+    $response->assertRedirect('/news/edit/'.$id);
 
 })->with([
-    'newsitem' => fn(): array => array_merge(Newsitem::factory()->raw(), ['title' => fake()->sentence()]),
-    'weekly' => fn() => Newsitem::factory()->isWeekly()->raw(),
+    'newsitem' => fn (): array => array_merge(Newsitem::factory()->raw(), ['title' => fake()->sentence()]),
+    'weekly' => fn () => Newsitem::factory()->isWeekly()->raw(),
 ]);
 
 it('does not let non board members create news', function () {
