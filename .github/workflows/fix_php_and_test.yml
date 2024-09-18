@@ -1,15 +1,58 @@
-name: ⚙ Deploy and 🐘 Test check
-
+name: 🛠 Format
 on: pull_request
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
+  phplint:
+    runs-on: ubuntu-latest
+    name: 🛠 Fix PHP formatting
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: 🔍 Read .env
+        run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV
+
+      - uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
+
+      - uses: actions/cache@v3
+        with:
+          path: .tmp/rector
+          key: ${{ runner.os }}-rector-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-rector-
+
+      - run: mkdir -p .tmp/rector
+
+      - name: Run rector
+        run: vendor/bin/rector --ansi
+
+      - name: Cache Pint
+        uses: actions/cache@v3
+        with:
+          path: .tmp/pint.cache
+          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-pint-
+
+      - run: mkdir -p .tmp/pint
+
+      - name: Run pint
+        run: ./vendor/bin/pint
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: PHP Linting (Pint)
+          skip_fetch: true
   deploy:
     name: Deploy Check
     runs-on: ubuntu-latest
+    needs: phplint
     services:
       mysql:
         image: mysql
@@ -34,18 +77,18 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - name: 🔍 Read .env
-        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
-
       - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
           coverage: none
 
+      - name: 🔍 Read .env
+        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
       - uses: ramsey/composer-install@v3
         with:
-          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist --no-dev"
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
@@ -55,7 +98,6 @@ jobs:
 
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
-
       - name: 🔨 build front-end
         run: npm run build
 
@@ -72,8 +114,3 @@ jobs:
         with:
           name: laravel-failure-artifact
           path: storage/logs/laravel.log
-
-      - name: 🗑️ Remove storage directory
-        run: rm -rf storage
-
-
