@@ -96,12 +96,12 @@
 
                             <div class="form-group">
                                 <label for="bic">Bank BIC Code</label>
-                                <input type="text" class="form-control text-uppercase" id="bic" name="bic" placeholder="" disabled>
+                                <input type="text" class="form-control text-uppercase" id="bic" name="bic" placeholder="">
                             </div>
 
-                            <p>
+                            <!-- <p>
                                 <span id="bic-message">Enter your IBAN first.</span>
-                            </p>
+                            </p> -->
 
                             <hr>
 
@@ -178,13 +178,13 @@
                     iban_message('black', 'We could not automatically verify your IBAN.')
                     bic_message('red', 'Please enter your BIC.')
                     bic.value = ''
-                    bic.disabled = false
+                    //bic.disabled = false
                 })
             } else {
                 iban_message('black', "Please enter your IBAN above.")
                 bic_message('black', 'Enter your IBAN first.')
                 bic.value = ''
-                bic.disabled = true
+                //bic.disabled = true
                 submit.disabled = true
             }
         })
@@ -197,19 +197,19 @@
                 get('{{ route('api::verify_iban') }}', { 'iban': iban.value, 'bic': bic.value })
                 .then(data => {
                     if (data.status === true) {
-                        bic.disabled = false
+                        //bic.disabled = false
                         form.submit()
                     } else {
                         update_iban_form(data)
                     }
                 }).catch(err => {
                     console.error(err)
-                    bic.disabled = true
+                    //bic.disabled = true
                     form.submit()
                 })
             } else {
                 bic_message('red', 'Please enter your BIC.')
-                bic.disabled = false
+                //bic.disabled = false
             }
         })
 
@@ -234,14 +234,14 @@
                 bic_message('green', 'We found your BIC for you!')
                 bic.value = data.bic
                 iban.value = data.iban
-                bic.disabled = true
+                //bic.disabled = true
                 submit.disabled = false
             } else {
                 iban_message('green', "Your IBAN is valid!")
                 bic_message('red', 'We could not find your BIC. Please enter your it manually.')
                 iban.value = data.iban
                 bic.value = ''
-                bic.disabled = false
+                //bic.disabled = false
             }
         }
 

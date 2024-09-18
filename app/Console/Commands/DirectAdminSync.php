@@ -41,12 +41,12 @@ class DirectAdminSync extends Command
     public function handle()
     {
         $da = new DirectAdmin();
-        $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
-        $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
+        $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
+        $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
 
         // Mail forwarders
         $da->query('/CMD_API_EMAIL_FORWARDERS', [
-            'domain' => getenv('DA_DOMAIN'),
+            'domain' => config('directadmin.da-domain'),
         ]);
         $current = $da->fetch_parsed_body();
         $target = $this->constructForwarderList();
@@ -55,7 +55,7 @@ class DirectAdminSync extends Command
 
         // E-mail accounts
         $da->query('/CMD_API_POP', [
-            'domain' => getenv('DA_DOMAIN'),
+            'domain' => config('directadmin.da-domain'),
             'action' => 'list',
         ]);
         $current = $da->fetch_parsed_body();
@@ -180,8 +180,7 @@ class DirectAdminSync extends Command
                 }
 
                 // Otherwise, we do not modify this alias.
-            }
-            // Remove the forwarder because it does not exist according to the target list.
+            } // Remove the forwarder because it does not exist according to the target list.
             else {
                 $data['del'][] = $alias;
             }
@@ -213,7 +212,7 @@ class DirectAdminSync extends Command
             $queries[] = [
                 'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
-                    'domain' => getenv('DA_DOMAIN'),
+                    'domain' => config('directadmin.da-domain'),
                     'action' => 'create',
                     'user' => $alias,
                     'email' => implode(',', $destination),
@@ -225,7 +224,7 @@ class DirectAdminSync extends Command
             $queries[] = [
                 'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
-                    'domain' => getenv('DA_DOMAIN'),
+                    'domain' => config('directadmin.da-domain'),
                     'action' => 'modify',
                     'user' => $alias,
                     'email' => implode(',', $destination),
@@ -237,7 +236,7 @@ class DirectAdminSync extends Command
             $queries[] = [
                 'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
-                    'domain' => getenv('DA_DOMAIN'),
+                    'domain' => config('directadmin.da-domain'),
                     'action' => 'delete',
                     'select0' => $del,
                 ],
@@ -297,7 +296,7 @@ class DirectAdminSync extends Command
             $queries[] = [
                 'cmd' => '/CMD_API_POP',
                 'options' => [
-                    'domain' => getenv('DA_DOMAIN'),
+                    'domain' => config('directadmin.da-domain'),
                     'action' => 'create',
                     'user' => $account,
                     'passwd' => $password,
@@ -312,7 +311,7 @@ class DirectAdminSync extends Command
             $queries[] = [
                 'cmd' => '/CMD_API_POP',
                 'options' => [
-                    'domain' => getenv('DA_DOMAIN'),
+                    'domain' => config('directadmin.da-domain'),
                     'action' => 'delete',
                     'user' => $account,
                 ],

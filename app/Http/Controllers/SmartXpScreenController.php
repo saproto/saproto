@@ -13,7 +13,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function show(Request $request)
+    public function show()
     {
         return view('smartxp.screen');
     }
@@ -21,7 +21,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function showProtopolis(Request $request)
+    public function showProtopolis()
     {
         return view('smartxp.protopolis_screen');
     }
@@ -30,7 +30,7 @@ class SmartXpScreenController extends Controller
     public function timetable()
     {
         return CalendarController::returnGoogleCalendarEvents(
-            config('proto.google-timetable-id'),
+            config('proto.google-calendar.timetable-id'),
             date('c', strtotime('today')),
             date('c', strtotime('tomorrow'))
         );
@@ -40,7 +40,7 @@ class SmartXpScreenController extends Controller
     public function protopenersTimetable()
     {
         return CalendarController::returnGoogleCalendarEvents(
-            config('proto.protopeners-google-timetable-id'),
+            config('proto.google-calendar.protopeners-id'),
             date('c', strtotime('today')),
             date('c', strtotime('tomorrow'))
         );
@@ -72,7 +72,7 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
         $occupied = false;
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.config('proto.smartxp-google-timetable-id').'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.config('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
