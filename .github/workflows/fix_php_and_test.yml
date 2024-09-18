@@ -24,7 +24,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: .tmp/rector
-          key: ${{ runner.os }}-rector-${{ github.run_id }}
+          key: ${{ runner.os }}-rector-${{ github.run_id }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-rector-
 
       - run: mkdir -p .tmp/rector
@@ -38,8 +38,6 @@ jobs:
           path: .tmp/pint.cache
           key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-pint-
-
-      - run: mkdir -p .tmp/pint
 
       - name: Run pint
         run: ./vendor/bin/pint
@@ -98,6 +96,15 @@ jobs:
         run: npm ci --ignore-scripts
       - name: 🔨 build front-end
         run: npm run build
+
+      - name: Cache Pest test results
+        uses: actions/cache@v4
+        with:
+          path: .tmp/phpunit.cache/test-results
+          key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-pest-
+
+      - run: mkdir -p .tmp/phpunit.cache
 
       - name: 🐘 Run Pest tests
         env:
