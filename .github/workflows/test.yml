@@ -1,9 +1,6 @@
-name: ⚙ Deploy Check
+name: ⚙ Deploy and 🐘 Test check
 
-on:
-  push:
-    branches-ignore:
-      - master
+on: pull_request
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,6 +10,17 @@ jobs:
   deploy:
     name: Deploy Check
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     env:
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
@@ -23,14 +31,17 @@ jobs:
     steps:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: 🔍 Read .env
-        run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
+        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
 
       - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
+          coverage: none
 
       - uses: ramsey/composer-install@v3
         with:
@@ -48,14 +59,21 @@ jobs:
       - name: 🔨 build front-end
         run: npm run build
 
+      - name: 🐘 Run PHP tests
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_CONNECTION: mysql
+          DB_DATABASE: test_db
+          DB_USERNAME: user
+          DB_PASSWORD: password
+        run: (php artisan key:generate && php artisan migrate && php artisan test)
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: laravel-failure-artifact
+          path: storage/logs/laravel.log
+
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
 
-      - name: 📝 Create Sentry release
-        uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ env.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
-        with:
-          environment: production
+

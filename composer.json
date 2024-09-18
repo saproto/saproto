@@ -84,7 +84,8 @@
     "laravel/pint": "^1.10",
     "driftingly/rector-laravel": "^1.2",
     "pestphp/pest": "^3.0",
-    "mockery/mockery": "^1.6"
+    "mockery/mockery": "^1.6",
+    "pestphp/pest-plugin-laravel": "^3.0"
   },
   "autoload": {
     "psr-4": {

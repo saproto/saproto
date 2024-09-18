@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Member;
+use App\Models\Newsitem;
 
 it('shows members the news section on the homepage', function () {
     $member = Member::factory()->create();
@@ -19,4 +20,45 @@ it('shows members an empty news page', function () {
 
     $response->assertSee('no News Articles');
     $response->assertStatus(200);
+});
+
+it('lets admins create news', function ($article) {
+    $member = Member::factory()->create();
+    $member->user->assignRole('board');
+    $response = $this->actingAs($member->user)
+        ->get('/news/add');
+
+    $response->assertSee('Create a new');
+    $response->assertStatus(200);
+
+    $response = $this->actingAs($member->user)
+        ->post('/news/add', $article);
+
+    $response->assertRedirect('/news/edit/1');
+    $this->assertDatabaseHas('newsitems', [
+        'title' => $article['title'] ?? 'Weekly update for week ' . date('W') . ' of ' . date('Y') . '.',
+        'content' => $article['content'],
+        'is_weekly' => $article['is_weekly'],
+    ]);
+})->with([
+    'newsitem' => fn() => array_merge(Newsitem::factory()->raw(), ['title' => fake()->sentence()]),
+    'weekly' => fn() => Newsitem::factory()->isWeekly()->raw()
+]);
+
+it('does not let non board members create news', function () {
+    $member = Member::factory()->create();
+    $response = $this->actingAs($member->user)
+        ->get('/news/add');
+    $response->assertStatus(200);
+
+    $response->assertDontSee('Create a new');
+    $response->assertSee('You are not allowed to access this page');
+
+
+    $article = Newsitem::factory()->raw();
+    $response = $this->actingAs($member->user)
+        ->post('/news/add', $article);
+
+    $response->assertStatus(200);
+    $response->assertSee('You are not allowed to access this page');
 });

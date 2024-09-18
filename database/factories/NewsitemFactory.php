@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,14 +18,23 @@ class NewsitemFactory extends Factory
      */
     public function definition(): array
     {
-        $published_at = fake()->dateTimeBetween('-1 year', '+1 year');
+        $published_at = fake()->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d H:i:s');
 
         return [
-            'user_id' => 1,
-            'title' => fake()->sentence(),
+            'user_id' => User::factory()->create()->id,
             'content' => fake()->paragraphs(3, true),
-            'is_weekly' => fake()->boolean(),
+            'is_weekly' => 0,
             'published_at' => $published_at,
         ];
+    }
+
+    public function isWeekly(): Factory|NewsitemFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_weekly' => 1,
+                'published_at' => null,
+            ];
+        });
     }
 }
