@@ -10,7 +10,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
           coverage: none
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -21,7 +21,7 @@ jobs:
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: .tmp/rector
           key: ${{ runner.os }}-rector-${{ github.run_id }}
@@ -33,7 +33,7 @@ jobs:
         run: vendor/bin/rector --ansi
 
       - name: Cache Pint
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .tmp/pint.cache
           key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
@@ -60,12 +60,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: testing
         ports:
-          - 33306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     env:
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
@@ -75,7 +71,7 @@ jobs:
       SENTRY_PROJECT: sa-proto-website
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -93,7 +89,7 @@ jobs:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -107,9 +103,10 @@ jobs:
         env:
           DB_CONNECTION: mysql
           DB_DATABASE: testing
-          DB_PORT: 33306
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           DB_USER: root
           DB_PASSWORD: secret
+          DB_HOST: 127.0.0.1
         run: |
           php artisan key:generate
           php artisan migrate
