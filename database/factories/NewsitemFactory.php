@@ -30,11 +30,9 @@ class NewsitemFactory extends Factory
 
     public function isWeekly(): Factory|NewsitemFactory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'is_weekly' => 1,
-                'published_at' => null,
-            ];
-        });
+        return $this->state(fn (array $attributes): array => [
+            'is_weekly' => 1,
+            'published_at' => null,
+        ]);
     }
 }

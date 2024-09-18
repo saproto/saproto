@@ -36,13 +36,13 @@ it('lets admins create news', function ($article) {
 
     $response->assertRedirect('/news/edit/1');
     $this->assertDatabaseHas('newsitems', [
-        'title' => $article['title'] ?? 'Weekly update for week ' . date('W') . ' of ' . date('Y') . '.',
+        'title' => $article['title'] ?? 'Weekly update for week '.date('W').' of '.date('Y').'.',
         'content' => $article['content'],
         'is_weekly' => $article['is_weekly'],
     ]);
 })->with([
-    'newsitem' => fn() => array_merge(Newsitem::factory()->raw(), ['title' => fake()->sentence()]),
-    'weekly' => fn() => Newsitem::factory()->isWeekly()->raw()
+    'newsitem' => fn (): array => array_merge(Newsitem::factory()->raw(), ['title' => fake()->sentence()]),
+    'weekly' => fn () => Newsitem::factory()->isWeekly()->raw(),
 ]);
 
 it('does not let non board members create news', function () {
@@ -53,7 +53,6 @@ it('does not let non board members create news', function () {
 
     $response->assertDontSee('Create a new');
     $response->assertSee('You are not allowed to access this page');
-
 
     $article = Newsitem::factory()->raw();
     $response = $this->actingAs($member->user)

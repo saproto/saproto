@@ -46,7 +46,7 @@ class ApiController extends Controller
             abort(403);
         }
 
-        $playedVideo = new PlayedVideo();
+        $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);
 
         if ($user->keep_protube_history) {

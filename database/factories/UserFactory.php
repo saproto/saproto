@@ -27,7 +27,7 @@ class UserFactory extends Factory
         return [
             'name' => $name,
             'calling_name' => $callingName,
-            'email' => strtolower(Str::transliterate("{$callingName}.{$lastName}@")) . fake()->freeEmailDomain(),
+            'email' => strtolower(Str::transliterate("{$callingName}.{$lastName}@")).fake()->freeEmailDomain(),
             'password' => bcrypt(Str::random()),
             'remember_token' => Str::random(10),
             'birthdate' => fake()->dateTimeBetween('-40 years', '-16 years')->format('Y-m-d'),

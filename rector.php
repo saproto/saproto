@@ -11,25 +11,25 @@ use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
-use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelLevelSetList;
+use RectorLaravel\Set\LaravelSetList;
 
 try {
     return RectorConfig::configure()
         ->withCache(
-        // ensure file system caching is used instead of in-memory
+            // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
 
             // specify a path that works locally as well as on CI job runners
             cacheClass: FileCacheStorage::class
         )
         ->withPaths([
-            __DIR__ . '/app',
-            __DIR__ . '/config',
-            __DIR__ . '/routes',
-            __DIR__ . '/resources/views',
-            __DIR__ . '/tests',
-            __DIR__ . '/database',
+            __DIR__.'/app',
+            __DIR__.'/config',
+            __DIR__.'/routes',
+            __DIR__.'/resources/views',
+            __DIR__.'/tests',
+            __DIR__.'/database',
         ])->withPhpSets(php82: true)
         ->withsets([
             LaravelLevelSetList::UP_TO_LARAVEL_110,
@@ -65,7 +65,7 @@ try {
                 NullToStrictStringFuncCallArgRector::class,
                 AddClosureVoidReturnTypeWhereNoReturnRector::class,
                 RenamePropertyRector::class,
-                __DIR__ . '/app/Libraries',
+                __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {
 }

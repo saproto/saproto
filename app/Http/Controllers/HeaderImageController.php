@@ -44,7 +44,7 @@ class HeaderImageController extends Controller
             Redirect::back();
         }
 
-        $file = new StorageEntry();
+        $file = new StorageEntry;
         $file->createFromFile($image);
 
         $header->image()->associate($file);

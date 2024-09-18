@@ -319,7 +319,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
         // Update DirectAdmin Password
         if ($this->is_member) {
-            $da = new DirectAdmin();
+            $da = new DirectAdmin;
             $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
             $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
             $da->set_method('POST');

@@ -41,7 +41,7 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        $ticket = new Ticket();
+        $ticket = new Ticket;
         $ticket->event_id = Event::query()->findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');

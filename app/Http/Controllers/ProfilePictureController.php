@@ -24,7 +24,7 @@ class ProfilePictureController extends Controller
         $image = $request->file('image');
         if ($image) {
             if (str_starts_with($image->getMimeType(), 'image')) {
-                $file = new StorageEntry();
+                $file = new StorageEntry;
                 $file->createFromFile($image);
 
                 $user->photo()->associate($file);

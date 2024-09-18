@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Cache;
 use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -53,10 +53,10 @@ class FileController extends Controller
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
 
         if (! $w || ! $h) {
-            return Cache::remember($cacheKey, 86400, fn(): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
+            return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
         }
 
-        return Cache::remember($cacheKey, 86400, fn(): EncodedImageInterface => $image->coverDown($w, $h)->encode());
+        return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->coverDown($w, $h)->encode());
     }
 
     /**

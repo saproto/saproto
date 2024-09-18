@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\ActivityController;
@@ -47,10 +44,10 @@ use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProtubeController;
 use App\Http\Controllers\QrAuthController;
 use App\Http\Controllers\QueryController;
-/* --- use App\Http\Controllers\RadioController; --- */
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
+/* --- use App\Http\Controllers\RadioController; --- */
 use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
@@ -67,10 +64,13 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__ . '/minisites.php';
+require __DIR__.'/minisites.php';
 
 /* Route block convention:
  *
@@ -671,8 +671,8 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Public Routes for e-mail --- */
     Route::get('togglelist/{id}', [EmailListController::class, 'toggleSubscription'])->middleware(['auth'])->name('togglelist');
     Route::get('unsubscribe/{hash}', [EmailController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn (Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn (Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
 
     /* --- Routes related to the Feedback Boards --- */
     Route::controller(FeedbackController::class)->prefix('feedback')->middleware(['member'])->name('feedback::')->group(function () {

@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\Member;
 use App\Models\User;
 
@@ -16,7 +15,6 @@ it('shows the authorized homepage', function () {
         ->get('/');
     $response->assertSee('Dashboard');
 });
-
 
 it('shows the member homepage', function () {
     $member = Member::factory()->create();
