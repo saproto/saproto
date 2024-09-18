@@ -55,15 +55,17 @@ jobs:
     needs: phplint
     services:
       mysql:
-        image: mysql
+        image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test_db
-          MYSQL_USER: user
-          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: testing
         ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 33306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     env:
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
@@ -101,14 +103,18 @@ jobs:
       - name: 🔨 build front-end
         run: npm run build
 
-      - name: 🐘 Run PHP tests
+      - name: 🐘 Run Pest tests
         env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
           DB_CONNECTION: mysql
-          DB_DATABASE: test_db
-          DB_USERNAME: user
-          DB_PASSWORD: password
-        run: (php artisan key:generate && php artisan migrate && php artisan test)
+          DB_DATABASE: testing
+          DB_PORT: 33306
+          DB_USER: root
+          DB_PASSWORD: secret
+        run: |
+          php artisan key:generate
+          php artisan migrate
+          vendor/bin/pest --ci
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
