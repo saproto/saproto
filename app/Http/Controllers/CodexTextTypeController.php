@@ -27,7 +27,7 @@ class CodexTextTypeController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function show($id)
+    public function show(CodexTextType $codexTextType)
     {
     }
 

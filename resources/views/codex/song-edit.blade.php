@@ -6,7 +6,8 @@
 
 @section('container')
     <form action="{{ !empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route("codexSong.store") }}"
-          method="{{ !empty($song) ? "PUT" : "POST" }}">
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($song) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -26,14 +27,16 @@
                             {{-- Artist }--}}
                             <label for="artist">Artist:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $song->artist ?? "" }}" class="form-control" id="artist"
+                                <input type="text" value="{{ $song->artist ?? "" }}" class="form-control"
+                                       id="artist"
                                        name="artist">
                             </div>
 
                             {{-- Youtube ID }--}}
                             <label for="youtube">Youtube ID:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $song->youtube ?? "" }}" class="form-control" id="youtube"
+                                <input type="text" value="{{ $song->youtube ?? "" }}" class="form-control"
+                                       id="youtube"
                                        name="youtube">
                             </div>
 

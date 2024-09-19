@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Libraries\PDF_TOC;
 use App\Models\Codex;
 use App\Models\CodexTextType;
-use App\Models\SongCategory;
+use App\Models\CodexSongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Session;
@@ -18,7 +18,7 @@ class CodexController extends Controller
     {
         $codices = Codex::orderBy('name')->get();
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.index', ['codices' => $codices, 'textTypes' => $textTypes, 'songTypes' => $songTypes]);
     }
@@ -26,7 +26,7 @@ class CodexController extends Controller
     public function create()
     {
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.codex-edit', ['codex' => null, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => [], 'myTexts' => [], 'myTextTypes' => []]);
     }
@@ -42,9 +42,8 @@ class CodexController extends Controller
 
     public function edit(Codex $codex)
     {
-        //        return $codex;
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = SongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
         $myTexts = $codex->texts->pluck('id')->toArray();
 
@@ -79,7 +78,7 @@ class CodexController extends Controller
 
     public function show(Codex $codex)
     {
-        $categories = SongCategory::whereHas('songs', function ($q) use ($codex) {
+        $categories = CodexSongCategory::whereHas('songs', function ($q) use ($codex) {
             $q->whereHas('codices', function ($q) use ($codex) {
                 $q->where('codex', $codex->id);
             });
@@ -152,11 +151,11 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (! preg_match('/(\d+)\./', $textValue)) {
+                        if (!preg_match('/(\d+)\./', $textValue)) {
                             $list = false;
                         }
                         $count += 1;
-                        $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
+                        $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
                     } else {
                         $count = 0;
                     }

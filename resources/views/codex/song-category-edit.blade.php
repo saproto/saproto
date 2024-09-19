@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <form action="{{ !empty($category) ? route('codexSongCategory.update', ['codexSongCategory' => $category]) : route("codexSongCategory.store") }}"
+    <form action="{{ !empty($category) ? route('codexSongCategory.update', ['codexSongCategory'=>$category]) : route("codexSongCategory.store") }}"
           method="POST">
         <input type="hidden" name="_method" value="{{ !empty($category) ? "PUT" : "POST" }}">
         {{ csrf_field()}}

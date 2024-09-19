@@ -7,7 +7,8 @@
 @section('container')
     @php /** @var \App\Models\Codex $codex */ @endphp
     <form action="{{ !empty($codex) ? route('codex.update', ['codex' => $codex]) : route("codex.store") }}"
-          method="{{ !empty($codex) ? "PUT" : "POST" }}">
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($codex) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3">
             <div class="col">

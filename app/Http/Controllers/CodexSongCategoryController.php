@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SongCategory;
+use App\Models\CodexSongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -20,7 +20,7 @@ class CodexSongCategoryController extends Controller
 
     public function store(Request $request)
     {
-        $category = new SongCategory();
+        $category = new CodexSongCategory();
         $category->name = $request->input('name');
         $category->save();
 
@@ -31,27 +31,23 @@ class CodexSongCategoryController extends Controller
     {
     }
 
-    public function edit($id)
+    public function edit(CodexSongCategory $codexSongCategory)
     {
-        $category = SongCategory::findOrFail($id);
-
-        return view('codex.song-category-edit', ['category' => $category]);
+        return view('codex.song-category-edit', ['category' => $codexSongCategory]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, CodexSongCategory $codexSongCategory)
     {
-        $category = SongCategory::findOrFail($id);
-        $category->name = $request->input('name');
-        $category->save();
+        $codexSongCategory->name = $request->input('name');
+        $codexSongCategory->save();
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy($id)
+    public function destroy(CodexSongCategory $codexSongCategory)
     {
-        $category = SongCategory::findOrFail($id);
-        $category->songs()->delete();
-        $category->delete();
+        $codexSongCategory->songs()->delete();
+        $codexSongCategory->delete();
 
         return Redirect::route('codex.index');
     }

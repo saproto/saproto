@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $lyrics
  * @property string $youtube
  * @property int $category_id
- * @property SongCategory $category
+ * @property CodexSongCategory $category
  * @property Codex[] $codices
  **/
 class CodexSong extends Model
@@ -28,7 +28,7 @@ class CodexSong extends Model
     //belongs to one category on category_id in codex_songs
     public function category(): BelongsTo
     {
-        return $this->belongsTo(SongCategory::class, 'category_id');
+        return $this->belongsTo(CodexSongCategory::class, 'category_id');
     }
 
     public function codices(): BelongsToMany

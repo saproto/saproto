@@ -27,6 +27,7 @@
                                         <a href="{{ route('codexTextType.edit', ['codexTextType' => $textType]) }}"
                                            class="btn btn-info badge m-1">Edit</a>
                                          @include('components.modals.confirm-modal', [
+                                           'method'=> 'DELETE',
                                             'action' => route('codexTextType.destroy', ['codexTextType' => $textType]),
                                             'classes' => 'btn btn-danger badge m-1',
                                             'text' => 'Delete',
@@ -59,6 +60,7 @@
                                                 <a href="{{ route('codexText.edit', ['codexText' => $text]) }}"
                                                    class="btn btn-info badge m-1">Edit</a>
                                                  @include('components.modals.confirm-modal', [
+                                                    'method'=> 'DELETE',
                                                     'action' => route('codexText.destroy', ['codexText' => $text]),
                                                     'classes' => 'btn btn-danger badge m-1',
                                                     'text' => 'Delete',

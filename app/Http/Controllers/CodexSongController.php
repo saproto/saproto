@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CodexSong;
-use App\Models\SongCategory;
+use App\Models\CodexSongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Session;
@@ -17,12 +17,12 @@ class CodexSongController extends Controller
 
     public function create()
     {
-        if (! SongCategory::count()) {
+        if (!CodexSongCategory::count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex.index');
         }
-        $categories = SongCategory::orderBy('name')->get();
+        $categories = CodexSongCategory::orderBy('name')->get();
 
         return view('codex.song-edit', ['song' => null, 'textType' => null, 'categories' => $categories, 'myCategories' => []]);
     }
@@ -35,31 +35,29 @@ class CodexSongController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function show($id)
+    public function show(CodexSong $codexSong)
     {
     }
 
-    public function edit($id)
+    public function edit(CodexSong $codexSong)
     {
-        $song = CodexSong::findOrFail($id);
-        $categories = SongCategory::orderBy('name')->get();
-        $myCategories = $song->category->id;
+        $categories = CodexSongCategory::orderBy('name')->get();
 
-        return view('codex.song-edit', ['song' => $song, 'categories' => $categories, 'myCategories' => $myCategories]);
+        $myCategories = $codexSong->category->id;
+
+        return view('codex.song-edit', ['song' => $codexSong, 'categories' => $categories, 'myCategories' => $myCategories]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, CodexSong $codexSong)
     {
-        $song = CodexSong::findOrFail($id);
-        $this->saveSong($song, $request);
+        $this->saveSong($codexSong, $request);
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy($id)
+    public function destroy(CodexSong $codexSong)
     {
-        $song = CodexSong::findOrFail($id);
-        $song->delete();
+        $codexSong->delete();
 
         return Redirect::route('codex.index');
     }

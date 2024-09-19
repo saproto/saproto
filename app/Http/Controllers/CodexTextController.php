@@ -17,7 +17,7 @@ class CodexTextController extends Controller
 
     public function create()
     {
-        if (! CodexTextType::count()) {
+        if (!CodexTextType::count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex.index');
@@ -35,7 +35,7 @@ class CodexTextController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function show($id)
+    public function show(CodexText $codexText)
     {
     }
 

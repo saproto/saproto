@@ -27,6 +27,7 @@
                                 <a href="{{ route('codexSongCategory.edit', ['codexSongCategory' => $songCategory]) }}"
                                    class="btn btn-info badge m-1">Edit</a>
                                  @include('components.modals.confirm-modal', [
+                                   'method'=> 'DELETE',
                                     'action' => route('codexSongCategory.destroy', ['codexSongCategory' => $songCategory]),
                                     'classes' => 'btn btn-danger badge',
                                     'text' => 'Delete',
@@ -59,6 +60,7 @@
                                             <a href="{{ route('codexSong.edit', ['codexSong' => $song]) }}"
                                                class="btn btn-info badge m-1">Edit</a>
                                              @include('components.modals.confirm-modal', [
+                                               'method'=> 'DELETE',
                                             'action' => route('codexSong.destroy', ['codexSong' => $song]),
                                             'classes' => 'btn btn-danger badge m-1',
                                             'text' => 'Delete',
