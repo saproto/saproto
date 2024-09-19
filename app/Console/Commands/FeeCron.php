@@ -67,9 +67,9 @@ class FeeCron extends Command
         $emails = $students['emails'];
         $usernames = $students['usernames'];
 
-        $already_paid = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->get()->pluck('user_id')->toArray();
+        $already_paid = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
-        $charged = (object)[
+        $charged = (object) [
             'count' => 0,
             'regular' => [],
             'reduced' => [],
@@ -100,15 +100,15 @@ class FeeCron extends Command
                     $reason = 'Donor';
                     $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
                 }
-                $charged->remitted[] = $member->user->name . ' (#' . $member->user->id . ") - $reason";
+                $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - $reason";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
                 $fee = config('omnomcom.fee')['regular'];
                 $email_fee = 'regular';
-                $charged->regular[] = $member->user->name . ' (#' . $member->user->id . ')';
+                $charged->regular[] = $member->user->name.' (#'.$member->user->id.')';
             } else {
                 $fee = config('omnomcom.fee')['reduced'];
                 $email_fee = 'reduced';
-                $charged->reduced[] = $member->user->name . ' (#' . $member->user->id . ')';
+                $charged->reduced[] = $member->user->name.' (#'.$member->user->id.')';
             }
 
             $charged->count++;
@@ -123,7 +123,7 @@ class FeeCron extends Command
             Mail::queue((new FeeEmailForBoard($charged))->onQueue('high'));
         }
 
-        $this->info('Charged ' . $charged->count . ' of ' . Member::count() . ' members their fee.');
+        $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
 
         return 0;
     }
