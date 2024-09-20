@@ -41,7 +41,7 @@ class CodexSongController extends Controller
 
     public function edit(CodexSong $codexSong)
     {
-        $categories = CodexSongCategory::orderBy('name')->get();
+        $categories = CodexSongCategory::query()->orderBy('name')->get();
 
         $myCategories = $codexSong->category->id;
 
@@ -64,11 +64,18 @@ class CodexSongController extends Controller
 
     private function saveSong(CodexSong $song, Request $request)
     {
-        $song->title = $request->input('title');
-        $song->artist = $request->input('artist');
-        $song->lyrics = $request->input('lyrics');
-        $song->youtube = $request->input('youtube');
-        $song->category_id = $request->input('category');
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'artist' => 'required|string|max:255',
+            'lyrics' => 'required|string',
+            'youtube' => 'nullable|string|max:255',
+            'category' => 'required|integer',
+        ]);
+        $song->title = $validated['title'];
+        $song->artist = $validated['artist'];
+        $song->lyrics = $validated['lyrics'];
+        $song->youtube = $validated['youtube'];
+        $song->category_id = $validated['category'];
         $song->save();
     }
 }

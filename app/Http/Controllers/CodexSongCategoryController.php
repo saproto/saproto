@@ -20,8 +20,12 @@ class CodexSongCategoryController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         $category = new CodexSongCategory();
-        $category->name = $request->input('name');
+        $category->name = $validated['name'];
         $category->save();
 
         return Redirect::route('codex.index');
@@ -38,7 +42,11 @@ class CodexSongCategoryController extends Controller
 
     public function update(Request $request, CodexSongCategory $codexSongCategory)
     {
-        $codexSongCategory->name = $request->input('name');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $codexSongCategory->name = $validated['name'];
         $codexSongCategory->save();
 
         return Redirect::route('codex.index');

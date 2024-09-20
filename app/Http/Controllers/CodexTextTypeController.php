@@ -20,8 +20,11 @@ class CodexTextTypeController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'type' => 'required|string|max:255',
+        ]);
         $type = new CodexTextType();
-        $type->type = $request->input('type');
+        $type->type = $validated['type'];
         $type->save();
 
         return Redirect::route('codex.index');
@@ -38,7 +41,10 @@ class CodexTextTypeController extends Controller
 
     public function update(Request $request, CodexTextType $codexTextType)
     {
-        $codexTextType->type = $request->input('type');
+        $validated = $request->validate([
+            'type' => 'required|string|max:255',
+        ]);
+        $codexTextType->type = $validated['type'];
         $codexTextType->save();
 
         return Redirect::route('codex.index');

@@ -64,9 +64,14 @@ class CodexTextController extends Controller
 
     private function saveText(CodexText $codexText, Request $request)
     {
-        $codexText->name = $request->input('name');
-        $codexText->type_id = $request->input('category');
-        $codexText->text = $request->input('text');
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|integer',
+            'text' => 'required|string',
+        ]);
+        $codexText->name = $validated['name'];
+        $codexText->type_id = $validated['category'];
+        $codexText->text = $validated['text'];
         $codexText->save();
     }
 }

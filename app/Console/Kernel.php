@@ -7,7 +7,6 @@ use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\CodexMarkdownConverter;
 use App\Console\Commands\DirectAdminSync;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
@@ -68,7 +67,6 @@ class Kernel extends ConsoleKernel
         AddSysadmin::class,
         EndMemberships::class,
         UpdateWallstreetPrices::class,
-        CodexMarkdownConverter::class,
         RefreshEventUniqueUsers::class,
     ];
 
@@ -96,6 +94,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn(): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
     }
 }

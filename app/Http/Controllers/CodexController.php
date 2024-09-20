@@ -66,13 +66,23 @@ class CodexController extends Controller
         return Redirect::route('codex.index');
     }
 
-    private function saveCodex($codex, Request $request): void
+    private function saveCodex(Codex $codex, Request $request)
     {
-        $codex->name = $request->input('name');
-        $codex->export = $request->input('export');
-        $codex->description = $request->input('description');
-        $codex->songs()->sync($request->input('songids'));
-        $codex->texts()->sync($request->input('textids'));
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'export' => 'required|string|max:255',
+            'description' => 'required|string',
+            'songids' => 'nullable|array',
+            'songids.*' => 'integer',
+            'textids' => 'nullable|array',
+            'textids.*' => 'integer',
+        ]);
+
+        $codex->name = $validated['name'];
+        $codex->export = $validated['export'];
+        $codex->description = $validated['description'];
+        $codex->songs()->sync($validated['songids'] ?? []);
+        $codex->texts()->sync($validated['textids'] ?? []);
         $codex->save();
     }
 

@@ -10,6 +10,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CodexController;
+use App\Http\Controllers\CodexSongCategoryController;
+use App\Http\Controllers\CodexSongController;
+use App\Http\Controllers\CodexTextController;
+use App\Http\Controllers\CodexTextTypeController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
@@ -47,7 +51,9 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
+
 /* --- use App\Http\Controllers\RadioController; --- */
+
 use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
@@ -70,7 +76,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__.'/minisites.php';
+require __DIR__ . '/minisites.php';
 
 /* Route block convention:
  *
@@ -671,8 +677,8 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Public Routes for e-mail --- */
     Route::get('togglelist/{id}', [EmailListController::class, 'toggleSubscription'])->middleware(['auth'])->name('togglelist');
     Route::get('unsubscribe/{hash}', [EmailController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn (Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn (Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
+    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
+    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
 
     /* --- Routes related to the Feedback Boards --- */
     Route::controller(FeedbackController::class)->prefix('feedback')->middleware(['member'])->name('feedback::')->group(function () {
@@ -1063,41 +1069,14 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    /* --- Routes related to Cantus Codices (Senate only) --- */
-    Route::controller(CodexController::class)->prefix('codex')->name('codex::')->middleware(['auth', 'permission:senate'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('add-codex', 'addCodex')->name('add-codex');
-        Route::get('add-song', 'addSong')->name('add-song');
-        Route::get('add-song-category', 'addSongCategory')->name('add-song-category');
-        Route::get('add-text-type', 'addTextType')->name('add-text-type');
-        Route::get('add-text', 'addText')->name('add-text');
-
-        Route::get('edit-codex/{codex}', 'editCodex')->name('edit-codex');
-        Route::get('edit-song/{id}', 'editSong')->name('edit-song');
-        Route::get('edit-song-category/{id}', 'editSongCategory')->name('edit-song-category');
-        Route::get('edit-text-type/{id}', 'editTextType')->name('edit-text-type');
-        Route::get('edit-text/{id}', 'editText')->name('edit-text');
-
-        Route::get('delete-codex/{codex}', 'deleteCodex')->name('delete-codex');
-        Route::get('delete-song/{id}', 'deleteSong')->name('delete-song');
-        Route::get('delete-song-category/{id}', 'deleteSongCategory')->name('delete-song-category');
-        Route::get('delete-text-type/{id}', 'deleteTextType')->name('delete-text-type');
-        Route::get('delete-text/{id}', 'deleteText')->name('delete-text');
-
-        Route::post('add-codex', 'storeCodex')->name('add-codex');
-        Route::post('add-song', 'storeSong')->name('add-song');
-        Route::post('add-song-category', 'storeSongCategory')->name('add-song-category');
-        Route::post('add-text-type', 'storeTextType')->name('add-text-type');
-        Route::post('add-text', 'storeText')->name('add-text');
-
-        Route::post('edit-codex/{codex}', 'updateCodex')->name('edit-codex');
-        Route::post('edit-song/{id}', 'updateSong')->name('edit-song');
-        Route::post('edit-song-category/{id}', 'updateSongCategory')->name('edit-song-category');
-        Route::post('edit-text-type/{id}', 'updateTextType')->name('edit-text-type');
-        Route::post('edit-text/{id}', 'updateText')->name('edit-text');
-
-        Route::get('export/{id}', 'exportCodex')->name('export');
+    Route::prefix('codex')->middleware(['auth', 'permission:senate'])->group(function () {
+        Route::resource('codex', CodexController::class);
+        Route::resource('codexSong', CodexSongController::class)->except(['index', 'show']);
+        Route::resource('codexSongCategory', CodexSongCategoryController::class)->except(['index', 'show']);
+        Route::resource('codexText', CodexTextController::class)->except(['index', 'show']);
+        Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
     });
+
 
     /* --- Route related to the december theme --- */
     Route::get('/december/toggle', function () {
