@@ -8,7 +8,7 @@ use App\Models\CodexTextType;
 use App\Models\CodexSongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 define('FPDF_FONTPATH', resource_path('fonts/'));
 
@@ -16,7 +16,7 @@ class CodexController extends Controller
 {
     public function index()
     {
-        $codices = Codex::orderBy('name')->get();
+        $codices = Codex::query()->orderBy('name')->get();
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
         $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
 
@@ -33,7 +33,7 @@ class CodexController extends Controller
 
     public function store(Request $request)
     {
-        $codex = new Codex();
+        $codex = new Codex;
         $codex->save();
         $this->saveCodex($codex, $request);
 
@@ -66,7 +66,7 @@ class CodexController extends Controller
         return Redirect::route('codex.index');
     }
 
-    private function saveCodex($codex, $request)
+    private function saveCodex($codex, Request $request): void
     {
         $codex->name = $request->input('name');
         $codex->export = $request->input('export');
@@ -102,6 +102,7 @@ class CodexController extends Controller
 
             return Redirect::route('codex.index');
         }
+
         $A6 = [105, 148];
 
         $pdf = new PDF_TOC('P', 'mm', $A6);
@@ -124,8 +125,10 @@ class CodexController extends Controller
         $pdf->SetFont('old', '', 52);
         $pdf->Image(public_path('images/logo/codex_logo.png'), 10, 10, 85, 48);
         $pdf->Ln(50);
+
         $codex_name = str_replace('’', "'", $codex->name);
         $codex_name = str_replace('‘', "'", $codex_name);
+
         $pdf->MultiCell(0, 22, $codex_name, 0, 'C');
         $pdf->SetAlpha(0.1);
         $pdf->Image(public_path('images/logo/codex_logo.png'), -100, 47, 210);
@@ -159,6 +162,7 @@ class CodexController extends Controller
                     } else {
                         $count = 0;
                     }
+
                     if (str_contains($textValue, '**')) {
                         $textValue = str_replace('**', '', $textValue);
                         $pdf->SetFont('minion', 'B', $textSize);
@@ -169,6 +173,7 @@ class CodexController extends Controller
                         $textValue = str_replace('*', '', $textValue);
                         $pdf->SetFont('minion', 'I', $textSize);
                     }
+
                     $pdf->MultiCell(0, $textHeight, $textValue, 0, 'L');
                     $pdf->SetFont('minion', '', $textSize);
                 }
@@ -190,10 +195,11 @@ class CodexController extends Controller
                 $pdf->SetFont('minion', '', $textSize);
                 $link = $pdf->AddLink();
                 $pdf->SetLink($link, -1, -1);
-                $pdf->TOC_Entry($song->title, 1, $link);
+                $pdf->TOC_Entry($song->title, 1);
                 $lyricsArray = explode(PHP_EOL, $song->lyrics);
                 $print = true;
-                for ($index = 0; $index < count($lyricsArray); $index++) {
+                $counter = count($lyricsArray);
+                for ($index = 0; $index < $counter; $index++) {
                     $text = $lyricsArray[$index];
                     $text = str_replace('\\', '', $text);
                     if (str_contains($text, '**')) {
@@ -212,12 +218,15 @@ class CodexController extends Controller
                         $pdf->Cell($pdf->GetStringWidth($subString2), $textHeight, $subString2, 0, 1);
                         $print = false;
                     }
+
                     if ($print) {
                         $pdf->MultiCell(0, $textHeight, $text, 0, 'L');
                         $pdf->SetFont('minion', '', $textSize);
                     }
+
                     $print = true;
                 }
+
                 $pdf->Ln($textHeight);
             }
         }
@@ -243,5 +252,7 @@ class CodexController extends Controller
         $pdf->SetAlpha(1);
 
         $pdf->Output();
+
+        return null;
     }
 }

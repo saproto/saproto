@@ -7,17 +7,17 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Auth;
 use Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Mail;
-use Redirect;
-use Session;
 
 class CommitteeController extends Controller
 {
@@ -30,14 +30,16 @@ class CommitteeController extends Controller
         $user = Auth::user();
 
         if (Auth::check() && $user->can('board')) {
-            return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
+            return view('committee.list', ['data' => Committee::query()->where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
         }
-        $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
+
+        $publicGroups = Committee::query()->where('public', 1)->where('is_society', $showSociety)->get();
         if ($showSociety) {
             $userGroups = Auth::check() ? $user->societies : [];
         } else {
             $userGroups = Auth::check() ? $user->committees : [];
         }
+
         $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
 
         return view('committee.list', ['data' => $mergedGroups]);
@@ -75,7 +77,7 @@ class CommitteeController extends Controller
      */
     public function store(Request $request)
     {
-        $committee = new Committee();
+        $committee = new Committee;
 
         $committee->fill($request->all());
         $committee->save();
@@ -91,7 +93,7 @@ class CommitteeController extends Controller
      */
     public function edit($id)
     {
-        $committee = Committee::findOrFail($id);
+        $committee = Committee::query()->findOrFail($id);
 
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
@@ -103,7 +105,7 @@ class CommitteeController extends Controller
     public function update($id, Request $request)
     {
         // Retrieve the committee
-        $committee = Committee::find($id);
+        $committee = Committee::query()->find($id);
 
         // Check if the committee is protected
         if ($committee->slug == config('proto.rootcommittee') && $request->slug != $committee->slug) {
@@ -134,16 +136,17 @@ class CommitteeController extends Controller
      */
     public function image($id, Request $request)
     {
-        $committee = Committee::find($id);
+        $committee = Committee::query()->find($id);
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($image);
             $committee->image()->associate($file);
         } else {
             $committee->image()->dissociate();
         }
+
         $committee->save();
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
@@ -156,10 +159,10 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-        User::findOrFail($request->user_id);
-        Committee::findOrFail($request->committee_id);
+        User::query()->findOrFail($request->user_id);
+        Committee::query()->findOrFail($request->committee_id);
 
-        $membership = new CommitteeMembership();
+        $membership = new CommitteeMembership;
         $membership->role = $request->role;
         $membership->edition = $request->edition;
         $membership->user_id = $request->user_id;
@@ -170,6 +173,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
+
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
@@ -213,6 +217,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
+
         if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
 
@@ -249,12 +254,13 @@ class CommitteeController extends Controller
 
     public function endEdition(int $committeeID, string $edition)
     {
-        $memberships = CommitteeMembership::where('edition', $edition)->whereHas('committee', function ($q) use ($committeeID) {
+        $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function ($q) use ($committeeID) {
             $q->where('id', $committeeID);
         })->get();
         foreach ($memberships as $membership) {
             $membership->delete();
         }
+
         Session::flash('flash_message', 'all members from the edition ended!');
 
         return Redirect::back();
@@ -290,6 +296,7 @@ class CommitteeController extends Controller
 
             return Redirect::back();
         }
+
         $name = $committee->name;
 
         $message_content = strip_tags($request->get('message'));

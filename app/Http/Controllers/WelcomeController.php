@@ -6,16 +6,16 @@ use App\Models\WelcomeMessage;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class WelcomeController extends Controller
 {
     /** @return View */
     public function overview()
     {
-        return view('welcomemessages.list', ['messages' => WelcomeMessage::orderBy('created_at', 'desc')->get()]);
+        return view('welcomemessages.list', ['messages' => WelcomeMessage::query()->orderBy('created_at', 'desc')->get()]);
     }
 
     /**
@@ -23,9 +23,9 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
-        $message = WelcomeMessage::where('user_id', $request->user_id)->first();
+        $message = WelcomeMessage::query()->where('user_id', $request->user_id)->first();
         if (! $message) {
-            $message = new WelcomeMessage();
+            $message = new WelcomeMessage;
             $message->user_id = $request->user_id;
             $message->message = $request->message;
             $message->save();
@@ -49,7 +49,7 @@ class WelcomeController extends Controller
      */
     public function destroy($id)
     {
-        $message = WelcomeMessage::findOrFail($id);
+        $message = WelcomeMessage::query()->findOrFail($id);
         $message->delete();
         Session::flash('flash_message', 'Welcome Message removed');
 

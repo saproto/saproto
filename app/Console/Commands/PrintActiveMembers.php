@@ -33,15 +33,14 @@ class PrintActiveMembers extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (Member::all() as $member) {
             if (! $member->user->isActiveMember()) {
                 continue;
             }
+
             $this->info(sprintf('%s: %s', $member->user->name, implode(', ', $member->user->committees->pluck('name')->toArray())));
         }
     }

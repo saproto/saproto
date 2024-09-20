@@ -19,7 +19,7 @@ class CodexSongCategory extends Model
 
     protected static function booted()
     {
-        static::deleting(function ($category) {
+        static::deleting(static function ($category) {
             $category->songs()->delete();
         });
     }

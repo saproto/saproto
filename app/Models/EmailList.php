@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Crypt;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * Email List Model.
@@ -40,26 +40,26 @@ class EmailList extends Model
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany(\App\Models\User::class, 'users_mailinglists', 'list_id', 'user_id');
+        return $this->belongsToMany(User::class, 'users_mailinglists', 'list_id', 'user_id');
     }
 
     /**
      * @param  User  $user
      * @return bool Whether user is subscribed to mailing list.
      */
-    public function isSubscribed($user)
+    public function isSubscribed($user): bool
     {
-        return EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
+        return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
     /**
      * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
-    public function subscribe($user)
+    public function subscribe($user): bool
     {
         if (! $this->isSubscribed($user)) {
-            EmailListSubscription::create([
+            EmailListSubscription::query()->create([
                 'user_id' => $user->id,
                 'list_id' => $this->id,
             ]);
@@ -76,12 +76,13 @@ class EmailList extends Model
      *
      * @throws Exception
      */
-    public function unsubscribe($user)
+    public function unsubscribe($user): bool
     {
-        $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
+        $s = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id);
         if ($s == null) {
             return false;
         }
+
         $s->delete();
 
         return true;
@@ -90,14 +91,13 @@ class EmailList extends Model
     /**
      * @param  int  $user_id
      * @param  int  $list_id
-     * @return string
      */
-    public static function generateUnsubscribeHash($user_id, $list_id)
+    public static function generateUnsubscribeHash($user_id, $list_id): string
     {
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));
     }
 
-    public static function parseUnsubscribeHash(string $hash)
+    public static function parseUnsubscribeHash(string $hash): mixed
     {
         return json_decode(Crypt::decrypt(base64_decode($hash)));
     }

@@ -17,7 +17,7 @@ class HeaderImageController extends Controller
     /** @return View */
     public function index()
     {
-        return view('headerimages.index', ['images' => HeaderImage::paginate(5)]);
+        return view('headerimages.index', ['images' => HeaderImage::query()->paginate(5)]);
     }
 
     /** @return View */
@@ -33,7 +33,7 @@ class HeaderImageController extends Controller
      */
     public function store(Request $request)
     {
-        $header = HeaderImage::create([
+        $header = HeaderImage::query()->create([
             'title' => $request->get('title'),
             'credit_id' => $request->get('user'),
         ]);
@@ -43,7 +43,8 @@ class HeaderImageController extends Controller
             Session::flash('flash_message', 'Image is required.');
             Redirect::back();
         }
-        $file = new StorageEntry();
+
+        $file = new StorageEntry;
         $file->createFromFile($image);
 
         $header->image()->associate($file);
@@ -60,7 +61,7 @@ class HeaderImageController extends Controller
      */
     public function destroy($id)
     {
-        HeaderImage::findOrFail($id)->delete();
+        HeaderImage::query()->findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
 
         return Redirect::route('headerimage::index');

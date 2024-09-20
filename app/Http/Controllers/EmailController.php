@@ -7,14 +7,14 @@ use App\Models\EmailList;
 use App\Models\EmailListSubscription;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Redirect;
-use Session;
 
 class EmailController extends Controller
 {
@@ -22,14 +22,14 @@ class EmailController extends Controller
     public function index()
     {
         return view('emailadmin.overview', [
-            'lists' => EmailList::withCount('users')->get(),
-            'emails' => Email::orderBy('id', 'desc')->paginate(10),
+            'lists' => EmailList::query()->withCount('users')->get(),
+            'emails' => Email::query()->orderBy('id', 'desc')->paginate(10),
         ]);
     }
 
     public function filter(Request $request): View
     {
-        $filteredEmails = Email::orderBy('id', 'desc');
+        $filteredEmails = Email::query()->orderBy('id', 'desc');
         $description = $request->has('search_description');
         $subject = $request->has('search_subject');
         $body = $request->has('search_body');
@@ -48,7 +48,7 @@ class EmailController extends Controller
         }
 
         return view('emailadmin.overview', [
-            'lists' => EmailList::withCount('users')->get(),
+            'lists' => EmailList::query()->withCount('users')->get(),
             'emails' => $filteredEmails->paginate(10),
             'searchTerm' => $searchTerm,
             'description' => $description,
@@ -73,7 +73,8 @@ class EmailController extends Controller
 
             return Redirect::route('email::admin');
         }
-        $email = Email::create([
+
+        $email = Email::query()->create([
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
@@ -88,12 +89,13 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
+     *
+     * @throws Exception
      */
-    public function show($id)
+    public function show(int $id)
     {
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
 
         return view('emails.manualemail', [
             'body' => $email->parseBodyFor(Auth::user()),
@@ -106,13 +108,12 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View|RedirectResponse
      */
-    public function edit(Request $request, $id)
+    public function edit(int $id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
@@ -123,13 +124,12 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
 
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
@@ -160,13 +160,12 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function toggleReady(Request $request, $id)
+    public function toggleReady(int $id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
 
         if ($email->sent) {
             Session::flash('flash_message', 'This e-mail has been sent and can thus not be edited.');
@@ -184,6 +183,7 @@ class EmailController extends Controller
 
                 return Redirect::route('email::admin');
             }
+
             $email->ready = true;
             $email->save();
             Session::flash('flash_message', 'The e-mail has been queued for deliver at the specified time.');
@@ -193,15 +193,14 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function addAttachment(Request $request, $id)
+    public function addAttachment(Request $request, int $id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
@@ -210,7 +209,7 @@ class EmailController extends Controller
 
         $upload = $request->file('attachment');
         if ($upload) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($upload);
             $email->attachments()->attach($file);
             $email->save();
@@ -226,21 +225,19 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $file_id
      * @return RedirectResponse
      */
-    public function deleteAttachment(Request $request, $id, $file_id)
+    public function deleteAttachment(int $id, int $file_id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::admin');
         }
 
-        $file = StorageEntry::findOrFail($file_id);
+        $file = StorageEntry::query()->findOrFail($file_id);
 
         $email->attachments()->detach($file);
         $email->save();
@@ -251,20 +248,19 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  string  $hash
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function unsubscribeLink(Request $request, $hash)
+    public function unsubscribeLink(string $hash)
     {
         $data = EmailList::parseUnsubscribeHash($hash);
 
         /** @var User $user */
-        $user = User::findOrFail($data->user);
-        $list = EmailList::findOrFail($data->list);
+        $user = User::query()->findOrFail($data->user);
+        $list = EmailList::query()->findOrFail($data->list);
 
-        $sub = EmailListSubscription::where('user_id', $user->id)->where('list_id', $list->id)->first();
+        $sub = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $list->id)->first();
         if ($sub != null) {
             Session::flash('flash_message', $user->name.' has been unsubscribed from '.$list->name);
             $sub->delete();
@@ -276,39 +272,33 @@ class EmailController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(int $id)
     {
         /** @var Email $email */
-        $email = Email::findOrFail($id);
+        $email = Email::query()->findOrFail($id);
         if ($email->sent) {
             Session::flash('flash_message', 'This e-mail has been sent and can thus not be deleted.');
 
             return Redirect::route('email::admin');
         }
+
         $email->delete();
         Session::flash('flash_message', 'The e-mail has been deleted.');
 
         return Redirect::route('email::admin');
     }
 
-    /**
-     * @param  array  $type
-     * @param  array  $lists
-     * @param  array  $events
-     * @param  bool  $toBackup
-     */
-    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup = false)
+    private function updateEmailDestination(Email $email, array $type, array $lists = [], array $events = [], bool $toBackup = false): void
     {
 
+        $email->to_user = false;
         switch ($type) {
 
             case 'members':
-                $email->to_user = false;
                 $email->to_pending = false;
                 $email->to_member = true;
                 $email->to_active = false;
@@ -322,7 +312,6 @@ class EmailController extends Controller
                 break;
 
             case 'pending':
-                $email->to_user = false;
                 $email->to_pending = true;
                 $email->to_member = false;
                 $email->to_active = false;
@@ -336,7 +325,6 @@ class EmailController extends Controller
                 break;
 
             case 'active':
-                $email->to_user = false;
                 $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = true;
@@ -350,7 +338,6 @@ class EmailController extends Controller
                 break;
 
             case 'event':
-                $email->to_user = false;
                 $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = false;
@@ -359,13 +346,13 @@ class EmailController extends Controller
                 $email->to_event = true;
                 $email->to_backup = $toBackup;
                 $email->lists()->sync([]);
-                if (! empty($events)) {
+                if ($events !== []) {
                     $email->events()->sync($events);
                 }
+
                 break;
 
             case 'lists':
-                $email->to_user = false;
                 $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = false;
@@ -374,12 +361,11 @@ class EmailController extends Controller
                 $email->to_event = false;
                 $email->to_backup = false;
 
-                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
+                $email->lists()->sync($lists);
                 $email->events()->sync([]);
                 break;
 
             default:
-                $email->to_user = false;
                 $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = false;
@@ -393,6 +379,7 @@ class EmailController extends Controller
                 break;
 
         }
+
         $email->save();
     }
 }

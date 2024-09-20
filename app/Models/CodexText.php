@@ -25,7 +25,7 @@ class CodexText extends Model
 
     protected static function booted()
     {
-        static::deleting(function ($text) {
+        static::deleting(static function ($text) {
             $text->codices()->detach();
             $text->type()->dissociate();
         });

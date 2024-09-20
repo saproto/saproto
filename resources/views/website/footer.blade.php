@@ -8,7 +8,7 @@
                 <strong>
                     <span class="fas fa-home"></span>&nbsp;&nbsp;
                     <a class="org url text-white" href="https://www.saproto.nl/"><span
-                                class="green">S.A. Proto</span></a>
+                            class="green">S.A. Proto</span></a>
                 </strong>
                 <br>
                 <span class="adr">
@@ -68,7 +68,7 @@
                 <br>
                 This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
                 <a href="{{ route('developers') }}" class="text-white">
-                    HYTTIOAOAc
+                    Have You Tried Turning It Off And On Again committee
                 </a>.
             </sub>
         </p>
