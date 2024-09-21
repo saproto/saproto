@@ -1067,7 +1067,7 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    Route::prefix('codex')->middleware(['auth', 'permission:senate'])->group(function () {
+    Route::middleware(['auth', 'permission:senate'])->group(function () {
         Route::resource('codex', CodexController::class);
         Route::resource('codexSong', CodexSongController::class)->except(['index', 'show']);
         Route::resource('codexSongCategory', CodexSongCategoryController::class)->except(['index', 'show']);
