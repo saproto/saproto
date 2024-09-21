@@ -17,7 +17,7 @@ class AddressController extends Controller
     /**
      * @return View|RedirectResponse
      */
-    public function add(Request $request)
+    public function show(Request $request)
     {
         $user = Auth::user();
 
@@ -26,7 +26,7 @@ class AddressController extends Controller
         }
 
         if ($request->has('wizard')) {
-            Session::flash('wizard', true);
+            Session::flash('wizard');
         }
 
         return view('users.addresses.edit', ['user' => $user, 'action' => 'add']);
@@ -107,7 +107,7 @@ class AddressController extends Controller
 
         Session::flash('flash_message', 'Your address has been deleted.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /** @return RedirectResponse */
@@ -144,6 +144,6 @@ class AddressController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 }

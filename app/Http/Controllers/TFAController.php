@@ -29,7 +29,7 @@ class TFAController extends Controller
             Session::flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
         }
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**
@@ -53,7 +53,7 @@ class TFAController extends Controller
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**

@@ -18,7 +18,7 @@ use Illuminate\View\View;
 class AchievementController extends Controller
 {
     /** @return View */
-    public function overview()
+    public function index()
     {
         return view('achievement.list', ['achievements' => Achievement::query()->orderBy('name', 'asc')->paginate(15)]);
     }
@@ -37,10 +37,9 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function manage($id)
+    public function edit(int $id)
     {
         /** @var Achievement $achievement */
         $achievement = Achievement::query()->findOrFail($id);
@@ -77,7 +76,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', "Achievement '".$achievement->name."' has been created.");
         }
 
-        return Redirect::route('achievement::manage', ['id' => $achievement->id]);
+        return Redirect::route('achievement::edit', ['id' => $achievement->id]);
     }
 
     /**
@@ -121,13 +120,13 @@ class AchievementController extends Controller
         if (count($achievement->users) > 0) {
             Session::flash('flash_message', "Achievement '".$achievement->name."' has users associated with it. You cannot remove it.");
 
-            return Redirect::route('achievement::list');
+            return Redirect::route('achievement::index');
         }
 
         $achievement->delete();
         Session::flash('flash_message', "Achievement '".$achievement->name."' has been removed.");
 
-        return Redirect::route('achievement::list');
+        return Redirect::route('achievement::index');
     }
 
     /**
@@ -255,7 +254,7 @@ class AchievementController extends Controller
 
         Session::flash('flash_message', 'Achievement Icon set');
 
-        return Redirect::route('achievement::manage', ['id' => $id]);
+        return Redirect::route('achievement::edit', ['id' => $id]);
     }
 
     /**

@@ -88,7 +88,7 @@ class UserDashboardController extends Controller
             if ($validator->fails()) {
 
                 if ($user->id == Auth::id()) {
-                    return Redirect::route('user::dashboard')->withErrors($validator);
+                    return Redirect::route('user::dashboard::show')->withErrors($validator);
                 }
 
                 return Redirect::route('user::admin::details', ['id' => $user->id])->withErrors($validator);
@@ -123,7 +123,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'E-mail address changed.');
         if ($user->id == Auth::id()) {
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         return Redirect::route('user::admin::details', ['id' => $user->id]);
@@ -147,7 +147,7 @@ class UserDashboardController extends Controller
                 'phone' => 'required|regex:(\+[0-9]{8,16})',
             ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
             if ($validator->fails()) {
-                return Redirect::route('user::dashboard')->withErrors($validator);
+                return Redirect::route('user::dashboard::show')->withErrors($validator);
             }
         }
 
@@ -171,7 +171,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Changes saved.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**
@@ -186,7 +186,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Your diet and allergy information has been updated.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /** @return View */
@@ -197,7 +197,7 @@ class UserDashboardController extends Controller
 
         $steps = [
             [
-                'url' => route('login::register', ['wizard' => 1]),
+                'url' => route('login::register::index', ['wizard' => 1]),
                 'unlocked' => true,
                 'done' => Auth::check(),
                 'heading' => 'Create an account',
@@ -205,7 +205,7 @@ class UserDashboardController extends Controller
                 'text' => 'In order to become a member of Study Association Proto, you need a Proto account. You can create that here. After creating your account, activate it by using the link mailed to you.',
             ],
             [
-                'url' => Auth::check() ? route('user::edu::add', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::edu::create', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->edu_username,
                 'heading' => 'Link your UTwente account',
@@ -213,7 +213,7 @@ class UserDashboardController extends Controller
                 'text' => "If you are a student at the University of Twente, we would appreciate it if you would add your student account to your Proto account. If you don't study at the University of Twente, you can skip this step.",
             ],
             [
-                'url' => Auth::check() ? route('user::memberprofile::complete', ['wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::memberprofile::show', ['wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->completed_profile,
                 'heading' => 'Provide some personal details',
@@ -221,7 +221,7 @@ class UserDashboardController extends Controller
                 'text' => 'To enter your in our member administration, you need to provide is with some extra information.',
             ],
             [
-                'url' => Auth::check() ? route('user::bank::add', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::bank::show', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->bank,
                 'heading' => 'Provide payment details',
@@ -229,7 +229,7 @@ class UserDashboardController extends Controller
                 'text' => 'We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend.',
             ],
             [
-                'url' => Auth::check() ? route('user::address::add', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::address::show', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->address,
                 'heading' => 'Provide contact details',
@@ -237,7 +237,7 @@ class UserDashboardController extends Controller
                 'text' => 'To make you a member of our association, we need your postal address. Please add it to your account here.',
             ],
             [
-                'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('memberform::showsign', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address,
                 'done' => Auth::check() && ((Auth::user()->completed_profile && Auth::user()->signed_membership_form) || Auth::user()->is_member),
                 'heading' => 'Sign the membership form',
@@ -262,7 +262,7 @@ class UserDashboardController extends Controller
                 'shouldOpenInNewTab' => true,
             ],
             [
-                'url' => route('user::dashboard', ['wizard' => 1]),
+                'url' => route('user::dashboard::show', ['wizard' => 1]),
                 'unlocked' => Auth::check() && Auth::user()->is_member,
                 'done' => false,
                 'heading' => 'Add some additional info on your dashboard',
@@ -423,7 +423,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Profile cleared.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /** @return RedirectResponse */
@@ -435,6 +435,6 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'New personal key generated.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 }

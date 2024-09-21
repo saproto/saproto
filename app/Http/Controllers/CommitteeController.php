@@ -25,7 +25,7 @@ class CommitteeController extends Controller
      * @param  bool  $showSociety
      * @return View
      */
-    public function overview($showSociety = false)
+    public function index($showSociety = false)
     {
         $user = Auth::user();
 
@@ -67,7 +67,7 @@ class CommitteeController extends Controller
     }
 
     /** @return View */
-    public function add()
+    public function create()
     {
         return view('committee.edit', ['new' => true]);
     }
@@ -206,7 +206,7 @@ class CommitteeController extends Controller
      * @param  int  $id
      * @return RedirectResponse
      */
-    public function editMembership(Request $request, $id)
+    public function updateMembershipForm(Request $request, $id)
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $membership->role = $request->role;
@@ -287,7 +287,7 @@ class CommitteeController extends Controller
      * @param  int  $id
      * @return RedirectResponse
      */
-    public function postAnonMailForm(Request $request, $id)
+    public function sendAnonMailForm(Request $request, $id)
     {
         $committee = Committee::fromPublicId($id);
 

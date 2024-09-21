@@ -130,7 +130,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         if ($request->wizard) {
@@ -148,7 +148,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         Session::flash('register_persist', $request->all());
@@ -177,7 +177,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         if (! Session::has('surfconext_create_account')) {
@@ -263,7 +263,7 @@ class AuthController extends Controller
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
 
-            return Redirect::route('omnomcom::orders::list');
+            return Redirect::route('omnomcom::orders::index');
         }
 
         if ($user->member) {
@@ -369,7 +369,7 @@ class AuthController extends Controller
 
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-        return Redirect::route('login::resetpass');
+        return Redirect::route('login::password::reset');
     }
 
     /**
@@ -403,7 +403,7 @@ class AuthController extends Controller
 
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-        return Redirect::route('login::resetpass');
+        return Redirect::route('login::password::reset');
     }
 
     /**
@@ -464,7 +464,7 @@ class AuthController extends Controller
             $user->setPassword($pass_new1);
             Session::flash('flash_message', 'Your password has been changed.');
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         Session::flash('flash_message', 'Old password incorrect.');
@@ -505,7 +505,7 @@ class AuthController extends Controller
             $user->setPassword($pass);
             Session::flash('flash_message', 'Your password was successfully synchronized.');
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         Session::flash('flash_message', 'Password incorrect.');
@@ -568,7 +568,7 @@ class AuthController extends Controller
                 return Redirect::route('becomeamember');
             }
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         // Reason 2: we were trying to login using a university account

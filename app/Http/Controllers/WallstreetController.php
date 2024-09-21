@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 
 class WallstreetController extends Controller
 {
-    public function admin()
+    public function index()
     {
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
 
@@ -103,7 +103,7 @@ class WallstreetController extends Controller
 
         Session::flash('flash_message', 'Wallstreet drink and its affiliated price history deleted.');
 
-        return Redirect::to(route('wallstreet::admin'));
+        return Redirect::to(route('wallstreet::index'));
     }
 
     public function close($id): RedirectResponse
@@ -212,7 +212,7 @@ class WallstreetController extends Controller
         return $events;
     }
 
-    public function events()
+    public function eventIndex()
     {
         $allEvents = WallstreetEvent::all();
 
@@ -283,7 +283,7 @@ class WallstreetController extends Controller
         $currentEvent->save();
         $currentEvent->delete();
 
-        return Redirect::to(route('wallstreet::events::list'));
+        return Redirect::to(route('wallstreet::events::index'));
     }
 
     public function toggleEvent(Request $request)

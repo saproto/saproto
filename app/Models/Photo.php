@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Photo model.
@@ -55,7 +56,7 @@ class Photo extends Model
         return $this->hasMany(PhotoLikes::class);
     }
 
-    public function file(): hasOne
+    public function file(): HasOne
     {
         return $this->hasOne(StorageEntry::class, 'id', 'file_id');
     }

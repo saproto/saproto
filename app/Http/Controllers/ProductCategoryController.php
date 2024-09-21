@@ -34,7 +34,7 @@ class ProductCategoryController extends Controller
 
         Session::flash('flash_message', 'Category '.$category->name.' created.');
 
-        return Redirect::route('omnomcom::categories::list');
+        return Redirect::route('omnomcom::categories::index');
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductCategoryController extends Controller
 
         Session::flash('flash_message', 'Category '.$category->name.' saved.');
 
-        return Redirect::route('omnomcom::categories::list');
+        return Redirect::route('omnomcom::categories::index');
     }
 
     /**
@@ -78,6 +78,6 @@ class ProductCategoryController extends Controller
         Session::flash('flash_message', 'Category '.$category->name.' deleted.');
         $category->delete();
 
-        return Redirect::route('omnomcom::categories::list');
+        return Redirect::route('omnomcom::categories::index');
     }
 }

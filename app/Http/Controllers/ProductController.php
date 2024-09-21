@@ -89,7 +89,7 @@ class ProductController extends Controller
 
         Session::flash('flash_message', 'The new product has been created!');
 
-        return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
+        return Redirect::route('omnomcom::products::index', ['search' => $product->name]);
     }
 
     /**
@@ -277,7 +277,7 @@ class ProductController extends Controller
 
         Session::flash('flash_message', 'The product has been deleted.');
 
-        return Redirect::route('omnomcom::products::list');
+        return Redirect::route('omnomcom::products::index');
     }
 
     /** @return StreamedResponse A CSV file with all product info. */

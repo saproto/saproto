@@ -110,7 +110,7 @@ class FeedbackController extends Controller
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
     }
 
-    public function add(Request $request, $category): RedirectResponse
+    public function store(Request $request, $category): RedirectResponse
     {
         $category = FeedbackCategory::query()->findOrFail($category);
         $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);

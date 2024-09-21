@@ -3,27 +3,29 @@
         Text types
         @if(!isset($edit))
             <div>
-                <a href="{{ route('codex::add-text') }}" class="btn btn-info badge">
+                <a href="{{ route('codex::create-text') }}" class="btn btn-info badge">
                     New Text
                 </a>
-                <a href="{{ route('codex::add-text-type') }}" class="btn btn-info badge">
+                <a href="{{ route('codex::create-text-type') }}" class="btn btn-info badge">
                     New Text Type
                 </a>
             </div>
         @endif
     </div>
     <div class="card-body">
-            @foreach($textTypes as $textType)
+        @foreach($textTypes as $textType)
 
-                <div class="card border">
-                    <div class="card-header border-bottom-0">
+            <div class="card border">
+                <div class="card-header border-bottom-0">
                             <span class="w-100 d-inline-flex justify-content-between">
-                                <span class=" cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapse-text{{ $textType->id }}">
+                                <span class=" cursor-pointer" data-bs-toggle="collapse"
+                                      data-bs-target="#collapse-text{{ $textType->id }}">
                                     <b><i class="fas fa-sm fa-fw fa-caret-down"></i> {{ $textType->type }} ({{$textType->texts_count }})</b>
                                 </span>
                                 @if(!isset($edit))
                                     <div>
-                                        <a href="{{ route('codex::edit-text-type', ['id' => $textType->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                        <a href="{{ route('codex::edit-text-type', ['id' => $textType->id]) }}"
+                                           class="btn btn-info badge m-1">Edit</a>
                                          @include('components.modals.confirm-modal', [
                                             'action' => route('codex::delete-text-type', ['id' => $textType->id]),
                                             'classes' => 'btn btn-danger badge m-1',
@@ -34,13 +36,13 @@
                                 @endif
                             </span>
 
-                        <div id="collapse-text{{ $textType->id }}" class="collapse">
-                            <div class="card-body cursor-default">
+                    <div id="collapse-text{{ $textType->id }}" class="collapse">
+                        <div class="card-body cursor-default">
 
-                                @foreach($textType->texts as $text)
-                                    <span class="w-100 d-inline-flex justify-content-between">
+                            @foreach($textType->texts as $text)
+                                <span class="w-100 d-inline-flex justify-content-between">
                                         @if(isset($edit) && $edit)
-                                            <div class="form-check">
+                                        <div class="form-check">
                                                  @include('components.forms.checkbox', [
                                                     'input_class_name'=>'',
                                                     'name' => 'textids[]',
@@ -49,12 +51,13 @@
                                                     'label' => 'Include'
                                                     ])
                                             </div>
-                                        @endif
+                                    @endif
 
-                                        {{ $text->name}}
-                                        @if(!isset($edit))
-                                             <div>
-                                                <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                    {{ $text->name}}
+                                    @if(!isset($edit))
+                                        <div>
+                                                <a href="{{ route('codex::edit-text', ['id' => $text->id]) }}"
+                                                   class="btn btn-info badge m-1">Edit</a>
                                                  @include('components.modals.confirm-modal', [
                                                     'action' => route('codex::delete-text', ['id' => $text->id]),
                                                     'classes' => 'btn btn-danger badge m-1',
@@ -62,13 +65,13 @@
                                                     'message' => "Are you sure you want to delete $text->name?",
                                                  ])
                                              </div>
-                                        @endif
+                                    @endif
                                     </span>
-                                @endforeach
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
     </div>
 </div>

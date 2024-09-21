@@ -55,7 +55,7 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'The ticket has been created!');
 
-        return Redirect::route('tickets::list');
+        return Redirect::route('tickets::index');
     }
 
     /**
@@ -103,7 +103,7 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'The ticket has been updated!');
 
-        return Redirect::route('tickets::list');
+        return Redirect::route('tickets::index');
     }
 
     /**
@@ -126,7 +126,7 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'The ticket has been deleted!');
 
-        return Redirect::route('tickets::list');
+        return Redirect::route('tickets::index');
     }
 
     /**

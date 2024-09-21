@@ -20,15 +20,9 @@ use Illuminate\View\View;
 class PhotoAdminController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(Request $request)
     {
-        return view('photos.admin.index', ['query' => '']);
-    }
-
-    /** @return View */
-    public function search(Request $request)
-    {
-        return view('photos.admin.index', ['query' => $request->input('query')]);
+        return view('photos.admin.index', ['query' => $request->input('query') ?? '']);
     }
 
     /**

@@ -265,7 +265,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return Redirect::route('event::list');
+        return Redirect::route('event::index');
     }
 
     /**

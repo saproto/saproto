@@ -33,7 +33,7 @@ class EmailListController extends Controller
 
         Session::flash('flash_message', 'Your list has been created!');
 
-        return Redirect::route('email::admin');
+        return Redirect::route('email::index');
     }
 
     /** @return View */
@@ -58,7 +58,7 @@ class EmailListController extends Controller
 
         Session::flash('flash_message', 'The list has been updated!');
 
-        return Redirect::route('email::admin');
+        return Redirect::route('email::index');
     }
 
     /**
@@ -74,7 +74,7 @@ class EmailListController extends Controller
 
         Session::flash('flash_message', 'The list has been deleted!');
 
-        return Redirect::route('email::admin');
+        return Redirect::route('email::index');
     }
 
     /**
@@ -107,24 +107,24 @@ class EmailListController extends Controller
             if ($list->unsubscribe($user)) {
                 Session::flash('flash_message', 'You have been unsubscribed to the list '.$list->name.'.');
 
-                return Redirect::route('user::dashboard');
+                return Redirect::route('user::dashboard::show');
             }
         } else {
             if ($list->is_member_only && ! $user->is_member) {
                 Session::flash('flash_message', 'This list is only for members.');
 
-                return Redirect::route('user::dashboard');
+                return Redirect::route('user::dashboard::show');
             }
 
             if ($list->subscribe($user)) {
                 Session::flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
 
-                return Redirect::route('user::dashboard');
+                return Redirect::route('user::dashboard::show');
             }
         }
 
         Session::flash('flash_message', 'Something went wrong toggling your subscription for '.$list->name.'.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 }

@@ -38,7 +38,7 @@ class WelcomeController extends Controller
             Session::flash('flash_message', 'Welcome Message updated');
         }
 
-        return Redirect::route('welcomeMessages::list');
+        return Redirect::route('welcomeMessages::index');
     }
 
     /**
@@ -53,6 +53,6 @@ class WelcomeController extends Controller
         $message->delete();
         Session::flash('flash_message', 'Welcome Message removed');
 
-        return Redirect::route('welcomeMessages::list');
+        return Redirect::route('welcomeMessages::index');
     }
 }
