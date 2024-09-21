@@ -24,7 +24,7 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        return Redirect::away($authoriseURL . http_build_query($params));
+        return Redirect::away($authoriseURL.http_build_query($params));
     }
 
     public function discordLinkCallback(Request $request)
