@@ -10,7 +10,6 @@
 # Cache files
 .tmp
 *.cache
-/bootstrap/cache/
 
 # Local files
 /personal
