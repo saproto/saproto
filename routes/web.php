@@ -674,8 +674,10 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Public Routes for e-mail --- */
     Route::get('togglelist/{id}', [EmailListController::class, 'toggleSubscription'])->middleware(['auth'])->name('togglelist');
     Route::get('unsubscribe/{hash}', [EmailController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
+
+    /* --- Routes to redirect /goodideas and /quotes to /feedback/goodideas and /feedback/quotes --- */
+    Route::get('goodideas', [FeedbackController::class, 'goodIdeas'])->middleware(['member'])->name('goodideas::index');
+    Route::get('quotes', [FeedbackController::class, 'quotes'])->middleware(['member'])->name('quotes::list');
 
     /* --- Routes related to the Feedback Boards --- */
     Route::controller(FeedbackController::class)->prefix('feedback')->middleware(['member'])->name('feedback::')->group(function () {
@@ -698,7 +700,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Catch-alls --- */
         Route::prefix('/{category}')->group(function () {
-            Route::get('index', 'index')->name('index');
+            Route::get('', 'index')->name('index');
             Route::get('search/{searchTerm?}', 'search')->name('search');
             Route::get('archived', 'archived')->name('archived');
             Route::post('store', 'store')->name('store');
