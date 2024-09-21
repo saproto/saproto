@@ -1,11 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -21,6 +21,14 @@ return new class extends Migration
         foreach ($songs as $song) {
             DB::table('codex_songs')->where('id', $song->song)->update(['category_id' => $song->category]);
         }
+
+        Schema::table('codex_codex_song', function (Blueprint $table) {
+            $table->dropColumn('category');
+        });
+
+        Schema::table('codex_codex_text', function (Blueprint $table) {
+            $table->dropColumn('text_index');
+        });
 
         //remove the codex_category_song table
         Schema::dropIfExists('codex_category_song');
@@ -39,6 +47,14 @@ return new class extends Migration
         Schema::create('codex_category_song', function (Blueprint $table) {
             $table->integer('song');
             $table->integer('category');
+        });
+
+        Schema::table('codex_codex_song', function (Blueprint $table) {
+            $table->integer('category')->unsigned();
+        });
+
+        Schema::table('codex_codex_text', function (Blueprint $table) {
+            $table->integer('text_index')->unsigned();
         });
 
         $songs = DB::table('codex_songs')->get();

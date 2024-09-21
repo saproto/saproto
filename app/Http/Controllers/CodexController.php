@@ -14,11 +14,14 @@ define('FPDF_FONTPATH', resource_path('fonts/'));
 
 class CodexController extends Controller
 {
+
+    protected string $table = 'codex_codices';
+
     public function index()
     {
         $codices = Codex::query()->orderBy('name')->get();
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.index', ['codices' => $codices, 'textTypes' => $textTypes, 'songTypes' => $songTypes]);
     }
@@ -26,7 +29,7 @@ class CodexController extends Controller
     public function create()
     {
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
 
         return view('codex.codex-edit', ['codex' => null, 'textTypes' => $textTypes, 'songTypes' => $songTypes, 'mySongs' => [], 'myTexts' => [], 'myTextTypes' => []]);
     }
@@ -34,7 +37,6 @@ class CodexController extends Controller
     public function store(Request $request)
     {
         $codex = new Codex;
-        $codex->save();
         $this->saveCodex($codex, $request);
 
         return Redirect::route('codex.index');
@@ -43,7 +45,7 @@ class CodexController extends Controller
     public function edit(Codex $codex)
     {
         $textTypes = CodexTextType::with('texts')->withCount('texts')->get();
-        $songTypes = CodexSongCategory::orderBy('name')->with('songs')->withCount('songs')->get();
+        $songTypes = CodexSongCategory::query()->orderBy('name')->with('songs')->withCount('songs')->get();
         $mySongs = $codex->songs->pluck('id')->toArray();
         $myTexts = $codex->texts->pluck('id')->toArray();
 
@@ -66,7 +68,7 @@ class CodexController extends Controller
         return Redirect::route('codex.index');
     }
 
-    private function saveCodex(Codex $codex, Request $request)
+    private function saveCodex(Codex $codex, Request $request): void
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -88,7 +90,7 @@ class CodexController extends Controller
 
     public function show(Codex $codex)
     {
-        $categories = CodexSongCategory::whereHas('songs', function ($q) use ($codex) {
+        $categories = CodexSongCategory::query()->whereHas('songs', function ($q) use ($codex) {
             $q->whereHas('codices', function ($q) use ($codex) {
                 $q->where('codex', $codex->id);
             });
@@ -98,7 +100,7 @@ class CodexController extends Controller
             })->orderBy('title');
         }])->orderBy('id')->get();
 
-        $textCategories = CodexTextType::whereHas('texts', function ($q) use ($codex) {
+        $textCategories = CodexTextType::query()->whereHas('texts', function ($q) use ($codex) {
             $q->whereHas('codices', function ($q) use ($codex) {
                 $q->where('codex_codices.id', $codex->id);
             });
@@ -164,9 +166,10 @@ class CodexController extends Controller
                     if ($list || preg_match('/(\d+)\./', $textValue)) {
                         $textValue = str_replace('1.', '', $textValue);
                         $list = true;
-                        if (!preg_match('/(\d+)\./', $textValue)) {
+                        if (preg_match('/(\d+)\./', $textValue) === 0 || preg_match('/(\d+)\./', $textValue) === false) {
                             $list = false;
                         }
+
                         $count += 1;
                         $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
                     } else {

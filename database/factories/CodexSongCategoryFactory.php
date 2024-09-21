@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 /**
  * @extends Factory<SongCategory>
  */
-class SongCategoryFactory extends Factory
+class CodexSongCategoryFactory extends Factory
 {
     protected $model = CodexSongCategory::class;
 

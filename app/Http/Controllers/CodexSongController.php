@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
 use App\Models\CodexSong;
 use App\Models\CodexSongCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Session;
 
 class CodexSongController extends Controller
 {
@@ -17,12 +17,13 @@ class CodexSongController extends Controller
 
     public function create()
     {
-        if (!CodexSongCategory::count()) {
+        if (!CodexSongCategory::query()->count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
             return Redirect::route('codex.index');
         }
-        $categories = CodexSongCategory::orderBy('name')->get();
+        
+        $categories = CodexSongCategory::query()->orderBy('name')->get();
 
         return view('codex.song-edit', ['song' => null, 'textType' => null, 'categories' => $categories, 'myCategories' => []]);
     }
@@ -62,7 +63,7 @@ class CodexSongController extends Controller
         return Redirect::route('codex.index');
     }
 
-    private function saveSong(CodexSong $song, Request $request)
+    private function saveSong(CodexSong $song, Request $request): void
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
