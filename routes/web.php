@@ -47,7 +47,6 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
-
 /* --- use App\Http\Controllers\RadioController; --- */
 
 use App\Http\Controllers\ShortUrlController;
@@ -71,7 +70,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__ . '/minisites.php';
+require __DIR__.'/minisites.php';
 
 /* Route block convention:
  *

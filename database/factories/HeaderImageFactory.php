@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<HeaderImage>
+ */
 class HeaderImageFactory extends Factory
 {
     protected $model = HeaderImage::class;
@@ -15,7 +18,7 @@ class HeaderImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->word(),
+            'title' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 

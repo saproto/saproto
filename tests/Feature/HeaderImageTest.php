@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Codex;
-use App\Models\CodexSong;
-use App\Models\CodexText;
 use App\Models\HeaderImage;
 use App\Models\Member;
 use App\Models\StorageEntry;
@@ -37,10 +34,10 @@ it('lets the appropriate user create a new headerimage', function () {
     $response->assertStatus(200);
 
     $image = HeaderImage::factory()->raw();
-    dump([...$image, 'image' => UploadedFile::fake()->image($image['title'] . '.jpg')]);
+    dump([...$image, 'image' => UploadedFile::fake()->image($image['title'].'.jpg')]);
 
     $response = $this->actingAs($member->user)
-        ->post('/headerimages', [...$image, 'user' => $image['credit_id'], 'image' => UploadedFile::fake()->image($image['title'] . '.jpg')]);
+        ->post('/headerimages', [...$image, 'user' => $image['credit_id'], 'image' => UploadedFile::fake()->image($image['title'].'.jpg')]);
     $response->assertRedirect('/headerimages');
     $response->assertStatus(302);
     $this->assertDatabaseHas('headerimages', [
@@ -48,7 +45,7 @@ it('lets the appropriate user create a new headerimage', function () {
         'credit_id' => $image['credit_id'],
     ]);
     $this->assertDatabaseHas('files', [
-        'original_filename' => $image['title'] . '.jpg',
+        'original_filename' => $image['title'].'.jpg',
     ]);
 });
 
@@ -65,7 +62,7 @@ it('lets the appropriate user delete a headerimage and ensures it does not have 
     );
 
     $response = $this->actingAs($member->user)
-        ->delete('/headerimages/' . $oldImage->id);
+        ->delete('/headerimages/'.$oldImage->id);
     $response->assertRedirect('/headerimages/');
     $response->assertStatus(302);
     $this->assertDatabaseMissing('headerimages',

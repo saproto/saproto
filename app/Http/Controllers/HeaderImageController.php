@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\HeaderImage;
 use App\Models\StorageEntry;
-use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,9 +26,6 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
     public function store(Request $request): RedirectResponse
@@ -56,8 +52,9 @@ class HeaderImageController extends Controller
 
     public function destroy(int $id)
     {
-        HeaderImage::findOrFail($id)->delete();
+        HeaderImage::query()->findOrFail($id)->delete();
         Session::flash('flash_message', 'Header image deleted.');
+
         return Redirect::route('headerimages.index');
     }
 }

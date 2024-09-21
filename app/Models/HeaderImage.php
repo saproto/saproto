@@ -41,19 +41,16 @@ class HeaderImage extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'credit_id');
     }
 
-    /** @return BelongsTo */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
     }
 
-    /** @return BelongsTo */
     public function StorageEntry(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
