@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Codex song category model.
+ *
  * @property int $id
  * @property string $name
  * @property Carbon|null $created_at

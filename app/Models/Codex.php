@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Codex model.
+ *
  * @property int $id
  * @property string $name
  * @property string $export

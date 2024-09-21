@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class CodexTextTypeController extends Controller
 {
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     public function create()
     {
@@ -23,16 +20,14 @@ class CodexTextTypeController extends Controller
         $validated = $request->validate([
             'type' => 'required|string|max:255',
         ]);
-        $type = new CodexTextType();
+        $type = new CodexTextType;
         $type->type = $validated['type'];
         $type->save();
 
         return Redirect::route('codex.index');
     }
 
-    public function show(CodexTextType $codexTextType)
-    {
-    }
+    public function show(CodexTextType $codexTextType) {}
 
     public function edit(CodexTextType $codexTextType)
     {

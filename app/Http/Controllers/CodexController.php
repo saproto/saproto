@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Libraries\PDF_TOC;
 use App\Models\Codex;
-use App\Models\CodexTextType;
 use App\Models\CodexSongCategory;
+use App\Models\CodexTextType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -14,7 +14,6 @@ define('FPDF_FONTPATH', resource_path('fonts/'));
 
 class CodexController extends Controller
 {
-
     protected string $table = 'codex_codices';
 
     public function index()
@@ -171,7 +170,7 @@ class CodexController extends Controller
                         }
 
                         $count += 1;
-                        $pdf->Cell($bulletListIndent, $textHeight, $count . '.');
+                        $pdf->Cell($bulletListIndent, $textHeight, $count.'.');
                     } else {
                         $count = 0;
                     }

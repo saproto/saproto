@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use App\Models\CodexText;
 use App\Models\CodexTextType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class CodexTextController extends Controller
 {
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     public function create()
     {
-        if (!CodexTextType::query()->count()) {
+        if (! CodexTextType::query()->count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
             return Redirect::route('codex.index');
         }
-        
+
         $textTypes = CodexTextType::query()->orderBy('type')->get();
 
         return view('codex.text-edit', ['text' => null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
@@ -30,15 +27,13 @@ class CodexTextController extends Controller
 
     public function store(Request $request)
     {
-        $text = new CodexText();
+        $text = new CodexText;
         $this->saveText($text, $request);
 
         return Redirect::route('codex.index');
     }
 
-    public function show(CodexText $codexText)
-    {
-    }
+    public function show(CodexText $codexText) {}
 
     public function edit(CodexText $codexText)
     {

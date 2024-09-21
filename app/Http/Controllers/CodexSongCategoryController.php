@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class CodexSongCategoryController extends Controller
 {
-    public function index()
-    {
-
-    }
+    public function index() {}
 
     public function create()
     {
@@ -24,16 +21,14 @@ class CodexSongCategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $category = new CodexSongCategory();
+        $category = new CodexSongCategory;
         $category->name = $validated['name'];
         $category->save();
 
         return Redirect::route('codex.index');
     }
 
-    public function show($id)
-    {
-    }
+    public function show($id) {}
 
     public function edit(CodexSongCategory $codexSongCategory)
     {

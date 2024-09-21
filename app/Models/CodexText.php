@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * Codex text model.
+ *
  * @property int $id
  * @property string $text
  * @property CodexTextType $type
