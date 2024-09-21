@@ -47,6 +47,7 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
+
 /* --- use App\Http\Controllers\RadioController; --- */
 
 use App\Http\Controllers\ShortUrlController;
@@ -70,7 +71,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__.'/minisites.php';
+require __DIR__ . '/minisites.php';
 
 /* Route block convention:
  *
@@ -105,13 +106,7 @@ Route::middleware('forcedomain')->group(function () {
 
     Route::get('becomeamember', [UserDashboardController::class, 'becomeAMemberOf'])->name('becomeamember');
 
-    /* --- Routes related to the header images --- */
-    Route::controller(HeaderImageController::class)->prefix('headerimage')->name('headerimage::')->middleware(['auth', 'permission:header-image'])->group(function () {
-        Route::get('', 'index')->name('index');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('delete/{id}', 'destroy')->name('delete');
-    });
+    Route::resource('headerimages', HeaderImageController::class)->only(['index', 'create', 'store', 'destroy'])->middleware(['auth', 'permission:header-image']);
 
     /* Routes for the search function. All public*/
     Route::controller(SearchController::class)->name('search::')->group(function () {

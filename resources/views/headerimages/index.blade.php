@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge bg-info float-end" href="{{ route('headerimage::create') }}">
+                    <a class="badge bg-info float-end" href="{{ route('headerimages.create') }}">
                         Add header image.</a>
                 </div>
 
@@ -34,10 +34,14 @@
                         @foreach($images as $image)
 
                             <tr>
-
                                 <td>
-                                    <a href="{{ route('headerimage::delete', ['id' => $image->id]) }}"
-                                       class="fa fa-trash-alt text-danger"></a>
+                                    @include('components.modals.confirm-modal', [
+                                            'action' => route('headerimages.destroy', ['headerimage' => $image]),
+                                            'method'=>'DELETE',
+                                            'classes' => 'fa fa-trash-alt text-danger',
+                                            'text' => 'Delete',
+                                            'message' => "Are you sure you want to delete the headerimage?",
+                                        ])
                                 </td>
                                 <td>
                                     <strong>{{ $image->title }}</strong><br>

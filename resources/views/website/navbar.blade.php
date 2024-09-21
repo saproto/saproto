@@ -189,7 +189,7 @@
                                         Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
+                                    <a class="dropdown-item" href="{{ route("headerimages.index") }}">Header Images</a>
                                     <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
 
                                     @can('sysadmin')
@@ -225,7 +225,7 @@
                                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
                                        aria-haspopup="true" aria-expanded="false">Site <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header
+                                        <a class="dropdown-item" href="{{ route("headerimages.index") }}">Header
                                             Images</a>
                                         <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo
                                             Admin</a>
