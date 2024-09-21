@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('tempadmin::add') }}" class="float-end bg-info badge">
+                    <a href="{{ route('tempadmin::create') }}" class="float-end bg-info badge">
                         Add new temporary admin.
                     </a>
                 </div>

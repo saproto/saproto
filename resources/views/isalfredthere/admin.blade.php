@@ -10,7 +10,7 @@
 
         <div class="col-md-6 col-lg-4">
 
-            <form method="post" action="{{ route("minisites::isalfredthere::admin") }}">
+            <form method="post" action="{{ route("minisites::isalfredthere::update") }}">
 
                 {!! csrf_field() !!}
 
@@ -98,31 +98,31 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const dateSelect = document.getElementById('datetimepicker-back-form')
-        const dateBack = document.getElementById('datetimepicker-back')
-        const alfredText = document.getElementById('alfred-text')
+        const dateSelect = document.getElementById('datetimepicker-back-form');
+        const dateBack = document.getElementById('datetimepicker-back');
+        const alfredText = document.getElementById('alfred-text');
 
-        const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
+        const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'));
         radioList.forEach(el => {
             el.addEventListener('change', _ => {
 
                 if (el.checked && el.value === 'away') {
-                    dateSelect.classList.remove('d-none')
-                    alfredText.classList.remove('d-none')
-                    alfredText.querySelector('input').placeholder = "Additional message"
-                    dateBack.required = true
+                    dateSelect.classList.remove('d-none');
+                    alfredText.classList.remove('d-none');
+                    alfredText.querySelector('input').placeholder = 'Additional message';
+                    dateBack.required = true;
                 } else if (el.checked && el.value === 'text_only') {
-                    alfredText.classList.remove('d-none')
-                    dateSelect.classList.add('d-none')
-                    alfredText.querySelector('input').placeholder = "Message!"
-                    alfredText.required = true
+                    alfredText.classList.remove('d-none');
+                    dateSelect.classList.add('d-none');
+                    alfredText.querySelector('input').placeholder = 'Message!';
+                    alfredText.required = true;
                 } else {
-                    dateSelect.classList.add('d-none')
-                    alfredText.classList.add('d-none')
-                    dateBack.required = false
+                    dateSelect.classList.add('d-none');
+                    alfredText.classList.add('d-none');
+                    dateBack.required = false;
                 }
-            })
-        })
+            });
+        });
     </script>
 
 @endsection

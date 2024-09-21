@@ -10,7 +10,7 @@
 
         <div class="col-xl-3 col-lg-12">
 
-            <form method="post" action="{{ route('ldap::search') }}">
+            <form method="post" action="{{ route('search::ldap::post') }}">
 
                 {!! csrf_field() !!}
 

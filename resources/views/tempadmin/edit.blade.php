@@ -15,7 +15,7 @@
         <div class="col-md-4">
 
             <form method="post"
-                  action="{{ ($new ? route("tempadmin::add") : route("tempadmin::edit", ['id' => $item->id])) }}"
+                  action="{{ ($new ? route("tempadmin::store") : route("tempadmin::update", ['id' => $item->id])) }}"
                   enctype="multipart/form-data">
 
                 {!! csrf_field() !!}
@@ -31,7 +31,7 @@
                         @if($new)
                             <div class="form-group autocomplete">
                                 <label for="user-id">User:</label>
-                                <input id="user-id" class="form-control user-search" name="user_id" required/>
+                                <input id="user-id" class="form-control user-search" name="user_id" required />
                             </div>
                         @else
                             <div class="input-group">

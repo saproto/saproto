@@ -70,7 +70,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
 
-        return Redirect::route('narrowcasting::list');
+        return Redirect::route('narrowcasting::index');
     }
 
     /**
@@ -121,7 +121,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
 
-        return Redirect::route('narrowcasting::list');
+        return Redirect::route('narrowcasting::index');
     }
 
     /**
@@ -137,7 +137,7 @@ class NarrowcastingController extends Controller
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been deleted.");
         $narrowcasting->delete();
 
-        return Redirect::route('narrowcasting::list');
+        return Redirect::route('narrowcasting::index');
     }
 
     /**
@@ -153,7 +153,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', 'All finished campaigns have been deleted.');
 
-        return Redirect::route('narrowcasting::list');
+        return Redirect::route('narrowcasting::index');
     }
 
     /** @return array Return a JSON object of all currently active campaigns. */

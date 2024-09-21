@@ -69,8 +69,8 @@
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("omnomcom::orders::adminlist") }}">Orders</a>
                                         <a class="dropdown-item"
-                                           href="{{ route("omnomcom::products::list") }}">Products</a>
-                                        <a class="dropdown-item" href="{{ route("omnomcom::categories::list") }}">Categories</a>
+                                           href="{{ route("omnomcom::products::index") }}">Products</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::categories::index") }}">Categories</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::generateorder") }}">Generate
                                             Supplier Order</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::products::statistics") }}">Sales
@@ -79,10 +79,11 @@
 
                                     @can('tipcie')
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinnerforms</a>
+                                        <a class="dropdown-item"
+                                           href="{{ route("dinnerform::create") }}">Dinnerforms</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie
                                             Order Overview</a>
-                                        <a class="dropdown-item" href="{{ route("wallstreet::admin") }}">Wallstreet
+                                        <a class="dropdown-item" href="{{ route("wallstreet::index") }}">Wallstreet
                                             Drinks</a>
                                     @endcan
 
@@ -104,8 +105,8 @@
 
                                 <ul class="dropdown-menu">
                                     @can('board')
-                                        <a class="dropdown-item" href="{{ route("user::admin::list") }}">Users</a>
-                                        <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
+                                        <a class="dropdown-item" href="{{ route("user::admin::index") }}">Users</a>
+                                        <a class="dropdown-item" href="{{ route("tickets::index") }}">Tickets</a>
                                         <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URLs</a>
                                         <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
 
@@ -116,8 +117,9 @@
                                             Admin</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
-                                        <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
+                                        <a class="dropdown-item" href="{{ route("committee::create") }}">Add
+                                            Committee</a>
+                                        <a class="dropdown-item" href="{{ route("event::create") }}">Add Event</a>
                                         <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event
                                             Categories</a>
                                         <a class="dropdown-item" href="{{ route("feedback::category::admin") }}">Feedback
@@ -125,7 +127,7 @@
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item"
-                                           href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
+                                           href="{{ route("narrowcasting::index") }}">Narrowcasting</a>
                                         <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
                                         <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
                                         <a class="dropdown-item"
@@ -143,10 +145,10 @@
 
                                     @can('finadmin')
                                         <a class="dropdown-item"
-                                           href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
-                                        <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a>
+                                           href="{{ route("omnomcom::accounts::index") }}">Accounts</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::index") }}">Withdrawals</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a>
-                                        <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">Mollie
+                                        <a class="dropdown-item" href="{{ route("omnomcom::mollie::index") }}">Mollie
                                             Payments</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::payments::statistics") }}">Cash
                                             & Card Payments</a>
@@ -160,7 +162,7 @@
 
                                     @canany(['alfred', 'sysadmin'])
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("minisites::isalfredthere::admin") }}">Is
+                                        <a class="dropdown-item" href="{{ route("minisites::isalfredthere::edit") }}">Is
                                             Alfred There?</a>
                                     @endcanany
                                 </ul>
@@ -178,12 +180,12 @@
                                     <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
                                     <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
                                     <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
-                                    <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
-                                    <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                                    <a class="dropdown-item" href="{{ route("email::index") }}">Email</a>
+                                    <a class="dropdown-item" href="{{ route("achievement::index") }}">Achievements</a>
                                     <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                    <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
+                                    <a class="dropdown-item" href="{{ route("welcomeMessages::index") }}">Welcome
                                         Messages</a>
-                                    <a class="dropdown-item" href="{{ route("news::add", ['is_weekly'=>true]) }}">Weekly
+                                    <a class="dropdown-item" href="{{ route("news::create", ['is_weekly'=>true]) }}">Weekly
                                         Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
@@ -263,7 +265,8 @@
                     @endauth
                 </ul>
 
-                <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 me-2 float-end">
+                <form method="post" action="{{ route('search::post') }}"
+                      class="form-inline mt-2 mt-md-0 me-2 float-end">
                     {{ csrf_field() }}
                     <div class="input-group">
                         <input class="form-control bg-white text-black" placeholder="Search" type="search" name="query"
@@ -285,7 +288,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end mt-2">
-                                    <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
+                                    <a class="dropdown-item" href="{{ route('user::dashboard::show') }}">Dashboard</a>
                                     @if(Auth::user()->is_member)
                                         <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
                                     @else
@@ -304,7 +307,7 @@
 
                                     <a class="dropdown-item" href="{{ route('protube::dashboard') }}">ProTube
                                         Dashboard</a>
-                                    <a class="dropdown-item" href="{{ route('omnomcom::orders::list') }}">Purchase
+                                    <a class="dropdown-item" href="{{ route('omnomcom::orders::index') }}">Purchase
                                         History</a>
 
                                     @if (Session::has('impersonator'))
@@ -319,7 +322,7 @@
                     </form>
                 @else
                     <form class="form-inline mt-2 mt-md-0">
-                        <a class="btn btn-outline-light me-2" href="{{ route('login::register') }}">
+                        <a class="btn btn-outline-light me-2" href="{{ route('login::register::index') }}">
                             <i class="fas fa-user-plus me-2"></i> Register
                         </a>
                         <a class="btn btn-light" href="{{ route('login::show') }}">

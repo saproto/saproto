@@ -44,6 +44,6 @@ class SurfConextController extends Controller
 
         Session::flash('flash_message', 'The link with your university account has been deleted.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 }

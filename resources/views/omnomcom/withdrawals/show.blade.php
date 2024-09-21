@@ -10,7 +10,7 @@
 
         <div class="col-md-3">
 
-            <a href="{{ route('omnomcom::withdrawal::list') }}" class="btn btn-block btn-dark mb-2">
+            <a href="{{ route('omnomcom::withdrawal::index') }}" class="btn btn-block btn-dark mb-2">
                 <i class="fas fa-back"></i>
                 Return to overview
             </a>
@@ -168,7 +168,8 @@
                                                'confirm' => 'Revert',
                                             ])
                                         @else
-                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}" class="text-white fw-bold underline-on-hover">
+                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
+                                               class="text-white fw-bold underline-on-hover">
                                                 Remove
                                             </a>
 

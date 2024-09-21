@@ -221,7 +221,7 @@ class MollieController extends Controller
             return Redirect::route('event::show', ['id' => Event::query()->findOrFail($event_id)->getPublicId()]);
         }
 
-        return Redirect::route('omnomcom::orders::list');
+        return Redirect::route('omnomcom::orders::index');
     }
 
     /**

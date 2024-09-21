@@ -48,7 +48,7 @@ class AccountController extends Controller
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') created.');
 
-        return Redirect::route('omnomcom::accounts::list');
+        return Redirect::route('omnomcom::accounts::index');
     }
 
     /**
@@ -73,7 +73,7 @@ class AccountController extends Controller
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') saved.');
 
-        return Redirect::route('omnomcom::accounts::list');
+        return Redirect::route('omnomcom::accounts::index');
     }
 
     /**
@@ -96,7 +96,7 @@ class AccountController extends Controller
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') deleted.');
         $account->delete();
 
-        return Redirect::route('omnomcom::accounts::list');
+        return Redirect::route('omnomcom::accounts::index');
     }
 
     /**

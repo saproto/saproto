@@ -10,7 +10,6 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Services\ProTubeApiService;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +20,13 @@ use stdClass;
 
 class OmNomController extends Controller
 {
-    /**
-     * @return RedirectResponse|View
-     */
     public function display(Request $request, ?string $store_slug = null)
     {
+
+        if (($store_slug === null || $store_slug === '' || $store_slug === '0') && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
+            return view('omnomcom.choose');
+        }
+
         if (! array_key_exists($store_slug, config('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
 
@@ -52,12 +53,6 @@ class OmNomController extends Controller
         }
 
         return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'store_slug' => $store_slug, 'minors' => $minors]);
-    }
-
-    /** @return View */
-    public function choose()
-    {
-        return view('omnomcom.choose');
     }
 
     /** @return View */

@@ -67,13 +67,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property string|null $discord_id
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
  * @property-read bool $photo_preview
  * @property-read bool $signed_membership_form
  * @property-read string|null $welcome_message
- * @property-read string|null $discord_id
  * @property-read StorageEntry|null $photo
  * @property-read Address|null $address
  * @property-read Bank|null $bank

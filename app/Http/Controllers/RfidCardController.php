@@ -98,7 +98,7 @@ class RfidCardController extends Controller
 
         Session::flash('flash_message', 'Your RFID card has been updated.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**

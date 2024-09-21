@@ -197,7 +197,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', 'Withdrawal deleted.');
 
-        return Redirect::route('omnomcom::withdrawal::list');
+        return Redirect::route('omnomcom::withdrawal::index');
     }
 
     /**

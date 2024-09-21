@@ -119,6 +119,12 @@ jobs:
           php artisan migrate
           vendor/bin/pest --ci
 
+      - name: Check if laravel caching works
+        run: |
+          php artisan optimize:clear
+          php artisan optimize
+
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

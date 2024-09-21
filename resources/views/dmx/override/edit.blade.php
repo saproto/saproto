@@ -7,7 +7,7 @@
 @section('container')
 
     <form method="post"
-          action="{{ ($override == null ? route("dmx::override::add") : route("dmx::override::edit", ['id' => $override->id])) }}"
+          action="{{ ($override == null ? route("dmx::override::store") : route("dmx::override::update", ['id' => $override->id])) }}"
           enctype="multipart/form-data">
 
         {!! csrf_field() !!}
@@ -28,7 +28,8 @@
                             <label for="name">Fixtures to override:</label>
                             <select class="form-control" name="fixtures[]" multiple required>
                                 @foreach($fixtures as $fixture)
-                                    <option value="{{ $fixture->id }}" @selected($override && in_array($fixture->id, $override->getFixtureIds()))>
+                                    <option
+                                        value="{{ $fixture->id }}" @selected($override && in_array($fixture->id, $override->getFixtureIds()))>
                                         {{ $fixture->name }}
                                     </option>
                                 @endforeach

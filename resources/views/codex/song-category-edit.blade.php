@@ -19,7 +19,7 @@
                         <div class="card-body">
                             <label for="name">Name:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $category->name ?? "" }}" class="form-control" id="name"
+                                <input type="text" value="{{$category->name??""}}" class="form-control" id="name"
                                        name="name">
                             </div>
                             <button type="submit" class="btn btn-success btn-block">

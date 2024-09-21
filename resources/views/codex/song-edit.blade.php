@@ -20,23 +20,21 @@
                             {{-- Title }--}}
                             <label for="type">Title:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $song->title ?? "" }}" class="form-control" id="title"
+                                <input type="text" value="{{$song->title??""}}" class="form-control" id="title"
                                        name="title">
                             </div>
 
                             {{-- Artist }--}}
                             <label for="artist">Artist:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $song->artist ?? "" }}" class="form-control"
-                                       id="artist"
+                                <input type="text" value="{{$song->artist??""}}" class="form-control" id="artist"
                                        name="artist">
                             </div>
 
                             {{-- Youtube ID }--}}
                             <label for="youtube">Youtube ID:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{ $song->youtube ?? "" }}" class="form-control"
-                                       id="youtube"
+                                <input type="text" value="{{$song->youtube??""}}" class="form-control" id="youtube"
                                        name="youtube">
                             </div>
 

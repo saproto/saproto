@@ -27,7 +27,8 @@
                             <label for="category">Text category:</label>
                             <select name="category" id="category" class="form-select mb-3" aria-label="Text categories">
                                 @foreach($textTypes as $textType)
-                                    <option {{$selectedTextType?->id===$textType->id?"selected":""}} value="{{$textType->id}}">{{$textType->type}}</option>
+                                    <option
+                                        {{$selectedTextType?->id===$textType->id?"selected":""}} value="{{$textType->id}}">{{$textType->type}}</option>
                                 @endforeach
                             </select>
 
@@ -43,6 +44,7 @@
                             <button type="submit" class="btn btn-success btn-block">
                                 Save text!
                             </button>
+
                         </div>
                     </div>
                 </div>

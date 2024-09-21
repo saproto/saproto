@@ -29,7 +29,7 @@ class VideoController extends Controller
     /**
      * @return View
      */
-    public static function view(Request $request)
+    public static function show(Request $request)
     {
         return view('videos.view', ['video' => Video::query()->findOrFail($request->id)]);
     }

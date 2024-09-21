@@ -79,7 +79,7 @@ class DinnerformController extends Controller
 
         Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
 
-        return Redirect::route('dinnerform::add');
+        return Redirect::route('dinnerform::create');
     }
 
     /**
@@ -165,7 +165,7 @@ class DinnerformController extends Controller
             Session::flash('flash_message', 'The dinnerform is already closed and can not be deleted!');
         }
 
-        return Redirect::route('dinnerform::add');
+        return Redirect::route('dinnerform::create');
     }
 
     /**
@@ -219,6 +219,6 @@ class DinnerformController extends Controller
         $dinnerform->closed = true;
         $dinnerform->save();
 
-        return Redirect::route('dinnerform::add')->with('flash_message', "All orderlines of $dinnerform->restaurant have been processed!");
+        return Redirect::route('dinnerform::create')->with('flash_message', "All orderlines of $dinnerform->restaurant have been processed!");
     }
 }

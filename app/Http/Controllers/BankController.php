@@ -17,7 +17,7 @@ class BankController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function add(Request $request)
+    public function show(Request $request)
     {
         $user = Auth::user();
 
@@ -64,7 +64,7 @@ class BankController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /** @return RedirectResponse|View */
@@ -73,7 +73,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::add');
+            return Redirect::route('user::bank::show');
         }
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => false]);
@@ -89,7 +89,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::add');
+            return Redirect::route('user::bank::show');
         }
 
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
@@ -111,7 +111,7 @@ class BankController extends Controller
 
         Session::flash('flash_message', 'New withdrawal authorization added.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**
@@ -126,7 +126,7 @@ class BankController extends Controller
         if ($user->bank == null) {
             Session::flash('flash_message', "You don't have a bank authorization to revoke.");
 
-            return Redirect::route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         if ($user->is_member) {
@@ -145,7 +145,7 @@ class BankController extends Controller
 
         Session::flash('flash_message', 'Deleted bank account.');
 
-        return Redirect::route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     /**

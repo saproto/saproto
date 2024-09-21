@@ -24,7 +24,7 @@ use Illuminate\View\View;
 
 class FeedbackController extends Controller
 {
-    public function index(Request $request, string $category): View
+    public function index(string $category): View
     {
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
@@ -32,6 +32,16 @@ class FeedbackController extends Controller
         $unreviewed = $this->getUnreviewed($category);
 
         return view('feedbackboards.index', ['data' => $this->getFeedbackQuery($category)->paginate(20), 'mostVoted' => $mostVoted ?? null, 'category' => $category, 'unreviewed' => $unreviewed]);
+    }
+
+    public function goodIdeas(): View
+    {
+        return $this->index('goodideas');
+    }
+
+    public function quotes(): View
+    {
+        return $this->index('quotes');
     }
 
     private function getFeedbackQuery(FeedbackCategory $category): HasMany
@@ -110,7 +120,7 @@ class FeedbackController extends Controller
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
     }
 
-    public function add(Request $request, $category): RedirectResponse
+    public function store(Request $request, $category): RedirectResponse
     {
         $category = FeedbackCategory::query()->findOrFail($category);
         $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);

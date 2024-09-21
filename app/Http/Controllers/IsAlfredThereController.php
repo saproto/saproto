@@ -17,7 +17,7 @@ class IsAlfredThereController extends Controller
     public static $HashMapTextKey = 'is_alfred_there_text';
 
     /** @return View */
-    public function showMiniSite()
+    public function index()
     {
         return view('isalfredthere.minisite');
     }
@@ -29,7 +29,7 @@ class IsAlfredThereController extends Controller
     }
 
     /** @return View */
-    public function getAdminInterface()
+    public function edit()
     {
         return view('isalfredthere.admin', ['status' => self::getAlfredsStatusObject()]);
     }
@@ -37,7 +37,7 @@ class IsAlfredThereController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function postAdminInterface(Request $request)
+    public function update(Request $request)
     {
         $text = self::getOrCreateHasMapItem(self::$HashMapTextKey);
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);

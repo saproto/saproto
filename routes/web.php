@@ -70,7 +70,6 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -114,20 +113,20 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the header images --- */
     Route::controller(HeaderImageController::class)->prefix('headerimage')->name('headerimage::')->middleware(['auth', 'permission:header-image'])->group(function () {
         Route::get('', 'index')->name('index');
-        Route::get('add', 'create')->name('add');
-        Route::post('add', 'store')->name('add');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
         Route::get('delete/{id}', 'destroy')->name('delete');
     });
 
     /* Routes for the search function. All public*/
-    Route::controller(SearchController::class)->group(function () {
-        Route::get('search', 'search')->name('search');
-        Route::post('search', 'search')->name('search');
-        Route::get('opensearch', 'openSearch')->name('search::opensearch');
+    Route::controller(SearchController::class)->name('search::')->group(function () {
+        Route::get('search', 'search')->name('get');
+        Route::post('search', 'search')->name('post');
+        Route::get('opensearch', 'openSearch')->name('opensearch');
         /* --- Routes for the UTwente address book --- */
         Route::prefix('ldap')->name('ldap::')->middleware(['utwente'])->group(function () {
-            Route::get('search', 'ldapSearch')->name('search');
-            Route::post('search', 'ldapSearch')->name('search');
+            Route::get('search', 'ldapSearch')->name('get');
+            Route::post('search', 'ldapSearch')->name('post');
         });
     });
 
@@ -138,26 +137,28 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('logout', 'getLogout')->name('logout');
         Route::get('logout/redirect', 'getLogoutRedirect')->name('logout::redirect');
 
-        Route::get('password/reset/{token}', 'getPasswordReset')->name('resetpass::token');
-        Route::post('password/reset', 'postPasswordReset')->middleware(['throttle:5,1'])->name('resetpass::submit');
+        Route::prefix('password')->name('password::')->group(function () {
+            Route::get('reset/{token}', 'getPasswordReset')->name('reset::token');
+            Route::post('reset', 'postPasswordReset')->middleware(['throttle:5,1'])->name('reset::submit');
 
-        Route::get('password/email', 'getPasswordResetEmail')->name('resetpass');
-        Route::post('password/email', 'postPasswordResetEmail')->middleware(['throttle:5,1'])->name('resetpass::send');
+            Route::get('email', 'getPasswordResetEmail')->name('reset');
+            Route::post('email', 'postPasswordResetEmail')->middleware(['throttle:5,1'])->name('reset::send');
 
-        Route::get('password/sync', 'getPasswordSync')->middleware(['auth'])->name('password::sync');
-        Route::post('password/sync', 'postPasswordSync')->middleware(['throttle:5,1', 'auth'])->name('password::sync');
+            Route::get('sync', 'getPasswordSync')->middleware(['auth'])->name('sync::index');
+            Route::post('sync', 'postPasswordSync')->middleware(['throttle:5,1', 'auth'])->name('sync');
 
-        Route::get('password/change', 'getPasswordChange')->middleware(['auth'])->name('password::change');
-        Route::post('password/change', 'postPasswordChange')->middleware(['throttle:5,1', 'auth'])->name('password::change');
+            Route::get('change', 'getPasswordChange')->middleware(['auth'])->name('change::index');
+            Route::post('change', 'postPasswordChange')->middleware(['throttle:5,1', 'auth'])->name('change');
+        });
 
-        Route::get('register', 'getRegister')->name('register');
+        Route::get('register', 'getRegister')->name('register::index');
         Route::post('register', 'postRegister')->middleware(['throttle:5,1'])->name('register');
         Route::post('register/surfconext', 'postRegisterSurfConext')->middleware(['throttle:5,1'])->name('register::surfconext');
 
         Route::get('surfconext', 'startSurfConextAuth')->name('edu');
         Route::get('surfconext/post', 'postSurfConextAuth')->name('edupost');
 
-        Route::get('username', 'requestUsername')->name('requestusername');
+        Route::get('username', 'requestUsername')->name('requestusername::index');
         Route::post('username', 'requestUsername')->middleware(['throttle:5,1'])->name('requestusername');
     });
 
@@ -173,15 +174,15 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('personal_key', [UserDashboardController::class, 'generateKey'])->name('personal_key::generate');
 
         Route::controller(UserDashboardController::class)->prefix('memberprofile')->name('memberprofile::')->middleware('auth')->group(function () {
-            Route::get('complete', 'getCompleteProfile')->name('complete');
+            Route::get('complete', 'getCompleteProfile')->name('show');
             Route::post('complete', 'postCompleteProfile')->name('complete');
-            Route::get('clear', 'getClearProfile')->name('clear');
+            Route::get('clear', 'getClearProfile')->name('showclear');
             Route::post('clear', 'postClearProfile')->name('clear');
         });
 
         Route::controller(UserDashboardController::class)->group(function () {
             Route::post('change_email', 'updateMail')->middleware(['throttle:3,1'])->name('changemail');
-            Route::get('dashboard', 'show')->name('dashboard');
+            Route::get('dashboard', 'show')->name('dashboard::show');
             Route::post('dashboard', 'update')->name('dashboard');
         });
 
@@ -189,11 +190,11 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to addresses --- */
         Route::controller(AddressController::class)->prefix('address')->name('address::')->group(function () {
-            Route::get('add', 'add')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('show', 'add')->name('show');
+            Route::post('store', 'store')->name('store');
             Route::get('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
-            Route::post('edit', 'update')->name('edit');
+            Route::post('update', 'update')->name('update');
             Route::get('togglehidden', 'toggleHidden')->name('togglehidden');
         });
 
@@ -202,18 +203,18 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to bank accounts --- */
         Route::controller(BankController::class)->prefix('bank')->name('bank::')->group(function () {
-            Route::get('add', 'add')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('show', 'show')->name('show');
+            Route::post('store', 'store')->name('store');
             Route::post('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
-            Route::post('edit', 'update')->name('edit');
+            Route::post('update', 'update')->name('update');
         });
 
         /* --- Routes related to RFID cards --- */
         Route::controller(RfidCardController::class)->prefix('rfidcard/{id}')->name('rfid::')->group(function () {
             Route::get('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
-            Route::post('edit', 'update')->name('edit');
+            Route::post('update', 'update')->name('update');
         });
 
         /* --- Routes related to profile pictures --- */
@@ -225,13 +226,12 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to UT accounts --- */
         Route::controller(SurfConextController::class)->prefix('edu')->name('edu::')->group(function () {
             Route::get('delete', 'destroy')->name('delete');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
         });
 
         /* --- Routes related to 2FA --- */
         Route::controller(TFAController::class)->prefix('2fa')->name('2fa::')->group(function () {
-            Route::post('add', 'create')->name('add');
+            Route::post('create', 'create')->name('create');
             Route::post('delete', 'destroy')->name('delete');
             Route::post('delete/{id}', 'adminDestroy')->middleware(['permission:board'])->name('admindelete');
         });
@@ -254,7 +254,7 @@ Route::middleware('forcedomain')->group(function () {
                 Route::post('update', 'uploadOmnomcomSound')->name('update');
                 Route::get('delete', 'deleteOmnomcomSound')->name('delete');
             });
-            Route::post('add', 'addMembership')->name('add');
+            Route::post('create', 'addMembership')->name('create');
             Route::post('remove', 'endMembership')->name('remove');
             Route::post('end_in_september', 'EndMembershipInSeptember')->name('endinseptember');
             Route::post('remove_end', 'removeMembershipEnd')->name('removeend');
@@ -264,7 +264,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- User admin: Board only --- */
         Route::controller(UserAdminController::class)->prefix('admin')->name('admin::')->middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('list', 'index')->name('list');
+            Route::get('index', 'index')->name('index');
 
             Route::get('studied_create/{id}', 'toggleStudiedCreate')->name('toggle_studied_create');
             Route::get('studied_itech/{id}', 'toggleStudiedITech')->name('toggle_studied_itech');
@@ -282,7 +282,7 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the Membership Forms --- */
     Route::prefix('memberform')->name('memberform::')->middleware(['auth'])->group(function () {
         Route::controller(UserDashboardController::class)->group(function () {
-            Route::get('sign', 'getMemberForm')->name('sign');
+            Route::get('sign', 'getMemberForm')->name('showsign');
             Route::post('sign', 'postMemberForm')->name('sign');
         });
         Route::controller(UserAdminController::class)->group(function () {
@@ -302,26 +302,26 @@ Route::middleware('forcedomain')->group(function () {
         Route::middleware(['auth', 'permission:board'])->group(function () {
             // Membership management
             Route::prefix('membership')->name('membership::')->group(function () {
-                Route::post('add', 'addMembership')->name('add');
+                Route::post('store', 'addMembership')->name('store');
                 Route::get('end/{committee}/{edition}', 'endEdition')->name('endedition');
                 Route::get('{id}/delete', 'deleteMembership')->name('delete');
                 Route::get('{id}', 'editMembershipForm')->name('edit');
-                Route::post('{id}', 'editMembership')->name('edit');
+                Route::post('{id}', 'updateMembershipForm')->name('update');
             });
 
             // Committee management
-            Route::get('add', 'add')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('', 'store')->name('store');
             Route::get('{id}/edit', 'edit')->name('edit');
-            Route::post('{id}/edit', 'update')->name('edit');
+            Route::post('{id}/edit', 'update')->name('update');
             Route::post('{id}/image', 'image')->name('image');
         });
 
         /* --- Public routes --- */
-        Route::get('list', 'overview')->name('list');
+        Route::get('index', 'index')->name('index');
         Route::get('{id}', 'show')->name('show');
         Route::get('{id}/send_anonymous_email', 'showAnonMailForm')->middleware(['auth', 'member'])->name('anonymousmail');
-        Route::post('{id}/send_anonymous_email', 'postAnonMailForm')->middleware(['auth', 'member'])->name('anonymousmail');
+        Route::post('{id}/send_anonymous_email', 'sendAnonMailForm')->middleware(['auth', 'member'])->name('sendanonymousmail');
         Route::get('{slug}/toggle_helper_reminder', 'toggleHelperReminder')->middleware(['auth'])->name('toggle_helper_reminder');
     });
 
@@ -334,11 +334,11 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to narrowcasting (Board only) --- */
     Route::controller(NarrowcastingController::class)->prefix('narrowcasting')->name('narrowcasting::')->group(function () {
         Route::middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('list', 'index')->name('list');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('index', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('edit/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('clear', 'clear')->name('clear');
         });
@@ -351,10 +351,10 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Board only --- */
         Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'adminIndex')->name('admin');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('edit/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
             Route::get('up/{id}', 'orderUp')->name('orderUp');
@@ -385,11 +385,11 @@ Route::middleware('forcedomain')->group(function () {
         Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('list', 'adminIndex')->name('admin');
 
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
 
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('edit/{id}', 'update')->name('update');
 
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
@@ -405,12 +405,12 @@ Route::middleware('forcedomain')->group(function () {
             // Committee dependent
             Route::get('list', 'adminIndex')->name('admin');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
 
             // Board only
             Route::middleware(['permission:board'])->group(function () {
-                Route::get('add', 'create')->name('add');
-                Route::post('add', 'store')->name('add');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
                 Route::get('delete/{id}', 'destroy')->name('delete');
             });
 
@@ -421,7 +421,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Committee dependent --- */
         Route::controller(LeaderboardEntryController::class)->prefix('entries')->name('entries::')->group(function () {
-            Route::post('add', 'store')->name('add');
+            Route::post('create', 'store')->name('create');
             Route::post('update', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
@@ -433,10 +433,10 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- TIPCie only --- */
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('close/{id}', 'close')->name('close');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('admin/{id}', 'admin')->name('admin');
@@ -445,7 +445,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
             Route::get('delete/{id}', 'delete')->name('delete');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('add/{id}', 'store')->name('add');
+            Route::post('store/{id}', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
         });
         /* --- Public route --- */
@@ -454,28 +454,28 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {
-        Route::get('', 'admin')->name('admin');
+        Route::get('', 'index')->name('index');
         Route::get('marquee', 'marquee')->name('marquee');
-        Route::post('add', 'store')->name('add');
+        Route::post('store', 'store')->name('store');
         Route::get('close/{id}', 'close')->name('close');
         Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('edit/{id}', 'update')->name('edit');
+        Route::post('edit/{id}', 'update')->name('update');
         Route::get('delete/{id}', 'destroy')->name('delete');
         Route::get('statistics/{id}', 'statistics')->name('statistics');
         route::prefix('products')->name('products::')->group(function () {
-            Route::post('add/{id}', 'addProducts')->name('add');
+            Route::post('create/{id}', 'addProducts')->name('create');
             Route::get('remove/{id}/{productId}', 'removeProduct')->name('remove');
         });
 
-        Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
-            Route::get('', ['as' => 'list', 'uses' => 'WallstreetController@events']);
-            Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@addEvent']);
-            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@editEvent']);
-            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@updateEvent']);
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroyEvent']);
-            Route::group(['prefix' => 'products', 'as' => 'products::'], function () {
-                Route::post('add/{id}', ['as' => 'add', 'uses' => 'WallstreetController@addEventProducts']);
-                Route::get('remove/{id}/{productId}', ['as' => 'remove', 'uses' => 'WallstreetController@removeEventProduct']);
+        Route::prefix('events')->name('events::')->group(function () {
+            Route::get('', 'eventIndex')->name('index');
+            Route::post('store', 'addEvent')->name('store');
+            Route::get('edit/{id}', 'editEvent')->name('edit');
+            Route::post('update/{id}', 'updateEvent')->name('update');
+            Route::get('delete/{id}', 'destroyEvent')->name('delete');
+            Route::prefix('products')->name('products::')->group(function () {
+                Route::post('create/{id}', 'addEventProducts')->name('create');
+                Route::get('remove/{id}/{productId}', 'removeEventProduct')->name('remove');
             });
         });
     });
@@ -497,18 +497,18 @@ Route::middleware('forcedomain')->group(function () {
             Route::middleware(['permission:board'])->group(function () {
                 // Categories
                 Route::prefix('categories')->name('category::')->group(function () {
-                    Route::get('list', 'categoryAdmin')->name('admin');
-                    Route::post('add', 'categoryStore')->name('add');
+                    Route::get('index', 'categoryAdmin')->name('admin');
+                    Route::post('store', 'categoryStore')->name('store');
                     Route::get('edit/{id}', 'categoryEdit')->name('edit');
-                    Route::post('edit/{id}', 'categoryUpdate')->name('edit');
+                    Route::post('update/{id}', 'categoryUpdate')->name('update');
                     Route::get('delete/{id}', 'categoryDestroy')->name('delete');
                 });
 
                 // Events admin
-                Route::get('add', 'create')->name('add');
-                Route::post('add', 'store')->name('add');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
                 Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('edit/{id}', 'update')->name('edit');
+                Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
 
                 // Albums
@@ -517,7 +517,7 @@ Route::middleware('forcedomain')->group(function () {
             });
 
             // Public routes
-            Route::get('', 'index')->name('list');
+            Route::get('', 'index')->name('index');
             Route::get('archive/{year}', 'archive')->name('archive');
             Route::post('copy', 'copyEvent')->name('copy');
 
@@ -576,15 +576,15 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Board only --- */
         Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('', 'index')->name('list');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::post('edit/{id}/image', 'featuredImage')->name('image');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
             Route::prefix('/edit/{id}/file')->name('file::')->group(function () {
-                Route::post('add', 'addFile')->name('add');
+                Route::post('create', 'addFile')->name('create');
                 Route::get('{file_id}/delete', 'deleteFile')->name('delete');
             });
         });
@@ -599,31 +599,31 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Board only --- */
         Route::middleware(['auth', 'permission:board'])->group(function () {
             Route::get('admin', 'admin')->name('admin');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::post('edit/{id}/image', 'featuredImage')->name('image');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('sendWeekly/{id}', 'sendWeeklyEmail')->name('sendWeekly');
         });
         /* --- Member only --- */
         Route::get('showWeeklyPreview/{id}', 'showWeeklyPreview')->name('showWeeklyPreview');
-        Route::get('list', 'index')->name('list');
+        Route::get('index', 'index')->name('index');
         Route::get('{id}', 'show')->name('show');
     });
 
     /* --- Routes related to menu. (Board only) --- */
     Route::controller(MenuController::class)->prefix('menu')->name('menu::')->middleware(['auth', 'permission:board'])->group(function () {
         Route::get('', 'index')->name('list');
-        Route::get('add', 'create')->name('add');
-        Route::post('add', 'store')->name('add');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
 
         Route::get('up/{id}', 'orderUp')->name('orderUp');
         Route::get('down/{id}', 'orderDown')->name('orderDown');
 
         Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('edit/{id}', 'update')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
         Route::get('delete/{id}', 'destroy')->name('delete');
     });
 
@@ -631,11 +631,11 @@ Route::middleware('forcedomain')->group(function () {
     Route::controller(TicketController::class)->prefix('tickets')->name('tickets::')->middleware(['auth'])->group(function () {
         /* --- Board only admin --- */
         Route::middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('', 'index')->name('list');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
 
@@ -648,27 +648,27 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to e-mail. (Board only) --- */
     Route::prefix('email')->name('email::')->middleware(['auth', 'permission:board'])->group(function () {
         Route::controller(EmailListController::class)->prefix('list')->name('list::')->group(function () {
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
 
         Route::controller(EmailController::class)->group(function () {
-            Route::get('', 'index')->name('admin');
+            Route::get('', 'index')->name('index');
             Route::get('filter', 'filter')->name('filter');
 
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
-            Route::get('preview/{id}', 'show')->name('show');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::get('show/{id}', 'show')->name('show');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('toggleready/{id}', 'toggleReady')->name('toggleready');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
             Route::prefix('{id}/attachment')->name('attachment::')->group(function () {
-                Route::post('add', 'addAttachment')->name('add');
+                Route::post('create', 'addAttachment')->name('create');
                 Route::get('delete/{file_id}', 'deleteAttachment')->name('delete');
             });
         });
@@ -677,17 +677,19 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Public Routes for e-mail --- */
     Route::get('togglelist/{id}', [EmailListController::class, 'toggleSubscription'])->middleware(['auth'])->name('togglelist');
     Route::get('unsubscribe/{hash}', [EmailController::class, 'unsubscribeLink'])->name('unsubscribefromlist');
-    Route::get('quotes', ['middleware' => ['member'], 'as' => 'quotes::list', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'quotes')]);
-    Route::get('goodideas', ['middleware' => ['member'], 'as' => 'goodideas::index', fn(Request $request): \Illuminate\View\View => (new FeedbackController)->index($request, 'goodideas')]);
+
+    /* --- Routes to redirect /goodideas and /quotes to /feedback/goodideas and /feedback/quotes --- */
+    Route::get('goodideas', [FeedbackController::class, 'goodIdeas'])->middleware(['member'])->name('goodideas::index');
+    Route::get('quotes', [FeedbackController::class, 'quotes'])->middleware(['member'])->name('quotes::list');
 
     /* --- Routes related to the Feedback Boards --- */
     Route::controller(FeedbackController::class)->prefix('feedback')->middleware(['member'])->name('feedback::')->group(function () {
 
         Route::prefix('categories')->middleware(['permission:board'])->name('category::')->group(function () {
             Route::get('admin', 'categoryAdmin')->name('admin');
-            Route::post('addone', 'categoryStore')->name('add');
+            Route::post('store', 'categoryStore')->name('store');
             Route::get('edit/{id}', 'categoryEdit')->name('edit');
-            Route::post('edit/{id}', 'categoryUpdate')->name('edit');
+            Route::post('edit/{id}', 'categoryUpdate')->name('update');
             Route::get('delete/{id}', 'categoryDestroy')->name('delete');
         });
 
@@ -701,10 +703,10 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Catch-alls --- */
         Route::prefix('/{category}')->group(function () {
-            Route::get('index', 'index')->name('index');
+            Route::get('', 'index')->name('index');
             Route::get('search/{searchTerm?}', 'search')->name('search');
             Route::get('archived', 'archived')->name('archived');
-            Route::post('add', 'add')->name('add');
+            Route::post('store', 'store')->name('store');
             Route::get('archiveall', 'archiveAll')->middleware(['permission:board'])->name('archiveall');
         });
     });
@@ -717,11 +719,10 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to OmNomCom stores --- */
         Route::prefix('store')->name('store::')->group(function () {
             Route::controller(OmNomController::class)->group(function () {
-                Route::get('', 'choose')->middleware(['auth'])->name('show');
                 Route::get('{store?}', 'display')->name('show');
                 Route::post('{store}/buy', 'buy')->name('buy');
             });
-            Route::post('rfid/add', [RfidCardController::class, 'store'])->name('rfidadd');
+            Route::post('rfid/create', [RfidCardController::class, 'store'])->name('rfid::create');
         });
 
         /* --- Routes related to OmNomCom orders --- */
@@ -729,13 +730,13 @@ Route::middleware('forcedomain')->group(function () {
 
             Route::prefix('orders')->middleware(['auth'])->name('orders::')->group(function () {
                 // Public
-                Route::get('history/{date?}', 'index')->name('list');
+                Route::get('history/{date?}', 'index')->name('index');
                 Route::get('orderline-wizard', 'orderlineWizard')->name('orderline-wizard');
 
                 // OmNomCom admins only
                 Route::middleware(['permission:omnomcom'])->group(function () {
-                    Route::post('add/bulk', 'bulkStore')->name('addbulk');
-                    Route::post('add/single', 'store')->name('add');
+                    Route::post('store/bulk', 'bulkStore')->name('storebulk');
+                    Route::post('store/single', 'store')->name('store');
                     Route::get('delete/{id}', 'destroy')->name('delete');
                     Route::get('', 'adminindex')->name('adminlist');
 
@@ -750,7 +751,6 @@ Route::middleware('forcedomain')->group(function () {
             // Routes related to Payment Statistics
             Route::prefix('payments')->name('payments::')->middleware(['permission:finadmin'])->group(function () {
                 Route::get('statistics', 'showPaymentStatistics')->name('statistics');
-                Route::post('statistics', 'showPaymentStatistics')->name('statistics');
             });
         });
 
@@ -759,12 +759,12 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to Financial Accounts. (Finadmin only) --- */
         Route::controller(AccountController::class)->prefix('accounts')->name('accounts::')->middleware(['permission:finadmin'])->group(function () {
-            Route::get('list', 'index')->name('list');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('index', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::post('aggregate/{account}', 'showAggregation')->name('aggregate');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('{id}', 'show')->name('show');
         });
@@ -772,11 +772,11 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to managing Products. (Omnomcom admins only) --- */
         Route::prefix('products')->middleware(['permission:omnomcom'])->name('products::')->group(function () {
             Route::controller(ProductController::class)->group(function () {
-                Route::get('', 'index')->name('list');
-                Route::get('add', 'create')->name('add');
-                Route::post('add', 'store')->name('add');
+                Route::get('', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
                 Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('edit/{id}', 'update')->name('edit');
+                Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
 
                 Route::get('export/csv', 'generateCsv')->name('export_csv');
@@ -785,7 +785,6 @@ Route::middleware('forcedomain')->group(function () {
 
             Route::controller(AccountController::class)->group(function () {
                 Route::get('statistics', 'showOmnomcomStatistics')->name('statistics');
-                Route::post('statistics', 'showOmnomcomStatistics')->name('statistics');
             });
 
             Route::controller(StockMutationController::class)->group(function () {
@@ -796,10 +795,10 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to OmNomCom Categories. (OmNomCom admins only) --- */
         Route::controller(ProductCategoryController::class)->prefix('categories')->middleware(['permission:omnomcom'])->name('categories::')->group(function () {
-            Route::get('', 'index')->name('list');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::get('', 'index')->name('index');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('{id}', 'show')->name('show');
         });
@@ -812,9 +811,9 @@ Route::middleware('forcedomain')->group(function () {
 
             // Finadmin only
             Route::prefix('withdrawals')->middleware(['permission:finadmin'])->name('withdrawal::')->group(function () {
-                Route::get('', 'index')->name('list');
-                Route::get('add', 'create')->name('add');
-                Route::post('add', 'store')->name('add');
+                Route::get('', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
                 Route::post('edit/{id}', 'update')->name('edit');
                 Route::get('delete/{id}', 'destroy')->name('delete');
                 Route::get('accounts/{id}', 'showAccounts')->name('showAccounts');
@@ -840,7 +839,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('receive/{id}', 'receive')->name('receive');
 
             // Finadmin only
-            Route::get('list', 'index')->middleware(['permission:finadmin'])->name('list');
+            Route::get('list', 'index')->middleware(['permission:finadmin'])->name('index');
             Route::get('monthly/{month}', 'monthly')->middleware(['permission:finadmin'])->name('monthly');
         });
         /* --- Order generation (omnomcom admin only) --- */
@@ -854,23 +853,23 @@ Route::middleware('forcedomain')->group(function () {
     Route::controller(VideoController::class)->prefix('video')->name('video::')->group(function () {
         Route::prefix('admin')->middleware(['permission:board'])->name('admin::')->group(function () {
             Route::get('', 'index')->name('index');
-            Route::post('add', 'store')->name('add');
+            Route::post('create', 'store')->name('create');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
         Route::get('', 'publicIndex')->name('index');
-        Route::get('{id}', 'view')->name('view');
+        Route::get('{id}', 'view')->name('show');
     });
 
     /* --- Routes related to announcements --- */
     Route::controller(AnnouncementController::class)->prefix('announcement')->name('announcement::')->group(function () {
         Route::prefix('admin')->middleware(['permission:sysadmin'])->group(function () {
             Route::get('', 'index')->name('index');
-            Route::get('add', 'create')->name('add');
-            Route::post('add', 'store')->name('add');
+            Route::get('create', 'create')->name('create');
+            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
             Route::get('clear', 'clear')->name('clear');
         });
@@ -893,10 +892,9 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to the photo admin. (Protography only) --- */
         Route::controller(PhotoAdminController::class)->prefix('admin')->middleware(['permission:protography'])->name('admin::')->group(function () {
             Route::get('index', 'index')->name('index');
-            Route::post('index', 'search')->name('index');
-            Route::post('add', 'create')->name('add');
+            Route::post('create', 'create')->name('create');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->middleware(['permission:publishalbums'])->name('edit');
+            Route::post('edit/{id}', 'update')->middleware(['permission:publishalbums'])->name('update');
             Route::post('edit/{id}/action', 'action')->name('action');
             Route::post('edit/{id}/upload', 'upload')->name('upload');
             Route::get('edit/{id}/delete', 'delete')->middleware(['permission:publishalbums'])->name('delete');
@@ -925,19 +923,19 @@ Route::middleware('forcedomain')->group(function () {
     Route::controller(PasswordController::class)->prefix('passwordstore')->middleware(['auth'])->name('passwordstore::')->group(function () {
         Route::get('', 'index')->name('index');
         Route::get('auth', 'getAuth')->name('auth');
-        Route::post('auth', 'postAuth')->name('auth');
-        Route::get('add', 'create')->name('add');
-        Route::post('add', 'store')->name('add');
+        Route::post('auth', 'postAuth')->name('postAuth');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
         Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('edit/{id}', 'update')->name('edit');
+        Route::post('update/{id}', 'update')->name('update');
         Route::get('delete/{id}', 'destroy')->name('delete');
     });
 
     /* --- Routes related to e-mail aliases. (Sysadmin only) --- */
     Route::controller(AliasController::class)->prefix('alias')->middleware(['auth', 'permission:sysadmin'])->name('alias::')->group(function () {
         Route::get('', 'index')->name('index');
-        Route::get('add', 'create')->name('add');
-        Route::post('add', 'store')->name('add');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
         Route::get('delete/{id_or_alias}', 'destroy')->name('delete');
         Route::post('update', 'update')->name('update');
     });
@@ -967,10 +965,10 @@ Route::middleware('forcedomain')->group(function () {
         Route::prefix('achievement')->name('achievement::')->group(function () {
             // Board only
             Route::middleware(['auth', 'permission:board'])->group(function () {
-                Route::get('', 'overview')->name('list');
-                Route::get('add', 'create')->name('add');
-                Route::post('add', 'store')->name('add');
-                Route::get('manage/{id}', 'manage')->name('manage');
+                Route::get('', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::get('edit/{id}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
                 Route::post('award/{id}', 'award')->name('award');
@@ -985,8 +983,8 @@ Route::middleware('forcedomain')->group(function () {
     });
     /* --- Routes related to the Welcome Message system. (Board only) --- */
     Route::controller(WelcomeController::class)->prefix('welcomeMessages')->name('welcomeMessages::')->middleware(['auth', 'permission:board'])->group(function () {
-        Route::get('', 'overview')->name('list');
-        Route::post('add', 'store')->name('add');
+        Route::get('', 'overview')->name('index');
+        Route::post('store', 'store')->name('store');
         Route::get('delete/{id}', 'destroy')->name('delete');
     });
 
@@ -996,9 +994,9 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('end/{id}', 'end')->name('end');
         Route::get('endId/{id}', 'endId')->name('endId');
         Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('edit/{id}', 'update')->name('edit');
-        Route::get('add', 'create')->name('add');
-        Route::post('add', 'store')->name('add');
+        Route::post('update/{id}', 'update')->name('update');
+        Route::get('create', 'create')->name('create');
+        Route::post('store', 'store')->name('store');
         Route::get('', 'index')->name('index');
     });
 
@@ -1025,7 +1023,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function () {
             Route::get('', 'index')->name('index');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('edit/{id}', 'update')->name('edit');
+            Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
     });
@@ -1033,18 +1031,18 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the DMX Management. (Board or alfred) --- */
     Route::controller(DmxController::class)->prefix('dmx')->name('dmx::')->middleware(['auth', 'permission:board|alfred'])->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/add', 'create')->name('add');
-        Route::post('/add', 'store')->name('add');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
         Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/edit/{id}', 'update')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
         Route::get('/delete/{id}', 'delete')->name('delete');
 
         Route::prefix('override')->name('override::')->group(function () {
             Route::get('/', 'overrideIndex')->name('index');
-            Route::get('/add', 'overrideCreate')->name('add');
-            Route::post('/add', 'overrideStore')->name('add');
+            Route::get('/create', 'overrideCreate')->name('create');
+            Route::post('/store', 'overrideStore')->name('store');
             Route::get('/edit/{id}', 'overrideEdit')->name('edit');
-            Route::post('/edit/{id}', 'overrideUpdate')->name('edit');
+            Route::post('/update/{id}', 'overrideUpdate')->name('update');
             Route::get('/delete/{id}', 'overrideDelete')->name('delete');
         });
     });
@@ -1061,11 +1059,11 @@ Route::middleware('forcedomain')->group(function () {
     Route::prefix('minisites')->name('minisites::')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
             // Public routes
-            Route::get('/', 'showMiniSite')->name('index');
+            Route::get('/', 'index')->name('index');
 
             // Board only
-            Route::get('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
-            Route::post('/admin', 'getAdminInterface')->middleware(['auth', 'permission:sysadmin|alfred'])->name('admin');
+            Route::get('/edit', 'edit')->middleware(['auth', 'permission:sysadmin|alfred'])->name('edit');
+            Route::post('/update', 'update')->middleware(['auth', 'permission:sysadmin|alfred'])->name('update');
         });
     });
 

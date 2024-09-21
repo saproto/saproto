@@ -6,6 +6,7 @@ use App\Models\MenuItem;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        view()->composer('*', function ($view) {
+            view()->share('viewName', Str::replace('.', '-', $view->getName()));
+        });
 
         view()->composer('website.navbar', static function ($view) {
             $menuItems = MenuItem::query()->where('parent', null)->orderBy('order')->with('page')->with('children')->get();
