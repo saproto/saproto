@@ -52,7 +52,9 @@ class HeaderImageController extends Controller
 
     public function destroy(int $id)
     {
-        HeaderImage::query()->findOrFail($id)->delete();
+        $headerimage = HeaderImage::query()->findOrFail($id);
+        $headerimage->image->delete();
+        $headerimage->delete();
         Session::flash('flash_message', 'Header image deleted.');
 
         return Redirect::route('headerimages.index');
