@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Console\Commands;
@@ -35,6 +36,6 @@ class TempAdminCleanup extends Command
             $tempAdmin->delete();
         });
 
-        $this->info('Deleted ' . $tempAdmins->count() . ' Temp Protube Admin users.');
+        $this->info('Deleted '.$tempAdmins->count().' Temp Protube Admin users.');
     }
 }
