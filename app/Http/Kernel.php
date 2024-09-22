@@ -20,6 +20,7 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -54,6 +55,7 @@ class Kernel extends HttpKernel
             EnforceWizard::class,
             ApiMiddleware::class,
             AddCspHeaders::class,
+            SubstituteBindings::class,
         ],
         'api' => [
             'throttle:60,1',
