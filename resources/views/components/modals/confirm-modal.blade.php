@@ -15,7 +15,7 @@
         <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog model-sm" role="document">
                 <form method="POST">
-                    <input type="hidden" name="_method" value="{{ $method }}">
+                    <input type="hidden" name="_method" value="{{ $method??"GET" }}">
                     @csrf
                     <div class="modal-content">
                         <div class="modal-header">
