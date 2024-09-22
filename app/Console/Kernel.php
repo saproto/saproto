@@ -42,14 +42,16 @@ class Kernel extends ConsoleKernel
         Commands\UpdateWallstreetPrices::class,
         Commands\CodexMarkdownConverter::class,
         Commands\RefreshEventUniqueUsers::class,
+        Commands\TempAdminCleanup::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
+     * @param Schedule $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:dasync')->everyTenMinutes();
@@ -61,6 +63,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
         $schedule->command('proto:feecron')->daily()->at('03:00');
         $schedule->command('proto:membercleanup')->daily()->at('04:00');
+        $schedule->command('proto:tempadmincleanup')->daily()->at('04:30');
         $schedule->command('proto:filecleanup')->daily()->at('05:00');
         $schedule->command('proto:spotifysync')->daily()->at('06:00');
         $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
