@@ -34,7 +34,6 @@ it('lets the appropriate user create a new headerimage', function () {
     $response->assertStatus(200);
 
     $image = HeaderImage::factory()->raw();
-    dump([...$image, 'image' => UploadedFile::fake()->image($image['title'].'.jpg')]);
 
     $response = $this->actingAs($member->user)
         ->post('/headerimages', [...$image, 'user' => $image['credit_id'], 'image' => UploadedFile::fake()->image($image['title'].'.jpg')]);
