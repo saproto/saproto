@@ -13,7 +13,7 @@ use Illuminate\View\View;
 class WelcomeController extends Controller
 {
     /** @return View */
-    public function overview()
+    public function index()
     {
         return view('welcomemessages.list', ['messages' => WelcomeMessage::query()->orderBy('created_at', 'desc')->get()]);
     }
@@ -23,8 +23,12 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'user_id' => 'nullable|integer',
+            'message' => 'required|string'
+        ]);
         $message = WelcomeMessage::query()->where('user_id', $request->user_id)->first();
-        if (! $message) {
+        if (!$message) {
             $message = new WelcomeMessage;
             $message->user_id = $request->user_id;
             $message->message = $request->message;
@@ -38,21 +42,19 @@ class WelcomeController extends Controller
             Session::flash('flash_message', 'Welcome Message updated');
         }
 
-        return Redirect::route('welcomeMessages::index');
+        return Redirect::route('welcomeMessages.index');
     }
 
     /**
-     * @param  int  $id
+     * @param WelcomeMessage $welcomeMessage
      * @return RedirectResponse
      *
-     * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(WelcomeMessage $welcomeMessage)
     {
-        $message = WelcomeMessage::query()->findOrFail($id);
-        $message->delete();
+        $welcomeMessage->delete();
         Session::flash('flash_message', 'Welcome Message removed');
 
-        return Redirect::route('welcomeMessages::index');
+        return Redirect::route('welcomeMessages.index');
     }
 }

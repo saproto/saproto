@@ -183,7 +183,7 @@
                                     <a class="dropdown-item" href="{{ route("email::index") }}">Email</a>
                                     <a class="dropdown-item" href="{{ route("achievement::index") }}">Achievements</a>
                                     <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                    <a class="dropdown-item" href="{{ route("welcomeMessages::index") }}">Welcome
+                                    <a class="dropdown-item" href="{{ route("welcomeMessages.index") }}">Welcome
                                         Messages</a>
                                     <a class="dropdown-item" href="{{ route("news::create", ['is_weekly'=>true]) }}">Weekly
                                         Update</a>

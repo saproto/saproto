@@ -5,8 +5,10 @@ namespace App\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Testing\Fluent\Concerns\Has;
 
 /**
  * Welcome Message Model.
@@ -31,14 +33,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class WelcomeMessage extends Model
 {
+    use HasFactory;
+
     protected $table = 'user_welcome';
 
     protected $guarded = ['id'];
-
-    protected $rules = [
-        'user_id' => 'required|integer',
-        'message' => 'required|string',
-    ];
 
     /** @return BelongsTo */
     public function user()

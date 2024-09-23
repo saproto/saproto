@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("welcomeMessages::store") }}" id="addmessage">
+<form class="form-horizontal" method="post" action="{{ route("welcomeMessages.store") }}" id="addmessage">
     {{ csrf_field() }}
     <div class="row">
         <div class="col-md-4">
