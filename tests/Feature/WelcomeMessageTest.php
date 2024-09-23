@@ -63,7 +63,6 @@ it('lets the senate update a welcomeMessage', function () {
         'message' => 'New Message',
     ]);
 
-
     $response = $this->actingAs($member->user)
         ->get('/welcomeMessages/');
     $response->assertSee('New Message');
@@ -78,7 +77,7 @@ it('lets the board delete a WelcomeMessage', function () {
     $member->user->givePermissionTo('board');
 
     $response = $this->actingAs($member->user)
-        ->delete('/welcomeMessages/' . $oldWelcomeMessage->id);
+        ->delete('/welcomeMessages/'.$oldWelcomeMessage->id);
     $response->assertRedirect('/welcomeMessages/');
     $response->assertStatus(302);
     $response->assertDontSee($oldWelcomeMessage->message);

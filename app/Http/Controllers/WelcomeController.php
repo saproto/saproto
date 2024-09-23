@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\WelcomeMessage;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -25,10 +24,10 @@ class WelcomeController extends Controller
     {
         $this->validate($request, [
             'user_id' => 'nullable|integer',
-            'message' => 'required|string'
+            'message' => 'required|string',
         ]);
         $message = WelcomeMessage::query()->where('user_id', $request->user_id)->first();
-        if (!$message) {
+        if (! $message) {
             $message = new WelcomeMessage;
             $message->user_id = $request->user_id;
             $message->message = $request->message;
@@ -46,9 +45,7 @@ class WelcomeController extends Controller
     }
 
     /**
-     * @param WelcomeMessage $welcomeMessage
      * @return RedirectResponse
-     *
      */
     public function destroy(WelcomeMessage $welcomeMessage)
     {
