@@ -72,49 +72,47 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
         $occupied = false;
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.config('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . config('proto.google-calendar.smartxp-id') . '/events?singleEvents=true&orderBy=startTime&key=' . config('app-proto.google-key-private') . '&timeMin=' . urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))) . '&timeMax=' . urlencode(date('c', strtotime('next monday')));
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
         } catch (Exception $e) {
-            return (object) ['roster' => $roster, 'occupied' => $occupied];
+            return (object)['roster' => $roster, 'occupied' => $occupied];
         }
 
         foreach ($data->items as $entry) {
             $end_time = ($entry->end->date ?? $entry->end->dateTime);
             $start_time = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
             $name = $entry->summary;
-            $name_exp = explode(' ', $name);
-            if (is_numeric($name_exp[0])) {
-                $name_exp[0] = '';
+            preg_match('/Course\/Description:\s*([^\.]+)\./', $entry->summary, $name);
+            $name = $name[1] ?? 'unknown';
+
+            preg_match('/Hall: ZI A138, (.*)/', $entry->summary, $type);
+            foreach (config('proto.timetable-translations') as $key => $value) {
+                $type = str_replace($key, $value, $type);
             }
-            $name = '';
-            foreach ($name_exp as $val) {
-                $name .= $val.' ';
-            }
-            preg_match('/Type: (.*)/', $entry->description, $type);
             $current = strtotime($start_time) < time() && strtotime($end_time) > time();
             if ($current) {
                 $occupied = true;
             }
             $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))));
-            $roster[$day][] = (object) [
+            $roster[$day][] = (object)[
                 'title' => $name,
                 'start' => strtotime($start_time),
                 'end' => strtotime($end_time),
-                'type' => $type[1],
+                'type' => $type[1] ?? 'Other',
                 'over' => strtotime($end_time) < time(),
                 'current' => $current,
             ];
         }
 
-        return (object) ['roster' => $roster, 'occupied' => $occupied];
+        return (object)['roster' => $roster, 'occupied' => $occupied];
     }
 
     /** @return View */
     public function canWork()
     {
         return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()->roster,
-            'occupied' => $this->smartxpTimetable()->occupied, ]);
+            'occupied' => $this->smartxpTimetable()->occupied,]);
     }
 }

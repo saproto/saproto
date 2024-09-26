@@ -160,6 +160,23 @@ return [
     ],
 
     /*
+      |--------------------------------------------------------------------------
+      | Timetable translations
+      |--------------------------------------------------------------------------
+      |
+      | The translations for the different types of events in the timetable from timeedit
+      |
+      */
+
+    'timetable-translations' => [
+        'Zelfstudie geen begeleiding' => 'Self-study',
+        'Zelfstudie met begeleiding' => 'Self-study with guidance',
+        'Presentatie' => 'Presentation',
+        'Examen' => 'Exam',
+        'Hoorcollege' => 'Lecture',
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Internal Name
     |--------------------------------------------------------------------------
@@ -288,7 +305,7 @@ return [
     |
     */
 
-    'sepa_info' => (object) [
+    'sepa_info' => (object)[
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
         'creditor_id' => env('SEPA_CI'),
