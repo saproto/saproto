@@ -66,7 +66,7 @@ class ShortUrlController extends Controller
 
     public function qrCode(int $id)
     {
-        $url = ShortUrl::findOrFail($id);
+        $url = ShortUrl::query()->findOrFail($id);
 
         return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
     }
