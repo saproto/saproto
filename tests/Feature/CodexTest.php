@@ -98,6 +98,6 @@ it('lets the senate delete a codex and ensures it does not have the texts associ
         ]
     );
 
-    $this->assertDatabaseMissing('codex_codex_song', ['codex', $oldCodex->id]);
-    $this->assertDatabaseMissing('codex_codex_text', ['codex', $oldCodex->id]);
+    $this->assertDatabaseMissing('codex_codex_song', ['codex' => $oldCodex->id]);
+    $this->assertDatabaseMissing('codex_codex_text', ['codex' => $oldCodex->id]);
 });

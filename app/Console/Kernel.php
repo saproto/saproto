@@ -19,6 +19,7 @@ use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
 use App\Console\Commands\RefreshEventUniqueUsers;
+use App\Console\Commands\ReplaceQuestionMarkWithSingleQuoteInCodex;
 use App\Console\Commands\ReviewFeedbackCron;
 use App\Console\Commands\SpotifySync;
 use App\Console\Commands\SpotifyUpdate;
@@ -68,6 +69,7 @@ class Kernel extends ConsoleKernel
         EndMemberships::class,
         UpdateWallstreetPrices::class,
         RefreshEventUniqueUsers::class,
+        ReplaceQuestionMarkWithSingleQuoteInCodex::class,
     ];
 
     /**
@@ -94,6 +96,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn(): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
     }
 }
