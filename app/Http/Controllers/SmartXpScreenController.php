@@ -89,6 +89,7 @@ class SmartXpScreenController extends Controller
             foreach (config('proto.timetable-translations') as $key => $value) {
                 $type = str_replace($key, $value, $type);
             }
+
             $current = strtotime($start_time) < time() && strtotime($end_time) > time();
             if ($current) {
                 $occupied = true;
