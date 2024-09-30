@@ -1,9 +1,9 @@
-name: 🛠 Format
+name: 🛠 Fix PHP, 🐘 Test and ⚙ Deploy Check
 on: pull_request
 jobs:
   phplint:
     runs-on: ubuntu-latest
-    name: 🛠 Fix PHP formatting
+    name: 🛠 PHP Automatic Fixing (Pint & Rector)
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,12 +43,12 @@ jobs:
         run: ./vendor/bin/pint
 
       - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: PHP Linting (Pint)
+          commit_message: PHP Automatic Fixing (Pint & Rector)
           skip_fetch: true
   deploy:
-    name: Deploy Check
+    name: 🐘 Test and ⚙ Deploy Check
     runs-on: ubuntu-latest
     needs: phplint
     services:

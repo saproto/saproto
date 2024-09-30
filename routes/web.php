@@ -110,13 +110,7 @@ Route::middleware('forcedomain')->group(function () {
 
     Route::get('becomeamember', [UserDashboardController::class, 'becomeAMemberOf'])->name('becomeamember');
 
-    /* --- Routes related to the header images --- */
-    Route::controller(HeaderImageController::class)->prefix('headerimage')->name('headerimage::')->middleware(['auth', 'permission:header-image'])->group(function () {
-        Route::get('', 'index')->name('index');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('delete/{id}', 'destroy')->name('delete');
-    });
+    Route::resource('headerimages', HeaderImageController::class)->only(['index', 'create', 'store', 'destroy'])->middleware(['auth', 'permission:header-image']);
 
     /* Routes for the search function. All public*/
     Route::controller(SearchController::class)->name('search::')->group(function () {
@@ -982,11 +976,9 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
     /* --- Routes related to the Welcome Message system. (Board only) --- */
-    Route::controller(WelcomeController::class)->prefix('welcomeMessages')->name('welcomeMessages::')->middleware(['auth', 'permission:board'])->group(function () {
-        Route::get('', 'overview')->name('index');
-        Route::post('store', 'store')->name('store');
-        Route::get('delete/{id}', 'destroy')->name('delete');
-    });
+    Route::resource('welcomeMessages', WelcomeController::class)
+        ->middleware(['auth', 'permission:board'])
+        ->only(['index', 'store', 'destroy']);
 
     /* --- Routes related to Protube TempAdmin (Board only) --- */
     Route::controller(TempAdminController::class)->prefix('tempadmin')->name('tempadmin::')->middleware(['auth', 'permission:board'])->group(function () {

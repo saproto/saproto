@@ -183,13 +183,13 @@
                                     <a class="dropdown-item" href="{{ route("email::index") }}">Email</a>
                                     <a class="dropdown-item" href="{{ route("achievement::index") }}">Achievements</a>
                                     <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                    <a class="dropdown-item" href="{{ route("welcomeMessages::index") }}">Welcome
+                                    <a class="dropdown-item" href="{{ route("welcomeMessages.index") }}">Welcome
                                         Messages</a>
                                     <a class="dropdown-item" href="{{ route("news::create", ['is_weekly'=>true]) }}">Weekly
                                         Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
+                                    <a class="dropdown-item" href="{{ route("headerimages.index") }}">Header Images</a>
                                     <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
 
                                     @can('sysadmin')
@@ -225,7 +225,7 @@
                                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
                                        aria-haspopup="true" aria-expanded="false">Site <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header
+                                        <a class="dropdown-item" href="{{ route("headerimages.index") }}">Header
                                             Images</a>
                                         <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo
                                             Admin</a>

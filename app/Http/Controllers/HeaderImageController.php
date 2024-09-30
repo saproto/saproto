@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\HeaderImage;
 use App\Models\StorageEntry;
-use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,43 +26,36 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $header = HeaderImage::query()->create([
-            'title' => $request->get('title'),
-            'credit_id' => $request->get('user'),
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'user' => 'required|integer',
+            'image' => 'required|image:jpeg,png,jpg|max:2048',
         ]);
 
-        $image = $request->file('image');
-        if (! $image) {
-            Session::flash('flash_message', 'Image is required.');
-            Redirect::back();
-        }
-
         $file = new StorageEntry;
-        $file->createFromFile($image);
+        $file->createFromFile($validated['image']);
+        $file->save();
 
-        $header->image()->associate($file);
+        $header = HeaderImage::query()->create([
+            'title' => $validated['title'],
+            'credit_id' => $validated['user'],
+            'image_id' => $file->id,
+        ]);
         $header->save();
 
-        return Redirect::route('headerimage::index');
+        return Redirect::route('headerimages.index');
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function destroy($id)
+    public function destroy(HeaderImage $headerimage)
     {
-        HeaderImage::query()->findOrFail($id)->delete();
-        Session::flash('flash_message', 'Image deleted.');
+        $headerimage->image->delete();
+        $headerimage->delete();
+        Session::flash('flash_message', 'Header image deleted.');
 
-        return Redirect::route('headerimage::index');
+        return Redirect::route('headerimages.index');
     }
 }
