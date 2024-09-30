@@ -82,17 +82,13 @@ class SmartXpScreenController extends Controller
             $end_time = ($entry->end->date ?? $entry->end->dateTime);
             $start_time = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
             $name = $entry->summary;
-            $name_exp = explode(' ', $name);
-            if (is_numeric($name_exp[0])) {
-                $name_exp[0] = '';
-            }
+            preg_match('/Course\/Description:\s*([^\.]+)\./', $entry->summary, $name);
+            $name = $name[1] ?? 'unknown';
 
-            $name = '';
-            foreach ($name_exp as $val) {
-                $name .= $val.' ';
+            preg_match('/Hall: ZI A138, (.*)/', $entry->summary, $type);
+            foreach (config('proto.timetable-translations') as $key => $value) {
+                $type = str_replace($key, $value, $type);
             }
-
-            preg_match('/Type: (.*)/', $entry->description, $type);
             $current = strtotime($start_time) < time() && strtotime($end_time) > time();
             if ($current) {
                 $occupied = true;
@@ -103,7 +99,7 @@ class SmartXpScreenController extends Controller
                 'title' => $name,
                 'start' => strtotime($start_time),
                 'end' => strtotime($end_time),
-                'type' => $type[1],
+                'type' => $type[1] ?? 'Other',
                 'over' => strtotime($end_time) < time(),
                 'current' => $current,
             ];

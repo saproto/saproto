@@ -48,7 +48,17 @@ class FeeCron extends Command
             return 0;
         }
 
-        $yearstart = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+        if (intval(date('n')) == 10) {
+            $this->info('Temporarily skipped due to membership issues.');
+
+            return 0;
+        }
+
+        if (intval(date('n')) >= 9) {
+            $yearstart = intval(date('Y'));
+        } else {
+            $yearstart = intval(date('Y')) - 1;
+        }
 
         $students = LdapController::searchStudents();
         $names = $students['names'];
