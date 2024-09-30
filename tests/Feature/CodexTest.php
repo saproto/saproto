@@ -52,7 +52,7 @@ it('lets the senate update a codex and assign songs and texts', function () {
     $member->user->assignRole('senate');
 
     $response = $this->actingAs($member->user)
-        ->get('/codex/' . $oldCodex->id . '/edit');
+        ->get('/codex/'.$oldCodex->id.'/edit');
     $response->assertSee('Codex details');
     $response->assertSee($oldCodex->name);
     $response->assertStatus(200);
@@ -60,7 +60,7 @@ it('lets the senate update a codex and assign songs and texts', function () {
     $songs = CodexSong::factory()->count(3)->create();
     $texts = CodexText::factory()->count(3)->create();
     $response = $this->actingAs($member->user)
-        ->patch('/codex/' . $oldCodex->id, [...$oldCodex->toArray(), 'name' => 'New Name', 'songids' => $songs->pluck('id')->toArray(), 'textids' => $texts->pluck('id')->toArray()]);
+        ->patch('/codex/'.$oldCodex->id, [...$oldCodex->toArray(), 'name' => 'New Name', 'songids' => $songs->pluck('id')->toArray(), 'textids' => $texts->pluck('id')->toArray()]);
 
     $response->assertRedirect('/codex/');
     $response->assertStatus(302);
@@ -87,7 +87,7 @@ it('lets the senate delete a codex and ensures it does not have the texts associ
     $oldCodex->texts()->attach(CodexText::factory()->create());
 
     $response = $this->actingAs($member->user)
-        ->delete('/codex/' . $oldCodex->id);
+        ->delete('/codex/'.$oldCodex->id);
     $response->assertRedirect('/codex/');
     $response->assertStatus(302);
     $this->assertDatabaseMissing('codex_codices',
