@@ -833,6 +833,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
+        Route::get('qr_code/{id}', ['as' => 'qr_code', 'uses' => 'ShortUrlController@qrCode']);
     });
     Route::get('go/{short?}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
 
