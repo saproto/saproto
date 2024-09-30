@@ -45,3 +45,6 @@ storage/oauth-public.key
 /docker/nginx-log/*
 !/docker/nginx-log/.gitkeep
 *.cache
+
+#Google Cloud Platform Credentials
+application_default_credentials.json
