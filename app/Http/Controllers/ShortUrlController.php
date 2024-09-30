@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Milon\Barcode\DNS2D;
 
 class ShortUrlController extends Controller
 {
@@ -63,11 +64,17 @@ class ShortUrlController extends Controller
         return Redirect::route('short_url::index');
     }
 
+    public function qrCode(int $id)
+    {
+        $url = ShortUrl::findOrFail($id);
+
+        return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
+    }
+
     /**
-     * @param  string  $short
      * @return RedirectResponse
      */
-    public function go(Request $request, $short)
+    public function go(string $short)
     {
         $url = ShortUrl::query()->where('url', $short)->firstOrFail();
         $url->clicks++;

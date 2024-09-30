@@ -160,6 +160,23 @@ return [
     ],
 
     /*
+      |--------------------------------------------------------------------------
+      | Timetable translations
+      |--------------------------------------------------------------------------
+      |
+      | The translations for the different types of events in the timetable from timeedit
+      |
+      */
+
+    'timetable-translations' => [
+        'Zelfstudie geen begeleiding' => 'Self-study',
+        'Zelfstudie met begeleiding' => 'Self-study with guidance',
+        'Presentatie' => 'Presentation',
+        'Examen' => 'Exam',
+        'Hoorcollege' => 'Lecture',
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Internal Name
     |--------------------------------------------------------------------------

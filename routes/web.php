@@ -1025,6 +1025,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
             Route::get('delete/{id}', 'destroy')->name('delete');
+            Route::get('qr_code/{id}', 'qrCode')->name('qr_code');
         });
     });
 
