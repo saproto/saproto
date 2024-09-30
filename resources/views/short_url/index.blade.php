@@ -68,7 +68,7 @@
                                 <td>
                                     <a href="#" id="url-{{ $url->id }}"
                                        class="qr-button"
-                                       data-url="{{ $url->url }}"
+                                       data-url-id="{{ $url->id }}"
                                        data-bs-toggle="modal"
                                        data-bs-target="#qr-modal">
                                         Open QR
@@ -98,7 +98,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
       document.querySelectorAll('.qr-button').forEach(el => el.addEventListener('click', e => {
         const modal = document.querySelector(el.getAttribute('data-bs-target'));
-        modal.querySelector('#qr-modal-url').src = "{{ route('short_url::qr_code', '') }}" + '/?url=' + encodeURI("{{route('short_url::go')}}" + '/' + el.getAttribute('data-url'));
+        modal.querySelector('#qr-modal-url').src = "{{ route('short_url::qr_code', '') }}/" + el.getAttribute('data-url-id');
         console.log(document.getElementById('qr-modal-url').src);
       }));
 

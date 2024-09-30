@@ -24,7 +24,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function edit(Request $request, $id)
@@ -35,7 +35,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -49,7 +49,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -64,13 +64,10 @@ class ShortUrlController extends Controller
         return Redirect::route('short_url::index');
     }
 
-    public function qrCode(Request $request)
+    public function qrCode(int $id)
     {
-        if ($request->has('url')) {
-            return response((new DNS2D)->getBarcodeSVG($request->url, 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
-        }
-
-        return response('No URL provided', 400);
+        $url = ShortUrl::findOrFail($id);
+        return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
     }
 
     /**
