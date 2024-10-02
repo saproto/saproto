@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\UserData;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -15,12 +16,14 @@ use App\Models\WelcomeMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
-    /** @return View Display the homepage. */
+    /* Display the homepage. */
     public function show()
     {
+        return Inertia::render('Home');
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')
@@ -29,7 +32,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::query()->inRandomOrder()->first();
 
-        if (! Auth::user()?->is_member) {
+        if (!Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
 
