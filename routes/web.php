@@ -316,7 +316,7 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to societies --- */
     Route::controller(CommitteeController::class)->prefix('society')->name('society::')->group(function () {
-        Route::get('list', 'overview')->name('list')->defaults('showSociety', true);
+        Route::get('list', 'index')->name('list')->defaults('showSociety', true);
         Route::get('{id}', 'show')->name('show');
     });
 
