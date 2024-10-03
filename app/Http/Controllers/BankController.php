@@ -17,7 +17,7 @@ class BankController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function show(Request $request)
+    public function create(Request $request)
     {
         $user = Auth::user();
 
