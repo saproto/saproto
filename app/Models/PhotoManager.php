@@ -23,10 +23,10 @@ use stdClass;
 class PhotoManager extends Model
 {
     /**
-     * @param  int|null  $max
-     * @param  string|null  $query
-     * @param  bool  $unpublished
-     * @param  bool  $no_thumb
+     * @param int|null $max
+     * @param string|null $query
+     * @param bool $unpublished
+     * @param bool $no_thumb
      * @return Collection|LengthAwarePaginator
      */
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
@@ -34,17 +34,17 @@ class PhotoManager extends Model
         $include_private = (Auth::check() && Auth::user()->member() !== null);
         $base = PhotoAlbum::query()->orderBy('date_taken', 'desc');
 
-        if (! $include_private) {
+        if (!$include_private) {
             $base = $base->where('private', '=', false);
         }
 
         if ($query) {
-            $base = $base->where('name', 'LIKE', '%'.$query.'%');
+            $base = $base->where('name', 'LIKE', '%' . $query . '%');
         }
 
         $base = $unpublished ? $base->where('published', '=', false) : $base->where('published', '=', true);
 
-        if (! $no_thumb) {
+        if (!$no_thumb) {
             $base = $base->where('thumb_id', '!=', 'null');
         }
 
@@ -56,15 +56,15 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param  int  $album_id
-     * @param  int|null  $max
+     * @param int $album_id
+     * @param int|null $max
      */
     public static function getPhotos($album_id, $max = null): ?stdClass
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
         $album = PhotoAlbum::query()->where('id', $album_id);
-        if (! $include_private) {
+        if (!$include_private) {
             $album->where('private', '=', false);
         }
 
@@ -76,7 +76,7 @@ class PhotoManager extends Model
 
         $items = Photo::query()->where('album_id', $album_id);
 
-        if (! $include_private) {
+        if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
 
@@ -100,6 +100,7 @@ class PhotoManager extends Model
 
     public static function getPhoto(int $photo_id): stdClass
     {
+        /** @var Photo $photo */
         $photo = Photo::query()->findOrFail($photo_id);
 
         $data = new stdClass;
@@ -110,9 +111,9 @@ class PhotoManager extends Model
         $data->likes = $photo->getLikes();
         $data->liked = Auth::check() ? PhotoLikes::query()->where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
-        $data->next = $photo->getNextPhoto() != null ? $photo->getNextPhoto()->id : null;
+        $data->next = $photo->getNextPhoto() ? $photo->getNextPhoto()->id : null;
 
-        $data->previous = $photo->getPreviousPhoto() != null ? $photo->getPreviousPhoto()->id : null;
+        $data->previous = $photo->getPreviousPhoto() ? $photo->getPreviousPhoto()->id : null;
 
         $data->id = $photo_id;
         $data->albumPage = $photo->getAlbumPageNumber(24);
@@ -121,7 +122,7 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param  int  $album_id
+     * @param int $album_id
      *
      * @throws Exception
      */
