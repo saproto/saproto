@@ -61,7 +61,7 @@ class Photo extends Model
         return $this->hasOne(StorageEntry::class, 'id', 'file_id');
     }
 
-    private function getAdjacentPhoto(bool $next = true): Photo
+    private function getAdjacentPhoto(bool $next = true): ?Photo
     {
         if ($next) {
             $ord = 'ASC';
@@ -79,12 +79,12 @@ class Photo extends Model
         return $result->first();
     }
 
-    public function getNextPhoto(): Photo
+    public function getNextPhoto(): ?Photo
     {
         return $this->getAdjacentPhoto();
     }
 
-    public function getPreviousPhoto(): Photo
+    public function getPreviousPhoto(): ?Photo
     {
         return $this->getAdjacentPhoto(false);
     }
