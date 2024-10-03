@@ -192,7 +192,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to bank accounts --- */
         Route::controller(BankController::class)->prefix('bank')->name('bank::')->group(function () {
-            Route::get('show', 'show')->name('show');
+            Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::post('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
