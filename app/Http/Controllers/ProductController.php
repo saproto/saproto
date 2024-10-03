@@ -8,15 +8,15 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StockMutation;
 use App\Models\StorageEntry;
-use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Mail;
-use Redirect;
-use Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
@@ -28,18 +28,14 @@ class ProductController extends Controller
     {
         if ($request->has('search') && strlen($request->get('search')) > 2) {
             $search = $request->get('search');
-            $products = Product::where('name', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
+            $products = Product::query()->where('name', 'like', "%{$search}%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
-            switch ($request->get('filter')) {
-                case 'invisible':
-                    $products = Product::where('is_visible', false)->orderBy('name', 'asc')->get();
-                    break;
-                default:
-                    $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
-                    break;
-            }
+            $products = match ($request->get('filter')) {
+                'invisible' => Product::query()->where('is_visible', false)->orderBy('name', 'asc')->get(),
+                default => Product::query()->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20),
+            };
         } else {
-            $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
+            $products = Product::query()->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
         }
 
         return view('omnomcom.products.index', ['products' => $products]);
@@ -52,7 +48,7 @@ class ProductController extends Controller
     {
         return view('omnomcom.products.edit', [
             'product' => null,
-            'accounts' => Account::orderBy('account_number', 'asc')->get(),
+            'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
             'categories' => ProductCategory::all(),
         ]);
     }
@@ -64,14 +60,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::create($request->except('image', 'product_categories'));
+        $product = Product::query()->create($request->except('image', 'product_categories'));
         $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $product->image()->associate($file);
@@ -80,19 +76,20 @@ class ProductController extends Controller
         $categories = [];
         if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
             foreach ($request->input('product_categories') as $category) {
-                $category = ProductCategory::find($category);
+                $category = ProductCategory::query()->find($category);
                 if ($category != null) {
                     $categories[] = $category->id;
                 }
             }
         }
+
         $product->categories()->sync($categories);
 
         $product->save();
 
         Session::flash('flash_message', 'The new product has been created!');
 
-        return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
+        return Redirect::route('omnomcom::products::index', ['search' => $product->name]);
     }
 
     /**
@@ -101,11 +98,11 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         return view('omnomcom.products.edit', [
             'product' => $product,
-            'accounts' => Account::orderBy('account_number', 'asc')->get(),
+            'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
             'categories' => ProductCategory::all(),
             'orderlines' => $product->orderlines()->orderBy('created_at', 'DESC')->paginate(20),
         ]);
@@ -120,7 +117,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Product $product */
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         // Mutation logging point
         $old_stock = $product->stock;
@@ -131,11 +128,10 @@ class ProductController extends Controller
         if ($old_stock != $found_stock) {
             // Stock observation mutation
             // Is this how you make them records? Is there a better way?
-            $pre_mut = StockMutation::make([
+            $pre_mut = StockMutation::query()->make([
                 'before' => $old_stock,
                 'after' => $found_stock,
-                'is_bulk' => false]
-            );
+                'is_bulk' => false]);
 
             $pre_mut->user()->associate($request->user());
             $pre_mut->product()->associate($product);
@@ -144,11 +140,10 @@ class ProductController extends Controller
 
         if ($found_stock != $new_stock) {
             // Actwual restocking mutation
-            $after_mut = StockMutation::make([
+            $after_mut = StockMutation::query()->make([
                 'before' => $found_stock,
                 'after' => $new_stock,
-                'is_bulk' => false]
-            );
+                'is_bulk' => false]);
 
             $after_mut->user()->associate($request->user());
             $after_mut->product()->associate($product);
@@ -162,23 +157,24 @@ class ProductController extends Controller
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
+            $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
 
             $product->image()->associate($file);
         }
 
-        $product->account()->associate(Account::findOrFail($request->input('account_id')));
+        $product->account()->associate(Account::query()->findOrFail($request->input('account_id')));
 
         $categories = [];
         if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
             foreach ($request->input('product_categories') as $category) {
-                $category = ProductCategory::find($category);
+                $category = ProductCategory::query()->find($category);
                 if ($category != null) {
                     $categories[] = $category->id;
                 }
             }
         }
+
         $product->categories()->sync($categories);
 
         $product->save();
@@ -205,7 +201,7 @@ class ProductController extends Controller
             $line = explode(',', $lineRaw);
 
             if (count($line) == 2) {
-                $product = Product::find($line[0]);
+                $product = Product::query()->find($line[0]);
 
                 if ($product) {
                     $delta = intval($line[1]);
@@ -213,7 +209,7 @@ class ProductController extends Controller
                     $old_stock = $product->stock;
                     $new_stock = $old_stock + $delta;
 
-                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from $old_stock to <strong>$new_stock</strong>.<br>";
+                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
 
                     $products[] = $product->id;
                     $deltas[] = $delta;
@@ -226,10 +222,10 @@ class ProductController extends Controller
         }
 
         foreach ($products as $i => $product_id) {
-            $product = Product::find($product_id);
+            $product = Product::query()->find($product_id);
 
             // Make product mutations for bulk updates
-            $mutation = StockMutation::make([
+            $mutation = StockMutation::query()->make([
                 'before' => $product->stock,
                 'after' => $product->stock + $deltas[$i],
                 'is_bulk' => true]);
@@ -261,8 +257,9 @@ class ProductController extends Controller
 
             return Redirect::back();
         }
+
         /** @var Product $product */
-        $product = Product::findOrFail($id);
+        $product = Product::query()->findOrFail($id);
 
         if ($product->orderlines->count() > 0) {
             Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
@@ -280,7 +277,7 @@ class ProductController extends Controller
 
         Session::flash('flash_message', 'The product has been deleted.');
 
-        return Redirect::route('omnomcom::products::list');
+        return Redirect::route('omnomcom::products::index');
     }
 
     /** @return StreamedResponse A CSV file with all product info. */
@@ -297,11 +294,12 @@ class ProductController extends Controller
         $data = Product::all()->toArray();
         array_unshift($data, array_keys($data[0]));
 
-        $callback = function () use ($data) {
+        $callback = static function () use ($data) {
             $f = fopen('php://output', 'w');
             foreach ($data as $row) {
                 fputcsv($f, $row);
             }
+
             fclose($f);
         };
 

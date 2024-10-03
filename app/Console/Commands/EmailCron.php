@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Mail\ManualEmail;
 use App\Models\Email;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class EmailCron extends Command
 {
@@ -36,11 +36,11 @@ class EmailCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
 
         // Send admin created e-mails.
-        $emails = Email::where('sent', false)->where('ready', true)->where('time', '<', date('U'))->get();
+        $emails = Email::query()->where('sent', false)->where('ready', true)->where('time', '<', date('U'))->get();
         $this->info('There are '.$emails->count().' queued e-mails.');
 
         foreach ($emails as $email) {

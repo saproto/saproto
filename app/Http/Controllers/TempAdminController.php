@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Tempadmin;
 use App\Models\User;
 use App\Services\ProTubeApiService;
-use Auth;
 use Carbon;
-use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Redirect;
 
 class TempAdminController extends Controller
 {
@@ -23,9 +23,9 @@ class TempAdminController extends Controller
     public function make($id)
     {
         /** @var User */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
-        $tempAdmin = new Tempadmin();
+        $tempAdmin = new Tempadmin;
         $tempAdmin->created_by = Auth::user()->id;
         $tempAdmin->start_at = Carbon::today();
         $tempAdmin->end_at = Carbon::tomorrow();
@@ -44,7 +44,7 @@ class TempAdminController extends Controller
     public function end($id)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         foreach ($user->tempadmin as $tempadmin) {
             if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
@@ -67,7 +67,7 @@ class TempAdminController extends Controller
     public function endId($id)
     {
         /** @var Tempadmin $tempadmin */
-        $tempadmin = Tempadmin::findOrFail($id);
+        $tempadmin = Tempadmin::query()->findOrFail($id);
 
         if (Carbon::parse($tempadmin->start_at)->isFuture()) {
             $tempadmin->delete();
@@ -86,8 +86,8 @@ class TempAdminController extends Controller
      */
     public function index()
     {
-        $tempadmins = Tempadmin::where('end_at', '>', DB::raw('NOW()'))->orderBy('end_at', 'desc')->get();
-        $pastTempadmins = Tempadmin::where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
+        $tempadmins = Tempadmin::query()->where('end_at', '>', DB::raw('NOW()'))->orderBy('end_at', 'desc')->get();
+        $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
@@ -104,9 +104,9 @@ class TempAdminController extends Controller
     public function store(Request $request)
     {
         /** @var User */
-        $tempAdminUser = User::findOrFail($request->user_id);
+        $tempAdminUser = User::query()->findOrFail($request->user_id);
 
-        $tempadmin = new Tempadmin();
+        $tempadmin = new Tempadmin;
         $tempadmin->user()->associate($tempAdminUser);
         $tempadmin->creator()->associate(Auth::user());
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
@@ -124,7 +124,7 @@ class TempAdminController extends Controller
      */
     public function edit($id)
     {
-        $tempadmin = Tempadmin::findOrFail($id);
+        $tempadmin = Tempadmin::query()->findOrFail($id);
 
         return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }
@@ -136,7 +136,7 @@ class TempAdminController extends Controller
     public function update($id, Request $request)
     {
         /** @var Tempadmin $tempadmin */
-        $tempadmin = Tempadmin::findOrFail($id);
+        $tempadmin = Tempadmin::query()->findOrFail($id);
         $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();

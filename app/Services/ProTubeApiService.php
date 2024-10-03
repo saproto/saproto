@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -31,8 +32,8 @@ class ProTubeApiService
     {
         try {
             $response->throw();
-        } catch (\Exception $e) {
-            captureException($e);
+        } catch (Exception $exception) {
+            captureException($exception);
 
             return false;
         }
@@ -51,6 +52,7 @@ class ProTubeApiService
         if (! app()->environment('production')) {
             return true;
         }
+
         $response = self::client()->post('/skipsong');
         if (! self::assertResponse($response)) {
             return false;
@@ -72,6 +74,7 @@ class ProTubeApiService
         if (! app()->environment('production')) {
             return true;
         }
+
         $response = self::client()->post('/updateadmin', [
             'user_id' => $userID,
             'admin' => $admin,

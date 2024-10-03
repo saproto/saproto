@@ -9,8 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Session;
 
 class DinnerformOrderlineController extends Controller
 {
@@ -20,7 +20,7 @@ class DinnerformOrderlineController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $dinnerform = Dinnerform::findOrFail($id);
+        $dinnerform = Dinnerform::query()->findOrFail($id);
 
         if ($dinnerform->hasOrdered()) {
             Session::flash('flash_message', 'You can only make one order per dinnerform!');
@@ -32,7 +32,7 @@ class DinnerformOrderlineController extends Controller
         $amount = $request->input('price');
         $helper = $request->has('helper') || $dinnerform->isHelping();
 
-        DinnerformOrderline::create([
+        DinnerformOrderline::query()->create([
             'description' => $order,
             'price' => $amount,
             'user_id' => Auth::user()->id,
@@ -53,12 +53,13 @@ class DinnerformOrderlineController extends Controller
      */
     public function delete($id)
     {
-        $dinnerOrderline = DinnerformOrderline::findOrFail($id);
+        $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);
         if ($dinnerOrderline->closed) {
             Session::flash('flash_message', 'You cannot delete an order of a closed dinnerform!');
 
             return Redirect::back();
         }
+
         if (! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')) {
             Session::flash('flash_message', 'You are not authorized to delete this order!');
             Redirect::back();
@@ -76,7 +77,7 @@ class DinnerformOrderlineController extends Controller
      */
     public function edit($id)
     {
-        $dinnerOrderline = DinnerformOrderline::findOrFail($id);
+        $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);
         if ($dinnerOrderline->closed) {
             Session::flash('flash_message', 'You cannot edit an order of a closed dinnerform!');
 
@@ -92,7 +93,7 @@ class DinnerformOrderlineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $dinnerOrderline = DinnerformOrderline::findOrFail($id);
+        $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);
         if ($dinnerOrderline->closed) {
             $dinnerform = $dinnerOrderline->dinnerform;
             Session::flash('flash_message', 'You cannot update an order of a closed dinnerform!');
@@ -110,7 +111,8 @@ class DinnerformOrderlineController extends Controller
             'helper' => $helper,
         ]);
         $dinnerOrderline->save();
-        $dinnerform = Dinnerform::findOrFail($dinnerOrderline->dinnerform_id);
+
+        $dinnerform = Dinnerform::query()->findOrFail($dinnerOrderline->dinnerform_id);
         Session::flash('flash_message', 'Your order has been updated!');
 
         return view('dinnerform.admin', ['dinnerform' => $dinnerform, 'orderList' => $dinnerform->orderlines()->get()]);

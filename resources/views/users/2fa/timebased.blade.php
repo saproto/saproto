@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form method="post" action="{{ route('user::2fa::add') }}"
+            <form method="post" action="{{ route('user::2fa::create') }}"
                   class="form-horizontal">
 
                 <div class="modal-header">

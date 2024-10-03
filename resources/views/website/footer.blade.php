@@ -8,7 +8,7 @@
                 <strong>
                     <span class="fas fa-home"></span>&nbsp;&nbsp;
                     <a class="org url text-white" href="https://www.saproto.nl/"><span
-                                class="green">S.A. Proto</span></a>
+                            class="green">S.A. Proto</span></a>
                 </strong>
                 <br>
                 <span class="adr">
@@ -44,7 +44,7 @@
             </div>
 
             <div class="col-lg-3 col-md-5 d-none d-md-block text-end">
-                <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
+                <img src="{{ asset('images/logo/inverse.png') }}" height="120px" alt="inverse proto logo">
             </div>
 
         </div>
@@ -54,7 +54,8 @@
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">
                     Please familiarize yourself with our
-                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
+                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank"
+                       class="text-white">
                         privacy policy
                     </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
                         responsible disclosure policy
@@ -66,8 +67,8 @@
                 </a>.
                 <br>
                 This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
-                <a href="{{ route('developers') }}" class="text-white">
-                    {{ App\Models\Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                <a href="{{ 'https://'.config('proto.domains.developers')[0] }}" target="_blank" class="text-white">
+                    Have You Tried Turning It Off And On Again committee
                 </a>.
             </sub>
         </p>

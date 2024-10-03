@@ -11,7 +11,7 @@
         <div class="col-md-4">
 
             <form method="POST" id="iban-form"
-                  action="{{ ($new ? route('user::bank::add', ['id' => $user->id]) : route('user::bank::edit', ['id' => $user->id])) }}">
+                  action="{{ ($new ? route('user::bank::store', ['id' => $user->id]) : route('user::bank::update', ['id' => $user->id])) }}">
 
                 <div class="card mb-3">
 
@@ -96,7 +96,8 @@
 
                             <div class="form-group">
                                 <label for="bic">Bank BIC Code</label>
-                                <input type="text" class="form-control text-uppercase" id="bic" name="bic" placeholder="">
+                                <input type="text" class="form-control text-uppercase" id="bic" name="bic"
+                                       placeholder="">
                             </div>
 
                             <!-- <p>
@@ -142,7 +143,7 @@
                             I have read the authorization statement and agree with it.
                         </button>
 
-                        <a href="{{ route('user::dashboard') }}" class="btn btn-default" data-bs-dismiss="modal">
+                        <a href="{{ route('user::dashboard::show') }}" class="btn btn-default" data-bs-dismiss="modal">
                             Cancel
                         </a>
 
@@ -161,86 +162,88 @@
 @push('javascript')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const iban = document.getElementById('iban')
-        const bic = document.getElementById('bic')
-        const submit = document.getElementById('iban-submit')
-        const form = document.getElementById('iban-form')
-        const ibanMessage = document.getElementById('iban-message')
-        const bicMessage = document.getElementById('bic-message')
+        const iban = document.getElementById('iban');
+        const bic = document.getElementById('bic');
+        const submit = document.getElementById('iban-submit');
+        const form = document.getElementById('iban-form');
+        const ibanMessage = document.getElementById('iban-message');
+        const bicMessage = document.getElementById('bic-message');
 
         iban.addEventListener('keyup', _ => {
-            iban.value = iban.value.replace(' ', '')
+            iban.value = iban.value.replace(' ', '');
             if (iban.value.length >= 15) {
                 get('{{ route('api::verify_iban') }}', { 'iban': iban.value })
-                .then(data => update_iban_form(data))
-                .catch(error => {
-                    console.error(error)
-                    iban_message('black', 'We could not automatically verify your IBAN.')
-                    bic_message('red', 'Please enter your BIC.')
-                    bic.value = ''
-                    //bic.disabled = false
-                })
+                    .then(data => update_iban_form(data))
+                    .catch(error => {
+                        console.error(error);
+                        iban_message('black', 'We could not automatically verify your IBAN.');
+                        bic_message('red', 'Please enter your BIC.');
+                        bic.value = '';
+                        //bic.disabled = false
+                    });
             } else {
-                iban_message('black', "Please enter your IBAN above.")
-                bic_message('black', 'Enter your IBAN first.')
-                bic.value = ''
+                iban_message('black', 'Please enter your IBAN above.');
+                bic_message('black', 'Enter your IBAN first.');
+                bic.value = '';
                 //bic.disabled = true
-                submit.disabled = true
+                submit.disabled = true;
             }
-        })
+        });
 
-        bic.addEventListener('keyup', _ => { submit.disabled = bic.value < 8 })
+        bic.addEventListener('keyup', _ => {
+            submit.disabled = bic.value < 8;
+        });
 
         submit.addEventListener('click', _ => {
-            submit.disabled = true
+            submit.disabled = true;
             if (bic.value.length >= 8) {
                 get('{{ route('api::verify_iban') }}', { 'iban': iban.value, 'bic': bic.value })
-                .then(data => {
-                    if (data.status === true) {
-                        //bic.disabled = false
-                        form.submit()
-                    } else {
-                        update_iban_form(data)
-                    }
-                }).catch(err => {
-                    console.error(err)
+                    .then(data => {
+                        if (data.status === true) {
+                            //bic.disabled = false
+                            form.submit();
+                        } else {
+                            update_iban_form(data);
+                        }
+                    }).catch(err => {
+                    console.error(err);
                     //bic.disabled = true
-                    form.submit()
-                })
+                    form.submit();
+                });
             } else {
-                bic_message('red', 'Please enter your BIC.')
+                bic_message('red', 'Please enter your BIC.');
                 //bic.disabled = false
             }
-        })
+        });
 
         function iban_message(color, text) {
-            ibanMessage.style.color = color
-            ibanMessage.innerHTML = text
+            ibanMessage.style.color = color;
+            ibanMessage.innerHTML = text;
         }
 
         function bic_message(color, text) {
-            bicMessage.style.color = color
-            bicMessage.innerHTML = text
+            bicMessage.style.color = color;
+            bicMessage.innerHTML = text;
         }
 
         function update_iban_form(data) {
             if (data.status === false) {
-                iban_message('red', data.message)
-                bic_message('red', data.message)
-                bic.value = ''
-                submit.disabled = true
+                iban_message('red', data.message);
+                bic_message('red', data.message);
+                bic.value = '';
+                submit.disabled = true;
             } else if (data.bic !== '') {
-                iban_message('green', 'Your IBAN is valid!')
-                bic_message('green', 'We found your BIC for you!')
-                bic.value = data.bic
-                iban.value = data.iban
+                iban_message('green', 'Your IBAN is valid!');
+                bic_message('green', 'We found your BIC for you!');
+                bic.value = data.bic;
+                iban.value = data.iban;
                 //bic.disabled = true
-                submit.disabled = false
+                submit.disabled = false;
             } else {
-                iban_message('green', "Your IBAN is valid!")
-                bic_message('red', 'We could not find your BIC. Please enter your it manually.')
-                iban.value = data.iban
-                bic.value = ''
+                iban_message('green', 'Your IBAN is valid!');
+                bic_message('red', 'We could not find your BIC. Please enter your it manually.');
+                iban.value = data.iban;
+                bic.value = '';
                 //bic.disabled = false
             }
         }

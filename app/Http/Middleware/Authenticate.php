@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Redirect;
+use Illuminate\Support\Facades\Redirect;
 
 class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
@@ -31,6 +31,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
         if (! $this->auth->guest()) {
             return $next($request);
         }
+
         if ($request->ajax()) {
             return response('Unauthorized.', 401);
         }

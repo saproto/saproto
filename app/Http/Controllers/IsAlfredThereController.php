@@ -17,7 +17,7 @@ class IsAlfredThereController extends Controller
     public static $HashMapTextKey = 'is_alfred_there_text';
 
     /** @return View */
-    public function showMiniSite()
+    public function index()
     {
         return view('isalfredthere.minisite');
     }
@@ -29,7 +29,7 @@ class IsAlfredThereController extends Controller
     }
 
     /** @return View */
-    public function getAdminInterface()
+    public function edit()
     {
         return view('isalfredthere.admin', ['status' => self::getAlfredsStatusObject()]);
     }
@@ -37,7 +37,7 @@ class IsAlfredThereController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function postAdminInterface(Request $request)
+    public function update(Request $request)
     {
         $text = self::getOrCreateHasMapItem(self::$HashMapTextKey);
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
@@ -54,6 +54,7 @@ class IsAlfredThereController extends Controller
             $text->value = $request->input('is_alfred_there_text');
             $status->value = 'unknown';
         }
+
         $status->save();
         $text->save();
 
@@ -63,9 +64,9 @@ class IsAlfredThereController extends Controller
     /** @return HashMapItem */
     public static function getOrCreateHasMapItem($key)
     {
-        $item = HashMapItem::where('key', $key)->first();
+        $item = HashMapItem::query()->where('key', $key)->first();
         if (! $item) {
-            return HashMapItem::create([
+            return HashMapItem::query()->create([
                 'key' => $key,
                 'value' => '',
             ]);
@@ -77,7 +78,7 @@ class IsAlfredThereController extends Controller
     /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $result = new stdClass();
+        $result = new stdClass;
         $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
 
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
@@ -86,6 +87,7 @@ class IsAlfredThereController extends Controller
 
             return $result;
         }
+
         if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
@@ -93,6 +95,7 @@ class IsAlfredThereController extends Controller
 
             return $result;
         }
+
         $result->status = 'unknown';
 
         return $result;

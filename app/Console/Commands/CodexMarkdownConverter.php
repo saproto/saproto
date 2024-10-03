@@ -25,7 +25,7 @@ class CodexMarkdownConverter extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         foreach (CodexText::all() as $text) {
             $text->text = $this->reformat($text->text);
@@ -40,7 +40,7 @@ class CodexMarkdownConverter extends Command
 
     private function reformat(string $text): string
     {
-        $text = str_replace('ÃŸ', utf8_encode('ß'), $text);
+        $text = str_replace('ÃŸ', mb_convert_encoding('ß', 'UTF-8', 'ISO-8859-1'), $text);
         $text = str_replace('//', '_', $text);
         $text = str_replace('`', "\'", $text);
         while (str_contains($text, '==') && str_contains($text, '/=')) {
@@ -49,6 +49,6 @@ class CodexMarkdownConverter extends Command
             $text = str_replace('=='.$between.'/=', $newBetween, $text);
         }
 
-        return utf8_decode($text);
+        return mb_convert_encoding($text, 'ISO-8859-1');
     }
 }

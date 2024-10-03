@@ -8,8 +8,8 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
@@ -27,12 +27,8 @@ class QueryController extends Controller
     public function activityOverview(Request $request)
     {
         if ($request->missing('start') || $request->missing('end')) {
-            if (intval(date('n')) >= 9) {
-                $year_start = intval(date('Y'));
-            } else {
-                $year_start = intval(date('Y')) - 1;
-            }
-            $start = strtotime("$year_start-09-01 00:00:01");
+            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+            $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
             $start = strtotime($request->start);
@@ -79,7 +75,7 @@ class QueryController extends Controller
             $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
                 in_array($member->user->utwente_username, $usernames) ||
                 in_array(strtolower($member->user->name), $names);
-            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
+            $has_ut_mail = str_ends_with($member->user->email, 'utwente.nl');
             $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             if ($member->is_pending) {
@@ -99,12 +95,15 @@ class QueryController extends Controller
                         ];
                     }
                 }
+
                 if ($member->is_lifelong) {
                     $count_lifelong++;
                 }
+
                 if ($member->is_honorary) {
                     $count_honorary++;
                 }
+
                 if ($member->is_donor) {
                     $count_donor++;
                 }
@@ -119,18 +118,17 @@ class QueryController extends Controller
                     $count_ut++;
                 }
 
-                if ($request->has('export_subsidies')) {
-                    if ($is_ut) {
-                        $export_subsidies[] = (object) [
-                            'primary' => $is_primary_student ? 'true' : 'false',
-                            'name' => $member->user->name,
-                            'email' => $has_ut_mail ? $member->user->email : null,
-                            'ut_number' => $member->user->utwente_username ?: null,
-                        ];
-                    }
+                if ($request->has('export_subsidies') && $is_ut) {
+                    $export_subsidies[] = (object) [
+                        'primary' => $is_primary_student ? 'true' : 'false',
+                        'name' => $member->user->name,
+                        'email' => $has_ut_mail ? $member->user->email : null,
+                        'ut_number' => $member->user->utwente_username ?: null,
+                    ];
                 }
             }
         }
+
         if ($request->has('export_subsidies')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
@@ -168,47 +166,43 @@ class QueryController extends Controller
     {
 
         if ($request->missing('start') || $request->missing('end')) {
-            if (intval(date('n')) >= 9) {
-                $year_start = intval(date('Y'));
-            } else {
-                $year_start = intval(date('Y')) - 1;
-            }
-            $start = strtotime("$year_start-09-01 00:00:01");
+            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+            $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
             $start = strtotime($request->start);
             $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
         }
 
-        $eventCategories = EventCategory::withCount(['events' => function ($query) use ($start, $end) {
+        $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {
             $query->where('start', '>=', $start)->where('end', '<=', $end);
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
-            $category->spots = Activity::whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
                 ->sum('participants');
 
-            $category->signups = ActivityParticipation::whereHas('activity', function ($query) use ($category, $start, $end) {
-                $query->whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
+                $query->whereHas('event', static function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
 
-            $category->attendees = Activity::where('participants', '>', 0)->whereHas('event', function ($query) use ($category, $start, $end) {
+            $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
         }
 
-        $events = Event::selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
+        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
 
-        $totalEvents = Event::where('start', '>=', $start)->where('end', '<=', $end)->count();
+        $totalEvents = Event::query()->where('start', '>=', $start)->where('end', '<=', $end)->count();
 
-        $changeGMM = Carbon::create('01-09-2010');
+        $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
             $event->Board = Carbon::createFromTimestamp($event->Start)->diffInYears($changeGMM);
         }
