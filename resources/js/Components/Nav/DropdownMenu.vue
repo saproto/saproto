@@ -47,7 +47,7 @@ onUnmounted(() => {
         <div>
           <slot name="parent" />
         </div>
-        <div :class="`fas fa-caret-${open ? 'up' : 'down'}`"></div>
+        <div class="fas fa-caret-down transition-transform" :class="`${open ? 'rotate-180' : ''}`"></div>
       </button>
     </NavItem>
     <div

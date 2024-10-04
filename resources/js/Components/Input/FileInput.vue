@@ -6,13 +6,13 @@ defineOptions({
 });
 
 const props = defineProps<{
-    name?: string;
-    id?: string;
-    disabled?: boolean;
-    required?: boolean;
-    value?: string | number | boolean | Array<boolean>;
-    modelValue?: string | number | boolean | Array<boolean>;
-  }>();
+  name?: string;
+  id?: string;
+  disabled?: boolean;
+  required?: boolean;
+  value?: string | number | boolean | Array<boolean>;
+  modelValue?: string | number | boolean | Array<boolean>;
+}>();
 
 const emit = defineEmits(['update:modelValue']);
 

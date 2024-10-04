@@ -5,6 +5,8 @@ import InputGroup from '@/Components/Input/InputGroup.vue';
 import SolidButton from '@/Components/SolidButton.vue';
 import InfoText from '@/Components/InfoText.vue';
 import InputField from '@/Components/Input/InputField.vue';
+import CheckBox from '@/Components/Input/CheckBox.vue';
+import FileInput from '@/Components/Input/FileInput.vue';
 const page = usePage();
 
 const themes = computed(() => page.props.themes);
@@ -87,21 +89,7 @@ const postForm = () => {
           </template>
         </InputGroup>
 
-        <InputGroup name="birthdate">
-          Birthdate
-          <template #input>
-            <InputField name="birthdate" disabled :value="user.birthdate" />
-            <InputField
-              v-if="user.birthdate"
-              v-model="form.show_birthday"
-              type="checkbox"
-              name="show_birthday"
-              class="mb-4"
-            >
-              Show to members
-            </InputField>
-          </template>
-        </InputGroup>
+        <CheckBox v-if="user.birthdate" v-model="form.show_birthday" name="show_birthday"> Show to members </CheckBox>
 
         <InputGroup name="edu_username">
           University account
@@ -175,12 +163,8 @@ const postForm = () => {
         </InputGroup>
 
         <template v-if="user.phone">
-          <InputField v-model="form.phone_visible" type="checkbox" name="phone_visible" class="mb-4"
-            >Show to members
-          </InputField>
-          <InputField v-model="form.receive_sms" type="checkbox" name="receive_sms" class="mb-4"
-            >Receive messages
-          </InputField>
+          <CheckBox v-model="form.phone_visible" name="phone_visible" class="mb-4">Show to members </CheckBox>
+          <CheckBox v-model="form.receive_sms" name="receive_sms" class="mb-4">Receive messages </CheckBox>
         </template>
 
         <InputGroup name="website">
@@ -195,28 +179,23 @@ const postForm = () => {
           <template #input>
             <template v-if="user.is_member">
               <div class="flex-row space-y-1">
-                <InputField v-model="form.show_omnomcom_total" type="checkbox" name="show_omnomcom_total">
+                <CheckBox v-model="form.show_omnomcom_total" name="show_omnomcom_total">
                   After checkout, show how much I've spent today.
-                </InputField>
+                </CheckBox>
                 <InfoText>
                   This feature was requested by members who want to be aware of how much they spend.
                 </InfoText>
 
-                <InputField v-model="form.show_omnomcom_calories" type="checkbox" name="show_omnomcom_calories">
+                <CheckBox v-model="form.show_omnomcom_calories" name="show_omnomcom_calories">
                   After checkout, show how many calories I've bought today.
-                </InputField>
+                </CheckBox>
                 <InfoText>
                   This feature was requested by members who want to be aware of how much calories they eat.
                 </InfoText>
 
-                <InputField
-                  v-model="form.disable_omnomcom"
-                  type="checkbox"
-                  name="disable_omnomcom"
-                  :disabled="form.disable_omnomcom"
-                >
+                <CheckBox v-model="form.disable_omnomcom" name="disable_omnomcom" :disabled="form.disable_omnomcom">
                   Don't let me use the OmNomCom.
-                </InputField>
+                </CheckBox>
                 <InfoText
                   ><i class="fas fa-warning me-1"></i>
                   Only the board can allow you access to the OmNomCom again.
@@ -231,9 +210,9 @@ const postForm = () => {
               </div>
             </template>
 
-            <InputField v-model="form.keep_omnomcom_history" type="checkbox" name="keep_omnomcom_history">
+            <CheckBox v-model="form.keep_omnomcom_history" name="keep_omnomcom_history">
               Keep my personal orderline history.
-            </InputField>
+            </CheckBox>
             <InfoText>
               We are required to keep financial information for 7 years. If you disable this setting, your purchases
               will be anonymised after this time.
@@ -244,7 +223,7 @@ const postForm = () => {
         <InputGroup name="theme">
           Theme
           <template #input>
-            <InputField v-model="form.theme" type="checkbox" name="theme" place-holder="Test">
+            <InputField v-model="form.theme" type="select" name="theme" place-holder="Test">
               <option v-for="(theme, key) in themes" :key="key" :value="key">{{ theme }}</option>
             </InputField>
           </template>
@@ -254,17 +233,17 @@ const postForm = () => {
         <InputGroup v-if="user.is_member">
           Privacy
           <template #input>
-            <InputField v-model="form.show_achievements" type="checkbox" name="show_achievements">
+            <CheckBox v-model="form.show_achievements" name="show_achievements">
               Show my achievements on my profile.
-            </InputField>
+            </CheckBox>
             <InfoText>
               Achievements you obtain may reveal some personal details.<br />
               Only members can see your achievements.
             </InfoText>
 
-            <InputField v-model="form.profile_in_almanac" type="checkbox" name="profile_in_almanac">
+            <CheckBox v-model="form.profile_in_almanac" name="profile_in_almanac">
               Use my profile picture in the Lustrum Almanac.
-            </InputField>
+            </CheckBox>
             <InfoText>
               With this you allow for the use of your profile picture in the Lustrum Alamanac if one will be published
               during your Proto membership.
@@ -282,7 +261,7 @@ const postForm = () => {
           Profile picture
           <template #input>
             <img :src="user.photo_preview" />
-            <InputField type="file" />
+            <FileInput />
           </template>
         </InputGroup>
       </div>
