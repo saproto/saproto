@@ -15,7 +15,7 @@ class MemberCardController extends Controller
     public function download(Request $request, $id)
     {
         /** @var User $user */
-        $user = User::findOrFail($id);
+        $user = User::query()->findOrFail($id);
 
         if (! $user->is_member) {
             abort(403, 'Only members can have a member card printed.');
@@ -27,12 +27,9 @@ class MemberCardController extends Controller
         return $card->output();
     }
 
-    /**
-     * @return string
-     */
-    public function startPrint(Request $request)
+    public function startPrint(Request $request): string
     {
-        $user = User::find($request->input('id'));
+        $user = User::query()->find($request->input('id'));
 
         if (! $user) {
             return 'This user could not be found!';

@@ -3,11 +3,11 @@
         Songs
         @if(!isset($edit))
             <div>
-                <a href="{{ route('codex::add-song') }}" class="btn btn-info badge">
+                <a href="{{ route('codex::create-song') }}" class="btn btn-info badge">
                     New Song
                 </a>
 
-                <a href="{{ route('codex::add-song-category') }}" class="btn btn-info badge">
+                <a href="{{ route('codex::create-song-category') }}" class="btn btn-info badge">
                     New Song type
                 </a>
             </div>
@@ -18,15 +18,19 @@
             <div class="card border">
                 <div class="card-header border-bottom-0">
                     <span class="w-100 d-inline-flex justify-content-between">
-                        <span class=" cursor-pointer" data-bs-toggle="collapse" data-bs-target="#collapse-song{{ $songCategory->id }}">
+                        <span class=" cursor-pointer" data-bs-toggle="collapse"
+                              data-bs-target="#collapse-song{{ $songCategory->id }}">
                             <b><i class="fas fa-sm fa-fw fa-caret-down"></i> {{ $songCategory->name }} ({{$songCategory->songs_count }})</b>
                               @if(isset($edit)&& $edit)
-                                <input class="form-check-input" type="checkbox" name="shuffleids[]" {{in_array($songCategory->id, $myShuffles??[])?"checked":""}} value="{{$songCategory->id}}"> shuffle?
-                              @endif
+                                <input class="form-check-input" type="checkbox" name="shuffleids[]"
+                                       {{in_array($songCategory->id, $myShuffles??[])?"checked":""}} value="{{$songCategory->id}}">
+                                shuffle?
+                            @endif
                         </span>
                         @if(!isset($edit))
                             <div>
-                                <a href="{{ route('codex::edit-song-category', ['id' => $songCategory->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                <a href="{{ route('codex::edit-song-category', ['id' => $songCategory->id]) }}"
+                                   class="btn btn-info badge m-1">Edit</a>
                                  @include('components.modals.confirm-modal', [
                                     'action' => route('codex::delete-song-category', ['id' => $songCategory->id]),
                                     'classes' => 'btn btn-danger badge',
@@ -52,12 +56,13 @@
                                                 'label' => 'Include'
                                                 ])
                                         </div>
-                                      @endif
+                                    @endif
 
                                     {{$song->title}}
                                     @if(!isset($edit))
                                         <div>
-                                            <a href="{{ route('codex::edit-song', ['id' => $song->id]) }}" class="btn btn-info badge m-1">Edit</a>
+                                            <a href="{{ route('codex::edit-song', ['id' => $song->id]) }}"
+                                               class="btn btn-info badge m-1">Edit</a>
                                              @include('components.modals.confirm-modal', [
                                             'action' => route('codex::delete-song', ['id' => $song->id]),
                                             'classes' => 'btn btn-danger badge m-1',

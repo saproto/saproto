@@ -6,6 +6,9 @@ use App\Models\SongCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<SongCategory>
+ */
 class SongCategoryFactory extends Factory
 {
     protected $model = SongCategory::class;
@@ -13,7 +16,7 @@ class SongCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => fake()->name(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

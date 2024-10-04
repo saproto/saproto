@@ -9,11 +9,9 @@ use Illuminate\Support\Facades\Cache;
 class LdapController extends Controller
 {
     /**
-     * @param string $query
-     * @param bool $only_active
      * @return array
      */
-    public static function searchUtwente($query, $only_active = false)
+    public static function searchUtwente(string $query, bool $only_active = false)
     {
         $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', config('ldap.proxy.utwente.url'), config('ldap.proxy.utwente.key'), urlencode($query)));
         if ($response === false) {
@@ -22,19 +20,13 @@ class LdapController extends Controller
         $result = json_decode($response)->result;
 
         if ($only_active) {
-            return array_filter($result, function ($row) {
-                if ($row->active) {
-                    return true;
-                }
-
-                return false;
-            });
+            return array_filter($result, static fn ($row): bool => (bool) $row->active);
         }
 
-        return $result;
+        return $result ?? [];
     }
 
-    public static function searchStudents()
+    public static function searchStudents(): array
     {
         return Cache::remember('ldap_utwente_students', 3600, function () {
             $ldap_students = LdapController::searchUtwente('|(department=*B-CREA*)(department=*M-ITECH*)');

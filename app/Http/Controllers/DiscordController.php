@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use GuzzleHttp;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class DiscordController extends Controller
 {
@@ -22,7 +24,7 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        return redirect()->away($authoriseURL.http_build_query($params));
+        return Redirect::away($authoriseURL.http_build_query($params));
     }
 
     public function discordLinkCallback(Request $request)
@@ -38,23 +40,23 @@ class DiscordController extends Controller
             'scope' => 'identify',
         ];
 
-        $client = new GuzzleHttp\Client();
+        $client = new Client;
         try {
             $accessTokenData = $client->post($tokenURL, ['form_params' => $tokenData]);
             $accessTokenData = json_decode($accessTokenData->getBody());
-        } catch (ClientException) {
+        } catch (ClientException|GuzzleException) {
             Session::flash('flash_message', 'Something went wrong when trying to link this Discord account. Try again later.');
 
-            return redirect()->route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         $userData = Http::withToken($accessTokenData->access_token)->get($apiURLBase);
         $userData = json_decode($userData);
 
-        if (User::firstWhere('discord_id', $userData->id)) {
+        if (User::query()->firstWhere('discord_id', $userData->id)) {
             session()->flash('flash_message', 'This Discord account is already linked to a user!');
 
-            return redirect()->route('user::dashboard');
+            return Redirect::route('user::dashboard::show');
         }
 
         $user = Auth::user();
@@ -63,7 +65,7 @@ class DiscordController extends Controller
 
         session()->flash('flash_message', 'Successfully linked Discord!');
 
-        return redirect()->route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 
     public function discordUnlink()
@@ -74,6 +76,6 @@ class DiscordController extends Controller
 
         session()->flash('flash_message', 'Discord account has been unlinked.');
 
-        return redirect()->route('user::dashboard');
+        return Redirect::route('user::dashboard::show');
     }
 }

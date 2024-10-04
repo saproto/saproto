@@ -41,8 +41,6 @@
 
 @yield('body')
 
-@include('discord.modal')
-
 @if(!App::isDownForMaintenance())
 
     @include('components.modals.flashmessages')

@@ -37,11 +37,11 @@ class NewsletterCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        $newsletterlist = EmailList::findOrFail(config('proto.weeklynewsletter'));
+        $newsletterlist = EmailList::query()->findOrFail(config('proto.weeklynewsletter'));
 
-        $newsitem = Newsitem::findOrFail($this->argument('id'));
+        $newsitem = Newsitem::query()->findOrFail($this->argument('id'));
 
         if (! $newsitem->is_weekly) {
             $this->error('This is not a weekly newsletter item!');

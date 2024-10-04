@@ -6,5 +6,5 @@
     </Description>
     <InputEncoding>UTF-8</InputEncoding>
     <Image width="16" height="16" type="image/x-icon">{{ asset('images/favicons/favicon2.png') }}</Image>
-    <Url type="text/html" method="get" template="{{ route('search') }}/?query={searchTerms}"/>
+    <Url type="text/html" method="get" template="{{ route('search::get') }}/?query={searchTerms}" />
 </OpenSearchDescription>

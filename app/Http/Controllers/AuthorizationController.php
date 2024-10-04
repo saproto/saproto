@@ -6,11 +6,11 @@ use App\Models\User;
 use App\Services\ProTubeApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Permission;
-use Redirect;
 use Role;
-use Session;
 
 class AuthorizationController extends Controller
 {
@@ -38,7 +38,7 @@ class AuthorizationController extends Controller
         /** @var Role $role */
         $role = Role::findOrFail($id);
         /** @var User $user */
-        $user = User::findOrFail($request->user);
+        $user = User::query()->findOrFail($request->user);
 
         if ($user->hasRole($role)) {
             Session::flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
@@ -69,7 +69,7 @@ class AuthorizationController extends Controller
         /** @var Role $role */
         $role = Role::findOrFail($id);
         /** @var User $user */
-        $user = User::findOrFail($userId);
+        $user = User::query()->findOrFail($userId);
         $user->removeRole($role);
 
         // Call Protube webhook to remove this user's admin rights

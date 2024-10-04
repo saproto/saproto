@@ -12,6 +12,9 @@ class VerifyPersonalDetails extends Mailable
     use Queueable;
     use SerializesModels;
 
+    /**
+     * @var User
+     */
     public $user;
 
     /**

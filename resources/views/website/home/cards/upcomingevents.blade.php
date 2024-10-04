@@ -26,7 +26,7 @@
 
         @endif
 
-        <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
+        <a href="{{ route("event::index") }}" class="btn btn-info btn-block">Go to the calendar</a>
 
     </div>
 </div>

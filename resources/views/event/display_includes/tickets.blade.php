@@ -32,7 +32,7 @@
                             @else
                                     <?php $has_unpaid_tickets = true; ?>
                                 <a class="card-link text-danger"
-                                   href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::list") }}">
+                                   href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::index") }}">
                                     Payment Required
                                 </a>
                             @endif
@@ -232,26 +232,26 @@
 
     @push('javascript')
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            const directPayButton = document.getElementById('directpay')
-            const feesButton = document.getElementById('feesbutton')
-            const selectList = Array.from(document.getElementsByClassName('ticket-select'))
+            const directPayButton = document.getElementById('directpay');
+            const feesButton = document.getElementById('feesbutton');
+            const selectList = Array.from(document.getElementsByClassName('ticket-select'));
             let totalPrepaidSelected = 0;
             selectList.forEach(ticket => ticket.addEventListener('change', _ => {
-                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value, 0)
-                document.getElementById('ticket-total').innerHTML = total.toFixed(2)
+                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value, 0);
+                document.getElementById('ticket-total').innerHTML = total.toFixed(2);
 
                 if (ticket.getAttribute('data-prepaid') === true) {
-                    totalPrepaidSelected += ticket.value - ticket.getAttribute('previous-value')
-                    ticket.setAttribute('data-previous-value', ticket.value)
+                    totalPrepaidSelected += ticket.value - ticket.getAttribute('previous-value');
+                    ticket.setAttribute('data-previous-value', ticket.value);
                 }
                 if (totalPrepaidSelected === 0) {
-                    directPayButton?.setAttribute('hidden', '')
-                    feesButton?.removeAttribute('hidden')
+                    directPayButton?.setAttribute('hidden', '');
+                    feesButton?.removeAttribute('hidden');
                 } else if (totalPrepaidSelected > 0) {
-                    directPayButton?.removeAttribute('hidden')
-                    feesButton?.setAttribute('hidden', '')
+                    directPayButton?.removeAttribute('hidden');
+                    feesButton?.setAttribute('hidden', '');
                 }
-            }))
+            }));
         </script>
     @endpush
 

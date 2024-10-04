@@ -30,10 +30,11 @@ class ExportController extends Controller
      */
     public function export($table, $personal_key)
     {
-        $user = User::where('personal_key', $personal_key)->first();
+        $user = User::query()->where('personal_key', $personal_key)->first();
         if (! $user || ! $user->is_member || ! $user->signed_nda) {
             abort(403, 'You do not have access to this data. You need a membership of a relevant committee to access it.');
         }
+
         $data = null;
         switch ($table) {
             case 'user':
@@ -46,12 +47,11 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
-                    return $activity->event->mayViewEvent($user);
-                });
+                $data = Activity::query()->has('event')->with('event')->get()->filter(static fn ($activity) => $activity->event->mayViewEvent($user));
                 foreach ($data as $val) {
                     unset($val->event);
                 }
+
                 break;
             case 'committees':
                 if ($user->can('admin')) {
@@ -62,6 +62,7 @@ class ExportController extends Controller
                         ->orWhereIn('id', array_values(config('proto.committee')))
                         ->get();
                 }
+
                 break;
             case 'committees_activities':
                 $data = HelpingCommittee::all();
@@ -71,13 +72,12 @@ class ExportController extends Controller
                 break;
             case 'events':
                 if ($user->can('admin')) {
-                    $data = Event::setEagerLoads([])->get();
+                    $data = Event::query()->setEagerLoads([])->get();
                 } else {
-                    $data = Event::setEagerLoads([])->get()
-                        ->filter(function (Event $event) use ($user) {
-                            return $event->mayViewEvent($user);
-                        });
+                    $data = Event::query()->setEagerLoads([])->get()
+                        ->filter(static fn (Event $event): bool => $event->mayViewEvent($user));
                 }
+
                 break;
             case 'event_categories':
                 $data = EventCategory::all();

@@ -16,9 +16,7 @@ class UtwenteCleanup extends Mailable
      *
      * @return void
      */
-    public function __construct(public $unlinked)
-    {
-    }
+    public function __construct(public $unlinked) {}
 
     /**
      * Build the message.

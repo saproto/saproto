@@ -5,7 +5,8 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($song)&&$song?route('codex::edit-song', ['id'=>$song->id]):route("codex::add-song") }}" method="POST">
+    <form action="{{ isset($song)&&$song?route('codex::update-song', ['id'=>$song->id]):route("codex::store-codex") }}"
+          method="POST">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -18,29 +19,34 @@
                             {{-- Title }--}}
                             <label for="type">Title:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->title??""}}" class="form-control" id="title" name="title">
+                                <input type="text" value="{{$song->title??""}}" class="form-control" id="title"
+                                       name="title">
                             </div>
 
                             {{-- Artist }--}}
                             <label for="artist">Artist:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->artist??""}}" class="form-control" id="artist" name="artist">
+                                <input type="text" value="{{$song->artist??""}}" class="form-control" id="artist"
+                                       name="artist">
                             </div>
 
                             {{-- Youtube ID }--}}
                             <label for="youtube">Youtube ID:</label>
                             <div class="form-group mb-3">
-                                <input type="text" value="{{$song->youtube??""}}" class="form-control" id="youtube" name="youtube">
+                                <input type="text" value="{{$song->youtube??""}}" class="form-control" id="youtube"
+                                       name="youtube">
                             </div>
 
-                                {{-- Categories }--}}
+                            {{-- Categories }--}}
                             <label for="categories">Categories:</label>
                             <ul>
                                 @foreach($categories as $category)
                                     <li>
-                                            <div class="form-check d-inline-flex">
-                                                <input class="form-check-input" type="checkbox" {{in_array($category->id, $myCategories)?"checked":""}} name="categoryids[]" value="{{$category->id}}">
-                                            </div>
+                                        <div class="form-check d-inline-flex">
+                                            <input class="form-check-input" type="checkbox"
+                                                   {{in_array($category->id, $myCategories)?"checked":""}} name="categoryids[]"
+                                                   value="{{$category->id}}">
+                                        </div>
                                         {{ $category->name}}
                                     </li>
                                 @endforeach

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Milon\Barcode\DNS2D;
 
 class ShortUrlController extends Controller
 {
@@ -17,7 +18,7 @@ class ShortUrlController extends Controller
      */
     public function index(Request $request)
     {
-        $urls = ShortUrl::orderBy('url')->paginate(25);
+        $urls = ShortUrl::query()->orderBy('url')->paginate(25);
 
         return view('short_url.index', ['urls' => $urls]);
     }
@@ -28,7 +29,7 @@ class ShortUrlController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $url = $id == 'new' ? null : ShortUrl::findOrFail($id);
+        $url = $id == 'new' ? null : ShortUrl::query()->findOrFail($id);
 
         return view('short_url.edit', ['url' => $url]);
     }
@@ -39,7 +40,7 @@ class ShortUrlController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $url = $id == 'new' ? new ShortUrl() : ShortUrl::findOrFail($id);
+        $url = $id == 'new' ? new ShortUrl : ShortUrl::query()->findOrFail($id);
         $url->fill($request->all());
         $url->save();
         Session::flash('flash_message', 'Short URL updated!');
@@ -55,7 +56,7 @@ class ShortUrlController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $url = ShortUrl::findOrFail($id);
+        $url = ShortUrl::query()->findOrFail($id);
         $url->delete();
 
         Session::flash('flash_message', 'Short URL deleted!');
@@ -63,14 +64,20 @@ class ShortUrlController extends Controller
         return Redirect::route('short_url::index');
     }
 
+    public function qrCode(int $id)
+    {
+        $url = ShortUrl::query()->findOrFail($id);
+
+        return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
+    }
+
     /**
-     * @param  string  $short
      * @return RedirectResponse
      */
-    public function go(Request $request, $short)
+    public function go(string $short)
     {
-        $url = ShortUrl::where('url', $short)->firstOrFail();
-        $url->clicks = $url->clicks + 1;
+        $url = ShortUrl::query()->where('url', $short)->firstOrFail();
+        $url->clicks++;
         $url->save();
 
         return Redirect::to(sprintf('https://%s', $url->target));

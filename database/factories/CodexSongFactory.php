@@ -6,6 +6,9 @@ use App\Models\CodexSong;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<CodexSong>
+ */
 class CodexSongFactory extends Factory
 {
     protected $model = CodexSong::class;
@@ -13,10 +16,10 @@ class CodexSongFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->word(),
-            'artist' => $this->faker->word(),
-            'lyrics' => $this->faker->word(),
-            'youtube' => $this->faker->word(),
+            'title' => fake()->word(),
+            'artist' => fake()->word(),
+            'lyrics' => fake()->word(),
+            'youtube' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
