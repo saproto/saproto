@@ -221,7 +221,7 @@ class UserDashboardController extends Controller
                 'text' => 'To enter your in our member administration, you need to provide is with some extra information.',
             ],
             [
-                'url' => Auth::check() ? route('user::bank::show', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::bank::create', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->bank,
                 'heading' => 'Provide payment details',
