@@ -179,7 +179,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to addresses --- */
         Route::controller(AddressController::class)->prefix('address')->name('address::')->group(function () {
-            Route::get('show', 'add')->name('show');
+            Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');

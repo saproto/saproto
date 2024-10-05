@@ -173,7 +173,7 @@
                                 </a>
                             </p>
                         @else
-                            <a href="{{ route('user::address::show') }}">
+                            <a href="{{ route('user::address::create') }}">
                                 Let us know your address
                             </a>
                         @endif
