@@ -47,25 +47,21 @@ class Ticket extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /** @return BelongsTo */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
-    /** @return HasMany */
     public function purchases(): HasMany
     {
         return $this->hasMany(TicketPurchase::class);
     }
 
-    /** @return Collection */
     public function getUsers(): Collection
     {
         return User::query()->whereHas('tickets', function ($query) {
@@ -73,13 +69,11 @@ class Ticket extends Model
         })->get();
     }
 
-    /** @return int */
     public function totalAvailable(): int
     {
         return $this->sold() + $this->product->stock;
     }
 
-    /** @return int */
     public function sold(): int
     {
         return $this->purchases->count();
@@ -87,7 +81,7 @@ class Ticket extends Model
 
     public function canBeSoldTo(User $user): bool
     {
-        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
+        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
     }
 
     public function buyLimitReached(User $user): bool
@@ -95,10 +89,6 @@ class Ticket extends Model
         return $this->has_buy_limit && $this->buyLimitForUser($user) <= 0;
     }
 
-    /**
-     * @param User $user
-     * @return int|float
-     */
     public function buyLimitForUser(User $user): int|float
     {
         return $this->buy_limit - $this->purchases->where('user_id', $user->id)->count();
