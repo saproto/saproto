@@ -139,7 +139,7 @@ return [
         'fee_id' => 887,
         'free_methods' => ['creditcard'],
         'use_fees' => false,
-        'has_webhook' => ! (getenv('APP_ENV') === 'local'),
+        'has_webhook' => getenv('APP_ENV') !== 'local',
     ],
 
     /*

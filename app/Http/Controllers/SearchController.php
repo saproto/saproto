@@ -9,15 +9,16 @@ use App\Models\Page;
 use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\User;
-use Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response as SupportResponse;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
-use Session;
 
 class SearchController extends Controller
 {
@@ -38,6 +39,7 @@ class SearchController extends Controller
 
             if ($presearch_users) {
                 foreach ($presearch_users as $user) {
+                    /** @var User $user */
                     if ($user->is_member) {
                         $users[] = $user;
                     }
@@ -53,6 +55,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_pages) {
             foreach ($presearch_pages as $page) {
+                /** @var Page $page */
                 if (! $page->is_member_only || Auth::user()?->is_member) {
                     $pages[] = $page;
                 }
@@ -67,6 +70,7 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_committees) {
             foreach ($presearch_committees as $committee) {
+                /** @var Committee $committee */
                 if ($committee->public || Auth::user()?->can('board')) {
                     $committees[] = $committee;
                 }
@@ -82,7 +86,7 @@ class SearchController extends Controller
         $events = collect();
         if ($presearch_event_ids) {
             //load the events with all the correct data to show in the event block
-            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(function ($event) use ($events) {
+            Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(static function ($event) use ($events) {
                 if ($event->mayViewEvent(Auth::user())) {
                     $events->push($event);
                 }
@@ -113,10 +117,7 @@ class SearchController extends Controller
         ]);
     }
 
-    /**
-     * @return View
-     */
-    public function ldapSearch(Request $request)
+    public function ldapSearch(Request $request): View
     {
         $query = null;
         $data = null;
@@ -125,16 +126,18 @@ class SearchController extends Controller
             if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
                 abort(400, 'You cannot use special characters in your search query.');
             }
+
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
                 $search = '&';
                 foreach ($terms as $term) {
                     if (Auth::user()->can('board')) {
-                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(userPrincipalName={$term}@utwente.nl)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
                     } else {
-                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
                     }
                 }
+
                 $data = LdapController::searchUtwente($search, true);
             } else {
                 Session::flash('flash_message', 'Please make your search term more than three characters.');
@@ -153,10 +156,7 @@ class SearchController extends Controller
         return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
-    /**
-     * @return array
-     */
-    public function getUserSearch(Request $request)
+    public function getUserSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
@@ -171,40 +171,28 @@ class SearchController extends Controller
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public function getEventSearch(Request $request)
+    public function getEventSearch(Request $request): array|Collection
     {
         $search_attributes = ['id', 'title'];
 
         return $this->getGenericSearchQuery(Event::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    /**
-     * @return array
-     */
-    public function getCommitteeSearch(Request $request)
+    public function getCommitteeSearch(Request $request): Collection
     {
         $search_attributes = ['id', 'name', 'slug'];
 
         return $this->getGenericSearchQuery(Committee::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    /**
-     * @return array
-     */
-    public function getProductSearch(Request $request)
+    public function getProductSearch(Request $request): Collection
     {
         $search_attributes = ['id', 'name'];
 
         return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    /**
-     * @return array
-     */
-    public function getAchievementSearch(Request $request)
+    public function getAchievementSearch(Request $request): Collection
     {
         $search_attributes = ['id', 'name'];
 
@@ -213,7 +201,7 @@ class SearchController extends Controller
 
     private function getGenericSearchQuery(Model|string $model, ?string $query, array $attributes): ?Builder
     {
-        if (! $query) {
+        if ($query === null || $query === '' || $query === '0') {
             return null;
         }
 
@@ -225,6 +213,7 @@ class SearchController extends Controller
             if (strlen(str_replace('%', '', $term)) < 3) {
                 continue;
             }
+
             $check_at_least_one_valid_term = true;
         }
 
@@ -233,11 +222,12 @@ class SearchController extends Controller
         }
 
         foreach ($attributes as $attr) {
-            $query = $query->orWhere(function ($query) use ($terms, $attr) {
+            $query = $query->orWhere(static function ($query) use ($terms, $attr) {
                 foreach ($terms as $term) {
                     if (strlen(str_replace('%', '', $term)) < 3) {
                         continue;
                     }
+
                     $query = $query->where($attr, 'LIKE', sprintf('%%%s%%', $term));
                 }
             });

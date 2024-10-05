@@ -53,19 +53,19 @@ class PhotoAlbum extends Model
     /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo(\App\Models\Event::class, 'event_id');
+        return $this->belongsTo(Event::class, 'event_id');
     }
 
     /** @return HasOne */
     private function thumbPhoto()
     {
-        return $this->hasOne(\App\Models\Photo::class, 'id', 'thumb_id');
+        return $this->hasOne(Photo::class, 'id', 'thumb_id');
     }
 
     /** @return HasMany */
     public function items()
     {
-        return $this->hasMany(\App\Models\Photo::class, 'album_id');
+        return $this->hasMany(Photo::class, 'album_id');
     }
 
     /** @return string|null */

@@ -9,7 +9,7 @@ use App\Models\Member;
 use App\Models\OrderLine;
 use App\Models\Product;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class FeeCron extends Command
 {
@@ -39,29 +39,29 @@ class FeeCron extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
-            $this->info('We don\'t charge membership fees in August or September.');
+            $this->info("We don't charge membership fees in August or September.");
 
             return 0;
         }
 
-        if (intval(date('n')) >= 9) {
-            $yearstart = intval(date('Y'));
-        } else {
-            $yearstart = intval(date('Y')) - 1;
+        if (intval(date('n')) == 10) {
+            $this->info('Temporarily skipped due to membership issues.');
+
+            return 0;
         }
+
+        $yearstart = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         $students = LdapController::searchStudents();
         $names = $students['names'];
         $emails = $students['emails'];
         $usernames = $students['usernames'];
 
-        $already_paid = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
+        $already_paid = OrderLine::query()->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
         $charged = (object) [
             'count' => 0,
@@ -71,7 +71,11 @@ class FeeCron extends Command
         ];
 
         foreach (Member::all() as $member) {
-            if (in_array($member->user->id, $already_paid) || $member->is_pending) {
+            if (in_array($member->user->id, $already_paid)) {
+                continue;
+            }
+
+            if ($member->is_pending) {
                 continue;
             }
 
@@ -94,7 +98,8 @@ class FeeCron extends Command
                     $reason = 'Donor';
                     $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
                 }
-                $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - $reason";
+
+                $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - {$reason}";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
                 $fee = config('omnomcom.fee')['regular'];
                 $email_fee = 'regular';
@@ -107,17 +112,18 @@ class FeeCron extends Command
 
             $charged->count++;
 
-            $product = Product::findOrFail($fee);
+            $product = Product::query()->findOrFail($fee);
             $product->buyForUser($member->user, 1, null, null, null, null, 'membership_fee_cron');
 
             Mail::to($member->user)->queue((new FeeEmail($member->user, $email_fee, $product->price, $email_remittance_reason))->onQueue('high'));
         }
 
+        /** @phpstan-ignore-next-line */
         if ($charged->count > 0) {
             Mail::queue((new FeeEmailForBoard($charged))->onQueue('high'));
         }
 
-        $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
+        $this->info('Charged '.$charged->count.' of '.Member::query()->count().' members their fee.');
 
         return 0;
     }

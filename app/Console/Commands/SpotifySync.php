@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
-use DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifySync extends Command
@@ -37,10 +37,8 @@ class SpotifySync extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $spotify = SpotifyController::getApi();
         $session = SpotifyController::getSession();
@@ -53,8 +51,8 @@ class SpotifySync extends Command
 
                 return;
             }
-        } catch (SpotifyWebAPIException $e) {
-            if ($e->getMessage() == 'The access token expired') {
+        } catch (SpotifyWebAPIException $spotifyWebAPIException) {
+            if ($spotifyWebAPIException->getMessage() === 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
                 $refreshToken = $session->getRefreshToken();
@@ -117,7 +115,7 @@ class SpotifySync extends Command
         $this->info('Done!');
     }
 
-    public function updatePlaylist($spotify, $playlistId, $spotifyUris)
+    public function updatePlaylist($spotify, string $playlistId, $spotifyUris): void
     {
         $this->info('---');
 
@@ -125,8 +123,8 @@ class SpotifySync extends Command
 
         try {
             $spotify->replacePlaylistTracks($playlistId, $spotifyUris);
-        } catch (SpotifyWebAPIException $e) {
-            $this->error('Error updating playlist '.$playlistId.': '.$e->getMessage());
+        } catch (SpotifyWebAPIException $spotifyWebAPIException) {
+            $this->error('Error updating playlist '.$playlistId.': '.$spotifyWebAPIException->getMessage());
 
             return;
         }

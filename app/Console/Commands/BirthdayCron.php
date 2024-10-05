@@ -6,7 +6,7 @@ use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class BirthdayCron extends Command
 {
@@ -37,11 +37,11 @@ class BirthdayCron extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))
-            ->whereHas('member', function ($q) {
+            ->whereHas('member', static function ($q) {
                 $q->where('is_pending', false);
             })
             ->get();

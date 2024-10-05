@@ -18,18 +18,18 @@ class RegistrationHelperController extends Controller
     {
         $search = $request->input('query');
 
-        $users = User::whereHas('member', function ($q) {
+        $users = User::query()->whereHas('member', static function ($q) {
             $q->where('is_pending', true);
         });
 
         if ($search) {
-            $users = $users->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%$search%")
-                    ->orWhere('calling_name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%")
-                    ->orWhere('utwente_username', 'LIKE', "%$search%")
-                    ->orWhereHas('member', function ($q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%$search%");
+            $users = $users->where(static function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
+                    ->orWhereHas('member', static function ($q) use ($search) {
+                        $q->where('proto_username', 'LIKE', "%{$search}%");
                     });
             });
         }
@@ -47,7 +47,7 @@ class RegistrationHelperController extends Controller
      */
     public function details($id)
     {
-        $user = User::whereHas('member', function ($q) {
+        $user = User::query()->whereHas('member', static function ($q) {
             $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
         $memberships = $user->getMemberships();

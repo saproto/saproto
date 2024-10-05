@@ -26,15 +26,11 @@ class NotUtwenteEmail implements Rule
     {
         $domainPart = explode('@', $value)[1] ?? null;
 
-        if (! $domainPart) {
+        if ($domainPart === null || $domainPart === '' || $domainPart === '0') {
             return false;
         }
 
-        if (str_contains(strtolower($domainPart), 'utwente')) {
-            return false;
-        }
-
-        return true;
+        return ! str_contains(strtolower($domainPart), 'utwente');
     }
 
     /**

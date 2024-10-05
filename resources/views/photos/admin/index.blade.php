@@ -38,7 +38,7 @@
                     Add Album
                 </div>
 
-                <form method="post" action="{{ route('photo::admin::add') }}">
+                <form method="post" action="{{ route('photo::admin::create') }}">
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group">

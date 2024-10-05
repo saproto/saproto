@@ -35,9 +35,9 @@ class SyncWikiAccounts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        $users = User::get();
+        $users = User::query()->get();
 
         $configlines = [];
 
@@ -59,12 +59,15 @@ class SyncWikiAccounts extends Command
         echo implode("\n", $configlines);
     }
 
-    private function convertCommitteeNameToGroup($name)
+    private function convertCommitteeNameToGroup($name): string
     {
         return strtolower(str_replace(' ', '_', $name));
     }
 
-    private function convertCommitteesToGroups($committees)
+    /**
+     * @return mixed[]
+     */
+    private function convertCommitteesToGroups($committees): array
     {
         $groups = [];
         foreach ($committees as $committee) {
@@ -74,7 +77,7 @@ class SyncWikiAccounts extends Command
         return $groups;
     }
 
-    private function constructWikiGroups($user)
+    private function constructWikiGroups($user): string
     {
         $rootCommittee = $this->convertCommitteeNameToGroup(
             Committee::whereSlug(config('proto.rootcommittee'))->firstOrFail()->name
