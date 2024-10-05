@@ -17,7 +17,7 @@ class AddressController extends Controller
     /**
      * @return View|RedirectResponse
      */
-    public function show(Request $request)
+    public function create(Request $request)
     {
         $user = Auth::user();
 
