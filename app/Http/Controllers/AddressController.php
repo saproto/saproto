@@ -17,7 +17,7 @@ class AddressController extends Controller
     /**
      * @return View|RedirectResponse
      */
-    public function show(Request $request)
+    public function create(Request $request)
     {
         $user = Auth::user();
 
@@ -91,7 +91,7 @@ class AddressController extends Controller
     public function destroy()
     {
         $user = Auth::user();
-        if (! $user->address) {
+        if (!$user->address) {
             Session::flash('flash_message', "We don't have an address for you?");
 
             return Redirect::back();
@@ -115,10 +115,10 @@ class AddressController extends Controller
     {
         $user = Auth::user();
 
-        $user->address_visible = ! $user->address_visible;
+        $user->address_visible = !$user->address_visible;
         $user->save();
 
-        Session::flash('flash_message', 'Your primary address is now '.($user->address_visible ? 'visible' : 'hidden').' for members.');
+        Session::flash('flash_message', 'Your primary address is now ' . ($user->address_visible ? 'visible' : 'hidden') . ' for members.');
 
         return Redirect::back();
     }
@@ -131,7 +131,7 @@ class AddressController extends Controller
         $addressdata = $request->all();
         $addressdata['user_id'] = $user->id;
 
-        if (! $address->validate($addressdata)) {
+        if (!$address->validate($addressdata)) {
             return Redirect::route('user::address::edit')->withErrors($address->errors());
         }
 
