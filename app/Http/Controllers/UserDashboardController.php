@@ -229,7 +229,7 @@ class UserDashboardController extends Controller
                 'text' => 'We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend.',
             ],
             [
-                'url' => Auth::check() ? route('user::address::show', ['id' => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::address::create', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->address,
                 'heading' => 'Provide contact details',
