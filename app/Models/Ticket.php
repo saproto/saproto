@@ -22,7 +22,6 @@ use Illuminate\Support\Collection;
  * @property bool $is_prepaid
  * @property bool $show_participants
  * @property bool $has_buy_limit
- * @property string $redirect_url
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
@@ -49,25 +48,25 @@ class Ticket extends Model
     public $timestamps = false;
 
     /** @return BelongsTo */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
     /** @return BelongsTo */
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
     /** @return HasMany */
-    public function purchases()
+    public function purchases(): HasMany
     {
         return $this->hasMany(TicketPurchase::class);
     }
 
     /** @return Collection */
-    public function getUsers()
+    public function getUsers(): Collection
     {
         return User::query()->whereHas('tickets', function ($query) {
             $query->where('ticket_id', $this->id);
@@ -75,20 +74,20 @@ class Ticket extends Model
     }
 
     /** @return int */
-    public function totalAvailable(): float|int|array
+    public function totalAvailable(): int
     {
         return $this->sold() + $this->product->stock;
     }
 
     /** @return int */
-    public function sold()
+    public function sold(): int
     {
         return $this->purchases->count();
     }
 
     public function canBeSoldTo(User $user): bool
     {
-        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
+        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
     }
 
     public function buyLimitReached(User $user): bool
@@ -97,7 +96,8 @@ class Ticket extends Model
     }
 
     /**
-     * @return int
+     * @param User $user
+     * @return int|float
      */
     public function buyLimitForUser(User $user): int|float
     {

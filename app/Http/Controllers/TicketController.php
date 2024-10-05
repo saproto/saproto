@@ -35,7 +35,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
+        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turning It Off And On Again committee.');
 
             return Redirect::back();
@@ -59,7 +59,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -70,12 +70,12 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
+        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
 
             return Redirect::back();
@@ -107,7 +107,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -130,13 +130,13 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  string  $barcode
+     * @param string $barcode
      * @return RedirectResponse
      */
     public function scan($barcode)
     {
         $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
-        if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
+        if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');
 
             return Redirect::back();
@@ -154,11 +154,11 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $event
+     * @param int $event
      */
     public function scanApi($event, Request $request): array
     {
-        if (! $request->has('barcode')) {
+        if (!$request->has('barcode')) {
             return [
                 'code' => 500,
                 'message' => 'Missing barcode',
@@ -180,7 +180,7 @@ class TicketController extends Controller
         /** @var TicketPurchase|null $ticket */
         $ticket = TicketPurchase::query()->where('barcode', $request->barcode)->first();
 
-        if ($ticket != null && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
+        if ($ticket != null && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
             return [
                 'code' => 500,
                 'message' => 'Unauthorized to scan',
@@ -198,7 +198,7 @@ class TicketController extends Controller
                 ];
             }
 
-            if (! $unscan && $ticket->scanned !== null) {
+            if (!$unscan && $ticket->scanned !== null) {
                 return [
                     'code' => 403,
                     'message' => 'Ticket already used',
@@ -244,7 +244,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  string  $barcode
+     * @param string $barcode
      * @return RedirectResponse
      */
     public function unscan($barcode = null)
@@ -256,7 +256,7 @@ class TicketController extends Controller
         }
 
         $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
-        if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
+        if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');
 
             return Redirect::back();
@@ -274,16 +274,16 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return string
      */
-    public function download($id)
+    public function download(int $id)
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);
         if ($ticket->user->id != Auth::id()) {
             abort(403, 'This is not your ticket!');
-        } elseif (! $ticket->canBeDownloaded()) {
+        } elseif (!$ticket->canBeDownloaded()) {
             Session::flash('flash_message', 'You need to pay for this ticket before you can download it.');
 
             return Redirect::back();
@@ -296,7 +296,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function buyForEvent(Request $request, $id)
@@ -310,47 +310,49 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        if (! $request->has('tickets')) {
+        if (!$request->has('tickets')) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
 
             return Redirect::back();
         }
 
-        foreach ($request->get('tickets') as $ticket_id => $amount) {
+        $tickets = $request->get('tickets');
+
+        foreach ($tickets as $ticket_id => $amount) {
             $ticket = Ticket::query()->find($ticket_id);
             $user_owns = TicketPurchase::query()->where('user_id', Auth::id())->where('ticket_id', $ticket_id)->count();
-            if (! $ticket) {
+            if (!$ticket) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is not an existing ticket. Entire order cancelled.");
 
                 return Redirect::back();
             }
 
-            if ($ticket->members_only && ! Auth::user()->is_member) {
+            if ($ticket->members_only && !Auth::user()->is_member) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is only available to members. You are not a member. Entire order cancelled.");
 
                 return Redirect::back();
             }
 
             if ($ticket->event->id != $event->id) {
-                Session::flash('flash_message', "Ticket ID#{$ticket_id} is not a ticket for event '".$event->title."'. Entire order cancelled.");
+                Session::flash('flash_message', "Ticket ID#{$ticket_id} is not a ticket for event '" . $event->title . "'. Entire order cancelled.");
 
                 return Redirect::back();
             }
 
             if ($ticket->has_buy_limit && ($amount + $user_owns) > $ticket->buy_limit) {
-                Session::flash('flash_message', 'You tried to buy '.$amount." of ticket '".$ticket->product->name."'. The total limit per user for this ticket is ".$ticket->buy_limit.' and you have already bought '.$user_owns.'. Entire order cancelled.');
+                Session::flash('flash_message', 'You tried to buy ' . $amount . " of ticket '" . $ticket->product->name . "'. The total limit per user for this ticket is " . $ticket->buy_limit . ' and you have already bought ' . $user_owns . '. Entire order cancelled.');
 
                 return Redirect::back();
             }
 
             if ($amount > config('proto.maxtickets')) {
-                Session::flash('flash_message', 'You tried to buy more then '.config('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".config('proto.maxtickets').' at a time. Entire order cancelled.');
+                Session::flash('flash_message', 'You tried to buy more then ' . config('proto.maxtickets') . " of ticket '" . $ticket->product->name . "', you can only buy " . config('proto.maxtickets') . ' at a time. Entire order cancelled.');
 
                 return Redirect::back();
             }
 
             if ($amount > $ticket->product->stock) {
-                Session::flash('flash_message', "You tried to buy {$amount} of ticket '".$ticket->product->name."', but only ".$ticket->product->stock.' are available. Entire order cancelled.');
+                Session::flash('flash_message', "You tried to buy {$amount} of ticket '" . $ticket->product->name . "', but only " . $ticket->product->stock . ' are available. Entire order cancelled.');
 
                 return Redirect::back();
             }
@@ -361,14 +363,15 @@ class TicketController extends Controller
         $prepaid_tickets = [];
 
         $total_cost = 0;
-        foreach ($request->get('tickets') as $ticket_id => $amount) {
+        foreach ($tickets as $ticket_id => $amount) {
+            /** @var Ticket $ticket */
             $ticket = Ticket::query()->find($ticket_id);
 
             for ($i = 0; $i < $amount; $i++) {
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
 
                 //Non-members can only buy prepaid tickets, as we have no way of resolving their payment otherwise.
-                if ($ticket->is_prepaid || ! Auth::user()->is_member) {
+                if ($ticket->is_prepaid || !Auth::user()->is_member) {
                     $prepaid_tickets[] = $oid;
                     $total_cost += $ticket->product->price;
                 }
@@ -377,7 +380,7 @@ class TicketController extends Controller
                     'ticket_id' => $ticket_id,
                     'orderline_id' => $oid,
                     'user_id' => Auth::id(),
-                    'barcode' => $oid.mt_rand(1000000000, 9999999999),
+                    'barcode' => $oid . mt_rand(1000000000, 9999999999),
                 ]);
                 $purchase->save();
 
@@ -386,7 +389,7 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
+        if (config('omnomcom.mollie.use_fees') && !$request->has('method') && $prepaid_tickets !== []) {
             Session::flash('flash_message', 'No payment method is selected!');
 
             return Redirect::back();
@@ -396,7 +399,7 @@ class TicketController extends Controller
         if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
-            $payment_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);
+            $payment_method = $available_methods->filter(static fn($method): bool => $method->id === $requested_method);
 
             if ($payment_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
@@ -416,7 +419,7 @@ class TicketController extends Controller
             }
         }
 
-        if (! $sold) {
+        if (!$sold) {
             Session::flash('flash_message', "You didn't select any tickets to buy. Maybe buy some tickets?");
 
             return Redirect::back();
@@ -435,9 +438,8 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
 
-        $ticket = Ticket::query()->find($request->get('tickets')[0]);
-        if ($ticket?->redirect_url) {
-            return Redirect::away($ticket->redirect_url);
+        if ($event?->activity?->redirect_url) {
+            return Redirect::away($event->activity->redirect_url);
         }
 
         return Redirect::back();
