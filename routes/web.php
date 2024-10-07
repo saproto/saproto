@@ -423,8 +423,8 @@ Route::middleware('forcedomain')->group(function () {
         /* --- TIPCie only --- */
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
             Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
+            Route::post('store', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
             Route::get('close/{id}', 'close')->name('close');
             Route::get('delete/{id}', 'destroy')->name('delete');
@@ -434,10 +434,10 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
             Route::get('delete/{id}', 'delete')->name('delete');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('store/{id}', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
         });
         /* --- Public route --- */
+        Route::post('store/{id}', [DinnerformOrderlineController::class, 'store'])->prefix('orderline')->name('orderline::store');
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
     });
 
