@@ -898,6 +898,12 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('{id}/{hash}/{name}', 'getImage');
     });
 
+    /* --- Fetching files: Public   --- */
+    Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
+        Route::get('{id}/{hash}', 'get')->name('get');
+        Route::get('{id}/{hash}/{name}', 'get');
+    });
+
     /* --- Routes related to Spotify. (Board) --- */
     Route::get('spotify/oauth', [SpotifyController::class, 'oauthTool'])->name('spotify::oauth')->middleware(['auth', 'permission:board']);
 
