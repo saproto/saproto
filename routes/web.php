@@ -436,7 +436,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
         });
-        /* --- Public route --- */
+        /* --- Member only routes --- */
         Route::post('store/{id}', [DinnerformOrderlineController::class, 'store'])->prefix('orderline')->name('orderline::store');
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
     });
