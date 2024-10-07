@@ -51,25 +51,25 @@ class PhotoAlbum extends Model
     protected $guarded = ['id'];
 
     /** @return BelongsTo */
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
 
     /** @return HasOne */
-    private function thumbPhoto()
+    private function thumbPhoto(): HasOne
     {
         return $this->hasOne(Photo::class, 'id', 'thumb_id');
     }
 
     /** @return HasMany */
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(Photo::class, 'album_id');
     }
 
     /** @return string|null */
-    public function thumb()
+    public function thumb(): ?string
     {
         if ($this->thumb_id) {
             return $this->thumbPhoto()->first()->thumbnail();
