@@ -34,8 +34,8 @@
                         <div class="form-group autocomplete">
                             <label for="event">Event:</label>
                             <input class="form-control event-search" id="event" name="event"
-                                   placeholder="{{ $ticket ? $ticket->event->title : '' }}"
-                                   value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
+                                   placeholder="{{ ($ticket && $ticket->event) ? $ticket->event->title : '' }}"
+                                   value="{{ ($ticket && $ticket->event) ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
                         </div>
 
                         @include('components.forms.datetimepicker', [
