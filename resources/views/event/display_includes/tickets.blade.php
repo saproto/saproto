@@ -1,3 +1,4 @@
+@php /**@var \App\Models\Event $event */ @endphp
 @if($event->tickets()->count() > 0)
 
         <?php $has_unpaid_tickets = false; ?>
@@ -85,7 +86,7 @@
                 @else
 
                     @foreach($event->tickets as $ticket)
-
+                        @php /** @var \App\Models\Ticket $ticket */ @endphp
                         <div class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}">
 
                             <div class="card-body">
@@ -131,7 +132,7 @@
                                     @elseif(date('U') < $ticket->available_from)
                                         For sale
                                         starting {{ date('d-m-Y H:i', $ticket->available_from) }}
-                                    @elseif(!$ticket->canBeSoldTo(Auth::user()))
+                                    @elseif(!$ticket->canBeSoldTo(Auth::user()) && !Auth::user()->is_member)
                                         This ticket is only available to members!
                                     @elseif($ticket->product->stock <= 0)
                                         Sold-out!
@@ -232,24 +233,24 @@
 
     @push('javascript')
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            const directPayButton = document.getElementById('directpay');
-            const feesButton = document.getElementById('feesbutton');
-            const selectList = Array.from(document.getElementsByClassName('ticket-select'));
+            const directPayButton = document.getElementById("directpay");
+            const feesButton = document.getElementById("feesbutton");
+            const selectList = Array.from(document.getElementsByClassName("ticket-select"));
             let totalPrepaidSelected = 0;
-            selectList.forEach(ticket => ticket.addEventListener('change', _ => {
-                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value, 0);
-                document.getElementById('ticket-total').innerHTML = total.toFixed(2);
+            selectList.forEach(ticket => ticket.addEventListener("change", _ => {
+                const total = selectList.reduce((agg, el) => agg + el.getAttribute("data-price") * el.value, 0);
+                document.getElementById("ticket-total").innerHTML = total.toFixed(2);
 
-                if (ticket.getAttribute('data-prepaid') === true) {
-                    totalPrepaidSelected += ticket.value - ticket.getAttribute('previous-value');
-                    ticket.setAttribute('data-previous-value', ticket.value);
+                if (ticket.getAttribute("data-prepaid") === true) {
+                    totalPrepaidSelected += ticket.value - ticket.getAttribute("previous-value");
+                    ticket.setAttribute("data-previous-value", ticket.value);
                 }
                 if (totalPrepaidSelected === 0) {
-                    directPayButton?.setAttribute('hidden', '');
-                    feesButton?.removeAttribute('hidden');
+                    directPayButton?.setAttribute("hidden", "");
+                    feesButton?.removeAttribute("hidden");
                 } else if (totalPrepaidSelected > 0) {
-                    directPayButton?.removeAttribute('hidden');
-                    feesButton?.setAttribute('hidden', '');
+                    directPayButton?.removeAttribute("hidden");
+                    feesButton?.setAttribute("hidden", "");
                 }
             }));
         </script>
