@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Dinnerform;
 use App\Models\Event;
 use App\Models\HeaderImage;
+use App\Models\MenuItem;
 use App\Models\Newsitem;
 use App\Models\User;
 use App\Models\Video;

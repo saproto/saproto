@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Data\MenuData;
 use App\Data\UserData;
+use App\Models\MenuItem;
 use Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -41,10 +43,17 @@ class HandleInertiaRequests extends Middleware
                     return [$permission => true];
                 })
             ],
+            'menuItems' => fn() => MenuData::collect(MenuItem::query()->where(function ($query) {
+                if (Auth::user()?->cannot('member')) {
+                    $query->where('is_member_only', false);
+                }
+            })->where('parent')->orderBy('order')->with('page')->with('children')->get()),
             'csrf' => fn() => csrf_token(),
             'flash' => [
                 'message' => fn() => $request->session()->get('flash_message')
             ],
+//            todo: remove this
+            'impersonating' => null
         ];
     }
 }

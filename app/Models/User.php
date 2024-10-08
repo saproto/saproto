@@ -71,7 +71,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
- * @property-read bool $photo_preview
+ * @property-read string $photo_preview
  * @property-read bool $signed_membership_form
  * @property-read string|null $welcome_message
  * @property-read StorageEntry|null $photo
@@ -343,11 +343,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         foreach ($this->orderlines as $orderline) {
             /** @var OrderLine $orderline */
-            if (! $orderline->isPayed()) {
+            if (!$orderline->isPayed()) {
                 return true;
             }
 
-            if (! $orderline->orderline) {
+            if (!$orderline->orderline) {
                 continue;
             }
 
@@ -410,7 +410,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  Committee  $committee
+     * @param Committee $committee
      */
     public function isInCommittee($committee): bool
     {
@@ -418,7 +418,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      */
     public function isInCommitteeBySlug($slug): bool
     {
@@ -430,17 +430,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isActiveMember(): bool
     {
         return count(
-            CommitteeMembership::withTrashed()
-                ->where('user_id', $this->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(static function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })
-                ->with('committee')
-                ->get()
-                ->where('committee.is_society', false)
-        ) > 0;
+                CommitteeMembership::withTrashed()
+                    ->where('user_id', $this->id)
+                    ->where('created_at', '<', date('Y-m-d H:i:s'))
+                    ->where(static function ($q) {
+                        $q->whereNull('deleted_at')
+                            ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                    })
+                    ->with('committee')
+                    ->get()
+                    ->where('committee.is_society', false)
+            ) > 0;
     }
 
     /**
@@ -614,7 +614,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return string */
-    public function getPhotoPreviewAttribute()
+    public function getPhotoPreviewAttribute(): string
     {
         return $this->generatePhotoPath();
     }
@@ -624,7 +624,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
-    
+
     public function getWelcomeMessageAttribute(): ?string
     {
         $welcomeMessage = WelcomeMessage::query()->where('user_id', $this->id)->first();

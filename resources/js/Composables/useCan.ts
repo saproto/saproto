@@ -1,11 +1,11 @@
 import { usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
-import type { Ref } from 'vue';
-import type { Page, PageProps } from '@inertiajs/core';
+import type { Page } from '@inertiajs/core';
+import { PageProps } from '@/types';
 
 export function useCan() {
   const page: Page<PageProps> = usePage();
-  const userPermissions: Ref<Record<string, boolean>> = computed(() => page.props.auth.permissions);
+  const userPermissions = computed(() => (page?.props as PageProps)?.auth?.permissions);
 
   const can = (permission: string): boolean => {
     return Boolean(userPermissions.value[permission]);
@@ -18,7 +18,7 @@ export function useCan() {
   };
 
   const canAll = (permissions: Array<string>): boolean => {
-    return permissions.every((permission: string) => {
+    return permissions.every((permission) => {
       return userPermissions.value[permission];
     });
   };

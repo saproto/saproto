@@ -93,7 +93,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -109,7 +109,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -189,6 +189,7 @@ class ProductController extends Controller
      */
     public function bulkUpdate(Request $request)
     {
+        return $request;
         $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
 
         $log = '';
@@ -201,6 +202,7 @@ class ProductController extends Controller
             $line = explode(',', $lineRaw);
 
             if (count($line) == 2) {
+                /** @var Product $product */
                 $product = Product::query()->find($line[0]);
 
                 if ($product) {
@@ -209,22 +211,24 @@ class ProductController extends Controller
                     $old_stock = $product->stock;
                     $new_stock = $old_stock + $delta;
 
-                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
+                    $log .= '<strong>' . $product->name . '</strong> updated with delta <strong>' . $line[1] . "</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
 
                     $products[] = $product->id;
                     $deltas[] = $delta;
                 } else {
-                    $errors .= "<span style='color: red;'>Product ID <strong>".$line[0].'</strong> not recognized.</span><br>';
+                    $errors .= "<span style='color: red;'>Product ID <strong>" . $line[0] . '</strong> not recognized.</span><br>';
                 }
             } else {
-                $errors .= "<span style='color: red;'>Incorrect format for line <strong>".$lineRaw.'</strong>.</span><br>';
+                $errors .= "<span style='color: red;'>Incorrect format for line <strong>" . $lineRaw . '</strong>.</span><br>';
             }
         }
 
         foreach ($products as $i => $product_id) {
+            /** @var Product $product */
             $product = Product::query()->find($product_id);
 
             // Make product mutations for bulk updates
+            /** @var StockMutation $mutation */
             $mutation = StockMutation::query()->make([
                 'before' => $product->stock,
                 'after' => $product->stock + $deltas[$i],
@@ -238,14 +242,14 @@ class ProductController extends Controller
             $product->save();
         }
 
-        Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
+        Session::flash('flash_message', 'Done. Errors:<br>' . $errors);
+        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors . $log))->onQueue('low'));
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception

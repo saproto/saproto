@@ -15,8 +15,8 @@ withDefaults(
 <template>
   <component
     :is="noInertia ? 'a' : Link"
-    class="my-auto opacity-75 hover:opacity-100 cursor-pointer whitespace-nowrap"
     :href="href"
+    class="my-auto opacity-75 hover:opacity-100 cursor-pointer whitespace-nowrap"
   >
     <slot />
   </component>

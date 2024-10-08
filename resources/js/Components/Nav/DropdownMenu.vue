@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onUnmounted, ref, Ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import NavItem from '@/Components/Nav/NavItem.vue';
 
 withDefaults(
@@ -8,13 +8,14 @@ withDefaults(
     direction?: 'left' | 'right';
   }>(),
   {
+    noHover: false,
     direction: 'left',
   }
 );
 
 const open = ref<boolean>(false);
 
-const dropdown: Ref<HTMLElement> = ref(null);
+const dropdown = ref<HTMLElement>();
 
 const openDropdown = () => {
   open.value = true;
@@ -25,8 +26,8 @@ const closeDropdown = () => {
   open.value = false;
   window.removeEventListener('click', clickAway);
 };
-const clickAway = (e: MouseEvent) => {
-  if (!dropdown.value.contains(e.target) && dropdown.value !== e.target) {
+const clickAway = (e: Event) => {
+  if (!dropdown.value?.contains(e.target as Node) && dropdown.value !== (e.target as HTMLElement)) {
     closeDropdown();
   }
 };

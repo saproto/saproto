@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { usePage } from '@inertiajs/vue3';
-import { computed, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import Dropdown from '@/Components/Nav/DropdownMenu.vue';
 import NavItem from '@/Components/Nav/NavItem.vue';
 import NavLink from '@/Components/Nav/NavLink.vue';
 import DropdownLink from '@/Components/Nav/DropdownLink.vue';
 import Input from '@/Components/Input/InputField.vue';
-import Button from '@/Components/SolidButton.vue';
 import { useCan } from '@/Composables/useCan';
+import { route } from 'ziggy-js';
+import { usePage } from '@inertiajs/vue3';
+import { PageProps } from '@/types';
 
 const appEnv = import.meta.env.VITE_APP_ENV || 'production';
-
-const page = usePage();
-
+const props = usePage().props as PageProps;
 const { can, canNot, canAny, canAll } = useCan();
-
-const menuItems = computed((): Array<MenuItem> => page.props.menuItems);
-const user = computed((): User => page.props.auth?.user);
-const csrf = computed((): string => page.props.csrf);
-
 const mobileOpen: Ref<boolean> = ref(false);
 </script>
 
@@ -75,29 +69,29 @@ const mobileOpen: Ref<boolean> = ref(false);
           </div>
           <div class="hidden lg:ml-6 lg:block">
             <div class="flex space-x-4">
-              <template v-for="menuItem in menuItems" :key="menuItem.id">
-                <template v-if="!menuItem.is_member_only || user.is_member">
-                  <Dropdown v-if="menuItem.children.length > 0">
+              <template v-for="menuItem in props.menuItems" :key="menuItem.id">
+                <template v-if="!menuItem.is_member_only || (props.auth.user && props.auth.user.is_member)">
+                  <Dropdown v-if="menuItem.children?.length">
                     <template #parent>
                       {{ menuItem.menuname }}
                     </template>
                     <template #children>
                       <template v-for="child in menuItem.children" :key="child.id">
                         <DropdownLink
-                          v-if="!child.is_member_only || user.is_member"
+                          v-if="!child.is_member_only || (props.auth.user && props.auth.user.is_member)"
                           no-inertia
-                          :href="child.parsed_url"
+                          :href="child.parsed_url ?? ''"
                         >
                           {{ child.menuname }}
                         </DropdownLink>
                       </template>
                     </template>
                   </Dropdown>
-                  <NavLink v-else no-inertia :href="menuItem.parsed_url">{{ menuItem.menuname }} </NavLink>
+                  <NavLink v-else no-inertia :href="menuItem.parsed_url ?? ''">{{ menuItem.menuname }} </NavLink>
                 </template>
               </template>
 
-              <template v-if="user">
+              <template v-if="props.auth.user">
                 <Dropdown v-if="canAny(['omnomcom', 'tipcie', 'drafters'])">
                   <template #parent> OmNomCom</template>
                   <template #children>
@@ -219,7 +213,7 @@ const mobileOpen: Ref<boolean> = ref(false);
                     Registration Helper
                   </NavLink>
                 </template>
-                <NavLink v-if="false && 'leaderboardadmin'" no-inertia :href="route('leaderboards::admin')">
+                <NavLink v-if="can('board')" no-inertia :href="route('leaderboards::admin')">
                   Leaderboards Admin
                 </NavLink>
               </template>
@@ -228,7 +222,7 @@ const mobileOpen: Ref<boolean> = ref(false);
         </div>
         <div class="inset-y-0 right-0 flex justify-end space-x-4 items-center pr-2 lg:inset-auto lg:ml-6 lg:pr-0">
           <form method="post" class="flex-auto" :action="route('search::post')">
-            <input type="hidden" name="_token" :value="csrf" />
+            <input type="hidden" name="_token" :value="props.csrf" />
             <Input name="query" place-holder="Search" class="max-w-xs" after-hover>
               <template #after>
                 <button class="px-2 self-stretch"><i class="fas fa-search"></i></button>
@@ -236,18 +230,24 @@ const mobileOpen: Ref<boolean> = ref(false);
             </Input>
           </form>
 
-          <Dropdown v-if="user" class="flex-none" no-hover direction="right">
+          <Dropdown v-if="props.auth.user" class="flex-none" no-hover direction="right">
             <template #parent>
-              {{ user.calling_name }}
-              <img class="inline h-8 w-8 mx-1 rounded-full border-2 border-white" :src="user.photo_preview" alt="" />
+              {{ props.auth.user.calling_name }}
+              <img
+                class="inline h-8 w-8 mx-1 rounded-full border-2 border-white"
+                :src="props.auth.user.photo_preview"
+                alt=""
+              />
             </template>
             <template #children>
               <DropdownLink :href="route('user::dashboard')">Dashboard</DropdownLink>
-              <DropdownLink v-if="user.is_member" no-inertia :href="route('user::profile')">My Profile </DropdownLink>
+              <DropdownLink v-if="props.auth.user.is_member" no-inertia :href="route('user::profile')"
+                >My Profile
+              </DropdownLink>
               <DropdownLink v-else no-inertia :href="route('becomeamember')">Become a member </DropdownLink>
               <DropdownLink no-inertia :href="route('protube::dashboard')">ProTube Dashboard </DropdownLink>
               <DropdownLink no-inertia :href="route('omnomcom::orders::index')">Purchase History </DropdownLink>
-              <DropdownLink v-if="impersonater" no-inertia :href="route('user::quitimpersonating')"
+              <DropdownLink v-if="props.impersonating" no-inertia :href="route('user::quitimpersonating')"
                 >Quit Impersonating
               </DropdownLink>
               <DropdownLink v-else no-inertia :href="route('login::logout')">Logout</DropdownLink>
@@ -255,10 +255,10 @@ const mobileOpen: Ref<boolean> = ref(false);
           </Dropdown>
           <template v-else>
             <NavItem>
-              <Button no-inertia :href="route('login::register')" variant="info">Register</Button>
+              <NavLink no-inertia :href="route('login::register')" variant="info">Register</NavLink>
             </NavItem>
             <NavItem>
-              <Button no-inertia :href="route('login::show')" variant="info">Login</Button>
+              <NavLink no-inertia :href="route('login::show')" variant="info">Login</NavLink>
             </NavItem>
           </template>
         </div>

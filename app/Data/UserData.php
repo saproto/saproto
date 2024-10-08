@@ -13,7 +13,7 @@ class UserData extends Data
         public string  $calling_name,
         public string  $email,
         public bool    $is_member,
-        public bool    $photo_preview,
+        public string  $photo_preview,
         public bool    $is_protube_admin,
         public string  $theme,
         public ?string $welcome_message = null,

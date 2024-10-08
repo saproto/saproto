@@ -1,29 +1,8 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
+import { variantStyles, hoverStyles } from '@/enums/styles';
 
 const slots = useSlots();
-
-const variantStyles = {
-  primary: 'bg-primary border-primary',
-  secondary: 'bg-secondary border-secondary',
-  success: 'bg-success border-success',
-  info: 'bg-info border-info',
-  warning: 'bg-warning border-warning',
-  danger: 'bg-danger border-danger',
-  dark: 'bg-dark border-dark',
-  light: 'bg-light border-light',
-};
-
-const hoverStyles = {
-  primary: 'hover:bg-primary-dark hover:border-primary-dark',
-  secondary: 'hover:bg-secondary-dark hover:border-secondary-dark',
-  success: 'hover:bg-success-dark hover:border-success-dark',
-  info: 'hover:bg-info-dark hover:border-info-dark',
-  warning: 'hover:bg-warning-dark hover:border-warning-dark',
-  danger: 'hover:bg-danger-dark hover:border-danger-dark',
-  dark: 'hover:bg-dark-dark hover:border-dark-dark',
-  light: 'hover:bg-light-dark hover:border-light-dark',
-};
 
 const inputStyles = () => {
   let styles =
@@ -44,21 +23,21 @@ const props = withDefaults(
     type?: 'text' | 'number' | 'datetime-local' | 'select' | 'checkbox' | 'file';
     disabled?: boolean;
     required?: boolean;
-    value?: string | number | boolean | Array<boolean>;
+    initialValue?: string | number | boolean | Array<boolean>;
     modelValue?: string | number | boolean | Array<boolean>;
     placeHolder?: string;
-    afterVariant?: string;
-    beforeVariant?: string;
+    afterVariant?: keyof typeof variantStyles;
+    beforeVariant?: keyof typeof variantStyles;
     beforeHover?: boolean;
     afterHover?: boolean;
   }>(),
   {
-    name: null,
-    id: null,
+    name: '',
+    id: undefined,
     type: 'text',
-    value: null,
-    modelValue: null,
-    placeHolder: null,
+    initialValue: undefined,
+    modelValue: undefined,
+    placeHolder: undefined,
     afterVariant: 'info',
     beforeVariant: 'info',
   }
@@ -68,7 +47,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const model = computed({
   get() {
-    return props.modelValue ?? props.value;
+    return props.modelValue ?? props.initialValue;
   },
   set(val) {
     emit('update:modelValue', val);
@@ -84,7 +63,6 @@ const model = computed({
         :id="id ?? name"
         v-model="model"
         :name="name"
-        :value="value"
         :disabled="disabled"
         :required="required"
         :class="inputStyles()"
