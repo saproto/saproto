@@ -5,8 +5,10 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($text)&&$text?route('codex::update-text', ['id'=>$text->id]):route("codex::store-text") }}"
+    @php /** @var \App\Models\CodexText $text */ @endphp
+    <form action="{{ !empty($text) ? route('codexText.update', ['codexText' => $text]) : route("codexText.store") }}"
           method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($text) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -42,7 +44,6 @@
                             <button type="submit" class="btn btn-success btn-block">
                                 Save text!
                             </button>
-
 
                         </div>
                     </div>

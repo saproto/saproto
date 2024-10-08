@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\CodexSong;
+use App\Models\CodexSongCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -16,6 +17,7 @@ class CodexSongFactory extends Factory
     public function definition(): array
     {
         return [
+            'category_id' => CodexSongCategory::factory(),
             'title' => fake()->word(),
             'artist' => fake()->word(),
             'lyrics' => fake()->word(),

@@ -10,6 +10,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CodexController;
+use App\Http\Controllers\CodexSongCategoryController;
+use App\Http\Controllers\CodexSongController;
+use App\Http\Controllers\CodexTextController;
+use App\Http\Controllers\CodexTextTypeController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
@@ -1068,40 +1072,12 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    /* --- Routes related to Cantus Codices (Senate only) --- */
-    Route::controller(CodexController::class)->prefix('codex')->name('codex::')->middleware(['auth', 'permission:senate'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('create-codex', 'addCodex')->name('create-codex');
-        Route::get('create-song', 'addSong')->name('create-song');
-        Route::get('create-song-category', 'addSongCategory')->name('create-song-category');
-        Route::get('create-text-type', 'addTextType')->name('create-text-type');
-        Route::get('create-text', 'addText')->name('create-text');
-
-        Route::get('edit-codex/{codex}', 'editCodex')->name('edit-codex');
-        Route::get('edit-song/{id}', 'editSong')->name('edit-song');
-        Route::get('edit-song-category/{id}', 'editSongCategory')->name('edit-song-category');
-        Route::get('edit-text-type/{id}', 'editTextType')->name('edit-text-type');
-        Route::get('edit-text/{id}', 'editText')->name('edit-text');
-
-        Route::get('delete-codex/{codex}', 'deleteCodex')->name('delete-codex');
-        Route::get('delete-song/{id}', 'deleteSong')->name('delete-song');
-        Route::get('delete-song-category/{id}', 'deleteSongCategory')->name('delete-song-category');
-        Route::get('delete-text-type/{id}', 'deleteTextType')->name('delete-text-type');
-        Route::get('delete-text/{id}', 'deleteText')->name('delete-text');
-
-        Route::post('store-codex', 'storeCodex')->name('store-codex');
-        Route::post('store-codex', 'storeSong')->name('store-codex');
-        Route::post('store-codex-category', 'storeSongCategory')->name('store-codex-category');
-        Route::post('store-text-type', 'storeTextType')->name('store-text-type');
-        Route::post('store-text', 'storeText')->name('store-text');
-
-        Route::post('update-codex/{codex}', 'updateCodex')->name('update-codex');
-        Route::post('update-song/{id}', 'updateSong')->name('update-song');
-        Route::post('update-song-category/{id}', 'updateSongCategory')->name('update-song-category');
-        Route::post('update-text-type/{id}', 'updateTextType')->name('update-text-type');
-        Route::post('update-text/{id}', 'updateText')->name('update-text');
-
-        Route::get('export/{id}', 'exportCodex')->name('export');
+    Route::middleware(['auth', 'permission:senate'])->group(function () {
+        Route::resource('codex', CodexController::class);
+        Route::resource('codexSong', CodexSongController::class)->except(['index', 'show']);
+        Route::resource('codexSongCategory', CodexSongCategoryController::class)->except(['index', 'show']);
+        Route::resource('codexText', CodexTextController::class)->except(['index', 'show']);
+        Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
     });
 
     /* --- Route related to the december theme --- */

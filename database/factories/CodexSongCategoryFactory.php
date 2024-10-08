@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
-use App\Models\SongCategory;
+use App\Models\CodexSongCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
  * @extends Factory<SongCategory>
  */
-class SongCategoryFactory extends Factory
+class CodexSongCategoryFactory extends Factory
 {
-    protected $model = SongCategory::class;
+    protected $model = CodexSongCategory::class;
 
     public function definition(): array
     {

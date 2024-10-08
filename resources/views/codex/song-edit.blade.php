@@ -5,8 +5,9 @@
 @endsection
 
 @section('container')
-    <form action="{{ isset($song)&&$song?route('codex::update-song', ['id'=>$song->id]):route("codex::store-codex") }}"
+    <form action="{{ !empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route("codexSong.store") }}"
           method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($song) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -38,19 +39,15 @@
                             </div>
 
                             {{-- Categories }--}}
-                            <label for="categories">Categories:</label>
-                            <ul>
+                            <label for="category">Category</label>
+
+                            <select class="form-select form-select-m mb-3" aria-label="category-dropdown"
+                                    name="category">
                                 @foreach($categories as $category)
-                                    <li>
-                                        <div class="form-check d-inline-flex">
-                                            <input class="form-check-input" type="checkbox"
-                                                   {{in_array($category->id, $myCategories)?"checked":""}} name="categoryids[]"
-                                                   value="{{$category->id}}">
-                                        </div>
-                                        {{ $category->name}}
-                                    </li>
+                                    <option value="{{$category->id}}"
+                                            {{ $category->id === $myCategories ? "selected" : "" }}>{{ $category->name }}</option>
                                 @endforeach
-                            </ul>
+                            </select>
 
                             {{-- Lyrics }--}}
                             <label for="lyrics">Lyrics:</label>

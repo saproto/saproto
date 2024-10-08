@@ -5,17 +5,18 @@
 @endsection
 
 @section('container')
-    <form
-        action="{{ isset($codex)&&$codex?route('codex::update-codex', ['codex'=>$codex]):route("codex::store-codex") }}"
-        method="POST">
+    @php /** @var \App\Models\Codex $codex */ @endphp
+    <form action="{{ !empty($codex) ? route('codex.update', ['codex' => $codex]) : route("codex.store") }}"
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($codex) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3">
             <div class="col">
                 <div class="row">
-                    @include('codex.includes.codex-details', ['codex'=>$codex])
+                    @include('codex.includes.codex-details', ['codex' => $codex])
                 </div>
                 <div class="row">
-                    @include('codex.includes.text_types', ['edit'=>true, 'textTypes' => $textTypes, 'myTextTypes' => $myTextTypes])
+                    @include('codex.includes.text_types', ['edit' => true, 'textTypes' => $textTypes, 'myTextTypes' => $myTextTypes])
                 </div>
             </div>
             <div class="col">
@@ -31,7 +32,7 @@
                 </div>
                 <div class="row">
                     <div class="card-body">
-                        @include('codex.includes.song_list', ['edit'=>true, 'songTypes' => $songTypes, 'mySongs' => $mySongs, 'myShuffles' => $myShuffles])
+                        @include('codex.includes.song_list', ['edit'=>true, 'songTypes' => $songTypes, 'mySongs' => $mySongs])
                     </div>
                 </div>
             </div>
