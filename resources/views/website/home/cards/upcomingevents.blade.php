@@ -12,7 +12,7 @@
 
                     @include('event.display_includes.event_block', ['event'=> $event])
 
-                    @php $week = date('W', $event->start); @endphp
+                    @php $week = $event->start->week; @endphp
 
                 @endif
 

@@ -1,60 +1,96 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
-import typography from "@tailwindcss/typography";
+import { createThemes } from "tw-colors";
+import Color from "color";
 
-const { createThemes } = require("tw-colors");
-/** @type {import("tailwindcss").Config} */
+/** @type {function(*, *): *} */
+
+const alpha = (clr, val) => Color(clr).alpha(val).toString();
+const lighten = (clr, val) => Color(clr).lighten(val).toString();
+const darken = (clr, val) => Color(clr).darken(val).toString();
+
+const colors = (clr, { inverse = false, step = 0.1 } = {}) => ({
+    DEFAULT: clr,
+    light: inverse ? darken(clr, step) : lighten(clr, step),
+    dark: inverse ? lighten(clr, step) : darken(clr, step),
+});
+
+const baseThemes = {
+    light: {
+        primary: colors("#83b71a"),
+        secondary: colors("#6c757d"),
+        success: colors("#00aac0"),
+        info: colors("#00aac0"),
+        warning: colors("#f37e16"),
+        danger: colors("#c50005"),
+        dark: "#303030",
+        light: "#f1f1f1",
+        back: {
+            DEFAULT: "#ffffff",
+            light: "#f1f1f1",
+            dark: "#303030",
+        },
+        front: {
+            DEFAULT: "#000000",
+            light: "#424242",
+            dark: "#ffffff",
+        },
+    },
+    dark: {
+        primary: colors("#83b71a"),
+        secondary: colors("#6c757d"),
+        success: colors("#00aac0"),
+        info: colors("#00aac0"),
+        warning: colors("#f37e16"),
+        danger: colors("#c50005"),
+        dark: "#303030",
+        light: "#f1f1f1",
+        back: {
+            DEFAULT: "#303030",
+            light: "#424242",
+            dark: "#212121",
+        },
+        front: {
+            DEFAULT: "#ffffff",
+            light: "#c2c2c2",
+            dark: "#ffffff",
+        },
+    },
+};
+
 export default {
     content: [
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-        "./storage/framework/views/*.php",
-        "./resources/views/**/*.blade.php",
-        "./resources/js/**/*.vue",
+        "./resources/views/app.blade.php",
+        "./resources/js/**/*.{js,ts,vue}",
     ],
     safelist: [],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                sans: ["Lato", ...defaultTheme.fontFamily.sans],
+            },
+            colors: {},
+        },
     },
 
     plugins: [
-        createThemes({
-            light: {
-                primary: "#83b71a",
-                secondary: "#6c757d",
-                brand: "#83b71a",
-                success: "#00aac0",
-                info: "#00aac0",
-                warning: "#f37e16",
-                danger: "#c50005",
-                omnomcom: "#26ade4",
-                dark: "#303030",
-                light: "#f1f1f1",
-                background: "#F3F3F3",
-            },
-            dark: {
-                primary: "steelblue",
-                secondary: "darkblue",
-                brand: "#F3F3F3",
-                // ...other colors
-            },
-            rainbowbarf: {
-                primary: "steelblue",
-                secondary: "darkblue",
-                brand: "#F3F3F3",
-                // ...other colors
-            },
-            broto: {
-                primary: "steelblue",
-                secondary: "darkblue",
-                brand: "#F3F3F3",
-            },
-            nightMode: {
-                primary: "steelblue",
-                secondary: "darkblue",
-                brand: "#F3F3F3",
-            },
-        }),
+        createThemes(({ light, dark }) => ({
+            light: light(baseThemes.light),
+            dark: dark(baseThemes.dark),
+            broto: dark({
+                ...baseThemes.dark,
+                primary: colors("#b57000"),
+                success: colors("#cdd911"),
+            }),
+            nightMode: dark({
+                ...baseThemes.dark,
+                back: {
+                    DEFAULT: "#1e2f62",
+                    light: "#05103A",
+                    dark: "#0c1f66",
+                },
+            }),
+        })),
         forms,
-        typography,
     ],
 };

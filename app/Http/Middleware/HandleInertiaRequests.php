@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Data\UserData;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -32,9 +33,15 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'auth.user' => fn() => $request->user()
-                ? UserData::from($request->user())
-                : null,
+            'auth' => [
+                'user' => fn() => $request->user()
+                    ? UserData::from($request->user())
+                    : null,
+                'permissions' => fn() => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(function ($permission) {
+                    return [$permission => true];
+                })
+            ],
+            'csrf' => fn() => csrf_token(),
             'flash' => [
                 'message' => fn() => $request->session()->get('flash_message')
             ],

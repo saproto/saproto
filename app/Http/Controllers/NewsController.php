@@ -37,7 +37,7 @@ class NewsController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
     public function show($id)
@@ -46,7 +46,7 @@ class NewsController extends Controller
 
         $newsitem = Newsitem::query()->findOrFail($id);
 
-        if (! $newsitem->isPublished()) {
+        if (!$newsitem->isPublished()) {
             if (Auth::user()?->can('board')) {
                 $preview = true;
             } else {
@@ -63,11 +63,19 @@ class NewsController extends Controller
         ]);
     }
 
-    public function showWeeklyPreview(int $id)
+    public function showWeeklyPreview(int $id = null)
     {
-        $newsitem = Newsitem::query()->findOrFail($id);
+        if ($id === null) {
+            $newsitem = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
+            if ($newsitem === null) {
+                abort(404);
+            }
+        } else {
+            $newsitem = Newsitem::query()->findOrFail($id);
+        }
 
-        if (! $newsitem->published_at && ! Auth::user()?->can('board')) {
+
+        if (!$newsitem->published_at && !Auth::user()?->can('board')) {
             Session::flash('flash_message', 'This weekly newsletter has not been published yet.');
 
             return Redirect::back();
@@ -128,7 +136,7 @@ class NewsController extends Controller
             $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         } else {
             $newsitem->is_weekly = true;
-            $newsitem->title = 'Weekly update for week '.date('W').' of '.date('Y').'.';
+            $newsitem->title = 'Weekly update for week ' . date('W') . ' of ' . date('Y') . '.';
             $newsitem->published_at = null;
         }
 
@@ -159,7 +167,7 @@ class NewsController extends Controller
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::query()->findOrFail($id);
 
-        Session::flash('flash_message', 'Newsitem '.$newsitem->title.' has been removed.');
+        Session::flash('flash_message', 'Newsitem ' . $newsitem->title . ' has been removed.');
 
         $newsitem->delete();
 
@@ -169,7 +177,7 @@ class NewsController extends Controller
     public function sendWeeklyEmail(int $id)
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only the board can do this.');
         }
 

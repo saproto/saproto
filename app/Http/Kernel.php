@@ -58,6 +58,8 @@ class Kernel extends HttpKernel
             ApiMiddleware::class,
             AddCspHeaders::class,
             SubstituteBindings::class,
+            AddLinkHeadersForPreloadedAssets::class,
+            HandleInertiaRequests::class,
         ],
         'api' => [
             'throttle:60,1',

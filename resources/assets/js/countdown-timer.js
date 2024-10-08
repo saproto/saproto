@@ -47,7 +47,7 @@ class CountdownTimer extends BaseComponent {
   _getConfig() {
     const data = this._element.dataset;
     let attributes = {};
-    Object.keys(data).map(key => {
+    Object.keys(data).map((key) => {
       let pureKey = key.replace(/^countdown/, '');
       pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
       attributes[pureKey] = data[key];
@@ -70,9 +70,10 @@ class CountdownTimer extends BaseComponent {
   }
 
   _update() {
-    const current = (new Date()).getTime();
+    const current = new Date().getTime();
     const delta = this._start - current;
-    this._element.innerHTML = delta < 0 ? this._config.textFinished : this._config.textCounting.replace('{}', this._getTimeString(delta));
+    this._element.innerHTML =
+      delta < 0 ? this._config.textFinished : this._config.textCounting.replace('{}', this._getTimeString(delta));
   }
 }
 

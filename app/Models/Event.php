@@ -94,16 +94,16 @@ class Event extends Model
     protected $appends = ['is_future', 'formatted_date'];
 
     /** @return string */
-    public function getPublicId()
+    public function getPublicId(): string
     {
         return Hashids::connection('event')->encode($this->id);
     }
 
     /**
-     * @param  string  $public_id
+     * @param string $public_id
      * @return Model
      */
-    public static function fromPublicId($public_id)
+    public static function fromPublicId(string $public_id)
     {
         return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
@@ -116,7 +116,7 @@ class Event extends Model
     }
 
     /** @return BelongsTo */
-    public function committee()
+    public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
     }
@@ -134,7 +134,7 @@ class Event extends Model
         }
 
         //show non-secret events only when published
-        return ! $this->secret && (! $this->publication || $this->isPublished());
+        return !$this->secret && (!$this->publication || $this->isPublished());
     }
 
     public static function getEventBlockQuery()
@@ -169,58 +169,58 @@ class Event extends Model
     }
 
     /** @return BelongsTo */
-    public function image()
+    public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class);
     }
 
     /** @return HasOne */
-    public function activity()
+    public function activity(): HasOne
     {
         return $this->hasOne(Activity::class);
     }
 
     /** @return HasMany */
-    public function videos()
+    public function videos(): HasMany
     {
         return $this->hasMany(Video::class);
     }
 
     /** @return HasMany */
-    public function albums()
+    public function albums(): HasMany
     {
         return $this->hasMany(PhotoAlbum::class, 'event_id');
     }
 
     /** @return HasMany */
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'event_id');
     }
 
     /** @return HasMany */
-    public function dinnerforms()
+    public function dinnerforms(): HasMany
     {
         return $this->hasMany(Dinnerform::class, 'event_id');
     }
 
     /** @return BelongsTo */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->BelongsTo(EventCategory::class);
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is organising the activity.
      */
-    public function isOrganising($user): bool
+    public function isOrganising(User $user): bool
     {
         return $this->committee && $user->isInCommittee($this->committee);
     }
 
     /** @return Collection|TicketPurchase[] */
-    public function getTicketPurchasesFor(User $user)
+    public function getTicketPurchasesFor(User $user): Collection|array
     {
         return TicketPurchase::query()
             ->where('user_id', $user->id)
@@ -239,27 +239,26 @@ class Event extends Model
     }
 
     /**
-     * @param  string  $long_format  Format when timespan is larger than 24 hours.
-     * @param  string  $short_format  Format when timespan is smaller than 24 hours.
-     * @param  string  $combiner  Character to separate start and end time.
+     * @param string $long_format Format when timespan is larger than 24 hours.
+     * @param string $short_format Format when timespan is smaller than 24 hours.
+     * @param string $combiner Character to separate start and end time.
      * @return string Timespan text in given format
      */
-    public function generateTimespanText($long_format, $short_format, string $combiner): string
+    public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
-            (($this->end - $this->start) < 3600 * 24)
-                ?
-                date($short_format, $this->end)
-                :
-                date($long_format, $this->end)
-        );
+        return $this->start->format($long_format) . ' ' . $combiner . ' ' . (
+            $this->end->diffInDays($this->start) < 1)
+            ?
+            $this->end->format($short_format)
+            :
+            $this->end->format($long_format);
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is an admin of the event.
      */
-    public function isEventAdmin($user): bool
+    public function isEventAdmin(User $user): bool
     {
         if ($user->can('board')) {
             return true;
@@ -273,10 +272,10 @@ class Event extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether the user is an ERO at the event
      */
-    public function isEventEro($user): bool
+    public function isEventEro(User $user): bool
     {
         if ($user->can('board')) {
             return true;
@@ -286,7 +285,7 @@ class Event extends Model
             return false;
         }
 
-        if (! $this->activity) {
+        if (!$this->activity) {
             return false;
         }
 
@@ -295,9 +294,9 @@ class Event extends Model
             ->where('committee_id', config('proto.committee')['ero'])->first();
         if ($eroHelping) {
             return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
+                    ->where('activity_id', $this->activity->id)
+                    ->where('committees_activities_id', $eroHelping->id)
+                    ->where('user_id', $user->id)->count() > 0;
         }
 
         return false;
@@ -312,21 +311,21 @@ class Event extends Model
     }
 
     /** @return SupportCollection */
-    public function allUsers()
+    public function allUsers(): SupportCollection
     {
-        $users = collect([]);
+        $users = collect();
         foreach ($this->tickets as $ticket) {
             $users = $users->merge($ticket->getUsers());
         }
 
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers->sort(static function ($a, $b): int {
-                return (int) isset($a->pivot->committees_activities_id);
+                return (int)isset($a->pivot->committees_activities_id);
                 // prefer helper participation registration
             })->unique());
         }
 
-        return $users->sort(static fn ($a, $b): int => strcmp($a->name, $b->name));
+        return $users->sort(static fn($a, $b): int => strcmp($a->name, $b->name));
     }
 
     //recounts the unique users on an event to make the fetching of the event_block way faster
@@ -348,7 +347,7 @@ class Event extends Model
     }
 
     /** @return string[] */
-    public function getAllEmails()
+    public function getAllEmails(): array
     {
         return $this->allUsers()->pluck('email')->toArray();
     }
@@ -364,9 +363,9 @@ class Event extends Model
     }
 
     /** @return object */
-    public function getFormattedDateAttribute()
+    public function getFormattedDateAttribute(): object
     {
-        return (object) [
+        return (object)[
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
@@ -374,7 +373,7 @@ class Event extends Model
         ];
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

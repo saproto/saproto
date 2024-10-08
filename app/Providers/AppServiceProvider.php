@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('website.navbar', static function ($view) {
-            $menuItems = MenuItem::query()->where('parent', null)->orderBy('order')->with('page')->with('children')->get();
+            $menuItems = MenuItem::query()->where('parent')->orderBy('order')->with('page')->with('children')->get();
             $view->with('menuItems', $menuItems);
         });
 
@@ -43,5 +43,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register() {}
+    public function register()
+    {
+    }
 }

@@ -20,10 +20,16 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+
+    public function post()
+    {
+        return [1, 2, 3];
+    }
+
     /* Display the homepage. */
     public function show()
     {
-        return Inertia::render('Home');
+        return Inertia::render('HomePage');
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')
