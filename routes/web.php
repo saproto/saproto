@@ -761,15 +761,15 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to managing Products. (Omnomcom admins only) --- */
         Route::prefix('products')->middleware(['permission:omnomcom'])->name('products::')->group(function () {
             Route::controller(ProductController::class)->group(function () {
+                Route::get('export/csv', 'generateCsv')->name('export_csv');
+                Route::post('update/bulk', 'bulkUpdate')->name('bulkupdate');
+
                 Route::get('', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
                 Route::get('edit/{id}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
-
-                Route::get('export/csv', 'generateCsv')->name('export_csv');
-                Route::post('update/bulk', 'bulkUpdate')->name('bulkupdate');
             });
 
             Route::controller(AccountController::class)->group(function () {
