@@ -532,7 +532,10 @@ class AuthController extends Controller
         $directory = new Directory($client);
         $optParams = ['domain' => 'proto.utwente.nl', 'query' => "externalId:$protoUser->id"];
         $googleUser = $directory->users->listUsers($optParams)->getUsers();
-        if ($googleUser == null) { return; }
+        if ($googleUser == null) {
+            return;
+        }
+
         $directory->users->update(
             $googleUser[0]->id,
             new GoogleUser(['password' => $password])
