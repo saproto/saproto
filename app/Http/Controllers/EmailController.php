@@ -292,7 +292,7 @@ class EmailController extends Controller
         return Redirect::route('email::index');
     }
 
-    private function updateEmailDestination(Email $email, array $type, array $lists = [], array $events = [], bool $toBackup = false): void
+    private function updateEmailDestination(Email $email, string $type, ?array $lists = [], ?array $events = [], bool $toBackup = false): void
     {
 
         $email->to_user = false;

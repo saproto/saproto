@@ -7,6 +7,7 @@ use Eloquent;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -81,6 +82,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class Event extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'events';
@@ -92,6 +94,13 @@ class Event extends Model
     protected $with = ['category', 'activity'];
 
     protected $appends = ['is_future', 'formatted_date'];
+
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+        ];
+    }
 
     /** @return string */
     public function getPublicId()
@@ -244,7 +253,7 @@ class Event extends Model
      * @param  string  $combiner  Character to separate start and end time.
      * @return string Timespan text in given format
      */
-    public function generateTimespanText($long_format, $short_format, string $combiner): string
+    public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
         return date($long_format, $this->start).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
@@ -381,12 +390,5 @@ class Event extends Model
         self::updating(static function ($event) {
             $event->update_sequence++;
         });
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }
