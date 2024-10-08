@@ -36,15 +36,15 @@ class EmailController extends Controller
         $searchTerm = $request->input('searchterm');
 
         if ($description) {
-            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%' . $searchTerm . '%');
         }
 
         if ($subject) {
-            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%' . $searchTerm . '%');
         }
 
         if ($body) {
-            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%' . $searchTerm . '%');
         }
 
         return view('emailadmin.overview', [
@@ -262,10 +262,10 @@ class EmailController extends Controller
 
         $sub = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $list->id)->first();
         if ($sub != null) {
-            Session::flash('flash_message', $user->name.' has been unsubscribed from '.$list->name);
+            Session::flash('flash_message', $user->name . ' has been unsubscribed from ' . $list->name);
             $sub->delete();
         } else {
-            Session::flash('flash_message', $user->name.' was already unsubscribed from '.$list->name);
+            Session::flash('flash_message', $user->name . ' was already unsubscribed from ' . $list->name);
         }
 
         return Redirect::route('homepage');
@@ -292,7 +292,7 @@ class EmailController extends Controller
         return Redirect::route('email::index');
     }
 
-    private function updateEmailDestination(Email $email, array $type, array $lists = [], array $events = [], bool $toBackup = false): void
+    private function updateEmailDestination(Email $email, string $type, array|null $lists = [], array|null $events = [], bool $toBackup = false): void
     {
 
         $email->to_user = false;
