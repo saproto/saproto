@@ -85,7 +85,8 @@
     "driftingly/rector-laravel": "^1.2",
     "pestphp/pest": "^3.0",
     "mockery/mockery": "^1.6",
-    "pestphp/pest-plugin-laravel": "^3.0"
+    "pestphp/pest-plugin-laravel": "^3.0",
+    "beyondcode/expose": "^2.6"
   },
   "autoload": {
     "psr-4": {

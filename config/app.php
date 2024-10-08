@@ -128,6 +128,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | If your application is behind a proxy, you may specify the proxy server
+    | that should be trusted for the purposes of generating secure URLs.
+    | This will prevent the "X-Forwarded-For" header from being used.
+    |
+    */
+    'trusted_proxies' => env('TRUSTED_PROXIES', null),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
