@@ -1,5 +1,10 @@
 name: 🛠 Fix PHP, 🐘 Test and ⚙ Deploy Check
 on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   phplint:
     runs-on: ubuntu-latest
