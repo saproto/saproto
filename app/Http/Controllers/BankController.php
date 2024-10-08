@@ -73,7 +73,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::show');
+            return Redirect::route('user::bank::create');
         }
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => false]);
@@ -89,7 +89,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::show');
+            return Redirect::route('user::bank::create');
         }
 
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));

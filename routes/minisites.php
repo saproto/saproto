@@ -35,12 +35,12 @@ foreach ($domains['isalfredthere'] as $domain) {
 
 foreach ($domains['static'] as $domain) {
     Route::group(['domain' => $domain], static function () {
-        Route::group(['prefix' => 'file', 'as' => 'file::'], static function () {
-            Route::get('{id}/{hash}', [FileController::class, 'get'])->name('get');
+        Route::group(['prefix' => 'file'], static function () {
+            Route::get('{id}/{hash}', [FileController::class, 'get']);
             Route::get('{id}/{hash}/{name}', [FileController::class, 'get']);
         });
-        Route::group(['prefix' => 'image', 'as' => 'image::'], static function () {
-            Route::get('{id}/{hash}', [FileController::class, 'getImage'])->name('get');
+        Route::group(['prefix' => 'image'], static function () {
+            Route::get('{id}/{hash}', [FileController::class, 'getImage']);
             Route::get('{id}/{hash}/{name}', [FileController::class, 'getImage']);
         });
     });
