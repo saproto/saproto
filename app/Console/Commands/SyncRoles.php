@@ -49,7 +49,7 @@ class SyncRoles extends Command
         $permissions = [];
 
         foreach (Permission::all() as $permission) {
-            if (!in_array($permission->name, array_keys(config('permission.permissions')))) {
+            if (! in_array($permission->name, array_keys(config('permission.permissions')))) {
                 $permission->delete();
                 $this->warn("Removed '$permission->name' permission.");
             }
@@ -73,7 +73,7 @@ class SyncRoles extends Command
         $roles = [];
 
         foreach (Role::all() as $role) {
-            if (!in_array($role->name, array_keys(config('permission.roles')))) {
+            if (! in_array($role->name, array_keys(config('permission.roles')))) {
                 $role->delete();
                 $this->warn("Removed '$role->name' permission.");
             }
