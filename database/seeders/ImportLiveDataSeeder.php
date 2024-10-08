@@ -91,11 +91,9 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param  string  $password
-     *
      * @throws Exception
      */
-    public static function createAdminUser($password): void
+    public static function createAdminUser(string $password): void
     {
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
