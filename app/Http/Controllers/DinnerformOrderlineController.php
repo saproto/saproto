@@ -15,8 +15,6 @@ use Illuminate\View\View;
 class DinnerformOrderlineController extends Controller
 {
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      */
     public function store(Request $request, int $id)
@@ -33,7 +31,7 @@ class DinnerformOrderlineController extends Controller
         $validated = $request->validate([
             'order' => 'required|string',
             'price' => 'required|numeric',
-            'helper' => 'nullable|boolean'
+            'helper' => 'nullable|boolean',
         ]);
 
         $helper = $request->has('helper') || $dinnerform->isHelping();
@@ -44,7 +42,7 @@ class DinnerformOrderlineController extends Controller
             'user_id' => Auth::user()->id,
             'dinnerform_id' => $dinnerform->id,
             'helper' => $helper,
-            'closed' => false
+            'closed' => false,
         ]);
 
         Session::flash('flash_message', 'Your order has been saved!');
@@ -53,7 +51,6 @@ class DinnerformOrderlineController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -67,22 +64,18 @@ class DinnerformOrderlineController extends Controller
             return Redirect::back();
         }
 
-        if (!Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || !$dinnerOrderline->dinnerform->isCurrent() || !Auth::user()->can('tipcie')) {
+        if (! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')) {
             Session::flash('flash_message', 'You are not authorized to delete this order!');
             Redirect::back();
         }
 
         $dinnerOrderline->delete();
-        
+
         Session::flash('flash_message', 'Your order has been deleted!');
 
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return View|RedirectResponse
-     */
     public function edit(int $id): View|RedirectResponse
     {
         $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);
@@ -95,11 +88,6 @@ class DinnerformOrderlineController extends Controller
         return view('dinnerform.admin-edit-order', ['dinnerformOrderline' => $dinnerOrderline]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return View
-     */
     public function update(Request $request, int $id): View
     {
         $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);

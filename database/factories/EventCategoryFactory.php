@@ -6,6 +6,9 @@ use App\Models\EventCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<EventCategory>
+ */
 class EventCategoryFactory extends Factory
 {
     protected $model = EventCategory::class;
@@ -13,8 +16,8 @@ class EventCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'icon' => $this->faker->word(),
+            'name' => fake()->name(),
+            'icon' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

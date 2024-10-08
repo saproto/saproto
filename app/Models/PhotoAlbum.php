@@ -48,7 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class PhotoAlbum extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'photo_albums';
 
     protected $guarded = ['id'];

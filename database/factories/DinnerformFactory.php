@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Dinnerform>
+ */
 class DinnerformFactory extends Factory
 {
     protected $model = Dinnerform::class;
@@ -15,18 +18,18 @@ class DinnerformFactory extends Factory
     public function definition(): array
     {
         return [
-            'restaurant' => $this->faker->word(),
-            'description' => $this->faker->text(),
-            'url' => $this->faker->url(),
+            'restaurant' => fake()->word(),
+            'description' => fake()->text(),
+            'url' => fake()->url(),
             'start' => Carbon::now(),
             'end' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'event_id' => Event::factory(),
-            'helper_discount' => $this->faker->randomFloat(),
-            'regular_discount' => $this->faker->randomFloat(),
+            'helper_discount' => fake()->randomFloat(),
+            'regular_discount' => fake()->randomFloat(),
             'closed' => 0,
-            'visible_home_page' => $this->faker->boolean(),
+            'visible_home_page' => fake()->boolean(),
             'ordered_by_user_id' => User::factory(),
         ];
     }

@@ -33,7 +33,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class EventCategory extends Model
 {
-
     use HasFactory;
 
     protected $table = 'event_categories';

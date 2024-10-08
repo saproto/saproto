@@ -8,6 +8,9 @@ use App\Models\StorageEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Photo>
+ */
 class PhotoFactory extends Factory
 {
     protected $model = Photo::class;
@@ -16,7 +19,7 @@ class PhotoFactory extends Factory
     {
         return [
             'file_id' => StorageEntry::factory(),
-            'date_taken' => $this->faker->randomNumber(),
+            'date_taken' => fake()->randomNumber(),
             'private' => false,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

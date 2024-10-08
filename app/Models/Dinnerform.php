@@ -49,7 +49,6 @@ use Illuminate\Support\Facades\Auth;
  */
 class Dinnerform extends Model
 {
-
     use HasFactory;
 
     protected $table = 'dinnerforms';
@@ -86,7 +85,7 @@ class Dinnerform extends Model
     /** @return string A timespan string with format 'D H:i'. */
     public function generateTimespanText(): string
     {
-        return $this->start->format('D H:i') . ' - ' . Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */
@@ -111,7 +110,7 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(static fn(DinnerformOrderline $orderline) => $orderline->price_with_discount);
+            ->sum(static fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
     }
 
     /** @return int Number of orders. */
