@@ -179,7 +179,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to addresses --- */
         Route::controller(AddressController::class)->prefix('address')->name('address::')->group(function () {
-            Route::get('show', 'add')->name('show');
+            Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::get('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
@@ -192,7 +192,7 @@ Route::middleware('forcedomain')->group(function () {
 
         /* --- Routes related to bank accounts --- */
         Route::controller(BankController::class)->prefix('bank')->name('bank::')->group(function () {
-            Route::get('show', 'show')->name('show');
+            Route::get('create', 'create')->name('create');
             Route::post('store', 'store')->name('store');
             Route::post('delete', 'destroy')->name('delete');
             Route::get('edit', 'edit')->name('edit');
@@ -316,7 +316,7 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to societies --- */
     Route::controller(CommitteeController::class)->prefix('society')->name('society::')->group(function () {
-        Route::get('list', 'overview')->name('list')->defaults('showSociety', true);
+        Route::get('list', 'index')->name('list')->defaults('showSociety', true);
         Route::get('{id}', 'show')->name('show');
     });
 
@@ -423,8 +423,8 @@ Route::middleware('forcedomain')->group(function () {
         /* --- TIPCie only --- */
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
             Route::get('create', 'create')->name('create');
-            Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
+            Route::post('store', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
             Route::get('close/{id}', 'close')->name('close');
             Route::get('delete/{id}', 'destroy')->name('delete');
@@ -434,10 +434,10 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
             Route::get('delete/{id}', 'delete')->name('delete');
             Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('store/{id}', 'store')->name('store');
             Route::post('update/{id}', 'update')->name('update');
         });
-        /* --- Public route --- */
+        /* --- Member only routes --- */
+        Route::post('store/{id}', [DinnerformOrderlineController::class, 'store'])->prefix('orderline')->name('orderline::store');
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
     });
 
@@ -896,6 +896,12 @@ Route::middleware('forcedomain')->group(function () {
     Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
         Route::get('{id}/{hash}', 'getImage')->name('get');
         Route::get('{id}/{hash}/{name}', 'getImage');
+    });
+
+    /* --- Fetching files: Public   --- */
+    Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
+        Route::get('{id}/{hash}', 'get')->name('get');
+        Route::get('{id}/{hash}/{name}', 'get');
     });
 
     /* --- Routes related to Spotify. (Board) --- */

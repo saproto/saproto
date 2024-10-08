@@ -10,22 +10,18 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
-use Ramsey\Collection\Collection;
 
 class SearchController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function search(Request $request)
+    public function search(Request $request): View
     {
         $term = $request->input('query');
 
@@ -101,7 +97,8 @@ class SearchController extends Controller
         )?->get();
         if ($presearch_photo_albums) {
             foreach ($presearch_photo_albums as $album) {
-                if (! $album->secret || Auth::user()?->can('protography')) {
+                /** @var PhotoAlbum $album */
+                if (! $album->private || Auth::user()?->can('protography')) {
                     $photoAlbums[] = $album;
                 }
             }
@@ -150,17 +147,17 @@ class SearchController extends Controller
         ]);
     }
 
-    /** @return Response */
-    public function openSearch()
+    public function openSearch(): SupportResponse
     {
         return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
     }
 
-    public function getUserSearch(Request $request): array|Collection
+    public function getUserSearch(Request $request): array
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
         foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->get() ?? [] as $user) {
+            /** @var User $user */
             $result[] = (object) [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -171,28 +168,28 @@ class SearchController extends Controller
         return $result;
     }
 
-    public function getEventSearch(Request $request): array|Collection
+    public function getEventSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'title'];
 
         return $this->getGenericSearchQuery(Event::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    public function getCommitteeSearch(Request $request): array|Collection
+    public function getCommitteeSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name', 'slug'];
 
         return $this->getGenericSearchQuery(Committee::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    public function getProductSearch(Request $request): array|Collection
+    public function getProductSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name'];
 
         return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    public function getAchievementSearch(Request $request): array|Collection
+    public function getAchievementSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name'];
 

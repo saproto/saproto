@@ -100,6 +100,7 @@ class PhotoManager extends Model
 
     public static function getPhoto(int $photo_id): stdClass
     {
+        /** @var Photo $photo */
         $photo = Photo::query()->findOrFail($photo_id);
 
         $data = new stdClass;
@@ -110,9 +111,9 @@ class PhotoManager extends Model
         $data->likes = $photo->getLikes();
         $data->liked = Auth::check() ? PhotoLikes::query()->where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
-        $data->next = $photo->getNextPhoto() != null ? $photo->getNextPhoto()->id : null;
+        $data->next = $photo->getNextPhoto() ? $photo->getNextPhoto()->id : null;
 
-        $data->previous = $photo->getPreviousPhoto() != null ? $photo->getPreviousPhoto()->id : null;
+        $data->previous = $photo->getPreviousPhoto() ? $photo->getPreviousPhoto()->id : null;
 
         $data->id = $photo_id;
         $data->albumPage = $photo->getAlbumPageNumber(24);

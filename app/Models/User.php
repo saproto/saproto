@@ -343,11 +343,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         foreach ($this->orderlines as $orderline) {
             /** @var OrderLine $orderline */
-            if (!$orderline->isPayed()) {
+            if (! $orderline->isPayed()) {
                 return true;
             }
 
-            if (!$orderline->orderline) {
+            if (! $orderline->orderline) {
                 continue;
             }
 
@@ -410,7 +410,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param Committee $committee
+     * @param  Committee  $committee
      */
     public function isInCommittee($committee): bool
     {
@@ -418,7 +418,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      */
     public function isInCommitteeBySlug($slug): bool
     {
@@ -430,17 +430,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isActiveMember(): bool
     {
         return count(
-                CommitteeMembership::withTrashed()
-                    ->where('user_id', $this->id)
-                    ->where('created_at', '<', date('Y-m-d H:i:s'))
-                    ->where(static function ($q) {
-                        $q->whereNull('deleted_at')
-                            ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                    })
-                    ->with('committee')
-                    ->get()
-                    ->where('committee.is_society', false)
-            ) > 0;
+            CommitteeMembership::withTrashed()
+                ->where('user_id', $this->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(static function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })
+                ->with('committee')
+                ->get()
+                ->where('committee.is_society', false)
+        ) > 0;
     }
 
     /**
