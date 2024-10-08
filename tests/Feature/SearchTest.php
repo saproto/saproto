@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Page;
@@ -21,7 +20,7 @@ it('shows the search page', function () {
 it('shows an event on the search page', function () {
     Event::factory()->create([
         'title' => 'TestEvent',
-        'secret' => false
+        'secret' => false,
     ]);
     $response = $this->get('/search?query=Test');
     $response->assertSee('TestEvent');
@@ -36,7 +35,7 @@ it('shows a photoalbum on the search page', function () {
         'name' => 'TestAlbum',
         'thumb_id' => $photo->id,
         'private' => false,
-        'published' => true
+        'published' => true,
     ]);
 
     $response = $this->get('/search?query=Test');
@@ -45,12 +44,11 @@ it('shows a photoalbum on the search page', function () {
 });
 
 it('shows a committee on the search page', function () {
-    /** @var Committee $committee */
     Committee::factory()->create([
         'name' => 'TestCommittee',
         'public' => true,
         'is_society' => false,
-        'is_active' => true
+        'is_active' => true,
     ]);
 
     $response = $this->get('/search?query=Test');
@@ -59,16 +57,13 @@ it('shows a committee on the search page', function () {
 });
 
 it('shows a page on the search page', function () {
-    /** @var Page $page */
     Page::factory()->create([
         'title' => 'TestPage',
         'content' => 'TestContent',
-        'is_member_only' => false
+        'is_member_only' => false,
     ]);
 
     $response = $this->get('/search?query=Test');
     $response->assertSee('TestPage');
     $response->assertStatus(200);
 });
-
-

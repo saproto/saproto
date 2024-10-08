@@ -9,6 +9,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<DinnerformOrderline>
+ */
 class DinnerformOrderlineFactory extends Factory
 {
     protected $model = DinnerformOrderline::class;
@@ -16,12 +19,12 @@ class DinnerformOrderlineFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => $this->faker->text(),
-            'price' => $this->faker->randomFloat(),
+            'description' => fake()->text(),
+            'price' => fake()->randomFloat(),
             'closed' => false,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'helper' => $this->faker->boolean(),
+            'helper' => fake()->boolean(),
             'user_id' => User::factory()->has(Member::factory()),
             'dinnerform_id' => Dinnerform::factory(),
         ];

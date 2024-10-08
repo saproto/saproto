@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::query()->inRandomOrder()->first();
 
-        if (!Auth::user()?->is_member) {
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
 

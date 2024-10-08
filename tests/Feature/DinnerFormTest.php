@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\Dinnerform;
 use App\Models\DinnerformOrderline;
 use App\Models\Member;
@@ -11,7 +10,7 @@ it('shows a public Dinnerform on the homepage to members but not to users', func
         'restaurant' => 'TestDinnerform',
         'closed' => false,
         'visible_home_page' => true,
-        'end' => now()->addDay()
+        'end' => now()->addDay(),
     ]);
 
     /** @var Member $member */
@@ -36,25 +35,25 @@ it('lets user order on a dinnerform', function () {
         'restaurant' => 'TestDinnerform',
         'closed' => false,
         'visible_home_page' => false,
-        'end' => now()->addDay()
+        'end' => now()->addDay(),
     ]);
 
     /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
-        ->get('/dinnerform/' . $dinnerform->id);
+        ->get('/dinnerform/'.$dinnerform->id);
 
     $response->assertSee('Add an order');
     $response->assertStatus(200);
 
     $response = $this->actingAs($member->user)
-        ->post('/dinnerform/orderline/store/' . $dinnerform->id, [
+        ->post('/dinnerform/orderline/store/'.$dinnerform->id, [
             'order' => 'TestOrder',
             'price' => 1.0,
-            'helper' => false
+            'helper' => false,
         ]);
 
-    $response->assertRedirect('/dinnerform/' . $dinnerform->id);
+    $response->assertRedirect('/dinnerform/'.$dinnerform->id);
     $response->assertStatus(302);
 
     $this->assertDatabaseHas('dinnerform_orderline', [
@@ -63,11 +62,11 @@ it('lets user order on a dinnerform', function () {
         'description' => 'TestOrder',
         'price' => 1,
         'helper' => 1,
-        'closed' => 0
+        'closed' => 0,
     ]);
 
     $response = $this->actingAs($member->user)
-        ->get('/dinnerform/' . $dinnerform->id);
+        ->get('/dinnerform/'.$dinnerform->id);
 
     $response->assertSee('TestOrder');
 });
@@ -77,7 +76,7 @@ it('lets users delete their order on a dinnerform', function () {
     $orderline = DinnerformOrderline::factory()->create();
 
     $response = $this->actingAs($orderline->user)
-        ->get('/dinnerform/orderline/delete/' . $orderline->id);
+        ->get('/dinnerform/orderline/delete/'.$orderline->id);
 
     $response->assertRedirect('/');
     $response->assertStatus(302);

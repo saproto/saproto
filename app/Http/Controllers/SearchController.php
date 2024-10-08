@@ -51,7 +51,7 @@ class SearchController extends Controller
         if ($presearch_pages) {
             foreach ($presearch_pages as $page) {
                 /** @var Page $page */
-                if (!$page->is_member_only || Auth::user()?->is_member) {
+                if (! $page->is_member_only || Auth::user()?->is_member) {
                     $pages[] = $page;
                 }
             }
@@ -97,7 +97,7 @@ class SearchController extends Controller
         if ($presearch_photo_albums) {
             foreach ($presearch_photo_albums as $album) {
                 /** @var PhotoAlbum $album */
-                if (!$album->private || Auth::user()?->can('protography')) {
+                if (! $album->private || Auth::user()?->can('protography')) {
                     $photoAlbums[] = $album;
                 }
             }
@@ -142,7 +142,7 @@ class SearchController extends Controller
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array)$data,
+            'data' => (array) $data,
         ]);
     }
 
@@ -157,7 +157,7 @@ class SearchController extends Controller
         $result = [];
         foreach ($this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->get() ?? [] as $user) {
             /** @var User $user */
-            $result[] = (object)[
+            $result[] = (object) [
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -213,7 +213,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (!$check_at_least_one_valid_term) {
+        if (! $check_at_least_one_valid_term) {
             return null;
         }
 

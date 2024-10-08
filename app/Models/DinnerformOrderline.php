@@ -28,20 +28,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  **/
 class DinnerformOrderline extends Model
 {
-
     use HasFactory;
 
     protected $table = 'dinnerform_orderline';
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
     public function dinnerform(): BelongsTo
     {
         return $this->belongsTo(Dinnerform::class);
