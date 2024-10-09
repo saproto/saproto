@@ -47,7 +47,7 @@ class CalendarController extends Controller
 
             $year = null;
             $studyShort = null;
-            if ($study) {
+            if ($study !== null && $study !== []) {
                 $study = $study[1];
                 if (str_starts_with($study, 'CRE')) {
                     $year = ceil(intval(str_replace('CRE MOD', '', $study)) / 4);
@@ -64,7 +64,7 @@ class CalendarController extends Controller
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',
                 'start' => strtotime($startTime),
                 'end' => strtotime($endTime),
-                'type' => ($type ? $type[1] : null),
+                'type' => ($type !== null && $type !== [] ? $type[1] : null),
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,

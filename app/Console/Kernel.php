@@ -13,6 +13,7 @@ use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
 use App\Console\Commands\FileCleanup;
+use App\Console\Commands\GoogleSync;
 use App\Console\Commands\MakeAdmin;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
@@ -70,8 +71,9 @@ class Kernel extends ConsoleKernel
         EndMemberships::class,
         UpdateWallstreetPrices::class,
         CodexMarkdownConverter::class,
-        RefreshEventUniqueUsers::class,
         TempAdminCleanup::class,
+        RefreshEventUniqueUsers::class,
+        GoogleSync::class,
     ];
 
     /**
