@@ -56,7 +56,7 @@ class SyncRoles extends Command
         }
 
         foreach (config('permission.permissions') as $name => $permission) {
-            $permissions[$name] = Permission::updateOrCreate(
+            $permissions[$name] = Permission::query()->updateOrCreate(
                 ['name' => $name],
                 [
                     'display_name' => $permission->display_name,
@@ -80,7 +80,7 @@ class SyncRoles extends Command
         }
 
         foreach (config('permission.roles') as $name => $role) {
-            $roles[$name] = Role::updateOrCreate(
+            $roles[$name] = Role::query()->updateOrCreate(
                 ['name' => $name],
                 [
                     'display_name' => $role->display_name,

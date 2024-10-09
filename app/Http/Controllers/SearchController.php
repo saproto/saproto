@@ -13,10 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
 class SearchController extends Controller
@@ -147,9 +146,9 @@ class SearchController extends Controller
         ]);
     }
 
-    public function openSearch(): SupportResponse
+    public function openSearch(): Response
     {
-        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
+        return response()->view('search.opensearch')->header('Content-Type', 'text/xml');
     }
 
     public function getUserSearch(Request $request): array
