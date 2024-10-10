@@ -340,7 +340,7 @@ class WithdrawalController extends Controller
             }
         }
 
-        $direct_debit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02, [
+        $debitCollectionData = [
             'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),
             'lclInstrm' => SepaUtilities::LOCAL_INSTRUMENT_CORE_DIRECT_DEBIT,
             'seqTp' => SepaUtilities::SEQUENCE_TYPE_FIRST,
@@ -351,12 +351,14 @@ class WithdrawalController extends Controller
             'ccy' => 'EUR',
             'ultmtCdtr' => 'S.A. Proto',
             'reqdColltnDt' => $withdrawal->date,
-        ]);
+        ];
+        $directDebit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02);
+        $collection = $directDebit->addCollection($debitCollectionData);
 
         $i = 1;
         foreach ($withdrawal->users() as $user) {
             try {
-                $direct_debit->addPayment([
+                $collection->addPayment([
                     'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
                     'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
@@ -371,7 +373,7 @@ class WithdrawalController extends Controller
             }
         }
 
-        $response = $direct_debit->generateOutput([])[0];
+        $response = $directDebit->generateOutput([])[0];
 
         $headers = [
             'Content-Encoding' => 'UTF-8',
