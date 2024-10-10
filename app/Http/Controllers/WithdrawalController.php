@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use AbcAeffchen\SepaUtilities\SepaUtilities;
-use AbcAeffchen\Sephpa\PaymentCollections\SepaDirectDebit00800102;
-use AbcAeffchen\Sephpa\PaymentCollections\SepaDirectDebit00800302;
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\Sephpa\SephpaInputException;
 use App\Mail\OmnomcomFailedWithdrawalNotification;
@@ -343,16 +341,16 @@ class WithdrawalController extends Controller
         }
 
         $debitCollectionData = [
-        'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),
-        'lclInstrm' => SepaUtilities::LOCAL_INSTRUMENT_CORE_DIRECT_DEBIT,
-        'seqTp' => SepaUtilities::SEQUENCE_TYPE_FIRST,
-        'cdtr' => 'Study Association Proto',
-        'iban' => config('proto.sepa_info')->iban,
-        'bic' => config('proto.sepa_info')->bic,
-        'ci' => config('proto.sepa_info')->creditor_id,
-        'ccy' => 'EUR',
-        'ultmtCdtr' => 'S.A. Proto',
-        'reqdColltnDt' => $withdrawal->date,
+            'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),
+            'lclInstrm' => SepaUtilities::LOCAL_INSTRUMENT_CORE_DIRECT_DEBIT,
+            'seqTp' => SepaUtilities::SEQUENCE_TYPE_FIRST,
+            'cdtr' => 'Study Association Proto',
+            'iban' => config('proto.sepa_info')->iban,
+            'bic' => config('proto.sepa_info')->bic,
+            'ci' => config('proto.sepa_info')->creditor_id,
+            'ccy' => 'EUR',
+            'ultmtCdtr' => 'S.A. Proto',
+            'reqdColltnDt' => $withdrawal->date,
         ];
         $directDebit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02);
         $collection = $directDebit->addCollection($debitCollectionData);
