@@ -3,11 +3,9 @@ import moment from 'moment';
 </script>
 
 <template>
-  <div class="w-full bg-back-dark text-white p-4 flex flex-col items-center">
-    <div
-      class="flex flex-col space-y-8 items-stretch justify-between md:flex-row md:space-y-0 md:w-full lg:mx-auto lg:w-10/12 xl:w-8/12"
-    >
-      <div>
+  <div class="bg-back-dark">
+    <div class="grid px-2 m-2 lg:grid-cols-4 md:grid-cols-3 md:mb-4 grid-cols-2 gap-2 md:place-items-center">
+      <div class="col-span-2 sm:col-span-1">
         <strong>
           <span class="fas fa-home"></span>&nbsp;&nbsp;
           <a class="underline" href="https://www.saproto.nl/">S.A. Proto</a>
@@ -18,7 +16,7 @@ import moment from 'moment';
         <p>7522NB Enschede</p>
       </div>
 
-      <div>
+      <div class="col-span-2 sm:col-span-1">
         <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Monday & Friday 08:30-16:00<br />
         <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30<br />
         <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">
@@ -44,13 +42,11 @@ import moment from 'moment';
       </div>
 
       <div>
-        <img class="h-20" src="/images/logo/inverse.png" />
+        <img class="h-20" src="/images/logo/inverse.png" alt="Proto's logo" />
       </div>
-    </div>
-    <p class="text-center mt-3 mb-2">
-      <sub>
-        &copy; {{ moment().year() }} S.A. Proto. All rights reserved.
-        <span class="d-sm-none">
+      <span class="col-span-2 md:col-span-2 lg:col-span-4 h-full text-center text-sm text-pretty align-middle mx-8">
+        <span> &copy; {{ moment().year() }} S.A. Proto. All rights reserved. </span>
+        <span>
           Please familiarize yourself with our
           <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
             privacy policy
@@ -60,14 +56,17 @@ import moment from 'moment';
             responsible disclosure policy </a
           >.
         </span>
-        The website source is available on
-        <a href="https://github.com/saproto/saproto" target="_blank" class="text-white"> GitHub </a>.
-        <br />
-        This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
-        <a href="{{ route('developers') }}" class="underline"> Have You Tried Turning It Off And On Again committee </a
-        >.
-      </sub>
-    </p>
+        <span>
+          The website source is available on
+          <a href="https://github.com/saproto/saproto" target="_blank" class="text-white"> GitHub </a>.
+          <br />
+          Created with <i class="fas fa-heart text-primary"></i> by the folks of the
+          <a href="{{ route('developers') }}" class="underline">
+            Have You Tried Turning It Off And On Again committee </a
+          >.
+        </span>
+      </span>
+    </div>
   </div>
 </template>
 

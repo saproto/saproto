@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ToastResponses;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -18,25 +19,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 class ParticipationController extends Controller
 {
     /**
-     * @param  int  $id
-     * @return RedirectResponse|JsonResponse
+     * @param int $id
+     * @param Request $request
+     * @return Response
      */
-    public function create($id, Request $request)
+    public function create(int $id, Request $request)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
-        if (! $event->activity) {
-            abort(403, 'You cannot subscribe for '.$event->title.'.');
+        if (!$event->activity) {
+            Session::flash('flash_message_type', ToastResponses::ERROR);
+            Session::flash('flash_message', 'You cannot subscribe for ' . $event->title . '.');
+            return to_route('event::show', ['id' => $event->getPublicId()]);
         } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
-            abort(403, 'You are already subscribed for '.$event->title.'.');
-        } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
-            abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
+            Session::flash('flash_message', 'You are already subscribed for ' . $event->title . '.');
+            Session::flash('flash_message_type', ToastResponses::ERROR);
+            return to_route('event::show', ['id' => $event->getPublicId()]);
+        } elseif (!$request->has('helping_committee_id') && (!$event->activity->canSubscribeBackup())) {
+            Session::flash('flash_message_type', ToastResponses::ERROR);
+            Session::flash('flash_message', 'You cannot subscribe for ' . $event->title . ' at this time.');
+            return to_route('event::show', ['id' => $event->getPublicId()]);
         } elseif ($event->activity->closed) {
-            abort(403, 'This activity is closed, you cannot change participation anymore.');
+            Session::flash('flash_message_type', ToastResponses::ERROR);
+            Session::flash('flash_message', 'This activity is closed, you cannot change participation anymore.');
+            return to_route('event::show', ['id' => $event->getPublicId()]);
         }
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
@@ -44,24 +56,31 @@ class ParticipationController extends Controller
         $is_web = Auth::guard('web')->user();
 
         if ($request->has('helping_committee_id')) {
+            /** @var HelpingCommittee $helping */
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
-            if (! $helping->committee->isMember(Auth::user())) {
-                abort(403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
+            if (!$helping->committee->isMember(Auth::user())) {
+                Session::flash('flash_message_type', ToastResponses::ERROR);
+                Session::flash('flash_message', 'You are not a member of the ' . $helping->committee . ' and thus cannot help on behalf of it.');
+                return to_route('event::show', ['id' => $event->getPublicId()]);
             }
 
             if ($helping->users->count() >= $helping->amount) {
-                abort(403, 'There are already enough people of your committee helping, thanks though!');
+                Session::flash('flash_message', 'There are already enough people of your committee helping, thanks though!');
+                Session::flash('flash_message_type', ToastResponses::WARNING);
+                return to_route('event::show', ['id' => $event->getPublicId()]);
             }
 
             $data['committees_activities_id'] = $helping->id;
         } elseif ($is_web) {
-            if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+                Session::flash('flash_message_type', ToastResponses::WARNING);
+                Session::flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
-                Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
+                Session::flash('flash_message_type', ToastResponses::SUCCESS);
+                Session::flash('flash_message', 'You claimed a spot for ' . $event->title . '.');
             }
-        } elseif ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
+        } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
             $data['backup'] = true;
         }
 
@@ -71,11 +90,11 @@ class ParticipationController extends Controller
 
         $event->updateUniqueUsersCount();
 
-        if (! $is_web) {
-            if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                $message = 'You have been placed on the back-up list for '.$event->title.'.';
+        if (!$is_web) {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+                $message = 'You have been placed on the back-up list for ' . $event->title . '.';
             } else {
-                $message = 'You claimed a spot for '.$event->title.'.';
+                $message = 'You claimed a spot for ' . $event->title . '.';
             }
 
             return response()->json([
@@ -86,14 +105,14 @@ class ParticipationController extends Controller
         }
 
         if ($event->activity->redirect_url) {
-            return Redirect::to($event->activity->redirect_url);
+            return Inertia::location($event->activity->redirect_url);
         }
 
-        return Redirect::back();
+        return to_route('event::show', ['id' => $event->getPublicId()]);
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function createFor($id, Request $request)
@@ -106,24 +125,24 @@ class ParticipationController extends Controller
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
-            if (! $helping->committee->isMember($user)) {
-                abort(403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
+            if (!$helping->committee->isMember($user)) {
+                abort(403, $user->name . ' is not a member of the ' . $helping->committee->name . ' and thus cannot help on behalf of it.');
             }
 
             $data['committees_activities_id'] = $helping->id;
         }
 
-        if (! $event->activity) {
-            abort(403, 'You cannot subscribe for '.$event->title.'.');
+        if (!$event->activity) {
+            abort(403, 'You cannot subscribe for ' . $event->title . '.');
         } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
-            abort(403, 'You are already subscribed for '.$event->title.'.');
+            abort(403, 'You are already subscribed for ' . $event->title . '.');
         } elseif ($event->activity->closed) {
             abort(403, 'This activity is closed, you cannot change participation anymore.');
         }
 
-        Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
+        Session::flash('flash_message', 'You added ' . $user->name . ' for ' . $event->title . '.');
 
-        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
+        if (!isset($data['committees_activities_id']) || !$data['committees_activities_id']) {
             $event->updateUniqueUsersCount();
         }
 
@@ -139,7 +158,7 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $participation_id
+     * @param int $participation_id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -149,7 +168,7 @@ class ParticipationController extends Controller
         /** @var ActivityParticipation $participation */
         $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
-        if (! $participation) {
+        if (!$participation) {
             Session::flash('flash_message', 'The participation is not found.');
 
             return Redirect::back();
@@ -158,7 +177,7 @@ class ParticipationController extends Controller
         $notify = false;
 
         if ($participation->user->id != Auth::id()) {
-            if (! Auth::user()->can('board')) {
+            if (!Auth::user()->can('board')) {
                 abort(403);
             }
 
@@ -172,7 +191,7 @@ class ParticipationController extends Controller
                 abort(403, 'This activity is closed, you cannot change participation anymore.');
             }
 
-            if (! $participation->activity->canUnsubscribe() && ! $participation->backup && ! Auth::user()->can('board')) {
+            if (!$participation->activity->canUnsubscribe() && !$participation->backup && !Auth::user()->can('board')) {
                 abort(403, 'You cannot unsubscribe for this event at this time.');
             }
 
@@ -180,7 +199,7 @@ class ParticipationController extends Controller
                 Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
             }
 
-            $message = $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.';
+            $message = $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.';
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
@@ -193,7 +212,7 @@ class ParticipationController extends Controller
                 self::transferOneBackupUser($participation->activity);
             }
         } else {
-            $message = $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.';
+            $message = $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.';
             if ($is_web) {
                 Session::flash('flash_message', $message);
             }
@@ -206,7 +225,7 @@ class ParticipationController extends Controller
             return Redirect::back();
         }
 
-        abort(200, json_encode((object) [
+        abort(200, json_encode((object)[
             'success' => true,
             'message' => $message,
         ]));
@@ -215,7 +234,7 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $participation_id
+     * @param int $participation_id
      * @return JsonResponse
      */
     public function togglePresence($participation_id, Request $request)
@@ -223,11 +242,11 @@ class ParticipationController extends Controller
         /** @var ActivityParticipation $participation */
         $participation = ActivityParticipation::query()->findOrFail($participation_id);
 
-        if (! $participation->activity->event->isEventAdmin(Auth::user())) {
+        if (!$participation->activity->event->isEventAdmin(Auth::user())) {
             abort(403, 'You are not an organizer for this event.');
         }
 
-        $participation->is_present = ! $participation->is_present;
+        $participation->is_present = !$participation->is_present;
         $participation->save();
 
         return response()->json($participation->activity->getPresent());

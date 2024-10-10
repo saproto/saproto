@@ -47,10 +47,13 @@ class Ticket extends Model
 
     public $timestamps = false;
 
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
+
+    /** @return BelongsTo */
 
     public function event(): BelongsTo
     {
@@ -81,7 +84,7 @@ class Ticket extends Model
 
     public function canBeSoldTo(User $user): bool
     {
-        return ($user->is_member || ! $this->members_only) && ! $this->buyLimitReached($user);
+        return ($user->is_member || !$this->members_only) && !$this->buyLimitReached($user);
     }
 
     public function buyLimitReached(User $user): bool

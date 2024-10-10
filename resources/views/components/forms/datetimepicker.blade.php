@@ -13,9 +13,10 @@
         </label>
     @endisset
     <input
-       type="{{ $format ?? 'datetime-local' }}"
-       id="datetimepicker-{{ $name }}" class="form-control datetimepicker {{ $input_class_name ?? '' }}"
-       name="{{ $name }}" value="{{ isset($placeholder) ? date( $strFormat[$format ?? 'datetime-local'], $placeholder): '' }}"
-       {{ isset($not_required) && $not_required ? '' : 'required' }}
+        type="{{ $format ?? 'datetime-local' }}"
+        id="datetimepicker-{{ $name }}" class="form-control datetimepicker {{ $input_class_name ?? '' }}"
+        name="{{ $name }}"
+        value="{{ isset($placeholder) ? $placeholder->format( $strFormat[$format ?? 'datetime-local']): '' }}"
+        {{ isset($not_required) && $not_required ? '' : 'required' }}
     />
 </div>

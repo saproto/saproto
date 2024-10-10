@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
-import { variantStyles, hoverStyles } from '@/enums/styles';
+import { variantStyles, hoverStyles } from '@/Enums/styles';
 
 const slots = useSlots();
 

@@ -80,8 +80,7 @@ class Product extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    /** @raturn String */
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
         if ($this->image_id) {
             $image = StorageEntry::query()->find($this->image_id);
@@ -89,8 +88,7 @@ class Product extends Model
                 return $image->generateImagePath(null, null);
             }
         }
-
-        return null;
+        return '';
     }
 
     public function categories(): BelongsToMany
@@ -110,13 +108,13 @@ class Product extends Model
 
     public function isVisible(): bool
     {
-        return $this->is_visible && ! ($this->stock <= 0 && ! $this->is_visible_when_no_stock);
+        return $this->is_visible && !($this->stock <= 0 && !$this->is_visible_when_no_stock);
     }
 
     public function omnomcomPrice()
     {
         $active = WallstreetController::active();
-        if (! $active) {
+        if (!$active) {
             return $this->price;
         }
 

@@ -2,7 +2,7 @@ import { glob } from 'glob';
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
-import eslint from 'vite-plugin-eslint';
+import eslintPlugin from '@nabla/vite-plugin-eslint';
 import path from 'path';
 
 export default defineConfig({
@@ -28,9 +28,9 @@ export default defineConfig({
         },
       },
     }),
-    eslint({
+    eslintPlugin({
       fix: true,
-      exclude: ['resources/js/*.js', 'vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
+      ignores: ['resources/js/*.js', 'vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
     }),
   ],
   build: {

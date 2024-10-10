@@ -2,7 +2,7 @@
 import { computed, useSlots } from 'vue';
 import moment from 'moment';
 import InputWrapper from '@/Components/Input/Shared/InputWrapper.vue';
-import { variantStyles } from '@/enums/styles';
+import { variantStyles } from '@/Enums/styles';
 
 const slots = useSlots();
 

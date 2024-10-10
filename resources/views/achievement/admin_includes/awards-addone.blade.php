@@ -15,12 +15,13 @@
             </div>
             <div class="form-group autocomplete">
                 <label for="user">User(s):</label>
-                <input class="form-control user-search" id="users" name="users[]" data-label="User(s):" multiple required>
+                <input class="form-control user-search" id="users" name="users[]" data-label="User(s):" multiple
+                       required>
             </div>
             @include('components.forms.datetimepicker', [
                            'name' => 'achieved_on',
                            'label' => 'Achieved on',
-                           'placeholder' => Carbon::now()->timestamp,
+                           'placeholder' => Carbon::now(),
                            'format'=>'date',
                        ])
             <div class="form-group">

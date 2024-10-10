@@ -52,14 +52,14 @@
                                 @include('components.forms.datetimepicker', [
                                     'name' => 'start',
                                     'label' => 'Since',
-                                    'placeholder' => strtotime($membership->created_at)
+                                    'placeholder' => $membership->created_at
                                 ])
                             </div>
                             <div class="col-6">
                                 @include('components.forms.datetimepicker', [
                                     'name' => 'end',
                                     'label' => 'Until',
-                                    'placeholder' => ($membership->deleted_at == null ? null : strtotime($membership->deleted_at)),
+                                    'placeholder' => $membership->deleted_at,
                                     'not_required' => true
                                 ])
                             </div>

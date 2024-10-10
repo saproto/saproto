@@ -5,7 +5,7 @@
     </div>
 
     @if ($event != null)
-
+        @php /** @var \App\Models\Event $event */ @endphp
         <form method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}">
 
             {!! csrf_field() !!}
@@ -28,7 +28,7 @@
                         @include('components.forms.datetimepicker',[
                             'name' => 'registration_start',
                             'label' => 'Sign-up start:',
-                            'placeholder' => old('registration_start')?strtotime(old('registration_start')):($event->activity ? $event->activity->registration_start : null)
+                            'placeholder' => Carbon::createFromTimestamp(old('registration_start')??$event?->activity?->registration_start)
                         ])
                     </div>
 
@@ -36,7 +36,7 @@
                         @include('components.forms.datetimepicker',[
                             'name' => 'registration_end',
                             'label' => 'Sign-up end:',
-                            'placeholder' => old('registration_end')?strtotime(old('registration_end')):($event->activity ? $event->activity->registration_end : null)
+                            'placeholder' => Carbon::createFromTimestamp(old('registration_end')??$event?->activity?->registration_end),
                         ])
                     </div>
 
@@ -44,7 +44,7 @@
                         @include('components.forms.datetimepicker',[
                             'name' => 'deregistration_end',
                             'label' => 'Sign-out end:',
-                            'placeholder' => old('registration_end')?strtotime(old('deregistration_end')):($event->activity ? $event->activity->deregistration_end : null)
+                            'placeholder' => Carbon::createFromTimestamp(old('deregistration_end')??($event?->activity?->deregistration_end))
                         ])
                     </div>
 

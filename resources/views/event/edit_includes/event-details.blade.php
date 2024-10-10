@@ -83,7 +83,7 @@
                             @include('components.forms.datetimepicker',[
                                 'name' => 'publication',
                                 'label' => 'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
-                                'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
+                                'placeholder' => old('publication') ? Carbon::parse(old('publication')) : Carbon::parse($event?->publication),
                                 'not_required'=> true,
                             ])
                         </div>

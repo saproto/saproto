@@ -21,7 +21,7 @@ createInertiaApp({
       .use(ZiggyVue)
       .use(Vue3Toastify, {
         autoClose: 3000,
-        position: toast.POSITION.BOTTOM_CENTER,
+        position: toast.POSITION.BOTTOM_RIGHT,
       } as ToastContainerOptions)
       .mount(el);
   },

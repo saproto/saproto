@@ -8,10 +8,11 @@
 
 
             @foreach($featuredEvents as $key => $event)
+                @php /** @var \App\Models\Event $event */ @endphp
 
                 @include('event.display_includes.event_block', ['event'=> $event, 'countdown' => true])
 
-                @php($week = date('W', $event->start))
+                @php($week = $event->start->format('W'))
 
             @endforeach
 

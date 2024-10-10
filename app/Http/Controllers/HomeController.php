@@ -30,7 +30,6 @@ class HomeController extends Controller
     /* Display the homepage. */
     public function show()
     {
-        return Inertia::render('HomePage');
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')

@@ -6,9 +6,8 @@ global.SignaturePad = SignaturePad;
 import moment from 'moment/moment.js';
 
 global.moment = moment;
-import quagga from 'quagga';
 
-global.Quagga = quagga;
+console.log('Application.js loaded');
 
 import './countdown-timer';
 import './utilities';
@@ -31,7 +30,7 @@ if (discordOnlineCount) {
     .then((data) => {
       discordOnlineCount.innerHTML = data.presence_count;
     })
-    .catch((_) => {
+    .catch(() => {
       discordOnlineCount.innerHTML = '...';
     });
 }

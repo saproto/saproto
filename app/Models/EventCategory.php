@@ -37,6 +37,8 @@ class EventCategory extends Model
 
     protected $table = 'event_categories';
 
+    protected $fillable = ['name', 'icon'];
+
     public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'category_id');

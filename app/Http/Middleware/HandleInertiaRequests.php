@@ -50,10 +50,11 @@ class HandleInertiaRequests extends Middleware
             })->where('parent')->orderBy('order')->with('page')->with('children')->get()),
             'csrf' => fn() => csrf_token(),
             'flash' => [
-                'message' => fn() => $request->session()->get('flash_message')
+                'message' => $request->session()->get('flash_message'),
+                'message_type' => $request->session()->get('flash_message_type'),
             ],
-//            todo: remove this
-            'impersonating' => null
+
+            'impersonating' => fn() => session('impersonator') !== null,
         ];
     }
 }

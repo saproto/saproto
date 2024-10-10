@@ -139,7 +139,9 @@ const mobileOpen: Ref<boolean> = ref(false);
                       <hr />
                       <DropdownLink no-inertia :href="route('committee::create')">Add Committee </DropdownLink>
                       <DropdownLink no-inertia :href="route('event::create')">Add Event </DropdownLink>
-                      <DropdownLink no-inertia :href="route('event::category::admin')">Event Categories </DropdownLink>
+                      <DropdownLink no-inertia :href="route('event::categories.create')"
+                        >Event Categories
+                      </DropdownLink>
 
                       <hr />
                       <DropdownLink no-inertia :href="route('narrowcasting::index')"> Narrowcasting </DropdownLink>

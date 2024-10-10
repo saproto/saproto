@@ -17,6 +17,7 @@ use App\Http\Controllers\DinnerformOrderlineController;
 use App\Http\Controllers\DmxController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
+use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\FileController;
@@ -481,19 +482,21 @@ Route::middleware('forcedomain')->group(function () {
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::prefix('events')->name('event::')->group(function () {
-        Route::controller(EventController::class)->group(function () {
+        // Event related admin (Board only)
+        Route::middleware(['permission:board'])
+            ->resource('categories', EventCategoryController::class)
+            ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
+        Route::controller(EventController::class)->group(function () {
             // Financials related to events (Finadmin only)
             Route::prefix('financial')->name('financial::')->middleware('permission:finadmin')->group(function () {
                 Route::get('list', 'finindex')->name('list');
                 Route::post('close/{id}', 'finclose')->name('close');
             });
 
-            // Event related admin (Board only)
             Route::middleware(['permission:board'])->group(function () {
-                // Categories
                 Route::prefix('categories')->name('category::')->group(function () {
-                    Route::get('index', 'categoryAdmin')->name('admin');
+                    Route::get('index', 'categoryAdmin')->name('show');
                     Route::post('store', 'categoryStore')->name('store');
                     Route::get('edit/{id}', 'categoryEdit')->name('edit');
                     Route::post('update/{id}', 'categoryUpdate')->name('update');
@@ -503,7 +506,7 @@ Route::middleware('forcedomain')->group(function () {
                 // Events admin
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::get('edit/{event}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
 
@@ -900,15 +903,12 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Fetching images: Public --- */
-    Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
-        Route::get('{id}/{hash}', 'getImage')->name('get');
-        Route::get('{id}/{hash}/{name}', 'getImage');
-    });
+    Route::get('image/{id}/{hash}/{name?}', [FileController::class, 'getImage'])->name('image::get');
 
     /* --- Fetching files: Public   --- */
     Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
         Route::get('{id}/{hash}', 'get')->name('get');
-        Route::get('{id}/{hash}/{name}', 'get');
+        Route::get('{id}/{hash}/{name}', 'get')->name('getWithName');
     });
 
     /* --- Routes related to Spotify. (Board) --- */

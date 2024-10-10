@@ -99,6 +99,10 @@ class Event extends Model
     {
         return [
             'deleted_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'start' => 'datetime',
+            'end' => 'datetime',
         ];
     }
 
@@ -110,9 +114,9 @@ class Event extends Model
 
     /**
      * @param string $public_id
-     * @return Model
+     * @return Event|Collection|Model|null
      */
-    public static function fromPublicId(string $public_id)
+    public static function fromPublicId(string $public_id): Event|Collection|Model|null
     {
         return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
@@ -371,14 +375,19 @@ class Event extends Model
         return date('U') < $this->start;
     }
 
+    public function getImageUrlAttribute(): string
+    {
+        return $this->image ? route('image::get', ['id' => $this->image->id, 'hash' => $this->image->hash]) : '';
+    }
+
     /** @return object */
     public function getFormattedDateAttribute(): object
     {
         return (object)[
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => $this->start->format('M d, Y'),
+            'year' => $this->start->format('Y'),
+            'month' => $this->start->format('M Y'),
+            'time' => $this->start->format('H:i'),
         ];
     }
 
