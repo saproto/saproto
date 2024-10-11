@@ -65,6 +65,14 @@ class OrderLine extends Model
 
     protected $guarded = ['id'];
 
+
+    public function casts(): array
+    {
+        return [
+            'payed_with_loss' => 'boolean',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
@@ -95,6 +103,21 @@ class OrderLine extends Model
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
+    public function scopeUnpayed(Builder $query): void
+    {
+        $query->whereNull('payed_with_cash')
+            ->whereNull('payed_with_bank_card')
+            ->whereNull('payed_with_withdrawal')
+            ->where('payed_with_loss', false)
+            ->where(function ($query) {
+                $query->whereDoesntHave('molliePayment')
+                    ->orWhereHas('molliePayment', static function ($query) {
+                        $query->whereNotIn('status', ['paid', 'paidout']);
+                    });
+            })
+            ->where('total_price', '!=', 0);
+    }
+
     public function isPayed(): bool
     {
         $mollie_payment = false;
@@ -113,7 +136,7 @@ class OrderLine extends Model
 
     public function canBeDeleted(): bool
     {
-        return $this->total_price == 0 || ! $this->isPayed();
+        return $this->total_price == 0 || !$this->isPayed();
     }
 
     public function generateHistoryStatus(): string
@@ -123,10 +146,10 @@ class OrderLine extends Model
         }
 
         if ($this->payed_with_withdrawal !== null) {
-            return "Withdrawal <a href='".
-                route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
-                "'>#".
-                $this->payed_with_withdrawal.
+            return "Withdrawal <a href='" .
+                route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]) .
+                "'>#" .
+                $this->payed_with_withdrawal .
                 '</a>';
         }
 
@@ -140,25 +163,25 @@ class OrderLine extends Model
 
         if ($this->payed_with_mollie !== null) {
             return match ($this->molliePayment->translatedStatus()) {
-                'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
-                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                    "'>#".
-                    $this->payed_with_mollie.
+                'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\'' .
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) .
+                    "'>#" .
+                    $this->payed_with_mollie .
                     '</a>',
-                'failed' => '<i class="fas fa-times ml-2 text-danger"></i> - <a href=\''.
-                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                    "'>#".
-                    $this->payed_with_mollie.
+                'failed' => '<i class="fas fa-times ml-2 text-danger"></i> - <a href=\'' .
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) .
+                    "'>#" .
+                    $this->payed_with_mollie .
                     '</a>',
-                'open' => '<i class="fas fa-spinner ml-2 text-normal"></i> - <a href=\''.
-                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                    "'>#".
-                    $this->payed_with_mollie.
+                'open' => '<i class="fas fa-spinner ml-2 text-normal"></i> - <a href=\'' .
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) .
+                    "'>#" .
+                    $this->payed_with_mollie .
                     '</a>',
-                default => '<i class="fas fa-question ml-2 text-normal"></i> - <a href=\''.
-                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                    "'>#".
-                    $this->payed_with_mollie.
+                default => '<i class="fas fa-question ml-2 text-normal"></i> - <a href=\'' .
+                    route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) .
+                    "'>#" .
+                    $this->payed_with_mollie .
                     '</a>',
             };
         }

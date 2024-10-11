@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mollie;
+use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Resources\Payment;
 
 /**
@@ -57,6 +58,9 @@ class MollieTransaction extends Model
         return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
+    /**
+     * @throws ApiException
+     */
     public function transaction(): Payment
     {
         return Mollie::api()
@@ -102,6 +106,8 @@ class MollieTransaction extends Model
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
+
+
         if ($new_status !== 'open') {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
@@ -125,13 +131,11 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    ! $orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
+                    !$orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
                 ) {
-                    if ($orderline->ticketPurchase) {
-                        $orderline->ticketPurchase->delete();
-                    }
 
+                    $orderline->ticketPurchase?->delete();
                     $orderline->product->ticket->event->updateUniqueUsersCount();
                     $orderline->product->stock++;
                     $orderline->product->save();
@@ -143,12 +147,14 @@ class MollieTransaction extends Model
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
             }
-        } elseif ($new_status === 'paid') {
+            return $this;
+        }
+
+        if ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
-                    $orderline->ticketPurchase->payment_complete = true;
-                    $orderline->ticketPurchase->save();
-                }
+                $orderline->ticketPurchase?->update([
+                    'payment_complete' => true
+                ]);
             }
         }
 
