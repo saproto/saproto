@@ -421,8 +421,7 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Routes related to dinnerforms --- */
-
-    Route::prefix('dinnerform')->name('dinnerform::')->middleware(['auth'])->group(function () {
+    Route::prefix('dinnerform')->name('dinnerform::')->middleware(['member'])->group(function () {
 
         /* --- TIPCie only --- */
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
@@ -435,14 +434,22 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('admin/{id}', 'admin')->name('admin');
             Route::get('process/{id}', 'process')->name('process');
         });
-        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
-            Route::get('delete/{id}', 'delete')->name('delete');
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('update/{id}', 'update')->name('update');
-        });
-        /* --- Member only routes --- */
-        Route::post('store/{id}', [DinnerformOrderlineController::class, 'store'])->prefix('orderline')->name('orderline::store');
+
+        /* --- Member only --- */
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
+
+        /* --- Routes related to the dinnerform orderlines --- */
+        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->group(function () {
+            /* --- TIPCie only --- */
+            Route::middleware(['permission:tipcie'])->group(function () {
+                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::post('update/{id}', 'update')->name('update');
+            });
+
+            /* --- Member only --- */
+            Route::get('delete/{id}', 'delete')->name('delete');
+            Route::post('store/{id}', 'store')->name('store');
+        });
     });
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
@@ -765,15 +772,15 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Routes related to managing Products. (Omnomcom admins only) --- */
         Route::prefix('products')->middleware(['permission:omnomcom'])->name('products::')->group(function () {
             Route::controller(ProductController::class)->group(function () {
+                Route::get('export/csv', 'generateCsv')->name('export_csv');
+                Route::post('update/bulk', 'bulkUpdate')->name('bulkupdate');
+
                 Route::get('', 'index')->name('index');
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
                 Route::get('edit/{id}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
-
-                Route::get('export/csv', 'generateCsv')->name('export_csv');
-                Route::post('update/bulk', 'bulkUpdate')->name('bulkupdate');
             });
 
             Route::controller(AccountController::class)->group(function () {

@@ -2,25 +2,24 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\Models\WelcomeMessage;
+use App\Models\EventCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends Factory<WelcomeMessage>
+ * @extends Factory<EventCategory>
  */
-class WelcomeMessageFactory extends Factory
+class EventCategoryFactory extends Factory
 {
-    protected $model = WelcomeMessage::class;
+    protected $model = EventCategory::class;
 
     public function definition(): array
     {
         return [
-            'message' => fake()->sentence(),
+            'name' => fake()->name(),
+            'icon' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-            'user_id' => User::factory(),
         ];
     }
 }
