@@ -33,6 +33,7 @@ class WithdrawalController extends Controller
     public function index()
     {
         $withdrawals = Withdrawal::query()->orderBy('id', 'desc')->withCount(['orderlines', 'users'])->withSum('orderlines', 'total_price')->paginate(6);
+
         return view('omnomcom.withdrawals.index', ['withdrawals' => $withdrawals]);
     }
 
@@ -58,6 +59,7 @@ class WithdrawalController extends Controller
 
             return Redirect::back();
         }
+
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
             'date' => date('Y-m-d', $date),
@@ -66,7 +68,7 @@ class WithdrawalController extends Controller
         $totalPerUser = [];
         foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
             /** @var OrderLine $orderline */
-            if (!array_key_exists($orderline->user->id, $totalPerUser)) {
+            if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
 
@@ -102,13 +104,12 @@ class WithdrawalController extends Controller
     public function show(int $id)
     {
         $withdrawal = Withdrawal::query()->withCount(['orderlines', 'users'])->with('failedWithdrawals')->findOrFail($id);
-        $userLines = Orderline::selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')->where('payed_with_withdrawal', $id)->groupBy('user_id')->with('user.bank')->get();
+        $userLines = OrderLine::query()->selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')->where('payed_with_withdrawal', $id)->groupBy('user_id')->with('user.bank')->get();
 
         return view('omnomcom.withdrawals.show', ['withdrawal' => $withdrawal, 'userLines' => $userLines]);
     }
 
     /**
-     * @param int $id
      * @return View
      */
     public function showAccounts(int $id)
@@ -126,13 +127,13 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Accounts of withdrawal of ' . date('d-m-Y', strtotime($withdrawal->date)),
+            'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
             'total' => $withdrawal->total(),
         ]);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function update(Request $request, $id)
@@ -162,7 +163,7 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -196,8 +197,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $user_id
      * @return RedirectResponse
      */
     public static function deleteFrom(Request $request, int $id, int $user_id)
@@ -225,8 +224,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $user_id
      * @return RedirectResponse
      */
     public static function markFailed(Request $request, int $id, int $user_id)
@@ -278,8 +275,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $user_id
      * @return RedirectResponse
      */
     public static function markLoss(int $id, int $user_id)
@@ -311,7 +306,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse|\Illuminate\Http\Response
      *
      * @throws SephpaInputException
@@ -321,7 +315,7 @@ class WithdrawalController extends Controller
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
-        if (!$withdrawal->orderlines()->exists()) {
+        if (! $withdrawal->orderlines()->exists()) {
             Session::flash('flash_message', 'Cannot export! This withdrawal is empty.');
 
             return Redirect::back();
@@ -348,13 +342,13 @@ class WithdrawalController extends Controller
         try {
             $directDebit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId, SephpaDirectDebit::SEPA_PAIN_008_001_02);
             $collection = $directDebit->addCollection($debitCollectionData);
-        } catch (SephpaInputException $e) {
-            abort(500, 'Error creating the withdrawal. Error: ' . $e->getMessage());
+        } catch (SephpaInputException $sephpaInputException) {
+            abort(500, 'Error creating the withdrawal. Error: '.$sephpaInputException->getMessage());
         }
 
         $i = 1;
         foreach ($withdrawal->users() as $user) {
-            if (!$collection->addPayment([
+            if (! $collection->addPayment([
                 'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
                 'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
                 'mndtId' => $user->bank->machtigingid,
@@ -379,7 +373,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public static function close(int $id)
@@ -402,7 +395,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param int $id
      * @return View
      */
     public function showForUser(int $id)
@@ -416,7 +408,6 @@ class WithdrawalController extends Controller
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
      *
-     * @param int $id
      * @return RedirectResponse
      */
     public function email(int $id)
@@ -457,8 +448,8 @@ class WithdrawalController extends Controller
                 continue;
             }
 
-            if (!in_array($orderline->user->id, array_keys($users))) {
-                $users[$orderline->user->id] = (object)[
+            if (! in_array($orderline->user->id, array_keys($users))) {
+                $users[$orderline->user->id] = (object) [
                     'user' => $orderline->user,
                     'orderlines' => [],
                     'total' => 0,

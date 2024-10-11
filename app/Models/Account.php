@@ -58,8 +58,8 @@ class Account extends Model
             $account_nr = $orderline->account_number;
 
             // Add account to dataset if not existing yet.
-            if (!isset($accounts[$account_nr])) {
-                $accounts[$account_nr] = (object)[
+            if (! isset($accounts[$account_nr])) {
+                $accounts[$account_nr] = (object) [
                     'byDate' => [],
                     'name' => $orderline->name,
                     'total' => 0,
@@ -70,7 +70,7 @@ class Account extends Model
             $accounts[$account_nr]->total += $orderline->total_price;
 
             // Add date to account data if not existing yet.
-            if (!isset($accounts[$account_nr]->byDate[$sortDate])) {
+            if (! isset($accounts[$account_nr]->byDate[$sortDate])) {
                 $accounts[$account_nr]->byDate[$sortDate] = 0;
             }
 

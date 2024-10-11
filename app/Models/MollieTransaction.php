@@ -107,7 +107,6 @@ class MollieTransaction extends Model
 
         $this->status = $mollie->status;
 
-
         if ($new_status !== 'open') {
             $this->payment_url = $mollie->getCheckoutUrl();
         }
@@ -131,8 +130,8 @@ class MollieTransaction extends Model
                  */
                 if (
                     $orderline->product->ticket &&
-                    !$orderline->ticketPurchase->payment_complete &&
-                    ($orderline->product->ticket->is_prepaid || !$orderline->user->is_member)
+                    ! $orderline->ticketPurchase->payment_complete &&
+                    ($orderline->product->ticket->is_prepaid || ! $orderline->user->is_member)
                 ) {
 
                     $orderline->ticketPurchase?->delete();
@@ -147,13 +146,14 @@ class MollieTransaction extends Model
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
             }
+
             return $this;
         }
 
         if ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
                 $orderline->ticketPurchase?->update([
-                    'payment_complete' => true
+                    'payment_complete' => true,
                 ]);
             }
         }

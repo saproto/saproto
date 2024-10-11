@@ -6,12 +6,9 @@ use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Withdrawal Model.
@@ -43,13 +40,8 @@ class Withdrawal extends Model
 
     protected $guarded = ['id'];
 
-    protected $casts = [
-        'closed' => 'boolean',
-    ];
-
     protected $appends = ['withdrawal_id'];
 
-    /** @return HasMany */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class, 'payed_with_withdrawal');
@@ -61,7 +53,6 @@ class Withdrawal extends Model
     }
 
     /**
-     * @param User $user
      * @return int
      */
     public function totalForUser(User $user): mixed
@@ -69,11 +60,7 @@ class Withdrawal extends Model
         return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
-    /**
-     * @param User $user
-     * @return FailedWithdrawal|null
-     */
-    public function getFailedWithdrawal(User $user): FailedWithdrawal|null
+    public function getFailedWithdrawal(User $user): ?FailedWithdrawal
     {
         return FailedWithdrawal::query()->where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
     }
@@ -82,7 +69,6 @@ class Withdrawal extends Model
     {
         return $this->hasMany(FailedWithdrawal::class, 'withdrawal_id');
     }
-
 
     public function users(): HasManyThrough
     {
@@ -96,6 +82,13 @@ class Withdrawal extends Model
 
     public function getWithdrawalIdAttribute(): string
     {
-        return 'PROTO-' . $this->id . '-' . date('dmY', strtotime($this->date));
+        return 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date));
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'boolean',
+        ];
     }
 }

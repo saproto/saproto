@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use DateTime;
 use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -160,7 +159,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
-    /** @return string|null */
     public function getPublicId(): ?string
     {
         return $this->is_member ? $this->member->proto_username : null;
@@ -180,7 +178,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale(): bool
     {
-        return !(
+        return ! (
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -293,8 +291,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param int $w
-     * @param int $h
+     * @param  int  $w
+     * @param  int  $h
      * @return string Path to a resized version of someone's profile picture.
      */
     public function generatePhotoPath($w = 100, $h = 100)
@@ -307,7 +305,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $password
+     * @param  string  $password
      *
      * @throws Exception
      */
@@ -341,7 +339,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function hasUnpaidOrderlines(): bool
     {
-        $orderlines = $this->orderlines()->unpayed()->exists();
+        $this->orderlines()->unpayed()->exists();
     }
 
     /**
@@ -361,8 +359,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return int
-     *
      * @throws Exception
      */
     public function age(): int
@@ -370,19 +366,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return Carbon::parse($this->birthdate)->age;
     }
 
-    /**
-     * @param Committee $committee
-     * @return bool
-     */
     public function isInCommittee(Committee $committee): bool
     {
         return $committee->users()->where('user_id', $this->id)->exists();
     }
 
-    /**
-     * @param string $slug
-     * @return bool
-     */
     public function isInCommitteeBySlug(string $slug): bool
     {
         $committee = Committee::query()->where('slug', $slug)->first();
@@ -396,24 +384,22 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param int $limit
      * @return Withdrawal[]
      */
     public function withdrawals(int $limit = 0): array
     {
-        return Withdrawal::whereHas('orderlines', function ($query) {
+        return Withdrawal::query()->whereHas('orderlines', function ($query) {
             $query->where('user_id', $this->id);
         })->orderBy('date', 'desc')->limit($limit)->get()->toArray();
     }
 
-    /** @return string|null */
     public function websiteUrl(): ?string
     {
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
         }
 
-        return 'https://' . $this->website;
+        return 'https://'.$this->website;
     }
 
     /** @return string|null */
@@ -528,7 +514,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function toggleCalendarRelevantSetting(): void
     {
-        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
@@ -540,7 +526,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && !$this->member->is_pending;
+        return $this->member && ! $this->member->is_pending;
     }
 
     public function getSignedMembershipFormAttribute(): bool
@@ -569,7 +555,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
 
-    /** @return string|null */
     public function getWelcomeMessageAttribute(): ?string
     {
         return WelcomeMessage::query()->where('user_id', $this->id)->first()?->welcomeMessage;
