@@ -81,7 +81,7 @@ class Committee extends Model
             ->where('committees_users.created_at', '<', Carbon::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+            ->orderByPivot('created_at', 'desc');
     }
 
     public function image(): BelongsTo
@@ -96,7 +96,7 @@ class Committee extends Model
 
     public function getEmailAddressAttribute(): string
     {
-        return $this->slug.'@'.config('proto.emaildomain');
+        return $this->slug . '@' . config('proto.emaildomain');
     }
 
     public function pastEvents(int $n): Collection
@@ -132,7 +132,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
+            if ($event?->isPublished() || (!$event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -172,7 +172,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;

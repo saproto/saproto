@@ -210,7 +210,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->where('committees_users.created_at', '<', Carbon::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+            ->orderByPivot('desc');
     }
 
     public function lists(): BelongsToMany
@@ -220,7 +220,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
     public function committees(): BelongsToMany
