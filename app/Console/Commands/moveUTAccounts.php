@@ -4,13 +4,13 @@ namespace App\Console\Commands;
 
 use App\Enums\MembershipTypeEnum;
 use App\Http\Controllers\LdapController;
-use App\Models\Member;
 use App\Models\User;
 use App\Models\UtAccount;
 use Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class moveUTAccounts extends Command
 {
@@ -31,45 +31,55 @@ class moveUTAccounts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    //todo: handle the case where an account is not found anymore
+    //todo: Not always create but update the account
+    public function handle(): void
     {
-//        \DB::table('ut_accounts')->truncate();
-        $query = User::whereHas('member', function ($member) {
+        //set all accounts to not found
+        UtAccount::query()->update(['found' => false]);
+
+        //get all users who are currently studying and have a UT account
+        $query = User::query()->whereHas('member', function ($member) {
             $member->where('membership_type', MembershipTypeEnum::REGULAR);
         })->where(function (Builder $query) {
             $query->whereHas('UtAccount', function ($q) {
-                $q->where('updated_at', '<', Carbon::now()->subHour());
+                $q->where('found', false);
             })->orDoesntHave('UtAccount');
         });
 
-        $this->syncCreaters((clone $query), '(|(department=*B-CREA*)(department=*M-ITECH*))');
+        $this->syncStudents((clone $query), '(|(department=*B-CREA*)(department=*M-ITECH*))');
 
         $pastCreaTersQuery = (clone $query)->where(function (Builder $query) {
             $query->where('did_study_itech', true)->orWhere('did_study_create', true);
         });
-        $this->syncCreaters($pastCreaTersQuery);
+        $this->syncStudents($pastCreaTersQuery);
     }
 
-    public function syncCreaters($query, $constraints = '')
+    public function syncStudents($query, $constraints = ''): void
     {
-        $accountsByNumber = (clone $query)->whereNotNull('utwente_username')->get();
-        $this->info('Checking' . $accountsByNumber->count() . ' by Student number');
-        $newAccounts = $this->syncColumnToUTTrait($accountsByNumber, 'uid', 'utwente_username', $constraints);
-        UTAccount::insert($newAccounts->toArray());
+        //try to find the users by their student number
+        $usersById = (clone $query)->whereNotNull('utwente_username')->get();
+        $this->info('Checking'.$usersById->count().' by Student number');
+        $newAccounts = $this->syncColumnToUTTrait($usersById, 'uid', 'utwente_username', $constraints);
+        UtAccount::query()->insert($newAccounts->toArray());
 
-        $pastCreaTers = (clone $query)->whereNotNull('email')->get();
-        $this->info('Checking the remaining ' . $pastCreaTers->count() . ' users by email');
-        $newerAccounts = $this->syncColumnToUTTrait($pastCreaTers, 'userprincipalname', 'email', $constraints);
-        UTAccount::insert($newerAccounts->toArray());
-        $pastCreaTers = (clone $query)->whereNotNull('name')->get();
+        //try to find the users by their email
+        $usersByEmail = (clone $query)->whereNotNull('email')->get();
+        $this->info('Checking the remaining '.$usersByEmail->count().' users by email');
+        $newerAccounts = $this->syncColumnToUTTrait($usersByEmail, 'userprincipalname', 'email', $constraints);
+        UtAccount::query()->insert($newerAccounts->toArray());
 
-        $sns = implode('', array_map(function ($name) {
+        //try to find the users by their name
+        $usersByName = (clone $query)->whereNotNull('name')->get();
+        $this->info('Checking another '.$usersByName->count().' users by email');
+        $sns = implode('', array_map(function ($name): string {
             $names = explode(' ', $name);
             if (count($names) === 1) {
                 return '';
             }
-            return "(&(givenname=$names[0])(sn=" . $names[count($names) - 1] . "))";
-        }, $pastCreaTers->pluck('name')->toArray()));
+
+            return "(&(givenname=$names[0])(sn=".$names[count($names) - 1].'))';
+        }, $usersByName->pluck('name')->toArray()));
 
         $students = $this->getUtwenteResults($sns, $constraints);
         $bar = $this->output->createProgressBar(count($students));
@@ -78,50 +88,73 @@ class moveUTAccounts extends Command
         $newUTAccounts = collect();
         foreach ($students as $student) {
             /** @var User $account */
-            $account = $pastCreaTers->filter(function ($user) use ($student) {
+            $account = $usersByName->filter(function (array $user) use ($student): bool {
                 $names = explode(' ', $user['name']);
-                return strtolower($names[0] . ' ' . $names[count($names) - 1]) == strtolower($student['givenname'] . ' ' . $student['sn']);
+
+                return strtolower($names[0].' '.$names[count($names) - 1]) === strtolower($student['givenname'].' '.$student['sn']);
             })->first();
 
             if ($account == null) {
-                $this->error('Could not find user with ' . $student['givenname'] . ' ' . $student['sn']);
+                $this->error('Could not find user with '.$student['givenname'].' '.$student['sn']);
+
                 continue;
             }
+
             $newUTAccounts->push($this->formatUserInfo($account, $student));
             $bar->advance();
         }
-        UTAccount::insert($newUTAccounts->toArray());
-        $this->info('Created ' . $newUTAccounts->count() . ' UT accounts for users who studied CreaTe or I-Tech in the past.');
+
+        UtAccount::query()->insert($newUTAccounts->toArray());
+        $this->info('Created '.$newUTAccounts->count().' UT accounts for users who studied CreaTe or I-Tech in the past.');
         $bar->finish();
     }
 
-    function syncColumnToUTTrait(Collection $users, string $UTIdentifier, string $userColumn, string $constraints = ''): Collection
+    public function syncColumnToUTTrait(Collection $users, string $UTIdentifier, string $userColumn, string $constraints = ''): Collection
     {
-        $sns = implode('', array_map(function ($studentNumber) use ($UTIdentifier) {
-            return "($UTIdentifier=$studentNumber)";
-        }, $users->pluck($userColumn)->toArray()));
+        $sns = implode('', array_map(fn ($studentNumber): string => "({$UTIdentifier}={$studentNumber})", $users->pluck($userColumn)->toArray()));
 
         $students = $this->getUtwenteResults($sns, $constraints);
         $bar = $this->output->createProgressBar(count($students));
         $bar->start();
 
         $newUTAccounts = collect();
-        //loop through all students and update their information (in_array($member->user->utwente_username, $usernames))
         foreach ($students as $student) {
+            $bar->advance();
             /** @var User $account */
-            $account = $users->filter(function ($user) use ($student, $userColumn, $UTIdentifier) {
-                return strtolower($user[$userColumn]) == strtolower($student[$UTIdentifier]);
-            })->first();
+            $account = $users->filter(fn ($user): bool => strtolower($user[$userColumn]) === strtolower($student[$UTIdentifier]))->first();
 
-            if ($account == null) {
-                $this->error('Could not find user with ' . $student[$UTIdentifier]);
+            //if we have found a match in the UT system but can not find the user anymore
+            if ($account === null) {
+                $this->error('Could not find user we did find in the UT system called: '.$student[$UTIdentifier]);
+
                 continue;
             }
-            $newUTAccounts->push($this->formatUserInfo($account, $student));
-            $bar->advance();
+
+            //if the user does not have a UT account yet, create one
+            if (! $account->UtAccount) {
+                $newUTAccounts->push($this->formatUserInfo($account, $student));
+
+                continue;
+            }
+
+            if (! $account->did_study_itech && Str::contains($student['department'], 'I-TECH')) {
+                $account->update(['did_study_itech' => true, ['department' => $student['department'], 'found' => true]]);
+
+                continue;
+            }
+
+            if (! $account->did_study_create && Str::contains($student['department'], 'B-CREA')) {
+                $account->update(['did_study_create' => true, ['department' => $student['department'], 'found' => true]]);
+
+                continue;
+            }
+
+            $account->UtAccount->update(['found' => true]);
         }
-        $this->info('Created ' . $newUTAccounts->count() . ' UT accounts for users who studied CreaTe or I-Tech in the past.');
+
+        $this->info('Created '.$newUTAccounts->count().' UT accounts for users who have their '.$userColumn.' as their '.$UTIdentifier);
         $bar->finish();
+
         return $newUTAccounts;
     }
 
@@ -136,20 +169,22 @@ class moveUTAccounts extends Command
             'middlename' => $student['middlename'] ?? null,
             'surname' => $student['sn'],
             'account_expires_at' => $student['accountexpires'],
+            'found' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];
     }
 
-    private function getUtwenteResults($sns, $constraints = '')
+    private function getUtwenteResults(string $sns, $constraints = '')
     {
         //get the results from the LDAP server
-        $result = LdapController::searchUtwentePost("(&$constraints(description=Student *)(extensionattribute6=actief)(|$sns))");
+        $result = LdapController::searchUtwentePost("(&{$constraints}(description=Student *)(extensionattribute6=actief)(|{$sns}))");
         //check that we have a valid response
         if (isset($result->error)) {
-            $this->error('Error: ' . $result->error);
+            $this->error('Error: '.$result->error);
             exit();
         }
+
         return $result->result;
     }
 }

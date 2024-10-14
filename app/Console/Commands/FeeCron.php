@@ -42,9 +42,6 @@ class FeeCron extends Command
      */
     public function handle(): int
     {
-        $this->call('proto:moveutaccounts', [
-            'user' => 1, '--queue' => 'default'
-        ]);
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
             $this->info("We don't charge membership fees in August or September.");
 
@@ -66,7 +63,7 @@ class FeeCron extends Command
 
         $already_paid = OrderLine::query()->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
-        $charged = (object)[
+        $charged = (object) [
             'count' => 0,
             'regular' => [],
             'reduced' => [],
@@ -106,11 +103,11 @@ class FeeCron extends Command
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
                 $fee = config('omnomcom.fee')['regular'];
                 $email_fee = 'regular';
-                $charged->regular[] = $member->user->name . ' (#' . $member->user->id . ')';
+                $charged->regular[] = $member->user->name.' (#'.$member->user->id.')';
             } else {
                 $fee = config('omnomcom.fee')['reduced'];
                 $email_fee = 'reduced';
-                $charged->reduced[] = $member->user->name . ' (#' . $member->user->id . ')';
+                $charged->reduced[] = $member->user->name.' (#'.$member->user->id.')';
             }
 
             $charged->count++;

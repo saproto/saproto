@@ -68,25 +68,25 @@ class Member extends Model
 
     protected $guarded = ['id', 'user_id'];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-        'membership_type' => MembershipTypeEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'membership_type' => MembershipTypeEnum::class,
+        ];
+    }
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
-    public function membershipForm()
+    public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
-    /** @return BelongsTo */
-    public function customOmnomcomSound()
+    public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
@@ -110,14 +110,13 @@ class Member extends Model
         })->count();
     }
 
-    /** @return OrderLine|null */
-    public function getMembershipOrderline()
+    public function getMembershipOrderline(): ?OrderLine
     {
         $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
@@ -126,7 +125,7 @@ class Member extends Model
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
-        if ($membershipOrderline) {
+        if ($membershipOrderline instanceof OrderLine) {
             return match ($this->getMembershipOrderline()->product->id) {
                 config('omnomcom.fee')['regular'] => 'primary',
                 config('omnomcom.fee')['reduced'] => 'secondary',
@@ -143,13 +142,13 @@ class Member extends Model
      *
      * @param  $name  string
      */
-    public static function createProtoUsername($name): string
+    public static function createProtoUsername(string $name): string
     {
         $name = explode(' ', $name);
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                . '.' .
+                .'.'.
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {
@@ -162,18 +161,11 @@ class Member extends Model
         $usernameBase = substr($usernameBase, 0, 17);
 
         $username = $usernameBase;
-        $i = \App\Models\Member::query()->where('proto_username', $username)->withTrashed()->count();
+        $i = Member::query()->where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
             return "{$usernameBase}-{$i}";
         }
 
         return $username;
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }

@@ -9,8 +9,8 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
 use App\Models\User;
-use App\Models\UtAccount;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -85,7 +85,7 @@ class QueryController extends Controller
             if ($member->is_pending) {
                 $count_pending++;
             } else {
-                if (!$member->is_pet) {
+                if (! $member->is_pet) {
                     $count_total++;
                 } else {
                     $count_pet++;
@@ -95,7 +95,7 @@ class QueryController extends Controller
                     $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object)[
+                        $export_active[] = (object) [
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -174,24 +174,24 @@ class QueryController extends Controller
 
     public function newMembershipTotals()
     {
-        $count_total = Member::where(function (Builder $query) {
+        $count_total = Member::query()->where(function (Builder $query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PET)
                 ->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->count();
-        $count_active = Member::whereHas('user', function ($query) {
+        $count_active = Member::query()->whereHas('user', function ($query) {
             $query->whereHas('committees');
         })->count();
-        $count_lifelong = Member::where('membership_type', MembershipTypeEnum::LIFELONG)->count();
-        $count_honorary = Member::where('membership_type', MembershipTypeEnum::HONORARY)->count();
-        $count_donor = Member::where('membership_type', MembershipTypeEnum::DONOR)->count();
-        $count_pending = Member::where('membership_type', MembershipTypeEnum::PENDING)->count();
-        $count_pet = Member::where('membership_type', MembershipTypeEnum::PET)->count();
+        $count_lifelong = Member::query()->where('membership_type', MembershipTypeEnum::LIFELONG)->count();
+        $count_honorary = Member::query()->where('membership_type', MembershipTypeEnum::HONORARY)->count();
+        $count_donor = Member::query()->where('membership_type', MembershipTypeEnum::DONOR)->count();
+        $count_pending = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->count();
+        $count_pet = Member::query()->where('membership_type', MembershipTypeEnum::PET)->count();
 
-        $count_primary = Member::where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
+        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
             $query->whereHas('UtAccount');
         })->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
+        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
             $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
         })->count();
 
@@ -212,11 +212,12 @@ class QueryController extends Controller
     public function primaryExport()
     {
         $export_subsidies = [];
-        $users = User::whereHas('member', function ($query) {
+        /** @var User[] $users */
+        $users = User::query()->whereHas('member', function ($query) {
             $query->where('membership_type', MembershipTypeEnum::REGULAR);
         })->whereHas('UtAccount')->with('UtAccount')->get();
         foreach ($users as $user) {
-            $export_subsidies[] = (object)[
+            $export_subsidies[] = (object) [
                 'name' => $user->name,
                 'primary' => 'true',
                 'email' => $user->UtAccount()->first()->mail,

@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\LdapController;
 use App\Models\Member;
-use App\Models\UtAccount;
 use Illuminate\Console\Command;
 
 class MarkMembersAsPrimary extends Command
@@ -26,14 +25,15 @@ class MarkMembersAsPrimary extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         //code copied from the FeeCron.php file
         $students = LdapController::searchStudents();
         $names = $students['names'];
         $emails = $students['emails'];
         $usernames = $students['usernames'];
-        $members = Member::where([
+        /** @var Member[] $members */
+        $members = Member::query()->where([
             ['is_pending', false],
             ['is_honorary', false],
             ['is_donor', false],
@@ -46,9 +46,12 @@ class MarkMembersAsPrimary extends Command
                 $member->primary = true;
                 $member->save();
             }
+
             $bar->advance();
         }
+
         $bar->finish();
+
         return 0;
     }
 }

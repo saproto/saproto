@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string department
@@ -14,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string givenname
  * @property string|null middlename
  * @property string surname
+ * @property int account_expires_at
+ * @property bool found
  * @property User user
  * @property mixed id
  * @property mixed created_at
@@ -22,8 +23,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class UtAccount extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'ut_accounts';
 
     protected $fillable = [
@@ -35,6 +34,7 @@ class UtAccount extends Model
         'middlename',
         'surname',
         'account_expires_at',
+        'false',
     ];
 
     public function user(): BelongsTo
