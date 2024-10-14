@@ -9,6 +9,9 @@ import { useCan } from '@/Composables/useCan';
 import { route } from 'ziggy-js';
 import { usePage } from '@inertiajs/vue3';
 import { PageProps } from '@/types';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const appEnv = import.meta.env.VITE_APP_ENV || 'production';
 const props = usePage().props as PageProps;
@@ -26,37 +29,15 @@ const mobileOpen: Ref<boolean> = ref(false);
               <!-- Mobile menu button-->
               <button
                 type="button"
-                class="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                class="inline-flex items-center justify-center border b-gray-100 rounded-md p-2 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                 aria-controls="mobile-menu"
                 aria-expanded="false"
               >
                 <span class="sr-only">Open main menu</span>
-                <svg
-                  v-if="mobileOpen"
-                  class="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <svg
-                  v-else
-                  class="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
+                <div class="h-6 w-6 border-1 rounded-lg">
+                  <font-awesome-icon v-if="mobileOpen" :icon="faXmark" />
+                  <font-awesome-icon v-else :icon="faBars" />
+                </div>
               </button>
             </div>
             <a class="navbar-brand" :href="route('homepage')">

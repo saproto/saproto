@@ -107,7 +107,7 @@ onUnmounted(
               <SmartSelect
                 id="committee_id"
                 v-model="form.committee_id"
-                :value="event ? { id: event.committee.id, name: event.committee.name } : undefined"
+                :value="event?.committee ? { id: event.committee.id, name: event.committee.name } : undefined"
                 name="committee_id"
               />
             </template>

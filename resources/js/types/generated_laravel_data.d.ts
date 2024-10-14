@@ -7,7 +7,14 @@ declare namespace App.Data {
     registration_start: number;
     registration_end: number;
     deregistration_end: number;
-    redirect_url: string;
+    redirect_url: string | null;
+    users: Array<App.Data.UserData> | null;
+  };
+  export type CommitteeData = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
   };
   export type EventData = {
     id: number;
@@ -19,9 +26,15 @@ declare namespace App.Data {
     is_external: boolean;
     involves_food: boolean;
     unique_users_count: number;
+    secret: boolean;
     start: string;
     end: string;
+    maps_location: string | null;
+    publication: string | null;
     activity: App.Data.ActivityData | null;
+    committee_id: number | null;
+    committee: App.Data.CommitteeData | null;
+    users: Array<App.Data.UserData> | null;
   };
   export type MenuData = {
     id: number | null;
@@ -51,6 +64,7 @@ declare namespace App.Data {
     ticket: App.Data.TicketData | null;
   };
   export type UserData = {
+    id: number;
     name: string;
     calling_name: string;
     email: string;

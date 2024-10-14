@@ -90,7 +90,7 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
-            ->with('tickets', 'tickets.product', 'activity')
+            ->with('tickets', 'tickets.product', 'activity.users')
             ->firstOrFail();
 
         $methods = [];
@@ -161,7 +161,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        $event->load('committee');
+        $event->load('committee', 'users');
         return Inertia::render('Events/EditEvent', [
             'event' => EventData::from($event),
         ]);
@@ -173,7 +173,7 @@ class EventController extends Controller
      *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, $id)
+    public function update(StoreEventRequest $request, int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -231,7 +231,7 @@ class EventController extends Controller
      * @param int $year
      * @return View
      */
-    public function archive(Request $request, $year)
+    public function archive(Request $request, int $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
         $events = Event::getEventBlockQuery()
@@ -247,8 +247,9 @@ class EventController extends Controller
         }
 
         foreach ($events as $event) {
-            if (!$category || $category == $event->category) {
-                $months[intval(date('n', $event->start))][] = $event;
+            /** @var Event $event */
+            if ($category === $event?->category) {
+                $months[intval($event->start->format('n'))][] = $event;
             }
         }
 

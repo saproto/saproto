@@ -3,6 +3,7 @@
 namespace App\Data;
 
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -19,13 +20,16 @@ class EventData extends Data
         public bool           $is_external,
         public bool           $involves_food,
         public int            $unique_users_count,
-        public string         $maps_location,
         public bool           $secret,
         public DateTime       $start,
         public DateTime       $end,
+        public ?string        $maps_location,
         public ?DateTime      $publication,
         public ?ActivityData  $activity,
+        public ?int           $committee_id,
         public ?CommitteeData $committee,
+        /** @var Collection<UserData> */
+        public ?Collection    $users
     )
     {
     }

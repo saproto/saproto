@@ -61,6 +61,11 @@ class Newsitem extends Model
 
     protected $with = ['featuredImage'];
 
+    protected $casts = [
+        'is_weekly' => 'boolean',
+        'published_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -18,7 +18,7 @@ class FileController extends Controller
      * @param int $id
      * @param string $hash
      */
-    public function get($id, $hash): Response
+    public function get(int $id, string $hash): Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::query()->findOrFail($id);
@@ -42,7 +42,7 @@ class FileController extends Controller
      * @param int $h
      * @return EncodedImageInterface
      */
-    public static function makeImage(StorageEntry $entry, $w, $h)
+    public static function makeImage(StorageEntry $entry, int $w, int $h)
     {
         $storage = config('filesystems.disks');
 

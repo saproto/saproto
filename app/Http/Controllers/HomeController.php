@@ -21,12 +21,6 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
-
-    public function post()
-    {
-        return [1, 2, 3];
-    }
-
     /* Display the homepage. */
     public function show()
     {

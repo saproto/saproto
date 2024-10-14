@@ -26,6 +26,11 @@
         "build": "vue-tsc && vite build"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.6.0",
+        "@fortawesome/free-brands-svg-icons": "^6.6.0",
+        "@fortawesome/free-regular-svg-icons": "^6.6.0",
+        "@fortawesome/free-solid-svg-icons": "^6.6.0",
+        "@fortawesome/vue-fontawesome": "^3.0.8",
         "@nabla/vite-plugin-eslint": "^2.0.4",
         "@popperjs/core": "^2.11.4",
         "@rushstack/eslint-patch": "^1.10.4",

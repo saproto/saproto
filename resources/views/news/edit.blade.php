@@ -1,5 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
+@php /**@var \App\Models\Newsitem $item */ @endphp
 @php($newsName=$is_weekly ? 'weekly' : 'news')
+
 @section('page-title')
     @if($new)
         Create a new {{ $newsName }}
@@ -44,7 +46,7 @@
                             @include('components.forms.datetimepicker', [
                                 'name' => 'published_at',
                                 'label' => 'Publish at:',
-                                'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
+                                'placeholder' => $item ? $item->published_at : Carbon::now()
                             ])
                         @endif
 
