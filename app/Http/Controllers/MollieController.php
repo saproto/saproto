@@ -51,7 +51,10 @@ class MollieController extends Controller
         $orderlines = [];
         $unpaid_orderlines = OrderLine::query()
             ->where('user_id', Auth::id())
-            ->unpayed()->get();
+            ->unpayed()
+            ->orderBy('total_price')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         if ($unpaid_orderlines->min('total_price') > $cap) {
             Session::flash(
