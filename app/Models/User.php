@@ -179,7 +179,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale(): bool
     {
-        return !(
+        return ! (
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -274,6 +274,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->hasMany(Token::class);
     }
 
+    public function UtAccount(): HasOne
+    {
+        return $this->hasOne(UtAccount::class);
+    }
+
     public function playedVideos(): HasMany
     {
         return $this->hasMany(PlayedVideo::class);
@@ -292,8 +297,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param int $w
-     * @param int $h
+     * @param  int  $w
+     * @param  int  $h
      * @return string Path to a resized version of someone's profile picture.
      */
     public function generatePhotoPath($w = 100, $h = 100)
@@ -306,7 +311,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param string $password
+     * @param  string  $password
      *
      * @throws Exception
      */
@@ -400,7 +405,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             return $this->website;
         }
 
-        return 'https://' . $this->website;
+        return 'https://'.$this->website;
     }
 
     /** @return string|null */
@@ -515,7 +520,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function toggleCalendarRelevantSetting(): void
     {
-        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
@@ -527,7 +532,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && !$this->member->is_pending;
+        return $this->member && ! $this->member->is_pending;
     }
 
     public function getSignedMembershipFormAttribute(): bool

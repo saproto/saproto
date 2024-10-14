@@ -13,8 +13,11 @@ use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
 use App\Console\Commands\FileCleanup;
 use App\Console\Commands\MakeAdmin;
+use App\Console\Commands\MarkMembersAsPrimary;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
+use App\Console\Commands\MoveMembersToMembershipType;
+use App\Console\Commands\moveUTAccounts;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
@@ -72,6 +75,9 @@ class Kernel extends ConsoleKernel
         RefreshEventUniqueUsers::class,
         ReplaceQuestionMarkWithSingleQuoteInCodex::class,
         TempAdminCleanup::class,
+        MarkMembersAsPrimary::class,
+        MoveMembersToMembershipType::class,
+        moveUTAccounts::class,
     ];
 
     /**

@@ -25,7 +25,7 @@ class syncUtAccounts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         /* Primary/secondary divide:
             * 1. Users who are currently studying and have a UT account, are automatically primary members
@@ -36,17 +36,16 @@ class syncUtAccounts extends Command
 
     }
 
-    function syncUsers($users, string $UTIdentifier, string $userColumn): void
+    public function syncUsers($users, string $UTIdentifier, string $userColumn): void
     {
-        $sns = implode('', array_map(function ($studentNumber) use ($UTIdentifier) {
-            return "($UTIdentifier=$studentNumber)";
-        }, $users->pluck($userColumn)->toArray()));
+        $sns = implode('', array_map(fn ($studentNumber): string => "({$UTIdentifier}={$studentNumber})", $users->pluck($userColumn)->toArray()));
 
         //get the results from the LDAP server
-        $result = LdapController::searchUtwentePost("(&(|(department=*B-CREA*)(department=*M-ITECH*))(|$sns))");
+        $result = LdapController::searchUtwentePost("(&(|(department=*B-CREA*)(department=*M-ITECH*))(|{$sns}))");
         //check that we have a valid response
         if (isset($result->error)) {
-            $this->error('Error: ' . $result->error);
+            $this->error('Error: '.$result->error);
+
             return;
         }
 
@@ -58,19 +57,18 @@ class syncUtAccounts extends Command
         $newUTAccounts = collect();
         //loop through all students and update their information (in_array($member->user->utwente_username, $usernames))
         foreach ($students as $student) {
-            $account = $users->filter(function ($user) use ($student, $userColumn, $UTIdentifier) {
-                return strtolower($user[$userColumn]) == strtolower($student[$UTIdentifier]);
-            })->first();
-
+            $account = $users->filter(fn ($user): bool => strtolower($user[$userColumn]) === strtolower($student[$UTIdentifier]))->first();
 
             if ($account == null) {
-                $this->error('Could not find user with ' . $student[$UTIdentifier]);
+                $this->error('Could not find user with '.$student[$UTIdentifier]);
+
                 continue;
             }
 
             $bar->advance();
         }
-        UTAccount::insert($newUTAccounts->toArray());
+
+        UtAccount::query()->insert($newUTAccounts->toArray());
         $bar->finish();
     }
 }

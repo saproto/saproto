@@ -101,16 +101,16 @@
     },
     "scripts": {
         "fix": [
-            "vendor/bin/rector process & ./vendor/bin/pint"
+            "./vendor/bin/rector process && ./vendor/bin/pint"
+        ],
+        "pint": [
+            "./vendor/bin/pint"
         ],
         "test": [
             "phpunit"
         ],
         "rector": [
             "vendor/bin/rector process"
-        ],
-        "pint": [
-            "./vendor/bin/pint"
         ],
         "ide-helper": [
             "php artisan cache:clear",

@@ -25,40 +25,62 @@ class MoveMembersToMembershipType extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
 
-        $bar = $this->output->createProgressBar(Member::count());
+        $bar = $this->output->createProgressBar(Member::query()->count());
         $bar->start();
 
-        Member::chunk(25, function ($members) use ($bar) {
+        Member::query()->chunk(25, function ($members) use ($bar) {
+            $bar->advance();
             foreach ($members as $member) {
-                if (!$member->is_pending) {
-                    $member->membership_type = MembershipTypeEnum::PENDING;
+                /** @var Member $member */
+                if ($member->is_pending) {
+                    $member->update([
+                        'membership_type' => MembershipTypeEnum::PENDING,
+                    ]);
+
+                    continue;
                 }
 
                 if ($member->is_pet) {
-                    $member->membership_type = MembershipTypeEnum::PET;
+                    $member->update([
+                        'membership_type' => MembershipTypeEnum::PET,
+                    ]);
+
+                    continue;
                 }
 
                 if ($member->is_lifelong) {
-                    $member->membership_type = MembershipTypeEnum::LIFELONG;
+                    $member->update([
+                        'membership_type' => MembershipTypeEnum::LIFELONG,
+                    ]);
+
+                    continue;
                 }
 
                 if ($member->is_honorary) {
-                    $member->membership_type = MembershipTypeEnum::HONORARY;
+                    $member->update([
+                        'membership_type' => MembershipTypeEnum::HONORARY,
+                    ]);
+
+                    continue;
                 }
 
                 if ($member->is_donor) {
-                    $member->membership_type = MembershipTypeEnum::DONOR;
+                    $member->update([
+                        'membership_type' => MembershipTypeEnum::DONOR,
+                    ]);
+
+                    continue;
                 }
 
-                $member->save();
-                $bar->advance();
+                $member->update([
+                    'membership_type' => MembershipTypeEnum::REGULAR,
+                ]);
             }
         });
 
         $bar->finish();
-
     }
 }

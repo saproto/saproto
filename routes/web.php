@@ -1033,15 +1033,14 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    /* Routes related to the Query system. */
-    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function () {
-        Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
-        Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
-        Route::get('/activity_statistics', ['as' => 'activity_statistics', 'uses' => 'QueryController@activityStatistics']);
-        Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
-        Route::get('/new_membership_totals', ['as' => 'new_membership_totals', 'uses' => 'QueryController@newMembershipTotals']);
-        Route::get('/primary_export', ['as' => 'primary_export', 'uses' => 'QueryController@primaryExport']);
-    });
+    /* --- Routes related to the DMX Management. (Board or alfred) --- */
+    Route::controller(DmxController::class)->prefix('dmx')->name('dmx::')->middleware(['auth', 'permission:board|alfred'])->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
 
         Route::prefix('override')->name('override::')->group(function () {
             Route::get('/', 'overrideIndex')->name('index');
@@ -1059,7 +1058,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', 'activityOverview')->name('activity_overview');
         Route::get('/activity_statistics', 'activityStatistics')->name('activity_statistics');
         Route::get('/membership_totals', 'membershipTotals')->name('membership_totals');
-        Route::get('/new_membership_totals','newMembershipTotals')->name('new_membership_totals');
+        Route::get('/new_membership_totals', 'newMembershipTotals')->name('new_membership_totals');
     });
 
     /* --- Routes related to the mini-sites --- */
