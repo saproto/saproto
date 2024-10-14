@@ -4,14 +4,13 @@ namespace App\Csp\Policies;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Vite;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Policies\Policy;
-
 use Symfony\Component\HttpFoundation\Response;
+
 use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
@@ -20,9 +19,9 @@ class ProtoPolicy extends Policy
     {
         //disable the csp on the standard laravel error pages
         if (config('app.debug') && (
-                $response->isClientError() || // Ignition
-                $response->isServerError() // Ignition
-            )) {
+            $response->isClientError() || // Ignition
+            $response->isServerError() // Ignition
+        )) {
             return false;
         }
 
