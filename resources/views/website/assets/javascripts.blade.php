@@ -14,9 +14,7 @@
         discord_server_id: "{{ config('proto.discord_server_id') }}",
         theme: "{{ Auth::check() && Auth::user()->theme !== null ? config('proto.themes')[Auth::user()->theme] : 'light' }}",
         @isset($companies) company_count: {{ count($companies) }} @endisset
-    }
+    };
 </script>
 
 @vite('resources/assets/js/application.js')
-
-<script src="{{ config('proto.fontawesome_kit') }}" crossorigin="anonymous"></script>
