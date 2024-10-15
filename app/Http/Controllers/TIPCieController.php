@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use App\Models\OrderLine;
 use App\Models\Product;
 use Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use stdClass;
 
 class TIPCieController extends Controller
 {
@@ -44,6 +42,7 @@ class TIPCieController extends Controller
         $totalPrice = $products->sum('orderlines_sum_total_price');
         $totalAmount = $products->sum('orderlines_sum_units');
         $pinTotal = $pinOrders->sum('total_price');
+
         return view('omnomcom.tipcie.orderhistory', ['products' => $products, 'date' => $date, 'pinOrders' => $pinOrders, 'totalPrice' => $totalPrice, 'totalAmount' => $totalAmount, 'pinTotal' => $pinTotal]);
     }
 }
