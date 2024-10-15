@@ -34,7 +34,7 @@ class UtAccount extends Model
         'middlename',
         'surname',
         'account_expires_at',
-        'false',
+        'found',
     ];
 
     public function user(): BelongsTo

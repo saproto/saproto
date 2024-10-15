@@ -17,7 +17,7 @@ use App\Console\Commands\MarkMembersAsPrimary;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
 use App\Console\Commands\MoveMembersToMembershipType;
-use App\Console\Commands\moveUTAccounts;
+use App\Console\Commands\SyncUTAccounts;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
@@ -77,7 +77,7 @@ class Kernel extends ConsoleKernel
         TempAdminCleanup::class,
         MarkMembersAsPrimary::class,
         MoveMembersToMembershipType::class,
-        moveUTAccounts::class,
+        SyncUTAccounts::class,
     ];
 
     /**
@@ -93,7 +93,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
-        $schedule->command('proto:feecron')->daily()->at('03:00');
+        $schedule->command('proto:syncutaccounts')->daily()->at('03:00');
+        $schedule->command('proto:feecron')->daily()->at('03:30');
         $schedule->command('proto:membercleanup')->daily()->at('04:00');
         $schedule->command('proto:tempadmincleanup')->daily()->at('04:30');
         $schedule->command('proto:filecleanup')->daily()->at('05:00');
@@ -103,6 +104,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn(): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
     }
 }
