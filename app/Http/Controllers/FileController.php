@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -48,7 +49,11 @@ class FileController extends Controller
 
         ini_set('memory_limit', '512M');
         $manager = new ImageManager(new Driver);
-        $image = $manager->read($storage['local']['root'] . '/' . $entry->filename);
+        if (File::exists($storage['local']['root'].'/'.$entry->filename)) {
+            $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
+        } else {
+            abort(404, 'File not found');
+        }
 
         $cacheKey = 'image:' . $entry->hash . '; w:' . $w . '; h:' . $h;
 
