@@ -199,7 +199,7 @@
                                            href="{{ route("announcement::index") }}">Announcements</a>
                                         <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("codex::index") }}">Codices</a>
+                                        <a class="dropdown-item" href="{{ route("codex.index") }}">Codices</a>
                                     @endcan
 
                                     <li role="separator" class="dropdown-divider"></li>
@@ -249,7 +249,7 @@
 
                             @can('senate')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('codex::index')}}" role="button"
+                                    <a class="nav-link" href="{{route('codex.index')}}" role="button"
                                        aria-haspopup="false" aria-expanded="false">Codices</a>
                                 </li>
                             @endcan

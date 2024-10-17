@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * Codex text model.
+ *
+ * @property int $id
+ * @property string $text
+ * @property CodexTextType $type
+ * @property Codex[] $codices
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class CodexText extends Model
 {
     use HasFactory;

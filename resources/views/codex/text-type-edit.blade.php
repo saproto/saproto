@@ -5,9 +5,9 @@
 @endsection
 
 @section('container')
-    <form
-        action="{{ isset($textType)&&$textType?route('codex::update-text-type', ['id'=>$textType->id]):route("codex::store-text-type") }}"
-        method="POST">
+    <form action="{{ !empty($textType) ? route('codexTextType.update', ['codexTextType' => $textType]) : route("codexTextType.store")}}"
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($textType) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
