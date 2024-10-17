@@ -32,7 +32,9 @@ class WithdrawalController extends Controller
      */
     public function index()
     {
-        return view('omnomcom.withdrawals.index', ['withdrawals' => Withdrawal::query()->orderBy('id', 'desc')->paginate(6)]);
+        $withdrawals = Withdrawal::query()->orderBy('id', 'desc')->withCount(['orderlines', 'users'])->withSum('orderlines', 'total_price')->paginate(6);
+
+        return view('omnomcom.withdrawals.index', ['withdrawals' => $withdrawals]);
     }
 
     /** @return View */
@@ -58,20 +60,14 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
+        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
             'date' => date('Y-m-d', $date),
         ]);
 
         $totalPerUser = [];
-        foreach (OrderLine::query()->whereNull('payed_with_withdrawal')->with('product', 'product.ticket')->get() as $orderline) {
-            if ($orderline->isPayed()) {
-                continue;
-            }
-
-            if ($orderline->user === null) {
-                continue;
-            }
-
+        foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
+            /** @var OrderLine $orderline */
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
@@ -95,7 +91,7 @@ class WithdrawalController extends Controller
             if ($total < 0) {
                 /** @var User $user */
                 $user = User::query()->findOrFail($user_id);
-                foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+                foreach ($withdrawal->orderlinesForUser($user)->get() as $orderline) {
                     $orderline->withdrawal()->dissociate();
                     $orderline->save();
                 }
@@ -105,21 +101,20 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function show($id)
+    public function show(int $id)
     {
-        return view('omnomcom.withdrawals.show', ['withdrawal' => Withdrawal::query()->findOrFail($id)]);
+        $withdrawal = Withdrawal::query()->withCount(['orderlines', 'users'])->with('failedWithdrawals')->findOrFail($id);
+        $userLines = OrderLine::query()->selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')->where('payed_with_withdrawal', $id)->groupBy('user_id')->with('user.bank')->get();
+
+        return view('omnomcom.withdrawals.show', ['withdrawal' => $withdrawal, 'userLines' => $userLines]);
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function showAccounts($id)
+    public function showAccounts(int $id)
     {
+        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
         // We do one massive query to reduce the number of queries.
@@ -175,6 +170,7 @@ class WithdrawalController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
         if ($withdrawal->closed) {
@@ -201,11 +197,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $user_id
      * @return RedirectResponse
      */
-    public static function deleteFrom(Request $request, $id, $user_id)
+    public static function deleteFrom(Request $request, int $id, int $user_id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -230,11 +224,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $user_id
      * @return RedirectResponse
      */
-    public static function markFailed(Request $request, $id, $user_id)
+    public static function markFailed(Request $request, int $id, int $user_id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -283,11 +275,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $user_id
      * @return RedirectResponse
      */
-    public static function markLoss(Request $request, $id, $user_id)
+    public static function markLoss(int $id, int $user_id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -316,32 +306,29 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|\Illuminate\Http\Response
      *
      * @throws SephpaInputException
      */
-    public static function export(Request $request, $id)
+    public static function export(int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
-        if ($withdrawal->orderlines()->count() == 0) {
+        if (! $withdrawal->orderlines()->exists()) {
             Session::flash('flash_message', 'Cannot export! This withdrawal is empty.');
 
             return Redirect::back();
         }
 
-        foreach ($withdrawal->users() as $user) {
-            if ($user->bank === null) {
-                Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
+        if ($withdrawal->users()->whereDoesntHave('bank')->exists()) {
+            Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
 
-                return Redirect::back();
-            }
+            return Redirect::back();
         }
 
-        $direct_debit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02, [
-            'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),
+        $debitCollectionData = [
+            'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId),
             'lclInstrm' => SepaUtilities::LOCAL_INSTRUMENT_CORE_DIRECT_DEBIT,
             'seqTp' => SepaUtilities::SEQUENCE_TYPE_FIRST,
             'cdtr' => 'Study Association Proto',
@@ -351,27 +338,30 @@ class WithdrawalController extends Controller
             'ccy' => 'EUR',
             'ultmtCdtr' => 'S.A. Proto',
             'reqdColltnDt' => $withdrawal->date,
-        ]);
+        ];
+        try {
+            $directDebit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId, SephpaDirectDebit::SEPA_PAIN_008_001_02);
+            $collection = $directDebit->addCollection($debitCollectionData);
+        } catch (SephpaInputException $sephpaInputException) {
+            abort(500, 'Error creating the withdrawal. Error: '.$sephpaInputException->getMessage());
+        }
 
         $i = 1;
         foreach ($withdrawal->users() as $user) {
-            try {
-                $direct_debit->addPayment([
-                    'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
-                    'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                    'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
-                    'bic' => $user->bank->bic,
-                    'dbtr' => $user->name,
-                    'iban' => $user->bank->iban,
-                ]);
-                $i++;
-            } catch (SephpaInputException $e) {
-                abort(500, sprintf('Error for user #%s: %s', $user->id, $e->getMessage()));
+            if (! $collection->addPayment([
+                'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
+                'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
+                'mndtId' => $user->bank->machtigingid,
+                'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                'bic' => $user->bank->bic,
+                'dbtr' => $user->name,
+                'iban' => $user->bank->iban,
+            ])) {
+                abort(500, sprintf('Error for user %s', $user->id));
             }
         }
 
-        $response = $direct_debit->generateOutput([])[0];
+        $response = $directDebit->generateOutput()[0];
 
         $headers = [
             'Content-Encoding' => 'UTF-8',
@@ -383,10 +373,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public static function close(Request $request, $id)
+    public static function close(int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -406,23 +395,22 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function showForUser(Request $request, $id)
+    public function showForUser(int $id)
     {
+        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
-        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
+        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())->get()]);
     }
 
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
      *
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function email(Request $request, $id)
+    public function email(int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -448,10 +436,7 @@ class WithdrawalController extends Controller
         $users = [];
 
         /** @var OrderLine $orderline */
-        foreach (OrderLine::query()->whereNull('payed_with_withdrawal')->get() as $orderline) {
-            if ($orderline->isPayed()) {
-                continue;
-            }
+        foreach (OrderLine::unpayed()->get() as $orderline) {
 
             if ($orderline->user === null) {
                 Session::flash('flash_message', 'There are unpaid anonymous orderlines. Please contact the IT committee.');
@@ -480,29 +465,11 @@ class WithdrawalController extends Controller
 
     public static function openOrderlinesSum(): int|float
     {
-        $sum = 0;
-        foreach (OrderLine::query()->whereNull('payed_with_withdrawal')->get() as $orderline) {
-            if ($orderline->isPayed()) {
-                continue;
-            }
-
-            $sum += $orderline->total_price;
-        }
-
-        return $sum;
+        return OrderLine::unpayed()->sum('total_price');
     }
 
-    public static function openOrderlinesTotal(): int
+    public static function openOrderlinesTotal()
     {
-        $total = 0;
-        foreach (OrderLine::query()->whereNull('payed_with_withdrawal')->get() as $orderline) {
-            if ($orderline->isPayed()) {
-                continue;
-            }
-
-            $total++;
-        }
-
-        return $total;
+        return OrderLine::unpayed()->count();
     }
 }

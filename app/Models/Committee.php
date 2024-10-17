@@ -81,7 +81,7 @@ class Committee extends Model
             ->where('committees_users.created_at', '<', Carbon::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+            ->orderByPivot('created_at', 'desc');
     }
 
     public function image(): BelongsTo

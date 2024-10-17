@@ -19,7 +19,7 @@
                     </a>
                 </div>
 
-                @if ($withdrawals->count() > 0)
+                @if (count($withdrawals) > 0)
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -40,7 +40,7 @@
                             </tr>
 
                             </thead>
-
+                            @php /** @var \App\Models\Withdrawal $withdrawal */ @endphp
                             @foreach($withdrawals as $withdrawal)
 
                                 <tr>
@@ -50,11 +50,12 @@
                                             {{ $withdrawal->id }}
                                         </a>
                                     </td>
-                                    <td>{{ $withdrawal->withdrawalId() }}</td>
+                                    <td>{{ $withdrawal->withdrawalId }}</td>
                                     <td>{{ $withdrawal->date }}</td>
-                                    <td>{{ $withdrawal->userCount() }}</td>
-                                    <td>{{ $withdrawal->orderlines->count() }}</td>
-                                    <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
+                                    <td>{{ $withdrawal->users_count }}</td>
+                                    <td>{{ $withdrawal->orderlines_count }}</td>
+                                    <td>
+                                        &euro;{{ number_format($withdrawal->orderlines_sum_total_price, 2, ',', '.') }}</td>
                                     <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
                                     <td>
                                         <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
