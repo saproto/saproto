@@ -2,17 +2,30 @@
 
 namespace App\Csp\Policies;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Policies\Policy;
+use Symfony\Component\HttpFoundation\Response;
 
 use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
 {
+    public function shouldBeApplied(Request $request, Response $response): bool
+    {
+        // Don't apply csp in debug mode to enable the whoops (standard laravel) error page to be displayed correctly.
+        // see https://github.com/spatie/laravel-csp?tab=readme-ov-file#using-whoops
+        if (config('app.debug') && ($response->isClientError() || $response->isServerError())) {
+            return false;
+        }
+
+        return parent::shouldBeApplied($request, $response);
+    }
+
     public function configure(): void
     {
         try {
