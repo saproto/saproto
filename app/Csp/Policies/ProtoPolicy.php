@@ -52,8 +52,6 @@ class ProtoPolicy extends Policy
                     'https://s.ytimg.com',
                     'https://www.google.com/recaptcha/api.js',
                     'blob:',
-                    'https://ka-f.fontawesome.com/',
-                    ...([config('proto.fontawesome_kit')] ?? []),  // Avoid adding empty string or null.
                     ...(App::environment('production') ? [] : ['http://localhost:*']),
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
@@ -83,7 +81,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'data:',
                     'https://fonts.gstatic.com',
-                    'https://ka-f.fontawesome.com/',
+                    ...(App::environment('production') ? [] : ['http://localhost:*']),
                 ])
                 ->addDirective(Directive::CONNECT, [
                     Keyword::SELF,
@@ -97,7 +95,6 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://cdn.jsdelivr.net/npm/chart.js',
-                    'https://ka-f.fontawesome.com/',
                     'https://api.fontawesome.com/',
                     ...(App::environment('production') ? [] : ['ws://localhost:*']),
                 ]);

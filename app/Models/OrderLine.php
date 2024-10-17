@@ -65,6 +65,13 @@ class OrderLine extends Model
 
     protected $guarded = ['id'];
 
+    protected function casts(): array
+    {
+        return [
+            'payed_with_loss' => 'boolean',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
@@ -93,6 +100,21 @@ class OrderLine extends Model
     public function ticketPurchase(): HasOne
     {
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
+    }
+
+    public function scopeUnpayed(Builder $query): void
+    {
+        $query->whereNull('payed_with_cash')
+            ->whereNull('payed_with_bank_card')
+            ->whereNull('payed_with_withdrawal')
+            ->where('payed_with_loss', false)
+            ->where(function ($query) {
+                $query->whereDoesntHave('molliePayment')
+                    ->orWhereHas('molliePayment', static function ($query) {
+                        $query->whereNotIn('status', ['paid', 'paidout']);
+                    });
+            })
+            ->where('total_price', '!=', 0);
     }
 
     public function isPayed(): bool

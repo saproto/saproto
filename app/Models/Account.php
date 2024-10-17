@@ -49,7 +49,7 @@ class Account extends Model
     public static function generateAccountOverviewFromOrderlines(Collection $orderlines): array
     {
         $accounts = [];
-
+        /** @var OrderLine $orderline */
         foreach ($orderlines as $orderline) {
             // We sort by date, where a date goes from 6am - 6am.
             $sortDate = Carbon::createFromFormat('Y-m-d H:i:s', $orderline->created_at)->subHours(6)->toDateString();
