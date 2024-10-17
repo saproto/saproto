@@ -210,7 +210,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->where('committees_users.created_at', '<', Carbon::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
-            ->orderByPivot('desc');
+            ->orderByPivot('created_at', 'desc');
     }
 
     public function lists(): BelongsToMany
