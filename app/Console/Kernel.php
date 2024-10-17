@@ -7,7 +7,6 @@ use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\CodexMarkdownConverter;
 use App\Console\Commands\DirectAdminSync;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
@@ -20,6 +19,7 @@ use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
 use App\Console\Commands\RefreshEventUniqueUsers;
+use App\Console\Commands\ReplaceQuestionMarkWithSingleQuoteInCodex;
 use App\Console\Commands\ReviewFeedbackCron;
 use App\Console\Commands\SpotifySync;
 use App\Console\Commands\SpotifyUpdate;
@@ -69,8 +69,8 @@ class Kernel extends ConsoleKernel
         AddSysadmin::class,
         EndMemberships::class,
         UpdateWallstreetPrices::class,
-        CodexMarkdownConverter::class,
         RefreshEventUniqueUsers::class,
+        ReplaceQuestionMarkWithSingleQuoteInCodex::class,
         TempAdminCleanup::class,
     ];
 
