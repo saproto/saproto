@@ -17,11 +17,9 @@ class ProtoPolicy extends Policy
 {
     public function shouldBeApplied(Request $request, Response $response): bool
     {
-        //disable the csp on the standard laravel error pages
-        if (config('app.debug') && (
-            $response->isClientError() || // Ignition
-            $response->isServerError() // Ignition
-        )) {
+        // Don't apply csp in debug mode to enable the whoops (standard laravel) error page to be displayed correctly.
+        // see https://github.com/spatie/laravel-csp?tab=readme-ov-file#using-whoops
+        if (config('app.debug') && ($response->isClientError() || $response->isServerError())) {
             return false;
         }
 
