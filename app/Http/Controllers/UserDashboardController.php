@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Milon\Barcode\DNS2D;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
 use Spatie\Permission\Models\Permission;
@@ -35,7 +36,7 @@ class UserDashboardController extends Controller
         if (! $user->tfa_totp_key) {
             $google2fa = new Google2FA;
             $tfakey = $google2fa->generateSecretKey(32);
-            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
+            $qrcode = (new DNS2D)->getBarcodeSVG($google2fa->getQRCodeUrl('S.A. Proto', $user->name, $tfakey), 'QRCODE');
         }
 
         $memberships = $user->getMemberships();
