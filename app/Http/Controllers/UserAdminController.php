@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
 use App\Mail\MembershipStarted;
@@ -160,6 +161,7 @@ class UserAdminController extends Controller
         $member = $user->member;
         $member->created_at = Carbon::now();
         $member->is_pending = false;
+        $member->membership_type = MembershipTypeEnum::REGULAR;
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
 
@@ -253,6 +255,15 @@ class UserAdminController extends Controller
         $member->is_lifelong = $type == 'lifelong';
         $member->is_donor = $type == 'donor';
         $member->is_pet = $type == 'pet';
+
+        match ($type) {
+            'honorary' => $member->membership_type = MembershipTypeEnum::HONORARY,
+            'lifelong' => $member->membership_type = MembershipTypeEnum::LIFELONG,
+            'donor' => $member->membership_type = MembershipTypeEnum::DONOR,
+            'pet' => $member->membership_type = MembershipTypeEnum::PET,
+            default => $member->membership_type = MembershipTypeEnum::REGULAR,
+        };
+
         $member->save();
 
         Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
@@ -419,10 +430,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function printMemberForm($id): string
+    public function printMemberForm(int $id): string
     {
         $user = User::query()->find($id);
 
