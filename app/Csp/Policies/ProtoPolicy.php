@@ -56,7 +56,7 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::STYLE, [
                     Keyword::SELF,
                     Keyword::UNSAFE_INLINE,
-                    'https://fonts.googleapis.com/css',
+                    'https://fonts.googleapis.com/css2',
                     ...(App::environment('production') ? [] : ['http://localhost:*']),
                 ])
                 ->addDirective(Directive::IMG, [
