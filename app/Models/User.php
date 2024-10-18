@@ -383,14 +383,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->committees()->exists();
     }
 
-    /**
-     * @return Withdrawal[]
-     */
-    public function withdrawals(int $limit = 0): array
+    public function withdrawals(int $limit = 0): Collection
     {
         return Withdrawal::query()->whereHas('orderlines', function ($query) {
             $query->where('user_id', $this->id);
-        })->orderBy('date', 'desc')->limit($limit)->get()->toArray();
+        })->orderBy('date', 'desc')->limit($limit)->get();
     }
 
     public function websiteUrl(): ?string
