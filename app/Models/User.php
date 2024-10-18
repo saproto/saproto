@@ -339,7 +339,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function hasUnpaidOrderlines(): bool
     {
-        $this->orderlines()->unpayed()->exists();
+        return $this->orderlines()->unpayed()->exists();
     }
 
     /**
