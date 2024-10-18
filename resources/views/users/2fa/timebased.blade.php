@@ -18,7 +18,7 @@
 
                     {!! csrf_field() !!}
 
-                    <img src="{{ $tfa_qrcode }}">
+                    {!! $tfa_qrcode !!}
 
                     <p class="py-5">
                         <input class="form-control" name="2facode" placeholder="Your six digit code.">
