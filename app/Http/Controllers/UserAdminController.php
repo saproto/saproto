@@ -33,10 +33,10 @@ class UserAdminController extends Controller
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
             'pending' => $userQuery->whereHas('member', static function ($q) {
-                $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
+                $q->where('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function ($q) {
-                $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'users' => $userQuery->doesntHave('member'),
             default => $userQuery,
@@ -91,11 +91,11 @@ class UserAdminController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($id);
 
-        if (! Auth::user()->can('sysadmin')) {
+        if (!Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
                 /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
-                    if (! Auth::user()->can($permission->name)) {
+                    if (!Auth::user()->can($permission->name)) {
                         abort(403, 'You may not impersonate this person.');
                     }
                 }
@@ -135,7 +135,7 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        if (! ($user->address && $user->bank)) {
+        if (!($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
 
             return Redirect::back();
@@ -149,7 +149,6 @@ class UserAdminController extends Controller
 
         $member = $user->member;
         $member->created_at = Carbon::now();
-        $member->is_pending = false;
         $member->membership_type = MembershipTypeEnum::REGULAR;
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
@@ -167,7 +166,7 @@ class UserAdminController extends Controller
         // Disabled because ProTube is down.
         // Removed; Here should the playsound new-member be played
 
-        Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
+        Session::flash('flash_message', 'Congratulations! ' . $user->name . ' is now our newest member!');
 
         return Redirect::back();
     }
@@ -185,7 +184,7 @@ class UserAdminController extends Controller
 
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
-        Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
+        Session::flash('flash_message', 'Membership of ' . $user->name . ' has been terminated.');
 
         return Redirect::back();
     }
@@ -194,7 +193,7 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
             return Redirect::back();
@@ -212,7 +211,7 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
 
             return Redirect::back();
@@ -227,7 +226,7 @@ class UserAdminController extends Controller
 
     public function setMembershipType(Request $request, int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
         }
 
@@ -235,11 +234,6 @@ class UserAdminController extends Controller
         $user = User::query()->findOrFail($id);
         $member = $user->member;
         $type = $request->input('type');
-
-        $member->is_honorary = $type == 'honorary';
-        $member->is_lifelong = $type == 'lifelong';
-        $member->is_donor = $type == 'donor';
-        $member->is_pet = $type == 'pet';
 
         match ($type) {
             'honorary' => $member->membership_type = MembershipTypeEnum::HONORARY,
@@ -251,23 +245,23 @@ class UserAdminController extends Controller
 
         $member->save();
 
-        Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
+        Session::flash('flash_message', $user->name . ' is now a ' . $type . ' member.');
 
         return Redirect::back();
     }
 
     public function toggleNda(int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
+        if (!Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
         }
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->signed_nda = ! $user->signed_nda;
+        $user->signed_nda = !$user->signed_nda;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
+        Session::flash('flash_message', 'Toggled NDA status of ' . $user->name . '. Please verify if it is correct.');
 
         return Redirect::back();
     }
@@ -279,7 +273,7 @@ class UserAdminController extends Controller
         $user->disable_omnomcom = false;
         $user->save();
 
-        Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
+        Session::flash('flash_message', 'OmNomCom unblocked for ' . $user->name . '.');
 
         return Redirect::back();
     }
@@ -288,10 +282,10 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->did_study_create = ! $user->did_study_create;
+        $user->did_study_create = !$user->did_study_create;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
+        Session::flash('flash_message', 'Toggled CreaTe status of ' . $user->name . '.');
 
         return Redirect::back();
     }
@@ -300,10 +294,10 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        $user->did_study_itech = ! $user->did_study_itech;
+        $user->did_study_itech = !$user->did_study_itech;
         $user->save();
 
-        Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+        Session::flash('flash_message', 'Toggled ITech status of ' . $user->name . '.');
 
         return Redirect::back();
     }
@@ -312,16 +306,16 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        if (! $user->is_member) {
+        if (!$user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its status can be toggled!');
 
             return Redirect::back();
         }
 
-        $user->member->is_primary_at_another_association = ! $user->member->is_primary_at_another_association;
+        $user->member->is_primary_at_another_association = !$user->member->is_primary_at_another_association;
         $user->member->save();
 
-        Session::flash('flash_message', 'Toggled that '.$user->name.'is a primary member at another association.');
+        Session::flash('flash_message', 'Toggled that ' . $user->name . 'is a primary member at another association.');
 
         return Redirect::back();
     }
@@ -365,7 +359,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
+        if ($user->id != $member->user_id && !$user->can('registermembers')) {
             abort(403);
         }
 
@@ -403,7 +397,7 @@ class UserAdminController extends Controller
 
     public function destroyMemberForm(int $id): RedirectResponse
     {
-        if ((! Auth::check() || ! Auth::user()->can('board'))) {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
             abort(403);
         }
 
@@ -412,7 +406,7 @@ class UserAdminController extends Controller
 
         $member->forceDelete();
 
-        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+        Session::flash('flash_message', 'The digital membership form of ' . $user->name . ' signed on ' . $member->created_at . 'has been deleted!');
 
         return Redirect::back();
     }
@@ -422,7 +416,7 @@ class UserAdminController extends Controller
         /** @var User $user */
         $user = User::query()->find($id);
 
-        if (! $user) {
+        if (!$user) {
             return 'This user could not be found!';
         }
 

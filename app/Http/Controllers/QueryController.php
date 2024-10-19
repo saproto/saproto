@@ -49,131 +49,24 @@ class QueryController extends Controller
         ]);
     }
 
-    /**
-     * @return \Illuminate\Http\Response|View
-     */
     public function membershipTotals(Request $request)
     {
-        // Get a list of all CreaTe students.
-        $students = LdapController::searchStudents();
-        $names = $students['names'];
-        $emails = $students['emails'];
-        $usernames = $students['usernames'];
-
-        $count_total = 0;
-        $count_primary = 0;
-        $count_secondary = 0;
-        $count_ut = 0;
-        $count_active = 0;
-        $count_lifelong = 0;
-        $count_honorary = 0;
-        $count_donor = 0;
-        $count_pending = 0;
-        $count_pet = 0;
-
-        $export_subsidies = [];
-        $export_active = [];
-
-        // Loop over all members and determine if they are studying CreaTe.
-        foreach (Member::all() as $member) {
-            $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
-                in_array($member->user->utwente_username, $usernames) ||
-                in_array(strtolower($member->user->name), $names);
-            $has_ut_mail = str_ends_with($member->user->email, 'utwente.nl');
-            $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
-
-            if ($member->is_pending) {
-                $count_pending++;
-            } else {
-                if (! $member->is_pet) {
-                    $count_total++;
-                } else {
-                    $count_pet++;
-                }
-
-                if ($member->user->isActiveMember()) {
-                    $count_active++;
-
-                    if ($request->has('export_active')) {
-                        $export_active[] = (object) [
-                            'name' => $member->user->name,
-                            'committees' => $member->user->committees->pluck('name'),
-                        ];
-                    }
-                }
-
-                if ($member->is_lifelong) {
-                    $count_lifelong++;
-                }
-
-                if ($member->is_honorary) {
-                    $count_honorary++;
-                }
-
-                if ($member->is_donor) {
-                    $count_donor++;
-                }
-
-                if ($is_primary_student) {
-                    $count_primary++;
-                    $member->update([
-                        'primary' => true,
-                    ]);
-                } else {
-                    $count_secondary++;
-                }
-
-                if ($is_ut) {
-                    $count_ut++;
-                }
-
-                if ($request->has('export_subsidies') && $is_ut) {
-                    $export_subsidies[] = (object) [
-                        'primary' => $is_primary_student ? 'true' : 'false',
-                        'name' => $member->user->name,
-                        'email' => $has_ut_mail ? $member->user->email : null,
-                        'ut_number' => $member->user->utwente_username ?: null,
-                    ];
-                }
-            }
-        }
-
+        $primary_query = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)
+            ->where('is_primary_at_another_association', false)
+            ->whereHas('user', function ($query) {
+                $query->whereHas('UtAccount');
+            });
         if ($request->has('export_subsidies')) {
+            //todo: implement export
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
-            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
+            return Response::make(view('queries.export_subsidies', ['subsidy_users' => $subsidy_users]), 200, $headers);
         }
 
-        if ($request->has('export_active')) {
-            $headers = [
-                'Content-Encoding' => 'UTF-8',
-                'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', date('d_m_Y')),
-            ];
-
-            return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
-        }
-
-        return view('queries.membership_totals', [
-            'total' => $count_total,
-            'primary' => $count_primary,
-            'secondary' => $count_secondary,
-            'ut' => $count_ut,
-            'active' => $count_active,
-            'lifelong' => $count_lifelong,
-            'honorary' => $count_honorary,
-            'donor' => $count_donor,
-            'pending' => $count_pending,
-            'pet' => $count_pet,
-        ]);
-    }
-
-    public function newMembershipTotals()
-    {
         $count_total = Member::query()->where(function (Builder $query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PET)
                 ->whereNot('membership_type', MembershipTypeEnum::PENDING);
@@ -186,22 +79,11 @@ class QueryController extends Controller
         $count_donor = Member::query()->where('membership_type', MembershipTypeEnum::DONOR)->count();
         $count_pending = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->count();
         $count_pet = Member::query()->where('membership_type', MembershipTypeEnum::PET)->count();
-
-        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
-            $query->whereHas('UtAccount');
-        })->count();
+        $count_primary = $primary_query->count();
         $count_secondary = $count_total - $count_primary;
         $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
             $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
         })->count();
-
-        $membersWhoArentPrimaryAnymore = User::query()->whereDoesntHave('UtAccount')->whereHas('member', function ($q) {
-            $q->where('primary', true);
-        })->get();
-
-        $membersWhoAreNewPrimary = User::query()->whereHas('UtAccount')->whereHas('member', function ($q) {
-            $q->where('primary', false);
-        })->get();
 
         return view('queries.membership_totals', [
             'total' => $count_total,
@@ -214,8 +96,6 @@ class QueryController extends Controller
             'donor' => $count_donor,
             'pending' => $count_pending,
             'pet' => $count_pet,
-            'membersWhoArentPrimaryAnymore' => $membersWhoArentPrimaryAnymore,
-            'membersWhoAreNewPrimary' => $membersWhoAreNewPrimary,
         ]);
     }
 

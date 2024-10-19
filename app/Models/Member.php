@@ -18,21 +18,16 @@ use Illuminate\Support\Str;
  *
  * @property int $id
  * @property int $user_id
+ * @property User $user
  * @property string|null $proto_username
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
- * @property bool $is_lifelong
  * @property MembershipTypeEnum $membership_type
- * @property bool $is_honorary
- * @property bool $is_donor
- * @property bool $is_pending
- * @property bool $is_pet
  * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $until
- * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
  *
@@ -101,14 +96,14 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', true);
+            $query->where('membership_type', MembershipTypeEnum::PENDING);
         })->count();
     }
 
     public static function countValidMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', false);
+            $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->count();
     }
 
@@ -118,7 +113,7 @@ class Member extends Model
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
@@ -127,7 +122,7 @@ class Member extends Model
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
-        if ($membershipOrderline instanceof OrderLine) {
+        if ($membershipOrderline !== null) {
             return match ($this->getMembershipOrderline()->product->id) {
                 config('omnomcom.fee')['regular'] => 'primary',
                 config('omnomcom.fee')['reduced'] => 'secondary',
@@ -150,7 +145,7 @@ class Member extends Model
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                .'.'.
+                . '.' .
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {

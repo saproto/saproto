@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -45,7 +46,7 @@ class OmNomController extends Controller
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
-                    $q->where('is_pending', false);
+                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
                 })
                 ->get();
         } else {

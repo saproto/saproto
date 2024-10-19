@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Activity;
 use App\Models\FailedWithdrawal;
 use App\Models\OrderLine;
@@ -112,7 +113,7 @@ class OrderLineController extends Controller
     public function orderlineWizard()
     {
         $members = User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', false);
+            $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->orderBy('name')->get();
 
         $products = Product::query()->where('is_visible', true)->orderBy('name')->get();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Exception;
@@ -131,13 +132,13 @@ class Email extends Model
 
         if ($this->to_member) {
             return User::query()->whereHas('member', static function ($q) {
-                $q->where('is_pending', false);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
 
         if ($this->to_pending) {
             return User::query()->whereHas('member', static function ($q) {
-                $q->where('is_pending', true);
+                $q->where('membership_type', MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
 
