@@ -11,12 +11,12 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class MenuData extends Data
 {
     public function __construct(
-        public ?int            $id,
-        public ?string         $menuname,
-        public ?string         $parsed_url,
-        public ?bool           $is_member_only,
+        public ?int        $id,
+        public ?string     $menuname,
+        public ?string     $parsed_url,
+        public ?bool       $is_member_only,
         /** @var Collection<MenuData> */
-        public null|Collection $children
+        public ?Collection $children
     )
     {
     }

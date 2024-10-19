@@ -172,7 +172,7 @@ Route::middleware('forcedomain')->group(function () {
 
         Route::controller(UserDashboardController::class)->group(function () {
             Route::post('change_email', 'updateMail')->middleware(['throttle:3,1'])->name('changemail');
-            Route::get('dashboard', 'show')->name('dashboard::show');
+            Route::get('dashboard/{page?}', 'show')->name('dashboard::show');
             Route::post('dashboard', 'update')->name('dashboard');
         });
 

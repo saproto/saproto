@@ -9,14 +9,15 @@ import { useCan } from '@/Composables/useCan';
 import { route } from 'ziggy-js';
 import { usePage } from '@inertiajs/vue3';
 import { PageProps } from '@/types';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faBars, faHammer, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const appEnv = import.meta.env.VITE_APP_ENV || 'production';
-const props = usePage().props as PageProps;
+const pageProps = usePage().props as PageProps;
 const { can, canNot, canAny, canAll } = useCan();
 const mobileOpen: Ref<boolean> = ref(false);
+const emits = defineEmits(['toggle-side-bar']);
 </script>
 
 <template>
@@ -25,6 +26,14 @@ const mobileOpen: Ref<boolean> = ref(false);
       <div class="relative flex h-14 items-center justify-between">
         <div class="flex items-center flex-none justify-center lg:justify-start">
           <div class="flex space-x-4 flex-shrink-0 items-center">
+            <button
+              v-if="can('board')"
+              type="button"
+              class="inline-flex items-center justify-center border b-gray-100 rounded-md p-2 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              @click="emits('toggle-side-bar')"
+            >
+              <font-awesome-icon :icon="faArrowRight" />
+            </button>
             <div class="flex items-center lg:hidden" @click="mobileOpen = !mobileOpen">
               <!-- Mobile menu button-->
               <button
@@ -42,7 +51,7 @@ const mobileOpen: Ref<boolean> = ref(false);
             </div>
             <a class="navbar-brand" :href="route('homepage')">
               <template v-if="appEnv != 'production'">
-                <i class="fas fa-hammer me-2"></i>
+                <font-awesome-icon :icon="faHammer" class="me-2" />
                 <span class="uppercase">{{ appEnv }}</span> |
               </template>
               S.A. Proto
@@ -50,8 +59,8 @@ const mobileOpen: Ref<boolean> = ref(false);
           </div>
           <div class="hidden lg:ml-6 lg:block">
             <div class="flex space-x-4">
-              <template v-for="menuItem in props.menuItems" :key="menuItem.id">
-                <template v-if="!menuItem.is_member_only || (props.auth.user && props.auth.user.is_member)">
+              <template v-for="menuItem in pageProps.menuItems" :key="menuItem.id">
+                <template v-if="!menuItem.is_member_only || (pageProps.auth.user && pageProps.auth.user.is_member)">
                   <Dropdown v-if="menuItem.children?.length">
                     <template #parent>
                       {{ menuItem.menuname }}
@@ -59,7 +68,7 @@ const mobileOpen: Ref<boolean> = ref(false);
                     <template #children>
                       <template v-for="child in menuItem.children" :key="child.id">
                         <DropdownLink
-                          v-if="!child.is_member_only || (props.auth.user && props.auth.user.is_member)"
+                          v-if="!child.is_member_only || (pageProps.auth.user && pageProps.auth.user.is_member)"
                           no-inertia
                           :href="child.parsed_url ?? ''"
                         >
@@ -72,7 +81,7 @@ const mobileOpen: Ref<boolean> = ref(false);
                 </template>
               </template>
 
-              <template v-if="props.auth.user">
+              <template v-if="pageProps.auth.user">
                 <Dropdown v-if="canAny(['omnomcom', 'tipcie', 'drafters'])">
                   <template #parent> OmNomCom</template>
                   <template #children>
@@ -204,33 +213,35 @@ const mobileOpen: Ref<boolean> = ref(false);
           </div>
         </div>
         <div class="inset-y-0 right-0 flex justify-end space-x-4 items-center pr-2 lg:inset-auto lg:ml-6 lg:pr-0">
-          <form method="post" class="flex-auto" :action="route('search::post')">
-            <input type="hidden" name="_token" :value="props.csrf" />
+          <form method="post" class="flex-auto w-32 md:w-full" :action="route('search::post')">
+            <input type="hidden" name="_token" :value="pageProps.csrf" />
             <Input name="query" place-holder="Search" class="max-w-xs" after-hover>
               <template #after>
-                <button class="px-2 self-stretch"><i class="fas fa-search"></i></button>
+                <button class="px-2">
+                  <font-awesome-icon :icon="faSearch" />
+                </button>
               </template>
             </Input>
           </form>
 
-          <Dropdown v-if="props.auth.user" class="flex-none" no-hover direction="right">
+          <Dropdown v-if="pageProps.auth.user" class="flex-none" no-hover direction="right">
             <template #parent>
-              {{ props.auth.user.calling_name }}
+              {{ pageProps.auth.user.calling_name }}
               <img
                 class="inline h-8 w-8 mx-1 rounded-full border-2 border-white"
-                :src="props.auth.user.photo_preview"
+                :src="pageProps.auth.user.photo_preview"
                 alt=""
               />
             </template>
             <template #children>
               <DropdownLink :href="route('user::dashboard')">Dashboard</DropdownLink>
-              <DropdownLink v-if="props.auth.user.is_member" no-inertia :href="route('user::profile')"
+              <DropdownLink v-if="pageProps.auth.user.is_member" no-inertia :href="route('user::profile')"
                 >My Profile
               </DropdownLink>
               <DropdownLink v-else no-inertia :href="route('becomeamember')">Become a member </DropdownLink>
               <DropdownLink no-inertia :href="route('protube::dashboard')">ProTube Dashboard </DropdownLink>
               <DropdownLink no-inertia :href="route('omnomcom::orders::index')">Purchase History </DropdownLink>
-              <DropdownLink v-if="props.impersonating" no-inertia :href="route('user::quitimpersonating')"
+              <DropdownLink v-if="pageProps.impersonating" no-inertia :href="route('user::quitimpersonating')"
                 >Quit Impersonating
               </DropdownLink>
               <DropdownLink v-else no-inertia :href="route('login::logout')">Logout</DropdownLink>

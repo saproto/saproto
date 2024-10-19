@@ -161,7 +161,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        $event->load('committee', 'users');
+        $event->load('committee', 'activity');
         return Inertia::render('Events/EditEvent', [
             'event' => EventData::from($event),
         ]);

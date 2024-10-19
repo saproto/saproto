@@ -10,6 +10,16 @@ declare namespace App.Data {
     redirect_url: string | null;
     users: Array<App.Data.UserData> | null;
   };
+  export type AddressData = {
+    id: number;
+    street: string;
+    number: string;
+    user: App.Data.UserData | null;
+  };
+  export type BankData = {
+    id: number;
+    user: App.Data.UserData | null;
+  };
   export type CommitteeData = {
     id: number;
     name: string;
@@ -35,6 +45,16 @@ declare namespace App.Data {
     committee_id: number | null;
     committee: App.Data.CommitteeData | null;
     users: Array<App.Data.UserData> | null;
+  };
+  export type MemberData = {
+    id: number;
+    user: App.Data.UserData | null;
+    created_at: string;
+    updated_at: string;
+    is_honorary: boolean;
+    is_donor: boolean;
+    is_lifelong: boolean;
+    is_pet: boolean;
   };
   export type MenuData = {
     id: number | null;
@@ -69,9 +89,29 @@ declare namespace App.Data {
     calling_name: string;
     email: string;
     is_member: boolean;
+    member: App.Data.MemberData | null;
     photo_preview: string;
-    is_protube_admin: boolean;
     theme: string;
     welcome_message: string | null;
+    phone: boolean | null;
+    birthdate: string | null;
+    edu_username: string | null;
+    utwente_username: string | null;
+    website: string | null;
+    is_protube_admin: boolean;
+    address_visible: boolean;
+    did_study_create: boolean;
+    did_study_itech: boolean;
+    profile_in_almanac: boolean;
+    show_achievements: boolean;
+    keep_omnomcom_history: boolean;
+    disable_omnomcom: boolean;
+    show_omnomcom_calories: boolean;
+    show_omnomcom_total: boolean;
+    show_birthday: boolean;
+    phone_visible: boolean;
+    receive_sms: boolean;
+    address: App.Data.AddressData | null;
+    bank: App.Data.BankData | null;
   };
 }

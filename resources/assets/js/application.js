@@ -307,7 +307,7 @@ if ('IntersectionObserver' in window) {
 const _paq = [];
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
-((_) => {
+(() => {
   let u = '//' + config.analytics_url + '/';
   _paq.push(['setTrackerUrl', u + 'matomo.php']);
   _paq.push(['setSiteId', '1']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\UserData;
 use App\Mail\UserMailChange;
 use App\Models\Member;
 use App\Models\StorageEntry;
@@ -18,17 +19,18 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
 use Spatie\Permission\Models\Permission;
 
 class UserDashboardController extends Controller
 {
-    /** @return View */
-    public function show()
+    public function show(string $page = null): Response
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = User::with('bank', 'member')->findOrFail(Auth::user()->id);
 
         $qrcode = null;
         $tfakey = null;
@@ -40,7 +42,11 @@ class UserDashboardController extends Controller
 
         $memberships = $user->getMemberships();
 
-        return view('users.dashboard.dashboard', ['user' => $user, 'memberships' => $memberships, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
+        return Inertia::render('SettingsPage', [
+            'user' => UserData::from($user),
+            'memberships' => $memberships,
+            'settingsPage' => $page,
+        ]);
     }
 
     /**

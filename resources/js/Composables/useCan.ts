@@ -5,7 +5,7 @@ import { PageProps } from '@/types';
 
 export function useCan() {
   const page: Page<PageProps> = usePage();
-  const userPermissions = computed(() => (page?.props as PageProps)?.auth?.permissions);
+  const userPermissions = computed(() => (page?.props as PageProps)?.auth?.permissions ?? []);
 
   const can = (permission: string): boolean => {
     return Boolean(userPermissions.value[permission]);

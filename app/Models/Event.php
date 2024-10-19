@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string $description
  * @property int $start
  * @property int $end
- * @property int $publication
+ * @property Carbon|null $publication
  * @property int|null $image_id
  * @property int|null $committee_id
  * @property int|null $category_id
@@ -103,6 +103,7 @@ class Event extends Model
             'updated_at' => 'datetime',
             'start' => 'datetime',
             'end' => 'datetime',
+            'publication' => 'datetime',
         ];
     }
 
@@ -178,7 +179,7 @@ class Event extends Model
 
     public function isPublished(): bool
     {
-        return $this->publication < Carbon::now()->timestamp;
+        return $this->publication < Carbon::now();
     }
 
     /** @return BelongsTo */
