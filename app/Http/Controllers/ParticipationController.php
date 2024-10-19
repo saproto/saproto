@@ -146,7 +146,7 @@ class ParticipationController extends Controller
      */
     public function destroy($participation_id, Request $request)
     {
-        /** @var ActivityParticipation $participation */
+        /** @var ActivityParticipation|null $participation */
         $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
         if (! $participation) {

@@ -38,7 +38,8 @@ class PrintActiveMembers extends Command
     {
         foreach (Member::query()->whereHas('user', function ($q) {
             $q->whereHas('committees');
-        }) as $member) {
+        })->get() as $member) {
+            /** @var Member $member */
             $this->info(sprintf('%s: %s', $member->user->name, implode(', ', $member->user->committees->pluck('name')->toArray())));
         }
     }

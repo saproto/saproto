@@ -542,6 +542,7 @@ CALSCALE:GREGORIAN
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
         foreach (Event::query()->where('start', '>', strtotime('-6 months'))->get() as $event) {
+            /** @var Event $event */
             if (! $event->mayViewEvent(Auth::user())) {
                 continue;
             }

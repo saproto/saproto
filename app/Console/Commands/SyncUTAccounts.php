@@ -91,7 +91,7 @@ class SyncUTAccounts extends Command
         $newUTAccounts = collect();
         foreach ($students as $student) {
             $bar->advance();
-            /** @var User $account */
+            /** @var User|null $account */
             $account = $users->filter(fn ($user): bool => $compareFilter($user[$userColumn], $student, $UTIdentifier))->first();
 
             //if we have found a match in the UT system but can not find the user anymore

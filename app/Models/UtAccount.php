@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
+use Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property string department
- * @property int user_id
- * @property string mail
- * @property string number
- * @property string givenname
- * @property string surname
- * @property bool found
- * @property User user
- * @property int id
- * @property Carbon created_at
- * @property Carbon updated_at
- * @property Carbon deleted_at
+ * @property string $department
+ * @property int $user_id
+ * @property string $mail
+ * @property string $number
+ * @property string $givenname
+ * @property string $surname
+ * @property bool $found
+ * @property User $user
+ * @property int $id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
  */
 class UtAccount extends Model
 {

@@ -58,6 +58,7 @@ class QueryController extends Controller
             });
         if ($request->has('export_subsidies')) {
             //todo: implement export
+            $subsidy_users = $primary_query->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
@@ -141,6 +142,7 @@ class QueryController extends Controller
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
+            /** @var EventCategory $category */
             $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)

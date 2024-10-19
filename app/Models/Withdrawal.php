@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
  * @property-read Collection|Orderline[] $orderlines
  * @property-read Collection|FailedWithdrawal[] $failedWithdrawals
  * @property-read Collection|User[] $users
- * @property-read string withdrawalId
+ * @property-read string $withdrawalId
  *
  * @method static Builder|Withdrawal whereClosed($value)
  * @method static Builder|Withdrawal whereCreatedAt($value)
