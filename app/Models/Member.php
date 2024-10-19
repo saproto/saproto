@@ -27,9 +27,11 @@ use Illuminate\Support\Str;
  * @property bool $is_donor
  * @property bool $is_pending
  * @property bool $is_pet
+ * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property Carbon|null $until
  * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->boolean('primary')->default(false);
+            $table->boolean('primary')->default(false)->after('is_pending');
+            $table->boolean('is_primary_at_another_association')->default(false)->after('primary');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('members', function (Blueprint $table) {
             $table->dropColumn('primary');
+            $table->dropColumn('is_primary_at_another_association');
         });
     }
 };

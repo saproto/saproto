@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipTypeEnum;
 use App\Http\Requests\MP3Request;
 use App\Mail\MembershipEnded;
+use App\Mail\MembershipEndSet;
 use App\Mail\MembershipStarted;
 use App\Models\HashMapItem;
 use App\Models\Member;
@@ -224,6 +225,7 @@ class UserAdminController extends Controller
 
     public function removeMembershipEnd($id): RedirectResponse
     {
+        /** @var User $user */
         $user = User::query()->findOrFail($id);
         if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
@@ -238,15 +240,13 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function setMembershipType(Request $request, $id): RedirectResponse
+    public function setMembershipType(Request $request, int $id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
         }
 
+        /** @var User $user */
         $user = User::query()->findOrFail($id);
         $member = $user->member;
         $type = $request->input('type');
@@ -271,10 +271,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function toggleNda($id): RedirectResponse
+    public function toggleNda(int $id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
@@ -290,10 +287,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function unblockOmnomcom($id): RedirectResponse
+    public function unblockOmnomcom(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -305,10 +299,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function toggleStudiedCreate($id): RedirectResponse
+    public function toggleStudiedCreate(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -320,10 +311,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     */
-    public function toggleStudiedITech($id): RedirectResponse
+    public function toggleStudiedITech(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -331,6 +319,24 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
+
+        return Redirect::back();
+    }
+
+    public function togglePrimaryAtAnotherAssociation(int $id): RedirectResponse
+    {
+        /** @var User $user */
+        $user = User::query()->findOrFail($id);
+        if (! $user->is_member) {
+            Session::flash('flash_message', 'The user needs to be a member for its status can be toggled!');
+
+            return Redirect::back();
+        }
+
+        $user->member->is_primary_at_another_association = ! $user->member->is_primary_at_another_association;
+        $user->member->save();
+
+        Session::flash('flash_message', 'Toggled that '.$user->name.'is a primary member at another association.');
 
         return Redirect::back();
     }
@@ -383,10 +389,9 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return string
      */
-    public function getNewMemberForm($id)
+    public function getNewMemberForm(int $id)
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
