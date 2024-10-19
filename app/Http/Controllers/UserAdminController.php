@@ -208,6 +208,7 @@ class UserAdminController extends Controller
 
     public function EndMembershipInSeptember($id): RedirectResponse
     {
+        /** @var User $user */
         $user = User::query()->findOrFail($id);
         if (! $user->is_member) {
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');

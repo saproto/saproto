@@ -71,7 +71,9 @@
         "vinkla/hashids": "^12.0",
         "willvincent/feeds": "^2.4",
         "setasign/tfpdf": "^1.33",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "litesaml/lightsaml": "^4.2",
+        "ext-zlib": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

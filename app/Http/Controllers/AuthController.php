@@ -28,7 +28,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use LightSaml\Binding\BindingFactory;
 use LightSaml\Context\Profile\MessageContext;
@@ -48,13 +47,13 @@ use LightSaml\Model\Assertion\Subject;
 use LightSaml\Model\Assertion\SubjectConfirmation;
 use LightSaml\Model\Assertion\SubjectConfirmationData;
 use LightSaml\Model\Context\DeserializationContext;
+use LightSaml\Model\Protocol\AuthnRequest;
 use LightSaml\Model\Protocol\Response;
 use LightSaml\Model\Protocol\Status;
 use LightSaml\Model\Protocol\StatusCode;
 use LightSaml\Model\XmlDSig\SignatureWriter;
 use LightSaml\SamlConstants;
 use nickurt\PwnedPasswords\PwnedPasswords;
-use OneLogin\Saml2\AuthnRequest;
 use PragmaRX\Google2FA\Google2FA;
 
 class AuthController extends Controller
@@ -106,26 +105,21 @@ class AuthController extends Controller
         return $this->handleRegularLogin($request);
     }
 
-    /** @return RedirectResponse */
-    public function getLogout()
+    public function getLogout(): RedirectResponse
     {
         Auth::logout();
 
         return Redirect::route('homepage');
     }
 
-    /** @return RedirectResponse */
-    public function getLogoutRedirect(Request $request)
+    public function getLogoutRedirect(Request $request): RedirectResponse
     {
         Auth::logout();
 
         return Redirect::route($request->route, $request->parameters);
     }
 
-    /**
-     * @return View|RedirectResponse
-     */
-    public function getRegister(Request $request)
+    public function getRegister(Request $request): RedirectResponse|View
     {
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
@@ -140,10 +134,7 @@ class AuthController extends Controller
         return view('users.register');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function postRegister(Request $request)
+    public function postRegister(Request $request): RedirectResponse
     {
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
@@ -167,12 +158,7 @@ class AuthController extends Controller
         return Redirect::route('homepage');
     }
 
-    /**
-     * @return RedirectResponse
-     *
-     * @throws ValidationException
-     */
-    public function postRegisterSurfConext(Request $request)
+    public function postRegisterSurfConext(Request $request): RedirectResponse
     {
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
@@ -225,10 +211,7 @@ class AuthController extends Controller
         return Redirect::route('login::edu');
     }
 
-    /**
-     * @return User
-     */
-    private function registerAccount(Request $request)
+    private function registerAccount(Request $request): User
     {
         $user = User::query()->create($request->only(['email', 'name', 'calling_name']));
 
@@ -258,6 +241,7 @@ class AuthController extends Controller
      */
     public function deleteUser(Request $request)
     {
+        /** @var User $user */
         $user = User::query()->findOrFail($request->id ?? Auth::id());
 
         if ($user->hasUnpaidOrderlines()) {
@@ -359,7 +343,7 @@ class AuthController extends Controller
      *
      * @throws Exception
      */
-    public function getPasswordReset(Request $request, $token)
+    public function getPasswordReset(Request $request, string $token)
     {
         PasswordReset::query()->where('valid_to', '<', date('U'))->delete();
         $reset = PasswordReset::query()->where('token', $token)->first();
@@ -778,7 +762,7 @@ class AuthController extends Controller
      * @param  string  $saml  The SAML data (deflated and encoded).
      * @return View|RedirectResponse
      */
-    private static function handleSAMLRequest($user, $saml)
+    private static function handleSAMLRequest(User $user, string $saml)
     {
         if (! $user->member) {
             Session::flash('flash_message', 'Only members can use the Proto SSO. You only have a user account.');
@@ -793,7 +777,7 @@ class AuthController extends Controller
         $deserializationContext = new DeserializationContext;
         $deserializationContext->getDocument()->loadXML($xml);
 
-        $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest;
+        $authnRequest = new AuthnRequest;
         $authnRequest->deserialize($deserializationContext->getDocument()->firstChild, $deserializationContext);
 
         if (! array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
@@ -819,16 +803,13 @@ class AuthController extends Controller
      *
      * @param  User  $user  The user to generate the SAML response for.
      * @param  AuthnRequest  $authnRequest  The request to generate a SAML response for.
-     * @return \LightSaml\Model\Protocol\Response A LightSAML response.
+     * @return Response A LightSAML response.
      */
-    private static function buildSAMLResponse($user, $authnRequest): Response
+    private static function buildSAMLResponse(User $user, AuthnRequest $authnRequest): Response
     {
-
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
         $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience'];
-        /** @phpstan-ignore-line */
         $destination = $authnRequest->getAssertionConsumerServiceURL();
-        /** @phpstan-ignore-line */
         $issuer = config('saml-idp.idp.issuer');
 
         $certificate = X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
