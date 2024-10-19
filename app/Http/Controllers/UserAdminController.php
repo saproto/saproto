@@ -12,7 +12,6 @@ use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
 use Carbon;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +21,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use PDF;
 use Spatie\Permission\Models\Permission;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 
 class UserAdminController extends Controller
 {
@@ -60,22 +60,18 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function details($id)
+    public function details(int $id)
     {
+        /** @var User $user */
         $user = User::query()->findOrFail($id);
         $memberships = $user->getMemberships();
 
         return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -90,11 +86,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function impersonate($id)
+    public function impersonate(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -116,8 +108,7 @@ class UserAdminController extends Controller
         return Redirect::route('homepage');
     }
 
-    /** @return RedirectResponse */
-    public function quitImpersonating()
+    public function quitImpersonating(): RedirectResponse
     {
         if (Session::has('impersonator')) {
             $redirect_user = Auth::id();
@@ -133,11 +124,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function addMembership($id, Request $request)
+    public function addMembership(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -155,6 +142,7 @@ class UserAdminController extends Controller
         }
 
         if ($user->member == null) {
+            /** @var Member $member */
             $member = Member::query()->create();
             $member->user()->associate($user);
         }
@@ -187,12 +175,8 @@ class UserAdminController extends Controller
     /**
      * Adds membership end date to member object.
      * Member object will be removed by cron job on end date.
-     *
-     * @param  int  $id
-     *
-     * @throws Exception
      */
-    public function endMembership($id): RedirectResponse
+    public function endMembership(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -206,7 +190,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    public function EndMembershipInSeptember($id): RedirectResponse
+    public function EndMembershipInSeptember(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -224,7 +208,7 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    public function removeMembershipEnd($id): RedirectResponse
+    public function removeMembershipEnd(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -363,6 +347,7 @@ class UserAdminController extends Controller
 
     public function deleteOmnomcomSound(int $id): RedirectResponse
     {
+        /** @var User $user */
         $user = User::query()->findOrFail($id);
         if ($user->member->customOmnomcomSound) {
             $user->member->customOmnomcomSound()->delete();
@@ -390,9 +375,9 @@ class UserAdminController extends Controller
     }
 
     /**
-     * @return string
+     * @throws Html2PdfException
      */
-    public function getNewMemberForm(int $id)
+    public function getNewMemberForm(int $id): string
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -416,11 +401,7 @@ class UserAdminController extends Controller
         return $form->output();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function destroyMemberForm($id)
+    public function destroyMemberForm(int $id): RedirectResponse
     {
         if ((! Auth::check() || ! Auth::user()->can('board'))) {
             abort(403);
@@ -438,6 +419,7 @@ class UserAdminController extends Controller
 
     public function printMemberForm(int $id): string
     {
+        /** @var User $user */
         $user = User::query()->find($id);
 
         if (! $user) {
