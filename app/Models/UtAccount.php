@@ -31,9 +31,7 @@ class UtAccount extends Model
         'mail',
         'number',
         'givenname',
-        'middlename',
         'surname',
-        'account_expires_at',
         'found',
     ];
 

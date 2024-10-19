@@ -16,7 +16,6 @@ use App\Console\Commands\MakeAdmin;
 use App\Console\Commands\MarkMembersAsPrimary;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
-use App\Console\Commands\MoveMembersToMembershipType;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
@@ -76,7 +75,6 @@ class Kernel extends ConsoleKernel
         ReplaceQuestionMarkWithSingleQuoteInCodex::class,
         TempAdminCleanup::class,
         MarkMembersAsPrimary::class,
-        MoveMembersToMembershipType::class,
         SyncUTAccounts::class,
     ];
 
@@ -104,6 +102,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0);
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->exists());
     }
 }

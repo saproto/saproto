@@ -195,6 +195,14 @@ class QueryController extends Controller
             $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
         })->count();
 
+        $membersWhoArentPrimaryAnymore = User::query()->whereDoesntHave('UtAccount')->whereHas('member', function ($q) {
+            $q->where('primary', true);
+        })->get();
+
+        $membersWhoAreNewPrimary = User::query()->whereHas('UtAccount')->whereHas('member', function ($q) {
+            $q->where('primary', false);
+        })->get();
+
         return view('queries.membership_totals', [
             'total' => $count_total,
             'primary' => $count_primary,
@@ -206,6 +214,8 @@ class QueryController extends Controller
             'donor' => $count_donor,
             'pending' => $count_pending,
             'pet' => $count_pet,
+            'membersWhoArentPrimaryAnymore' => $membersWhoArentPrimaryAnymore,
+            'membersWhoAreNewPrimary' => $membersWhoAreNewPrimary,
         ]);
     }
 

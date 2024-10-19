@@ -104,6 +104,64 @@
 
             </div>
 
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white">
+                    Members who were primary members according to the old system but are now secondary members
+                </div>
+                @if(count($membersWhoArentPrimaryAnymore)>0)
+                    <table class="table table-sm table-hover mb-0">
+                        @php /** @var \App\Models\User $user */ @endphp
+                        @foreach($membersWhoArentPrimaryAnymore as $user)
+
+                            <tr>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                            </tr>
+
+                        @endforeach
+                    </table>
+                @else
+                    <div class="card-body">
+                        <p>
+                            No differences found.
+                        </p>
+                    </div>
+                @endif
+            </div>
+
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white">
+                    Members who were not primary members according to the old system but are now
+                </div>
+                @if(count($membersWhoAreNewPrimary)>0)
+                    <table class="table table-sm table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>E-mail address</th>
+                        </tr>
+                        </thead>
+                        @php /** @var \App\Models\User $user */ @endphp
+                        @foreach($membersWhoAreNewPrimary as $user)
+
+                            <tr>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                            </tr>
+
+                        @endforeach
+                    </table>
+                @else
+                    <div class="card-body">
+                        <p>
+                            No differences found.
+                        </p>
+                    </div>
+                @endif
+            </div>
+
         </div>
 
     </div>
