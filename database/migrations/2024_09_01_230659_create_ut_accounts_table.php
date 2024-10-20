@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('ut_accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('member_id');
             $table->string('number');
             $table->string('mail');
             $table->string('department')->nullable();

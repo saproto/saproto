@@ -80,10 +80,13 @@ class QueryController extends Controller
         $count_donor = Member::query()->where('membership_type', MembershipTypeEnum::DONOR)->count();
         $count_pending = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->count();
         $count_pet = Member::query()->where('membership_type', MembershipTypeEnum::PET)->count();
-        $count_primary = $primary_query->count();
+
+        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where('is_primary_at_another_association', false)->whereHas('UtAccount')->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
-            $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
+        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where(function ($query) {
+            $query->whereHas('UtAccount')->orWhereHas('user', function ($query) {
+                $query->whereNotNull('utwente_username');
+            });
         })->count();
 
         return view('queries.membership_totals', [
@@ -105,14 +108,16 @@ class QueryController extends Controller
         $export_subsidies = [];
         /** @var User[] $users */
         $users = User::query()->whereHas('member', function ($query) {
-            $query->where('membership_type', MembershipTypeEnum::REGULAR);
-        })->whereHas('UtAccount')->with('UtAccount')->get();
+            $query->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('UtAccount', function ($q) {
+                $q->where('is_primary_at_another_association', false);
+            });
+        })->with('member.UtAccount')->get();
         foreach ($users as $user) {
             $export_subsidies[] = (object) [
                 'name' => $user->name,
                 'primary' => 'true',
-                'email' => $user->UtAccount()->first()->mail,
-                'ut_number' => $user->UtAccount()->first()->number,
+                'email' => $user->member->UtAccount()->first()->mail,
+                'ut_number' => $user->member->UtAccount()->first()->number,
             ];
         }
 

@@ -38,11 +38,10 @@ class SyncUTAccounts extends Command
 
         //get all regular members who do not have an account yet or have not been verified in this cron yet
         $query = User::query()->whereHas('member', function ($member) {
-            $member->where('membership_type', MembershipTypeEnum::REGULAR);
-        })->where(function (Builder $query) {
-            $query->whereHas('UtAccount', function ($q) {
-                $q->where('found', false);
-            })->orDoesntHave('UtAccount');
+            $member->where('membership_type', MembershipTypeEnum::REGULAR)
+                ->whereHas('UtAccount', function ($q) {
+                    $q->where('found', false);
+                })->orDoesntHave('UtAccount');
         });
         //sync the students who are currently studying, with the constraints that they are either in the I-TECH or B-CREA department
         $this->syncStudents((clone $query), '(|(department=*B-CREA*)(department=*M-ITECH*))');
@@ -102,7 +101,7 @@ class SyncUTAccounts extends Command
             }
 
             //if the user does not have a UT account yet, create one
-            if (! $account->UtAccount) {
+            if (! $account->member->UtAccount) {
                 $newUTAccounts->push($this->formatUserInfo($account, $student));
 
                 continue;
@@ -110,19 +109,19 @@ class SyncUTAccounts extends Command
 
             if (! $account->did_study_itech && Str::contains($student['department'], 'I-TECH')) {
                 $account->update(['did_study_itech' => true]);
-                $account->UtAccount->update(['department' => $student['department'], 'found' => true]);
+                $account->member->UtAccount->update(['department' => $student['department'], 'found' => true]);
 
                 continue;
             }
 
             if (! $account->did_study_create && Str::contains($student['department'], 'B-CREA')) {
                 $account->update(['did_study_create' => true]);
-                $account->UtAccount->update(['department' => $student['department'], 'found' => true]);
+                $account->member->UtAccount->update(['department' => $student['department'], 'found' => true]);
 
                 continue;
             }
 
-            $account->UtAccount->update(['found' => true]);
+            $account->member->UtAccount->update(['found' => true]);
         }
 
         $this->info("\n Created ".$newUTAccounts->count().' UT accounts for users who have their '.$userColumn.' as their '.$UTIdentifier);
@@ -165,7 +164,7 @@ class SyncUTAccounts extends Command
     private function formatUserInfo(User $user, $student): array
     {
         return [
-            'user_id' => $user->id,
+            'member_id' => $user->member->id,
             'department' => $student['department'] ?? null,
             'mail' => $student['userprincipalname'],
             'number' => $student['cn'],

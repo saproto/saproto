@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
@@ -30,6 +31,7 @@ use Illuminate\Support\Str;
  * @property Carbon|null $until
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ * @property UtAccount|null $UtAccount
  *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
@@ -86,6 +88,11 @@ class Member extends Model
     public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
+    }
+
+    public function UtAccount(): HasOne
+    {
+        return $this->hasOne(UtAccount::class);
     }
 
     public static function countActiveMembers(): int
