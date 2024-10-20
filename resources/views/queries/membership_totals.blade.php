@@ -111,12 +111,12 @@
                 </div>
                 @if(count($membersWhoArentPrimaryAnymore)>0)
                     <table class="table table-sm table-hover mb-0">
-                        @php /** @var \App\Models\User $user */ @endphp
-                        @foreach($membersWhoArentPrimaryAnymore as $user)
+                        @php /** @var \App\Models\Member $member */ @endphp
+                        @foreach($membersWhoArentPrimaryAnymore as $member)
 
                             <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
+                                <td>{{ $member->user->name }}</td>
+                                <td>{{ $member->user->email }}</td>
                             </tr>
 
                         @endforeach
@@ -144,11 +144,11 @@
                         </tr>
                         </thead>
                         @php /** @var \App\Models\User $user */ @endphp
-                        @foreach($membersWhoAreNewPrimary as $user)
+                        @foreach($membersWhoAreNewPrimary as $member)
 
                             <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
+                                <td>{{ $member->user->name }}</td>
+                                <td>{{ $member->user->email }}</td>
                             </tr>
 
                         @endforeach

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
@@ -35,6 +36,7 @@ use Illuminate\Support\Str;
  * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ * @property UtAccount|null $UtAccount
  *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
@@ -93,6 +95,11 @@ class Member extends Model
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
+    public function UtAccount(): HasOne
+    {
+        return $this->hasOne(UtAccount::class);
+    }
+
     public static function countActiveMembers(): int
     {
         return User::query()->whereHas('committees')->count();
@@ -118,7 +125,7 @@ class Member extends Model
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
@@ -150,7 +157,7 @@ class Member extends Model
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                .'.'.
+                . '.' .
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {

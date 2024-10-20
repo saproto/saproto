@@ -85,7 +85,7 @@ class QueryController extends Controller
             if ($member->is_pending) {
                 $count_pending++;
             } else {
-                if (! $member->is_pet) {
+                if (!$member->is_pet) {
                     $count_total++;
                 } else {
                     $count_pet++;
@@ -95,7 +95,7 @@ class QueryController extends Controller
                     $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object) [
+                        $export_active[] = (object)[
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -128,7 +128,7 @@ class QueryController extends Controller
                 }
 
                 if ($request->has('export_subsidies') && $is_ut) {
-                    $export_subsidies[] = (object) [
+                    $export_subsidies[] = (object)[
                         'primary' => $is_primary_student ? 'true' : 'false',
                         'name' => $member->user->name,
                         'email' => $has_ut_mail ? $member->user->email : null,
@@ -187,21 +187,17 @@ class QueryController extends Controller
         $count_pending = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->count();
         $count_pet = Member::query()->where('membership_type', MembershipTypeEnum::PET)->count();
 
-        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
-            $query->whereHas('UtAccount');
-        })->count();
+        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where('is_primary_at_another_association', false)->whereHas('UtAccount')->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('user', function ($query) {
-            $query->whereHas('UtAccount')->orWhereNotNull('utwente_username');
+        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where(function ($query) {
+            $query->whereHas('UtAccount')->orWhereHas('user', function ($query) {
+                $query->whereNotNull('utwente_username');
+            });
         })->count();
 
-        $membersWhoArentPrimaryAnymore = User::query()->whereDoesntHave('UtAccount')->whereHas('member', function ($q) {
-            $q->where('primary', true);
-        })->get();
+        $membersWhoArentPrimaryAnymore = Member::query()->whereDoesntHave('UtAccount')->where('primary', true)->get();
 
-        $membersWhoAreNewPrimary = User::query()->whereHas('UtAccount')->whereHas('member', function ($q) {
-            $q->where('primary', false);
-        })->get();
+        $membersWhoAreNewPrimary = Member::query()->whereHas('UtAccount')->where('primary', false)->get();
 
         return view('queries.membership_totals', [
             'total' => $count_total,
@@ -224,14 +220,16 @@ class QueryController extends Controller
         $export_subsidies = [];
         /** @var User[] $users */
         $users = User::query()->whereHas('member', function ($query) {
-            $query->where('membership_type', MembershipTypeEnum::REGULAR);
-        })->whereHas('UtAccount')->with('UtAccount')->get();
+            $query->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('UtAccount', function ($q) {
+                $q->where('is_primary_at_another_association', false);
+            });
+        })->with('member.UtAccount')->get();
         foreach ($users as $user) {
-            $export_subsidies[] = (object) [
+            $export_subsidies[] = (object)[
                 'name' => $user->name,
                 'primary' => 'true',
-                'email' => $user->UtAccount()->first()->mail,
-                'ut_number' => $user->UtAccount()->first()->number,
+                'email' => $user->member->UtAccount()->first()->mail,
+                'ut_number' => $user->member->UtAccount()->first()->number,
             ];
         }
 
@@ -261,6 +259,7 @@ class QueryController extends Controller
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
+            /** @var EventCategory $category */
             $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
