@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
 use App\Models\StorageEntry;
@@ -369,13 +370,14 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        if ($user->member?->is_pending) {
+        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
             $user->member->delete();
         }
 
+        /** @var Member $member */
         $member = Member::query()->create();
         $member->user()->associate($user);
-        $member->is_pending = true;
+        $member->membership_type = MembershipTypeEnum::PENDING;
 
         $form = new PDF('P', 'A4', 'en');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));

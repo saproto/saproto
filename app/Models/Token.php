@@ -35,16 +35,12 @@ class Token extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * @param  User  $user
-     */
-    public function generate($user): static
+    public function generate(User $user): static
     {
         $this->user_id = $user->id;
         $this->token = uniqid();

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Member;
 use Carbon;
 use Exception;
@@ -41,7 +42,7 @@ class MemberCleanup extends Command
      */
     public function handle(): int
     {
-        $old_pending_memberships = Member::query()->where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth())->get();
+        $old_pending_memberships = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->where('created_at', '<', Carbon::now()->subMonth())->get();
         foreach ($old_pending_memberships as $pending_membership) {
             $pending_membership->delete();
         }

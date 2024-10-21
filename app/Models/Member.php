@@ -19,21 +19,16 @@ use Illuminate\Support\Str;
  *
  * @property int $id
  * @property int $user_id
+ * @property User $user
  * @property string|null $proto_username
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
- * @property bool $is_lifelong
  * @property MembershipTypeEnum $membership_type
- * @property bool $is_honorary
- * @property bool $is_donor
- * @property bool $is_pending
- * @property bool $is_pet
  * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $until
- * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
  * @property UtAccount|null $UtAccount
@@ -108,14 +103,14 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', true);
+            $query->where('membership_type', MembershipTypeEnum::PENDING);
         })->count();
     }
 
     public static function countValidMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', false);
+            $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->count();
     }
 

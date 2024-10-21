@@ -213,7 +213,8 @@ class WithdrawalController extends Controller
         /** @var User $user */
         $user = User::withTrashed()->findOrFail($user_id);
 
-        foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+        foreach ($withdrawal->orderlinesForUser($user)->get() as $orderline) {
+            /** @var OrderLine $orderline */
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }
@@ -347,7 +348,8 @@ class WithdrawalController extends Controller
         }
 
         $i = 1;
-        foreach ($withdrawal->users() as $user) {
+        foreach ($withdrawal->users()->get() as $user) {
+            /** @var User $user */
             if (! $collection->addPayment([
                 'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
                 'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
@@ -421,7 +423,7 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
-        foreach ($withdrawal->users() as $user) {
+        foreach ($withdrawal->users()->get() as $user) {
             Mail::to($user)->queue((new OmnomcomWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
         }
 

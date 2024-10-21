@@ -105,13 +105,13 @@
                                 {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                             </td>
                             <td>
-                                @if($user->member->is_lifelong)
+                                @if($user->member->membership_type===\App\Enums\MembershipTypeEnum::LIFELONG)
                                     Lifelong <i class="fas fa-clock"></i>
-                                @elseif($user->member->is_honorary)
+                                @elseif($user->member->membership_type===\App\Enums\MembershipTypeEnum::HONORARY)
                                     Honorary <i class="fas fa-trophy"></i>
-                                @elseif($user->member->is_donor)
+                                @elseif($user->member->membership_type===\App\Enums\MembershipTypeEnum::DONOR)
                                     Donor <i class="fas fa-hand-holding-usd"></i>
-                                @elseif($user->member->is_pet)
+                                @elseif($user->member->membership_type===\App\Enums\MembershipTypeEnum::PET)
                                     Pet <i class="fas fa-paw"></i>
                                 @else
                                     Regular
