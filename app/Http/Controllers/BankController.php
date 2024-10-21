@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use AbcAeffchen\SepaUtilities\SepaUtilities;
 use App\Models\Bank;
 use App\Models\User;
 use Exception;
@@ -40,6 +41,24 @@ class BankController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
+
+        if (! SepaUtilities::checkIBAN($request->input('iban'))) {
+            Session::flash('flash_message', 'Your IBAN is not valid.');
+
+            return Redirect::back();
+        }
+
+        if (! SepaUtilities::checkBIC($request->input('bic'))) {
+            Session::flash('flash_message', 'Your BIC is not valid.');
+
+            return Redirect::back();
+        }
+
+        if (! SepaUtilities::crossCheckIbanBic($request->input('iban'), $request->input('bic'))) {
+            Session::flash('flash_message', 'Your IBAN and BIC do not match.');
+
+            return Redirect::back();
+        }
 
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {

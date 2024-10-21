@@ -72,7 +72,7 @@ class Withdrawal extends Model
 
     public function users(): HasManyThrough
     {
-        return $this->hasManyThrough(User::class, OrderLine::class, 'payed_with_withdrawal', 'id', 'id', 'user_id');
+        return $this->hasManyThrough(User::class, OrderLine::class, 'payed_with_withdrawal', 'id', 'id', 'user_id')->distinct();
     }
 
     public function total(): mixed
