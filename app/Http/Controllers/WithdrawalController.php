@@ -68,7 +68,7 @@ class WithdrawalController extends Controller
         $totalPerUser = [];
         foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
             /** @var OrderLine $orderline */
-            if (!array_key_exists($orderline->user->id, $totalPerUser)) {
+            if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
 
@@ -127,7 +127,7 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Accounts of withdrawal of ' . date('d-m-Y', strtotime($withdrawal->date)),
+            'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
             'total' => $withdrawal->total(),
         ]);
     }
@@ -315,7 +315,7 @@ class WithdrawalController extends Controller
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
-        if (!$withdrawal->orderlines()->exists()) {
+        if (! $withdrawal->orderlines()->exists()) {
             Session::flash('flash_message', 'Cannot export! This withdrawal is empty.');
 
             return Redirect::back();
@@ -349,7 +349,7 @@ class WithdrawalController extends Controller
         }
 
         $i = 1;
-        $userQuery = User::select(['id', 'name'])->without(['roles', 'member', 'photo'])->whereHas('orderlines', function ($q) use ($withdrawal) {
+        $userQuery = User::query()->select(['id', 'name'])->without(['roles', 'member', 'photo'])->whereHas('orderlines', function ($q) use ($withdrawal) {
             $q->where('payed_with_withdrawal', $withdrawal->id);
         })->withSum(['orderlines as orderlines_total' => function ($q) use ($withdrawal) {
             $q->where('payed_with_withdrawal', $withdrawal->id);
@@ -377,8 +377,8 @@ class WithdrawalController extends Controller
 
         try {
             $response = $directDebit->generateOutput()[0];
-        } catch (Exception $e) {
-            Session::flash('flash_message', "Error creating the xml file. Error: {$e->getMessage()}");
+        } catch (Exception $exception) {
+            Session::flash('flash_message', "Error creating the xml file. Error: {$exception->getMessage()}");
 
             return Redirect::back();
         }
@@ -470,8 +470,8 @@ class WithdrawalController extends Controller
                 continue;
             }
 
-            if (!in_array($orderline->user->id, array_keys($users))) {
-                $users[$orderline->user->id] = (object)[
+            if (! in_array($orderline->user->id, array_keys($users))) {
+                $users[$orderline->user->id] = (object) [
                     'user' => $orderline->user,
                     'orderlines' => [],
                     'total' => 0,
