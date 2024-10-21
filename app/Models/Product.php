@@ -110,13 +110,13 @@ class Product extends Model
 
     public function isVisible(): bool
     {
-        return $this->is_visible && !($this->stock <= 0 && !$this->is_visible_when_no_stock);
+        return $this->is_visible && ! ($this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
     public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
-        if (!$active) {
+        if (! $active) {
             return $this->price;
         }
 
