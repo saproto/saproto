@@ -51,7 +51,7 @@ class UpdateWallstreetPrices extends Command
         }
 
         /** @var WallstreetDrink $currentDrink */
-        foreach ($currentDrink->products() as $product) {
+        foreach ($currentDrink->products()->get() as $product) {
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {

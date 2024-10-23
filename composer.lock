@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "bdf64338e87f342e2572b7bcf8486b0e",
+  "content-hash": "77628ca02dc10506fdfede13230d51ce",
   "packages": [
     {
       "name": "aacotroneo/laravel-saml2",
@@ -1904,21 +1904,21 @@
     },
     {
       "name": "intervention/image",
-      "version": "3.8.0",
+      "version": "3.9.0",
       "source": {
         "type": "git",
         "url": "https://github.com/Intervention/image.git",
-        "reference": "1786ad5e1789050939d73cd195de4b8eaeeb34ed"
+        "reference": "1e0a2b6d767ef22a095924c6bcb2981da6de6f1e"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Intervention/image/zipball/1786ad5e1789050939d73cd195de4b8eaeeb34ed",
-        "reference": "1786ad5e1789050939d73cd195de4b8eaeeb34ed",
+        "url": "https://api.github.com/repos/Intervention/image/zipball/1e0a2b6d767ef22a095924c6bcb2981da6de6f1e",
+        "reference": "1e0a2b6d767ef22a095924c6bcb2981da6de6f1e",
         "shasum": ""
       },
       "require": {
         "ext-mbstring": "*",
-        "intervention/gif": "^4.1",
+        "intervention/gif": "^4.2",
         "php": "^8.1"
       },
       "require-dev": {
@@ -1960,7 +1960,7 @@
       ],
       "support": {
         "issues": "https://github.com/Intervention/image/issues",
-        "source": "https://github.com/Intervention/image/tree/3.8.0"
+        "source": "https://github.com/Intervention/image/tree/3.9.0"
       },
       "funding": [
         {
@@ -1976,7 +1976,7 @@
           "type": "ko_fi"
         }
       ],
-      "time": "2024-08-16T14:57:26+00:00"
+      "time": "2024-10-06T15:37:56+00:00"
     },
     {
       "name": "jean85/pretty-package-versions",
@@ -2090,16 +2090,16 @@
     },
     {
       "name": "laravel/framework",
-      "version": "v11.28.1",
+      "version": "v11.29.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/framework.git",
-        "reference": "3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c"
+        "reference": "425054512c362835ba9c0307561973c8eeac7385"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/framework/zipball/3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c",
-        "reference": "3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c",
+        "url": "https://api.github.com/repos/laravel/framework/zipball/425054512c362835ba9c0307561973c8eeac7385",
+        "reference": "425054512c362835ba9c0307561973c8eeac7385",
         "shasum": ""
       },
       "require": {
@@ -2295,7 +2295,7 @@
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
       },
-      "time": "2024-10-16T16:32:21+00:00"
+      "time": "2024-10-22T14:13:31+00:00"
     },
     {
       "name": "laravel/helpers",
@@ -9832,16 +9832,16 @@
     },
     {
       "name": "laravel/sail",
-      "version": "v1.36.0",
+      "version": "v1.37.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/sail.git",
-        "reference": "f184d3d687155d06bc8cb9ff6dc48596a138460c"
+        "reference": "5d385f2e698f0f774cdead82aff5d989fb95309b"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/sail/zipball/f184d3d687155d06bc8cb9ff6dc48596a138460c",
-        "reference": "f184d3d687155d06bc8cb9ff6dc48596a138460c",
+        "url": "https://api.github.com/repos/laravel/sail/zipball/5d385f2e698f0f774cdead82aff5d989fb95309b",
+        "reference": "5d385f2e698f0f774cdead82aff5d989fb95309b",
         "shasum": ""
       },
       "require": {
@@ -9891,7 +9891,7 @@
         "issues": "https://github.com/laravel/sail/issues",
         "source": "https://github.com/laravel/sail"
       },
-      "time": "2024-10-10T13:26:02+00:00"
+      "time": "2024-10-21T17:13:38+00:00"
     },
     {
       "name": "laravel/tinker",
@@ -10259,16 +10259,16 @@
     },
     {
       "name": "pestphp/pest",
-      "version": "v3.4.1",
+      "version": "v3.5.0",
       "source": {
         "type": "git",
         "url": "https://github.com/pestphp/pest.git",
-        "reference": "67f217852ce153134fbea8857487a3829904c086"
+        "reference": "eaeb133c77f3f5382620f0307c3b45b34961bcfc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/pestphp/pest/zipball/67f217852ce153134fbea8857487a3829904c086",
-        "reference": "67f217852ce153134fbea8857487a3829904c086",
+        "url": "https://api.github.com/repos/pestphp/pest/zipball/eaeb133c77f3f5382620f0307c3b45b34961bcfc",
+        "reference": "eaeb133c77f3f5382620f0307c3b45b34961bcfc",
         "shasum": ""
       },
       "require": {
@@ -10279,11 +10279,11 @@
         "pestphp/pest-plugin-arch": "^3.0.0",
         "pestphp/pest-plugin-mutate": "^3.0.5",
         "php": "^8.2.0",
-        "phpunit/phpunit": "^11.4.1"
+        "phpunit/phpunit": "^11.4.2"
       },
       "conflict": {
         "filp/whoops": "<2.16.0",
-        "phpunit/phpunit": ">11.4.1",
+        "phpunit/phpunit": ">11.4.2",
         "sebastian/exporter": "<6.0.0",
         "webmozart/assert": "<1.11.0"
       },
@@ -10355,7 +10355,7 @@
       ],
       "support": {
         "issues": "https://github.com/pestphp/pest/issues",
-        "source": "https://github.com/pestphp/pest/tree/v3.4.1"
+        "source": "https://github.com/pestphp/pest/tree/v3.5.0"
       },
       "funding": [
         {
@@ -10367,7 +10367,7 @@
           "type": "github"
         }
       ],
-      "time": "2024-10-15T16:17:09+00:00"
+      "time": "2024-10-22T14:33:27+00:00"
     },
     {
       "name": "pestphp/pest-plugin",
@@ -11465,16 +11465,16 @@
     },
     {
       "name": "phpunit/phpunit",
-      "version": "11.4.1",
+      "version": "11.4.2",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/phpunit.git",
-        "reference": "7875627f15f4da7e7f0823d1f323f7295a77334e"
+        "reference": "1863643c3f04ad03dcb9c6996c294784cdda4805"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7875627f15f4da7e7f0823d1f323f7295a77334e",
-        "reference": "7875627f15f4da7e7f0823d1f323f7295a77334e",
+        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1863643c3f04ad03dcb9c6996c294784cdda4805",
+        "reference": "1863643c3f04ad03dcb9c6996c294784cdda4805",
         "shasum": ""
       },
       "require": {
@@ -11488,21 +11488,21 @@
         "phar-io/manifest": "^2.0.4",
         "phar-io/version": "^3.2.1",
         "php": ">=8.2",
-        "phpunit/php-code-coverage": "^11.0.6",
+        "phpunit/php-code-coverage": "^11.0.7",
         "phpunit/php-file-iterator": "^5.1.0",
         "phpunit/php-invoker": "^5.0.1",
         "phpunit/php-text-template": "^4.0.1",
         "phpunit/php-timer": "^7.0.1",
         "sebastian/cli-parser": "^3.0.2",
         "sebastian/code-unit": "^3.0.1",
-        "sebastian/comparator": "^6.1.0",
+        "sebastian/comparator": "^6.1.1",
         "sebastian/diff": "^6.0.2",
         "sebastian/environment": "^7.2.0",
         "sebastian/exporter": "^6.1.3",
         "sebastian/global-state": "^7.0.2",
         "sebastian/object-enumerator": "^6.0.1",
         "sebastian/type": "^5.1.0",
-        "sebastian/version": "^5.0.1"
+        "sebastian/version": "^5.0.2"
       },
       "suggest": {
         "ext-soap": "To be able to generate mocks based on WSDL files"
@@ -11545,7 +11545,7 @@
       "support": {
         "issues": "https://github.com/sebastianbergmann/phpunit/issues",
         "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.4.1"
+        "source": "https://github.com/sebastianbergmann/phpunit/tree/11.4.2"
       },
       "funding": [
         {
@@ -11561,7 +11561,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2024-10-08T15:38:37+00:00"
+      "time": "2024-10-19T13:05:19+00:00"
     },
     {
       "name": "psy/psysh",
@@ -12888,7 +12888,8 @@
     "ext-calendar": "*",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-iconv": "*"
+    "ext-iconv": "*",
+    "ext-zlib": "*"
   },
   "platform-dev": [],
   "plugin-api-version": "2.6.0"

@@ -44,6 +44,7 @@ class EmailCron extends Command
         $this->info('There are '.$emails->count().' queued e-mails.');
 
         foreach ($emails as $email) {
+            /** @var Email $email */
             $this->info('Sending e-mail <'.$email->subject.'>');
 
             $email->ready = false;
@@ -51,7 +52,7 @@ class EmailCron extends Command
             $email->sent_to = $email->recipients()->count();
             $email->save();
 
-            foreach ($email->recipients() as $recipient) {
+            foreach ($email->recipients()->get() as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
                         $email->sender_address.'@'.config('proto.emaildomain'),

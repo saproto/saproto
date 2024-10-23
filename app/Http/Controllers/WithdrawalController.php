@@ -133,10 +133,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -163,12 +162,11 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -185,6 +183,7 @@ class WithdrawalController extends Controller
         }
 
         foreach (FailedWithdrawal::query()->where('withdrawal_id', $withdrawal->id)->get() as $failed_withdrawal) {
+            /** @var FailedWithdrawal $failed_withdrawal */
             $failed_withdrawal->correction_orderline->delete();
             $failed_withdrawal->delete();
         }
@@ -199,7 +198,7 @@ class WithdrawalController extends Controller
     /**
      * @return RedirectResponse
      */
-    public static function deleteFrom(Request $request, int $id, int $user_id)
+    public static function deleteFrom(int $id, int $user_id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -293,7 +292,7 @@ class WithdrawalController extends Controller
         $user = User::query()->findOrFail($user_id);
 
         /** @var Orderline[] $orderlines */
-        $orderlines = $withdrawal->orderlinesForUser($user);
+        $orderlines = $withdrawal->orderlinesForUser($user)->get();
 
         foreach ($orderlines as $orderline) {
             $orderline->withdrawal()->dissociate();
@@ -344,32 +343,53 @@ class WithdrawalController extends Controller
             $directDebit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId, SephpaDirectDebit::SEPA_PAIN_008_001_02);
             $collection = $directDebit->addCollection($debitCollectionData);
         } catch (SephpaInputException $sephpaInputException) {
-            abort(500, 'Error creating the withdrawal. Error: '.$sephpaInputException->getMessage());
+            Session::flash('flash_message', "Error creating the withdrawal. Error: {$sephpaInputException->getMessage()}");
+
+            return Redirect::back();
         }
 
         $i = 1;
-        foreach ($withdrawal->users()->get() as $user) {
+        $userQuery = User::query()->select(['id', 'name'])->without(['roles', 'member', 'photo'])->whereHas('orderlines', function ($q) use ($withdrawal) {
+            $q->where('payed_with_withdrawal', $withdrawal->id);
+        })->withSum(['orderlines as orderlines_total' => function ($q) use ($withdrawal) {
+            $q->where('payed_with_withdrawal', $withdrawal->id);
+        }], 'total_price')->with('bank:user_id,machtigingid,iban,bic,created_at');
+
+        foreach ($userQuery->get()->each->setAppends([]) as $user) {
             /** @var User $user */
-            if (! $collection->addPayment([
-                'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
-                'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                'mndtId' => $user->bank->machtigingid,
-                'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
-                'bic' => $user->bank->bic,
-                'dbtr' => $user->name,
-                'iban' => $user->bank->iban,
-            ])) {
-                abort(500, sprintf('Error for user %s', $user->id));
+            try {
+                $collection->addPayment([
+                    'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
+                    'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
+                    'mndtId' => $user->bank->machtigingid,
+                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'bic' => $user->bank->bic,
+                    'dbtr' => $user->name,
+                    'iban' => $user->bank->iban,
+                ]);
+                $i++;
+            } catch (SephpaInputException $e) {
+                Session::flash('flash_message', "Error creating the withdrawal. user {$user->id}: Error: {$e->getMessage()}");
+
+                return Redirect::back();
             }
         }
 
-        $response = $directDebit->generateOutput()[0];
+        try {
+            $response = $directDebit->generateOutput()[0];
+        } catch (Exception $exception) {
+            Session::flash('flash_message', "Error creating the xml file. Error: {$exception->getMessage()}");
+
+            return Redirect::back();
+        }
 
         $headers = [
             'Content-Encoding' => 'UTF-8',
             'Content-Type' => 'text/xml; charset=UTF-8',
             'Content-Disposition' => sprintf('attachment; filename="%s"', $response['name']),
         ];
+
+        Session::flash('flash_message', 'The withdrawal has been exported. Still check if the total is correct!');
 
         return Response::make($response['data'], 200, $headers);
     }
