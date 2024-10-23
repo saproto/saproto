@@ -513,7 +513,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member?->membership_type !== MembershipTypeEnum::PENDING;
+        return $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING;
     }
 
     public function getSignedMembershipFormAttribute(): bool
