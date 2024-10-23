@@ -7,6 +7,9 @@ use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Activity>
+ */
 class ActivityFactory extends Factory
 {
     protected $model = Activity::class;
@@ -14,14 +17,14 @@ class ActivityFactory extends Factory
     public function definition(): array
     {
         return [
-            'price' => $this->faker->randomFloat(),
-            'no_show_fee' => $this->faker->randomFloat(),
-            'participants' => $this->faker->randomNumber(),
+            'price' => fake()->randomFloat(),
+            'no_show_fee' => fake()->randomFloat(),
+            'participants' => fake()->randomNumber(),
             'attendees' => null,
             'registration_start' => Carbon::now(),
             'registration_end' => Carbon::now()->addDay(),
             'deregistration_end' => Carbon::now()->addHour(),
-            'comment' => $this->faker->word(),
+            'comment' => fake()->word(),
             'redirect_url' => null,
             'closed' => false,
             'hide_participants' => false,

@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Mail;
 use App\Mail\ManualEmail;
 use App\Models\Activity;
 use App\Models\Email;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 
 it('sends a manual email to an event', function () {
     Mail::fake();

@@ -6,6 +6,9 @@ use App\Models\Email;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
+/**
+ * @extends Factory<Email>
+ */
 class EmailFactory extends Factory
 {
     protected $model = Email::class;
@@ -13,11 +16,11 @@ class EmailFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => $this->faker->text(),
-            'subject' => $this->faker->word(),
-            'sender_name' => $this->faker->name(),
-            'sender_address' => $this->faker->word(),
-            'body' => $this->faker->word(),
+            'description' => fake()->text(),
+            'subject' => fake()->word(),
+            'sender_name' => fake()->name(),
+            'sender_address' => fake()->word(),
+            'body' => fake()->word(),
             'sent_to' => 0,
             'to_user' => false,
             'to_member' => false,
