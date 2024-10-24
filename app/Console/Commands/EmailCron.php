@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\ManualEmail;
 use App\Models\Email;
+use Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -40,7 +41,7 @@ class EmailCron extends Command
     {
 
         // Send admin created e-mails.
-        $emails = Email::query()->where('sent', false)->where('ready', true)->where('time', '<', date('U'))->get();
+        $emails = Email::query()->where('sent', false)->where('ready', true)->where('time', '<', Carbon::now()->getTimestamp())->get();
         $this->info('There are '.$emails->count().' queued e-mails.');
 
         foreach ($emails as $email) {
@@ -52,7 +53,7 @@ class EmailCron extends Command
             $email->sent_to = $email->recipients()->count();
             $email->save();
 
-            foreach ($email->recipients()->get() as $recipient) {
+            foreach ($email->recipients() as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
                         $email->sender_address.'@'.config('proto.emaildomain'),
