@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\User;
 use Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class RegistrationHelperController extends Controller
         $search = $request->input('query');
 
         $users = User::query()->whereHas('member', static function ($q) {
-            $q->where('is_pending', true);
+            $q->where('membership_type', MembershipTypeEnum::PENDING);
         });
 
         if ($search) {
@@ -42,13 +43,12 @@ class RegistrationHelperController extends Controller
     /**
      * Show the user details for registration helper.
      *
-     * @param  int  $id
      * @return View
      */
-    public function details($id)
+    public function details(int $id)
     {
         $user = User::query()->whereHas('member', static function ($q) {
-            $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay());
+            $q->where('membership_type', MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 

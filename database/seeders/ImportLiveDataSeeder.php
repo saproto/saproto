@@ -19,7 +19,7 @@ class ImportLiveDataSeeder extends Seeder
      *
      * @throws Exception
      */
-    public function run($password, $output): void
+    public function run(string $password, $output): void
     {
         // First let's create our admin user.
         $output->task('creating admin user.', fn () => self::createAdminUser($password));
@@ -91,11 +91,9 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param  string  $password
-     *
      * @throws Exception
      */
-    public static function createAdminUser($password): void
+    public static function createAdminUser(string $password): void
     {
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
