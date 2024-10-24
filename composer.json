@@ -70,7 +70,10 @@
         "spipu/html2pdf": "^5.2",
         "vinkla/hashids": "^12.0",
         "willvincent/feeds": "^2.4",
-        "setasign/tfpdf": "^1.33"
+        "setasign/tfpdf": "^1.33",
+        "ext-iconv": "*",
+        "litesaml/lightsaml": "^4.2",
+        "ext-zlib": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
@@ -101,16 +104,16 @@
     },
     "scripts": {
         "fix": [
-            "vendor/bin/rector process & ./vendor/bin/pint"
+            "./vendor/bin/rector process && ./vendor/bin/pint"
+        ],
+        "pint": [
+            "./vendor/bin/pint"
         ],
         "test": [
             "php artisan test --parallel"
         ],
         "rector": [
             "vendor/bin/rector process"
-        ],
-        "pint": [
-            "./vendor/bin/pint"
         ],
         "ide-helper": [
             "php artisan cache:clear",

@@ -261,7 +261,8 @@ Route::middleware('forcedomain')->group(function () {
 
             Route::get('studied_create/{id}', 'toggleStudiedCreate')->name('toggle_studied_create');
             Route::get('studied_itech/{id}', 'toggleStudiedITech')->name('toggle_studied_itech');
-            Route::get('nda/{id}', 'toggleNda')->middleware(['permission:board'])->name('toggle_nda');
+            Route::get('primary_somewhere_else/{id}', 'togglePrimaryAtAnotherAssociation')->name('toggle_primary_somewhere_else');
+            Route::get('nda/{id}', 'toggleNda')->name('toggle_nda');
             Route::get('unblock_omnomcom/{id}', 'unblockOmnomcom')->name('unblock_omnomcom');
 
             Route::get('{id}', 'details')->name('details');
@@ -1058,6 +1059,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', 'activityOverview')->name('activity_overview');
         Route::get('/activity_statistics', 'activityStatistics')->name('activity_statistics');
         Route::get('/membership_totals', 'membershipTotals')->name('membership_totals');
+        Route::get('/new_membership_totals', 'newMembershipTotals')->name('new_membership_totals');
     });
 
     /* --- Routes related to the mini-sites --- */
