@@ -41,14 +41,15 @@ class CheckUtwenteAccounts extends Command
     {
         $users = User::query()->whereNotNull('utwente_username')->select(['id', 'utwente_username', 'name'])->get();
 
-        $userSns = implode('', $users->pluck('utwente_username')->map(fn($username) => "(cn=" . strtolower($username) . ")")->toArray());
-        $this->info('Checking ' . $users->count() . ' UTwente accounts.');
+        $userSns = implode('', $users->pluck('utwente_username')->map(fn ($username): string => '(cn='.strtolower($username).')')->toArray());
+        $this->info('Checking '.$users->count().' UTwente accounts.');
 
         $unlinked = [];
 
         $remoteusers = LdapController::searchUtwente("(&(extensionattribute6=actief)(|{$userSns}))");
         if (property_exists($remoteusers, 'error')) {
             $this->error($remoteusers->error);
+
             return;
         }
 
@@ -56,10 +57,8 @@ class CheckUtwenteAccounts extends Command
 
         foreach ($users as $user) {
 
-            if ($remoteusers->filter(function ($item) use ($user) {
-                    return strtolower($item) == strtolower($user->utwente_username);
-                })->count() <= 0) {
-                $msg = "Not found: {$user->utwente_username} (" . $user->name . ')';
+            if ($remoteusers->filter(fn ($item): bool => strtolower($item) === strtolower($user->utwente_username))->count() <= 0) {
+                $msg = "Not found: {$user->utwente_username} (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $user->utwente_username = null;

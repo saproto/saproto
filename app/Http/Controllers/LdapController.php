@@ -14,7 +14,7 @@ class LdapController extends Controller
         $cacheKey = md5($query);
 
         if (Cache::has($cacheKey)) {
-            return (object)[
+            return (object) [
                 'result' => Cache::get($cacheKey),
             ];
         }
@@ -35,12 +35,12 @@ class LdapController extends Controller
             Cache::put($cacheKey, $content, 3600 * 60);
 
             // Return the response content
-            return (object)[
+            return (object) [
                 'result' => $content,
             ];
         } catch (Exception|GuzzleException $e) {
             // Handle exceptions
-            return (object)[
+            return (object) [
                 'error' => $e->getMessage(),
             ];
         }
