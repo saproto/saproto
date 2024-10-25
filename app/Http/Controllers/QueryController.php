@@ -10,7 +10,6 @@ use App\Models\EventCategory;
 use App\Models\Member;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -47,42 +46,47 @@ class QueryController extends Controller
 
     public function membershipTotals(Request $request)
     {
-        $primary_query = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)
-            ->where('is_primary_at_another_association', false)
-            ->whereHas('user', function ($query) {
-                $query->whereHas('UtAccount');
-            });
         if ($request->has('export_subsidies')) {
-            //todo: implement export
-            $subsidy_users = $primary_query->get();
+            $export_subsidies = User::query()->whereHas('member', function ($q) {
+                $q->primary();
+            })->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
-            return Response::make(view('queries.export_subsidies', ['subsidy_users' => $subsidy_users]), 200, $headers);
+            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
         }
 
-        $count_total = Member::query()->where(function (Builder $query) {
-            $query->whereNot('membership_type', MembershipTypeEnum::PET)
-                ->whereNot('membership_type', MembershipTypeEnum::PENDING);
-        })->count();
-        $count_active = Member::query()->whereHas('user', function ($query) {
-            $query->whereHas('committees');
-        })->count();
-        $count_lifelong = Member::query()->type(MembershipTypeEnum::LIFELONG)->count();
-        $count_honorary = Member::query()->type(MembershipTypeEnum::HONORARY)->count();
-        $count_donor = Member::query()->type(MembershipTypeEnum::DONOR)->count();
-        $count_pending = Member::query()->type(MembershipTypeEnum::PENDING)->count();
-        $count_pet = Member::query()->type(MembershipTypeEnum::PET)->count();
+        $activeUserQuery = User::query()->whereHas('member', function ($query) {
+            $query->type(MembershipTypeEnum::REGULAR);
+        })->whereHas('committees');
+
+        if ($request->has('export_active')) {
+            $export_active = $activeUserQuery->get();
+            $headers = [
+                'Content-Encoding' => 'UTF-8',
+                'Content-Type' => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => sprintf('attachment; filename="active_member_overview%s.csv"', date('d_m_Y')),
+            ];
+
+            return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
+        }
+
+        $count_per_type = Member::query()->selectRaw('membership_type, COUNT(*) as count')
+            ->groupBy('membership_type')
+            ->get()
+            ->keyBy(fn ($item) => $item->membership_type->value)->map(fn ($item) => $item->count);
+
+        $count_total = $count_per_type->reject(static fn ($value, $key): bool => in_array($key, [MembershipTypeEnum::PENDING->value, MembershipTypeEnum::PET->value]))->sum();
+
+        $count_active = $activeUserQuery->count();
 
         $count_primary = Member::query()->primary()->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->type(MembershipTypeEnum::REGULAR)->where(function ($query) {
-            $query->whereHas('UtAccount')->orWhereHas('user', function ($query) {
-                $query->whereNotNull('utwente_username');
-            });
+        $count_ut = Member::query()->primary()->orWhereHas('user', function ($query) {
+            $query->whereNotNull('utwente_username');
         })->count();
 
         return view('queries.membership_totals', [
@@ -91,11 +95,7 @@ class QueryController extends Controller
             'secondary' => $count_secondary,
             'ut' => $count_ut,
             'active' => $count_active,
-            'lifelong' => $count_lifelong,
-            'honorary' => $count_honorary,
-            'donor' => $count_donor,
-            'pending' => $count_pending,
-            'pet' => $count_pet,
+            'count_per_type' => $count_per_type,
         ]);
     }
 

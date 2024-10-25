@@ -45,12 +45,12 @@
 
                     <tr>
                         <td><strong>Total number of lifelong members</strong></td>
-                        <td>{{ $lifelong }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::LIFELONG->value]}}</td>
                     </tr>
 
                     <tr>
                         <td><strong>Total number of honorary members</strong></td>
-                        <td>{{ $honorary }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::HONORARY->value] }}</td>
                     </tr>
 
                     <tr>
@@ -58,7 +58,7 @@
                             <strong>Total number of donors</strong><br>
                             <sup>For this overview donors are also considered members.</sup>
                         </td>
-                        <td>{{ $donor }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::DONOR->value] }}</td>
                     </tr>
 
                     <tr>
@@ -66,7 +66,7 @@
                             <strong>Total number of pending members</strong><br>
                             <sup>For this overview pending members are not counted as members.</sup>
                         </td>
-                        <td>{{ $pending }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::PENDING->value] }}</td>
                     </tr>
 
                     <tr>
@@ -74,7 +74,7 @@
                             <strong>Total number of pet members</strong><br>
                             <sup>For this overview pet members are not counted as members.</sup>
                         </td>
-                        <td>{{ $pet }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::PET->value] }}</td>
                     </tr>
 
                 </table>
@@ -104,6 +104,6 @@
 
             </div>
 
-    </div>
+        </div>
 
 @endsection
