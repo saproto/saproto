@@ -95,6 +95,18 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
+    public function scopePrimary(Builder $query): Builder
+    {
+        return $query->type(MembershipTypeEnum::REGULAR)
+            ->where('is_primary_at_another_association', false)
+            ->whereHas('UtAccount');
+    }
+
+    public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
+    {
+        return $query->type($type);
+    }
+
     public static function countActiveMembers(): int
     {
         return User::query()->whereHas('committees')->count();

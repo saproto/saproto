@@ -18,16 +18,12 @@ use Illuminate\View\View;
 
 class QueryController extends Controller
 {
-    /** @return View */
-    public function index()
+    public function index(): View
     {
         return view('queries.index');
     }
 
-    /**
-     * @return View
-     */
-    public function activityOverview(Request $request)
+    public function activityOverview(Request $request): View
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
@@ -40,7 +36,7 @@ class QueryController extends Controller
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
             ->where('start', '>=', $start)->where('end', '<=', $end)
-            ->orderBy('start', 'asc')->get();
+            ->orderBy('start')->get();
 
         return view('queries.activity_overview', [
             'start' => $start,
@@ -75,15 +71,15 @@ class QueryController extends Controller
         $count_active = Member::query()->whereHas('user', function ($query) {
             $query->whereHas('committees');
         })->count();
-        $count_lifelong = Member::query()->where('membership_type', MembershipTypeEnum::LIFELONG)->count();
-        $count_honorary = Member::query()->where('membership_type', MembershipTypeEnum::HONORARY)->count();
-        $count_donor = Member::query()->where('membership_type', MembershipTypeEnum::DONOR)->count();
-        $count_pending = Member::query()->where('membership_type', MembershipTypeEnum::PENDING)->count();
-        $count_pet = Member::query()->where('membership_type', MembershipTypeEnum::PET)->count();
+        $count_lifelong = Member::query()->type(MembershipTypeEnum::LIFELONG)->count();
+        $count_honorary = Member::query()->type(MembershipTypeEnum::HONORARY)->count();
+        $count_donor = Member::query()->type(MembershipTypeEnum::DONOR)->count();
+        $count_pending = Member::query()->type(MembershipTypeEnum::PENDING)->count();
+        $count_pet = Member::query()->type(MembershipTypeEnum::PET)->count();
 
-        $count_primary = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where('is_primary_at_another_association', false)->whereHas('UtAccount')->count();
+        $count_primary = Member::query()->primary()->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->where('membership_type', MembershipTypeEnum::REGULAR)->where(function ($query) {
+        $count_ut = Member::query()->type(MembershipTypeEnum::REGULAR)->where(function ($query) {
             $query->whereHas('UtAccount')->orWhereHas('user', function ($query) {
                 $query->whereNotNull('utwente_username');
             });
@@ -103,43 +99,15 @@ class QueryController extends Controller
         ]);
     }
 
-    public function primaryExport()
+    public function activityStatistics(Request $request): View
     {
-        $export_subsidies = [];
-        /** @var User[] $users */
-        $users = User::query()->whereHas('member', function ($query) {
-            $query->where('membership_type', MembershipTypeEnum::REGULAR)->whereHas('UtAccount', function ($q) {
-                $q->where('is_primary_at_another_association', false);
-            });
-        })->with('member.UtAccount')->get();
-        foreach ($users as $user) {
-            $export_subsidies[] = (object) [
-                'name' => $user->name,
-                'primary' => 'true',
-                'email' => $user->member->UtAccount()->first()->mail,
-                'ut_number' => $user->member->UtAccount()->first()->number,
-            ];
-        }
-
-        $headers = [
-            'Content-Encoding' => 'UTF-8',
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
-        ];
-
-        return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
-    }
-
-    public function activityStatistics(Request $request)
-    {
-
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
             $start = strtotime("{$year_start}-09-01 00:00:01");
             $end = date('U');
         } else {
-            $start = strtotime($request->start);
-            $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
+            $start = Carbon::parse($request->start)->getTimestamp();
+            $end = Carbon::parse($request->end)->addDay()->getTimestamp();
         }
 
         $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {

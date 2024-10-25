@@ -9,10 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class LdapController extends Controller
 {
-    /**
-     * @return array
-     */
-    public static function searchUtwente(string $query, bool $only_active = false)
+    public static function searchUtwente(string $query, bool $only_active = false): array
     {
         $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', config('ldap.proxy.utwente.url'), config('ldap.proxy.utwente.key'), urlencode($query)));
         if ($response === false) {
@@ -47,7 +44,7 @@ class LdapController extends Controller
         });
     }
 
-    public static function searchUtwentePost(string $query)
+    public static function searchUtwentePost(string $query): object
     {
         $cacheKey = md5($query);
 

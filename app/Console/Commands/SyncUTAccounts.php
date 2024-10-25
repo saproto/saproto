@@ -38,7 +38,7 @@ class SyncUTAccounts extends Command
 
         //get all regular members who do not have an account yet or have not been verified in this cron yet
         $query = User::query()->whereHas('member', function ($member) {
-            $member->where('membership_type', MembershipTypeEnum::REGULAR)
+            $member->type(MembershipTypeEnum::REGULAR)
                 ->whereHas('UtAccount', function ($q) {
                     $q->where('found', false);
                 })->orDoesntHave('UtAccount');
@@ -63,25 +63,25 @@ class SyncUTAccounts extends Command
         //try to find the users by their student number
         $usersById = (clone $query)->whereNotNull('utwente_username')->get();
         $this->info('Checking '.$usersById->count().' users by student number');
-        $newAccounts = $this->syncColumnToUTTrait($usersById, $this->standardSns(...), $this->standardCompare(...), 'utwente_username', 'uid', $constraints);
+        $newAccounts = $this->syncColumnToUTTrait($usersById, $this->standardQueryStringBuilder(...), $this->standardCompare(...), 'utwente_username', 'uid', $constraints);
         UtAccount::query()->insert($newAccounts->toArray());
 
         //try to find the users by their email
         $usersByEmail = (clone $query)->whereNotNull('email')->get();
         $this->info('Checking the remaining '.$usersByEmail->count().' users by email');
-        $newerAccounts = $this->syncColumnToUTTrait($usersByEmail, $this->standardSns(...), $this->standardCompare(...), 'email', 'userprincipalname', $constraints);
+        $newerAccounts = $this->syncColumnToUTTrait($usersByEmail, $this->standardQueryStringBuilder(...), $this->standardCompare(...), 'email', 'userprincipalname', $constraints);
         UtAccount::query()->insert($newerAccounts->toArray());
 
         //try to find the users by their name
         $usersByName = (clone $query)->whereNotNull('name')->get();
         $this->info('Checking another '.$usersByName->count().' users by name');
-        $newerAccounts = $this->syncColumnToUTTrait($usersByName, $this->nameSns(...), $this->nameCompare(...), 'name', 'givenname', $constraints);
+        $newerAccounts = $this->syncColumnToUTTrait($usersByName, $this->nameQueryStringBuilder(...), $this->nameCompare(...), 'name', 'givenname', $constraints);
         UtAccount::query()->insert($newerAccounts->toArray());
     }
 
-    public function syncColumnToUTTrait(Collection $users, callable $snsMapper, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection
+    public function syncColumnToUTTrait(Collection $users, callable $queryStringBuilder, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection
     {
-        $sns = implode('', array_map(fn ($userIdentifier): string => $snsMapper($userIdentifier, $UTIdentifier), $users->pluck($userColumn)->toArray()));
+        $sns = implode('', array_map(fn ($userIdentifier): string => $queryStringBuilder($userIdentifier, $UTIdentifier), $users->pluck($userColumn)->toArray()));
 
         $students = $this->getUtwenteResults($sns, $constraints);
         $bar = $this->output->createProgressBar(count($students));
@@ -131,7 +131,7 @@ class SyncUTAccounts extends Command
         return $newUTAccounts;
     }
 
-    public function nameSns(string $userIdentifier, string $UtIdentifier): string
+    public function nameQueryStringBuilder(string $userIdentifier, string $UtIdentifier): string
     {
 
         $names = explode(' ', $userIdentifier);
@@ -151,7 +151,7 @@ class SyncUTAccounts extends Command
         return strtolower(iconv('utf-8', 'us-ascii//TRANSLIT', $names[0].' '.$names[count($names) - 1])) === strtolower(iconv('utf-8', 'us-ascii//TRANSLIT', $student[$UTIdentifier].' '.$student['sn']));
     }
 
-    public function standardSns(string $userIdentifier, string $UtIdentifier): string
+    public function standardQueryStringBuilder(string $userIdentifier, string $UtIdentifier): string
     {
         return "({$UtIdentifier}={$userIdentifier})";
     }

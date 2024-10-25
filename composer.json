@@ -110,7 +110,7 @@
             "./vendor/bin/pint"
         ],
         "test": [
-            "phpunit"
+            "php artisan test --parallel"
         ],
         "rector": [
             "vendor/bin/rector process"

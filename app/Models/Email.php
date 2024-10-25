@@ -8,6 +8,7 @@ use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection as SupportCollection;
@@ -65,24 +66,23 @@ use Illuminate\Support\Facades\DB;
  */
 class Email extends Model
 {
+    use HasFactory;
+
     protected $table = 'emails';
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
-    public function lists()
+    public function lists(): BelongsToMany
     {
         return $this->belongsToMany(EmailList::class, 'emails_lists', 'email_id', 'list_id');
     }
 
-    /** @return BelongsToMany */
-    public function events()
+    public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
     }
 
-    /** @return BelongsToMany */
-    public function attachments()
+    public function attachments(): BelongsToMany
     {
         return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
@@ -123,8 +123,7 @@ class Email extends Model
         throw new Exception('Email has no destination');
     }
 
-    /** @return SupportCollection|User[] */
-    public function recipients()
+    public function recipients(): SupportCollection
     {
         if ($this->to_user) {
             return User::query()->orderBy('name')->get();
@@ -163,22 +162,21 @@ class Email extends Model
                 }
             }
 
-            return User::query()->whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::query()->whereIn('id', $user_ids)->orderBy('name')->get();
         }
 
-        return collect([]);
+        return collect();
     }
 
     public function hasRecipientList(EmailList $list): bool
     {
-        return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->count() > 0;
+        return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->exists();
     }
 
     /**
-     * @param  User  $user
      * @return string Email body with variables parsed.
      */
-    public function parseBodyFor($user): string
+    public function parseBodyFor(User $user): string
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
