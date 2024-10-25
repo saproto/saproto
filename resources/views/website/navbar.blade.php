@@ -310,6 +310,8 @@
                                     <a class="dropdown-item" href="{{ route('omnomcom::orders::index') }}">Purchase
                                         History</a>
 
+                                    <a class="dropdown-item" href="{{ route('photo::liked') }}">Liked photos</a>
+
                                     @if (Session::has('impersonator'))
                                         <a class="dropdown-item" href="{{ route('user::quitimpersonating') }}">Quit
                                             Impersonation</a>

@@ -885,8 +885,10 @@ Route::middleware('forcedomain')->group(function () {
 
             Route::get('/like/{id}', 'likePhoto')->middleware(['auth'])->name('likes');
             Route::get('/dislike/{id}', 'dislikePhoto')->middleware(['auth'])->name('dislikes');
+            Route::get('/liked', 'likedPhotos')->middleware(['auth'])->name('liked');
             Route::get('/photo/{id}', 'photo')->name('view');
             Route::get('{id}', 'show')->name('album::list');
+
         });
 
         /* --- Routes related to the photo admin. (Protography only) --- */
