@@ -39,51 +39,29 @@ class CheckUtwenteAccounts extends Command
      */
     public function handle(): void
     {
-        $users = User::query()->whereNotNull('utwente_username')->get();
-        $this->info('Checking '.$users->count().' UTwente accounts.');
+        $users = User::query()->whereNotNull('utwente_username')->select(['id', 'utwente_username', 'name'])->get();
+
+        $userSns = implode('', $users->pluck('utwente_username')->map(fn($username) => "(cn=" . strtolower($username) . ")")->toArray());
+        $this->info('Checking ' . $users->count() . ' UTwente accounts.');
 
         $unlinked = [];
 
+        $remoteusers = LdapController::searchUtwente("(&(extensionattribute6=actief)(|{$userSns}))");
+        if (property_exists($remoteusers, 'error')) {
+            $this->error($remoteusers->error);
+            return;
+        }
+
+        $remoteusers = collect($remoteusers->result)->pluck('cn');
+
         foreach ($users as $user) {
 
-            // Find remote user
-            $utwente_username = $user->utwente_username;
-            $remoteusers = LdapController::searchUtwente("cn={$utwente_username}");
-
-            // See if user is active
-            $active = true;
-            if (count($remoteusers) < 1) {
-                $msg = "Not found: {$utwente_username} (".$user->name.')';
+            if ($remoteusers->filter(function ($item) use ($user) {
+                    return strtolower($item) == strtolower($user->utwente_username);
+                })->count() <= 0) {
+                $msg = "Not found: {$user->utwente_username} (" . $user->name . ')';
                 $this->info($msg);
                 $unlinked[] = $msg;
-                $active = false;
-            } elseif (! $remoteusers[0]->active) {
-                $msg = "Inactive: {$utwente_username} (".$user->name.')';
-                $this->info($msg);
-                $unlinked[] = $msg;
-                $active = false;
-            }
-
-            if ($active && property_exists($remoteusers[0], 'department')) {
-                // See if user studies CreaTe
-                if (strpos($remoteusers[0]->department, 'CREA') > 0) {
-                    $user->did_study_create = true;
-                }
-
-                // See if user studies ITech
-                if (strpos($remoteusers[0]->department, 'ITECH') > 0) {
-                    $user->did_study_itech = true;
-                }
-
-                $user->utwente_department = $remoteusers[0]->department;
-            } else {
-                $user->utwente_department = null;
-            }
-
-            $user->save();
-
-            // Act
-            if (! $active) {
                 $user->utwente_username = null;
                 $user->utwente_department = null;
                 $user->save();

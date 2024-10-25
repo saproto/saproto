@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $department
- * @property int $user_id
+ * @property int $member_id
  * @property string $mail
  * @property string $number
  * @property string $givenname
@@ -35,7 +35,7 @@ class UtAccount extends Model
     }
 
     protected $fillable = [
-        'user_id',
+        'member_id',
         'department',
         'mail',
         'number',
@@ -44,8 +44,8 @@ class UtAccount extends Model
         'found',
     ];
 
-    public function user(): BelongsTo
+    public function member(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Member::class);
     }
 }
