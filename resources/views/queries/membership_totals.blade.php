@@ -109,7 +109,7 @@
                 <div class="card-header bg-dark text-white">
                     Members who were primary members according to the old system but are now secondary members
                 </div>
-                @if(count($membersWhoArentPrimaryAnymore)>0)
+                @if(count($membersWhoArentPrimaryAnymore) > 0)
                     <table class="table table-sm table-hover mb-0">
                         @php /** @var \App\Models\Member $member */ @endphp
                         @foreach($membersWhoArentPrimaryAnymore as $member)
@@ -135,7 +135,7 @@
                 <div class="card-header bg-dark text-white">
                     Members who were not primary members according to the old system but are now
                 </div>
-                @if(count($membersWhoAreNewPrimary)>0)
+                @if(count($membersWhoAreNewPrimary) > 0)
                     <table class="table table-sm table-hover mb-0">
                         <thead>
                         <tr>
