@@ -48,6 +48,8 @@ class MollieTransaction extends Model
 
     protected $guarded = ['id'];
 
+    public static array $paidStatuses = ['paid', 'paidout'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();

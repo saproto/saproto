@@ -77,6 +77,7 @@ class QueryController extends Controller
         $count_per_type = Member::query()->selectRaw('membership_type, COUNT(*) as count')
             ->groupBy('membership_type')
             ->get()
+            /** @phpstan-ignore-next-line */
             ->keyBy(fn ($item) => $item->membership_type->value)->map(fn ($item) => $item->count);
 
         $count_total = $count_per_type->reject(static fn ($value, $key): bool => in_array($key, [MembershipTypeEnum::PENDING->value, MembershipTypeEnum::PET->value]))->sum();
@@ -116,17 +117,18 @@ class QueryController extends Controller
 
         foreach ($eventCategories as $category) {
             /** @var EventCategory $category */
+            /** @phpstan-ignore-next-line */
             $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
                 ->sum('participants');
-
+            /** @phpstan-ignore-next-line */
             $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
                 $query->whereHas('event', static function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
-
+            /** @phpstan-ignore-next-line */
             $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
@@ -141,7 +143,8 @@ class QueryController extends Controller
 
         $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
-            $event->Board = Carbon::createFromTimestamp($event->Start)->diffInYears($changeGMM);
+            /** @phpstan-ignore-next-line */
+            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);

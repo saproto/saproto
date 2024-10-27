@@ -542,7 +542,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function getWelcomeMessageAttribute(): ?string
     {
-        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->welcomeMessage;
+        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
     }
 
     protected function casts(): array

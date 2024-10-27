@@ -139,12 +139,11 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $participation_id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($participation_id, Request $request)
+    public function destroy(int $participation_id)
     {
         /** @var ActivityParticipation|null $participation */
         $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();

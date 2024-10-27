@@ -589,7 +589,7 @@ CALSCALE:GREGORIAN
                 sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
                 sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
                 sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
-                sprintf('SUMMARY:%s', $status !== '' && $status !== '0' ? sprintf('[%s] %s', $status, $event->title) : $event->title)."\r\n".
+                sprintf('SUMMARY:%s', $status === null || ($status === '' || $status === '0') ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
                 sprintf(
@@ -733,14 +733,12 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            if ($event->activity->helpingCommitteeInstances) {
-                foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
-                    HelpingCommittee::query()->create([
-                        'activity_id' => $newActivity->id,
-                        'committee_id' => $helpingCommittee->committee_id,
-                        'amount' => $helpingCommittee->amount,
-                    ]);
-                }
+            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+                HelpingCommittee::query()->create([
+                    'activity_id' => $newActivity->id,
+                    'committee_id' => $helpingCommittee->committee_id,
+                    'amount' => $helpingCommittee->amount,
+                ]);
             }
         }
 

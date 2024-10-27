@@ -100,7 +100,7 @@ class FeeCron extends Command
                         $charged->remitted[] = $user->name.' (#'.$user->id.') - Pet Member';
                         break;
                     case MembershipTypeEnum::REGULAR:
-                        if ($user->UtAccount && ! $user->member->is_primary_at_another_association) {
+                        if ($user->member->UtAccount && ! $user->member->is_primary_at_another_association) {
                             $fee_type = 'regular';
                             $charged->regular[] = $user->name.' (#'.$user->id.')';
                         } else {
@@ -130,6 +130,7 @@ class FeeCron extends Command
             $this->info('Charged '.$charged->count.' of '.Member::query()->count().' members their fee.');
         });
 
+        /** @phpstan-ignore-next-line */
         if ($charged->count > 0) {
             Mail::queue((new FeeEmailForBoard($charged))->onQueue('high'));
         }

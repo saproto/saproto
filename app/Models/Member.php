@@ -54,7 +54,9 @@ use Illuminate\Support\Str;
  * @method static Builder|Member whereIsPet($value)
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
- * @method static Builder|Member query()
+ * @method static Builder|static query()
+ * @method Builder|static primary()
+ * @method Builder|static type(MembershipTypeEnum $type)
  *
  * @mixin Eloquent
  */
@@ -97,6 +99,7 @@ class Member extends Model
 
     public function scopePrimary(Builder $query): Builder
     {
+        /** @phpstan-ignore-next-line */
         return $query->type(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');

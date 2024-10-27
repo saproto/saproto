@@ -16,6 +16,9 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property string $date
  * @property bool $closed
+ * @property int $total_users_associated
+ * @property int $total_orderlines_associated
+ * @property float $sum_associated_orderlines
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|Orderline[] $orderlines
@@ -41,6 +44,13 @@ class Withdrawal extends Model
     protected $guarded = ['id'];
 
     protected $appends = ['withdrawal_id'];
+
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'boolean',
+        ];
+    }
 
     public function orderlines(): HasMany
     {
@@ -85,10 +95,12 @@ class Withdrawal extends Model
         return 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date));
     }
 
-    protected function casts(): array
+    public function recalculateTotals(): void
     {
-        return [
-            'closed' => 'boolean',
-        ];
+        $this->update([
+            'total_users_associated' => $this->users()->count(),
+            'total_orderlines_associated' => $this->orderlines()->count(),
+            'sum_associated_orderlines' => $this->orderlines()->sum('total_price'),
+        ]);
     }
 }

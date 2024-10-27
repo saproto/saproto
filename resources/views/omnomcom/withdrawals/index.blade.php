@@ -52,10 +52,10 @@
                                     </td>
                                     <td>{{ $withdrawal->withdrawalId }}</td>
                                     <td>{{ $withdrawal->date }}</td>
-                                    <td>{{ $withdrawal->users_count }}</td>
-                                    <td>{{ $withdrawal->orderlines_count }}</td>
+                                    <td>{{ $withdrawal->total_users_associated }}</td>
+                                    <td>{{ $withdrawal->total_orderlines_associated }}</td>
                                     <td>
-                                        &euro;{{ number_format($withdrawal->orderlines_sum_total_price, 2, ',', '.') }}</td>
+                                        &euro;{{ number_format($withdrawal->sum_associated_orderlines, 2, ',', '.') }}</td>
                                     <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
                                     <td>
                                         <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
