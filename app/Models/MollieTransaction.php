@@ -48,8 +48,6 @@ class MollieTransaction extends Model
 
     protected $guarded = ['id'];
 
-    public static array $paidStatuses = ['paid', 'paidout'];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
@@ -84,7 +82,7 @@ class MollieTransaction extends Model
             return 'failed';
         }
 
-        if ($status === 'paid' || $status === 'paidout') {
+        if (in_array($status, config('omnomcom.mollie.paid_statuses'))) {
             return 'paid';
         }
 

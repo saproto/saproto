@@ -111,7 +111,7 @@ class OrderLine extends Model
             ->where(function ($query) {
                 $query->whereDoesntHave('molliePayment')
                     ->orWhereHas('molliePayment', static function ($query) {
-                        $query->whereNotIn('status', ['paid', 'paidout']);
+                        $query->whereNotIn('status', config('omnomcom.mollie.paid_statuses'));
                     });
             })
             ->where('total_price', '!=', 0);
