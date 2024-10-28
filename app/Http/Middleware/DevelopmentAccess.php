@@ -8,12 +8,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DevelopmentAccess
 {
     /** @var string[] */
-    protected $except = [
+    protected array $except = [
         'webhook/*',
     ];
 
@@ -39,12 +41,8 @@ class DevelopmentAccess
 
     /**
      * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return Closure
      */
-    public function handle($request, $next)
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         if (config('app-proto.debug-whitelist') == null) {
             return $next($request);
