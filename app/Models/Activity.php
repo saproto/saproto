@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float|null $price
  * @property float $no_show_fee
  * @property int $participants
- * @property int $attendees
+ * @property int|null $attendees
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
@@ -293,9 +293,9 @@ class Activity extends Validatable
     }
 
     /**
-     * @return int how many people actually showed up
+     * @return int|null how many people actually showed up
      */
-    public function getAttendees(): int
+    public function getAttendees(): ?int
     {
         $present = $this->getPresent();
 

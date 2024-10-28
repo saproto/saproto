@@ -34,7 +34,8 @@
                     </tr>
 
                     <tr>
-                        <td><strong>Total number of members that are affiliated with the UT</strong></td>
+                        <td><strong>Total number of members that are affiliated with the UT</strong><br>
+                            <sup>These are the primary members counting towards the EEMCS subsidy</sup></td>
                         <td>{{ $ut }}</td>
                     </tr>
 

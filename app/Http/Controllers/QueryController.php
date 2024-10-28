@@ -46,17 +46,21 @@ class QueryController extends Controller
 
     public function membershipTotals(Request $request)
     {
+        $utQuery = User::query()->whereHas('member', function ($q) {
+            $q->primary()->whereHas('UtAccount', function ($q) {
+                $q->where('department', 'like', '%CREA%')->orWhere('department', 'like', '%TECH%');
+            });
+        });
+
         if ($request->has('export_subsidies')) {
-            $export_subsidies = User::query()->whereHas('member', function ($q) {
-                $q->primary();
-            })->get();
+            $export_subsidies = $utQuery->with('member.UtAccount')->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
-            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
+            return Response::make(view('queries.export_subsidies', ['users' => $export_subsidies]), 200, $headers);
         }
 
         $activeUserQuery = User::query()->whereHas('member', function ($query) {
@@ -64,11 +68,11 @@ class QueryController extends Controller
         })->whereHas('committees');
 
         if ($request->has('export_active')) {
-            $export_active = $activeUserQuery->get();
+            $export_active = $activeUserQuery->with('committees')->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="active_member_overview%s.csv"', date('d_m_Y')),
+                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
@@ -86,9 +90,7 @@ class QueryController extends Controller
 
         $count_primary = Member::query()->primary()->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->primary()->orWhereHas('user', function ($query) {
-            $query->whereNotNull('utwente_username');
-        })->count();
+        $count_ut = $utQuery->count();
 
         return view('queries.membership_totals', [
             'total' => $count_total,
