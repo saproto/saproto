@@ -6,20 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property string department
- * @property int user_id
- * @property string mail
- * @property string number
- * @property string givenname
- * @property string|null middlename
- * @property string surname
- * @property int account_expires_at
- * @property bool found
- * @property User user
- * @property mixed id
- * @property mixed created_at
- * @property mixed updated_at
- * @property mixed deleted_at
+ * @property string $department
+ * @property int $member_id
+ * @property string $mail
+ * @property string $number
+ * @property string $givenname
+ * @property string|null $middlename
+ * @property string $surname
+ * @property int $account_expires_at
+ * @property bool $found
+ * @property Member $member
+ * @property mixed $id
+ * @property mixed $created_at
+ * @property mixed $updated_at
+ * @property mixed $deleted_at
  */
 class UtAccount extends Model
 {
@@ -35,8 +35,8 @@ class UtAccount extends Model
         'found',
     ];
 
-    public function user(): BelongsTo
+    public function member(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Member::class);
     }
 }
