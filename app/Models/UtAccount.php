@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $givenname
  * @property string $surname
  * @property bool $found
- * @property User $user
+ * @property Member $member
  * @property int $id
  * @property Carbon $created_at
  * @property Carbon $updated_at

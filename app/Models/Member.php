@@ -144,7 +144,7 @@ class Member extends Model
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
-        if ($membershipOrderline instanceof OrderLine) {
+        if ($membershipOrderline != null) {
             return match ($this->getMembershipOrderline()->product->id) {
                 config('omnomcom.fee')['regular'] => 'primary',
                 config('omnomcom.fee')['reduced'] => 'secondary',
