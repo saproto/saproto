@@ -18,6 +18,7 @@ class Authenticate extends LaravelAuthenticate
      * @var Guard
      */
     protected $auth;
+
     /** @phpstan-ignore-line */
 
     /**
