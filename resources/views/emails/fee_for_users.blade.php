@@ -27,7 +27,9 @@
                 You have been charged the regular membership fee of &euro;{{ number_format($fee_amount, 2) }} because we
                 have determined, using information provided to us by the University of Twente, that you are currently
                 studying at the University of Twente,
-                and have studied Creative Technology or Interaction Technology. You also have not indicated to be a
+                and have studied or are studying Creative Technology or Interaction Technology. You also have not
+                indicated to
+                be a
                 primary member at another study association.
             </p>
 

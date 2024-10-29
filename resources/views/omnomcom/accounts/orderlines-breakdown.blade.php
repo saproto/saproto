@@ -55,8 +55,8 @@
                                 <tr class="collapse innercollapse innercollapse-{{ $account_id }}-{{ $date }}">
                                     <td></td>
                                     <td></td>
-                                    <td>{{$product->product_name}}</td>
-                                    <td> &euro;{{number_format($product->total, 2)}}</td>
+                                    <td>{{ $product->product_name }}</td>
+                                    <td> &euro;{{ number_format($product->total, 2) }}</td>
                                 </tr>
                             @endforeach
                         @endforeach
@@ -90,7 +90,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{csp_nonce()}}">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', _ => {
             const dayList = Array.from(document.getElementsByClassName('collapse'));
             dayList.forEach(day => {
