@@ -1059,6 +1059,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', 'activityOverview')->name('activity_overview');
         Route::get('/activity_statistics', 'activityStatistics')->name('activity_statistics');
         Route::get('/membership_totals', 'membershipTotals')->name('membership_totals');
+        Route::get('/new_membership_totals', 'newMembershipTotals')->name('new_membership_totals');
     });
 
     /* --- Routes related to the mini-sites --- */
