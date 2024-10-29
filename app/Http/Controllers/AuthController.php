@@ -144,7 +144,7 @@ class AuthController extends Controller
 
         Session::flash('register_persist', $request->all());
         $this->validate($request, [
-            'email' => ['required', 'unique:users', 'email', new NotUtwenteEmail],
+            'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'name' => 'required|string',
             'calling_name' => 'required|string',
             'g-recaptcha-response' => 'required|recaptcha',

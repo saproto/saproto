@@ -216,7 +216,7 @@ class SearchController extends Controller
 
     private function getGenericSearchQuery(Model|string $model, ?string $query, array $attributes): ?Builder
     {
-        if ($query === null || $query === '' || $query === '0') {
+        if (empty($query)) {
             return null;
         }
 

@@ -57,7 +57,7 @@ class FeeCron extends Command
             $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->whereDoesntHave('orderlines', function ($q) use ($yearstart) {
             $q->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
-        })->with('member', 'UtAccount');
+        })->with('member.UtAccount');
 
         $charged = (object) [
             'count' => 0,
