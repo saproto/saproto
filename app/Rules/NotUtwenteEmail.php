@@ -2,44 +2,26 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class NotUtwenteEmail implements Rule
+class NotUtwenteEmail implements ValidationRule
 {
     /**
-     * Create a new rule instance.
+     * Run the validation rule.
      *
-     * @return void
+     * @param  \Closure(string, ?string=): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function __construct()
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        //
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     */
-    public function passes($attribute, $value): bool
-    {
-        $domainPart = explode('@', $value)[1] ?? null;
+         $domainPart = explode('@', $value)[1] ?? null;
 
         if ($domainPart === null || $domainPart === '' || $domainPart === '0') {
-            return false;
+            $fail('The :attribute may not be a utwente email-address'); // maybe a different error, since this means the email wasnt parsed properly
         }
 
-        return ! str_contains(strtolower($domainPart), 'utwente');
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {
-        return 'The :attribute may not be a utwente email-address';
+        if (str_contains(strtolower($domainPart), 'utwente')) {
+            $fail('The :attribute may not be a utwente email-address');
+        }
     }
 }
