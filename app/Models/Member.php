@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
@@ -21,16 +23,20 @@ use Illuminate\Support\Str;
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
  * @property bool $is_lifelong
+ * @property MembershipTypeEnum $membership_type
  * @property bool $is_honorary
  * @property bool $is_donor
  * @property bool $is_pending
  * @property bool $is_pet
+ * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read User $user
+ * @property Carbon|null $until
+ * @property User $user
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ * @property UtAccount|null $UtAccount
  *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
@@ -66,22 +72,44 @@ class Member extends Model
 
     protected $guarded = ['id', 'user_id'];
 
-    /** @return BelongsTo */
-    public function user()
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'membership_type' => MembershipTypeEnum::class,
+        ];
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
-    public function membershipForm()
+    public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
-    /** @return BelongsTo */
-    public function customOmnomcomSound()
+    public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
+    }
+
+    public function UtAccount(): HasOne
+    {
+        return $this->hasOne(UtAccount::class);
+    }
+
+    public function scopePrimary(Builder $query): Builder
+    {
+        return $query->type(MembershipTypeEnum::REGULAR)
+            ->where('is_primary_at_another_association', false)
+            ->whereHas('UtAccount');
+    }
+
+    public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
+    {
+        return $query->where('membership_type', $type);
     }
 
     public static function countActiveMembers(): int
@@ -103,8 +131,7 @@ class Member extends Model
         })->count();
     }
 
-    /** @return OrderLine|null */
-    public function getMembershipOrderline()
+    public function getMembershipOrderline(): ?OrderLine
     {
         $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
@@ -119,7 +146,7 @@ class Member extends Model
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
-        if ($membershipOrderline) {
+        if ($membershipOrderline != null) {
             return match ($this->getMembershipOrderline()->product->id) {
                 config('omnomcom.fee')['regular'] => 'primary',
                 config('omnomcom.fee')['reduced'] => 'secondary',
@@ -136,7 +163,7 @@ class Member extends Model
      *
      * @param  $name  string
      */
-    public static function createProtoUsername($name): string
+    public static function createProtoUsername(string $name): string
     {
         $name = explode(' ', $name);
         if (count($name) > 1) {
@@ -155,18 +182,11 @@ class Member extends Model
         $usernameBase = substr($usernameBase, 0, 17);
 
         $username = $usernameBase;
-        $i = \App\Models\Member::query()->where('proto_username', $username)->withTrashed()->count();
+        $i = Member::query()->where('proto_username', $username)->withTrashed()->count();
         if ($i > 0) {
             return "{$usernameBase}-{$i}";
         }
 
         return $username;
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 }
