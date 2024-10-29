@@ -164,6 +164,8 @@ class QueryController extends Controller
             'donor' => $count_donor,
             'pending' => $count_pending,
             'pet' => $count_pet,
+            'membersWhoArentPrimaryAnymore' => [],
+            'membersWhoAreNewPrimary' => [],
         ]);
     }
 

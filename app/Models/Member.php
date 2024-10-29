@@ -109,7 +109,7 @@ class Member extends Model
 
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
-        return $query->type($type);
+        return $query->where('membership_type', $type);
     }
 
     public static function countActiveMembers(): int
