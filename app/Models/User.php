@@ -476,7 +476,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->where('membership_type', MembershipTypeEnum::PENDING)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
 
         return $memberships;

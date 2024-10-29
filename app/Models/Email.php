@@ -137,7 +137,7 @@ class Email extends Model
 
         if ($this->to_pending) {
             return User::query()->whereHas('member', static function ($q) {
-                $q->where('membership_type', MembershipTypeEnum::PENDING);
+                $q->type(MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
 

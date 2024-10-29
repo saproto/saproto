@@ -118,7 +118,7 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('membership_type', MembershipTypeEnum::PENDING);
+            $query->type(MembershipTypeEnum::PENDING);
         })->count();
     }
 

@@ -33,7 +33,7 @@ class UserAdminController extends Controller
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
             'pending' => $userQuery->whereHas('member', static function ($q) {
-                $q->where('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
+                $q->type(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function ($q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
