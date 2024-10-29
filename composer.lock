@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "0e3308f4a00035af530801436daf231f",
+  "content-hash": "77628ca02dc10506fdfede13230d51ce",
   "packages": [
     {
       "name": "aacotroneo/laravel-saml2",
@@ -2090,16 +2090,16 @@
     },
     {
       "name": "laravel/framework",
-      "version": "v11.28.1",
+      "version": "v11.29.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/framework.git",
-        "reference": "3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c"
+        "reference": "425054512c362835ba9c0307561973c8eeac7385"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/framework/zipball/3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c",
-        "reference": "3ef5c8a85b4c598d5ffaf98afd72f6a5d6a0be2c",
+        "url": "https://api.github.com/repos/laravel/framework/zipball/425054512c362835ba9c0307561973c8eeac7385",
+        "reference": "425054512c362835ba9c0307561973c8eeac7385",
         "shasum": ""
       },
       "require": {
@@ -2295,7 +2295,7 @@
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
       },
-      "time": "2024-10-16T16:32:21+00:00"
+      "time": "2024-10-22T14:13:31+00:00"
     },
     {
       "name": "laravel/helpers",
@@ -3454,6 +3454,75 @@
         }
       ],
       "time": "2024-03-23T07:42:40+00:00"
+    },
+    {
+      "name": "litesaml/lightsaml",
+      "version": "v4.2.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/litesaml/lightsaml.git",
+        "reference": "da88de24e699418918a128f0142dd09e2c41dd38"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/litesaml/lightsaml/zipball/da88de24e699418918a128f0142dd09e2c41dd38",
+        "reference": "da88de24e699418918a128f0142dd09e2c41dd38",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=7.4",
+        "psr/event-dispatcher": "^1.0",
+        "robrichards/xmlseclibs": "~2.0|~3.0|~4.0",
+        "symfony/http-foundation": "~5.0|~6.0|~7.0"
+      },
+      "require-dev": {
+        "litesaml/schemas": "~1.0.0",
+        "marcocesarato/php-conventional-changelog": "^1.15",
+        "monolog/monolog": "^2.0|^3.0",
+        "phpstan/phpstan": "^1.8",
+        "phpunit/phpunit": "~8.4|~9.5",
+        "pimple/pimple": "~3.0",
+        "squizlabs/php_codesniffer": "^3.6",
+        "symfony/css-selector": "~5.0|~6.0|~7.0",
+        "symfony/dom-crawler": "~5.0|~6.0|~7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "LightSaml\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "William",
+          "email": "work@suppo.fr"
+        },
+        {
+          "name": "Milos Tomic",
+          "email": "tmilos@gmail.com",
+          "homepage": "https://github.com/tmilos/",
+          "role": "Developer"
+        }
+      ],
+      "description": "SAML 2.0 PHP library",
+      "keywords": [
+        "SAML 2.0",
+        "Single Logout",
+        "Single SignOn",
+        "library",
+        "lightSAML",
+        "php"
+      ],
+      "support": {
+        "docs": "https://docs.litesaml.com",
+        "issues": "https://github.com/litesaml/lightsaml/issues",
+        "source": "https://github.com/litesaml/lightsaml"
+      },
+      "time": "2024-02-08T11:59:00+00:00"
     },
     {
       "name": "milon/barcode",
@@ -9763,16 +9832,16 @@
     },
     {
       "name": "laravel/sail",
-      "version": "v1.36.0",
+      "version": "v1.37.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/sail.git",
-        "reference": "f184d3d687155d06bc8cb9ff6dc48596a138460c"
+        "reference": "5d385f2e698f0f774cdead82aff5d989fb95309b"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/sail/zipball/f184d3d687155d06bc8cb9ff6dc48596a138460c",
-        "reference": "f184d3d687155d06bc8cb9ff6dc48596a138460c",
+        "url": "https://api.github.com/repos/laravel/sail/zipball/5d385f2e698f0f774cdead82aff5d989fb95309b",
+        "reference": "5d385f2e698f0f774cdead82aff5d989fb95309b",
         "shasum": ""
       },
       "require": {
@@ -9822,7 +9891,7 @@
         "issues": "https://github.com/laravel/sail/issues",
         "source": "https://github.com/laravel/sail"
       },
-      "time": "2024-10-10T13:26:02+00:00"
+      "time": "2024-10-21T17:13:38+00:00"
     },
     {
       "name": "laravel/tinker",
@@ -10190,16 +10259,16 @@
     },
     {
       "name": "pestphp/pest",
-      "version": "v3.4.2",
+      "version": "v3.5.0",
       "source": {
         "type": "git",
         "url": "https://github.com/pestphp/pest.git",
-        "reference": "2903a7e62100171d5faf4e50cda755ffeadedc57"
+        "reference": "eaeb133c77f3f5382620f0307c3b45b34961bcfc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/pestphp/pest/zipball/2903a7e62100171d5faf4e50cda755ffeadedc57",
-        "reference": "2903a7e62100171d5faf4e50cda755ffeadedc57",
+        "url": "https://api.github.com/repos/pestphp/pest/zipball/eaeb133c77f3f5382620f0307c3b45b34961bcfc",
+        "reference": "eaeb133c77f3f5382620f0307c3b45b34961bcfc",
         "shasum": ""
       },
       "require": {
@@ -10286,7 +10355,7 @@
       ],
       "support": {
         "issues": "https://github.com/pestphp/pest/issues",
-        "source": "https://github.com/pestphp/pest/tree/v3.4.2"
+        "source": "https://github.com/pestphp/pest/tree/v3.5.0"
       },
       "funding": [
         {
@@ -10298,7 +10367,7 @@
           "type": "github"
         }
       ],
-      "time": "2024-10-20T11:47:25+00:00"
+      "time": "2024-10-22T14:33:27+00:00"
     },
     {
       "name": "pestphp/pest-plugin",
@@ -12818,7 +12887,9 @@
   "platform": {
     "ext-calendar": "*",
     "ext-curl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-iconv": "*",
+    "ext-zlib": "*"
   },
   "platform-dev": [],
   "plugin-api-version": "2.6.0"
