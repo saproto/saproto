@@ -14,13 +14,8 @@ class NotUtwenteEmail implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-         $domainPart = explode('@', $value)[1] ?? null;
 
-        if ($domainPart === null || $domainPart === '' || $domainPart === '0') {
-            $fail('The :attribute may not be a utwente email-address'); // maybe a different error, since this means the email wasnt parsed properly
-        }
-
-        if (str_contains(strtolower($domainPart), 'utwente')) {
+        if (str_ends_with(strtolower($value)), 'utwente')) {
             $fail('The :attribute may not be a utwente email-address');
         }
     }
