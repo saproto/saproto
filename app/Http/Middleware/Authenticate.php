@@ -7,7 +7,6 @@ use Illuminate\Auth\Middleware\Authenticate as LaravelAuthenticate;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 
 class Authenticate extends LaravelAuthenticate
@@ -28,7 +27,7 @@ class Authenticate extends LaravelAuthenticate
      * @param  string[]  $guards
      * @return RedirectResponse|Closure
      */
-    public function handle($request, Closure $next, ...$guards): Response|RedirectResponse
+    public function handle($request, Closure $next, ...$guards): mixed
     {
         if (auth()->guest()) {
             return Redirect::route('login::show');

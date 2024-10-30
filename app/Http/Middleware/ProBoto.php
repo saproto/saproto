@@ -13,7 +13,7 @@ class ProBoto
      *
      * @param  Closure(Request):Response  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): mixed
     {
         $authHeader = request()->header('Authorization');
         if ($authHeader) {
