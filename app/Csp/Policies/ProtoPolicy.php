@@ -45,7 +45,7 @@ class ProtoPolicy extends Policy
                     'https://discordapp.com/api/guilds/600338792766767289/widget.json',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
-                    'https://analytics.saproto.nl/matomo.js',
+                    'https://analytics.saproto.nl/',
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com',
                     'https://www.google.com/recaptcha/api.js',
@@ -94,6 +94,7 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://api.fontawesome.com/',
+                    'https://analytics.saproto.nl/',
                     ...(App::environment('production') ? [] : ['ws://localhost:*']),
                 ]);
         } catch (InvalidValueSet|InvalidDirective $e) {

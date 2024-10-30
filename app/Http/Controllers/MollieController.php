@@ -333,7 +333,7 @@ class MollieController extends Controller
      */
     public static function getPaymentMethods()
     {
-        if (app()->environment('local')) {
+        if (App::environment('local')) {
             return null;
         }
 
