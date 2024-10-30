@@ -52,7 +52,8 @@
 
                 </div>
 
-                <img class="card-img-bottom" src="{!! $photo->photo_url !!}" style="max-height: 70vh; object-fit:scale-down">
+                <img class="card-img-bottom" src="{!! $photo->photo_url !!}"
+                     style="max-height: 70vh; object-fit:scale-down">
 
             </div>
 
@@ -60,8 +61,8 @@
                 <div class="card-body text-center">
                     <i class="fas fa-shield-alt fa-fw me-3"></i>
                     If there is a photo that you would like removed, please contact
-                    <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
-                        photos&#64;{{ config('proto.emaildomain') }}.
+                    <a href="mailto:photos&#64;{{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}">
+                        photos&#64;{{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}.
                     </a>
                 </div>
             </div>
@@ -78,7 +79,7 @@
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
                 e.preventDefault();
 
-            switch(e.key) {
+            switch (e.key) {
                 @if ($photo->previous != null)
                 case 'ArrowLeft':
                     window.location.href = '{{route("photo::view", ["id"=> $photo->previous])}}';
@@ -100,18 +101,18 @@
                     break;
                 @endif
             }
-        })
+        });
     </script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        history.replaceState(null, document.title, location.pathname+"#!/history")
-        history.pushState(null, document.title, location.pathname)
+        history.replaceState(null, document.title, location.pathname + '#!/history');
+        history.pushState(null, document.title, location.pathname);
 
-        window.addEventListener("popstate", function() {
-            if(location.hash === "#!/history") {
-                history.replaceState(null, document.title, location.pathname)
-                setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->albumPage }}"), 10)
+        window.addEventListener('popstate', function() {
+            if (location.hash === '#!/history') {
+                history.replaceState(null, document.title, location.pathname);
+                setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->albumPage }}"), 10);
             }
-        }, false)
+        }, false);
     </script>
 @endpush

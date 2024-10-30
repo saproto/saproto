@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\OrderLine;
 use App\Models\Product;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
 class FeeCron extends Command
@@ -61,7 +62,7 @@ class FeeCron extends Command
         $emails = $students['emails'];
         $usernames = $students['usernames'];
 
-        $already_paid = OrderLine::query()->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
+        $already_paid = OrderLine::query()->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
         $charged = (object) [
             'count' => 0,
@@ -83,7 +84,7 @@ class FeeCron extends Command
             $email_remittance_reason = null;
 
             if ($member->is_lifelong || $member->is_honorary || $member->is_donor || $member->is_pet) {
-                $fee = config('omnomcom.fee')['remitted'];
+                $fee = Config::array('omnomcom.fee')['remitted'];
                 $email_fee = 'remitted';
                 if ($member->is_honorary) {
                     $reason = 'Honorary Member';
@@ -101,11 +102,11 @@ class FeeCron extends Command
 
                 $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - {$reason}";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
-                $fee = config('omnomcom.fee')['regular'];
+                $fee = Config::array('omnomcom.fee')['regular'];
                 $email_fee = 'regular';
                 $charged->regular[] = $member->user->name.' (#'.$member->user->id.')';
             } else {
-                $fee = config('omnomcom.fee')['reduced'];
+                $fee = Config::array('omnomcom.fee')['reduced'];
                 $email_fee = 'reduced';
                 $charged->reduced[] = $member->user->name.' (#'.$member->user->id.')';
             }

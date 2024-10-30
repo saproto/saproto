@@ -6,6 +6,7 @@ use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
 class BirthdayCron extends Command
@@ -61,7 +62,7 @@ class BirthdayCron extends Command
                 Mail::to($user)->queue((new BirthdayEmail($user))->onQueue('medium'));
             }
 
-            Mail::to('board@'.config('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
+            Mail::to('board@'.Config::string('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
 
             $this->info('Done!');
         } else {

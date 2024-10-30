@@ -21,7 +21,8 @@
                 <i class="fas fa-list"></i> <span class="d-none d-sm-inline">Album overview</span>
             </a>
             @can('protography')
-                <a href="{{route("photo::admin::edit", ['id' => $photos->album_id])}}" class="btn btn-success float-start me-3">
+                <a href="{{route("photo::admin::edit", ['id' => $photos->album_id])}}"
+                   class="btn btn-success float-start me-3">
                     <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit album</span>
                 </a>
             @endcan
@@ -64,8 +65,8 @@
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw me-3"></i>
             If there is a photo that you would like removed, please contact
-            <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
-                photos&#64;{{ config('proto.emaildomain') }}.
+            <a href="mailto:photos&#64;{{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}">
+                photos&#64;{{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}.
             </a>
         </div>
 

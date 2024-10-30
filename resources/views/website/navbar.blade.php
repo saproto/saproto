@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('homepage') }}">
-                @if(config('app.env') != 'production')
+                @if(!App::environment('production'))
                     <i class="fas fa-hammer me-2"></i>
                     <span class="text-uppercase">{{ config('app.env') }}</span> |
                 @endif
@@ -56,7 +56,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @foreach(config('omnomcom.stores') as $name => $store)
+                                    @foreach(\Illuminate\Support\Facades\Config::array('omnomcom.stores') as $name => $store)
                                         @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
                                             <a class="dropdown-item"
                                                href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">

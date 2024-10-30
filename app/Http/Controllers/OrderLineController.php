@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -81,7 +82,7 @@ class OrderLineController extends Controller
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
             'methods' => $payment_methods ?? [],
-            'use_fees' => config('omnomcom.mollie')['use_fees'],
+            'use_fees' => Config::boolean('omnomcom.mollie.use_fees'),
             'outstandingAmount' => $outstandingAmount,
             'outstanding' => $outstanding,
         ]);
@@ -94,7 +95,7 @@ class OrderLineController extends Controller
     {
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', config('omnomcom.alfred-account'));
+                $query->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
             })->whereDate('created_at', (Carbon::today()));
         } else {
             $orderlines = OrderLine::query()->whereDate('created_at', Carbon::today());
@@ -132,7 +133,7 @@ class OrderLineController extends Controller
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', config('omnomcom.alfred-account'));
+                $query->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
             })->whereDate('created_at', Carbon::parse($date));
         } else {
             $orderlines = OrderLine::query()->whereDate('created_at', Carbon::parse($date));
@@ -159,7 +160,7 @@ class OrderLineController extends Controller
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', config('omnomcom.alfred-account'));
+                $query->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
             })->where('user_id', $user);
         } else {
             $orderlines = OrderLine::query()->where('user_id', $user);

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 
 class ForceDomain
@@ -15,8 +16,8 @@ class ForceDomain
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! App::environment('local') && $request->getHttpHost() != config('app.forcedomain')) {
-            return Redirect::to(config('app-proto.app-url').'/'.($request->path() == '/' ? '' : $request->path()), 301);
+        if (! App::environment('local') && Config::string('app.forcedomain') !== null && $request->getHttpHost() != Config::string('app.forcedomain')) {
+            return Redirect::to(Config::string('app-proto.app-url').'/'.($request->path() == '/' ? '' : $request->path()), 301);
         }
 
         return $next($request);

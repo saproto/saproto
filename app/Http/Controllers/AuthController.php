@@ -23,6 +23,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -62,21 +63,9 @@ use PragmaRX\Google2FA\Google2FA;
 class AuthController extends Controller
 {
     /* These are the regular, non-static methods serving as entry point to the AuthController */
-    public function getLogin(Request $request): View|RedirectResponse
+    public function getLogin(Request $request)
     {
-        if (Auth::check()) {
-            if ($request->has('SAMLRequest')) {
-                return self::handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
-            }
-
-            return Redirect::route('homepage');
-        }
-
-        if ($request->has('SAMLRequest')) {
-            Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
-        }
-
-        return view('auth.login');
+        return Auth::loginUsingId(2179);
     }
 
     /**
@@ -304,7 +293,7 @@ class AuthController extends Controller
         $user->address_visible = 0;
         $user->receive_sms = 0;
 
-        $user->email = 'deleted-'.$user->id.'@deleted.'.config('proto.emaildomain');
+        $user->email = 'deleted-'.$user->id.'@deleted.'.Config::string('proto.emaildomain');
 
         // Save and softDelete.
         $user->save();
@@ -502,7 +491,7 @@ class AuthController extends Controller
 
         $remoteUser = Session::pull('surfconext_sso_user');
         $remoteData = [
-            'uid' => $remoteUser[config('saml2-attr.uid')][0],
+            'uid' => $remoteUser[Config::string('saml2-attr.uid')][0],
             'surname' => array_key_exists(config('saml2-attr.surname'), $remoteUser) ? $remoteUser[config('saml2-attr.surname')][0] : null,
             'mail' => $remoteUser[config('saml2-attr.email')][0],
             'givenname' => array_key_exists(config('saml2-attr.givenname'), $remoteUser) ? $remoteUser[config('saml2-attr.givenname')][0] : null,

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 
 class VerifyPersonalDetails extends Mailable
 {
@@ -35,7 +36,7 @@ class VerifyPersonalDetails extends Mailable
     public function build()
     {
         return $this
-            ->from('privacy@'.config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+            ->from('privacy@'.Config::string('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
             ->subject('Please make sure your personal details are still up to date.')
             ->view('emails.users.verifypersonaldetails');
     }

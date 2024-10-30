@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
@@ -318,8 +319,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         // Update DirectAdmin Password
         if ($this->is_member) {
             $da = new DirectAdmin;
-            $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
-            $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
+            $da->connect(config('directadmin.da-hostname'), Config::string('directadmin.da-port'));
+            $da->set_login(Config::string('directadmin.da-username'), config('directadmin.da-password'));
             $da->set_method('POST');
             $da->query('/CMD_API_POP', [
                 'action' => 'modify',
@@ -417,7 +418,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return string */
     public function getDisplayEmail()
     {
-        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, Config::string('proto.emaildomain')) : $this->email;
     }
 
     /**

@@ -39,7 +39,7 @@
 
     <p>
         Kind regards,<br>
-        {{ config('proto.secretary') }}<br>
+        {{ \Illuminate\Support\Facades\Config::string('proto.secretary') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

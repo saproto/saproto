@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -45,7 +46,7 @@ class MollieController extends Controller
         $total = 0;
         $requested_method = $request->input('method');
         $selected_method = null;
-        $use_fees = config('omnomcom.mollie')['use_fees'];
+        $use_fees = Config::boolean('omnomcom.mollie.use_fees');
         $available_methods = $use_fees ? self::getPaymentMethods() : null;
 
         $orderlines = [];
@@ -241,7 +242,7 @@ class MollieController extends Controller
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
 
-        if (config('omnomcom.mollie')['use_fees']) {
+        if (Config::boolean('omnomcom.mollie.use_fees')) {
             $fee = round(
                 $selected_method->pricing[0]->fixed->value +
                 $total * (floatval($selected_method->pricing[0]->variable) / 100),
@@ -277,7 +278,7 @@ class MollieController extends Controller
                 'currency' => 'EUR',
                 'value' => $total,
             ],
-            'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
+            'method' => Config::boolean('omnomcom.mollie.use_fees') ? $selected_method->id : null,
             'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
