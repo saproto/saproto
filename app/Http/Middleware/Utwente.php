@@ -13,10 +13,10 @@ class Utwente
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (Auth::user()?->utwente_username != null) {
-            return $next($request);
+        if (Auth::user()?->utwente_username === null) {
+            abort(403, 'You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.');
         }
 
-        return response('You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.', 403);
+        return $next($request);
     }
 }
