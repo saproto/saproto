@@ -71,7 +71,7 @@
     <a href="{{route('homepage')}}">
         @if(Auth::check() && Auth::user()->theme)
             <img
-                src="{{ asset('images/logo/'.\Illuminate\Support\Facades\Config::array('proto.logoThemes')[Auth::user()->theme].'.png') }}"
+                src="{{ asset('images/logo/'.Config::array('proto.logoThemes')[Auth::user()->theme].'.png') }}"
                 style="width: 30%; max-width: 200px;" alt="ProtoLogo" />
         @else
             <img src="{{ asset('images/logo/regular.png') }}" style="width: 30%; max-width: 200px;" alt="ProtoLogo" />

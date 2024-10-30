@@ -56,7 +56,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @foreach(\Illuminate\Support\Facades\Config::array('omnomcom.stores') as $name => $store)
+                                    @foreach(Config::array('omnomcom.stores') as $name => $store)
                                         @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
                                             <a class="dropdown-item"
                                                href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
@@ -113,7 +113,8 @@
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp ProTube
                                             Admin</a>
-                                        <a class="dropdown-item" href="{{ config('protube.remote_url') }}">ProTube
+                                        <a class="dropdown-item"
+                                           href="{{ Config::string('protube.remote_url') }}">ProTube
                                             Admin</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
@@ -211,7 +212,9 @@
 
                         @cannot('board')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ config('protube.remote_url') }}" target="_blank"
+                                <a class="nav-link"
+                                   href="{{ Config::string('protube.remote_url') }}"
+                                   target="_blank"
                                    role="button">
                                     ProTube
                                     @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())

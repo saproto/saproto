@@ -56,10 +56,10 @@
 
         </p>
 
-        <a href="mailto:{{ $committee->slug . "@" . \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}"
+        <a href="mailto:{{ $committee->slug . "@" . Config::string('proto.emaildomain') }}"
            class="card-link text-info">
             E-mail them
-            at {{ $committee->slug . "@" . \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}
+            at {{ $committee->slug . "@" . Config::string('proto.emaildomain') }}
         </a>
 
     </div>

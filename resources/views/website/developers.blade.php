@@ -62,7 +62,7 @@
 
                     <p class="card-text">
                         If you find any security flaw on our website, please <a
-                            href="mailto:{{ $committee->slug . "@" . \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}">e-mail
+                            href="mailto:{{ $committee->slug . "@" . Config::string('proto.emaildomain') }}">e-mail
                             the
                             developers</a> immediately. We will make sure the security hole gets fixed as soon as
                         possible.
@@ -94,7 +94,7 @@
                         If you feel the desire to contribute to the website directly, do not hestitate to fork our
                         repository and make a pull request with your changes. We welcome all input and be happy to help
                         you get your idea integrated in the website! Just want to ask something? <a
-                            href="mailto:{{ $committee->slug . "@" . \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}">Shoot
+                            href="mailto:{{ $committee->slug . "@" . Config::string('proto.emaildomain') }}">Shoot
                             us an
                             e-mail!</a>
                     </p>

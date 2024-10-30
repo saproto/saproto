@@ -118,7 +118,7 @@
 
                     <p>
                         Kind regards,<br>
-                        {{ \Illuminate\Support\Facades\Config::string('proto.internal') }}<br>
+                        {{ Config::string('proto.internal') }}<br>
                         <em>Officer of Internal Affairs</em>
                     </p>
 

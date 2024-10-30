@@ -221,8 +221,8 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
 
-                if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', config('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', config('omnomcom.alcohol-end')))) {
-                    $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
+                if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', Config::string('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', Config::string('omnomcom.alcohol-end')))) {
+                    $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".Config::string('omnomcom.alcohol-start').' and '.Config::string('omnomcom.alcohol-end').'.';
 
                     return json_encode($result);
                 }
@@ -233,7 +233,7 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::query()->find($id);
 
-                if ($product->id == config('omnomcom.protube-skip')) {
+                if ($product->id == Config::integer('omnomcom.protube-skip')) {
                     $skipped = ProTubeApiService::skipSong();
                     if (! $skipped) {
                         continue;

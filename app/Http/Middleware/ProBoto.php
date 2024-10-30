@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProBoto
@@ -19,7 +20,7 @@ class ProBoto
         if ($authHeader) {
             //Remove the "Bearer" part from the header
             $secret = explode(' ', $authHeader)[1];
-            if ($secret == config('app-proto.proboto-secret')) {
+            if ($secret === Config::string('app-proto.proboto-secret')) {
                 return $next($request);
             }
         }

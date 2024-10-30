@@ -250,7 +250,7 @@ class MollieController extends Controller
             );
             if ($fee > 0) {
                 /** @var OrderLine $orderline */
-                $orderline = OrderLine::query()->findOrFail(Product::query()->findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(
+                $orderline = OrderLine::query()->findOrFail(Product::query()->findOrFail(Config::integer('omnomcom.mollie.fee_id'))->buyForUser(
                     Auth::user(),
                     1,
                     $fee,
@@ -283,7 +283,7 @@ class MollieController extends Controller
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
 
-        if (config('omnomcom.mollie')['has_webhook']) {
+        if (Config::boolean('omnomcom.mollie.has_webhook')) {
             $properties['webhookUrl'] = route('webhook::mollie', ['id' => $transaction->id]);
         }
 
@@ -352,7 +352,7 @@ class MollieController extends Controller
                 unset($methodsList[$index]);
             }
 
-            if (in_array($method->id, config('omnomcom.mollie')['free_methods'])) {
+            if (in_array($method->id, Config::array('omnomcom.mollie.free_methods'))) {
                 $methodsList[$index]->pricing = null;
                 $methodsList[$index]->pricing[0] = (object) [
                     'description' => $method->description,

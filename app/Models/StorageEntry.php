@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -129,8 +130,8 @@ class StorageEntry extends Model
     public function generatePath()
     {
         $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
-        if (config('app-proto.assets-domain')) {
-            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        if (Config::has('app-proto.assets-domain')) {
+            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 
         return $url;
@@ -144,18 +145,14 @@ class StorageEntry extends Model
     public function generateImagePath($w, $h)
     {
         $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
-        if (config('app-proto.assets-domain')) {
-            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        if (Config::has('app-proto.assets-domain')) {
+            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 
         return $url;
     }
 
-    /**
-     * @param  int|null  $w
-     * @param  int|null  $h
-     */
-    public function getBase64($w = null, $h = null): string
+    public function getBase64(?int $w = null, ?int $h = null): string
     {
         /* @phpstan-ignore-next-line */
         return base64_encode(FileController::makeImage($this, $w, $h));

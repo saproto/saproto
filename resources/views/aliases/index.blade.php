@@ -37,7 +37,7 @@
                                 <td class="text-end">
 
                                     <strong>{{ $alias }}</strong>
-                                    @ {{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}
+                                    @ {{ Config::string('proto.emaildomain') }}
 
                                     <a href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}" class="ms-2">
                                         <i class="fas fa-trash text-danger"></i>

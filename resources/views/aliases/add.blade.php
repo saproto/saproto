@@ -26,7 +26,7 @@
                             <input type="text" id="alias" class="form-control" placeholder="awesome-alias" name="alias"
                                    required>
                             <span
-                                class="input-group-text">@ {{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}</span>
+                                class="input-group-text">@ {{ Config::string('proto.emaildomain') }}</span>
                         </div>
 
                         <hr>

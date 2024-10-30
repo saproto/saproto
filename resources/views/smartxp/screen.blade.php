@@ -159,7 +159,7 @@
         }
 
         #protube.inactive {
-            background-image: url({{\Illuminate\Support\Facades\Config::string('app-proto.fishcam-url')}}) !important;
+            background-image: url({{Config::string('app-proto.fishcam-url')}}) !important;
         }
 
         #protube-title {

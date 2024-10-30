@@ -8,7 +8,7 @@
 
     <p>
         Welcome as the newest member of Study Association Proto! My name
-        is {{ \Illuminate\Support\Facades\Config::string('proto.internal') }} and I would
+        is {{ Config::string('proto.internal') }} and I would
         like to give a little introduction to the association. The room where you probably just signed up in is our
         association room called the Protopolis. In this room we offer free coffee and tea and sell other foods and
         drinks via the OmNomCom. At the OmNomCom you can also register various RFID-enabled cards for fast checkout.
@@ -49,7 +49,7 @@
 
     <p>
         Kind regards,<br>
-        {{ \Illuminate\Support\Facades\Config::string('proto.internal') }}<br>
+        {{ Config::string('proto.internal') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

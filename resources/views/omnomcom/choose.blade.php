@@ -19,7 +19,7 @@
                 </div>
 
                 <ul class="list-group list-group-flush">
-                    @foreach(\Illuminate\Support\Facades\Config::array('omnomcom.stores') as $slug => $store)
+                    @foreach(Config::array('omnomcom.stores') as $slug => $store)
                         <a href="{{ route('omnomcom::store::show', ['store' => $slug]) }}" class="list-group-item">
                             {{ $store->name }}
                         </a>

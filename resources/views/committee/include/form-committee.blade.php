@@ -24,7 +24,7 @@
                     <input type="text" class="form-control" id="slug" name="slug"
                            placeholder="awesome" value="{{ (!$new ? $committee->slug : "") }}">
                     <span
-                        class="input-group-text">@ {{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}</span>
+                        class="input-group-text">@ {{ Config::string('proto.emaildomain') }}</span>
                 </div>
 
 

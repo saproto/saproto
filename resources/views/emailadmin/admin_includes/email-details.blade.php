@@ -59,7 +59,7 @@
                             <input name="sender_address" type="text" class="form-control" placeholder="board"
                                    value="{{ $email->sender_address ?? '' }}" required>
                             <span class="input-group-text"
-                                  id="basic-addon2">@ {{ \Illuminate\Support\Facades\Config::string('proto.emaildomain') }}</span>
+                                  id="basic-addon2">@ {{ Config::string('proto.emaildomain') }}</span>
                         </div>
                     </div>
 

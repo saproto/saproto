@@ -6,12 +6,13 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 
 class LdapController extends Controller
 {
     public static function searchUtwente(string $query, bool $only_active = false): array
     {
-        $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', config('ldap.proxy.utwente.url'), config('ldap.proxy.utwente.key'), urlencode($query)));
+        $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', Config::string('ldap.proxy.utwente.url'), Config::string('ldap.proxy.utwente.key'), urlencode($query)));
         if ($response === false) {
             abort(500, 'Could not connect to LDAP proxy.');
         }
@@ -57,9 +58,9 @@ class LdapController extends Controller
         $client = new Client;
         try {
             // Make a POST request to the LDAP Proxy
-            $response = $client->post(config('ldap.proxy.utwente.post_url'), [
+            $response = $client->post(Config::string('ldap.proxy.utwente.post_url'), [
                 'form_params' => [
-                    'key' => config('ldap.proxy.utwente.key'),
+                    'key' => Config::string('ldap.proxy.utwente.key'),
                     'query' => $query,
                 ],
             ]);

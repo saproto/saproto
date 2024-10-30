@@ -66,7 +66,7 @@
         const unavailable = document.getElementById('fishcam-unavailable');
 
         activate.addEventListener('click', () => {
-            fishcamSrc.src = '{{\Illuminate\Support\Facades\Config::string('app-proto.fishcam-url')}}';
+            fishcamSrc.src = '{{Config::string('app-proto.fishcam-url')}}';
             fishcamSrc.classList.remove('d-none');
             warning.classList.add('d-none');
         });

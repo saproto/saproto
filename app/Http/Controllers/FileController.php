@@ -7,11 +7,12 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\EncodedImageInterface;
+use League\Flysystem\FilesystemException;
 
 class FileController extends Controller
 {
@@ -39,25 +40,22 @@ class FileController extends Controller
     }
 
     /**
-     * @param  int  $w
-     * @param  int  $h
-     * @return EncodedImageInterface
+     * @throws FilesystemException
      */
-    public static function makeImage(StorageEntry $entry, $w, $h)
+    public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): EncodedImageInterface
     {
-        $storage = config('filesystems.disks');
-
         ini_set('memory_limit', '512M');
         $manager = new ImageManager(new Driver);
-        if (File::exists($storage['local']['root'].'/'.$entry->filename)) {
-            $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
+
+        if (Storage::disk('local')->has($entry->filename)) {
+            $image = $manager->read(Storage::disk('local')->path($entry->filename));
         } else {
             abort(404, 'File not found');
         }
 
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
 
-        if (! $w || ! $h) {
+        if ($w === null || $w === 0 || ($h === null || $h === 0)) {
             return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
         }
 
@@ -97,7 +95,7 @@ class FileController extends Controller
         }
 
         $payload = base64_encode(json_encode((object) [
-            'secret' => config('app-proto.printer-secret'),
+            'secret' => Config::string('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
             'copies' => $copies,
@@ -105,7 +103,7 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
+            $result = file_get_contents('http://'.Config::string('app-proto.printer-host').':'.Config::string('app-proto.printer-port').'/?data='.$payload);
         } catch (Exception $exception) {
             return 'Exception while connecting to the printer server: '.$exception->getMessage();
         }
