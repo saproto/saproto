@@ -149,9 +149,9 @@ class Member extends Model
 
         if ($membershipOrderline != null) {
             return match ($this->getMembershipOrderline()->product->id) {
-                Config::array('omnomcom.fee')['regular'] => 'primary',
-                Config::array('omnomcom.fee')['reduced'] => 'secondary',
-                Config::array('omnomcom.fee')['remitted'] => 'non-paying',
+                Config::integer('omnomcom.fee.regular') => 'primary',
+                Config::integer('omnomcom.fee.reduced') => 'secondary',
+                Config::integer('omnomcom.fee.remitted') => 'non-paying',
                 default => 'unknown',
             };
         }

@@ -63,9 +63,21 @@ use PragmaRX\Google2FA\Google2FA;
 class AuthController extends Controller
 {
     /* These are the regular, non-static methods serving as entry point to the AuthController */
-    public function getLogin(Request $request)
+    public function getLogin(Request $request): View|RedirectResponse
     {
-        return Auth::loginUsingId(2179);
+        if (Auth::check()) {
+            if ($request->has('SAMLRequest')) {
+                return self::handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
+            }
+
+            return Redirect::route('homepage');
+        }
+
+        if ($request->has('SAMLRequest')) {
+            Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
+        }
+
+        return view('auth.login');
     }
 
     /**

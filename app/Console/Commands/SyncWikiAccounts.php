@@ -81,7 +81,7 @@ class SyncWikiAccounts extends Command
     private function constructWikiGroups($user): string
     {
         $rootCommittee = $this->convertCommitteeNameToGroup(
-            Committee::whereSlug(Config::integer('proto.rootcommittee'))->firstOrFail()->name
+            Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail()->name
         );
         $groups = ['user'];
         $groups = array_merge($groups, $this->convertCommitteesToGroups($user->committees));

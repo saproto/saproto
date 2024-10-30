@@ -84,7 +84,7 @@ class FeeCron extends Command
             $email_remittance_reason = null;
 
             if ($member->is_lifelong || $member->is_honorary || $member->is_donor || $member->is_pet) {
-                $fee = Config::array('omnomcom.fee')['remitted'];
+                $fee = Config::integer('omnomcom.fee.remitted');
                 $email_fee = 'remitted';
                 if ($member->is_honorary) {
                     $reason = 'Honorary Member';
@@ -102,11 +102,11 @@ class FeeCron extends Command
 
                 $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - {$reason}";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
-                $fee = Config::array('omnomcom.fee')['regular'];
+                $fee = Config::integer('omnomcom.fee.regular');
                 $email_fee = 'regular';
                 $charged->regular[] = $member->user->name.' (#'.$member->user->id.')';
             } else {
-                $fee = Config::array('omnomcom.fee')['reduced'];
+                $fee = Config::integer('omnomcom.fee.reduced');
                 $email_fee = 'reduced';
                 $charged->reduced[] = $member->user->name.' (#'.$member->user->id.')';
             }
