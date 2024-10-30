@@ -35,7 +35,7 @@ class DevelopmentAccess
             return true;
         }
 
-        return !$isAllowedIP;
+        return ! $isAllowedIP;
     }
 
     /**
@@ -43,7 +43,7 @@ class DevelopmentAccess
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (!Config::has('app-proto.debug-whitelist')) {
+        if (Config::get('app-proto.debug-whitelist') == null) {
             return $next($request);
         }
 
