@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -51,7 +52,7 @@ class HomeController extends Controller
 
         $birthdays = User::query()
             ->whereHas('member', static function ($q) {
-                $q->where('is_pending', false);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))

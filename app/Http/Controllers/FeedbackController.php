@@ -343,17 +343,15 @@ class FeedbackController extends Controller
      */
     public function categoryDestroy(int $id): RedirectResponse
     {
+        /** @var FeedbackCategory $category */
         $category = FeedbackCategory::query()->findOrFail($id);
-        $feedback = $category->feedback;
-        if ($feedback) {
-            foreach ($feedback as $item) {
-                $item->category()->dissociate();
-            }
+        foreach ($category->feedback as $item) {
+            $item->category()->dissociate();
         }
 
         $category->delete();
 
-        Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
+        Session::flash('flash_message', 'The category '.$category->title.' has been deleted.');
 
         return Redirect::route('feedback::category::admin', ['category' => null]);
     }

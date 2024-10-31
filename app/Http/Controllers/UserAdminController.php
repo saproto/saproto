@@ -33,10 +33,10 @@ class UserAdminController extends Controller
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
             'pending' => $userQuery->whereHas('member', static function ($q) {
-                $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
+                $q->type(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function ($q) {
-                $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'users' => $userQuery->doesntHave('member'),
             default => $userQuery,
@@ -149,7 +149,6 @@ class UserAdminController extends Controller
 
         $member = $user->member;
         $member->created_at = Carbon::now();
-        $member->is_pending = false;
         $member->membership_type = MembershipTypeEnum::REGULAR;
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
@@ -235,11 +234,6 @@ class UserAdminController extends Controller
         $user = User::query()->findOrFail($id);
         $member = $user->member;
         $type = $request->input('type');
-
-        $member->is_honorary = $type == 'honorary';
-        $member->is_lifelong = $type == 'lifelong';
-        $member->is_donor = $type == 'donor';
-        $member->is_pet = $type == 'pet';
 
         match ($type) {
             'honorary' => $member->membership_type = MembershipTypeEnum::HONORARY,
@@ -419,14 +413,13 @@ class UserAdminController extends Controller
 
     public function printMemberForm(int $id): string
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = User::query()->find($id);
-
         if (! $user) {
             return 'This user could not be found!';
         }
 
-        if ($user->address->count() === 0) {
+        if (! $user->address->exists()) {
             return 'This user has no address!';
         }
 

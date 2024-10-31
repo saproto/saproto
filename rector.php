@@ -10,6 +10,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use RectorLaravel\Set\LaravelLevelSetList;
@@ -62,6 +63,7 @@ try {
         )
         ->withSkip(
             [
+                DisallowedEmptyRuleFixerRector::class,
                 StringToClassConstantRector::class,
                 EncapsedStringsToSprintfRector::class,
                 NullToStrictStringFuncCallArgRector::class,

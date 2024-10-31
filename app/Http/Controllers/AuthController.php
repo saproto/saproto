@@ -144,7 +144,7 @@ class AuthController extends Controller
 
         Session::flash('register_persist', $request->all());
         $this->validate($request, [
-            'email' => ['required', 'unique:users', 'email', new NotUtwenteEmail],
+            'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'name' => 'required|string',
             'calling_name' => 'required|string',
             'g-recaptcha-response' => 'required|recaptcha',
@@ -299,10 +299,10 @@ class AuthController extends Controller
         $user->utwente_department = null;
         $user->tfa_totp_key = null;
 
-        $user->did_study_create = 0;
-        $user->phone_visible = 0;
-        $user->address_visible = 0;
-        $user->receive_sms = 0;
+        $user->did_study_create = false;
+        $user->phone_visible = false;
+        $user->address_visible = false;
+        $user->receive_sms = false;
 
         $user->email = 'deleted-'.$user->id.'@deleted.'.config('proto.emaildomain');
 
