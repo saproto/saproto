@@ -15,7 +15,9 @@ class ForceDomain
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! App::environment('local') && $request->getHttpHost() !== config('app.forcedomain')) {
+        $force = config('app.forcedomain');
+
+        if (! App::environment('local') && $force != null && $request->getHttpHost() != $force) {
             return Redirect::to(config('app-proto.app-url').'/'.($request->path() == '/' ? '' : $request->path()), 301);
         }
 

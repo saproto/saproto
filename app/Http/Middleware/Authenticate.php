@@ -29,7 +29,7 @@ class Authenticate extends LaravelAuthenticate
      */
     public function handle($request, Closure $next, ...$guards): mixed
     {
-        if (auth()->guest()) {
+        if (! $this->auth->guest()) {
             return Redirect::route('login::show');
         }
 
