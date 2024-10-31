@@ -12,6 +12,7 @@ use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -329,7 +330,7 @@ class MollieController extends Controller
      */
     public static function getPaymentMethods()
     {
-        if (app()->environment('local')) {
+        if (App::environment('local')) {
             return null;
         }
 

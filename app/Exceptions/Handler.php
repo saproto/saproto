@@ -90,6 +90,8 @@ class Handler extends ExceptionHandler
      * Render the given HttpException.
      *
      * @return SymfonyResponse
+     *
+     * @throws Throwable
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
