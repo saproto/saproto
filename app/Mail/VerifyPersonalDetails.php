@@ -18,9 +18,7 @@ class VerifyPersonalDetails extends Mailable
      *
      * @return void
      */
-    public function __construct(public User $user)
-    {
-    }
+    public function __construct(public User $user) {}
 
     /**
      * Build the message.
@@ -30,7 +28,7 @@ class VerifyPersonalDetails extends Mailable
     public function build(): static
     {
         return $this
-            ->from('board@' . Config::string('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+            ->from('board@'.Config::string('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
             ->subject('Please make sure your personal details are still up to date.')
             ->view('emails.users.verifypersonaldetails');
     }
