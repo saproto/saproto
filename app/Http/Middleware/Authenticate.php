@@ -3,13 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\Middleware\Authenticate as LaravelAuthenticate;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
-class Authenticate extends LaravelAuthenticate
+class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
     /**
      * The Guard implementation.
@@ -22,21 +19,18 @@ class Authenticate extends LaravelAuthenticate
 
     /**
      * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  string[]  $guards
-     * @return RedirectResponse|Closure
-     */
+     **/
     public function handle($request, Closure $next, ...$guards): mixed
     {
-        if (auth()->guest()) {
+        if ($request->ajax() && $this->auth->guest()) {
+            return response('Unauthorized.', 401);
+        }
+
+        if ($this->auth->guest()) {
             return Redirect::route('login::show');
         }
 
-        if ($request->ajax()) {
-            abort('Unauthorized.', 401);
-        }
-
         return $next($request);
+
     }
 }
