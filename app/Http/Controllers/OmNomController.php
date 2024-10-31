@@ -46,11 +46,11 @@ class OmNomController extends Controller
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
-                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
+                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
                 ->get();
         } else {
-            $minors = collect([]);
+            $minors = collect();
         }
 
         return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'store_slug' => $store_slug, 'minors' => $minors]);
