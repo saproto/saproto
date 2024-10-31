@@ -71,7 +71,7 @@ class FeeCron extends Command
             'reduced' => Product::query()->findOrFail(config('omnomcom.fee.reduced')),
             'remitted' => Product::query()->findOrFail(config('omnomcom.fee.remitted')),
         ];
-        $usersToCharge->chunk(100, function ($users) use ($feeProducts, $charged) {
+        $usersToCharge->chunkById(100, function ($users) use ($feeProducts, $charged) {
             /** @var User $user */
             foreach ($users as $user) {
                 $product = null;
@@ -127,7 +127,7 @@ class FeeCron extends Command
                 Mail::to($user)->queue((new FeeEmail($user, $fee_type, $product->price, $email_remittance_reason))->onQueue('high'));
             }
 
-            $this->info('Charged '.$charged->count.' of '.Member::query()->count().' members their fee.');
+            $this->info('Charged '.$charged->count.' of '.Member::query()->whereNot('membership_type', MembershipTypeEnum::PENDING)->count().' members their fee.');
         });
 
         /** @phpstan-ignore-next-line */
