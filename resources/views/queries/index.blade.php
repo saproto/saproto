@@ -57,18 +57,6 @@
 
                         <tr>
 
-                            <td>New Membership totals</td>
-                            <td>Shows the new overview of of membership totals.</td>
-                            <td>
-                                <a href="{{ route("queries::new_membership_totals") }}">
-                                    <i class="fas fa-running"></i>
-                                </a>
-                            </td>
-
-                        </tr>
-
-                        <tr>
-
                             <td>Activity statistics</td>
                             <td>Generates activity statistics between two dates.</td>
                             <td>

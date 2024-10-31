@@ -4,12 +4,14 @@ namespace App\Console\Commands;
 
 use App\Enums\MembershipTypeEnum;
 use App\Http\Controllers\LdapController;
+use App\Mail\UtwenteCleanup;
 use App\Models\User;
 use App\Models\UtAccount;
 use Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class SyncUTAccounts extends Command
@@ -53,9 +55,18 @@ class SyncUTAccounts extends Command
         $this->syncStudents($pastCreaTersQuery);
 
         //remove all accounts that have not been found
-        $this->info('Removing. '.UtAccount::query()->where('found', false)->count().'. accounts that have not been found');
-        //todo: send an email to the board that these accounts have been removed
+        $notFoundUtAccounts = UtAccount::query()->where('found', false);
+        $this->info('Removing. '.$notFoundUtAccounts->count().'. accounts that have not been found');
+
+        $removed = User::query()->whereHas('member', function ($member) {
+            $member->whereHas('UtAccount', function ($q) {
+                $q->where('found', false);
+            });
+        })->pluck('name')->map(fn ($name): string => 'Did not find the ut account associated with the membership for: '.$name);
+
         UtAccount::query()->where('found', false)->delete();
+
+        Mail::queue((new UtwenteCleanup($removed))->onQueue('high'));
     }
 
     public function syncStudents($query, string $constraints = ''): void
@@ -90,7 +101,7 @@ class SyncUTAccounts extends Command
         $newUTAccounts = collect();
         foreach ($students as $student) {
             $bar->advance();
-            /** @var User $account */
+            /** @var User|null $account */
             $account = $users->filter(fn ($user): bool => $compareFilter($user[$userColumn], $student, $UTIdentifier))->first();
 
             //if we have found a match in the UT system but can not find the user anymore
@@ -133,7 +144,6 @@ class SyncUTAccounts extends Command
 
     public function nameQueryStringBuilder(string $userIdentifier, string $UtIdentifier): string
     {
-
         $names = explode(' ', $userIdentifier);
         if (count($names) === 1) {
             return '';
@@ -179,7 +189,7 @@ class SyncUTAccounts extends Command
     private function getUtwenteResults(string $sns, string $constraints = '')
     {
         //get the results from the LDAP server
-        $result = LdapController::searchUtwentePost("(&{$constraints}(description=Student *)(extensionattribute6=actief)(|{$sns}))");
+        $result = LdapController::searchUtwente("(&{$constraints}(description=Student *)(extensionattribute6=actief)(|{$sns}))");
         //check that we have a valid response
         if (isset($result->error)) {
             $this->error('Error: '.$result->error);
