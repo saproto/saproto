@@ -8,9 +8,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class DevelopmentAccess
 {
@@ -42,7 +40,7 @@ class DevelopmentAccess
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    public function handle(Request $request, Closure $next): mixed
     {
         if (config('app-proto.debug-whitelist') == null) {
             return $next($request);
