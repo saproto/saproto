@@ -56,8 +56,7 @@ class FeeCron extends Command
         $usersToCharge = User::query()->whereHas('member', function ($q) {
             $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->whereDoesntHave('orderlines', function ($q) use ($yearstart) {
-            $q->whereIn('product_id', array_values(config('omnomcom.fee')))
-                ->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
+            $q->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
         })->with('member.UtAccount');
 
         $charged = (object) [
@@ -66,69 +65,70 @@ class FeeCron extends Command
             'reduced' => [],
             'remitted' => [],
         ];
-        /** @var Product[] $feeProducts */
+
         $feeProducts = [
             'regular' => Product::query()->findOrFail(config('omnomcom.fee.regular')),
             'reduced' => Product::query()->findOrFail(config('omnomcom.fee.reduced')),
             'remitted' => Product::query()->findOrFail(config('omnomcom.fee.remitted')),
         ];
-        /** @var User $user */
-        foreach ($usersToCharge->get() as $user) {
-            $product = null;
-            $fee_type = null;
-            $email_remittance_reason = null;
+        $usersToCharge->chunk(100, function ($users) use ($feeProducts, $charged) {
+            /** @var User $user */
+            foreach ($users as $user) {
+                $product = null;
+                $fee_type = null;
+                $email_remittance_reason = null;
 
-            switch ($user->member->membership_type) {
-                case MembershipTypeEnum::DONOR:
-                    $fee_type = 'remitted';
-                    $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
-                    $charged->remitted[] = $user->name.' (#'.$user->id.') - Donor';
-                    break;
-                case MembershipTypeEnum::HONORARY:
-                    $fee_type = 'remitted';
-                    $email_remittance_reason = 'you are an honorary member';
-                    $charged->remitted[] = $user->name.' (#'.$user->id.') - Honorary Member';
-                    break;
-                case MembershipTypeEnum::LIFELONG:
-                    $fee_type = 'remitted';
-                    $email_remittance_reason = 'you signed up for life-long membership when you became a member';
-                    $charged->remitted[] = $user->name.' (#'.$user->id.') - Lifelong Member';
-                    break;
-                case MembershipTypeEnum::PET:
-                    $fee_type = 'remitted';
-                    $email_remittance_reason = 'you are a pet and therefore do not possess any money';
-                    $charged->remitted[] = $user->name.' (#'.$user->id.') - Pet Member';
-                    break;
-                case MembershipTypeEnum::REGULAR:
-                    if ($user->member->UtAccount && ! $user->member->is_primary_at_another_association) {
-                        $fee_type = 'regular';
-                        $charged->regular[] = $user->name.' (#'.$user->id.')';
-                    } else {
-                        $fee_type = 'reduced';
-                        $charged->reduced[] = $user->name.' (#'.$user->id.')';
-                    }
+                switch ($user->member->membership_type) {
+                    case MembershipTypeEnum::DONOR:
+                        $fee_type = 'remitted';
+                        $email_remittance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
+                        $charged->remitted[] = $user->name.' (#'.$user->id.') - Donor';
+                        break;
+                    case MembershipTypeEnum::HONORARY:
+                        $fee_type = 'remitted';
+                        $email_remittance_reason = 'you are an honorary member';
+                        $charged->remitted[] = $user->name.' (#'.$user->id.') - Honorary Member';
+                        break;
+                    case MembershipTypeEnum::LIFELONG:
+                        $fee_type = 'remitted';
+                        $email_remittance_reason = 'you signed up for life-long membership when you became a member';
+                        $charged->remitted[] = $user->name.' (#'.$user->id.') - Lifelong Member';
+                        break;
+                    case MembershipTypeEnum::PET:
+                        $fee_type = 'remitted';
+                        $email_remittance_reason = 'you are a pet and therefore do not possess any money';
+                        $charged->remitted[] = $user->name.' (#'.$user->id.') - Pet Member';
+                        break;
+                    case MembershipTypeEnum::REGULAR:
+                        if ($user->member->UtAccount && ! $user->member->is_primary_at_another_association) {
+                            $fee_type = 'regular';
+                            $charged->regular[] = $user->name.' (#'.$user->id.')';
+                        } else {
+                            $fee_type = 'reduced';
+                            $charged->reduced[] = $user->name.' (#'.$user->id.')';
+                        }
 
-                    break;
-                case MembershipTypeEnum::PENDING:
-                    throw new Exception('This should not happen as we filter out pending members.');
+                        break;
+                    case MembershipTypeEnum::PENDING:
+                        throw new Exception('This should not happen as we filter out pending members.');
+                }
+
+                $charged->count++;
+
+                $product = $feeProducts[$fee_type];
+                if (! $product) {
+                    $this->error('No product found for user '.$user->id);
+
+                    continue;
+                }
+
+                $product->buyForUser($user, 1, null, null, null, null, 'membership_fee_cron');
+
+                Mail::to($user)->queue((new FeeEmail($user, $fee_type, $product->price, $email_remittance_reason))->onQueue('high'));
             }
 
-            $charged->count = $charged->count += 1;
-
-            $product = $feeProducts[$fee_type];
-
-            if (! $product || ! $product->id) {
-                $this->error('No product found for user '.$user->id);
-
-                continue;
-            }
-
-            $product->buyForUser($user, 1, auth_method: 'membership_fee_cron');
-
-            Mail::to($user)->queue((new FeeEmail($user, $fee_type, $product->price, $email_remittance_reason))->onQueue('high'));
-        }
-
-        $this->info('Charged '.$charged->count.' of '.Member::query()->whereNot('membership_type', MembershipTypeEnum::PENDING)->count().' members their fee.');
+            $this->info('Charged '.$charged->count.' of '.Member::query()->count().' members their fee.');
+        });
 
         /** @phpstan-ignore-next-line */
         if ($charged->count > 0) {
