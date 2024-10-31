@@ -80,12 +80,12 @@ class Product extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    /** @raturn String */
     public function getImageUrlAttribute(): ?string
     {
         if ($this->image_id) {
             $image = StorageEntry::query()->find($this->image_id);
             if ($image) {
+                /** @var StorageEntry $image */
                 return $image->generateImagePath(null, null);
             }
         }
@@ -113,7 +113,7 @@ class Product extends Model
         return $this->is_visible && ! ($this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
-    public function omnomcomPrice()
+    public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
         if (! $active) {
@@ -139,7 +139,7 @@ class Product extends Model
         $total_price ??= $this->price * $amount;
 
         $has_cashier = $withCash || $withBankCard;
-
+        /** @var OrderLine $orderline */
         $orderline = OrderLine::query()->create([
             'user_id' => ($has_cashier ? null : $user->id),
             'cashier_id' => ($has_cashier || $total_price == 0 ? $user->id : null),

@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -32,7 +31,9 @@ class WithdrawalController extends Controller
      */
     public function index()
     {
-        $withdrawals = Withdrawal::query()->orderBy('id', 'desc')->withCount(['orderlines', 'users'])->withSum('orderlines', 'total_price')->paginate(6);
+        $withdrawals = Withdrawal::query()
+            ->orderBy('id', 'desc')
+            ->paginate(15);
 
         return view('omnomcom.withdrawals.index', ['withdrawals' => $withdrawals]);
     }
@@ -92,41 +93,53 @@ class WithdrawalController extends Controller
                 /** @var User $user */
                 $user = User::query()->findOrFail($user_id);
                 foreach ($withdrawal->orderlinesForUser($user)->get() as $orderline) {
+                    /** @var OrderLine $orderline */
                     $orderline->withdrawal()->dissociate();
                     $orderline->save();
                 }
             }
         }
 
+        $withdrawal->recalculateTotals();
+
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
     public function show(int $id)
     {
-        $withdrawal = Withdrawal::query()->withCount(['orderlines', 'users'])->with('failedWithdrawals')->findOrFail($id);
-        $userLines = OrderLine::query()->selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')->where('payed_with_withdrawal', $id)->groupBy('user_id')->with('user.bank')->get();
+        $withdrawal = Withdrawal::query()
+            ->withCount(['orderlines', 'users'])
+            ->with('failedWithdrawals')
+            ->findOrFail($id);
+
+        $userLines = OrderLine::query()
+            ->selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')
+            ->where('payed_with_withdrawal', $id)
+            ->groupBy('user_id')
+            ->with('user.bank')
+            ->get();
 
         return view('omnomcom.withdrawals.show', ['withdrawal' => $withdrawal, 'userLines' => $userLines]);
     }
 
-    /**
-     * @return View
-     */
     public function showAccounts(int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
-        // We do one massive query to reduce the number of queries.
-        $orderlines = DB::table('orderlines')
-            ->join('products', 'orderlines.product_id', '=', 'products.id')
-            ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
+        //generate a list of all the accounts and their total orderlines for the given month
+        //grouped by account number and then by orderline date
+        //this is used to generate a table with the total orderlines for each account, and product
+        $accounts = Account::query()->join('products', 'accounts.id', '=', 'products.account_id')
+            ->join('orderlines', 'products.id', '=', 'orderlines.product_id')
             ->where('orderlines.payed_with_withdrawal', $withdrawal->id)
-            ->get();
+            ->groupByRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR))')
+            ->groupBy('orderlines.product_id')
+            ->selectRaw('accounts.account_number, accounts.name as account_name, DATE(orderlines.created_at) as orderline_date, products.name as product_name,  SUM(orderlines.total_price) as total')
+            ->get()->groupBy('account_number')->sortByDesc('account_number')->map(fn ($account) => $account->groupBy('orderline_date'));
 
         return view('omnomcom.accounts.orderlines-breakdown', [
-            'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
+            'accounts' => $accounts,
             'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
             'total' => $withdrawal->total(),
         ]);
@@ -166,7 +179,7 @@ class WithdrawalController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(Request $request, int $id)
+    public function destroy(int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -217,6 +230,8 @@ class WithdrawalController extends Controller
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }
+
+        $withdrawal->recalculateTotals();
 
         Session::flash('flash_message', "Orderlines for $user->name removed from this withdrawal.");
 
@@ -300,6 +315,8 @@ class WithdrawalController extends Controller
             $orderline->save();
         }
 
+        $withdrawal->recalculateTotals();
+
         Session::flash('flash_message', "Withdrawal for $user->name marked as loss.");
 
         return Redirect::back();
@@ -360,6 +377,7 @@ class WithdrawalController extends Controller
             try {
                 $collection->addPayment([
                     'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId, $i),
+                    /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
                     'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
@@ -368,6 +386,8 @@ class WithdrawalController extends Controller
                     'iban' => $user->bank->iban,
                 ]);
                 $i++;
+
+                /** @phpstan-ignore-next-line */
             } catch (SephpaInputException $e) {
                 Session::flash('flash_message', "Error creating the withdrawal. user {$user->id}: Error: {$e->getMessage()}");
 

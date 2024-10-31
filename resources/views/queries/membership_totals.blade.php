@@ -34,7 +34,8 @@
                     </tr>
 
                     <tr>
-                        <td><strong>Total number of members that are affiliated with the UT</strong></td>
+                        <td><strong>Total number of members that are affiliated with the UT</strong><br>
+                            <sup>These are the primary members counting towards the EEMCS subsidy</sup></td>
                         <td>{{ $ut }}</td>
                     </tr>
 
@@ -45,12 +46,12 @@
 
                     <tr>
                         <td><strong>Total number of lifelong members</strong></td>
-                        <td>{{ $lifelong }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::LIFELONG->value]}}</td>
                     </tr>
 
                     <tr>
                         <td><strong>Total number of honorary members</strong></td>
-                        <td>{{ $honorary }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::HONORARY->value] }}</td>
                     </tr>
 
                     <tr>
@@ -58,7 +59,7 @@
                             <strong>Total number of donors</strong><br>
                             <sup>For this overview donors are also considered members.</sup>
                         </td>
-                        <td>{{ $donor }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::DONOR->value] }}</td>
                     </tr>
 
                     <tr>
@@ -66,7 +67,7 @@
                             <strong>Total number of pending members</strong><br>
                             <sup>For this overview pending members are not counted as members.</sup>
                         </td>
-                        <td>{{ $pending }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::PENDING->value] }}</td>
                     </tr>
 
                     <tr>
@@ -74,7 +75,7 @@
                             <strong>Total number of pet members</strong><br>
                             <sup>For this overview pet members are not counted as members.</sup>
                         </td>
-                        <td>{{ $pet }}</td>
+                        <td>{{ $count_per_type[\App\Enums\MembershipTypeEnum::PET->value] }}</td>
                     </tr>
 
                 </table>
@@ -104,66 +105,6 @@
 
             </div>
 
-            <div class="card mb-3">
-
-                <div class="card-header bg-dark text-white">
-                    Members who were primary members according to the old system but are now secondary members
-                </div>
-                @if(count($membersWhoArentPrimaryAnymore) > 0)
-                    <table class="table table-sm table-hover mb-0">
-                        @php /** @var \App\Models\Member $member */ @endphp
-                        @foreach($membersWhoArentPrimaryAnymore as $member)
-
-                            <tr>
-                                <td>{{ $member->user->name }}</td>
-                                <td>{{ $member->user->email }}</td>
-                            </tr>
-
-                        @endforeach
-                    </table>
-                @else
-                    <div class="card-body">
-                        <p>
-                            No differences found.
-                        </p>
-                    </div>
-                @endif
-            </div>
-
-            <div class="card mb-3">
-
-                <div class="card-header bg-dark text-white">
-                    Members who were not primary members according to the old system but are now
-                </div>
-                @if(count($membersWhoAreNewPrimary) > 0)
-                    <table class="table table-sm table-hover mb-0">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>E-mail address</th>
-                        </tr>
-                        </thead>
-                        @php /** @var \App\Models\User $user */ @endphp
-                        @foreach($membersWhoAreNewPrimary as $member)
-
-                            <tr>
-                                <td>{{ $member->user->name }}</td>
-                                <td>{{ $member->user->email }}</td>
-                            </tr>
-
-                        @endforeach
-                    </table>
-                @else
-                    <div class="card-body">
-                        <p>
-                            No differences found.
-                        </p>
-                    </div>
-                @endif
-            </div>
-
         </div>
-
-    </div>
 
 @endsection

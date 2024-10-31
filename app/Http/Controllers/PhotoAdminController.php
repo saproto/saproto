@@ -204,12 +204,11 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  UploadedFile  $uploaded_photo
      * @param  int  $album_id
      *
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id): Photo
+    private function createPhotoFromUpload(UploadedFile $uploaded_photo, $album_id): Photo
     {
         $path = 'photos/'.$album_id.'/';
 

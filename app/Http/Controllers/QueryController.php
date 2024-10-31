@@ -10,7 +10,6 @@ use App\Models\EventCategory;
 use App\Models\Member;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -45,105 +44,31 @@ class QueryController extends Controller
         ]);
     }
 
-    /**
-     * @return \Illuminate\Http\Response|View
-     */
-    public function membershipTotals(Request $request): View
+    public function membershipTotals(Request $request)
     {
-        // Get a list of all CreaTe students.
-        $students = LdapController::searchStudents();
-        $names = $students['names'];
-        $emails = $students['emails'];
-        $usernames = $students['usernames'];
-
-        $count_total = 0;
-        $count_primary = 0;
-        $count_secondary = 0;
-        $count_ut = 0;
-        $count_active = 0;
-        $count_lifelong = 0;
-        $count_honorary = 0;
-        $count_donor = 0;
-        $count_pending = 0;
-        $count_pet = 0;
-
-        $export_subsidies = [];
-        $export_active = [];
-
-        // Loop over all members and determine if they are studying CreaTe.
-        foreach (Member::all() as $member) {
-            $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
-                in_array($member->user->utwente_username, $usernames) ||
-                in_array(strtolower($member->user->name), $names);
-            $has_ut_mail = str_ends_with($member->user->email, 'utwente.nl');
-            $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
-
-            if ($member->is_pending) {
-                $count_pending++;
-            } else {
-                if (! $member->is_pet) {
-                    $count_total++;
-                } else {
-                    $count_pet++;
-                }
-
-                if ($member->user->isActiveMember()) {
-                    $count_active++;
-                    if ($request->has('export_active')) {
-                        $export_active[] = (object) [
-                            'name' => $member->user->name,
-                            'committees' => $member->user->committees->pluck('name'),
-                        ];
-                    }
-                }
-
-                if ($member->is_lifelong) {
-                    $count_lifelong++;
-                }
-
-                if ($member->is_honorary) {
-                    $count_honorary++;
-                }
-
-                if ($member->is_donor) {
-                    $count_donor++;
-                }
-
-                if ($is_primary_student) {
-                    $count_primary++;
-                    $member->update([
-                        'primary' => true,
-                    ]);
-                } else {
-                    $count_secondary++;
-                }
-
-                if ($is_ut) {
-                    $count_ut++;
-                }
-
-                if ($request->has('export_subsidies') && $is_ut) {
-                    $export_subsidies[] = (object) [
-                        'primary' => $is_primary_student ? 'true' : 'false',
-                        'name' => $member->user->name,
-                        'email' => $has_ut_mail ? $member->user->email : null,
-                        'ut_number' => $member->user->utwente_username ?: null,
-                    ];
-                }
-            }
-        }
+        $utQuery = User::query()->whereHas('member', function ($q) {
+            $q->primary()->whereHas('UtAccount', function ($q) {
+                $q->where('department', 'like', '%CREA%')->orWhere('department', 'like', '%TECH%');
+            });
+        });
 
         if ($request->has('export_subsidies')) {
+            $export_subsidies = $utQuery->with('member.UtAccount')->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
-            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
+            return Response::make(view('queries.export_subsidies', ['users' => $export_subsidies]), 200, $headers);
         }
 
+        $activeUserQuery = User::query()->whereHas('member', function ($query) {
+            $query->type(MembershipTypeEnum::REGULAR);
+        })->whereHas('committees');
+
         if ($request->has('export_active')) {
+            $export_active = $activeUserQuery->with('committees')->get();
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
@@ -153,74 +78,19 @@ class QueryController extends Controller
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
         }
 
-        return view('queries.membership_totals', [
-            'total' => $count_total,
-            'primary' => $count_primary,
-            'secondary' => $count_secondary,
-            'ut' => $count_ut,
-            'active' => $count_active,
-            'lifelong' => $count_lifelong,
-            'honorary' => $count_honorary,
-            'donor' => $count_donor,
-            'pending' => $count_pending,
-            'pet' => $count_pet,
-            'membersWhoArentPrimaryAnymore' => [],
-            'membersWhoAreNewPrimary' => [],
-        ]);
-    }
+        $count_per_type = Member::query()->selectRaw('membership_type, COUNT(*) as count')
+            ->groupBy('membership_type')
+            ->get()
+            /** @phpstan-ignore-next-line */
+            ->keyBy(fn ($item) => $item->membership_type->value)->map(fn ($item) => $item->count);
 
-    public function newMembershipTotals(Request $request): View|Response
-    {
-        if ($request->has('export_subsidies')) {
-            $export_subsidies = User::query()->whereHas('member', function ($q) {
-                $q->primary();
-            })->get();
-            $headers = [
-                'Content-Encoding' => 'UTF-8',
-                'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
-            ];
+        $count_total = $count_per_type->reject(static fn ($value, $key): bool => in_array($key, [MembershipTypeEnum::PENDING->value, MembershipTypeEnum::PET->value]))->sum();
 
-            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
-        }
-
-        if ($request->has('export_active')) {
-            $export_active = User::query()->whereHas('committees')->whereHas('member', function ($q) {
-                $q->type(MembershipTypeEnum::REGULAR);
-            })->get();
-            $headers = [
-                'Content-Encoding' => 'UTF-8',
-                'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="active_member_overview%s.csv"', date('d_m_Y')),
-            ];
-
-            return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
-        }
-
-        $count_total = Member::query()->where(function (Builder $query) {
-            $query->whereNot('membership_type', MembershipTypeEnum::PET)
-                ->whereNot('membership_type', MembershipTypeEnum::PENDING);
-        })->count();
-        $count_active = Member::query()->whereHas('user', function ($query) {
-            $query->whereHas('committees');
-        })->count();
-        $count_lifelong = Member::query()->type(MembershipTypeEnum::LIFELONG)->count();
-        $count_honorary = Member::query()->type(MembershipTypeEnum::HONORARY)->count();
-        $count_donor = Member::query()->type(MembershipTypeEnum::DONOR)->count();
-        $count_pending = Member::query()->type(MembershipTypeEnum::PENDING)->count();
-        $count_pet = Member::query()->type(MembershipTypeEnum::PET)->count();
+        $count_active = $activeUserQuery->count();
 
         $count_primary = Member::query()->primary()->count();
         $count_secondary = $count_total - $count_primary;
-        $count_ut = Member::query()->type(MembershipTypeEnum::REGULAR)->where(function ($query) {
-            $query->whereHas('UtAccount')->orWhereHas('user', function ($query) {
-                $query->whereNotNull('utwente_username');
-            });
-        })->count();
-
-        $membersWhoArentPrimaryAnymore = Member::query()->whereDoesntHave('UtAccount')->where('primary', true)->get();
-
-        $membersWhoAreNewPrimary = Member::query()->whereHas('UtAccount')->where('primary', false)->get();
+        $count_ut = $utQuery->count();
 
         return view('queries.membership_totals', [
             'total' => $count_total,
@@ -228,13 +98,7 @@ class QueryController extends Controller
             'secondary' => $count_secondary,
             'ut' => $count_ut,
             'active' => $count_active,
-            'lifelong' => $count_lifelong,
-            'honorary' => $count_honorary,
-            'donor' => $count_donor,
-            'pending' => $count_pending,
-            'pet' => $count_pet,
-            'membersWhoArentPrimaryAnymore' => $membersWhoArentPrimaryAnymore,
-            'membersWhoAreNewPrimary' => $membersWhoAreNewPrimary,
+            'count_per_type' => $count_per_type,
         ]);
     }
 
@@ -255,17 +119,18 @@ class QueryController extends Controller
 
         foreach ($eventCategories as $category) {
             /** @var EventCategory $category */
+            /** @phpstan-ignore-next-line */
             $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->where('participants', '>', 0)
                 ->sum('participants');
-
+            /** @phpstan-ignore-next-line */
             $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
                 $query->whereHas('event', static function ($query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
                 })->where('participants', '>', 0);
             })->count();
-
+            /** @phpstan-ignore-next-line */
             $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
             })->sum('attendees');
@@ -280,7 +145,8 @@ class QueryController extends Controller
 
         $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
-            $event->Board = Carbon::createFromTimestamp($event->Start)->diffInYears($changeGMM);
+            /** @phpstan-ignore-next-line */
+            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
