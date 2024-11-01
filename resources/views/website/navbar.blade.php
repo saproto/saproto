@@ -111,7 +111,7 @@
                                         <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp ProTube
+                                        <a class="dropdown-item" href="{{ route("tempadmins.index") }}">Temp ProTube
                                             Admin</a>
                                         <a class="dropdown-item" href="{{ config('protube.remote_url') }}">ProTube
                                             Admin</a>

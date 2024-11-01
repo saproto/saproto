@@ -1000,12 +1000,8 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('make/{id}', 'make')->name('make');
         Route::get('end/{id}', 'end')->name('end');
         Route::get('endId/{id}', 'endId')->name('endId');
-        Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('update/{id}', 'update')->name('update');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('', 'index')->name('index');
     });
+    Route::resource('tempadmins', TempAdminController::class)->only(['index', 'create', 'store', 'edit', 'update'])->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to QR Authentication --- */
     Route::controller(QrAuthController::class)->prefix('qr')->name('qr::')->group(function () {
