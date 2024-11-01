@@ -27,6 +27,8 @@
                                 You are there!
                             @elseif($status->status == 'away')
                                 You'll be back at {{ $status->back }}.
+                            @elseif($status->status == 'jur')
+                                You do not seem to be Alfred. Do you happen to feel like a Jur today?
                             @else
                                 Your whereabouts are currently not known.
                             @endif
@@ -39,6 +41,14 @@
                                    value="there" required {{ $status->status == 'there' ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_1">
                                 I'm there!
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_jur"
+                                   value="jur" required {{ $status->status == 'jur' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="where_is_jur">
+                                I'm not Alfred, I'm Jur!
                             </label>
                         </div>
 
