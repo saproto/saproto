@@ -1022,19 +1022,9 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Short URL Service*/
-    Route::controller(ShortUrlController::class)->name('short_url::')->group(function () {
-        // Public routes
-        Route::get('go/{short?}', 'go')->name('go');
-
-        // Board only
-        Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('', 'index')->name('index');
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('update/{id}', 'update')->name('update');
-            Route::get('delete/{id}', 'destroy')->name('delete');
-            Route::get('qr_code/{id}', 'qrCode')->name('qr_code');
-        });
-    });
+    Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go');
+    Route::get('short_urls/qr_code/{id}', [ShortUrlController::class, 'qrCode'])->name('short_urls.qr_code')->middleware(['auth', 'permission:board']);
+    Route::resource('short_urls', ShortUrlController::class)->except('show')->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to the DMX Management. (Board or alfred) --- */
     Route::prefix('dmx')->name('dmx.')->middleware(['auth', 'permission:board|alfred'])->group(function () {

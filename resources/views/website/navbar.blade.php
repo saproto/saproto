@@ -107,7 +107,7 @@
                                     @can('board')
                                         <a class="dropdown-item" href="{{ route("user::admin::index") }}">Users</a>
                                         <a class="dropdown-item" href="{{ route("tickets::index") }}">Tickets</a>
-                                        <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URLs</a>
+                                        <a class="dropdown-item" href="{{ route("short_urls.index") }}">Short URLs</a>
                                         <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
