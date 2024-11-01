@@ -18,7 +18,8 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
 use App\Http\Controllers\DinnerformOrderlineController;
-use App\Http\Controllers\DmxController;
+use App\Http\Controllers\DmxFixtureController;
+use App\Http\Controllers\DmxOverrrideController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\EventController;
@@ -51,6 +52,7 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
+
 /* --- use App\Http\Controllers\RadioController; --- */
 
 use App\Http\Controllers\ShortUrlController;
@@ -74,7 +76,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
-require __DIR__.'/minisites.php';
+require __DIR__ . '/minisites.php';
 
 /* Route block convention:
  *
@@ -1035,22 +1037,10 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Routes related to the DMX Management. (Board or alfred) --- */
-    Route::controller(DmxController::class)->prefix('dmx')->name('dmx::')->middleware(['auth', 'permission:board|alfred'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/update/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'delete')->name('delete');
+    Route::prefix('dmx')->name('dmx.')->middleware(['auth', 'permission:board|alfred'])->group(function () {
+        Route::resource('fixtures', DmxFixtureController::class)->except('show');
 
-        Route::prefix('override')->name('override::')->group(function () {
-            Route::get('/', 'overrideIndex')->name('index');
-            Route::get('/create', 'overrideCreate')->name('create');
-            Route::post('/store', 'overrideStore')->name('store');
-            Route::get('/edit/{id}', 'overrideEdit')->name('edit');
-            Route::post('/update/{id}', 'overrideUpdate')->name('update');
-            Route::get('/delete/{id}', 'overrideDelete')->name('delete');
-        });
+        Route::resource('overrides', DmxOverrrideController::class)->except('show');
     });
 
     /* --- Routes related to the Query system. (Board only) --- */
@@ -1067,7 +1057,6 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
             // Public routes
             Route::get('/', 'index')->name('index');
-
             // Board only
             Route::get('/edit', 'edit')->middleware(['auth', 'permission:sysadmin|alfred'])->name('edit');
             Route::post('/update', 'update')->middleware(['auth', 'permission:sysadmin|alfred'])->name('update');
