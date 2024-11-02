@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\EncodedImageInterface;
+use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
@@ -33,9 +31,6 @@ class FileController extends Controller
         return $response;
     }
 
-    /**
-     * @return EncodedImageInterface
-     */
     public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
     {
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
@@ -43,15 +38,13 @@ class FileController extends Controller
             abort(404, 'File not found');
         }
 
-        return Cache::rememberForever($cacheKey, function () use ($entry, $w, $h): string {
-            $manager = new ImageManager(new Driver);
-
-            $image = $manager->read(Storage::disk('local')->get($entry->filename));
+        return Cache::remember($cacheKey, 31536000, function () use ($entry, $w, $h): string {
+            $image = Image::read(Storage::disk('local')->get($entry->filename));
             if (empty($w) || empty($h)) {
-                return $image->scaleDown($w, $h)->encode()->toString();
+                return $image->scaleDown($w, $h)->toWebp()->toString();
             }
 
-            return $image->coverDown($w, $h)->encode()->toString();
+            return $image->coverDown($w, $h)->toWebp()->toString();
         });
     }
 
@@ -68,8 +61,8 @@ class FileController extends Controller
         }
 
         return Response(static::makeImage($entry, $request->input('w'), $request->input('h')), 200, [
-            'Content-Type' => $entry->mime,
-            'Cache-Control' => 'max-age=86400, public',
+            'Content-Type' => 'image/webp',
+            'Cache-Control' => 'max-age=31536000, public',
             'Content-Disposition', sprintf('filename="%s"', $entry->original_filename),
         ]);
     }
