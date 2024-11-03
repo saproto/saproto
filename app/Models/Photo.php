@@ -49,6 +49,8 @@ class Photo extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['file'];
+
     public function album(): BelongsTo
     {
         return $this->belongsTo(PhotoAlbum::class, 'album_id');

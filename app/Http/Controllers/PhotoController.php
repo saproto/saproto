@@ -18,7 +18,7 @@ class PhotoController extends Controller
     /** @return View */
     public function index()
     {
-        $albums = PhotoManager::getAlbums(24);
+        $albums = PhotoAlbum::visible()->orderBy('date_taken', 'desc')->paginate(24);
 
         return view('photos.list', ['albums' => $albums]);
     }

@@ -10,6 +10,7 @@ use App\Models\Dinnerform;
 use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
+use App\Models\PhotoAlbum;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
@@ -30,8 +31,10 @@ class HomeController extends Controller
 
         $header = HeaderImage::query()->inRandomOrder()->first();
 
+        $albums = PhotoAlbum::visible()->orderBy('date_taken', 'desc')->with('thumbPhoto')->take(4)->get();
+
         if (! Auth::user()?->is_member) {
-            return view('website.home.external', ['companies' => $companies, 'header' => $header]);
+            return view('website.home.external', ['companies' => $companies, 'header' => $header, 'albums' => $albums]);
         }
 
         $weekly = Newsitem::query()
@@ -105,6 +108,7 @@ class HomeController extends Controller
             'dinnerforms' => $dinnerforms,
             'header' => $header,
             'videos' => $videos,
+            'albums' => $albums,
         ]);
     }
 
