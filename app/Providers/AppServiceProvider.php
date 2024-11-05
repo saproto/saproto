@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('website.navbar', static function ($view) {
-            $menuItems = Cache::rememberForever('website.navbar', static fn () => MenuItem::query()->where('parent')->orderBy('order')->with('page')->with('children')->get());
+            $menuItems = Cache::rememberForever('website.navbar', static fn() => MenuItem::query()->whereNull('parent')->orderBy('order')->with('page')->with('children')->get());
             $view->with('menuItems', $menuItems);
         });
 
@@ -44,5 +44,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register() {}
+    public function register()
+    {
+    }
 }

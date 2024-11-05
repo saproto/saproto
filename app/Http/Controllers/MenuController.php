@@ -18,7 +18,7 @@ class MenuController extends Controller
     /** @return View */
     public function index()
     {
-        $menuItems = MenuItem::query()->where('parent')->with('children', 'page')->orderBy('order')->get();
+        $menuItems = MenuItem::query()->whereNull('parent')->with('children', 'page')->orderBy('order')->get();
 
         return view('menu.list', ['menuItems' => $menuItems]);
     }
