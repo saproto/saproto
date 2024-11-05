@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ShortUrl;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -30,13 +29,14 @@ class ShortUrlController extends Controller
 
     public function store(Request $request)
     {
-        ShortUrl::create($request->all());
+        ShortUrl::query()->create($request->all());
         Session::flash('flash_message', 'New URL created!');
+
         return Redirect::route('short_urls.index');
     }
 
     /**
-     * @param ShortUrl $url
+     * @param  ShortUrl  $url
      * @return View
      */
     public function edit(ShortUrl $short_url)
@@ -45,8 +45,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param ShortUrl $url
+     * @param  ShortUrl  $url
      * @return RedirectResponse
      */
     public function update(Request $request, ShortUrl $short_url)
@@ -58,9 +57,7 @@ class ShortUrlController extends Controller
     }
 
     /**
-     * @param ShortUrl $short_url
      * @return RedirectResponse
-     *
      */
     public function destroy(ShortUrl $short_url)
     {

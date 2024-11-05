@@ -16,7 +16,6 @@ use Illuminate\View\View;
 
 class TempAdminController extends Controller
 {
-
     /**
      * @return View
      */
@@ -55,7 +54,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param Tempadmin $tempadmin
      * @return View
      */
     public function edit(Tempadmin $tempadmin)
@@ -64,8 +62,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param Tempadmin $tempadmin
-     * @param Request $request
      * @return RedirectResponse
      */
     public function update(Tempadmin $tempadmin, Request $request)
@@ -80,7 +76,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public function make(int $id)
@@ -101,7 +96,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public function end(int $id)
@@ -122,7 +116,6 @@ class TempAdminController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception

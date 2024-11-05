@@ -35,7 +35,7 @@ class DmxFixtureController extends Controller
 
         foreach (range($fixture->channel_start, $fixture->channel_end) as $channel_id) {
             $channel = DmxChannel::query()->find($channel_id);
-            if (!$channel) {
+            if (! $channel) {
                 DmxChannel::query()->create(['id' => $channel_id, 'name' => 'Unnamed Channel']);
             }
         }
@@ -118,7 +118,7 @@ class DmxFixtureController extends Controller
 
         // And we apply the overrides.
         foreach (DmxOverride::getActiveSorted()->reverse() as $override) {
-            if (!$override->active() && !$override->justOver()) {
+            if (! $override->active() && ! $override->justOver()) {
                 continue;
             }
 
@@ -127,7 +127,7 @@ class DmxFixtureController extends Controller
                     continue;
                 }
 
-                $colors = ($override->justOver() && !$fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
+                $colors = ($override->justOver() && ! $fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
                 $channel_values = self::setFixtureChannels($fixture, $channel_values, $colors);
             }
         }
@@ -136,8 +136,8 @@ class DmxFixtureController extends Controller
     }
 
     /**
-     * @param int[] $channel_values
-     * @param int[] $colors
+     * @param  int[]  $channel_values
+     * @param  int[]  $colors
      * @return int[]
      */
     private function setFixtureChannels(DmxFixture $fixture, array $channel_values, array $colors): array

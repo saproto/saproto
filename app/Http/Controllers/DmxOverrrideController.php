@@ -51,7 +51,7 @@ class DmxOverrrideController extends Controller
     public function edit(DmxOverride $override): Factory|View|Application|\Illuminate\View\View
     {
         return view('dmx.override.edit', ['override' => $override,
-            'fixtures' => DmxFixture::query()->orderBy('name')->get(),]);
+            'fixtures' => DmxFixture::query()->orderBy('name')->get(), ]);
     }
 
     public function update(Request $request, DmxOverride $override): RedirectResponse
