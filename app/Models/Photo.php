@@ -110,7 +110,9 @@ class Photo extends Model
     public function getAlbumPageNumber(int $paginateLimit): float|int
     {
         $photoIndex = 1;
-        $photos = self::query()->where('album_id', $this->album_id)->orderBy('date_taken', 'ASC')->orderBy('id', 'ASC')->get();
+        $photos = self::query()->where('album_id', $this->album_id)
+            ->orderBy('date_taken', 'desc')->orderBy('id', 'desc')
+            ->get();
         foreach ($photos as $photoItem) {
             if ($this->id == $photoItem->id) {
                 return ceil($photoIndex / $paginateLimit);
