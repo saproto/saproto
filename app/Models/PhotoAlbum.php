@@ -54,6 +54,15 @@ class PhotoAlbum extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['thumbPhoto'];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('published', fn (Builder $builder) => $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->where('published', true)));
+
+        static::addGlobalScope('private', fn (Builder $builder) => $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)));
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
@@ -69,13 +78,9 @@ class PhotoAlbum extends Model
         return $this->hasMany(Photo::class, 'album_id');
     }
 
-    public function scopeVisible($query)
+    public function scopeName($query, string $name): Builder
     {
-        if (! Auth::user()?->is_member) {
-            $query = $query->where('private', false);
-        }
-
-        return $query->where('published', true)->whereNotNull('thumb_id');
+        return $query->where('name', 'LIKE', '%'.$name.'%');
     }
 
     public function thumb(): ?string
