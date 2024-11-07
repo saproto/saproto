@@ -113,7 +113,7 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(date('U').mt_rand(1, intval(99999999999)));
+        return sha1(date('U').mt_rand(1, 99999999999));
     }
 
     public function generatePath(): string
