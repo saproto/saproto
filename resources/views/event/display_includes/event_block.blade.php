@@ -4,8 +4,15 @@
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div
-            class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? 'bg-img' : 'no-img'}}"
-            data-bgimage="{{(!isset($hide_photo) || !$hide_photo) ? $event?->image?->generateImagePath(800,300):''}}">
+            class="card-body event text-start {{ $event->image?'bg-img' : 'no-img' }}"
+            @if(empty($lazyload) && $event->image)
+                style="{{ sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) }}
+            background-size: cover;"
+            @elseif($event->image)
+                data-bgimage="{{ $event->image->generateImagePath(800,300)??''}}"
+            @endif
+        >
+
 
             {{-- Countdown --}}
             @if(!empty($countdown))
