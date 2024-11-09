@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function () {
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {
-        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
+        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxFixtureController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
         Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
