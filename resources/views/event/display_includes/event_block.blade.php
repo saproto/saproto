@@ -32,22 +32,22 @@
             @endif
 
             {{-- Participating --}}
-            @if(Auth::check() && $event->activity?->myParticipationCount > 0)
-                @if($event->activity->myBackupParticipationCount > 0)
+            @if(Auth::check() && $event->activity?->user_has_participation)
+                @if($event->activity->user_has_backup_participation)
                     <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
                 @else
                     <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
                 @endif
-                @if($event->activity->myHelperParticipationCount > 0)
+                @if($event->activity->user_has_helper_participation)
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
                 @endif
             @endif
 
             {{-- Ticket --}}
-            @if (Auth::check() && $event->myTicketCount>0)
+            @if (Auth::check() && $event->user_has_tickets)
                 <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
             @endif
@@ -98,7 +98,7 @@
                 <i class="fas fa-map-marker-alt fa-fw" aria-hidden="true"></i>
                 {{ $event->location }}
             </span>
-	    
+
 
             {{-- External --}}
             @if($event->is_external)
