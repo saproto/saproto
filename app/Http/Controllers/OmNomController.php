@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -24,7 +25,7 @@ class OmNomController extends Controller
     public function display(Request $request, ?string $store_slug = null)
     {
 
-        if (($store_slug === null || $store_slug === '' || $store_slug === '0') && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
+        if (empty($store_slug) && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
 
@@ -46,11 +47,11 @@ class OmNomController extends Controller
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
-                    $q->where('is_pending', false);
+                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
                 ->get();
         } else {
-            $minors = collect([]);
+            $minors = collect();
         }
 
         return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'store_slug' => $store_slug, 'minors' => $minors]);
@@ -93,12 +94,11 @@ class OmNomController extends Controller
     }
 
     /**
-     * @param  string  $store_slug
      * @return string
      *
      * @throws Exception
      */
-    public function buy(Request $request, $store_slug)
+    public function buy(Request $request, string $store_slug)
     {
         $stores = Config::array('omnomcom.stores');
         $result = new stdClass;
@@ -295,7 +295,7 @@ class OmNomController extends Controller
     }
 
     /**
-     * @return object{\category: \mixed, \products: \mixed}&stdClass[]
+     * @return object{category: mixed, products: mixed}&stdClass[]
      */
     private function getCategories($store): array
     {

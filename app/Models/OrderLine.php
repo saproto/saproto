@@ -111,7 +111,7 @@ class OrderLine extends Model
             ->where(function ($query) {
                 $query->whereDoesntHave('molliePayment')
                     ->orWhereHas('molliePayment', static function ($query) {
-                        $query->whereNotIn('status', ['paid', 'paidout']);
+                        $query->whereNotIn('status', config('omnomcom.mollie.paid_statuses'));
                     });
             })
             ->where('total_price', '!=', 0);
@@ -160,6 +160,10 @@ class OrderLine extends Model
             return 'Bank Card';
         }
 
+        if ($this->total_price == 0) {
+            return 'Free!';
+        }
+
         if ($this->payed_with_mollie !== null) {
             return match ($this->molliePayment->translatedStatus()) {
                 'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
@@ -183,10 +187,6 @@ class OrderLine extends Model
                     $this->payed_with_mollie.
                     '</a>',
             };
-        }
-
-        if ($this->total_price == 0) {
-            return 'Free!';
         }
 
         return 'Unpaid';

@@ -70,24 +70,21 @@ class StorageEntry extends Model
             Newsitem::query()->where('featured_image_id', $id)->count() == 0 &&
             SoundboardSound::query()->where('file_id', $id)->count() == 0 &&
             HeaderImage::query()->where('image_id', $id)->count() == 0 &&
-            Photo::query()->where('file_id', $id)->count() == 0 &&
+            Photo::query()->withoutGlobalScopes()->where('file_id', $id)->count() == 0 &&
             Member::query()->where('omnomcom_sound_id', $id)->count() == 0 &&
             WallstreetEvent::query()->where('image_id', $id)->count() == 0;
     }
 
     /**
-     * @param  UploadedFile  $file
-     * @param  string|null  $customPath
-     *
      * @throws FileNotFoundException
      */
-    public function createFromFile($file, $customPath = null): void
+    public function createFromFile(UploadedFile $file, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
 
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
 
-        if ($customPath) {
+        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
             $this->filename = $customPath.$this->hash;
         }
 
@@ -99,20 +96,14 @@ class StorageEntry extends Model
         $this->save();
     }
 
-    /**
-     * @param  resource|string  $data
-     * @param  string  $mime
-     * @param  string  $name
-     * @param  string|null  $customPath
-     */
-    public function createFromData($data, $mime, $name, $customPath = null): void
+    public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
-        if ($customPath) {
+        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
             $this->filename = $customPath.$this->hash;
         }
 
@@ -123,11 +114,10 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(date('U').mt_rand(1, intval(99999999999)));
+        return sha1(date('U').mt_rand(1, 99999999999));
     }
 
-    /** @return string */
-    public function generatePath()
+    public function generatePath(): string
     {
         $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
         if (Config::get('app-proto.assets-domain') != null) {
@@ -137,12 +127,7 @@ class StorageEntry extends Model
         return $url;
     }
 
-    /**
-     * @param  int|null  $w
-     * @param  int|null  $h
-     * @return string
-     */
-    public function generateImagePath($w, $h)
+    public function generateImagePath(?int $w, ?int $h): string
     {
         $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
         if (Config::get('app-proto.assets-domain') != null) {
@@ -154,15 +139,13 @@ class StorageEntry extends Model
 
     public function getBase64(?int $w = null, ?int $h = null): string
     {
-        /* @phpstan-ignore-next-line */
         return base64_encode(FileController::makeImage($this, $w, $h));
     }
 
     /**
      * @param  bool  $human  Defaults to true.
-     * @return string|int
      */
-    public function getFileSize($human = true)
+    public function getFileSize(bool $human = true): int|string
     {
         $size = File::size($this->generateLocalPath());
         if (! $human) {
@@ -184,8 +167,7 @@ class StorageEntry extends Model
         return round($size / 1024 ** 3, 1).' gigabytes';
     }
 
-    /** @return string */
-    public function generateLocalPath()
+    public function generateLocalPath(): string
     {
         return storage_path('app/'.$this->filename);
     }
@@ -198,7 +180,7 @@ class StorageEntry extends Model
         return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

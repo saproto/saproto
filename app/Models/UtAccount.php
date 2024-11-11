@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -11,22 +12,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $mail
  * @property string $number
  * @property string $givenname
- * @property string|null $middlename
  * @property string $surname
- * @property int $account_expires_at
  * @property bool $found
  * @property Member $member
- * @property mixed $id
- * @property mixed $created_at
- * @property mixed $updated_at
- * @property mixed $deleted_at
+ * @property int $id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
  */
 class UtAccount extends Model
 {
     protected $table = 'ut_accounts';
 
+    protected function casts(): array
+    {
+        return [
+            'found' => 'boolean',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     protected $fillable = [
-        'user_id',
+        'member_id',
         'department',
         'mail',
         'number',

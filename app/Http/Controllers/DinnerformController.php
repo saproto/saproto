@@ -29,7 +29,7 @@ class DinnerformController extends Controller
             ->where('dinnerform_id', $dinnerform->id)
             ->first();
 
-        if (! $dinnerform->isCurrent() && ! isset($order)) {
+        if (! $dinnerform->isCurrent() && ! $order) {
             Session::flash('flash_message', 'This dinnerform is closed and you have not ordered anything.');
 
             return Redirect::back();

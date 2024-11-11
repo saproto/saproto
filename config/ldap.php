@@ -3,9 +3,8 @@
 return [
     'proxy' => [
         'utwente' => [
-            'url' => env('LDAP_PROXY_URL'),
-            'post_url' => env('POST_LDAP_PROXY_URL'),
-            'key' => env('LDAP_PROXY_KEY'),
+            'post_url' => getenv('POST_LDAP_PROXY_URL'),
+            'key' => getenv('LDAP_PROXY_KEY'),
         ],
     ],
 ];

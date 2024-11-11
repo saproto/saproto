@@ -7,20 +7,12 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\EncodedImageInterface;
-use League\Flysystem\FilesystemException;
+use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
-    /**
-     * @param  int  $id
-     * @param  string  $hash
-     */
-    public function get($id, $hash): Response
+    public function get(int $id, string $hash): Response
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::query()->findOrFail($id);
@@ -39,34 +31,27 @@ class FileController extends Controller
         return $response;
     }
 
-    /**
-     * @throws FilesystemException
-     */
-    public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): EncodedImageInterface
+    public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
     {
-        ini_set('memory_limit', '512M');
-        $manager = new ImageManager(new Driver);
-
-        if (Storage::disk('local')->has($entry->filename)) {
-            $image = $manager->read(Storage::disk('local')->path($entry->filename));
-        } else {
+        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
+        if (Storage::disk('local')->missing($entry->filename)) {
             abort(404, 'File not found');
         }
 
-        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
+        return Cache::remember($cacheKey, 31536000, function () use ($entry, $w, $h): string {
+            $image = Image::read(Storage::disk('local')->get($entry->filename));
+            if (empty($w) || empty($h)) {
+                return $image->scaleDown($w, $h)->toWebp()->toString();
+            }
 
-        if ($w === null || $w === 0 || ($h === null || $h === 0)) {
-            return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
-        }
-
-        return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->coverDown($w, $h)->encode());
+            return $image->coverDown($w, $h)->toWebp()->toString();
+        });
     }
 
     /**
-     * @param  int  $id
-     * @param  string  $hash
+     * @return Response
      */
-    public function getImage($id, $hash, Request $request): Response
+    public function getImage(int $id, string $hash, Request $request)
     {
         /** @var StorageEntry $entry */
         $entry = StorageEntry::query()->findOrFail($id);
@@ -75,22 +60,16 @@ class FileController extends Controller
             abort(404);
         }
 
-        $response = new Response(static::makeImage($entry, ($request->has('w') ? $request->input('w') : null), ($request->has('h') ? $request->input('h') : null)), 200);
-        $response->header('Content-Type', $entry->mime);
-        $response->header('Cache-Control', 'max-age=86400, public');
-        $response->header('Content-Disposition', sprintf('filename="%s"', $entry->original_filename));
-
-        return $response;
+        return Response(static::makeImage($entry, $request->input('w'), $request->input('h')), 200, [
+            'Content-Type' => 'image/webp',
+            'Cache-Control' => 'max-age=31536000, public',
+            'Content-Disposition', sprintf('filename="%s"', $entry->original_filename),
+        ]);
     }
 
-    /**
-     * @param  string  $printer
-     * @param  string  $url
-     * @param  int  $copies
-     */
-    public static function requestPrint($printer, $url, $copies = 1): string
+    public static function requestPrint(string $printer, string $url, int $copies = 1): string
     {
-        if ($printer == 'document') {
+        if ($printer === 'document') {
             return 'You cannot do this at the moment. Please use the network printer.';
         }
 

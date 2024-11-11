@@ -35,13 +35,14 @@ it('lets user order on a dinnerform', function () {
         'restaurant' => 'TestDinnerform',
         'closed' => false,
         'visible_home_page' => false,
+        'start' => now()->subHour(),
         'end' => now()->addDay(),
     ]);
 
     /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
-        ->get('/dinnerform/'.$dinnerform->id);
+        ->get(route('dinnerform::show', ['id' => $dinnerform->id]));
 
     $response->assertSee('Add an order');
     $response->assertStatus(200);

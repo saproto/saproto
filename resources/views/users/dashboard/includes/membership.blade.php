@@ -62,29 +62,29 @@
                             </td>
                         @endif
                     </tr>
-                    @if($user->member->is_honorary || $user->member->is_donor || $user->member->is_lifelong || $user->member->is_pet)
+                    @if(in_array($user->member->membership_type, [\App\Enums\MembershipTypeEnum::HONORARY, \App\Enums\MembershipTypeEnum::DONOR, \App\Enums\MembershipTypeEnum::LIFELONG, \App\Enums\MembershipTypeEnum::PET]))
                         <tr>
                             <th>Special status</th>
                             <td>
-                                @if($user->member->is_honorary)
+                                @if($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
                                     <span class="badge rounded-pill bg-primary">
                                         Honorary member! <i class="fas fa-trophy ms-1"></i>
                                     </span>
                                 @endif
 
-                                @if($user->member->is_donor)
+                                @if($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
                                     <span class="badge rounded-pill bg-primary">
                                         Donor <i class="far fa-hand-holding-usd ms-1"></i>
                                     </span>
                                 @endif
 
-                                @if($user->member->is_lifelong)
+                                @if($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
                                     <span class="badge rounded-pill bg-primary">
                                         Lifelong member <i class="fas fa-clock s-1"></i>
                                     </span>
                                 @endif
 
-                                @if($user->member->is_pet)
+                                @if($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
                                     <span class="badge rounded-pill bg-primary">
                                         Pet member <i class="fas fa-cat ms-1"></i>
                                     </span>

@@ -6,7 +6,7 @@
 
 @section('body')
     @if($image_url)
-        <img src="{{ $image_url }}" style="width: 100%;" />
+        <img src="{{ $image_url }}" style="width: 100%;" alt="featured newsitem image" />
     @endif
     <p>
         Hey {{ $user->calling_name }},
@@ -36,7 +36,7 @@
 
                                     @if($event->image)
                                         <img src="{{ $event->image->generateImagePath(350,100) }}"
-                                             style="width: 100%;" />
+                                             style="width: 100%;" alt="{{$event->title}}'s cover image" />
                                     @endif
 
                                     <p>

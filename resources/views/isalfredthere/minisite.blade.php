@@ -30,14 +30,16 @@
                         class="fas fa-triangle-exclamation"></i>
                 </i> <i class="d-none" id="alfred-there" style="font-size: 120px;"><i
                         class="far fa-smile-beam"></i>
+                </i> <i class="d-none" id="jur-there" style="font-size: 120px;"><i
+                        class="far fa-face-grin-squint"></i>
                 </i> <i class="d-none" id="alfred-away" style="font-size: 120px;"><i
                         class="far fa-grimace"></i>
                 </i> <i class="" id="alfred-unknown" style="font-size: 120px;"><i
                         class="fas fa-circle-question"></i>
                 </i>
             </div>
-            <a href="//{{ Config::string('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
-                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" height="120px">
+            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
+                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="472px" height="120px">
             </a>
 
         </div>
@@ -70,6 +72,11 @@
             there: {
                 text: 'Alfred is there!',
                 htmlElement: document.getElementById('alfred-there'),
+                color: 'bg-success',
+            },
+            jur: {
+                text: 'Jur is here to help you! <br> <div style="font-size: 20px;">You might have to check Flex Office though...</div>',
+                htmlElement: document.getElementById('jur-there'),
                 color: 'bg-success',
             },
             unknown: {

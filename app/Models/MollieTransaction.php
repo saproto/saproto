@@ -83,7 +83,7 @@ class MollieTransaction extends Model
             return 'failed';
         }
 
-        if ($status === 'paid' || $status === 'paidout') {
+        if (in_array($status, config('omnomcom.mollie.paid_statuses'))) {
             return 'paid';
         }
 
