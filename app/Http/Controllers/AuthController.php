@@ -833,7 +833,7 @@ class AuthController extends Controller
                                 (new SubjectConfirmationData)
                                     ->setInResponseTo($authnRequest->getId())
                                     ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
-                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())/* @phpstan-ignore-line */
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
                             )
                     )
             )

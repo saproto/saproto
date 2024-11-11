@@ -13,6 +13,7 @@ use App\Services\ProTubeApiService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -220,7 +221,8 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
 
-                if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', config('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', config('omnomcom.alcohol-end')))) {
+                $isDuringRestrictedHours = date('Hi') <= str_replace(':', '', Config::string('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', Config::string('omnomcom.alcohol-end'));
+                if ($product->is_alcoholic && $store->alcohol_time_constraint && $isDuringRestrictedHours) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
 
                     return json_encode($result);
@@ -293,9 +295,6 @@ class OmNomController extends Controller
         return view('omnomcom.products.generateorder', ['orders' => $orders]);
     }
 
-    /**
-     * @return object{category: mixed, products: mixed}&stdClass[]
-     */
     private function getCategories($store): array
     {
         $categories = [];
