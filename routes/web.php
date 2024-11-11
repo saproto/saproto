@@ -18,7 +18,8 @@ use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
 use App\Http\Controllers\DinnerformOrderlineController;
-use App\Http\Controllers\DmxController;
+use App\Http\Controllers\DmxFixtureController;
+use App\Http\Controllers\DmxOverrrideController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\EventController;
@@ -995,12 +996,8 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('make/{id}', 'make')->name('make');
         Route::get('end/{id}', 'end')->name('end');
         Route::get('endId/{id}', 'endId')->name('endId');
-        Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('update/{id}', 'update')->name('update');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('', 'index')->name('index');
     });
+    Route::resource('tempadmins', TempAdminController::class)->only(['index', 'create', 'store', 'edit', 'update'])->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to QR Authentication --- */
     Route::controller(QrAuthController::class)->prefix('qr')->name('qr::')->group(function () {
@@ -1017,37 +1014,15 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Short URL Service*/
-    Route::controller(ShortUrlController::class)->name('short_url::')->group(function () {
-        // Public routes
-        Route::get('go/{short?}', 'go')->name('go');
-
-        // Board only
-        Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('', 'index')->name('index');
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('update/{id}', 'update')->name('update');
-            Route::get('delete/{id}', 'destroy')->name('delete');
-            Route::get('qr_code/{id}', 'qrCode')->name('qr_code');
-        });
-    });
+    Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go');
+    Route::get('short_urls/qr_code/{id}', [ShortUrlController::class, 'qrCode'])->name('short_urls.qr_code')->middleware(['auth', 'permission:board']);
+    Route::resource('short_urls', ShortUrlController::class)->except('show')->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to the DMX Management. (Board or alfred) --- */
-    Route::controller(DmxController::class)->prefix('dmx')->name('dmx::')->middleware(['auth', 'permission:board|alfred'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/update/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'delete')->name('delete');
+    Route::prefix('dmx')->name('dmx.')->middleware(['auth', 'permission:board|alfred'])->group(function () {
+        Route::resource('fixtures', DmxFixtureController::class)->except('show');
 
-        Route::prefix('override')->name('override::')->group(function () {
-            Route::get('/', 'overrideIndex')->name('index');
-            Route::get('/create', 'overrideCreate')->name('create');
-            Route::post('/store', 'overrideStore')->name('store');
-            Route::get('/edit/{id}', 'overrideEdit')->name('edit');
-            Route::post('/update/{id}', 'overrideUpdate')->name('update');
-            Route::get('/delete/{id}', 'overrideDelete')->name('delete');
-        });
+        Route::resource('overrides', DmxOverrrideController::class)->except('show');
     });
 
     /* --- Routes related to the Query system. (Board only) --- */
@@ -1064,7 +1039,6 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
             // Public routes
             Route::get('/', 'index')->name('index');
-
             // Board only
             Route::get('/edit', 'edit')->middleware(['auth', 'permission:sysadmin|alfred'])->name('edit');
             Route::post('/update', 'update')->middleware(['auth', 'permission:sysadmin|alfred'])->name('update');
