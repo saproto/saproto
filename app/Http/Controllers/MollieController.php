@@ -155,7 +155,7 @@ class MollieController extends Controller
             ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
             ->selectRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) as orderline_date')
             ->whereRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) BETWEEN ? AND ?', [$start, $end])
-            ->whereIn('mollie_transactions.status', config('omnomcom.mollie.paid_statuses'))
+            ->whereIn('mollie_transactions.status', Config::array('omnomcom.mollie.paid_statuses'))
             ->groupByRaw('orderline_date')
             ->selectRaw('accounts.account_number, accounts.name as account_name, SUM(orderlines.total_price) as total')
             ->get()->groupBy('account_number')->sortByDesc('account_number')->map(fn ($account) => $account->groupBy('orderline_date'));
@@ -318,7 +318,7 @@ class MollieController extends Controller
         }
 
         return OrderLine::query()->whereHas('molliePayment', static function ($query) use ($start, $end) {
-            $query->whereIn('status', config('omnomcom.mollie.paid_statuses'))
+            $query->whereIn('status', Config::array('omnomcom.mollie.paid_statuses'))
                 ->whereBetween('created_at', [$start, $end]);
         })
             ->sum('total_price');

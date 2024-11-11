@@ -127,7 +127,7 @@ class OrderLineController extends Controller
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', config('omnomcom.alfred-account'));
+                $query->where('account_id', Config::integer('omnomcom.alfred-account'));
             })->where('created_at', '>', Carbon::parse($date)->startOfDay())
                 ->where('created_at', '<', Carbon::parse($date)->endOfDay());
         } else {

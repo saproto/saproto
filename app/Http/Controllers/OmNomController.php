@@ -25,7 +25,7 @@ class OmNomController extends Controller
     public function display(Request $request, ?string $store_slug = null)
     {
 
-        if (empty($store_slug) && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
+        if (empty($store_slug) && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
 
