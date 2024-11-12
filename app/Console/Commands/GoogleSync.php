@@ -88,10 +88,12 @@ class GoogleSync extends Command
 
     /**
      * Create Google Client for subject with given scopes.
+     * @throws \Google\Exception
      */
     public function createClient(string $subject, array $scopes): Google_Client
     {
         $client = new Google_Client;
+        $client->setAuthConfig(config('proto.google_application_credentials'));
         $client->useApplicationDefaultCredentials();
         $client->setSubject($subject);
         $client->setApplicationName('Proto Website');
@@ -185,7 +187,7 @@ class GoogleSync extends Command
         foreach ($protoUsers as $protoUser) {
             // Check if ProtoUser exists in Google Workspace, otherwise create the Google Workspace user.
             if ($googleUsers->contains($protoUser)) {
-                $this->pp('<fg=green>✓</> '.str_pad("#$protoUser->id", 6).$protoUser->name);
+                $this->pp('<fg=green>✓</> '.str_pad("#$protoUser->id", 6).$protoUser->name.' | '.$protoUser->proto_email);
             } else {
                 $this->createGoogleUser($protoUser);
             }
@@ -403,6 +405,18 @@ class GoogleSync extends Command
             );
 
             return;
+        } finally {
+            try {
+                $gmail->users_settings->updateAutoForwarding('me', new Gmail\AutoForwarding([
+                    'enabled' => true,
+                    'emailAddress' => $protoUser->email,
+                    'disposition' => "leaveInInbox"
+                ]));
+            } catch (Throwable) {
+                $this->pp(
+                    $indent."<fg=yellow>x</> ✉ $protoUser->email forwarder is not verified"
+                );
+            }
         }
 
         $this->pp(

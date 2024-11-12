@@ -86,6 +86,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'https://proto.utwente.nl',
                     'https://www.proto.utwente.nl',
+                    'https://www.staging.proto.utwente.nl',
                     'https://static.saproto.com',
                     'https://metis.proto.utwente.nl:3001',
                     'wss://metis.proto.utwente.nl:3001',

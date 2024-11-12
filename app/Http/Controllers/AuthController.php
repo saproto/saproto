@@ -487,10 +487,12 @@ class AuthController extends Controller
 
     /**
      * @throws \Google\Service\Exception
+     * @throws \Google\Exception
      */
     private function syncGooglePassword($protoUser, $password): void
     {
         $client = new Google_Client;
+        $client->setAuthConfig(config('proto.google_application_credentials'));
         $client->useApplicationDefaultCredentials();
         $client->setSubject('superadmin@proto.utwente.nl');
         $client->setApplicationName('Proto Website');
