@@ -348,7 +348,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function hasUnpaidOrderlines(): bool
     {
         return $this->orderlines()->unpayed()->exists();
-        }
+    }
 
     /**
      * Returns whether the user is currently tempadmin.
