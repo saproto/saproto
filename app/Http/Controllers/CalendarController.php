@@ -7,13 +7,13 @@ use Exception;
 class CalendarController extends Controller
 {
     /**
-     * @param  string  $start
-     * @param  string  $end
+     * @param string $start
+     * @param string $end
      */
     public static function returnGoogleCalendarEvents(string $google_calendar_id, $start, $end): array
     {
         try {
-            $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';
+            $url = 'https://www.googleapis.com/calendar/v3/calendars/' . $google_calendar_id . '/events?singleEvents=true&orderBy=startTime&key=' . config('app-proto.google-key-private') . '&timeMin=' . urlencode($start) . '&timeMax=' . urlencode($end) . '';
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
         } catch (Exception) {
             return [];
@@ -34,7 +34,7 @@ class CalendarController extends Controller
 
             $name = '';
             foreach ($name_exp as $val) {
-                $name .= $val.' ';
+                $name .= $val . ' ';
             }
 
             if (property_exists($entry, 'description')) {
@@ -47,7 +47,7 @@ class CalendarController extends Controller
 
             $year = null;
             $studyShort = null;
-            if ($study !== null && $study !== []) {
+            if (!empty($study)) {
                 $study = $study[1];
                 if (str_starts_with($study, 'CRE')) {
                     $year = ceil(intval(str_replace('CRE MOD', '', $study)) / 4);
@@ -64,7 +64,7 @@ class CalendarController extends Controller
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',
                 'start' => strtotime($startTime),
                 'end' => strtotime($endTime),
-                'type' => ($type !== null && $type !== [] ? $type[1] : null),
+                'type' => !empty($type) ? $type[1] : null,
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,
