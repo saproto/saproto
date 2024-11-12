@@ -51,7 +51,6 @@
         "globalcitizen/php-iban": "4.2.3",
         "graham-campbell/markdown": "^15.2",
         "guzzlehttp/guzzle": "^7.5",
-        "intervention/image": "^3.5.0",
         "jwilsson/spotify-web-api-php": "^6.0",
         "laravel/framework": "^11.0",
         "laravel/helpers": "^1.5",
@@ -73,7 +72,8 @@
         "setasign/tfpdf": "^1.33",
         "ext-iconv": "*",
         "litesaml/lightsaml": "^4.2",
-        "ext-zlib": "*"
+        "ext-zlib": "*",
+        "intervention/image-laravel": "^1.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

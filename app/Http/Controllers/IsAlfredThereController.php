@@ -44,7 +44,7 @@ class IsAlfredThereController extends Controller
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
-        if ($new_status === 'there' || $new_status === 'unknown') {
+        if ($new_status === 'there' || $new_status === 'unknown' || $new_status === 'jur') {
             $status->value = $new_status;
             $text->value = '';
         } elseif ($new_status === 'away') {
@@ -82,7 +82,7 @@ class IsAlfredThereController extends Controller
         $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
 
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
-        if ($status->value == 'there' || $status->value == 'unknown') {
+        if ($status->value == 'there' || $status->value == 'jur' || $status->value == 'unknown') {
             $result->status = $status->value;
 
             return $result;
