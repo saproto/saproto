@@ -16,6 +16,7 @@ use Google\Service\Directory\UserExternalId;
 use Google\Service\Directory\UserName;
 use Google\Service\Exception;
 use Google\Service\Gmail;
+use Google\Service\Gmail\AutoForwarding;
 use Google\Service\Gmail\ForwardingAddress;
 use Google_Client;
 use Google_Service_Exception;
@@ -88,6 +89,7 @@ class GoogleSync extends Command
 
     /**
      * Create Google Client for subject with given scopes.
+     *
      * @throws \Google\Exception
      */
     public function createClient(string $subject, array $scopes): Google_Client
@@ -407,10 +409,10 @@ class GoogleSync extends Command
             return;
         } finally {
             try {
-                $gmail->users_settings->updateAutoForwarding('me', new Gmail\AutoForwarding([
+                $gmail->users_settings->updateAutoForwarding('me', new AutoForwarding([
                     'enabled' => true,
                     'emailAddress' => $protoUser->email,
-                    'disposition' => "leaveInInbox"
+                    'disposition' => 'leaveInInbox',
                 ]));
             } catch (Throwable) {
                 $this->pp(
