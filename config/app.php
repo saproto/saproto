@@ -67,7 +67,7 @@ use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
 use nickurt\PwnedPasswords\Facade;
-use PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider;
+use nickurt\PwnedPasswords\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -229,12 +229,11 @@ return [
          * External Service Providers
          */
         MailServiceProvider::class,
-        ServiceProvider::class,
         ReCaptchaServiceProvider::class,
         BarcodeServiceProvider::class,
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
-        nickurt\PwnedPasswords\ServiceProvider::class,
+        ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
     ],

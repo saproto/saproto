@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
-use DateTime;
 use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -346,31 +347,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function hasUnpaidOrderlines(): bool
     {
-        foreach ($this->orderlines as $orderline) {
-            if (! $orderline->isPayed()) {
-                return true;
-            }
-
-            if ($orderline->orderline && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
-                return true;
-            }
+        return $this->orderlines()->unpayed()->exists();
         }
-
-        return false;
-    }
 
     /**
      * Returns whether the user is currently tempadmin.
      */
     public function isTempadmin(): bool
     {
-        foreach ($this->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->tempadmin()->where('start_at', '<', Carbon::now())->where('end_at', '>', Carbon::now())->exists();
     }
 
     /**
@@ -378,19 +363,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isTempadminLaterToday(): bool
     {
-        $now = Carbon::now();
-        foreach ($this->tempadmin as $tempadmin) {
-            // Skip all 'past' tempadmin entries
-            if (Carbon::parse($tempadmin->end_at)->isBefore($now)) {
-                continue;
-            }
-
-            if ($now->between(Carbon::parse($tempadmin->start_at)->startOfDay(), Carbon::parse($tempadmin->end_at)->endOfDay())) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->tempadmin()->where('start_at', '<', Carbon::now()->endOfDay())->where('end_at', '<', Carbon::now())->exists();
     }
 
     /**
@@ -398,12 +371,12 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function age(): int
     {
-        return Carbon::instance(new DateTime($this->birthdate))->age;
+        return Carbon::parse($this->birthdate)->age;
     }
 
     public function isInCommittee(Committee $committee): bool
     {
-        return $this->committees()->where('committees.id', $committee->id)->exists();
+        return $committee->users()->where('user_id', $this->id)->exists();
     }
 
     public function isInCommitteeBySlug(string $slug): bool
@@ -418,22 +391,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->committees()->exists();
     }
 
-    /**
-     * @return Withdrawal[]
-     */
-    public function withdrawals(int $limit = 0): array
+    public function withdrawals(): HasManyThrough
     {
-        $withdrawals = [];
-        foreach (Withdrawal::query()->orderBy('date', 'desc')->get() as $withdrawal) {
-            if ($withdrawal->orderlinesForUser($this)->count() > 0) {
-                $withdrawals[] = $withdrawal;
-                if ($limit > 0 && count($withdrawals) > $limit) {
-                    break;
-                }
-            }
-        }
-
-        return $withdrawals;
+        return $this->hasManyThrough(Withdrawal::class, OrderLine::class, 'user_id', 'id', 'id', 'payed_with_withdrawal')
+            ->groupBy('withdrawals.id')
+            ->orderBy('withdrawals.created_at', 'desc');
     }
 
     public function websiteUrl(): ?string
@@ -512,8 +474,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function getToken(): Token
     {
-        $token = count($this->tokens) > 0 ? $this->tokens->last() : $this->generateNewToken();
-
+        $token = $this->tokens->last() ?? $this->generateNewToken();
         $token->touch();
 
         return $token;
@@ -530,8 +491,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
+        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
 
         return $memberships;
     }
@@ -541,8 +502,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_alarm;
     }
 
-    /** @param float|null $hours */
-    public function setCalendarAlarm($hours): void
+    public function setCalendarAlarm(?float $hours): void
     {
         $hours = floatval($hours);
         $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
@@ -560,11 +520,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    public function getIcalUrl(): string
-    {
-        return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
-    }
-
     public function getCompletedProfileAttribute(): bool
     {
         return $this->birthdate !== null && $this->phone !== null;
@@ -573,7 +528,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && ! $this->member->is_pending;
+        return $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING;
     }
 
     public function getSignedMembershipFormAttribute(): bool
@@ -595,9 +550,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->generatePhotoPath();
     }
 
+    public function getIcalUrl(): string
+    {
+        return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
+    }
+
     public function getWelcomeMessageAttribute(): ?string
     {
-        return $this->welcomeMessage()->message ?? null;
+        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
     }
 
     protected function casts(): array

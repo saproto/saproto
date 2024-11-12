@@ -5,9 +5,9 @@
 @endsection
 
 @section('container')
-    <form
-        action="{{ isset($category)&&$category?route('codex::update-song-category', ['id'=>$category->id]):route("codex::store-codex-category") }}"
-        method="POST">
+    <form action="{{ !empty($category) ? route('codexSongCategory.update', ['codexSongCategory'=>$category]) : route("codexSongCategory.store") }}"
+          method="POST">
+        <input type="hidden" name="_method" value="{{ !empty($category) ? "PUT" : "POST" }}">
         {{ csrf_field()}}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">

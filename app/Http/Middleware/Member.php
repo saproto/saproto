@@ -13,10 +13,14 @@ class Member
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (Auth::user()?->is_member) {
-            return $next($request);
+        if (! Auth::check()) {
+            abort(403, 'You need to be logged in to access this page.');
         }
 
-        return response('You need to be a member of S.A. Proto to see this page.', 403);
+        if (! Auth::user()?->is_member) {
+            abort(403, 'You need to be a member to access this page.');
+        }
+
+        return $next($request);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
 use App\Models\StorageEntry;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Milon\Barcode\DNS2D;
 use PDF;
 use PragmaRX\Google2FA\Google2FA;
 use Spatie\Permission\Models\Permission;
@@ -35,7 +37,7 @@ class UserDashboardController extends Controller
         if (! $user->tfa_totp_key) {
             $google2fa = new Google2FA;
             $tfakey = $google2fa->generateSecretKey(32);
-            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
+            $qrcode = (new DNS2D)->getBarcodeSVG($google2fa->getQRCodeUrl('S.A. Proto', $user->name, $tfakey), 'QRCODE');
         }
 
         $memberships = $user->getMemberships();
@@ -368,13 +370,14 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        if ($user->member?->is_pending) {
+        if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
             $user->member->delete();
         }
 
+        /** @var Member $member */
         $member = Member::query()->create();
         $member->user()->associate($user);
-        $member->is_pending = true;
+        $member->membership_type = MembershipTypeEnum::PENDING;
 
         $form = new PDF('P', 'A4', 'en');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));

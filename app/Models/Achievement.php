@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -50,8 +51,7 @@ class Achievement extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'achievements_users');
     }
@@ -75,14 +75,13 @@ class Achievement extends Model
     }
 
     /**
-     * @param  bool  $is_member
      * @return BelongsToMany|Builder|User[]
      */
-    public function currentOwners($is_member = true)
+    public function currentOwners(bool $is_member = true): array|Builder|BelongsToMany
     {
         if ($is_member) {
             return $this->users()->whereHas('member', static function ($query) {
-                $query->where('is_pending', false);
+                $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
             });
         }
 
