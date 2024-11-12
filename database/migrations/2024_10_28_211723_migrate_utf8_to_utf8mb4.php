@@ -23,7 +23,7 @@ return new class extends Migration
         $databaseName = config("database.connections.{$defaultConnection}.database");
 
         // Change default charset and collation
-        DB::unprepared("ALTER SCHEMA {$databaseName} DEFAULT CHARACTER SET {$charset} DEFAULT COLLATE {$collation};");
+        DB::unprepared("ALTER SCHEMA `{$databaseName}` DEFAULT CHARACTER SET {$charset} DEFAULT COLLATE {$collation};");
 
         // Get the list of all tables
         $tableNames = DB::table('information_schema.tables')
@@ -34,7 +34,7 @@ return new class extends Migration
 
         // Iterate through the list and alter each table
         foreach ($tableNames as $tableName) {
-            DB::unprepared("ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$charset} COLLATE {$collation};");
+            DB::unprepared("ALTER TABLE `{$tableName}` CONVERT TO CHARACTER SET {$charset} COLLATE {$collation};");
         }
 
         // Get the list of all columns in the active db that have a collation
@@ -66,7 +66,7 @@ return new class extends Migration
                 $default = 'DEFAULT NULL';
             }
 
-            $sql = "ALTER TABLE {$tableName}
+            $sql = "ALTER TABLE `{$tableName}`
                     CHANGE `{$columnName}` `{$columnName}`
                     {$columnType}
                     CHARACTER SET {$charset}
