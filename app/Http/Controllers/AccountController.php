@@ -16,14 +16,10 @@ class AccountController extends Controller
     /** @return View */
     public function index()
     {
-        return view('omnomcom.accounts.index', ['accounts' => Account::query()->orderBy('account_number', 'asc')->get()]);
+        return view('omnomcom.accounts.index', ['accounts' => Account::query()->orderBy('account_number')->get()]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function show($id)
+    public function show(int $id): View
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
@@ -31,16 +27,12 @@ class AccountController extends Controller
         return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::query()->where('account_id', $account->id)->paginate(10)]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('omnomcom.accounts.edit', ['account' => null]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         /** @var Account $account */
         $account = Account::query()->create($request->all());
@@ -51,20 +43,12 @@ class AccountController extends Controller
         return Redirect::route('omnomcom::accounts::index');
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function edit($id)
+    public function edit(int $id): View
     {
         return view('omnomcom.accounts.edit', ['account' => Account::query()->findOrFail($id)]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
@@ -77,12 +61,11 @@ class AccountController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(int $id)
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
@@ -101,11 +84,8 @@ class AccountController extends Controller
 
     /**
      * Display aggregated results of sales. Per product to value that has been sold in the specified period.
-     *
-     * @param  int  $account
-     * @return View
      */
-    public function showAggregation(Request $request, $account)
+    public function showAggregation(Request $request, int $account): View
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($account);
@@ -118,10 +98,8 @@ class AccountController extends Controller
 
     /**
      * Display aggregated results of sales for OmNomCom products. Per product to value that has been sold in the specified period.
-     *
-     * @return View
      */
-    public function showOmnomcomStatistics(Request $request)
+    public function showOmnomcomStatistics(Request $request): View
     {
         if ($request->has('start') && $request->has('end')) {
             $account = Account::query()->findOrFail(config('omnomcom.omnomcom-account'));

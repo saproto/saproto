@@ -12,6 +12,7 @@ use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -145,22 +146,21 @@ class MollieController extends Controller
             $end->nextWeekday();
         }
 
-        // We do one massive query to reduce the number of queries.
-        $orderlines = OrderLine::query()
-            ->join('products', 'orderlines.product_id', '=', 'products.id')
-            ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->select(['orderlines.*', 'accounts.account_number', 'accounts.name'])
-            ->whereHas('molliePayment', static function ($query) use ($start, $end) {
-                $query->where(static function ($query) {
-                    $query->where('status', 'paid')
-                        ->orWhere('status', 'paidout');
-                })
-                    ->whereBetween('created_at', [$start, $end]);
-            })
-            ->get();
+        //generate a list of all the accounts and their total orderlines for the given month
+        //grouped by account number and then by orderline date
+        //this is used to generate a table with the total orderlines for each account, and product
+        $accounts = Account::query()->join('products', 'accounts.id', '=', 'products.account_id')
+            ->join('orderlines', 'products.id', '=', 'orderlines.product_id')
+            ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
+            ->selectRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) as orderline_date')
+            ->whereRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) BETWEEN ? AND ?', [$start, $end])
+            ->whereIn('mollie_transactions.status', config('omnomcom.mollie.paid_statuses'))
+            ->groupByRaw('orderline_date')
+            ->selectRaw('accounts.account_number, accounts.name as account_name, SUM(orderlines.total_price) as total')
+            ->get()->groupBy('account_number')->sortByDesc('account_number')->map(fn ($account) => $account->groupBy('orderline_date'));
 
         return view('omnomcom.accounts.orderlines-breakdown', [
-            'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
+            'accounts' => $accounts,
             'title' => 'Account breakdown for Mollie transactions between '.$start->format('d-m-Y').' and '.$end->format('d-m-Y'),
         ]);
     }
@@ -317,10 +317,7 @@ class MollieController extends Controller
         }
 
         return OrderLine::query()->whereHas('molliePayment', static function ($query) use ($start, $end) {
-            $query->where(static function ($query) {
-                $query->where('status', 'paid')
-                    ->orWhere('status', 'paidout');
-            })
+            $query->whereIn('status', config('omnomcom.mollie.paid_statuses'))
                 ->whereBetween('created_at', [$start, $end]);
         })
             ->sum('total_price');
@@ -333,7 +330,7 @@ class MollieController extends Controller
      */
     public static function getPaymentMethods()
     {
-        if (app()->environment('local')) {
+        if (App::environment('local')) {
             return null;
         }
 

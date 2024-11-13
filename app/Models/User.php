@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Exception;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -291,11 +293,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
-     * @param  int  $w
-     * @param  int  $h
      * @return string Path to a resized version of someone's profile picture.
      */
-    public function generatePhotoPath($w = 100, $h = 100)
+    public function generatePhotoPath(int $w = 100, int $h = 100): string
     {
         if ($this->photo) {
             return $this->photo->generateImagePath($w, $h);
@@ -305,11 +305,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @param  string  $password
-     *
      * @throws Exception
      */
-    public function setPassword($password): void
+    public function setPassword(string $password): void
     {
         // Update Laravel Password
         $this->password = Hash::make($password);
@@ -383,11 +381,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->committees()->exists();
     }
 
-    public function withdrawals(int $limit = 0): Collection
+    public function withdrawals(): HasManyThrough
     {
-        return Withdrawal::query()->whereHas('orderlines', function ($query) {
-            $query->where('user_id', $this->id);
-        })->orderBy('date', 'desc')->limit($limit)->get();
+        return $this->hasManyThrough(Withdrawal::class, OrderLine::class, 'user_id', 'id', 'id', 'payed_with_withdrawal')
+            ->groupBy('withdrawals.id')
+            ->orderBy('withdrawals.created_at', 'desc');
     }
 
     public function websiteUrl(): ?string
@@ -399,8 +397,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return 'https://'.$this->website;
     }
 
-    /** @return string|null */
-    public function websiteDisplay()
+    public function websiteDisplay(): ?string
     {
         if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
             return $matches[1];
@@ -414,8 +411,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
-    /** @return string */
-    public function getDisplayEmail()
+    public function getDisplayEmail(): string
     {
         return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
     }
@@ -462,11 +458,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $token;
     }
 
-    /** @return Token */
-    public function getToken()
+    public function getToken(): Token
     {
-        $token = count($this->tokens) > 0 ? $this->tokens->last() : $this->generateNewToken();
-
+        $token = $this->tokens->last() ?? $this->generateNewToken();
         $token->touch();
 
         return $token;
@@ -481,30 +475,27 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /** @return array<string, Collection<Member>> */
-    public function getMemberships()
+    public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
+        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
 
         return $memberships;
     }
 
-    /** @return float|null */
-    public function getCalendarAlarm()
+    public function getCalendarAlarm(): ?float
     {
         return $this->pref_calendar_alarm;
     }
 
-    /** @param float|null $hours */
-    public function setCalendarAlarm($hours): void
+    public function setCalendarAlarm(?float $hours): void
     {
         $hours = floatval($hours);
         $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
         $this->save();
     }
 
-    /** @return bool */
-    public function getCalendarRelevantSetting()
+    public function getCalendarRelevantSetting(): bool
     {
         return $this->pref_calendar_relevant_only;
     }
@@ -523,7 +514,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute(): bool
     {
-        return $this->member && ! $this->member->is_pending;
+        return $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING;
     }
 
     public function getSignedMembershipFormAttribute(): bool
@@ -540,21 +531,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->isTempadmin();
     }
 
-    /** @return string */
-    public function getPhotoPreviewAttribute()
+    public function getPhotoPreviewAttribute(): string
     {
         return $this->generatePhotoPath();
     }
 
-    /** @return string */
-    public function getIcalUrl()
+    public function getIcalUrl(): string
     {
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
 
     public function getWelcomeMessageAttribute(): ?string
     {
-        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->welcomeMessage;
+        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
     }
 
     protected function casts(): array

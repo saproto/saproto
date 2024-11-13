@@ -14,13 +14,10 @@ class EnforceWizard
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return mixed
      *
      * @throws Exception
      */
-    public function handle($request, $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         if (Auth::check() && HashMapItem::key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
             if (! $request->is('becomeamember')) {

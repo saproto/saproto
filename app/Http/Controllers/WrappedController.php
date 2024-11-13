@@ -84,7 +84,9 @@ class WrappedController extends Controller
             ->map(static function (Event $event) use ($activity_prices, $ticket_prices, $images) {
                 $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
                 $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
+                /** @phpstan-ignore-next-line */
                 $event->price = $activity_price + $ticket_price;
+                /** @phpstan-ignore-next-line */
                 $event->image_url = $images->where('event_id', $event->id)->first()->generateImagePath(null, null);
 
                 return $event->only([

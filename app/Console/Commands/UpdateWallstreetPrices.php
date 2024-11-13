@@ -43,6 +43,7 @@ class UpdateWallstreetPrices extends Command
     public function handle(): ?int
     {
         //get the wallstreet drink that is currently active
+        /** @var WallstreetDrink|null $currentDrink */
         $currentDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
@@ -50,7 +51,6 @@ class UpdateWallstreetPrices extends Command
             return 0;
         }
 
-        /** @var WallstreetDrink $currentDrink */
         foreach ($currentDrink->products()->get() as $product) {
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
@@ -108,7 +108,7 @@ class UpdateWallstreetPrices extends Command
             $randomEvent = $randomEventQuery->first();
             $this->info('Random event '.$randomEvent->name.' triggered');
             $currentDrink->events()->attach($randomEvent->id);
-            foreach ($randomEvent->products()->whereIn('id', $currentDrink->products->pluck('id')) as $product) {
+            foreach ($randomEvent->products()->whereIn('id', $currentDrink->products->pluck('id'))->get() as $product) {
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
                 $delta = ($randomEvent->percentage / 100) * $product->price;
                 $newPriceObject = new WallstreetPrice([

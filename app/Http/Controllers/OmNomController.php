@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -12,6 +13,7 @@ use App\Services\ProTubeApiService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -23,7 +25,7 @@ class OmNomController extends Controller
     public function display(Request $request, ?string $store_slug = null)
     {
 
-        if (($store_slug === null || $store_slug === '' || $store_slug === '0') && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
+        if (empty($store_slug) && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
 
@@ -45,11 +47,11 @@ class OmNomController extends Controller
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
-                    $q->where('is_pending', false);
+                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
                 ->get();
         } else {
-            $minors = collect([]);
+            $minors = collect();
         }
 
         return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'store_slug' => $store_slug, 'minors' => $minors]);
@@ -92,12 +94,11 @@ class OmNomController extends Controller
     }
 
     /**
-     * @param  string  $store_slug
      * @return string
      *
      * @throws Exception
      */
-    public function buy(Request $request, $store_slug)
+    public function buy(Request $request, string $store_slug)
     {
         $stores = config('omnomcom.stores');
         $result = new stdClass;
@@ -220,7 +221,8 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
 
-                if ($product->is_alcoholic && $store->alcohol_time_constraint && (date('Hi') <= str_replace(':', '', config('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', config('omnomcom.alcohol-end')))) {
+                $isDuringRestrictedHours = date('Hi') <= str_replace(':', '', Config::string('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', Config::string('omnomcom.alcohol-end'));
+                if ($product->is_alcoholic && $store->alcohol_time_constraint && $isDuringRestrictedHours) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
 
                     return json_encode($result);
@@ -293,9 +295,6 @@ class OmNomController extends Controller
         return view('omnomcom.products.generateorder', ['orders' => $orders]);
     }
 
-    /**
-     * @return object{\category: \mixed, \products: \mixed}&stdClass[]
-     */
     private function getCategories($store): array
     {
         $categories = [];

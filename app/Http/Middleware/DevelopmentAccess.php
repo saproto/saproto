@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class DevelopmentAccess
 {
     /** @var string[] */
-    protected $except = [
+    protected array $except = [
         'webhook/*',
     ];
 
@@ -39,12 +39,8 @@ class DevelopmentAccess
 
     /**
      * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return Closure
      */
-    public function handle($request, $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         if (config('app-proto.debug-whitelist') == null) {
             return $next($request);
