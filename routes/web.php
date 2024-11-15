@@ -51,6 +51,7 @@ use App\Http\Controllers\QrAuthController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
+use App\Http\Controllers\SamlController;
 use App\Http\Controllers\SearchController;
 /* --- use App\Http\Controllers\RadioController; --- */
 
@@ -144,6 +145,12 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('change', 'getPasswordChange')->middleware(['auth'])->name('change::index');
             Route::post('change', 'postPasswordChange')->middleware(['throttle:5,1', 'auth'])->name('change');
         });
+
+        // Route::group(function () {
+            Route::post('surf/callback', [SurfConextController::class, 'callback'])->name('surf::callback');
+            Route::get('surf/login', [SurfConextController::class, 'login'])->name('surf::login');
+            Route::get('surf/sp_meta', [SurfConextController::class, 'provideMetadataForSurfConext'])->name('surf::meta');
+        // });
 
         Route::get('register', 'getRegister')->name('register::index');
         Route::post('register', 'postRegister')->middleware(['throttle:5,1'])->name('register');
