@@ -141,9 +141,11 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('change', 'postPasswordChange')->middleware(['throttle:5,1', 'auth'])->name('change');
         });
 
-        Route::post('surf/callback', [SamlController::class, 'callback'])->name('surf::callback');
-        Route::get('surf/login', [SamlController::class, 'login'])->name('surf::login');
-        Route::get('surf/sp_meta', [SamlController::class, 'provideMetadataForSurfConext'])->name('surf::meta');
+        // Route::group(function () {
+            Route::post('surf/callback', [SurfConextController::class, 'callback'])->name('surf::callback');
+            Route::get('surf/login', [SurfConextController::class, 'login'])->name('surf::login');
+            Route::get('surf/sp_meta', [SurfConextController::class, 'provideMetadataForSurfConext'])->name('surf::meta');
+        // });
 
         Route::get('register', 'getRegister')->name('register::index');
         Route::post('register', 'postRegister')->middleware(['throttle:5,1'])->name('register');

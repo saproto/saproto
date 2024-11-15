@@ -33,6 +33,8 @@ return [
         // 'sp_certificate' => file_get_contents(storage_path(env('SAML_IDP_CERT_PATH'))),
         // 'sp_private_key' => file_get_contents(storage_path(env('SAML_IDP_KEY_PATH'))),
         'sp_default_binding_method' => \LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST,
+        // 'sp_default_binding_method' => \LightSaml\SamlConstants::BINDING_SAML2_HTTP_REDIRECT,
+        // 'sp_default_binding_method' => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
 
         'attribute_map' => [
             'uid' => \SocialiteProviders\Saml2\OasisAttributeNameUris::UID,
