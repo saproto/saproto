@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response as SupportResponse;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 
 class SearchController extends Controller
@@ -114,42 +114,60 @@ class SearchController extends Controller
         ]);
     }
 
-    public function ldapSearch(Request $request): View
+    public function ldapSearch(Request $request)
     {
-        $query = null;
-        $data = null;
-        if ($request->has('query')) {
-            $query = $request->input('query');
-            if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
-                abort(400, 'You cannot use special characters in your search query.');
+        if (! $request->has('query')) {
+            Session::flash('flash_message', 'Please include a search query.');
+
+            return Redirect::back();
+        }
+
+        $query = $request->input('query');
+        if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
+            Session::flash('flash_message', 'You cannot use special characters in your search query.');
+
+            return Redirect::back();
+        }
+
+        if (strlen($query) < 3) {
+            Session::flash('flash_message', 'Please make your search term more than three characters.');
+
+            return Redirect::back();
+        }
+
+        $terms = explode(' ', $query);
+        //make the search match all the terms, and is an active account
+        $search = '(&(extensionattribute6=actief)';
+        foreach ($terms as $term) {
+            //or all the individual fields
+            $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*)";
+            if (Auth::user()->can('board')) {
+                $search .= "(userPrincipalName={$term}@utwente.nl)";
             }
 
-            if (strlen($query) >= 3) {
-                $terms = explode(' ', $query);
-                $search = '&';
-                foreach ($terms as $term) {
-                    if (Auth::user()->can('board')) {
-                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(userPrincipalName={$term}@utwente.nl)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
-                    } else {
-                        $search .= "(|(sn=*{$term}*)(middlename=*{$term}*)(givenName=*{$term}*)(telephoneNumber=*{$term}*)(otherTelephone=*{$term}*)(physicalDeliveryOfficeName=*{$term}*))";
-                    }
-                }
+            $search .= ')';
+        }
 
-                $data = LdapController::searchUtwente($search, true);
-            } else {
-                Session::flash('flash_message', 'Please make your search term more than three characters.');
-            }
+        //close the search
+        $search .= ')';
+
+        $result = LdapController::searchUtwente($search);
+        //check that we have a valid response
+        if (isset($result->error)) {
+            Session::flash('flash_message', 'Something went wrong while searching the UT LDAP server.'.($result->error ? ' '.$result->error : ''));
+
+            return Redirect::back();
         }
 
         return view('search.ldapsearch', [
             'term' => $query,
-            'data' => (array) $data,
+            'data' => $result->result,
         ]);
     }
 
-    public function openSearch(): SupportResponse
+    public function openSearch(): Response
     {
-        return SupportResponse::make(ViewFacade::make('search.opensearch'))->header('Content-Type', 'text/xml');
+        return response()->view('search.opensearch')->header('Content-Type', 'text/xml');
     }
 
     public function getUserSearch(Request $request): array
@@ -198,7 +216,7 @@ class SearchController extends Controller
 
     private function getGenericSearchQuery(Model|string $model, ?string $query, array $attributes): ?Builder
     {
-        if ($query === null || $query === '' || $query === '0') {
+        if (empty($query)) {
             return null;
         }
 

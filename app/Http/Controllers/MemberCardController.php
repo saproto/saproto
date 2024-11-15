@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 
 class MemberCardController extends Controller
 {
     /**
      * @param  int  $id
      * @return string
+     *
+     * @throws Html2PdfException
      */
     public function download(Request $request, $id)
     {

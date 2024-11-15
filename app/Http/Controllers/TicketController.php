@@ -274,10 +274,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return string
      */
-    public function download($id)
+    public function download(int $id)
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);
@@ -316,7 +315,9 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        foreach ($request->get('tickets') as $ticket_id => $amount) {
+        $tickets = $request->get('tickets');
+
+        foreach ($tickets as $ticket_id => $amount) {
             $ticket = Ticket::query()->find($ticket_id);
             $user_owns = TicketPurchase::query()->where('user_id', Auth::id())->where('ticket_id', $ticket_id)->count();
             if (! $ticket) {
@@ -361,7 +362,8 @@ class TicketController extends Controller
         $prepaid_tickets = [];
 
         $total_cost = 0;
-        foreach ($request->get('tickets') as $ticket_id => $amount) {
+        foreach ($tickets as $ticket_id => $amount) {
+            /** @var Ticket $ticket */
             $ticket = Ticket::query()->find($ticket_id);
 
             for ($i = 0; $i < $amount; $i++) {
@@ -435,9 +437,8 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
 
-        $ticket = Ticket::query()->find($request->get('tickets')[0]);
-        if ($ticket?->redirect_url) {
-            return Redirect::away($ticket->redirect_url);
+        if ($event->activity?->redirect_url) {
+            return Redirect::away($event->activity->redirect_url);
         }
 
         return Redirect::back();

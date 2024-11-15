@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
     /**
      * The application's global HTTP middleware stack.
      *
-     * @var array
+     * @var array<int, class-string|string>
      */
     protected $middleware = [
         HandleCors::class,
@@ -67,7 +67,7 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $middlewareAliases = [
         'auth' => Authenticate::class,

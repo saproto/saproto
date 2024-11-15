@@ -17,6 +17,7 @@ it('shows the authorized homepage', function () {
 });
 
 it('shows the member homepage', function () {
+    /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
         ->get('/');

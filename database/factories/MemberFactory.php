@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +26,7 @@ class MemberFactory extends Factory
             'deleted_at' => null,
             'user_id' => User::factory()->hasBank()->hasAddress(),
             'proto_username' => fn ($attributes): string => Member::createProtoUsername(User::query()->find($attributes['user_id'])->name),
-            'is_pet' => 0,
+            'membership_type' => MembershipTypeEnum::REGULAR,
         ];
     }
 
@@ -35,7 +36,7 @@ class MemberFactory extends Factory
     public function special(): Factory
     {
         return $this->state(function (array $attributes): array {
-            $member_types = ['is_lifelong', 'is_honorary', 'is_donor', 'is_pet', 'is_pending'];
+            $member_types = [MembershipTypeEnum::DONOR, MembershipTypeEnum::HONORARY, MembershipTypeEnum::LIFELONG];
 
             return [
                 fake()->randomElement($member_types) => 1,

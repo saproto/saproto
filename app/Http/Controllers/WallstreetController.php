@@ -152,16 +152,19 @@ class WallstreetController extends Controller
         $products = $drink->products()->select('name', 'price', 'id', 'image_id')->get();
         foreach ($products as $product) {
             /** @var Product $product */
+            /** @phpstan-ignore-next-line */
             $product->img = is_null($product->image_url) ? '' : $product->image_url;
 
             $newPrice = WallstreetPrice::query()->where('product_id', $product->id)->orderBy('id', 'desc')->first();
-            if (! $newPrice || $product->price === 0) {
+            if (! $newPrice || $product->price === 0.0) {
                 $product->price = $newPrice->price ?? $product->price;
+                /** @phpstan-ignore-next-line */
                 $product->diff = 0;
 
                 continue;
             }
 
+            /** @phpstan-ignore-next-line */
             $product->diff = ($newPrice->price - $product->price) / $product->price * 100;
             $product->price = $newPrice->price;
         }
@@ -189,8 +192,8 @@ class WallstreetController extends Controller
             ->whereHas('product', static function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             })
-            ->where('created_at', '<', Carbon::parse($drink->end_time))
-            ->where('created_at', '>', Carbon::parse($drink->start_time))
+            ->where('created_at', '<', Carbon::createFromTimestamp($drink->end_time))
+            ->where('created_at', '>', Carbon::createFromTimestamp($drink->start_time))
             ->get()
             ->sum('loss');
     }
@@ -206,7 +209,9 @@ class WallstreetController extends Controller
     {
         $events = $drink->events()->with('products')->get();
         foreach ($events as $event) {
-            $event->img = $event->image?->generatePath();
+            /** @var WallstreetEvent $event */
+            /** @phpstan-ignore-next-line */
+            $event->img = $event->image->generatePath();
         }
 
         return $events;

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\MembershipTypeEnum;
 use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
@@ -42,7 +43,7 @@ class BirthdayCron extends Command
         $users = User::query()
             ->where('birthdate', 'LIKE', '%-'.date('m-d'))
             ->whereHas('member', static function ($q) {
-                $q->where('is_pending', false);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->get();
 

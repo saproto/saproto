@@ -17,7 +17,7 @@ class WelcomeMessageFactory extends Factory
     public function definition(): array
     {
         return [
-            'message' => fake()->word(),
+            'message' => fake()->sentence(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'user_id' => User::factory(),

@@ -10,11 +10,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BankController;
 use App\Http\Controllers\CodexController;
+use App\Http\Controllers\CodexSongCategoryController;
+use App\Http\Controllers\CodexSongController;
+use App\Http\Controllers\CodexTextController;
+use App\Http\Controllers\CodexTextTypeController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DinnerformController;
 use App\Http\Controllers\DinnerformOrderlineController;
-use App\Http\Controllers\DmxController;
+use App\Http\Controllers\DmxFixtureController;
+use App\Http\Controllers\DmxOverrrideController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmailListController;
 use App\Http\Controllers\EventController;
@@ -177,7 +182,7 @@ Route::middleware('forcedomain')->group(function () {
         });
 
         Route::controller(UserDashboardController::class)->group(function () {
-            Route::post('change_email', 'updateMail')->middleware(['throttle:3,1'])->name('changemail');
+            Route::post('change_email/{id}', 'updateMail')->middleware(['throttle:3,1'])->name('changemail');
             Route::get('dashboard', 'show')->name('dashboard::show');
             Route::post('dashboard', 'update')->name('dashboard');
         });
@@ -264,7 +269,8 @@ Route::middleware('forcedomain')->group(function () {
 
             Route::get('studied_create/{id}', 'toggleStudiedCreate')->name('toggle_studied_create');
             Route::get('studied_itech/{id}', 'toggleStudiedITech')->name('toggle_studied_itech');
-            Route::get('nda/{id}', 'toggleNda')->middleware(['permission:board'])->name('toggle_nda');
+            Route::get('primary_somewhere_else/{id}', 'togglePrimaryAtAnotherAssociation')->name('toggle_primary_somewhere_else');
+            Route::get('nda/{id}', 'toggleNda')->name('toggle_nda');
             Route::get('unblock_omnomcom/{id}', 'unblockOmnomcom')->name('unblock_omnomcom');
 
             Route::get('{id}', 'details')->name('details');
@@ -424,8 +430,7 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Routes related to dinnerforms --- */
-
-    Route::prefix('dinnerform')->name('dinnerform::')->middleware(['auth'])->group(function () {
+    Route::prefix('dinnerform')->name('dinnerform::')->middleware(['member'])->group(function () {
 
         /* --- TIPCie only --- */
         Route::controller(DinnerformController::class)->middleware(['permission:tipcie'])->group(function () {
@@ -438,14 +443,22 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('admin/{id}', 'admin')->name('admin');
             Route::get('process/{id}', 'process')->name('process');
         });
-        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->middleware(['permission:tipcie'])->group(function () {
-            Route::get('delete/{id}', 'delete')->name('delete');
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('update/{id}', 'update')->name('update');
-        });
-        /* --- Member only routes --- */
-        Route::post('store/{id}', [DinnerformOrderlineController::class, 'store'])->prefix('orderline')->name('orderline::store');
+
+        /* --- Member only --- */
         Route::get('{id}', [DinnerformController::class, 'show'])->name('show');
+
+        /* --- Routes related to the dinnerform orderlines --- */
+        Route::controller(DinnerformOrderlineController::class)->prefix('orderline')->name('orderline::')->group(function () {
+            /* --- TIPCie only --- */
+            Route::middleware(['permission:tipcie'])->group(function () {
+                Route::get('edit/{id}', 'edit')->name('edit');
+                Route::post('update/{id}', 'update')->name('update');
+            });
+
+            /* --- Member only --- */
+            Route::get('delete/{id}', 'delete')->name('delete');
+            Route::post('store/{id}', 'store')->name('store');
+        });
     });
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
@@ -855,7 +868,7 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('delete/{id}', 'destroy')->name('delete');
         });
         Route::get('', 'publicIndex')->name('index');
-        Route::get('{id}', 'view')->name('show');
+        Route::get('{id}', 'show')->name('show');
     });
 
     /* --- Routes related to announcements --- */
@@ -877,10 +890,7 @@ Route::middleware('forcedomain')->group(function () {
         // Public routes
         Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');
-            Route::get('slideshow', 'slideshow')->name('slideshow');
-
-            Route::get('/like/{id}', 'likePhoto')->middleware(['auth'])->name('likes');
-            Route::get('/dislike/{id}', 'dislikePhoto')->middleware(['auth'])->name('dislikes');
+            Route::get('/like/{id}', 'toggleLike')->middleware(['auth'])->name('likes');
             Route::get('/photo/{id}', 'photo')->name('view');
             Route::get('{id}', 'show')->name('album::list');
         });
@@ -993,12 +1003,8 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('make/{id}', 'make')->name('make');
         Route::get('end/{id}', 'end')->name('end');
         Route::get('endId/{id}', 'endId')->name('endId');
-        Route::get('edit/{id}', 'edit')->name('edit');
-        Route::post('update/{id}', 'update')->name('update');
-        Route::get('create', 'create')->name('create');
-        Route::post('store', 'store')->name('store');
-        Route::get('', 'index')->name('index');
     });
+    Route::resource('tempadmins', TempAdminController::class)->only(['index', 'create', 'store', 'edit', 'update'])->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to QR Authentication --- */
     Route::controller(QrAuthController::class)->prefix('qr')->name('qr::')->group(function () {
@@ -1015,37 +1021,15 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* Routes related to the Short URL Service*/
-    Route::controller(ShortUrlController::class)->name('short_url::')->group(function () {
-        // Public routes
-        Route::get('go/{short?}', 'go')->name('go');
-
-        // Board only
-        Route::prefix('short_url')->middleware(['auth', 'permission:board'])->group(function () {
-            Route::get('', 'index')->name('index');
-            Route::get('edit/{id}', 'edit')->name('edit');
-            Route::post('update/{id}', 'update')->name('update');
-            Route::get('delete/{id}', 'destroy')->name('delete');
-            Route::get('qr_code/{id}', 'qrCode')->name('qr_code');
-        });
-    });
+    Route::get('go/{short?}', [ShortUrlController::class, 'go'])->name('short_urls.go');
+    Route::get('short_urls/qr_code/{id}', [ShortUrlController::class, 'qrCode'])->name('short_urls.qr_code')->middleware(['auth', 'permission:board']);
+    Route::resource('short_urls', ShortUrlController::class)->except('show')->middleware(['auth', 'permission:board']);
 
     /* --- Routes related to the DMX Management. (Board or alfred) --- */
-    Route::controller(DmxController::class)->prefix('dmx')->name('dmx::')->middleware(['auth', 'permission:board|alfred'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::post('/update/{id}', 'update')->name('update');
-        Route::get('/delete/{id}', 'delete')->name('delete');
+    Route::prefix('dmx')->name('dmx.')->middleware(['auth', 'permission:board|alfred'])->group(function () {
+        Route::resource('fixtures', DmxFixtureController::class)->except('show');
 
-        Route::prefix('override')->name('override::')->group(function () {
-            Route::get('/', 'overrideIndex')->name('index');
-            Route::get('/create', 'overrideCreate')->name('create');
-            Route::post('/store', 'overrideStore')->name('store');
-            Route::get('/edit/{id}', 'overrideEdit')->name('edit');
-            Route::post('/update/{id}', 'overrideUpdate')->name('update');
-            Route::get('/delete/{id}', 'overrideDelete')->name('delete');
-        });
+        Route::resource('overrides', DmxOverrrideController::class)->except('show');
     });
 
     /* --- Routes related to the Query system. (Board only) --- */
@@ -1054,6 +1038,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', 'activityOverview')->name('activity_overview');
         Route::get('/activity_statistics', 'activityStatistics')->name('activity_statistics');
         Route::get('/membership_totals', 'membershipTotals')->name('membership_totals');
+        Route::get('/new_membership_totals', 'newMembershipTotals')->name('new_membership_totals');
     });
 
     /* --- Routes related to the mini-sites --- */
@@ -1061,47 +1046,18 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(IsAlfredThereController::class)->prefix('isalfredthere')->name('isalfredthere::')->group(function () {
             // Public routes
             Route::get('/', 'index')->name('index');
-
             // Board only
             Route::get('/edit', 'edit')->middleware(['auth', 'permission:sysadmin|alfred'])->name('edit');
             Route::post('/update', 'update')->middleware(['auth', 'permission:sysadmin|alfred'])->name('update');
         });
     });
 
-    /* --- Routes related to Cantus Codices (Senate only) --- */
-    Route::controller(CodexController::class)->prefix('codex')->name('codex::')->middleware(['auth', 'permission:senate'])->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('create-codex', 'addCodex')->name('create-codex');
-        Route::get('create-song', 'addSong')->name('create-song');
-        Route::get('create-song-category', 'addSongCategory')->name('create-song-category');
-        Route::get('create-text-type', 'addTextType')->name('create-text-type');
-        Route::get('create-text', 'addText')->name('create-text');
-
-        Route::get('edit-codex/{codex}', 'editCodex')->name('edit-codex');
-        Route::get('edit-song/{id}', 'editSong')->name('edit-song');
-        Route::get('edit-song-category/{id}', 'editSongCategory')->name('edit-song-category');
-        Route::get('edit-text-type/{id}', 'editTextType')->name('edit-text-type');
-        Route::get('edit-text/{id}', 'editText')->name('edit-text');
-
-        Route::get('delete-codex/{codex}', 'deleteCodex')->name('delete-codex');
-        Route::get('delete-song/{id}', 'deleteSong')->name('delete-song');
-        Route::get('delete-song-category/{id}', 'deleteSongCategory')->name('delete-song-category');
-        Route::get('delete-text-type/{id}', 'deleteTextType')->name('delete-text-type');
-        Route::get('delete-text/{id}', 'deleteText')->name('delete-text');
-
-        Route::post('store-codex', 'storeCodex')->name('store-codex');
-        Route::post('store-codex', 'storeSong')->name('store-codex');
-        Route::post('store-codex-category', 'storeSongCategory')->name('store-codex-category');
-        Route::post('store-text-type', 'storeTextType')->name('store-text-type');
-        Route::post('store-text', 'storeText')->name('store-text');
-
-        Route::post('update-codex/{codex}', 'updateCodex')->name('update-codex');
-        Route::post('update-song/{id}', 'updateSong')->name('update-song');
-        Route::post('update-song-category/{id}', 'updateSongCategory')->name('update-song-category');
-        Route::post('update-text-type/{id}', 'updateTextType')->name('update-text-type');
-        Route::post('update-text/{id}', 'updateText')->name('update-text');
-
-        Route::get('export/{id}', 'exportCodex')->name('export');
+    Route::middleware(['auth', 'permission:senate'])->group(function () {
+        Route::resource('codex', CodexController::class);
+        Route::resource('codexSong', CodexSongController::class)->except(['index', 'show']);
+        Route::resource('codexSongCategory', CodexSongCategoryController::class)->except(['index', 'show']);
+        Route::resource('codexText', CodexTextController::class)->except(['index', 'show']);
+        Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
     });
 
     /* --- Route related to the december theme --- */

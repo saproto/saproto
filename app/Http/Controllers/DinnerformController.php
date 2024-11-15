@@ -17,10 +17,9 @@ use Illuminate\View\View;
 class DinnerformController extends Controller
 {
     /**
-     * @param  int  $id
      * @return View|RedirectResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
@@ -28,7 +27,8 @@ class DinnerformController extends Controller
             ->where('user_id', Auth::user()->id)
             ->where('dinnerform_id', $dinnerform->id)
             ->first();
-        if (! $dinnerform->isCurrent() && ! isset($order)) {
+
+        if (! $dinnerform->isCurrent() && ! $order) {
             Session::flash('flash_message', 'This dinnerform is closed and you have not ordered anything.');
 
             return Redirect::back();

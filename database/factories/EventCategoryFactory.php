@@ -2,21 +2,22 @@
 
 namespace Database\Factories;
 
-use App\Models\SongCategory;
+use App\Models\EventCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends Factory<SongCategory>
+ * @extends Factory<EventCategory>
  */
-class SongCategoryFactory extends Factory
+class EventCategoryFactory extends Factory
 {
-    protected $model = SongCategory::class;
+    protected $model = EventCategory::class;
 
     public function definition(): array
     {
         return [
             'name' => fake()->name(),
+            'icon' => fake()->word(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

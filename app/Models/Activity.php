@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float|null $price
  * @property float $no_show_fee
  * @property int $participants
- * @property int $attendees
+ * @property int|null $attendees
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
@@ -58,6 +59,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Activity extends Validatable
 {
+    use HasFactory;
+
     protected $table = 'activities';
 
     protected $guarded = ['id'];
@@ -290,9 +293,9 @@ class Activity extends Validatable
     }
 
     /**
-     * @return int how many people actually showed up
+     * @return int|null how many people actually showed up
      */
-    public function getAttendees(): int
+    public function getAttendees(): ?int
     {
         $present = $this->getPresent();
 
