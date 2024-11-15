@@ -247,8 +247,8 @@ return [
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-        Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
     /*
