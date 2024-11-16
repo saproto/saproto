@@ -34,7 +34,7 @@ class WrappedController extends Controller
      */
     public function getPurchases(Carbon $from, Carbon $to)
     {
-        return Orderline::where('user_id', Auth::id())
+        return OrderLine::query()->where('user_id', Auth::id())
             ->with('product')
             ->where('created_at', '>', $from)
             ->where('created_at', '<', $to)
@@ -53,7 +53,7 @@ class WrappedController extends Controller
             ->orderBy('total')
             ->get();
 
-        return $totals->groupBy('product_id')->map(static fn($product) => $product->pluck('total'));
+        return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
 
     public function eventList()
