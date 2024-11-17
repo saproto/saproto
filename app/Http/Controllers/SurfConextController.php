@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\UtAccount;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -15,13 +13,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectR
 
 class SurfConextController extends Controller
 {
+    // Some constants to keep track of the action we're performing
     const SESSION_FLASH_KEY = 'surfconext_action';
     const SESSION_FLASH_KEY_EMAIL = 'new_account_email';
 
     const CREATE_ACCOUNT = 'create_account';
-
     const LINK_ACCOUNT = 'link_account';
-
     const LOGIN = 'login';
 
     /**
@@ -110,6 +107,9 @@ class SurfConextController extends Controller
         }
     }
 
+    /**
+     * Process the response from SurfConext and log the user in
+     */
     protected function handleLoginUser(mixed $utAccount): RedirectResponse
     {
         $user = User::where('utwente_username', $utAccount->uid)->first();
@@ -122,6 +122,9 @@ class SurfConextController extends Controller
         return AuthController::loginUser($user);
     }
 
+    /**
+     * Process the response from SurfConext and create a new account
+     */
     protected function handleCreateNewAccount(mixed $user): RedirectResponse
     {
         $email = Session::get(self::SESSION_FLASH_KEY_EMAIL);
@@ -148,6 +151,9 @@ class SurfConextController extends Controller
         return Redirect::route('homepage');
     }
 
+    /**
+     * Process the response from SurfConext and link the account
+     */
     protected function handleLinkAccount(mixed $utUser): RedirectResponse
     {
         // We're in a create new account attempt, do not log them in

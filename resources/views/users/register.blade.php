@@ -14,7 +14,8 @@
         @csrf
 
         <p>
-            Using this form you can register a new account on the S.A. Proto website.
+            Using this form you can register a new account on the S.A. Proto website using your University account or without.
+            You can always unlink your University account later.
         </p>
 
         <p class="fw-bold">
@@ -58,7 +59,7 @@
         <hr>
 
         <button type="submit" class="btn btn-success btn-block">Create my account</button>
-        
+
         <div class="text-center mt-1">
             <input hidden class="form-check-input" id="create_without_ut_account" name="create_without_ut_account" type="checkbox" autocomplete="off" {{ !empty(old('create_without_ut_account')) ? "checked" : "" }}/>
             <label id="toggle-ut-account-button" class="form-check-label text-decoration-underline cursor-pointer" style="font-size: 14px" for="create_without_ut_account">
@@ -81,7 +82,6 @@
 
     toggleInput.addEventListener("change", function (event) { 
         let createWithUT = !event.target.checked;
-        console.log('toggleUtCreate', createWithUT);
         additionalNameInputs.hidden = createWithUT;
 
         // set all the inputs in the additionalNameInputs to required or not required
