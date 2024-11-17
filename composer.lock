@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "0539bfec0788304b17d2fbafc68a73f6",
+  "content-hash": "5624fade1d7eab71835dc2f941c63789",
   "packages": [
     {
       "name": "aacotroneo/laravel-saml2",
@@ -5916,6 +5916,131 @@
         "source": "https://github.com/simplepie/simplepie/tree/1.8.0"
       },
       "time": "2023-01-20T08:37:35+00:00"
+    },
+    {
+      "name": "socialiteproviders/manager",
+      "version": "v4.7.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/SocialiteProviders/Manager.git",
+        "reference": "ab0691b82cec77efd90154c78f1854903455c82f"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/SocialiteProviders/Manager/zipball/ab0691b82cec77efd90154c78f1854903455c82f",
+        "reference": "ab0691b82cec77efd90154c78f1854903455c82f",
+        "shasum": ""
+      },
+      "require": {
+        "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+        "laravel/socialite": "^5.5",
+        "php": "^8.0"
+      },
+      "require-dev": {
+        "mockery/mockery": "^1.2",
+        "phpunit/phpunit": "^9.0"
+      },
+      "type": "library",
+      "extra": {
+        "laravel": {
+          "providers": [
+            "SocialiteProviders\\Manager\\ServiceProvider"
+          ]
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "SocialiteProviders\\Manager\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Andy Wendt",
+          "email": "andy@awendt.com"
+        },
+        {
+          "name": "Anton Komarev",
+          "email": "a.komarev@cybercog.su"
+        },
+        {
+          "name": "Miguel Piedrafita",
+          "email": "soy@miguelpiedrafita.com"
+        },
+        {
+          "name": "atymic",
+          "email": "atymicq@gmail.com",
+          "homepage": "https://atymic.dev"
+        }
+      ],
+      "description": "Easily add new or override built-in providers in Laravel Socialite.",
+      "homepage": "https://socialiteproviders.com",
+      "keywords": [
+        "laravel",
+        "manager",
+        "oauth",
+        "providers",
+        "socialite"
+      ],
+      "support": {
+        "issues": "https://github.com/socialiteproviders/manager/issues",
+        "source": "https://github.com/socialiteproviders/manager"
+      },
+      "time": "2024-11-10T01:56:18+00:00"
+    },
+    {
+      "name": "socialiteproviders/saml2",
+      "version": "4.7.2",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/SocialiteProviders/Saml2.git",
+        "reference": "ae108f5ca999c40f301d397988d905f4ba2df653"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/SocialiteProviders/Saml2/zipball/ae108f5ca999c40f301d397988d905f4ba2df653",
+        "reference": "ae108f5ca999c40f301d397988d905f4ba2df653",
+        "shasum": ""
+      },
+      "require": {
+        "ext-json": "*",
+        "litesaml/lightsaml": "^4.0",
+        "php": "^8.0",
+        "socialiteproviders/manager": "^4.4"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "SocialiteProviders\\Saml2\\": ""
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": [
+        "MIT"
+      ],
+      "authors": [
+        {
+          "name": "Chris Lloyd",
+          "email": "chrislloyd403@gmail.com"
+        }
+      ],
+      "description": "SAML2 Service Provider for Laravel Socialite",
+      "keywords": [
+        "SAML2",
+        "laravel",
+        "oauth",
+        "provider",
+        "socialite"
+      ],
+      "support": {
+        "docs": "https://socialiteproviders.com/saml2",
+        "issues": "https://github.com/socialiteproviders/providers/issues",
+        "source": "https://github.com/socialiteproviders/providers"
+      },
+      "time": "2023-11-07T22:07:12+00:00"
     },
     {
       "name": "solitweb/directadmin",
@@ -13172,7 +13297,7 @@
   ],
   "aliases": [],
   "minimum-stability": "stable",
-  "stability-flags": {},
+  "stability-flags": [],
   "prefer-stable": false,
   "prefer-lowest": false,
   "platform": {
@@ -13182,6 +13307,6 @@
     "ext-iconv": "*",
     "ext-zlib": "*"
   },
-  "platform-dev": {},
+  "platform-dev": [],
   "plugin-api-version": "2.6.0"
 }

@@ -73,7 +73,9 @@
         "ext-iconv": "*",
         "litesaml/lightsaml": "^4.2",
         "ext-zlib": "*",
-        "intervention/image-laravel": "^1.3"
+        "intervention/image-laravel": "^1.3",
+        "laravel/socialite": "^5.16",
+        "socialiteproviders/saml2": "^4.7"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
@@ -88,7 +90,8 @@
         "driftingly/rector-laravel": "^1.2",
         "pestphp/pest": "^3.0",
         "mockery/mockery": "^1.6",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "beyondcode/expose": "^2.6"
     },
     "autoload": {
         "psr-4": {
