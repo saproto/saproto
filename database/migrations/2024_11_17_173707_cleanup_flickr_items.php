@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -41,7 +42,7 @@ return new class extends Migration {
             $table->boolean('private')->default(false);
             $table->boolean('migrated')->default(false);
         });
-        
+
         Schema::create('flickr_likes', function (Blueprint $table) {
             $table->bigInteger('photo_id');
             $table->integer('user_id');
