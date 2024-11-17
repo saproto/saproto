@@ -51,10 +51,7 @@ use App\Http\Controllers\QrAuthController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
-use App\Http\Controllers\SamlController;
 use App\Http\Controllers\SearchController;
-/* --- use App\Http\Controllers\RadioController; --- */
-
 use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;

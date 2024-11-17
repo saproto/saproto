@@ -195,7 +195,7 @@ class AuthController extends Controller
     }
 
     /**
-     * We know a user has identified itself, but we still need to check for other stuff like SAML or Two-Factor Authentication. We do this here.
+     * We know a user has identified itself, but we still need to check for other stuff like Two-Factor Authentication. We do this here.
      *
      * @param  User  $user  The username to be logged in.
      * @return View|RedirectResponse

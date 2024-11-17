@@ -11,7 +11,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'webhook/*',
-        'saml2/*',
         'api/*',
         'image/*',
         'file/*',

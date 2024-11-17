@@ -1,6 +1,5 @@
 <?php
 
-use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
@@ -246,7 +245,6 @@ return [
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
         ServiceProvider::class,
-        Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
     ],

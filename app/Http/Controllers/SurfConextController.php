@@ -83,6 +83,7 @@ class SurfConextController extends Controller
 
     /**
      * Handle the callback from surfconext
+     * This route must be excluded from CSRF protection
      */
     public function callback()
     {

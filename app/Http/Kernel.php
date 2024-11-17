@@ -11,7 +11,6 @@ use App\Http\Middleware\EnforceWizard;
 use App\Http\Middleware\ForceDomain;
 use App\Http\Middleware\Member;
 use App\Http\Middleware\ProBoto;
-use App\Http\Middleware\Saml;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\Utwente;
 use App\Http\Middleware\VerifyCsrfToken;
@@ -74,7 +73,6 @@ class Kernel extends HttpKernel
         'member' => Member::class,
         'utwente' => Utwente::class,
         'forcedomain' => ForceDomain::class,
-        'saml' => Saml::class,
         'throttle' => ThrottleRequests::class,
         'role' => RoleMiddleware::class,
         'permission' => PermissionMiddleware::class,
