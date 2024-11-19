@@ -25,17 +25,17 @@ class OmNomController extends Controller
     public function display(Request $request, ?string $store_slug = null)
     {
 
-        if (empty($store_slug) && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
+        if (empty($store_slug) && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
 
-        if (! array_key_exists($store_slug, config('omnomcom.stores'))) {
+        if (! array_key_exists($store_slug, Config::array('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
 
             return Redirect::route('homepage');
         }
 
-        $store = config('omnomcom.stores')[$store_slug];
+        $store = Config::array('omnomcom.stores')[$store_slug];
 
         if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
@@ -43,7 +43,7 @@ class OmNomController extends Controller
 
         $categories = $this->getCategories($store);
 
-        if ($store_slug == 'tipcie') {
+        if ($store_slug === 'tipcie') {
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
@@ -68,11 +68,11 @@ class OmNomController extends Controller
      */
     public function stock(Request $request)
     {
-        if (! array_key_exists($request->store, config('omnomcom.stores'))) {
+        if (! array_key_exists($request->store, Config::array('omnomcom.stores'))) {
             abort(404);
         }
 
-        $store = config('omnomcom.stores')[$request->store];
+        $store = Config::array('omnomcom.stores')[$request->store];
 
         if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
@@ -100,7 +100,7 @@ class OmNomController extends Controller
      */
     public function buy(Request $request, string $store_slug)
     {
-        $stores = config('omnomcom.stores');
+        $stores = Config::array('omnomcom.stores');
         $result = new stdClass;
         $result->status = 'ERROR';
 
@@ -234,7 +234,7 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::query()->find($id);
 
-                if ($product->id == config('omnomcom.protube-skip')) {
+                if ($product->id == Config::integer('omnomcom.protube-skip')) {
                     $skipped = ProTubeApiService::skipSong();
                     if (! $skipped) {
                         continue;
