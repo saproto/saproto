@@ -224,6 +224,7 @@ class OmNomController extends Controller
                 $isDuringRestrictedHours = date('Hi') <= str_replace(':', '', Config::string('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', Config::string('omnomcom.alcohol-end'));
                 if ($product->is_alcoholic && $store->alcohol_time_constraint && $isDuringRestrictedHours) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
+
                     return json_encode($result);
                 }
             }
