@@ -110,11 +110,11 @@ class SurfConextController extends Controller
     /**
      * Process the response from SurfConext and log the user in
      */
-    protected function handleLoginUser(mixed $utAccount): RedirectResponse
+    protected function handleLoginUser(mixed $utUser): RedirectResponse
     {
-        $user = User::where('utwente_username', $utAccount->uid)->first();
+        $user = User::where('utwente_username', $utUser->uid)->first();
 
-        if (!$user) {
+        if (empty($user)) {
             Session::flash('flash_message', 'This University of Twente account is not registered to a user.');
             return Redirect::route('login::show');
         }
@@ -125,7 +125,7 @@ class SurfConextController extends Controller
     /**
      * Process the response from SurfConext and create a new account
      */
-    protected function handleCreateNewAccount(mixed $user): RedirectResponse
+    protected function handleCreateNewAccount(mixed $utUser): RedirectResponse
     {
         $email = Session::get(self::SESSION_FLASH_KEY_EMAIL);
 
@@ -134,17 +134,18 @@ class SurfConextController extends Controller
         }
 
         // We're in a create new account attempt, do not log them in
-        if ($this->accountAlreadyExists($user->uid)) {
-            Session::flash('flash_message', 'This University of Twente account is already registered to a user.');
-            return Redirect::route('login::register::index');
+        if ($this->accountAlreadyExists($utUser->uid)) {
+            Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
+            AuthController::loginUser(User::where('utwente_username', $utUser->uid)->first());
+            return Redirect::route('user::dashboard::show');
         }
 
         User::register(
             $email, 
-            $user->first_name, 
-            $user->last_name . " " . $user->first_name, 
-            $user->uid,
-            $user->email);
+            $utUser->first_name, 
+            $utUser->last_name . " " . $utUser->first_name, 
+            $utUser->uid,
+            $utUser->email);
 
         Session::flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
 
@@ -156,10 +157,11 @@ class SurfConextController extends Controller
      */
     protected function handleLinkAccount(mixed $utUser): RedirectResponse
     {
-        // We're in a create new account attempt, do not log them in
+        // We're in a link account attempt, but it already exists. Log them in instead
         if ($this->accountAlreadyExists($utUser->uid)) {
-            Session::flash('flash_message', 'This University of Twente account is already registered to a user.');
-            return Redirect::back();
+            Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
+            AuthController::loginUser(User::where('utwente_username', $utUser->uid)->first());
+            return Redirect::route('user::dashboard::show');
         }
 
         $user = Auth::user();

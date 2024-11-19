@@ -21,21 +21,11 @@ return [
 
     'saml2' => [
         'metadata' => env('SAML_IDP_METADATA_URL'),
-        // 'entityid' => "https://sts.windows.net/f1ec8743-cb11-40ae-982a-45e321af98b4/ditkloptniethe",
-        // "entityid" => "https://engine.test.surfconext.nl/authentication/idp/metadataaaaa",
         'sp_entityid' => env('SAML_SP_ENTITY_ID'),
         // Need to exclude from CSRF verification
         'sp_acs' => 'surf/callback',
         'sp_sign_assertions' => true,
-        // 'sp_signing_passphrase' => "IS ER EEN?",
-        // Idk, hij voegt wel een signature toe maar idfk wat surfconext ermee doet, hij errors iig 
-        // niet op mismatchte certificaten
-        // 'sp_certificate' => file_get_contents(storage_path(env('SAML_IDP_CERT_PATH'))),
-        // 'sp_private_key' => file_get_contents(storage_path(env('SAML_IDP_KEY_PATH'))),
         'sp_default_binding_method' => \LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST,
-        // 'sp_default_binding_method' => \LightSaml\SamlConstants::BINDING_SAML2_HTTP_REDIRECT,
-        // 'sp_default_binding_method' => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-
         'attribute_map' => [
             'uid' => \SocialiteProviders\Saml2\OasisAttributeNameUris::UID,
             'organization' => "urn:mace:terena.org:attribute-def:schacHomeOrganization",

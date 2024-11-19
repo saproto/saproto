@@ -146,7 +146,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::prefix('surf')->name('surf::')->group(function () {
             Route::get('login', [SurfConextController::class, 'login'])->name('login');
             Route::post('callback', [SurfConextController::class, 'callback'])->name('callback');
-            Route::get('sp_meta', [SurfConextController::class, 'provideMetadataForSurfConext'])->name('meta');
+            Route::get('meta', [SurfConextController::class, 'provideMetadataForSurfConext'])->name('meta');
         });
 
         Route::get('username', [UserPasswordController::class, 'forgotUsernameIndex'])->name('requestusername::index');
