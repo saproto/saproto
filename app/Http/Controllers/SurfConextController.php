@@ -143,7 +143,7 @@ class SurfConextController extends Controller
         User::register(
             $email, 
             $utUser->first_name, 
-            $utUser->last_name . " " . $utUser->first_name, 
+            $utUser->first_name . " " . $utUser->last_name, 
             $utUser->uid,
             $utUser->email);
 
