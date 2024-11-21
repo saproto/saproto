@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use PwnedPasswords;
+use nickurt\PwnedPasswords\PwnedPasswords;
 
 class UserPasswordController extends Controller
 {
@@ -91,7 +91,7 @@ class UserPasswordController extends Controller
     /**
      * Show the page to synchronize passwords.
      */
-    public function syncPasswordsIndex(string $token): View
+    public function syncPasswordsIndex(): View
     {
         return view('auth.sync');
     }
