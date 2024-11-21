@@ -155,11 +155,11 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Authenticated routed related to password modifications --- */
     Route::prefix('password')->name('login::password::')->middleware(['auth'])->group(function () {
-        Route::get('sync', [UserPasswordController::class, 'syncPasswordsIndex'])->middleware(['auth'])->name('sync::index');
-        Route::post('sync', [UserPasswordController::class, 'syncPasswords'])->middleware(['throttle:5,1', 'auth'])->name('sync');
+        Route::get('sync', [UserPasswordController::class, 'syncPasswordsIndex'])->name('sync::index');
+        Route::post('sync', [UserPasswordController::class, 'syncPasswords'])->middleware(['throttle:5,1'])->name('sync');
 
-        Route::get('change', [UserPasswordController::class, 'changePasswordIndex'])->middleware(['auth'])->name('change::index');
-        Route::post('change', [UserPasswordController::class, 'changePassword'])->middleware(['throttle:5,1', 'auth'])->name('change');
+        Route::get('change', [UserPasswordController::class, 'changePasswordIndex'])->name('change::index');
+        Route::post('change', [UserPasswordController::class, 'changePassword'])->middleware(['throttle:5,1'])->name('change');
     });
 
     /* --- Routes related to user profiles --- */
