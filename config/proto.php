@@ -150,6 +150,17 @@ return [
     ],
 
     /*
+    |--------------------------------------------------------------------------
+    | Google Default Credentials
+    |--------------------------------------------------------------------------
+    |
+    | The location of the Google Workspace service account application credentials.
+    |
+    */
+
+    'google_application_credentials' => env('GOOGLE_APPLICATION_CREDENTIALS'),
+
+    /*
       |--------------------------------------------------------------------------
       | Timetable translations
       |--------------------------------------------------------------------------
