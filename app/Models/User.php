@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
@@ -324,14 +326,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
 
         // Update DirectAdmin Password
-        if ($this->is_member) {
+        if ($this->is_member && ! App::environment('local')) {
             $da = new DirectAdmin;
-            $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
-            $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
+            $da->connect(Config::string('directadmin.da-hostname'), Config::string('directadmin.da-port'));
+            $da->set_login(Config::string('directadmin.da-username'), Config::string('directadmin.da-password'));
             $da->set_method('POST');
             $da->query('/CMD_API_POP', [
                 'action' => 'modify',
-                'domain' => config('directadmin.da-domain'),
+                'domain' => Config::string('directadmin.da-domain'),
                 'user' => $this->member->proto_username,
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,
