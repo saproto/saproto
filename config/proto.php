@@ -325,7 +325,4 @@ return [
         3 => 'broto-inverse',
         4 => 'inverse',
     ],
-
-    // Analytics URL
-    'analytics_url' => env('ANALYTICS_URL', ''),
 ];
