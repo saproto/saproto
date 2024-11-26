@@ -83,7 +83,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('proto:emailcron')->everyMinute();;
+        $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:gsync')->at('00:01');
