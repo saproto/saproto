@@ -6,6 +6,7 @@ use App\Console\ConsoleOutput;
 use App\Mail\NewWorkspaceAccount;
 use App\Models\Alias as ProtoAlias;
 use App\Models\Committee;
+use App\Models\Member;
 use App\Models\User as ProtoUser;
 use Google\Service\Directory;
 use Google\Service\Directory\Alias as GoogleAlias;
@@ -114,8 +115,7 @@ class GoogleSync extends Command
     {
         $this->output->info('Groups:');
 
-        // TODO: Remove committee selection for debugging
-        $committees = Committee::whereSlug(config('proto.rootcommittee'))->get()->where('public');
+        $committees = Committee::query()->where('public')->get();
         $googleGroups = $this->listGoogleGroups();
 
         foreach ($committees as $committee) {
@@ -161,12 +161,10 @@ class GoogleSync extends Command
     public function syncGoogleUsersWithProtoUsers(): void
     {
         $this->output->info('Users:');
-        // TODO: Remove committee selection for debugging
         /* @var Collection<ProtoUser> $protoUsers */
-        $protoUsers = ProtoUser::query()
-            ->whereHas('member')
-            ->whereHas('committees', function ($query) {
-                $query->whereSlug(config('proto.rootcommittee'));
+        $protoUsers = Member::query()
+            ->whereHas('user', function ($q) {
+                $q->whereHas('committees');
             })
             ->get();
 
