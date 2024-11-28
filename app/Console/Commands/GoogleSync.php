@@ -160,8 +160,6 @@ class GoogleSync extends Command
         }
     }
 
-
-
     /**
      * Synchronise the current Proto aliases with the Google Workspace groups.
      *
@@ -174,10 +172,10 @@ class GoogleSync extends Command
 
         $aliases = ProtoAlias::query()->groupBy('alias')->get();
         $googleGroups = $this->listGoogleGroups();
-        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, "Alias"));
+        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
-        $groupsToAdd = $aliases->filter(fn ($alias) => ! $googleAliasGroups->contains('email', $alias->alias));
-        $groupsToRemove = $googleAliasGroups->filter(fn ($group) => ! $aliases->contains('alias', $group->email));
+        $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->alias));
+        $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', $group->email));
 
         foreach ($groupsToRemove as $group) {
             $this->pp(
@@ -193,13 +191,12 @@ class GoogleSync extends Command
                     new GoogleGroup([
                         'name' => "Alias $alias->alias",
                         'email' => $alias->alias,
-                        'description' => "Email alias ".$alias->alias,
+                        'description' => 'Email alias '.$alias->alias,
                     ])
                 )
             );
         }
     }
-
 
     /**
      * Synchronise the current Proto alias members with the Google Workspace group members.
@@ -213,7 +210,7 @@ class GoogleSync extends Command
 
         $aliases = ProtoAlias::query()->whereNotNull('destination')->get()->groupBy('alias');
         $googleGroups = $this->listGoogleGroups();
-        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, "Alias"));
+        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
         foreach ($aliases as $aliasGroup) {
             $this->pp(
@@ -222,8 +219,8 @@ class GoogleSync extends Command
             $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->alias);
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
 
-            $membersToAdd = $aliasGroup->filter(fn ($alias) => ! $googleGroupMembers->contains('email', $alias->destination));
-            $membersToRemove = $googleGroupMembers->filter(fn ($member) => ! $aliasGroup->contains('destination', $member->email));
+            $membersToAdd = $aliasGroup->reject(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
+            $membersToRemove = $googleGroupMembers->reject(fn ($member): bool => $aliasGroup->contains('destination', $member->email));
 
             foreach ($membersToRemove as $member) {
                 $this->pp(
@@ -326,10 +323,10 @@ class GoogleSync extends Command
             );
 
             Mail::to($protoUser)->send(new NewWorkspaceAccount($protoUser));
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $this->pp(
                 '<fg=red>x</> '.str_pad("#$protoUser->id", 6).$protoUser->name,
-                fn (): mixed => dump($e->getMessage())
+                fn (): mixed => dump($throwable->getMessage())
             );
         }
     }
@@ -348,6 +345,7 @@ class GoogleSync extends Command
         if ($protoUser != null) {
             $optParams['userKey'] = $protoUser->proto_email;
         }
+
         $pageToken = null;
         do {
             $optParams['pageToken'] = $pageToken;
@@ -384,7 +382,6 @@ class GoogleSync extends Command
 
         return $googleGroupMembers;
     }
-
 
     /**
      * List current Google Workspace users.
@@ -488,6 +485,7 @@ class GoogleSync extends Command
 
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
+     *
      * @throws \Google\Exception
      */
     public function patchGmailSettings(ProtoUser $protoUser): void
@@ -524,10 +522,10 @@ class GoogleSync extends Command
                     'emailAddress' => $protoUser->email,
                     'disposition' => 'leaveInInbox',
                 ]));
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 $this->pp(
                     $indent."<fg=yellow>x</> ✉ $protoUser->email: Forwarder is not verified",
-                    fn () => throw new Exception("Invalid forwarding address")
+                    fn () => throw new Exception('Invalid forwarding address')
                 );
             }
         }
@@ -571,7 +569,7 @@ class GoogleSync extends Command
             }
 
             // Ignore invalid forwarding address error as it just means the user still has to accept the forwarder.
-            if ($e->getMessage() == "Invalid forwarding address") {
+            if ($e->getMessage() === 'Invalid forwarding address') {
                 return;
             }
 
