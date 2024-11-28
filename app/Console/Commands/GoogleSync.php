@@ -458,17 +458,23 @@ class GoogleSync extends Command
         }
 
         foreach ($groupsToAdd as $group) {
-            $googleGroup = $googleGroups->firstWhere('email', $group);
-            $this->pp(
-                $indent.'<fg=yellow>+</> '.str_pad("#$googleGroup->id", 6).$googleGroup->name,
-                fn () => $this->directory->members->insert(
-                    $googleGroup->email,
-                    new GoogleGroupMembership([
-                        'email' => $protoUser->proto_email,
-                        'keyType' => 'USER',
-                    ])
-                )
-            );
+            try {
+                $this->pp(
+                    $indent.'<fg=yellow>+</> '.str_pad('', 6).$group,
+                    fn () => $this->directory->members->insert(
+                        $group,
+                        new GoogleGroupMembership([
+                            'email' => $protoUser->proto_email,
+                            'keyType' => 'USER',
+                        ])
+                    )
+                );
+            } catch (Throwable $throwable) {
+                $this->pp(
+                    $indent.'<fg=red>x</> '.str_pad('', 6).$group,
+                    fn (): mixed => throw $throwable
+                );
+            }
         }
     }
 
