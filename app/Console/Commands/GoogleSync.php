@@ -22,6 +22,7 @@ use Google_Client;
 use Google_Service_Exception;
 use Google_Task_Exception;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -214,7 +215,14 @@ class GoogleSync extends Command
     {
         $this->output->info('Alias Members:');
 
-        $aliases = ProtoAlias::query()->whereNotNull('destination')->get()->groupBy('alias');
+        $externalAliases = ProtoAlias::query()->whereNotNull('destination')->get();
+        $inactiveMemberAliases = ProtoAlias::query()->select(['alias', 'users.email AS destination'])->join('users', 'user_id', '=', 'users.id')->whereHas('user', function (Builder $query) {
+            $query->select(['email AS destination'])->whereDoesntHave('member')->orWhereHas('member', function (Builder $query) {
+                $query->whereIn('membership_type', [MembershipTypeEnum::PENDING, MembershipTypeEnum::PET]);
+            });
+        })->get();
+
+        $aliases = $externalAliases->merge($inactiveMemberAliases)->groupBy('alias');
         $googleGroups = $this->listGoogleGroups();
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
