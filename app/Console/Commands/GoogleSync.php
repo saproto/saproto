@@ -9,7 +9,6 @@ use App\Models\Alias as ProtoAlias;
 use App\Models\Committee;
 use App\Models\User as ProtoUser;
 use Google\Service\Directory;
-use Google\Service\Directory\Alias as GoogleAlias;
 use Google\Service\Directory\Group as GoogleGroup;
 use Google\Service\Directory\Member as GoogleGroupMembership;
 use Google\Service\Directory\User as GoogleUser;
@@ -466,7 +465,6 @@ class GoogleSync extends Command
             );
         }
     }
-
 
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
