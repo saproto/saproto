@@ -289,7 +289,8 @@ class GoogleSync extends Command
             $this->syncGoogleGroupsForUser($protoUser);
 
             // Synchronise Google Workspace email aliases for user.
-            $this->syncAliasesForUser($protoUser);
+//            $this->syncAliasesForUser($protoUser);
+            $this->removeAliasesForUser($protoUser);
 
             // Patch user's Gmail settings.
             $this->patchGmailSettings($protoUser);
@@ -482,6 +483,25 @@ class GoogleSync extends Command
             );
         }
     }
+
+
+    /**
+     * @throws Exception
+     */
+    public function removeAliasesForUser(ProtoUser $protoUser): void
+    {
+        $indent = '        ';
+        $googleUserAliases = $this->directory->users_aliases->listUsersAliases($protoUser->proto_email)->getAliases();
+        $googleUserAliases = collect(array_column($googleUserAliases ?? [], 'alias'));
+
+        foreach ($googleUserAliases as $emailAlias) {
+            $this->pp(
+                $indent."<fg=red>-</> ✉ {$emailAlias}",
+                fn () => $this->directory->users_aliases->delete($protoUser->proto_email, $emailAlias)
+            );
+        }
+    }
+
 
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
