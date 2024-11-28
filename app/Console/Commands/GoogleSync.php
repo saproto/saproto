@@ -460,8 +460,8 @@ class GoogleSync extends Command
         foreach ($groupsToAdd as $group) {
             try {
                 $this->pp(
-                    $indent . '<fg=yellow>+</> ' . str_pad("", 6) . $group,
-                    fn() => $this->directory->members->insert(
+                    $indent.'<fg=yellow>+</> '.str_pad('', 6).$group,
+                    fn () => $this->directory->members->insert(
                         $group,
                         new GoogleGroupMembership([
                             'email' => $protoUser->proto_email,
@@ -471,7 +471,7 @@ class GoogleSync extends Command
                 );
             } catch (Throwable $throwable) {
                 $this->pp(
-                    $indent . '<fg=red>x</> ' . str_pad("", 6) . $group,
+                    $indent.'<fg=red>x</> '.str_pad('', 6).$group,
                     fn (): mixed => throw $throwable
                 );
             }
