@@ -174,7 +174,7 @@ class GoogleSync extends Command
         $googleGroups = $this->listGoogleGroups();
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
-        $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->alias));
+        $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
         $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', $group->email));
 
         foreach ($groupsToRemove as $group) {
@@ -191,7 +191,7 @@ class GoogleSync extends Command
                     fn () => $this->directory->groups->insert(
                         new GoogleGroup([
                             'name' => "Alias $alias->alias",
-                            'email' => $alias->alias,
+                            'email' => $alias->email,
                             'description' => 'Email alias '.$alias->alias,
                         ])
                     )
