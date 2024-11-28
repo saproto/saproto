@@ -184,16 +184,23 @@ class GoogleSync extends Command
         }
 
         foreach ($groupsToAdd as $alias) {
-            $this->pp(
-                '<fg=yellow>+</> '.str_pad("#$alias->id", 6).$alias->alias,
-                fn () => $this->directory->groups->insert(
-                    new GoogleGroup([
-                        'name' => "Alias $alias->alias",
-                        'email' => $alias->alias,
-                        'description' => 'Email alias '.$alias->alias,
-                    ])
-                )
-            );
+            try {
+                $this->pp(
+                    '<fg=yellow>+</> ' . str_pad("#$alias->id", 6) . $alias->alias,
+                    fn() => $this->directory->groups->insert(
+                        new GoogleGroup([
+                            'name' => "Alias $alias->alias",
+                            'email' => $alias->alias,
+                            'description' => 'Email alias ' . $alias->alias,
+                        ])
+                    )
+                );
+            } catch (Throwable $throwable) {
+                $this->pp(
+                    '<fg=red>x</> ' . str_pad("#$alias->id", 6) . $alias->alias,
+                    fn () => dump($throwable->getMessage())
+                );
+            }
         }
     }
 
