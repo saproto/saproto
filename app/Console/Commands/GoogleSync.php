@@ -227,10 +227,18 @@ class GoogleSync extends Command
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
         foreach ($aliases as $aliasGroup) {
+            $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->email);
+            if ($googleGroup == null) {
+                $this->pp(
+                    '<fg=red>x</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members'
+                );
+
+                continue;
+            }
+
             $this->pp(
                 '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members',
             );
-            $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->email);
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
 
             $membersToAdd = $aliasGroup->reject(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
