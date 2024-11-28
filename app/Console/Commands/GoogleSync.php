@@ -288,8 +288,7 @@ class GoogleSync extends Command
             // Synchronise Google Workspace groups for user.
             $this->syncGoogleGroupsForUser($protoUser);
 
-            // Synchronise Google Workspace email aliases for user.
-//            $this->syncAliasesForUser($protoUser);
+            // Remove aliases created using old method.
             $this->removeAliasesForUser($protoUser);
 
             // Patch user's Gmail settings.
@@ -450,40 +449,6 @@ class GoogleSync extends Command
             );
         }
     }
-
-    /**
-     * @throws Exception
-     */
-    public function syncAliasesForUser(ProtoUser $protoUser): void
-    {
-        $indent = '        ';
-        $googleUserAliases = $this->directory->users_aliases->listUsersAliases($protoUser->proto_email)->getAliases();
-        $googleUserAliases = collect(array_column($googleUserAliases ?? [], 'alias'));
-
-        $protoUserAliases = ProtoAlias::query()
-            ->where('user_id', $protoUser->id)
-            ->get()
-            ->map(fn ($alias): string =>
-                /** @var ProtoAlias $alias */
-                $alias->alias.'@'.config('proto.emaildomain'))->unique();
-        foreach ($protoUserAliases->diff($googleUserAliases) as $emailAlias) {
-            $this->pp(
-                $indent."<fg=yellow>+</> ✉ {$emailAlias}",
-                fn () => $this->directory->users_aliases->insert($protoUser->proto_email, new GoogleAlias([
-                    'primaryEmail' => $protoUser->proto_email,
-                    'alias' => $emailAlias,
-                ]))
-            );
-        }
-
-        foreach ($googleUserAliases->diff($protoUserAliases) as $emailAlias) {
-            $this->pp(
-                $indent."<fg=red>-</> ✉ {$emailAlias}",
-                fn () => $this->directory->users_aliases->delete($protoUser->proto_email, $emailAlias)
-            );
-        }
-    }
-
 
     /**
      * @throws Exception
