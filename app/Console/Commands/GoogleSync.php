@@ -228,7 +228,7 @@ class GoogleSync extends Command
 
         foreach ($aliases as $aliasGroup) {
             $this->pp(
-                '<fg=green>✓</> '.str_pad("$aliasGroup->first()->alias <fg=gray>", 65, '.')."</> $aliasGroup->count() members",
+                '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias." <fg=gray>", 65, '.')."</> $aliasGroup->count() members",
             );
             $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->alias);
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
@@ -374,7 +374,7 @@ class GoogleSync extends Command
     }
 
     /**
-     * List Google Workspace groups. Pass in user to get only their groups.
+     * List Google Workspace group members of a specific group
      *
      * @return Collection<GoogleGroup>
      *
