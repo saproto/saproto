@@ -175,11 +175,11 @@ class GoogleSync extends Command
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
         $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
-        $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', $group->email));
+        $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', strtok($group->email, '@')));
 
         foreach ($groupsToRemove as $group) {
             $this->pp(
-                '<fg=red>-</> '.str_pad("#$group->id", 6).str_pad("$group->name <fg=gray>", 65, '.')."</> $group->email",
+                '<fg=red>-</> '.str_pad("#$group->id", 16).str_pad("$group->name <fg=gray>", 40, '.')."</> $group->email",
                 fn () => $this->directory->groups->delete($group->id)
             );
         }
@@ -230,7 +230,7 @@ class GoogleSync extends Command
             $this->pp(
                 '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members',
             );
-            $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->alias);
+            $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->email);
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
 
             $membersToAdd = $aliasGroup->reject(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
