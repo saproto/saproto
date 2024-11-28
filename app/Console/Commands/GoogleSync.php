@@ -232,8 +232,10 @@ class GoogleSync extends Command
                 $this->pp(
                     '<fg=red>x</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members'
                 );
+
                 continue;
             }
+
             $this->pp(
                 '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members',
             );
