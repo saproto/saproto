@@ -228,7 +228,7 @@ class GoogleSync extends Command
 
         foreach ($aliases as $aliasGroup) {
             $this->pp(
-                '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.')."</> ".$aliasGroup->count()." members",
+                '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members',
             );
             $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->alias);
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
