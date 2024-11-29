@@ -236,10 +236,10 @@ class GoogleSync extends Command
             );
 
             Mail::to($protoUser)->send(new NewWorkspaceAccount($protoUser));
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $this->pp(
                 '<fg=red>x</> '.str_pad("#$protoUser->id", 6).$protoUser->name,
-                fn (): mixed => dump($e->getMessage())
+                fn (): mixed => dump($throwable->getMessage())
             );
         }
     }
@@ -258,6 +258,7 @@ class GoogleSync extends Command
         if ($protoUser != null) {
             $optParams['userKey'] = $protoUser->proto_email;
         }
+
         $pageToken = null;
         do {
             $optParams['pageToken'] = $pageToken;
@@ -327,10 +328,11 @@ class GoogleSync extends Command
                 // Catch 403 errors, as these are expected when trying to access a group that was not created by this client.
                 if ($e->getCode() == 403) {
                     $this->pp(
-                        $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name." Not Authorized to access this resource",
+                        $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name.' Not Authorized to access this resource',
                         fn (): mixed => throw $e
                     );
                 }
+
                 $this->pp(
                     $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name,
                     fn (): mixed => throw $e
@@ -392,6 +394,7 @@ class GoogleSync extends Command
 
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
+     *
      * @throws \Google\Exception
      */
     public function patchGmailSettings(ProtoUser $protoUser): void
@@ -428,10 +431,10 @@ class GoogleSync extends Command
                     'emailAddress' => $protoUser->email,
                     'disposition' => 'leaveInInbox',
                 ]));
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 $this->pp(
                     $indent."<fg=yellow>x</> ✉ $protoUser->email: Forwarder is not verified",
-                    fn () => throw new Exception("Invalid forwarding address")
+                    fn () => throw new Exception('Invalid forwarding address')
                 );
             }
         }
@@ -475,7 +478,7 @@ class GoogleSync extends Command
             }
 
             // Ignore invalid forwarding address error as it just means the user still has to accept the forwarder.
-            if ($e->getMessage() == "Invalid forwarding address") {
+            if ($e->getMessage() === 'Invalid forwarding address') {
                 return;
             }
 
