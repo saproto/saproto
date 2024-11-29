@@ -220,7 +220,7 @@ class GoogleSync extends Command
             $query->whereDoesntHave('groups');
         })->get();
 
-        $aliases = $externalAliases->merge($inactiveMemberAliases)->groupBy('alias');
+        $aliases = $externalAliases->concat($inactiveMemberAliases)->groupBy('alias');
         $googleGroups = $this->listGoogleGroups();
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
