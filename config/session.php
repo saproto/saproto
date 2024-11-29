@@ -18,7 +18,6 @@ return [
 
     'driver' => env('SESSION_DRIVER', 'database'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Session Database Connection
@@ -31,7 +30,6 @@ return [
     */
 
     'connection' => env('SESSION_CONNECTION', null),
-
 
     /*
     |--------------------------------------------------------------------------

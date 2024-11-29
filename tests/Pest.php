@@ -1,7 +1,9 @@
 <?php
 
+use Tests\DuskTestCase;
+
 uses(
-    Tests\DuskTestCase::class,
+    DuskTestCase::class,
     // Illuminate\Foundation\Testing\DatabaseMigrations::class,
 )->in('Browser');
 
