@@ -4,6 +4,7 @@ namespace App\Csp\Policies;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
@@ -19,7 +20,7 @@ class ProtoPolicy extends Policy
     {
         // Don't apply csp in debug mode to enable the whoops (standard laravel) error page to be displayed correctly.
         // see https://github.com/spatie/laravel-csp?tab=readme-ov-file#using-whoops
-        if (config('app.debug') && ($response->isClientError() || $response->isServerError())) {
+        if (Config::boolean('app.debug') && ($response->isClientError() || $response->isServerError())) {
             return false;
         }
 
@@ -36,7 +37,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
                     'https://wrapped.omnomcom.nl',
-                    ...config('proto.domains.protube'),
+                    ...Config::array('proto.domains.protube'),
                     ...(App::environment('production') ? [] : ['http://localhost:*']),
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
@@ -45,8 +46,6 @@ class ProtoPolicy extends Policy
                     'https://discordapp.com/api/guilds/600338792766767289/widget.json',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
-                    'https://analytics.saproto.nl/',
-                    'http://analytics.saproto.nl/',
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com',
                     'https://www.google.com/recaptcha/api.js',
@@ -86,6 +85,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'https://proto.utwente.nl',
                     'https://www.proto.utwente.nl',
+                    'https://www.staging.proto.utwente.nl',
                     'https://static.saproto.com',
                     'https://metis.proto.utwente.nl:3001',
                     'wss://metis.proto.utwente.nl:3001',
@@ -95,8 +95,6 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://cdn.jsdelivr.net/npm/chart.js',
                     'https://api.fontawesome.com/',
-                    'https://analytics.saproto.nl/',
-                    'http://analytics.saproto.nl/',
                     ...(App::environment('production') ? [] : ['ws://localhost:*']),
                 ]);
         } catch (InvalidValueSet|InvalidDirective $e) {

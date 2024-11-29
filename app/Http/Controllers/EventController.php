@@ -19,6 +19,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -88,7 +89,7 @@ class EventController extends Controller
             ->firstOrFail();
 
         $methods = [];
-        if (config('omnomcom.mollie.use_fees')) {
+        if (Config::boolean('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
         }
 
@@ -595,7 +596,7 @@ CALSCALE:GREGORIAN
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
-                    ($event->committee ? $event->committee->email_address : 'board@proto.utwente.nl')
+                    ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
                 sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";

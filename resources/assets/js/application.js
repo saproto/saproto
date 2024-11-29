@@ -6,9 +6,10 @@ global.SignaturePad = SignaturePad;
 import moment from 'moment/moment.js';
 
 global.moment = moment;
-import quagga from 'quagga';
 
-global.Quagga = quagga;
+//Temporarily disabled due to an import error: Uncaught ReferenceError: glMatrixArrayType is not defined
+// import quagga from 'quagga';
+// global.Quagga = quagga;
 
 import './countdown-timer';
 import './utilities';
@@ -277,18 +278,3 @@ if ('IntersectionObserver' in window) {
         header.style.backgroundImage = 'url(\'' + header.dataset.bgimage + '\')';
     });
 }
-
-// Matomo Analytics
-const _paq = window._paq = window._paq || [];
-_paq.push(['trackPageView']);
-_paq.push(['enableLinkTracking']);
-(function() {
-    let u = '//' + config.analytics_url + '/';
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    const d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.type = 'text/javascript';
-    g.async = true;
-    g.src = u + 'matomo.js';
-    s.parentNode.insertBefore(g, s);
-})();
