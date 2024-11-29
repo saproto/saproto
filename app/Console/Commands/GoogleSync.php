@@ -216,7 +216,9 @@ class GoogleSync extends Command
         $this->output->info('Alias Members:');
 
         $externalAliases = ProtoAlias::query()->whereNotNull('destination')->get();
-        $inactiveMemberAliases = ProtoAlias::query()->select(['alias', 'users.email AS destination'])->join('users', 'user_id', '=', 'users.id')->whereHas('user', function (Builder $query) {$query->whereDoesntHave('groups');})->get();
+        $inactiveMemberAliases = ProtoAlias::query()->select(['alias', 'users.email AS destination'])->join('users', 'user_id', '=', 'users.id')->whereHas('user', function (Builder $query) {
+            $query->whereDoesntHave('groups');
+        })->get();
 
         $aliases = $externalAliases->merge($inactiveMemberAliases)->groupBy('alias');
         $googleGroups = $this->listGoogleGroups();
