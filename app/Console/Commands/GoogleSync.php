@@ -174,8 +174,15 @@ class GoogleSync extends Command
         $googleGroups = $this->listGoogleGroups();
         $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
 
+        $groupsCorrect = $aliases->filter(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
         $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
         $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', strtok($group->email, '@')));
+
+        foreach ($groupsCorrect as $alias) {
+            $this->pp(
+                '<fg=green>✓</> '.str_pad("#$alias->id", 6).$alias->alias,
+            );
+        }
 
         foreach ($groupsToRemove as $group) {
             $this->pp(
@@ -239,8 +246,15 @@ class GoogleSync extends Command
             );
             $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
 
+            $membersCorrect = $aliasGroup->filter(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
             $membersToAdd = $aliasGroup->reject(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
             $membersToRemove = $googleGroupMembers->reject(fn ($member): bool => $aliasGroup->contains('destination', $member->email));
+
+            foreach ($membersCorrect as $alias) {
+                $this->pp(
+                    '        <fg=green>✓</> '.str_pad("#$alias->id", 6).$alias->destination,
+                );
+            }
 
             foreach ($membersToRemove as $member) {
                 $this->pp(
@@ -444,8 +458,15 @@ class GoogleSync extends Command
         $targetGroups = $protoGroups->merge($protoAliases);
         $googleGroups = $this->listGoogleGroups($protoUser);
 
+        $groupsCorrect = $targetGroups->intersect($googleGroups->pluck('email'));
         $groupsToAdd = $targetGroups->diff($googleGroups->pluck('email'));
         $groupsToRemove = $googleGroups->pluck('email')->diff($targetGroups);
+
+        foreach ($groupsCorrect as $group) {
+            $this->pp(
+                $indent.'<fg=green>✓</> '.$group,
+            );
+        }
 
         foreach ($groupsToRemove as $group) {
             $googleGroup = $googleGroups->firstWhere('email', $group);
