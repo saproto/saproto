@@ -1,14 +1,13 @@
 <?php
 
 use Tests\DuskTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 uses(
     DuskTestCase::class,
-    // Illuminate\Foundation\Testing\DatabaseMigrations::class,
+// Illuminate\Foundation\Testing\DatabaseMigrations::class,
 )->in('Browser');
-
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +36,7 @@ uses(
 |
 */
 
-expect()->extend('toBeOne', fn () => $this->toBe(1));
+expect()->extend('toBeOne', fn() => $this->toBe(1));
 
 /*
 |--------------------------------------------------------------------------

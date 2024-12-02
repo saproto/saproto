@@ -6,7 +6,6 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use PHPUnit\Framework\Attributes\BeforeClass;
 
@@ -18,7 +17,7 @@ abstract class DuskTestCase extends BaseTestCase
     #[BeforeClass]
     public static function prepare(): void
     {
-        if (! static::runningInSail() && ! App::environment('ci')) {
+        if (!static::runningInSail()) {
             static::startChromeDriver(['--port=9515']);
         }
     }
@@ -31,7 +30,7 @@ abstract class DuskTestCase extends BaseTestCase
         $options = (new ChromeOptions)->addArguments(collect([
             $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
             '--disable-search-engine-choice-screen',
-        ])->unless($this->hasHeadlessDisabled(), fn (Collection $items) => $items->merge([
+        ])->unless($this->hasHeadlessDisabled(), fn(Collection $items) => $items->merge([
             '--disable-gpu',
             '--headless=new',
         ]))->all());
