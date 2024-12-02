@@ -34,10 +34,8 @@ jobs:
           path: public/build
 
   call-phplint:
-    - steps:
-        - uses: actions/checkout@v4
-        - uses: ./fix_php.yml
-          secrets: inherit
+    - uses: ./.github/workflows/fix_php.yml
+      secrets: inherit
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
