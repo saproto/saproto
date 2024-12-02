@@ -79,8 +79,8 @@ jobs:
         with:
           commit_message: PHP Automatic Fixing (Pint & Rector)
           skip_fetch: true
-  deploy:
-    name: 🐘 Test and ⚙ Deploy Check
+  pest:
+    name: 🐘 Pest Tests
     runs-on: ubuntu-latest
     needs: [ phplint, frontendbuild ]
     services:
@@ -157,3 +157,81 @@ jobs:
         with:
           name: laravel-failure-artifact
           path: storage/logs/laravel.log
+  dusk:
+    name: 🌜 Dusk Tests
+    runs-on: ubuntu-latest
+    needs: [ phplint, frontendbuild ]
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+      mysql:
+        image: mariadb:10
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: 🛎️ Checkout project
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mysql.ports['3306'] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+
+      - name: 🔍 Read .env
+        run: (grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env)
+
+      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+
+      - uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: Build
+          path: public/build
+
+      - name: Cache Dusk test results
+        uses: actions/cache@v4
+        with:
+          path: .tmp/phpunit.cache/test-results
+          key: ${{ runner.os }}-dusk-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-dusk-
+
+      - run: mkdir -p .tmp/phpunit.cache
+
+      - name: 🌜 Run dusk tests
+        env:
+          DB_CONNECTION: mysql
+          DB_DATABASE: testing
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_USERNAME: root
+          DB_PASSWORD: secret
+          DB_HOST: 127.0.0.1
+          DUSK_DRIVER_URL: selenium:4444
+        run: |
+          php artisan key:generate
+          php artisan migrate
+          vendor/bin/pest --ci
+          php artisan serve --no-reload & php artisan dusk
+
+      - name: Upload Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+
