@@ -32,7 +32,7 @@ return [
     */
 
     'connections' => [
-        
+
         'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
