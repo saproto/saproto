@@ -6,7 +6,8 @@
          stopOnError="false"
          stopOnFailure="false"
          cacheDirectory=".tmp/phpunit.cache"
-         backupStaticProperties="false">
+         backupStaticProperties="false"
+         bootstrap="bootstrap/app.php">
     <php>
         <ini name="memory_limit" value="-1"/>
         <server name="APP_ENV" value="testing"/>

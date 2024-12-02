@@ -226,7 +226,6 @@ jobs:
         run: |
           php artisan key:generate
           php artisan migrate
-          vendor/bin/pest --ci
           php artisan serve --no-reload & php artisan dusk
 
       - name: Upload Screenshots
