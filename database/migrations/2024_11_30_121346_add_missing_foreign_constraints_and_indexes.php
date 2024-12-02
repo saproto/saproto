@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -38,7 +39,6 @@ return new class extends Migration {
             //if a user gets deleted, also delete the alias
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
-
 
         Schema::table('bankaccounts', function (Blueprint $table) {
             $table->bigInteger('user_id')->unsigned()->index()->change();
@@ -293,7 +293,6 @@ return new class extends Migration {
             $table->bigInteger('payed_with_withdrawal')->unsigned()->nullable()->index()->change();
             $table->foreign('payed_with_withdrawal')->references('id')->on('withdrawals')->nullOnDelete();
         });
-
 
         Schema::table('pages', function (Blueprint $table) {
             //if a featured image is destroyed, do not delete the page, but set the relation to null
