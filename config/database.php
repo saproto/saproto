@@ -32,8 +32,7 @@ return [
     */
 
     'connections' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-
+        
         'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
@@ -45,17 +44,6 @@ return [
             'collation' => 'utf8mb4_unicode_520_ci',
             'prefix' => '',
             'strict' => false,
-        ],
-
-        'redis' => [
-            'default' => [
-                'url' => env('REDIS_URL'),
-                'host' => env('REDIS_HOST', '127.0.0.1'),
-                'user' => env('REDIS_USERNAME', ''),
-                'password' => env('REDIS_PASSWORD', null),
-                'port' => env('REDIS_PORT', '6379'),
-                'database' => env('REDIS_DB', '0'),
-            ],
         ],
     ],
 

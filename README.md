@@ -219,15 +219,25 @@ features such as timelines of runtime requests, database queries and client-metr
 
 ### Testing
 
-##### For testing we use Pest which is configured to use the sail database.
+For testing we use Pest for basic tests and Dusk for browser tests.
+These tests should be run locally, but are also run on every PR in GitHub Actions.
 
-You can run the tests with the following command:
-```sail test```. If you do not need the output and want it to go faster you can use the ```--parallel``` flag.
+If tests are failing, and it shows that all the tests using a database fail, you should run
+```sail artisan optimize:clear``` first.
 
-If it shows that all the tests using a database fail, you should run ```sail artisan optimize:clear``` first.
+#### Pest
+
+The Pest tests can be run with the following command:
+```sail test```.
+If you do not need the output and want it to go faster you can use the ```--parallel``` flag.
 
 To make a new test you can use the following command:
 ```sail artisan make:test {{TestName}}```.
 
 To make a unit test you can use the following command:
 ```sail artisan make:test {{TestName}} --unit```.
+
+#### Dusk
+
+The dusk tests can be run with the following command:
+```sail dusk```.
