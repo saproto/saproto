@@ -162,8 +162,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ phplint, frontendbuild ]
     services:
-      selenium:
-        image: selenium/standalone-chrome
       mysql:
         image: mariadb:10
         env:
@@ -221,17 +219,23 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: secret
           DB_HOST: 127.0.0.1
-          DUSK_DRIVER_URL: selenium:4444
-          BROWSER: chrome
         run: |
           php artisan key:generate
           php artisan migrate
-          php artisan serve --no-reload & php artisan dusk
-
+          php artisan dusk:chrome-driver --detect
+          ./vendor/laravel/dusk/bin/chromedriver-linux --port=9515 &
+          php artisan serve --no-reload &
+          php artisan dusk
       - name: Upload Screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: tests/Browser/screenshots
+      - name: Upload Console Logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: console
+          path: tests/Browser/console
 
