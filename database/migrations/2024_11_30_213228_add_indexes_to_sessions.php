@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::table('sessions', function (Blueprint $table) {
             $table->string('id')->primary()->change();
-            $table->foreignId('user_id')->nullable()->index()->change();
             $table->string('ip_address', 45)->nullable()->change();
             $table->text('user_agent')->nullable()->change();
             $table->longText('payload')->change();

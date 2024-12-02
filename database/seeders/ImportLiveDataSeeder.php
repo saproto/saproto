@@ -11,6 +11,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schema;
 
 class ImportLiveDataSeeder extends Seeder
 {
@@ -23,7 +24,7 @@ class ImportLiveDataSeeder extends Seeder
     public function run(string $password, $output): void
     {
         // First let's create our admin user.
-        $output->task('creating admin user.', fn () => self::createAdminUser($password));
+        $output->task('creating admin user.', fn() => self::createAdminUser($password));
 
         $output->info('Importing live data');
 
@@ -46,11 +47,11 @@ class ImportLiveDataSeeder extends Seeder
         ];
 
         foreach ($tables as $table) {
-            $output->task('importing '.$table['name'], fn () => self::createEntries(self::getDataFromExportApi($table['name']), $table));
+            $output->task('importing ' . $table['name'], fn() => self::createEntries(self::getDataFromExportApi($table['name']), $table));
         }
 
         // Now let's add our admin user to the committee and give them the sysadmin role.
-        $output->task('assigning admin roles.', fn () => self::assignAdminRole());
+        $output->task('assigning admin roles.', fn() => self::assignAdminRole());
 
     }
 
@@ -78,8 +79,9 @@ class ImportLiveDataSeeder extends Seeder
      */
     public static function createEntries($entries, array $table): void
     {
+        Schema::disableForeignKeyConstraints();
         foreach ($entries as $entry) {
-            $entry = (array) $entry;
+            $entry = (array)$entry;
 
             if (array_key_exists('excluded_columns', $table)) {
                 foreach ($table['excluded_columns'] as $column) {
@@ -89,6 +91,7 @@ class ImportLiveDataSeeder extends Seeder
 
             DB::table($table['name'])->insert($entry);
         }
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -96,7 +99,7 @@ class ImportLiveDataSeeder extends Seeder
      */
     public static function createAdminUser(string $password): void
     {
-        $userData = (array) self::getDataFromExportApi('user');
+        $userData = (array)self::getDataFromExportApi('user');
         if ($userData == null) {
             /** @var User $adminUser */
             $adminUser = User::factory()->has(Member::factory())->create(['id' => 1]);
@@ -104,13 +107,13 @@ class ImportLiveDataSeeder extends Seeder
 
             // Stop the import dataseeder from here as the user does not have enough rights.
             throw new Exception(
-                'You are not allowed to import data from the live website.'.PHP_EOL.
-                'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.'.PHP_EOL.
+                'You are not allowed to import data from the live website.' . PHP_EOL .
+                'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.' . PHP_EOL .
                 'Otherwise you can continue without seeding the database.'
             );
         }
 
-        $memberData = (array) ($userData['member'] ?? null);
+        $memberData = (array)($userData['member'] ?? null);
         unset($userData['member']);
         unset($userData['photo']);
         unset($userData['roles']);
@@ -126,6 +129,10 @@ class ImportLiveDataSeeder extends Seeder
         $adminUser = User::query()->create($userData);
         $adminUser->save();
         if ($memberData !== []) {
+            $memberData['user_id'] = 1;
+            unset($memberData['file_id']);
+            unset($memberData['membership_form_id']);
+            unset($memberData['omnomcom_sound_id']);
             $newMember = Member::query()->create($memberData);
             $newMember->user_id = 1;
             $newMember->save();
