@@ -11,8 +11,9 @@ concurrency:
 
 jobs:
   call-phplint:
-    - uses: ./.github/workflows/fix_php.yml
-      secrets: inherit
+    name: Fix php
+    uses: ./.github/workflows/fix_php.yml
+    secrets: inherit
 
   deploy:
     needs: call-phplint
