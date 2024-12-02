@@ -11,8 +11,9 @@ concurrency:
 
 jobs:
   call-phplint:
-    uses: ./fix_php.yml
-    secrets: inherit
+    - uses: actions/checkout@v4
+    - uses: ./fix_php.yml
+      secrets: inherit
 
   deploy:
     needs: call-phplint
