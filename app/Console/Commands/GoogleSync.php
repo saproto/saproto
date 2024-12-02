@@ -9,7 +9,6 @@ use App\Models\Alias as ProtoAlias;
 use App\Models\Committee;
 use App\Models\User as ProtoUser;
 use Google\Service\Directory;
-use Google\Service\Directory\Alias as GoogleAlias;
 use Google\Service\Directory\Group as GoogleGroup;
 use Google\Service\Directory\Member as GoogleGroupMembership;
 use Google\Service\Directory\User as GoogleUser;
@@ -23,6 +22,7 @@ use Google_Client;
 use Google_Service_Exception;
 use Google_Task_Exception;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -83,6 +83,8 @@ class GoogleSync extends Command
         );
         $this->directory = new Directory($client);
         $this->syncGoogleGroupsWithCommittees();
+        $this->syncGoogleGroupsWithAliases();
+        $this->syncGoogleGroupMembersWithExternalAliasesMembers();
         $this->syncGoogleUsersWithProtoUsers();
 
         $this->output->success('Finished!');
@@ -159,6 +161,125 @@ class GoogleSync extends Command
     }
 
     /**
+     * Synchronise the current Proto aliases with the Google Workspace groups.
+     *
+     *
+     * @throws Throwable
+     */
+    public function syncGoogleGroupsWithAliases(): void
+    {
+        $this->output->info('Aliases:');
+
+        $aliases = ProtoAlias::query()->groupBy('alias')->get();
+        $googleGroups = $this->listGoogleGroups();
+        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
+
+        $groupsCorrect = $aliases->filter(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
+        $groupsToAdd = $aliases->reject(fn ($alias): bool => $googleAliasGroups->contains('email', $alias->email));
+        $groupsToRemove = $googleAliasGroups->reject(fn ($group): bool => $aliases->contains('alias', strtok($group->email, '@')));
+
+        foreach ($groupsCorrect as $alias) {
+            $this->pp(
+                '<fg=green>✓</> '.str_pad("#$alias->id", 6).$alias->alias,
+            );
+        }
+
+        foreach ($groupsToRemove as $group) {
+            $this->pp(
+                '<fg=red>-</> '.str_pad("#$group->id", 16).str_pad("$group->name <fg=gray>", 40, '.')."</> $group->email",
+                fn () => $this->directory->groups->delete($group->id)
+            );
+        }
+
+        foreach ($groupsToAdd as $alias) {
+            try {
+                $this->pp(
+                    '<fg=yellow>+</> '.str_pad("#$alias->id", 6).$alias->alias,
+                    fn () => $this->directory->groups->insert(
+                        new GoogleGroup([
+                            'name' => "Alias $alias->alias",
+                            'email' => $alias->email,
+                            'description' => 'Email alias '.$alias->alias,
+                        ])
+                    )
+                );
+            } catch (Throwable $throwable) {
+                $this->pp(
+                    '<fg=red>x</> '.str_pad("#$alias->id", 6).$alias->alias,
+                    fn (): mixed => dump($throwable->getMessage())
+                );
+            }
+        }
+    }
+
+    /**
+     * Synchronise the current Proto alias members with the Google Workspace group members.
+     *
+     *
+     * @throws Throwable
+     */
+    public function syncGoogleGroupMembersWithExternalAliasesMembers(): void
+    {
+        $this->output->info('Alias Members:');
+
+        $externalAliases = ProtoAlias::query()->whereNotNull('destination')->get();
+        $inactiveMemberAliases = ProtoAlias::query()->select(['alias', 'users.email AS destination'])->join('users', 'user_id', '=', 'users.id')->whereHas('user', function (Builder $query) {
+            $query->whereDoesntHave('groups');
+        })->get();
+
+        $aliases = $externalAliases->concat($inactiveMemberAliases)->groupBy('alias');
+        $googleGroups = $this->listGoogleGroups();
+        $googleAliasGroups = $googleGroups->filter(fn ($group) => Str::startsWith($group->name, 'Alias'));
+
+        foreach ($aliases as $aliasGroup) {
+            $googleGroup = $googleAliasGroups->firstWhere('email', $aliasGroup->first()->email);
+            if ($googleGroup == null) {
+                $this->pp(
+                    '<fg=red>x</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members'
+                );
+
+                continue;
+            }
+
+            $this->pp(
+                '<fg=green>✓</> '.str_pad($aliasGroup->first()->alias.' <fg=gray>', 65, '.').'</> '.$aliasGroup->count().' members',
+            );
+            $googleGroupMembers = $this->listGoogleGroupMembers($googleGroup);
+
+            $membersCorrect = $aliasGroup->filter(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
+            $membersToAdd = $aliasGroup->reject(fn ($alias): bool => $googleGroupMembers->contains('email', $alias->destination));
+            $membersToRemove = $googleGroupMembers->reject(fn ($member): bool => $aliasGroup->contains('destination', $member->email));
+
+            foreach ($membersCorrect as $alias) {
+                $this->pp(
+                    '        <fg=green>✓</> '.str_pad("#$alias->id", 6).$alias->destination,
+                );
+            }
+
+            foreach ($membersToRemove as $member) {
+                $this->pp(
+                    '        <fg=red>-</> '.str_pad("#$member->id", 6).str_pad("$member->email <fg=gray>", 65, '.')."</> $member->email",
+                    fn () => $this->directory->members->delete($googleGroup->id, $member->email)
+                );
+            }
+
+            foreach ($membersToAdd as $alias) {
+                $this->pp(
+                    '        <fg=yellow>+</> '.str_pad("#$alias->id", 6).$alias->destination,
+                    fn () => $this->directory->members->insert(
+                        $googleGroup->id,
+                        new GoogleGroupMembership([
+                            'email' => $alias->destination,
+                            'keyType' => 'USER',
+                        ])
+                    )
+                );
+            }
+        }
+
+    }
+
+    /**
      * Synchronise the current Proto users with the Google Workspace users.
      *
      *
@@ -201,8 +322,8 @@ class GoogleSync extends Command
             // Synchronise Google Workspace groups for user.
             $this->syncGoogleGroupsForUser($protoUser);
 
-            // Synchronise Google Workspace email aliases for user.
-            $this->syncAliasesForUser($protoUser);
+            // Remove aliases created using old method.
+            $this->removeAliasesForUser($protoUser);
 
             // Patch user's Gmail settings.
             $this->patchGmailSettings($protoUser);
@@ -236,10 +357,10 @@ class GoogleSync extends Command
             );
 
             Mail::to($protoUser)->send(new NewWorkspaceAccount($protoUser));
-        } catch (Throwable $e) {
+        } catch (Throwable $throwable) {
             $this->pp(
                 '<fg=red>x</> '.str_pad("#$protoUser->id", 6).$protoUser->name,
-                fn (): mixed => dump($e->getMessage())
+                fn (): mixed => dump($throwable->getMessage())
             );
         }
     }
@@ -258,6 +379,7 @@ class GoogleSync extends Command
         if ($protoUser != null) {
             $optParams['userKey'] = $protoUser->proto_email;
         }
+
         $pageToken = null;
         do {
             $optParams['pageToken'] = $pageToken;
@@ -269,6 +391,30 @@ class GoogleSync extends Command
         } while ($pageToken);
 
         return $googleGroups;
+    }
+
+    /**
+     * List Google Workspace group members of a specific group
+     *
+     * @return Collection<GoogleGroup>
+     *
+     * @throws Exception
+     */
+    public function listGoogleGroupMembers(GoogleGroup $googleGroup): Collection
+    {
+        $googleGroupMembers = collect();
+        $optParams = [];
+        $pageToken = null;
+        do {
+            $optParams['pageToken'] = $pageToken;
+            $results = $this->directory->members->listMembers($googleGroup->id, $optParams);
+            $pageToken = $results->getNextPageToken();
+            foreach ($results->getMembers() as $members) {
+                $googleGroupMembers->push($members);
+            }
+        } while ($pageToken);
+
+        return $googleGroupMembers;
     }
 
     /**
@@ -306,52 +452,46 @@ class GoogleSync extends Command
     public function syncGoogleGroupsForUser(ProtoUser $protoUser): void
     {
         $indent = '        ';
-        /* @var Committee $committee */
-        foreach ($protoUser->groups()->where('public', true)->get() as $committee) {
-            try {
-                if ($this->directory->members->hasMember($committee->email, $protoUser->proto_email)->isMember) {
-                    $this->pp($indent.'<fg=green>✓</> '.str_pad("#$committee->id", 6).$committee->name);
-                } else {
-                    $this->pp(
-                        $indent.'<fg=yellow>+</> '.str_pad("#$committee->id", 6).$committee->name,
-                        fn () => $this->directory->members->insert(
-                            $committee->email,
-                            new GoogleGroupMembership([
-                                'email' => $protoUser->proto_email,
-                                'keyType' => 'USER',
-                            ])
-                        )
-                    );
-                }
-            } catch (Throwable $e) {
-                // Catch 403 errors, as these are expected when trying to access a group that was not created by this client.
-                if ($e->getCode() == 403) {
-                    $this->pp(
-                        $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name." Not Authorized to access this resource",
-                        fn (): mixed => throw $e
-                    );
-                }
-                $this->pp(
-                    $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name,
-                    fn (): mixed => throw $e
-                );
-            }
+        $protoGroups = $protoUser->groups()->where('public', true)->get()->pluck('email');
+        $protoAliases = ProtoAlias::where('user_id', $protoUser->id)->get()->pluck('email');
+
+        $targetGroups = $protoGroups->merge($protoAliases);
+        $googleGroups = $this->listGoogleGroups($protoUser);
+
+        $groupsCorrect = $targetGroups->intersect($googleGroups->pluck('email'));
+        $groupsToAdd = $targetGroups->diff($googleGroups->pluck('email'));
+        $groupsToRemove = $googleGroups->pluck('email')->diff($targetGroups);
+
+        foreach ($groupsCorrect as $group) {
+            $this->pp(
+                $indent.'<fg=green>✓</> '.$group,
+            );
         }
 
-        foreach ($this->listGoogleGroups($protoUser) as $googleGroup) {
-            $committee = Committee::query()->firstWhere('slug', explode('@', $googleGroup->email)[0]);
+        foreach ($groupsToRemove as $group) {
+            $googleGroup = $googleGroups->firstWhere('email', $group);
+            $this->pp(
+                $indent.'<fg=red>-</> '.str_pad("#$googleGroup->id", 6).$googleGroup->name,
+                fn () => $this->directory->members->delete($googleGroup->email, $protoUser->proto_email)
+            );
+        }
 
+        foreach ($groupsToAdd as $group) {
             try {
-                if ($committee && ! $committee->isMember($protoUser)) {
-                    $this->pp(
-                        $indent.'<fg=red>-</> '.str_pad("#$committee->id", 6)."$committee->name",
-                        fn (): mixed => $this->directory->members->delete($committee->email, $protoUser->proto_email)
-                    );
-                }
-            } catch (Throwable $e) {
                 $this->pp(
-                    $indent.'<fg=red>?</> '.str_pad("#$committee->id", 6).$committee->name,
-                    fn (): mixed => throw $e
+                    $indent.'<fg=yellow>+</> '.str_pad('', 6).$group,
+                    fn () => $this->directory->members->insert(
+                        $group,
+                        new GoogleGroupMembership([
+                            'email' => $protoUser->proto_email,
+                            'keyType' => 'USER',
+                        ])
+                    )
+                );
+            } catch (Throwable $throwable) {
+                $this->pp(
+                    $indent.'<fg=red>x</> '.str_pad('', 6).$group,
+                    fn (): mixed => throw $throwable
                 );
             }
         }
@@ -360,29 +500,13 @@ class GoogleSync extends Command
     /**
      * @throws Exception
      */
-    public function syncAliasesForUser(ProtoUser $protoUser): void
+    public function removeAliasesForUser(ProtoUser $protoUser): void
     {
         $indent = '        ';
         $googleUserAliases = $this->directory->users_aliases->listUsersAliases($protoUser->proto_email)->getAliases();
         $googleUserAliases = collect(array_column($googleUserAliases ?? [], 'alias'));
 
-        $protoUserAliases = ProtoAlias::query()
-            ->where('user_id', $protoUser->id)
-            ->get()
-            ->map(fn ($alias): string =>
-                /** @var ProtoAlias $alias */
-                $alias->alias.'@'.config('proto.emaildomain'))->unique();
-        foreach ($protoUserAliases->diff($googleUserAliases) as $emailAlias) {
-            $this->pp(
-                $indent."<fg=yellow>+</> ✉ {$emailAlias}",
-                fn () => $this->directory->users_aliases->insert($protoUser->proto_email, new GoogleAlias([
-                    'primaryEmail' => $protoUser->proto_email,
-                    'alias' => $emailAlias,
-                ]))
-            );
-        }
-
-        foreach ($googleUserAliases->diff($protoUserAliases) as $emailAlias) {
+        foreach ($googleUserAliases as $emailAlias) {
             $this->pp(
                 $indent."<fg=red>-</> ✉ {$emailAlias}",
                 fn () => $this->directory->users_aliases->delete($protoUser->proto_email, $emailAlias)
@@ -392,6 +516,7 @@ class GoogleSync extends Command
 
     /**
      * Patch Gmail settings by impersonating a Google Workspace user.
+     *
      * @throws \Google\Exception
      */
     public function patchGmailSettings(ProtoUser $protoUser): void
@@ -428,10 +553,10 @@ class GoogleSync extends Command
                     'emailAddress' => $protoUser->email,
                     'disposition' => 'leaveInInbox',
                 ]));
-            } catch (Throwable $e) {
+            } catch (Throwable) {
                 $this->pp(
                     $indent."<fg=yellow>x</> ✉ $protoUser->email: Forwarder is not verified",
-                    fn () => throw new Exception("Invalid forwarding address")
+                    fn () => throw new Exception('Invalid forwarding address')
                 );
             }
         }
@@ -475,7 +600,7 @@ class GoogleSync extends Command
             }
 
             // Ignore invalid forwarding address error as it just means the user still has to accept the forwarder.
-            if ($e->getMessage() == "Invalid forwarding address") {
+            if ($e->getMessage() === 'Invalid forwarding address') {
                 return;
             }
 
