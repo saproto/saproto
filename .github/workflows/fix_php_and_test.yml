@@ -222,6 +222,7 @@ jobs:
           DB_PASSWORD: secret
           DB_HOST: 127.0.0.1
           DUSK_DRIVER_URL: selenium:4444
+          BROWSER: chrome
         run: |
           php artisan key:generate
           php artisan migrate
