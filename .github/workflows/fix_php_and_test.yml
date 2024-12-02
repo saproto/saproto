@@ -32,11 +32,10 @@ jobs:
         with:
           name: Build
           path: public/build
-
   call-phplint:
-    - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
-      uses: ./.github/workflows/fix_php.yml
-      secrets: inherit
+    name: Fix php
+    uses: ./.github/workflows/fix_php.yml
+    secrets: inherit
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
