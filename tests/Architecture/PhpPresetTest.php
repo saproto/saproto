@@ -1,3 +1,5 @@
 <?php
 
-arch()->preset()->php()->ignoring('App\Console\Commands\GoogleSync');
+use App\Console\Commands\GoogleSync;
+
+arch()->preset()->php()->ignoring(GoogleSync::class);
