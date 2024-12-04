@@ -75,7 +75,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'S.A. Proto Have You Tried Turning It Off And On Again committee'),
     ],
 
-
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings
