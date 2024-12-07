@@ -166,7 +166,7 @@
                 })
                 ->get() as $i => $product)
 
-            @if($product->categories->whereIn('id', Config::array('omnomcom.stores.protopolis.categories'))->count() > 0)
+            @if($product->categories->whereIn('id', \Illuminate\Support\Facades\Config::array('omnomcom.stores.protopolis.categories'))->count() > 0)
 
                 <div class='result d-none {{ ($product->stock <= 0 ? 'unavailable' : '') }}'>
                     <div class='result_image'
