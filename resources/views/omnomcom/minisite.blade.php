@@ -166,7 +166,7 @@
                     ->orWhere('stock','>',0);
                 })
                 ->whereHas('categories', function ($query) {
-                    $query->whereIn('id', \Illuminate\Support\Facades\Config::array('omnomcom.stores.protopolis.categories'));
+                    $query->whereIn('product_categories.id', \Illuminate\Support\Facades\Config::array('omnomcom.stores.protopolis.categories'));
                 })
                 ->get() as $i => $product)
             @php /**@var Product $product */ @endphp
