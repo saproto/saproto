@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
-use DB;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Email Model.
@@ -64,50 +66,52 @@ use Illuminate\Support\Collection as SupportCollection;
  */
 class Email extends Model
 {
+    use HasFactory;
+
     protected $table = 'emails';
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
-    public function lists()
+    public function lists(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\EmailList::class, 'emails_lists', 'email_id', 'list_id');
+        return $this->belongsToMany(EmailList::class, 'emails_lists', 'email_id', 'list_id');
     }
 
-    /** @return BelongsToMany */
-    public function events()
+    public function events(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Event::class, 'emails_events', 'email_id', 'event_id');
+        return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
     }
 
-    /** @return BelongsToMany */
-    public function attachments()
+    public function attachments(): BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\StorageEntry::class, 'emails_files', 'email_id', 'file_id');
+        return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
 
     /**
-     * @return string
-     *
      * @throws Exception
      */
-    public function destinationForBody()
+    public function destinationForBody(): string
     {
         if ($this->to_user) {
             return 'users';
         }
+
         if ($this->to_member) {
             return 'members';
         }
+
         if ($this->to_pending) {
             return 'pending';
         }
+
         if ($this->to_active) {
             return 'active members';
         }
+
         if ($this->to_list) {
             return 'list';
         }
+
         if ($this->to_event) {
             if ($this->to_backup) {
                 return 'event with backup';
@@ -115,33 +119,38 @@ class Email extends Model
 
             return 'event';
         }
+
         throw new Exception('Email has no destination');
     }
 
-    /** @return SupportCollection|User[] */
-    public function recipients()
+    public function recipients(): SupportCollection
     {
         if ($this->to_user) {
-            return User::orderBy('name')->get();
+            return User::query()->orderBy('name')->get();
         }
+
         if ($this->to_member) {
-            return User::whereHas('member', function ($q) {
-                $q->where('is_pending', false);
+            return User::query()->whereHas('member', static function ($q) {
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
+
         if ($this->to_pending) {
-            return User::whereHas('member', function ($q) {
-                $q->where('is_pending', true);
+            return User::query()->whereHas('member', static function ($q) {
+                $q->type(MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
+
         if ($this->to_active) {
-            return User::whereHas('committees')->orderBy('name')->get();
+            return User::query()->whereHas('committees')->orderBy('name')->get();
         }
+
         if ($this->to_list) {
-            return User::whereHas('lists', function ($q) {
+            return User::query()->whereHas('lists', function ($q) {
                 $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
             })->orderBy('name')->get();
         }
+
         if ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
@@ -153,23 +162,21 @@ class Email extends Model
                 }
             }
 
-            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
+            return User::query()->whereIn('id', $user_ids)->orderBy('name')->get();
         }
 
-        return collect([]);
+        return collect();
     }
 
-    /** @return bool */
-    public function hasRecipientList(EmailList $list)
+    public function hasRecipientList(EmailList $list): bool
     {
-        return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->count() > 0;
+        return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->exists();
     }
 
     /**
-     * @param  User  $user
      * @return string Email body with variables parsed.
      */
-    public function parseBodyFor($user)
+    public function parseBodyFor(User $user): string
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
@@ -177,13 +184,13 @@ class Email extends Model
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
-    /** @return string */
-    public function getEventName()
+    public function getEventName(): string
     {
         $events = [];
         if (! $this->to_event) {
             return '';
         }
+
         foreach ($this->events as $event) {
             $events[] = $event->title;
         }
@@ -191,13 +198,13 @@ class Email extends Model
         return implode(', ', $events);
     }
 
-    /** @return string */
-    public function getListName()
+    public function getListName(): string
     {
         $lists = [];
         if (! $this->to_list) {
             return '';
         }
+
         foreach ($this->lists as $list) {
             $lists[] = $list->name;
         }
@@ -205,8 +212,7 @@ class Email extends Model
         return implode(', ', $lists);
     }
 
-    /** @return string */
-    public static function getListUnsubscribeFooter($user_id, $email_id)
+    public static function getListUnsubscribeFooter($user_id, $email_id): string
     {
         $footer = [];
         $lists = self::whereId($email_id)->firstOrFail()->lists;

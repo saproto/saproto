@@ -13,7 +13,7 @@ return [
     */
 
     'stores' => [
-        'protopolis' => (object) [
+        'protopolis' => [
             'name' => 'Protopolis',
             'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26],
             'addresses' => ['130.89.190.22', '130.89.190.235', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
@@ -22,7 +22,7 @@ return [
             'bank_card_allowed' => false,
             'alcohol_time_constraint' => true,
         ],
-        'tipcie' => (object) [
+        'tipcie' => [
             'name' => 'TIPCie',
             'categories' => [15, 18, 25],
             'addresses' => [],
@@ -139,7 +139,8 @@ return [
         'fee_id' => 887,
         'free_methods' => ['creditcard'],
         'use_fees' => false,
-        'has_webhook' => ! (getenv('APP_ENV') === 'local'),
+        'has_webhook' => getenv('APP_ENV') !== 'local',
+        'paid_statuses' => ['paid', 'paidout'],
     ],
 
     /*

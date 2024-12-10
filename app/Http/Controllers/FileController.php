@@ -3,24 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\StorageEntry;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\EncodedImageInterface;
+use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
-    /**
-     * @param  int  $id
-     * @param  string  $hash
-     * @return Response
-     */
-    public function get($id, $hash)
+    public function get(int $id, string $hash): Response
     {
         /** @var StorageEntry $entry */
-        $entry = StorageEntry::findOrFail($id);
+        $entry = StorageEntry::query()->findOrFail($id);
 
         if ($hash != $entry->hash) {
             abort(404);
@@ -36,72 +31,50 @@ class FileController extends Controller
         return $response;
     }
 
-    /**
-     * @param  int  $w
-     * @param  int  $h
-     * @return EncodedImageInterface
-     */
-    public static function makeImage(StorageEntry $entry, $w, $h)
+    public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
     {
-        $storage = config('filesystems.disks');
-
-        ini_set('memory_limit', '512M');
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($storage['local']['root'].'/'.$entry->filename);
-
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
-
-        if (! $w || ! $h) {
-            return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
-                return $image->scaleDown($w, $h)->encode();
-            });
+        if (Storage::disk('local')->missing($entry->filename)) {
+            abort(404, 'File not found');
         }
 
-        return \Cache::remember($cacheKey, 86400, function () use ($image, $w, $h) {
-            return $image->coverDown($w, $h)->encode();
+        return Cache::remember($cacheKey, 31536000, function () use ($entry, $w, $h): string {
+            $image = Image::read(Storage::disk('local')->get($entry->filename));
+            if (empty($w) || empty($h)) {
+                return $image->scaleDown($w, $h)->toWebp()->toString();
+            }
+
+            return $image->coverDown($w, $h)->toWebp()->toString();
         });
     }
 
     /**
-     * @param  int  $id
-     * @param  string  $hash
      * @return Response
      */
-    public function getImage($id, $hash, Request $request)
+    public function getImage(int $id, string $hash, Request $request)
     {
         /** @var StorageEntry $entry */
-        $entry = StorageEntry::findOrFail($id);
+        $entry = StorageEntry::query()->findOrFail($id);
 
         if ($hash != $entry->hash) {
             abort(404);
         }
 
-        $response = new Response($this->makeImage(
-            $entry,
-            ($request->has('w') ? $request->input('w') : null),
-            ($request->has('h') ? $request->input('h') : null)
-        ), 200);
-        $response->header('Content-Type', $entry->mime);
-        $response->header('Cache-Control', 'max-age=86400, public');
-        $response->header('Content-Disposition', sprintf('filename="%s"', $entry->original_filename));
-
-        return $response;
+        return Response(static::makeImage($entry, $request->input('w'), $request->input('h')), 200, [
+            'Content-Type' => 'image/webp',
+            'Cache-Control' => 'max-age=31536000, public',
+            'Content-Disposition', sprintf('filename="%s"', $entry->original_filename),
+        ]);
     }
 
-    /**
-     * @param  string  $printer
-     * @param  string  $url
-     * @param  int  $copies
-     * @return string
-     */
-    public static function requestPrint($printer, $url, $copies = 1)
+    public static function requestPrint(string $printer, string $url, int $copies = 1): string
     {
-        if ($printer == 'document') {
+        if ($printer === 'document') {
             return 'You cannot do this at the moment. Please use the network printer.';
         }
 
         $payload = base64_encode(json_encode((object) [
-            'secret' => config('app-proto.printer-secret'),
+            'secret' => Config::string('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
             'copies' => $copies,
@@ -109,9 +82,9 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
-        } catch (\Exception $e) {
-            return 'Exception while connecting to the printer server: '.$e->getMessage();
+            $result = file_get_contents('http://'.Config::string('app-proto.printer-host').':'.Config::string('app-proto.printer-port').'/?data='.$payload);
+        } catch (Exception $exception) {
+            return 'Exception while connecting to the printer server: '.$exception->getMessage();
         }
 
         return $result !== false ? $result : 'Something went wrong while connecting to the printer server.';

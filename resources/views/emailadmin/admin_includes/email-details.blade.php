@@ -1,5 +1,5 @@
 <form method="post"
-      action="{{ ($email == null ? route("email::add") : route("email::edit", ['id' => $email->id])) }}"
+      action="{{ ($email == null ? route("email::store") : route("email::update", ['id' => $email->id])) }}"
       enctype="multipart/form-data">
 
     {!! csrf_field() !!}
@@ -58,7 +58,8 @@
                         <div class="input-group mb-3">
                             <input name="sender_address" type="text" class="form-control" placeholder="board"
                                    value="{{ $email->sender_address ?? '' }}" required>
-                            <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
+                            <span class="input-group-text"
+                                  id="basic-addon2">@ {{ Config::string('proto.emaildomain') }}</span>
                         </div>
                     </div>
 
@@ -166,7 +167,7 @@
                         ])
 
                         <select multiple name="listSelect[]" id="listSelect" class="form-control"
-                                {{ ($email?->to_list ? '' : 'disabled="disabled"') }}>
+                            {{ ($email?->to_list ? '' : 'disabled="disabled"') }}>
 
                             @foreach(App\Models\EmailList::all() as $list)
 
@@ -198,7 +199,7 @@
 
             <button type="submit" class="btn btn-success float-end">Save</button>
 
-            <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
+            <a href="{{ route("email::index") }}" class="btn btn-default">Cancel</a>
 
         </div>
 
@@ -208,28 +209,28 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const eventSelect = document.getElementById('eventSelect')
-        const listSelect = document.getElementById('listSelect')
-        const destinationSelectList = Array.from(document.getElementsByName('destinationType'))
+        const eventSelect = document.getElementById('eventSelect');
+        const listSelect = document.getElementById('listSelect');
+        const destinationSelectList = Array.from(document.getElementsByName('destinationType'));
         const backupToggle = document.getElementById('backupDiv');
         const toggleList = {
             'event': [false, true, false],
             'members': [true, true, true],
             'active': [true, true, true],
             'pending': [true, true, true],
-            'lists': [true, false, true]
-        }
+            'lists': [true, false, true],
+        };
 
         destinationSelectList.forEach(el => {
             el.addEventListener('click', e => {
-                const toggle = toggleList[el.value]
-                eventSelect.disabled = toggle[0]
-                listSelect.disabled = toggle[1]
+                const toggle = toggleList[el.value];
+                eventSelect.disabled = toggle[0];
+                listSelect.disabled = toggle[1];
 
-                if (toggle[2]) backupToggle.classList.add('d-none')
-                else backupToggle.classList.remove('d-none')
-            })
-        })
+                if (toggle[2]) backupToggle.classList.add('d-none');
+                else backupToggle.classList.remove('d-none');
+            });
+        });
     </script>
 
 @endpush
