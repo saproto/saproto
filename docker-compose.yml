@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
       args:
         WWWGROUP: '${WWWGROUP}'
+        MYSQL_CLIENT: mariadb-client
     image: '${SAIL_CONTAINER_NAME}/app'
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -24,6 +25,8 @@ services:
     depends_on:
       - mariadb
       - mailpit
+      - redis
+      - selenium
   mariadb:
     container_name: '${SAIL_CONTAINER_NAME}-mariadb'
     image: 'mariadb:10'
@@ -66,9 +69,34 @@ services:
       - sail
     depends_on:
       - mariadb
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'sail-redis:/data'
+    networks:
+      - sail
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      retries: 3
+      timeout: 5s
+  selenium:
+    image: selenium/standalone-chromium
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - '/dev/shm:/dev/shm'
+    networks:
+      - sail
 networks:
   sail:
     driver: bridge
 volumes:
   sail-mariadb:
+    driver: local
+  sail-redis:
     driver: local
