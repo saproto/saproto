@@ -11,6 +11,7 @@ use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
 use Carbon;
 use Illuminate\Console\Command;
+use Random\RandomException;
 
 class UpdateWallstreetPrices extends Command
 {
@@ -42,6 +43,8 @@ class UpdateWallstreetPrices extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws RandomException
      */
     public function handle(): ?int
     {
@@ -55,6 +58,7 @@ class UpdateWallstreetPrices extends Command
         }
 
         foreach ($currentDrink->products()->get() as $product) {
+            /** @var $product Product */
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
@@ -126,7 +130,7 @@ class UpdateWallstreetPrices extends Command
         })->where('active', true);
 
         //chance of 1 in random_events_chance (so about every random_events_chance minutes that a random event is triggered)
-        if ($currentDrink->random_events_chance > 0 && $randomEventQuery->count() > 0 && random_int(1, $currentDrink->random_events_chance) === 1) {
+        if ($currentDrink->random_events_chance > 0 && $randomEventQuery->exists() && random_int(1, $currentDrink->random_events_chance) === 1) {
             /** @var WallstreetEvent $randomEvent */
             $randomEvent = $randomEventQuery->first();
             $this->info('Random event '.$randomEvent->name.' triggered');
@@ -159,5 +163,7 @@ class UpdateWallstreetPrices extends Command
             $currentDrink->id,
             $currentDrink->loss()
         );
+
+        return 0;
     }
 }

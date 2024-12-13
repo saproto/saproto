@@ -11,15 +11,16 @@ use Illuminate\Queue\SerializesModels;
 
 class NewWallstreetPrice implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
      */
     public function __construct(
         public WallstreetPrice $wallstreetPrice
-    ) {
-    }
+    ) {}
 
     /**
      * Get the channels the event should broadcast on.

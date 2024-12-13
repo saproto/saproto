@@ -5,7 +5,6 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Collection;
 
 /**
  * Class WallstreetDrink.
@@ -35,7 +34,7 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function orders(): Collection|array
+    public function orders()
     {
         $productIDs = $this->products()->pluck('id');
 

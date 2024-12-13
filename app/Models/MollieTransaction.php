@@ -56,15 +56,7 @@ class MollieTransaction extends Model
 
     public function orderlines(): HasMany
     {
-        return $this->hasMany(\App\Models\OrderLine::class, 'payed_with_mollie');
-    }
-
-    /** @return MollieTransaction */
-    public function transaction()
-    {
-        return Mollie::api()
-            ->payments
-            ->get($this->mollie_id);
+        return $this->hasMany(OrderLine::class, 'payed_with_mollie');
     }
 
     /**
