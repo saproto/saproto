@@ -175,8 +175,7 @@ class WallstreetController extends Controller
     {
         $drink = WallstreetDrink::query()->findOrFail($drinkID);
         $prices = $this->getLatestPrices($drink);
-        $events = $this->getLatestEvents($drink);
-        $wrapped = ['products' => $prices, 'events' => $events];
+        $wrapped = ['products' => $prices];
 
         return Response::json($wrapped);
     }

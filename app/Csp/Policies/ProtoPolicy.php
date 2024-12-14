@@ -6,13 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Spatie\Csp\Directive;
-use Spatie\Csp\Exceptions\InvalidDirective;
-use Spatie\Csp\Exceptions\InvalidValueSet;
 use Spatie\Csp\Keyword;
 use Spatie\Csp\Policies\Policy;
 use Symfony\Component\HttpFoundation\Response;
-
-use function Sentry\captureException;
 
 class ProtoPolicy extends Policy
 {

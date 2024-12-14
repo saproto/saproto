@@ -42,7 +42,7 @@
                 @endif
             @endforeach
 
-            background-image: url('{{ asset($bg_image) }}');
+               background-image: url('{{ asset($bg_image) }}');
             background-position: center 100%;
             background-repeat: no-repeat;
         }
@@ -79,6 +79,8 @@
 @include('omnomcom.store.includes.modals')
 
 @include('website.assets.javascripts')
+
+@vite('resources/assets/js/echo.js')
 
 @stack("javascript")
 
@@ -215,7 +217,7 @@
         //Initialize WallstreetDrink if active
 
         if ("{{$store_slug}}" === 'tipcie') {
-            initializeWallstreetDrink();
+            await initializeWallstreetDrink();
         }
     }
 
@@ -233,7 +235,7 @@
 
                     //get the current prices on the first load
                     get(`{{route('api::wallstreet::updated_prices', ['id'=>'_id'])}}`.replace('_id', data.id)).then((response) => {
-                        console.log("updating prices!")
+                        console.log("updating prices!", response)
                         if (typeof response.products === 'undefined' || response.products.length === 0) {
                             console.log('no products associated with the active drink!');
                             return;

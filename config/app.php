@@ -12,6 +12,7 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
 use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
+use Illuminate\Broadcasting\BroadcastServiceProvider;
 use Illuminate\Bus\BusServiceProvider;
 use Illuminate\Cache\CacheServiceProvider;
 use Illuminate\Cookie\CookieServiceProvider;
@@ -197,7 +198,7 @@ return [
          * Laravel Framework Service Providers...
          */
         AuthServiceProvider::class,
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        BroadcastServiceProvider::class,
         BusServiceProvider::class,
         CacheServiceProvider::class,
         ConsoleSupportServiceProvider::class,
