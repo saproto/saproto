@@ -16,8 +16,8 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
     cluster: 'eu',
 });
-console.log(window.Echo)
 if (import.meta.env.DEV) {
+    console.log(window.Echo);
     Pusher.log = (msg) => {
         console.log(msg);
     };
