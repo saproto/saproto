@@ -69,7 +69,7 @@ class OmNomController extends Controller
     public function stock(Request $request)
     {
         $stores = Config::array('omnomcom.stores');
-        if (! $stores[$request->store]) {
+        if (! array_key_exists($request->store, $stores)) {
             abort(404);
         }
 
