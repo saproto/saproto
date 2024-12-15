@@ -10,6 +10,8 @@
     </div>
 @endsection
 
+@vite('resources/assets/js/echo.js')
+
 @push('javascript')
     {{--    chart.js and the date adapter--}}
     <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>

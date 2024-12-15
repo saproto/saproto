@@ -196,12 +196,12 @@
                             <div><b>{{rand(10, 20)}}.{{rand(0,100)}}</b></div>
                         </div>
                         <div class="wallstreet-info-item">
-                            <div>EPS (TTM)</div>
-                            <div><b>{{rand(0, 100)}}.{{rand(0,100)}}</b></div>
-                        </div>
-                        <div class="wallstreet-info-item">
                             <div>Forward Divided & Yield</div>
                             <div><b>{{ rand(0, 10) }} </b><span class="text-green">(0.12%)</span></div>
+                        </div>
+                        <div class="wallstreet-info-item">
+                            <div>Chief Technical Officer (CTO)</div>
+                            <i>Ysbrand Burgstede</i>
                         </div>
                     </div>
                 </div>
