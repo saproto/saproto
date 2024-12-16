@@ -8,6 +8,7 @@ export default defineConfig({
             input: [
                 '/resources/assets/sass/light.scss',
                 '/resources/assets/js/application.js',
+                '/resources/assets/js/echo.js',
                 ...glob.sync('resources/assets/sass/!(*.example).scss')
             ],
             refresh: true,

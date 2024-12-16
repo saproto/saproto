@@ -225,6 +225,7 @@ return [
         AppServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
+        \App\Providers\BroadcastServiceProvider::class,
 
         /*
          * External Service Providers

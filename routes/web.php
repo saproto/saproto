@@ -470,7 +470,7 @@ Route::middleware('forcedomain')->group(function () {
         });
 
         Route::prefix('events')->name('events::')->group(function () {
-            Route::get('', 'eventIndex')->name('index');
+            Route::get('', 'events')->name('index');
             Route::post('store', 'addEvent')->name('store');
             Route::get('edit/{id}', 'editEvent')->name('edit');
             Route::post('update/{id}', 'updateEvent')->name('update');

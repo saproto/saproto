@@ -126,6 +126,14 @@ for changes to scripts or stylesheets.
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js`
 and the stylesheet in `vendor.scss`.
 
+#### Websockets
+
+In some parts of the website we use websockets to update the page in real-time.
+For this we use a soketi server. This runs in a docker container in your sail setup.
+
+For the frontend we use the [Laravel Echo](https://laravel.com/docs/broadcasting) library to connect to the
+websocket server.
+
 #### Localhost
 
 When you have finished the above setup the following port will be exposed on localhost.
