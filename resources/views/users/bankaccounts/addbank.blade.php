@@ -97,12 +97,12 @@
                             <div class="form-group">
                                 <label for="bic">Bank BIC Code</label>
                                 <input type="text" class="form-control text-uppercase" id="bic" name="bic"
-                                       placeholder="">
+                                       placeholder="" required>
                             </div>
 
-                            <!-- <p>
+                            <p>
                                 <span id="bic-message">Enter your IBAN first.</span>
-                            </p> -->
+                            </p>
 
                             <hr>
 
@@ -160,7 +160,6 @@
 @endsection
 
 @push('javascript')
-
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const iban = document.getElementById('iban');
         const bic = document.getElementById('bic');
@@ -168,31 +167,34 @@
         const form = document.getElementById('iban-form');
         const ibanMessage = document.getElementById('iban-message');
         const bicMessage = document.getElementById('bic-message');
+            console.log("Init");
 
-        iban.addEventListener('keyup', _ => {
+
+        const onkey = _ => {
             iban.value = iban.value.replace(' ', '');
+            console.log("KeyUp");
             if (iban.value.length >= 15) {
-                get('{{ route('api::verify_iban') }}', { 'iban': iban.value })
+                get('{{ route('api::verify_iban') }}', { 'iban': iban.value, 'bic': bic.value})
                     .then(data => update_iban_form(data))
                     .catch(error => {
                         console.error(error);
                         iban_message('black', 'We could not automatically verify your IBAN.');
                         bic_message('red', 'Please enter your BIC.');
-                        bic.value = '';
+                        //bic.value = '';
                         //bic.disabled = false
                     });
             } else {
                 iban_message('black', 'Please enter your IBAN above.');
-                bic_message('black', 'Enter your IBAN first.');
-                bic.value = '';
+                bic_message('black', ' ');
+                // bic.value = '';
                 //bic.disabled = true
                 submit.disabled = true;
             }
-        });
 
-        bic.addEventListener('keyup', _ => {
-            submit.disabled = bic.value < 8;
-        });
+        };
+        iban.addEventListener('keyup', onkey);
+
+        bic.addEventListener('keyup', onkey);
 
         submit.addEventListener('click', _ => {
             submit.disabled = true;
@@ -228,22 +230,23 @@
 
         function update_iban_form(data) {
             if (data.status === false) {
-                iban_message('red', data.message);
-                bic_message('red', data.message);
-                bic.value = '';
+                if (data.message.includes('BIC')) {
+                    bic_message('red', data.message);
+                    iban_message('red', '');
+                } else {
+                    iban_message('red', data.message);
+                    bic_message('red', '');
+                }
+                // bic.value = '';
                 submit.disabled = true;
-            } else if (data.bic !== '') {
+            }
+            else {
                 iban_message('green', 'Your IBAN is valid!');
-                bic_message('green', 'We found your BIC for you!');
-                bic.value = data.bic;
-                iban.value = data.iban;
-                //bic.disabled = true
+                bic_message('green', 'The BIC is also valid! Make sure that it matches your bank too!');
                 submit.disabled = false;
-            } else {
-                iban_message('green', 'Your IBAN is valid!');
-                bic_message('red', 'We could not find your BIC. Please enter your it manually.');
-                iban.value = data.iban;
-                bic.value = '';
+                // bic_message('red', 'We could not find your BIC. Please enter your it manually.');
+                iban.value = data.iban; // NOTE: Do we need to overwrite it here?
+                //bic.value = '';
                 //bic.disabled = false
             }
         }
