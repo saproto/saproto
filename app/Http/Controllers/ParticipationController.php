@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ParticipationController extends Controller
 {
     /**
-     * @return Response
+     * @return RedirectResponse|JsonResponse
      */
     public function create(int $id, Request $request)
     {
@@ -162,14 +162,13 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $participation_id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($participation_id, Request $request)
+    public function destroy(int $participation_id)
     {
-        /** @var ActivityParticipation $participation */
+        /** @var ActivityParticipation|null $participation */
         $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
 
         if (! $participation) {
@@ -212,7 +211,7 @@ class ParticipationController extends Controller
 
             $participation->activity->event->updateUniqueUsersCount();
 
-            if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->participants) {
+            if (! $participation->backup && $participation->activity->users()->count() < $participation->activity->participants) {
                 self::transferOneBackupUser($participation->activity);
             }
         } else {
@@ -234,14 +233,14 @@ class ParticipationController extends Controller
             'message' => $message,
         ]));
 
+        /**@phpstan-ignore-next-line */
         return null;
     }
 
     /**
-     * @param  int  $participation_id
      * @return JsonResponse
      */
-    public function togglePresence($participation_id, Request $request)
+    public function togglePresence(int $participation_id)
     {
         /** @var ActivityParticipation $participation */
         $participation = ActivityParticipation::query()->findOrFail($participation_id);

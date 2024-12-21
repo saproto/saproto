@@ -8,6 +8,7 @@ use App\Models\Member;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -19,7 +20,7 @@ class ImportLiveDataSeeder extends Seeder
      *
      * @throws Exception
      */
-    public function run($password, $output): void
+    public function run(string $password, $output): void
     {
         // First let's create our admin user.
         $output->task('creating admin user.', fn () => self::createAdminUser($password));
@@ -61,8 +62,8 @@ class ImportLiveDataSeeder extends Seeder
      */
     public static function getDataFromExportApi($tableName)
     {
-        $local_url = route('api::user::dev_export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $tableName]);
-        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl', $local_url);
+        $local_url = route('api::user::dev_export', ['personal_key' => Config::string('app-proto.personal-proto-key'), 'table' => $tableName]);
+        $remote_url = str_replace(Config::string('app-proto.app-url'), 'https://www.proto.utwente.nl', $local_url);
         $response = Http::get($remote_url);
         if ($response->failed()) {
             return null;
@@ -91,11 +92,9 @@ class ImportLiveDataSeeder extends Seeder
     }
 
     /**
-     * @param  string  $password
-     *
      * @throws Exception
      */
-    public static function createAdminUser($password): void
+    public static function createAdminUser(string $password): void
     {
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
@@ -138,7 +137,7 @@ class ImportLiveDataSeeder extends Seeder
     public static function assignAdminRole(): void
     {
         $adminUser = User::query()->find(1);
-        $root = Committee::query()->where('slug', config('proto.rootcommittee'))->first();
+        $root = Committee::query()->where('slug', Config::string('proto.rootcommittee'))->first();
         CommitteeMembership::query()->create([
             'user_id' => $adminUser->id,
             'committee_id' => $root->id,

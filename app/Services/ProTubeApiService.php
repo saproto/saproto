@@ -5,6 +5,8 @@ namespace App\Services;
 use Exception;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 use function Sentry\captureException;
@@ -18,9 +20,9 @@ class ProTubeApiService
 
     private static function client(): PendingRequest
     {
-        return Http::withToken(config('protube.laravel_to_protube_secret'))
-            ->withOptions(['verify' => (config('app.env') === 'production')])
-            ->baseUrl(config('protube.server').self::API_PREFIX);
+        return Http::withToken(Config::string('protube.laravel_to_protube_secret'))
+            ->withOptions(['verify' => (App::environment('production'))])
+            ->baseUrl(Config::string('protube.server').self::API_PREFIX);
     }
 
     /**
@@ -49,7 +51,7 @@ class ProTubeApiService
     public static function skipSong(): bool
     {
         //when in production don't update the protube admin status
-        if (! app()->environment('production')) {
+        if (! App::environment('production')) {
             return true;
         }
 
@@ -71,7 +73,7 @@ class ProTubeApiService
     public static function updateAdmin(int $userID, bool $admin): bool
     {
         //when in production don't update the protube admin status
-        if (! app()->environment('production')) {
+        if (! App::environment('production')) {
             return true;
         }
 

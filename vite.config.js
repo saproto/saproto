@@ -14,6 +14,10 @@ export default defineConfig({
   plugins: [
     laravel({
       input: [
+        '/resources/assets/sass/light.scss',
+        '/resources/assets/js/application.js',
+        '/resources/assets/js/echo.js',
+        ...glob.sync('resources/assets/sass/!(*.example).scss'),
         'resources/js/app.ts',
         '/resources/assets/js/application.js',
         ...glob.sync('resources/assets/sass/!(*.example).scss'),

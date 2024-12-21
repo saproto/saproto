@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Event Model.
@@ -112,7 +113,7 @@ class Event extends Model
         return Hashids::connection('event')->encode($this->id);
     }
 
-    public static function fromPublicId(string $public_id): Event|Collection|Model|null
+    public static function fromPublicId(string $public_id): Event
     {
         return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
@@ -129,7 +130,7 @@ class Event extends Model
         return $this->belongsTo(Committee::class);
     }
 
-    public function mayViewEvent($user): bool
+    public function mayViewEvent(?User $user): bool
     {
         //board may always view events
         if ($user?->can('board')) {
@@ -137,7 +138,7 @@ class Event extends Model
         }
 
         //only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user)))) {
+        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user)))) {
             return true;
         }
 
@@ -145,26 +146,24 @@ class Event extends Model
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
-    public static function getEventBlockQuery()
+    public static function getEventBlockQuery(): Builder
     {
         return Event::query()
             ->orderBy('start')
             ->with('image')
             ->with('activity', static function ($e) {
-                $e->withCount([
+                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) {
+                    $q->where('user_id', Auth::id());
+                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) {
+                    $q->where('user_id', Auth::id());
+                }, 'participation as user_has_participation' => static function ($q) {
+                    $q->where('user_id', Auth::id())
+                        ->whereNull('committees_activities_id');
+                },
+                ])->withCount([
                     'users',
-                    'backupUsers as myBackupParticipationCount' => static function ($q) {
-                        $q->where('user_id', Auth::id());
-                    },
-                    'helpingParticipations as myHelperParticipationCount' => static function ($q) {
-                        $q->where('user_id', Auth::id());
-                    },
-                    'participation as myParticipationCount' => static function ($q) {
-                        $q->where('user_id', Auth::id())
-                            ->whereNull('committees_activities_id');
-                    },
                 ]);
-            })->withCount(['tickets as myTicketCount' => static function ($q) {
+            })->withExists(['tickets as user_has_tickets' => static function ($q) {
                 $q->whereHas('purchases', static function ($q) {
                     $q->where('user_id', Auth::id());
                 });
@@ -224,7 +223,9 @@ class Event extends Model
     {
         return TicketPurchase::query()
             ->where('user_id', $user->id)
-            ->whereIn('ticket_id', $this->tickets->pluck('id'))
+            ->whereHas('ticket', function ($q) {
+                $q->where('event_id', $this->id);
+            })
             ->get();
     }
 
@@ -289,7 +290,7 @@ class Event extends Model
 
         $eroHelping = HelpingCommittee::query()
             ->where('activity_id', $this->activity->id)
-            ->where('committee_id', config('proto.committee')['ero'])->first();
+            ->where('committee_id', Config::integer('proto.committee.ero'))->first();
         if ($eroHelping) {
             return ActivityParticipation::query()
                 ->where('activity_id', $this->activity->id)
@@ -357,11 +358,6 @@ class Event extends Model
     public function getIsFutureAttribute(): bool
     {
         return date('U') < $this->start;
-    }
-
-    public function getImageUrlAttribute(): string
-    {
-        return $this->image ? route('image::get', ['id' => $this->image->id, 'hash' => $this->image->hash]) : '';
     }
 
     public function getFormattedDateAttribute(): object

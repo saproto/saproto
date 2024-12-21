@@ -4,6 +4,7 @@ use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
+use App\Providers\SoloServiceProvider;
 use Biscolab\ReCaptcha\Facades\ReCaptcha;
 use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
 use Carbon\Carbon;
@@ -67,7 +68,7 @@ use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
 use nickurt\PwnedPasswords\Facade;
-use PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider;
+use nickurt\PwnedPasswords\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -97,7 +98,7 @@ return [
 
     'env' => env('APP_ENV', 'local'),
     'ssl' => env('SSL', true),
-    'forcedomain' => env('FORCE_DOMAIN', null),
+    'forcedomain' => env('FORCE_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -224,19 +225,20 @@ return [
         AppServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
+        \App\Providers\BroadcastServiceProvider::class,
 
         /*
          * External Service Providers
          */
         MailServiceProvider::class,
-        ServiceProvider::class,
         ReCaptchaServiceProvider::class,
         BarcodeServiceProvider::class,
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
-        nickurt\PwnedPasswords\ServiceProvider::class,
+        ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
+        SoloServiceProvider::class,
     ],
 
     /*

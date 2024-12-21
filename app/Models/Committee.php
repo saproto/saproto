@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property int $is_active
- * @property-read string $email_address
+ * @property-read string $email
  * @property-read StorageEntry|null $image
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
@@ -88,7 +89,7 @@ class Committee extends Model
             ->where('committees_users.created_at', '<', Carbon::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+            ->orderByPivot('created_at', 'desc');
     }
 
     public function image(): BelongsTo
@@ -101,12 +102,15 @@ class Committee extends Model
         return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
-    public function getEmailAddressAttribute(): string
+    public function getEmailAttribute(): string
     {
-        return $this->slug.'@'.config('proto.emaildomain');
+        return $this->slug.'@'.Config::string('proto.emaildomain');
     }
 
-    public function pastEvents(int $n): Collection
+    /**
+     * @param  int  $n  the number of events to return
+     */
+    public function pastEvents(int $n): Collection|array
     {
         $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
 
@@ -117,7 +121,7 @@ class Committee extends Model
         return $events->where('secret', '=', 0)->get();
     }
 
-    public function upcomingEvents(): Collection
+    public function upcomingEvents(): Collection|array
     {
         $events = $this->organizedEvents()->where('end', '>', time());
 
@@ -128,26 +132,7 @@ class Committee extends Model
         return $events->where('secret', '=', 0)->get();
     }
 
-    /**
-     * @return Event[]
-     */
-    public function helpedEvents(bool $includeSecret = false): array
-    {
-        /** @var Activity[] $activities */
-        $activities = $this->belongsToMany(Activity::class, 'committees_activities')->orderBy('created_at', 'desc')->get();
-
-        $events = [];
-        foreach ($activities as $activity) {
-            $event = $activity->event;
-            if ($event?->isPublished() || (! $event->secret || $includeSecret)) {
-                $events[] = $event;
-            }
-        }
-
-        return $events;
-    }
-
-    public function pastHelpedEvents($n): Collection
+    public function pastHelpedEvents($n): Collection|array
     {
         return Event::query()->whereHas('activity', function ($q) {
             $q->whereHas('helpingCommittees', function ($q) {

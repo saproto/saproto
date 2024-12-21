@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\MembershipTypeEnum;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 /**
@@ -17,20 +20,19 @@ use Illuminate\Support\Str;
  *
  * @property int $id
  * @property int $user_id
+ * @property User $user
  * @property string|null $proto_username
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
- * @property bool $is_lifelong
- * @property bool $is_honorary
- * @property bool $is_donor
- * @property bool $is_pending
- * @property bool $is_pet
+ * @property MembershipTypeEnum $membership_type
+ * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read User $user
+ * @property Carbon|null $until
  * @property-read StorageEntry|null $membershipForm
  * @property StorageEntry|null $customOmnomcomSound
+ * @property UtAccount|null $UtAccount
  *
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
@@ -53,7 +55,9 @@ use Illuminate\Support\Str;
  * @method static Builder|Member whereIsPet($value)
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
- * @method static Builder|Member query()
+ * @method static Builder|static query()
+ * @method Builder|static primary()
+ * @method Builder|static type(MembershipTypeEnum $type)
  *
  * @mixin Eloquent
  */
@@ -75,6 +79,7 @@ class Member extends Model
             'is_pending' => 'boolean',
             'is_pet' => 'boolean',
             'deleted_at' => 'datetime',
+            'membership_type' => MembershipTypeEnum::class,
         ];
     }
 
@@ -93,6 +98,24 @@ class Member extends Model
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
+    public function UtAccount(): HasOne
+    {
+        return $this->hasOne(UtAccount::class);
+    }
+
+    public function scopePrimary(Builder $query): Builder
+    {
+        /** @phpstan-ignore-next-line */
+        return $query->type(MembershipTypeEnum::REGULAR)
+            ->where('is_primary_at_another_association', false)
+            ->whereHas('UtAccount');
+    }
+
+    public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
+    {
+        return $query->where('membership_type', $type);
+    }
+
     public static function countActiveMembers(): int
     {
         return User::query()->whereHas('committees')->count();
@@ -101,14 +124,14 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', true);
+            $query->type(MembershipTypeEnum::PENDING);
         })->count();
     }
 
     public static function countValidMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->where('is_pending', false);
+            $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->count();
     }
 
@@ -117,7 +140,7 @@ class Member extends Model
         $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
-            ->whereIn('product_id', array_values(config('omnomcom.fee')))
+            ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))
             ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
@@ -127,11 +150,11 @@ class Member extends Model
     {
         $membershipOrderline = $this->getMembershipOrderline();
 
-        if ($membershipOrderline) {
+        if ($membershipOrderline != null) {
             return match ($this->getMembershipOrderline()->product->id) {
-                config('omnomcom.fee')['regular'] => 'primary',
-                config('omnomcom.fee')['reduced'] => 'secondary',
-                config('omnomcom.fee')['remitted'] => 'non-paying',
+                Config::integer('omnomcom.fee.regular') => 'primary',
+                Config::integer('omnomcom.fee.reduced') => 'secondary',
+                Config::integer('omnomcom.fee.remitted') => 'non-paying',
                 default => 'unknown',
             };
         }

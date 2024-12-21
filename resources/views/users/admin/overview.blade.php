@@ -75,6 +75,9 @@
                         </thead>
 
                         <tbody>
+                        @php
+                            /** @var \App\Models\User[] $users */
+                        @endphp
                         @foreach($users as $user)
                             <tr class="{{ $user->deleted_at ? 'opacity-50' : '' }}">
                                 <td class="controls" class="ps-3">
@@ -107,7 +110,7 @@
                                                 <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            <a href="{{ route('tempadmin::create', ['id'=>$user->id]) }}"
+                                            <a href="{{ route('tempadmins.create', ['id'=>$user->id]) }}"
                                                data-bs-toggle="tooltip" data-bs-placement="top"
                                                title="Grant temp admin till midnight" class="text-decoration-none">
                                                 <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
@@ -122,7 +125,7 @@
                                     @if($user->deleted_at)
                                         Deleted
                                     @elseif($user->member)
-                                        @if($user->member->is_pending)
+                                        @if($user->member->membership_type === \App\Enums\MembershipTypeEnum::PENDING)
                                             <strong class="text-warning">Pending</strong>
                                         @else
                                             <strong>Member</strong>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -9,18 +10,21 @@ use App\Models\Dinnerform;
 use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
+use App\Models\PhotoAlbum;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    /* Display the homepage. */
+    /** Display the homepage. */
     public function show()
     {
+
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')
@@ -29,8 +33,14 @@ class HomeController extends Controller
 
         $header = HeaderImage::query()->inRandomOrder()->first();
 
+        $albums = PhotoAlbum::query()->orderBy('date_taken', 'desc')
+            ->with('thumbPhoto')
+            ->where('published', true)
+            ->take(4)
+            ->get();
+
         if (! Auth::user()?->is_member) {
-            return view('website.home.external', ['companies' => $companies, 'header' => $header]);
+            return view('website.home.external', ['companies' => $companies, 'header' => $header, 'albums' => $albums]);
         }
 
         $weekly = Newsitem::query()
@@ -51,7 +61,7 @@ class HomeController extends Controller
 
         $birthdays = User::query()
             ->whereHas('member', static function ($q) {
-                $q->where('is_pending', false);
+                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
@@ -104,13 +114,14 @@ class HomeController extends Controller
             'dinnerforms' => $dinnerforms,
             'header' => $header,
             'videos' => $videos,
+            'albums' => $albums,
         ]);
     }
 
     /** @return View Display the most important page of the whole site. */
     public function developers()
     {
-        $committee = Committee::query()->where('slug', '=', config('proto.rootcommittee'))->first();
+        $committee = Committee::query()->where('slug', '=', Config::string('proto.rootcommittee'))->first();
         $developers = [
             'current' => CommitteeMembership::query()
                 ->where('committee_id', $committee->id)

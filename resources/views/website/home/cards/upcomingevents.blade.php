@@ -6,11 +6,11 @@
 
         @if(count($events) > 0)
 
-            @foreach($events as $key => $event)
+            @foreach($events as $counter => $event)
 
                 @if($event->mayViewEvent(Auth::user()) && $event->isPublished())
 
-                    @include('event.display_includes.event_block', ['event'=> $event])
+                    @include('event.display_includes.event_block', ['event'=> $event, 'lazyload'=> $counter > 4])
 
                     @php $week = $event->start->week; @endphp
 
@@ -21,7 +21,7 @@
         @else
 
             <p class="card-text text-center mt-2 mb-4">
-                We have no events coming up soon, sorry! 😟
+                We have no events coming up this month, sorry! 😟
             </p>
 
         @endif

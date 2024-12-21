@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Config;
 
 /**
  * App\Models\OrderLine.
@@ -65,6 +66,13 @@ class OrderLine extends Model
 
     protected $guarded = ['id'];
 
+    protected function casts(): array
+    {
+        return [
+            'payed_with_loss' => 'boolean',
+        ];
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
@@ -93,6 +101,21 @@ class OrderLine extends Model
     public function ticketPurchase(): HasOne
     {
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
+    }
+
+    public function scopeUnpayed(Builder $query): Builder
+    {
+        return $query->whereNull('payed_with_cash')
+            ->whereNull('payed_with_bank_card')
+            ->whereNull('payed_with_withdrawal')
+            ->where('payed_with_loss', false)
+            ->where(function ($query) {
+                $query->whereDoesntHave('molliePayment')
+                    ->orWhereHas('molliePayment', static function ($query) {
+                        $query->whereNotIn('status', Config::array('omnomcom.mollie.paid_statuses'));
+                    });
+            })
+            ->where('total_price', '!=', 0);
     }
 
     public function isPayed(): bool
@@ -138,6 +161,10 @@ class OrderLine extends Model
             return 'Bank Card';
         }
 
+        if ($this->total_price == 0) {
+            return 'Free!';
+        }
+
         if ($this->payed_with_mollie !== null) {
             return match ($this->molliePayment->translatedStatus()) {
                 'paid' => '<i class="fas fa-check ml-2 text-success"></i> - <a href=\''.
@@ -161,10 +188,6 @@ class OrderLine extends Model
                     $this->payed_with_mollie.
                     '</a>',
             };
-        }
-
-        if ($this->total_price == 0) {
-            return 'Free!';
         }
 
         return 'Unpaid';

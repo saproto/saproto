@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('homepage') }}">
-                @if(config('app.env') != 'production')
+                @if(!App::environment('production'))
                     <i class="fas fa-hammer me-2"></i>
                     <span class="text-uppercase">{{ config('app.env') }}</span> |
                 @endif
@@ -56,11 +56,11 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @foreach(config('omnomcom.stores') as $name => $store)
-                                        @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
+                                    @foreach(Config::array('omnomcom.stores') as $name => $store)
+                                        @if(in_array(Request::ip(), $store['addresses']) || Auth::user()->hasAnyPermission($store['roles']))
                                             <a class="dropdown-item"
                                                href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
-                                                Open store: {{ $store->name }}
+                                                Open store: {{ $store['name'] }}
                                             </a>
                                         @endif
                                     @endforeach
@@ -107,13 +107,14 @@
                                     @can('board')
                                         <a class="dropdown-item" href="{{ route("user::admin::index") }}">Users</a>
                                         <a class="dropdown-item" href="{{ route("tickets::index") }}">Tickets</a>
-                                        <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URLs</a>
+                                        <a class="dropdown-item" href="{{ route("short_urls.index") }}">Short URLs</a>
                                         <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp ProTube
+                                        <a class="dropdown-item" href="{{ route("tempadmins.index") }}">Temp ProTube
                                             Admin</a>
-                                        <a class="dropdown-item" href="{{ config('protube.remote_url') }}">ProTube
+                                        <a class="dropdown-item"
+                                           href="{{ Config::string('protube.remote_url') }}">ProTube
                                             Admin</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
@@ -156,8 +157,8 @@
 
                                     @canany(['alfred', 'board'])
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
-                                        <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
+                                        <a class="dropdown-item" href="{{ route("dmx.fixtures.index") }}">Fixtures</a>
+                                        <a class="dropdown-item" href="{{ route("dmx.overrides.index") }}">Override</a>
                                     @endcanany
 
                                     @canany(['alfred', 'sysadmin'])
@@ -199,7 +200,7 @@
                                            href="{{ route("announcement::index") }}">Announcements</a>
                                         <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("codex::index") }}">Codices</a>
+                                        <a class="dropdown-item" href="{{ route("codex.index") }}">Codices</a>
                                     @endcan
 
                                     <li role="separator" class="dropdown-divider"></li>
@@ -211,7 +212,9 @@
 
                         @cannot('board')
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ config('protube.remote_url') }}" target="_blank"
+                                <a class="nav-link"
+                                   href="{{ Config::string('protube.remote_url') }}"
+                                   target="_blank"
                                    role="button">
                                     ProTube
                                     @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
@@ -249,7 +252,7 @@
 
                             @can('senate')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('codex::index')}}" role="button"
+                                    <a class="nav-link" href="{{route('codex.index')}}" role="button"
                                        aria-haspopup="false" aria-expanded="false">Codices</a>
                                 </li>
                             @endcan
@@ -284,7 +287,7 @@
                                    role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->calling_name }}
                                     <img id="profile-picture" class="rounded-circle ms-2" alt="your profile picture"
-                                         src="{{ Auth::user()->generatePhotoPath(100, 100) }}" />
+                                         src="{{ Auth::user()->generatePhotoPath(100, 100) }}"/>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end mt-2">

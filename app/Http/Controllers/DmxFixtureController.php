@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\DmxChannel;
 use App\Models\DmxFixture;
 use App\Models\DmxOverride;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
-class DmxController extends Controller
+class DmxFixtureController extends Controller
 {
     /** @return View */
     public function index()
@@ -43,25 +43,22 @@ class DmxController extends Controller
 
         Session::flash('flash_message', sprintf('The new fixture %s has been stored.', $fixture->name));
 
-        return Redirect::route('dmx::edit', ['id' => $fixture->id]);
+        return Redirect::route('dmx.fixtures.edit', ['fixture' => $fixture]);
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(DmxFixture $fixture)
     {
-        return view('dmx.edit', ['fixture' => DmxFixture::query()->findOrFail($id)]);
+        return view('dmx.edit', ['fixture' => $fixture]);
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DmxFixture $fixture)
     {
-        $fixture = DmxFixture::query()->findOrFail($id);
         $fixture->fill($request->except('channel_name', 'special_function'));
         $fixture->save();
 
@@ -83,112 +80,20 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
-     *
-     * @throws Exception
      */
-    public function delete($id)
+    public function destroy(DmxFixture $fixture)
     {
-        /** @var DmxFixture $fixture */
-        $fixture = DmxFixture::query()->findOrFail($id);
         Session::flash('flash_message', sprintf('The fixture %s has been deleted.', $fixture->name));
         $fixture->delete();
 
-        return Redirect::route('dmx::index');
-    }
-
-    /** @return View */
-    public function overrideIndex()
-    {
-        return view('dmx.override.index', [
-            'overrides' => DmxOverride::getActiveSorted(),
-            'upcoming_overrides' => DmxOverride::getUpcomingSorted(),
-            'past_overrides' => DmxOverride::getPastSorted(),
-        ]);
-    }
-
-    /** @return View */
-    public function overrideCreate()
-    {
-        return view('dmx.override.edit', ['override' => null, 'fixtures' => DmxFixture::query()->orderBy('name', 'asc')->get()]);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    public function overrideStore(Request $request)
-    {
-        $fixtures = implode(',', $request->fixtures);
-        $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = strtotime($request->start);
-        $end = strtotime($request->end);
-
-        $override = DmxOverride::query()->create([
-            'fixtures' => $fixtures,
-            'color' => $color,
-            'start' => $start,
-            'end' => $end,
-        ]);
-        $override->save();
-
-        Session::flash('flash_message', 'Override created.');
-
-        return Redirect::route('dmx::override::edit', ['id' => $override->id]);
-    }
-
-    /** @return View */
-    public function overrideEdit($id)
-    {
-        return view('dmx.override.edit', ['override' => DmxOverride::query()->findOrFail($id),
-            'fixtures' => DmxFixture::query()->orderBy('name', 'asc')->get(), ]);
-    }
-
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function overrideUpdate(Request $request, $id)
-    {
-        $override = DmxOverride::query()->findOrFail($id);
-
-        $fixtures = implode(',', $request->fixtures);
-        $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = strtotime($request->start);
-        $end = strtotime($request->end);
-
-        $override->update([
-            'fixtures' => $fixtures,
-            'color' => $color,
-            'start' => $start,
-            'end' => $end,
-        ]);
-        $override->save();
-
-        Session::flash('flash_message', 'Override updated.');
-
-        return Redirect::route('dmx::override::edit', ['id' => $override->id]);
-    }
-
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function overrideDelete($id)
-    {
-        $override = DmxOverride::query()->findOrFail($id);
-        Session::flash('flash_message', 'The override has been deleted.');
-        $override->delete();
-
-        return Redirect::route('dmx::override::index');
+        return Redirect::route('dmx.fixtures.index');
     }
 
     public function valueApi(): array
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(config('proto.google-calendar.smartxp-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
+        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
 
         // Determine if any event is currently going on.
         $current_event = null;
@@ -201,13 +106,13 @@ class DmxController extends Controller
         // Determine what preset to use.
         $preset = 'free';
         if ($current_event !== null) {
-            $preset = in_array($current_event['type'], config('dmx.lecture_types')) ? 'lecture' : 'tutorial';
+            $preset = in_array($current_event['type'], Config::array('dmx.lecture_types')) ? 'lecture' : 'tutorial';
         }
 
         $channel_values = [];
 
         // Now we fill the preset channels.
-        $preset_colors = (date('G') > 6 && date('G') < 20 ? array_merge(config('dmx.colors')[$preset], [50]) : [0, 0, 0, 0]);
+        $preset_colors = (date('G') > 6 && date('G') < 20 ? Config::array(Config::array('dmx.colors')[$preset], [50]) : [0, 0, 0, 0]);
         foreach (DmxFixture::query()->where('follow_timetable', true)->get() as $fixture) {
             $channel_values = self::setFixtureChannels($fixture, $channel_values, $preset_colors);
         }
@@ -232,12 +137,11 @@ class DmxController extends Controller
     }
 
     /**
-     * @param  DmxFixture  $fixture
      * @param  int[]  $channel_values
      * @param  int[]  $colors
      * @return int[]
      */
-    private function setFixtureChannels($fixture, array $channel_values, array $colors): array
+    private function setFixtureChannels(DmxFixture $fixture, array $channel_values, array $colors): array
     {
         // Set red
         foreach ($fixture->getChannels('red') as $channel) {

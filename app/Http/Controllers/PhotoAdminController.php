@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
-use App\Models\PhotoManager;
 use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -22,7 +21,16 @@ class PhotoAdminController extends Controller
     /** @return View */
     public function index(Request $request)
     {
-        return view('photos.admin.index', ['query' => $request->input('query') ?? '']);
+        $name = $request->input('query');
+        $published = PhotoAlbum::query()->where('published', true);
+        $unpublished = PhotoAlbum::query()->where('published', false);
+
+        if ($name) {
+            $published = $published->name($name);
+            $unpublished = $unpublished->name($name);
+        }
+
+        return view('photos.admin.index', ['query' => $name, 'published' => $published->get(), 'unpublished' => $unpublished->get()]);
     }
 
     /**
@@ -43,42 +51,41 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        $photos = PhotoManager::getPhotos($id);
+        $album = PhotoAlbum::query()
+            ->with([
+                'items' => function ($query) {
+                    $query->orderBy('date_taken', 'desc');
+                },
+                'event'])
+            ->findOrFail($id);
+
         $fileSizeLimit = ini_get('post_max_size');
 
-        if ($photos == null) {
-            abort(404);
-        }
-
-        return view('photos.admin.edit', ['photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
+        return view('photos.admin.edit', ['album' => $album, 'fileSizeLimit' => $fileSizeLimit]);
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $album = PhotoAlbum::query()->find($id);
+        $album = PhotoAlbum::query()->findOrFail($id);
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
         $album->private = (bool) $request->input('private');
-
         $album->save();
 
         return Redirect::route('photo::admin::edit', ['id' => $id]);
     }
 
     /**
-     * @param  int  $id
      * @return JsonResponse|string
      */
-    public function upload(Request $request, $id)
+    public function upload(Request $request, int $id)
     {
         $album = PhotoAlbum::query()->findOrFail($id);
         if (! $request->hasFile('file')) {
@@ -108,12 +115,9 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
-     *
-     * @throws Exception
      */
-    public function action(Request $request, $id)
+    public function action(Request $request, int $id)
     {
         $action = $request->input('action');
         $photos = $request->input('photos');
@@ -158,27 +162,27 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function delete($id)
+    public function delete(int $id)
     {
-        PhotoManager::deleteAlbum($id);
+        $album = PhotoAlbum::query()->findOrFail($id);
+        $album->items->each->delete();
+        $album->delete();
 
         return Redirect::route('photo::admin::index');
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function publish($id)
+    public function publish(int $id)
     {
-        $album = PhotoAlbum::query()->where('id', '=', $id)->first();
+        $album = PhotoAlbum::query()->where('id', $id)->first();
 
-        if (count($album->items) <= 0 || $album->thumb_id == null) {
+        if (! $album->items()->exists() || $album->thumb_id === null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
 
             return Redirect::back();
@@ -191,12 +195,11 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function unpublish($id)
+    public function unpublish(int $id)
     {
-        $album = PhotoAlbum::query()->where('id', '=', $id)->first();
+        $album = PhotoAlbum::query()->where('id', $id)->first();
         $album->published = false;
         $album->save();
 
@@ -204,12 +207,9 @@ class PhotoAdminController extends Controller
     }
 
     /**
-     * @param  UploadedFile  $uploaded_photo
-     * @param  int  $album_id
-     *
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id): Photo
+    private function createPhotoFromUpload(UploadedFile $uploaded_photo, int $album_id): Photo
     {
         $path = 'photos/'.$album_id.'/';
 

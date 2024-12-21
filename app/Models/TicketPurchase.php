@@ -68,13 +68,4 @@ class TicketPurchase extends Model
             ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
             ($this->orderline->molliePayment?->translatedStatus() == 'paid');
     }
-
-    public function getApiAttributesAttribute(): array
-    {
-        return [
-            'id' => $this->id,
-            'barcode' => $this->canBeDownloaded() ? $this->barcode : null,
-            'scanned' => $this->scanned,
-        ];
-    }
 }

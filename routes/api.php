@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function () {
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {
-        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
+        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxFixtureController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
         Route::post('scan', ['as' => 'scanPost', 'middleware' => ['auth'], 'uses' => 'TicketController@scanPostApi']);
@@ -14,6 +15,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     });
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], static function () {
+        Route::get('info', fn () => Auth::user())->name('info')->middleware('auth:api');
         Route::group(['middleware' => ['auth:api'], 'as' => 'qr::'], static function () {
             Route::get('qr_auth_approve/{code}', ['as' => 'approve', 'uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['as' => 'info', 'uses' => 'QrAuthController@apiInfo']);
@@ -38,10 +40,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], static function () {
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
-        Route::group(['middleware' => ['auth:api']], static function () {
-            Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
-            Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
-        });
     });
     Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], static function () {
         Route::get('bus', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
@@ -70,7 +68,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
         Route::get('updated_prices/{id}', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPricesJSON']);
         Route::get('all_prices/{id}', ['as' => 'all_prices', 'uses' => 'WallstreetController@getAllPrices']);
-        Route::get('latest_events/{id}', ['as' => 'latest_events', 'uses' => 'WallstreetController@getLatestEvents']);
         Route::get('toggle_event', ['as' => 'toggle_event', 'uses' => 'WallstreetController@toggleEvent', 'middleware' => ['permission:tipcie']]);
     });
     /* Route related to the IsAlfredThere API */

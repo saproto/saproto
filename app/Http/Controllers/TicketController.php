@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -86,7 +87,7 @@ class TicketController extends Controller
 
         $ticket->members_only = $request->has('is_members_only');
         $ticket->has_buy_limit = $request->has('has_buy_limit');
-        $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
+        $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
@@ -332,8 +333,8 @@ class TicketController extends Controller
                 return Redirect::back();
             }
 
-            if ($amount > config('proto.maxtickets')) {
-                Session::flash('flash_message', 'You tried to buy more then '.config('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".config('proto.maxtickets').' at a time. Entire order cancelled.');
+            if ($amount > Config::integer('proto.maxtickets')) {
+                Session::flash('flash_message', 'You tried to buy more then '.Config::integer('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".Config::integer('proto.maxtickets').' at a time. Entire order cancelled.');
 
                 return Redirect::back();
             }
@@ -376,14 +377,14 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
             Session::flash('flash_message', 'No payment method is selected!');
 
             return Redirect::back();
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
             $payment_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);
@@ -425,7 +426,7 @@ class TicketController extends Controller
 
         Session::flash('flash_message', 'Order completed succesfully! You can find your tickets on this event page.');
 
-        if ($event?->activity?->redirect_url) {
+        if ($event->activity?->redirect_url) {
             return Redirect::away($event->activity->redirect_url);
         }
 

@@ -23,6 +23,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -94,7 +95,7 @@ class EventController extends Controller
             ->firstOrFail();
 
         $methods = [];
-        if (config('omnomcom.mollie.use_fees')) {
+        if (Config::boolean('omnomcom.mollie.use_fees')) {
             $methods = MollieController::getPaymentMethods();
         }
 
@@ -605,13 +606,13 @@ CALSCALE:GREGORIAN
                 sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
                 sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
                 sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
-                sprintf('SUMMARY:%s', $status !== '' && $status !== '0' ? sprintf('[%s] %s', $status, $event->title) : $event->title)."\r\n".
+                sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
-                    ($event->committee ? $event->committee->email_address : 'board@proto.utwente.nl')
+                    ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
                 sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
@@ -686,14 +687,12 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            if ($event->activity->helpingCommitteeInstances) {
-                foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
-                    HelpingCommittee::query()->create([
-                        'activity_id' => $newActivity->id,
-                        'committee_id' => $helpingCommittee->committee_id,
-                        'amount' => $helpingCommittee->amount,
-                    ]);
-                }
+            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+                HelpingCommittee::query()->create([
+                    'activity_id' => $newActivity->id,
+                    'committee_id' => $helpingCommittee->committee_id,
+                    'amount' => $helpingCommittee->amount,
+                ]);
             }
         }
 

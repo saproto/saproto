@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MembershipTypeEnum;
 use App\Models\AchievementOwnership;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
@@ -52,20 +53,19 @@ class OtherDataSeeder extends Seeder
             Member::factory()
                 ->count(4)
                 ->state(new Sequence(
-                    ['is_lifelong' => 1],
-                    ['is_honorary' => 1],
-                    ['is_donor' => 1],
-                    ['is_pet' => 1],
+                    ['membership_type' => MembershipTypeEnum::LIFELONG],
+                    ['membership_type' => MembershipTypeEnum::HONORARY],
+                    ['membership_type' => MembershipTypeEnum::DONOR],
+                    ['membership_type' => MembershipTypeEnum::PET],
                 ))
                 ->state([
-                    'is_pending' => 0,
                     'deleted_at' => null,
                 ])
                 ->create();
         });
 
         // Get users with completed membership
-        $members = User::query()->whereHas('member', fn ($members) => $members->where('is_pending', '==', false))->get();
+        $members = User::query()->whereHas('member', fn ($members) => $members->whereNot('membership_type', MembershipTypeEnum::PENDING))->get();
 
         // Create committee participations
         $committees = Committee::all();
