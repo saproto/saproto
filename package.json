@@ -48,7 +48,7 @@
         "vue3-toastify": "^0.2.3"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^1.2.0",
+        "@inertiajs/vue3": "^2.0.0",
         "@nabla/vite-plugin-eslint": "^2.0.4",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/typography": "^0.5.13",
