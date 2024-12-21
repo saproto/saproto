@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ProductBulkUpdateNotification;
 use App\Models\Account;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -12,9 +11,7 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -188,65 +185,9 @@ class ProductController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(Request $request): Request
     {
         return $request;
-        $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
-
-        $log = '';
-        $errors = '';
-
-        $products = [];
-        $deltas = [];
-
-        foreach ($input as $lineRaw) {
-            $line = explode(',', $lineRaw);
-
-            if (count($line) == 2) {
-                /** @var Product $product */
-                $product = Product::query()->find($line[0]);
-
-                if ($product) {
-                    $delta = intval($line[1]);
-
-                    $old_stock = $product->stock;
-                    $new_stock = $old_stock + $delta;
-
-                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
-
-                    $products[] = $product->id;
-                    $deltas[] = $delta;
-                } else {
-                    $errors .= "<span style='color: red;'>Product ID <strong>".$line[0].'</strong> not recognized.</span><br>';
-                }
-            } else {
-                $errors .= "<span style='color: red;'>Incorrect format for line <strong>".$lineRaw.'</strong>.</span><br>';
-            }
-        }
-
-        foreach ($products as $i => $product_id) {
-            /** @var Product $product */
-            $product = Product::query()->find($product_id);
-
-            // Make product mutations for bulk updates
-            /** @var StockMutation $mutation */
-            $mutation = StockMutation::query()->make([
-                'before' => $product->stock,
-                'after' => $product->stock + $deltas[$i],
-                'is_bulk' => true]);
-
-            $mutation->user()->associate($request->user());
-            $mutation->product()->associate($product);
-            $mutation->save();
-
-            $product->stock += $deltas[$i];
-            $product->save();
-        }
-
-        Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
-
-        return Redirect::back();
     }
 
     /**

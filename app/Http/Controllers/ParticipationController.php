@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-use Symfony\Component\HttpFoundation\Response;
 
 class ParticipationController extends Controller
 {
@@ -36,17 +35,20 @@ class ParticipationController extends Controller
             Session::flash('flash_message', 'You cannot subscribe for '.$event->title.'.');
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
-        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+        }
+        if ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             Session::flash('flash_message', 'You are already subscribed for '.$event->title.'.');
             Session::flash('flash_message_type', ToastResponses::ERROR);
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
-        } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
+        }
+        if (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
             Session::flash('flash_message_type', ToastResponses::ERROR);
             Session::flash('flash_message', 'You cannot subscribe for '.$event->title.' at this time.');
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
-        } elseif ($event->activity->closed) {
+        }
+        if ($event->activity->closed) {
             Session::flash('flash_message_type', ToastResponses::ERROR);
             Session::flash('flash_message', 'This activity is closed, you cannot change participation anymore.');
 

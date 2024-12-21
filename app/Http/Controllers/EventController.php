@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\ActivityData;
-use App\Data\EventData;
-use App\Data\TicketPurchaseData;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -15,11 +12,12 @@ use App\Models\HelpingCommittee;
 use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
-use App\Models\TicketPurchase;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +27,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Inertia\Inertia;
 
 class EventController extends Controller
 {
@@ -79,16 +76,14 @@ class EventController extends Controller
         ]);
     }
 
-    /** @return View */
-    public function finindex()
+    public function finindex(): View
     {
         $activities = Activity::query()->where('closed', false)->orderBy('registration_end', 'asc')->get();
 
         return view('event.notclosed', ['activities' => $activities]);
     }
 
-    /** @return View */
-    public function show($id)
+    public function show($id): View
     {
         $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
             ->with('tickets', 'tickets.product', 'activity.users')
@@ -99,22 +94,13 @@ class EventController extends Controller
             $methods = MollieController::getPaymentMethods();
         }
 
-        return Inertia::render('Events/ShowEvent',
-            [
-                'event' => EventData::from($event),
-                'payment_methods' => $methods,
-            ]
-        );
-
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    /** @return \Inertia\Response */
-    public function create()
+    /** @return Factory|\Illuminate\Contracts\View\View|Application|View */
+    public function create(): View
     {
-        return Inertia::render('Events/EditEvent', [
-            'event' => null,
-        ]);
+        return view('event.edit', ['event' => null]);
     }
 
     /**
@@ -156,16 +142,9 @@ class EventController extends Controller
         return Redirect::route('event::show', ['id' => $event->getPublicId()]);
     }
 
-    /**
-     * @return \Inertia\Response
-     */
-    public function edit(Event $event)
+    public function edit(Event $event): View
     {
-        $event->load('committee', 'activity');
-
-        return Inertia::render('Events/EditEvent', [
-            'event' => EventData::from($event),
-        ]);
+        return view('event.edit', ['event' => $event]);
     }
 
     /**
@@ -307,9 +286,9 @@ class EventController extends Controller
     }
 
     /**
-     * @return RedirectResponse|\Inertia\Response
+     * @return Factory|\Illuminate\Contracts\View\View|Application|View
      */
-    public function scan(int $id)
+    public function scan(int $id): View|RedirectResponse
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -317,15 +296,10 @@ class EventController extends Controller
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
-            return to_route('event::show', ['id' => $id]);
+            return Redirect::back();
         }
 
-        return Inertia::render('Events/ScanPage', [
-            'event' => ActivityData::from($event),
-            'ticketPurchases' => TicketPurchaseData::collect(TicketPurchase::whereHas('ticket', static function ($query) use ($event) {
-                $query->where('event_id', $event->id);
-            })->with('user', 'ticket.product', 'ticket.event', 'ticket.purchases')->get()),
-        ]);
+        return view('event.scan', ['event' => $event]);
     }
 
     /**

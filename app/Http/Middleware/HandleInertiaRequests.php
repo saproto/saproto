@@ -5,9 +5,17 @@ namespace App\Http\Middleware;
 use App\Data\MenuData;
 use App\Data\UserData;
 use App\Models\MenuItem;
-use Auth;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\AbstractCursorPaginator;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Enumerable;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,14 +44,12 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => fn () => $request->user()
+                'user' => fn (): ?UserData => $request->user()
                     ? UserData::from($request->user())
                     : null,
-                'permissions' => fn () => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(function ($permission) {
-                    return [$permission => true];
-                }),
+                'permissions' => fn () => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(fn ($permission) => [$permission => true]),
             ],
-            'menuItems' => fn () => MenuData::collect(MenuItem::query()->where(function ($query) {
+            'menuItems' => fn (): DataCollection|PaginatedDataCollection|CursorPaginatedDataCollection|Enumerable|AbstractPaginator|Paginator|AbstractCursorPaginator|CursorPaginator|array => MenuData::collect(MenuItem::query()->where(function ($query) {
                 if (Auth::user()?->cannot('member')) {
                     $query->where('is_member_only', false);
                 }
@@ -54,7 +60,7 @@ class HandleInertiaRequests extends Middleware
                 'message_type' => $request->session()->get('flash_message_type'),
             ],
 
-            'impersonating' => fn () => session('impersonator') !== null,
+            'impersonating' => fn (): bool => session('impersonator') !== null,
         ];
     }
 }

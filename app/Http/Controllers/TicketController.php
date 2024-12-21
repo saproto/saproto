@@ -37,8 +37,8 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        Event::findOrFail($request->input('event'));
-        Product::findOrFail($request->input('product'));
+        Event::query()->findOrFail($request->input('event'));
+        Product::query()->findOrFail($request->input('product'));
         $validated = $request->validate([
             'event' => 'required|integer',
             'product' => 'required|integer',
@@ -51,7 +51,7 @@ class TicketController extends Controller
             'show_participants' => 'nullable|boolean',
         ]);
 
-        Ticket::create($validated);
+        Ticket::query()->create($validated);
 
         Session::flash('flash_message', 'The ticket has been created!');
 

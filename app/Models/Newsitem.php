@@ -61,11 +61,6 @@ class Newsitem extends Model
 
     protected $with = ['featuredImage'];
 
-    protected $casts = [
-        'is_weekly' => 'boolean',
-        'published_at' => 'datetime',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -93,5 +88,13 @@ class Newsitem extends Model
         }
 
         return route('news::show', ['id' => $this->id]);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_weekly' => 'boolean',
+            'published_at' => 'datetime',
+        ];
     }
 }

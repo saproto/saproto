@@ -248,7 +248,7 @@ class Event extends Model
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
         return $this->start->format($long_format).' '.$combiner.' '.(
-            $this->end->diffInDays($this->start) < 1)
+            $this->end->diffInDays($this->start) < 1) !== ''
             ?
             $this->end->format($short_format)
             :

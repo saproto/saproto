@@ -20,7 +20,7 @@ class EventCategoryController extends Controller
             'name' => 'required|string|min:5',
             'icon' => 'required|string|min:5|starts_with:fa',
         ]);
-        $category = EventCategory::create($validated);
+        $category = EventCategory::query()->create($validated);
 
         Session::flash('flash_message', 'The category '.$category->name.' has been created.');
 

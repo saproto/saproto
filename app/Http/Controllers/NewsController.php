@@ -64,16 +64,9 @@ class NewsController extends Controller
         ]);
     }
 
-    public function showWeeklyPreview(?int $id = null)
+    public function showWeeklyPreview(int $id)
     {
-        if ($id === null) {
-            $newsitem = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-            if ($newsitem === null) {
-                abort(404);
-            }
-        } else {
-            $newsitem = Newsitem::query()->findOrFail($id);
-        }
+        $newsitem = Newsitem::query()->findOrFail($id);
 
         if (! $newsitem->published_at && ! Auth::user()?->can('board')) {
             Session::flash('flash_message', 'This weekly newsletter has not been published yet.');

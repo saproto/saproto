@@ -53,13 +53,6 @@ class Committee extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'start' => 'datetime',
-        'end' => 'datetime',
-        'publication' => 'datetime',
-        'deleted_at' => 'datetime',
-    ];
-
     protected $table = 'committees';
 
     protected $guarded = ['id'];
@@ -182,5 +175,15 @@ class Committee extends Model
     public function isMember(User $user): bool
     {
         return $user->isInCommittee($this);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'start' => 'datetime',
+            'end' => 'datetime',
+            'publication' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
     }
 }
