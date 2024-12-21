@@ -49,19 +49,16 @@ class MenuItem extends Model
 
     protected $appends = ['parsed_url'];
 
-    /** @return BelongsTo */
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id', 'id');
     }
 
-    /** @return HasMany */
     public function children(): HasMany
     {
         return $this->hasMany(MenuItem::class, 'parent');
     }
 
-    /** @return string|null */
     public function getUrl(): ?string
     {
         return $this->getParsedUrlAttribute();

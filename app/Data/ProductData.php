@@ -9,12 +9,10 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class ProductData extends Data
 {
     public function __construct(
-        public int    $id,
+        public int $id,
         public string $name,
-        public float  $price,
-        public int    $stock,
+        public float $price,
+        public int $stock,
         public string $image_url,
-    )
-    {
-    }
+    ) {}
 }

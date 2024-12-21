@@ -78,19 +78,16 @@ class Member extends Model
         ];
     }
 
-    /** @return BelongsTo */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
     public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
-    /** @return BelongsTo */
     public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
@@ -115,14 +112,13 @@ class Member extends Model
         })->count();
     }
 
-    /** @return OrderLine|null */
     public function getMembershipOrderline(): ?OrderLine
     {
         $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
@@ -152,7 +148,7 @@ class Member extends Model
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                . '.' .
+                .'.'.
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {

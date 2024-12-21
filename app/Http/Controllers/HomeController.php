@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\UserData;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
 use App\Models\Dinnerform;
 use App\Models\Event;
 use App\Models\HeaderImage;
-use App\Models\MenuItem;
 use App\Models\Newsitem;
 use App\Models\User;
 use App\Models\Video;
@@ -17,7 +15,6 @@ use App\Models\WelcomeMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Inertia\Inertia;
 
 class HomeController extends Controller
 {
@@ -32,7 +29,7 @@ class HomeController extends Controller
 
         $header = HeaderImage::query()->inRandomOrder()->first();
 
-        if (!Auth::user()?->is_member) {
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
 

@@ -150,25 +150,24 @@ class EventController extends Controller
         $event->category()->associate($category);
         $event->save();
 
-        Session::flash('flash_message', "Your event '" . $event->title . "' has been added.");
+        Session::flash('flash_message', "Your event '".$event->title."' has been added.");
 
         return Redirect::route('event::show', ['id' => $event->getPublicId()]);
     }
 
     /**
-     * @param Event $event
      * @return \Inertia\Response
      */
     public function edit(Event $event)
     {
         $event->load('committee', 'activity');
+
         return Inertia::render('Events/EditEvent', [
             'event' => EventData::from($event),
         ]);
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -219,24 +218,23 @@ class EventController extends Controller
         $changed_important_details = $event->start !== strtotime($request->start) || $event->end !== strtotime($request->end) || $event->location != $request->location;
 
         if ($changed_important_details) {
-            Session::flash('flash_message', "Your event '" . $event->title . "' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
+            Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
         } else {
-            Session::flash('flash_message', "Your event '" . $event->title . "' has been saved.");
+            Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
         }
 
         return Redirect::back();
     }
 
     /**
-     * @param int $year
      * @return View
      */
     public function archive(Request $request, int $year)
     {
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
         $events = Event::getEventBlockQuery()
-            ->where('start', '>', strtotime($year . '-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year . '-12-31 23:59:59'))
+            ->where('start', '>', strtotime($year.'-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
             ->get();
 
         $category = EventCategory::query()->find($request->category);
@@ -262,7 +260,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -273,12 +271,12 @@ class EventController extends Controller
         $event = Event::query()->findOrFail($id);
 
         if ($event->activity !== null) {
-            Session::flash('flash_message', "You cannot delete event '" . $event->title . "' since it has a participation details.");
+            Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
 
             return Redirect::back();
         }
 
-        Session::flash('flash_message', "The event '" . $event->title . "' has been deleted.");
+        Session::flash('flash_message', "The event '".$event->title."' has been deleted.");
 
         $event->delete();
 
@@ -286,7 +284,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function forceLogin($id)
@@ -294,15 +292,11 @@ class EventController extends Controller
         return Redirect::route('event::show', ['id' => $id]);
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse|View
-     */
     public function admin(int $id): RedirectResponse|View
     {
         $event = Event::query()->findOrFail($id);
 
-        if (!$event->isEventAdmin(Auth::user())) {
+        if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
             return Redirect::back();
@@ -312,7 +306,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse|\Inertia\Response
      */
     public function scan(int $id)
@@ -320,7 +313,7 @@ class EventController extends Controller
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
 
-        if (!$event->isEventAdmin(Auth::user())) {
+        if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
             return to_route('event::show', ['id' => $id]);
@@ -335,7 +328,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      */
     public function finclose(Request $request, $id)
@@ -343,7 +336,7 @@ class EventController extends Controller
         /** @var Activity $activity */
         $activity = Activity::query()->findOrFail($id);
 
-        if ($activity->event && !$activity->event->over()) {
+        if ($activity->event && ! $activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
 
             return Redirect::back();
@@ -371,7 +364,7 @@ class EventController extends Controller
 
         $product = Product::query()->create([
             'account_id' => $account->id,
-            'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
+            'name' => 'Activity: '.($activity->event ? $activity->event->title : $activity->comment),
             'price' => $activity->price,
         ]);
         $product->save();
@@ -390,7 +383,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param Event $event
+     * @param  Event  $event
      * @return RedirectResponse
      */
     public function linkAlbum(Request $request, $event)
@@ -403,13 +396,13 @@ class EventController extends Controller
         $album->event()->associate($event);
         $album->save();
 
-        Session::flash('flash_message', 'The album ' . $album->name . ' has been linked to this activity!');
+        Session::flash('flash_message', 'The album '.$album->name.' has been linked to this activity!');
 
         return Redirect::back();
     }
 
     /**
-     * @param PhotoAlbum $album
+     * @param  PhotoAlbum  $album
      * @return RedirectResponse
      */
     public function unlinkAlbum($album)
@@ -419,13 +412,13 @@ class EventController extends Controller
         $album->event()->dissociate();
         $album->save();
 
-        Session::flash('flash_message', 'The album ' . $album->name . ' has been unlinked from an activity!');
+        Session::flash('flash_message', 'The album '.$album->name.' has been unlinked from an activity!');
 
         return Redirect::back();
     }
 
     /**
-     * @param int $limit
+     * @param  int  $limit
      */
     public function apiUpcomingEvents($limit, Request $request): array
     {
@@ -437,22 +430,22 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                        !$event->activity->isParticipating($user) &&
-                        !$event->activity->isHelping($user) &&
-                        !$event->activity->isOrganising($user)
-                    ))) {
+                ! $event->activity->isParticipating($user) &&
+                ! $event->activity->isHelping($user) &&
+                ! $event->activity->isOrganising($user)
+            ))) {
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn($item) => (object)[
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn($item) => (object)[
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $data[] = (object)[
+            $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
                 'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
@@ -476,7 +469,7 @@ class EventController extends Controller
                 'price' => ($event->activity ? $event->activity->price : null),
                 'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
                 'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
-                'user_signedup_backup' => (bool)($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'user_signedup_backup' => (bool) ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
                 'user_signedup_id' => ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
@@ -526,7 +519,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param string|null $personal_key
+     * @param  string|null  $personal_key
      * @return \Illuminate\Http\Response
      */
     public function icalCalendar($personal_key = null)
@@ -539,26 +532,26 @@ class EventController extends Controller
 VERSION:2.0
 PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN
 CALSCALE:GREGORIAN
-' .
-            'X-WR-CALNAME:' . $calendar_name . "\r\n" .
-            "X-WR-CALDESC:All of Proto's events, straight from the website!" . "\r\n" .
-            'BEGIN:VTIMEZONE' . "\r\n" .
-            'TZID:Central European Standard Time' . "\r\n" .
-            'BEGIN:STANDARD' . "\r\n" .
-            'DTSTART:20161002T030000' . "\r\n" .
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10' . "\r\n" .
-            'TZNAME:Central European Standard Time' . "\r\n" .
-            'TZOFFSETFROM:+0200' . "\r\n" .
-            'TZOFFSETTO:+0100' . "\r\n" .
-            'END:STANDARD' . "\r\n" .
-            'BEGIN:DAYLIGHT' . "\r\n" .
-            'DTSTART:20160301T020000' . "\r\n" .
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3' . "\r\n" .
-            'TZNAME:Central European Daylight Time' . "\r\n" .
-            'TZOFFSETFROM:+0100' . "\r\n" .
-            'TZOFFSETTO:+0200' . "\r\n" .
-            'END:DAYLIGHT' . "\r\n" .
-            'END:VTIMEZONE' . "\r\n";
+'.
+            'X-WR-CALNAME:'.$calendar_name."\r\n".
+            "X-WR-CALDESC:All of Proto's events, straight from the website!"."\r\n".
+            'BEGIN:VTIMEZONE'."\r\n".
+            'TZID:Central European Standard Time'."\r\n".
+            'BEGIN:STANDARD'."\r\n".
+            'DTSTART:20161002T030000'."\r\n".
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10'."\r\n".
+            'TZNAME:Central European Standard Time'."\r\n".
+            'TZOFFSETFROM:+0200'."\r\n".
+            'TZOFFSETTO:+0100'."\r\n".
+            'END:STANDARD'."\r\n".
+            'BEGIN:DAYLIGHT'."\r\n".
+            'DTSTART:20160301T020000'."\r\n".
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3'."\r\n".
+            'TZNAME:Central European Daylight Time'."\r\n".
+            'TZOFFSETFROM:+0100'."\r\n".
+            'TZOFFSETTO:+0200'."\r\n".
+            'END:DAYLIGHT'."\r\n".
+            'END:VTIMEZONE'."\r\n";
 
         $reminder = $user ? $user->getCalendarAlarm() : null;
 
@@ -566,11 +559,11 @@ CALSCALE:GREGORIAN
 
         foreach (Event::query()->where('start', '>', strtotime('-6 months'))->get() as $event) {
             /** @var Event $event */
-            if (!$event->mayViewEvent(Auth::user())) {
+            if (! $event->mayViewEvent(Auth::user())) {
                 continue;
             }
 
-            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;
             }
 
@@ -579,7 +572,7 @@ CALSCALE:GREGORIAN
             } elseif ($event->activity !== null && $event->activity->participants == -1) {
                 $info_text = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
-                $info_text = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
+                $info_text = 'Sign-up required! There are roughly '.$event->activity->freeSpots().' of '.$event->activity->participants.' places left.';
             } elseif ($event->tickets->count() > 0) {
                 $info_text = 'Ticket purchase required.';
             } else {
@@ -607,29 +600,29 @@ CALSCALE:GREGORIAN
             }
 
             $calendar .= 'BEGIN:VEVENT
-' .
-                sprintf('UID:%s@proto.utwente.nl', $event->id) . "\r\n" .
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at))) . "\r\n" .
-                sprintf('DTSTART:%s', date('Ymd\THis', $event->start)) . "\r\n" .
-                sprintf('DTEND:%s', date('Ymd\THis', $event->end)) . "\r\n" .
-                sprintf('SUMMARY:%s', $status !== '' && $status !== '0' ? sprintf('[%s] %s', $status, $event->title) : $event->title) . "\r\n" .
-                sprintf('DESCRIPTION:%s', $info_text . ' More information: ' . route('event::show', ['id' => $event->getPublicId()])) . "\r\n" .
-                sprintf('LOCATION:%s', $event->location) . "\r\n" .
+'.
+                sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
+                sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
+                sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
+                sprintf('SUMMARY:%s', $status !== '' && $status !== '0' ? sprintf('[%s] %s', $status, $event->title) : $event->title)."\r\n".
+                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
+                sprintf('LOCATION:%s', $event->location)."\r\n".
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email_address : 'board@proto.utwente.nl')
-                ) . "\r\n" .
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at))) . "\r\n" .
-                sprintf('SEQUENCE:%s', $event->update_sequence) . "\r\n";
+                )."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
+                sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
                 $calendar .= 'BEGIN:VALARM
-' .
-                    sprintf('TRIGGER:-PT%dM', ceil($reminder * 60)) . "\r\n" .
-                    'ACTION:DISPLAY' . "\r\n" .
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start)) . "\r\n" .
-                    'END:VALARM' . "\r\n";
+'.
+                    sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
+                    'ACTION:DISPLAY'."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
+                    'END:VALARM'."\r\n";
             }
 
             $calendar .= 'END:VEVENT
@@ -646,7 +639,7 @@ CALSCALE:GREGORIAN
                 $line = str_replace($search, $replace, $line);
             }
 
-            $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true) . "\r\n";
+            $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
         }
 
         return Response::make($calendar_wrapped)
@@ -670,7 +663,7 @@ CALSCALE:GREGORIAN
         $diff = $newDate - $event->start;
 
         $newEvent = $event->withoutRelations()->replicate()->fill([
-            'title' => $event->title . ' [copy]',
+            'title' => $event->title.' [copy]',
             'secret' => $event->publication ? false : $event->secret,
             'start' => $newDate,
             'end' => $event->end + $diff,

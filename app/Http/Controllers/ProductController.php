@@ -93,7 +93,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return View
      */
     public function edit($id)
@@ -109,7 +109,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -211,15 +211,15 @@ class ProductController extends Controller
                     $old_stock = $product->stock;
                     $new_stock = $old_stock + $delta;
 
-                    $log .= '<strong>' . $product->name . '</strong> updated with delta <strong>' . $line[1] . "</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
+                    $log .= '<strong>'.$product->name.'</strong> updated with delta <strong>'.$line[1]."</strong>. Stock changed from {$old_stock} to <strong>{$new_stock}</strong>.<br>";
 
                     $products[] = $product->id;
                     $deltas[] = $delta;
                 } else {
-                    $errors .= "<span style='color: red;'>Product ID <strong>" . $line[0] . '</strong> not recognized.</span><br>';
+                    $errors .= "<span style='color: red;'>Product ID <strong>".$line[0].'</strong> not recognized.</span><br>';
                 }
             } else {
-                $errors .= "<span style='color: red;'>Incorrect format for line <strong>" . $lineRaw . '</strong>.</span><br>';
+                $errors .= "<span style='color: red;'>Incorrect format for line <strong>".$lineRaw.'</strong>.</span><br>';
             }
         }
 
@@ -242,14 +242,14 @@ class ProductController extends Controller
             $product->save();
         }
 
-        Session::flash('flash_message', 'Done. Errors:<br>' . $errors);
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors . $log))->onQueue('low'));
+        Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
+        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
 
         return Redirect::back();
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception

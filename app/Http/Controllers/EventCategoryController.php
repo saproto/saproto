@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\EventCategory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class EventCategoryController extends Controller
 {
-
     public function create()
     {
         return view('event.categories', ['cur_category' => null]);
@@ -24,7 +22,7 @@ class EventCategoryController extends Controller
         ]);
         $category = EventCategory::create($validated);
 
-        Session::flash('flash_message', 'The category ' . $category->name . ' has been created.');
+        Session::flash('flash_message', 'The category '.$category->name.' has been created.');
 
         return Redirect::route('event::categories.edit', ['category' => $category]);
     }
@@ -43,7 +41,7 @@ class EventCategoryController extends Controller
 
         $category->update($validated);
 
-        Session::flash('flash_message', 'The category ' . $category->name . ' has been updated.');
+        Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
 
         return Redirect::route('event::categories.edit', ['category' => $category]);
     }
@@ -53,7 +51,7 @@ class EventCategoryController extends Controller
         $category->events()->update(['category_id' => null]);
         $category->delete();
 
-        Session::flash('flash_message', 'The category ' . $category->name . ' has been deleted.');
+        Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
 
         return Redirect::route('event::categories.create');
     }

@@ -15,10 +15,6 @@ use Intervention\Image\Interfaces\EncodedImageInterface;
 
 class FileController extends Controller
 {
-    /**
-     * @param int $id
-     * @param string $hash
-     */
     public function get(int $id, string $hash): Response
     {
         /** @var StorageEntry $entry */
@@ -39,8 +35,6 @@ class FileController extends Controller
     }
 
     /**
-     * @param int $w
-     * @param int $h
      * @return EncodedImageInterface
      */
     public static function makeImage(StorageEntry $entry, int $w, int $h)
@@ -55,21 +49,15 @@ class FileController extends Controller
             abort(404, 'File not found');
         }
 
-        $cacheKey = 'image:' . $entry->hash . '; w:' . $w . '; h:' . $h;
+        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
 
-        if (!$w || !$h) {
-            return Cache::remember($cacheKey, 86400, fn(): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
+        if (! $w || ! $h) {
+            return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->scaleDown($w, $h)->encode());
         }
 
-        return Cache::remember($cacheKey, 86400, fn(): EncodedImageInterface => $image->coverDown($w, $h)->encode());
+        return Cache::remember($cacheKey, 86400, fn (): EncodedImageInterface => $image->coverDown($w, $h)->encode());
     }
 
-    /**
-     * @param int $id
-     * @param string $hash
-     * @param Request $request
-     * @return Response
-     */
     public function getImage(int $id, string $hash, Request $request): Response
     {
         /** @var StorageEntry $entry */
@@ -88,9 +76,9 @@ class FileController extends Controller
     }
 
     /**
-     * @param string $printer
-     * @param string $url
-     * @param int $copies
+     * @param  string  $printer
+     * @param  string  $url
+     * @param  int  $copies
      */
     public static function requestPrint($printer, $url, $copies = 1): string
     {
@@ -98,7 +86,7 @@ class FileController extends Controller
             return 'You cannot do this at the moment. Please use the network printer.';
         }
 
-        $payload = base64_encode(json_encode((object)[
+        $payload = base64_encode(json_encode((object) [
             'secret' => config('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
@@ -107,9 +95,9 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://' . config('app-proto.printer-host') . ':' . config('app-proto.printer-port') . '/?data=' . $payload);
+            $result = file_get_contents('http://'.config('app-proto.printer-host').':'.config('app-proto.printer-port').'/?data='.$payload);
         } catch (Exception $exception) {
-            return 'Exception while connecting to the printer server: ' . $exception->getMessage();
+            return 'Exception while connecting to the printer server: '.$exception->getMessage();
         }
 
         return $result !== false ? $result : 'Something went wrong while connecting to the printer server.';

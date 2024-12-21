@@ -10,12 +10,10 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 class TicketData extends Data
 {
     public function __construct(
-        public int          $id,
+        public int $id,
         public ActivityData $event,
-        public ProductData  $product,
+        public ProductData $product,
         /** @var Collection<TicketPurchaseData> */
-        public array        $purchases,
-    )
-    {
-    }
+        public array $purchases,
+    ) {}
 }

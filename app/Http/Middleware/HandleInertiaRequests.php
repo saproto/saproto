@@ -36,25 +36,25 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => fn() => $request->user()
+                'user' => fn () => $request->user()
                     ? UserData::from($request->user())
                     : null,
-                'permissions' => fn() => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(function ($permission) {
+                'permissions' => fn () => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(function ($permission) {
                     return [$permission => true];
-                })
+                }),
             ],
-            'menuItems' => fn() => MenuData::collect(MenuItem::query()->where(function ($query) {
+            'menuItems' => fn () => MenuData::collect(MenuItem::query()->where(function ($query) {
                 if (Auth::user()?->cannot('member')) {
                     $query->where('is_member_only', false);
                 }
             })->where('parent')->orderBy('order')->with('page')->with('children')->get()),
-            'csrf' => fn() => csrf_token(),
+            'csrf' => fn () => csrf_token(),
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
                 'message_type' => $request->session()->get('flash_message_type'),
             ],
 
-            'impersonating' => fn() => session('impersonator') !== null,
+            'impersonating' => fn () => session('impersonator') !== null,
         ];
     }
 }

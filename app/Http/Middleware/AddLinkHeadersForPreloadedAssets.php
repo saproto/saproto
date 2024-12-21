@@ -17,7 +17,7 @@ class AddLinkHeadersForPreloadedAssets
         return tap($next($request), function ($response) {
             if (Vite::preloadedAssets() !== []) {
                 $response->header('Link', Collection::make(Vite::preloadedAssets())
-                    ->map(fn($attributes, $url) => "<{$url}>; " . implode('; ', $attributes))
+                    ->map(fn ($attributes, $url) => "<{$url}>; ".implode('; ', $attributes))
                     ->join(', '));
             }
         });
