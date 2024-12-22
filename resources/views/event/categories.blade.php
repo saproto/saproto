@@ -17,7 +17,7 @@
                     <form method="post"
                           action="{{ ($cur_category == null ? route('event::category::store') : route('event::category::update', ['id' => $cur_category])) }}"
                           enctype="multipart/form-data">
-                        {!! csrf_field() !!}
+                        @csrf
 
                         <label for="name">Category Name:</label>
                         <input type="text" class="form-control mb-3" id="name" name="name"
@@ -31,7 +31,8 @@
 
                         <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if($cur_category)
-                            <a class="btn btn-warning float-end me-1" href="{{ route('event::category::admin') }}">Cancel</a>
+                            <a class="btn btn-warning float-end me-1"
+                               href="{{ route('event::category.create') }}">Cancel</a>
                         @endif
                     </form>
                 </div>
@@ -55,7 +56,7 @@
                                         {{ $category->name }}
                                     </div>
                                     <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
-                                        <a href="{{ route('event::category::admin', ['id' => $category]) }}">
+                                        <a href="{{ route('event::category.create', ['id' => $category]) }}">
                                             <i class="fas fa-edit me-2 ms-1 mt-1"></i>
                                         </a>
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#delete-category-modal"
