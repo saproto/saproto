@@ -27,12 +27,12 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.6.0",
-        "@popperjs/core": "^2.11.4",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
         "@fortawesome/free-brands-svg-icons": "^6.6.0",
         "@fortawesome/free-regular-svg-icons": "^6.6.0",
         "@fortawesome/free-solid-svg-icons": "^6.6.0",
         "@fortawesome/vue-fontawesome": "^3.0.8",
+        "@popperjs/core": "^2.11.4",
         "@rushstack/eslint-patch": "^1.10.4",
         "@vue/eslint-config-typescript": "^13.0.0",
         "bootstrap": "^5.3.0",
@@ -44,7 +44,6 @@
         "signature_pad": "^3.0.0-beta.4",
         "swiper": "^8.0.7",
         "util.promisify": "^1.0.1",
-        "vue-barcode-reader": "^1.0.3",
         "vue3-toastify": "^0.2.3"
     },
     "devDependencies": {
