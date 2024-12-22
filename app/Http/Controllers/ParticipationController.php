@@ -36,18 +36,21 @@ class ParticipationController extends Controller
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
         }
+
         if ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             Session::flash('flash_message', 'You are already subscribed for '.$event->title.'.');
             Session::flash('flash_message_type', ToastResponses::ERROR);
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
         }
+
         if (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
             Session::flash('flash_message_type', ToastResponses::ERROR);
             Session::flash('flash_message', 'You cannot subscribe for '.$event->title.' at this time.');
 
             return to_route('event::show', ['id' => $event->getPublicId()]);
         }
+
         if ($event->activity->closed) {
             Session::flash('flash_message_type', ToastResponses::ERROR);
             Session::flash('flash_message', 'This activity is closed, you cannot change participation anymore.');

@@ -97,7 +97,6 @@ class EventController extends Controller
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    /** @return Factory|\Illuminate\Contracts\View\View|Application|View */
     public function create(): View
     {
         return view('event.edit', ['event' => null]);
