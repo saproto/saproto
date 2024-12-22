@@ -8,7 +8,7 @@
         @php /** @var \App\Models\Event $event */ @endphp
         <form method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}">
 
-            {!! csrf_field() !!}
+            @csrf
 
             <div class="card-body">
 

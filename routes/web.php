@@ -53,6 +53,7 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
+
 /* --- use App\Http\Controllers\RadioController; --- */
 
 use App\Http\Controllers\ShortUrlController;
@@ -487,10 +488,6 @@ Route::middleware('forcedomain')->group(function () {
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::prefix('events')->name('event::')->group(function () {
-        // Event related admin (Board only)
-        Route::middleware(['permission:board'])
-            ->resource('categories', EventCategoryController::class)
-            ->only(['create', 'store', 'edit', 'update', 'destroy']);
 
         Route::controller(EventController::class)->group(function () {
             // Financials related to events (Finadmin only)
@@ -500,14 +497,6 @@ Route::middleware('forcedomain')->group(function () {
             });
 
             Route::middleware(['permission:board'])->group(function () {
-                Route::prefix('categories')->name('category::')->group(function () {
-                    Route::get('index', 'categoryAdmin')->name('show');
-                    Route::post('store', 'categoryStore')->name('store');
-                    Route::get('edit/{id}', 'categoryEdit')->name('edit');
-                    Route::post('update/{id}', 'categoryUpdate')->name('update');
-                    Route::get('delete/{id}', 'categoryDestroy')->name('delete');
-                });
-
                 // Events admin
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
@@ -536,6 +525,11 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('{id}/login', 'forceLogin')->middleware(['auth'])->name('login');
             // Show event
             Route::get('{id}', 'show')->name('show');
+        });
+
+        // Event categories (Board only)
+        Route::controller(EventCategoryController::class)->middleware(['permission:board'])->group(function () {
+            Route::resource('categories', EventCategoryController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
         });
 
         /* --- Related to presence & participation --- */

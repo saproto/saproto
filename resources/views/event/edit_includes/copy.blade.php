@@ -9,7 +9,7 @@
 
         <form method="post" action="{{ route('event::copy', ['id'=> $event->id]) }}">
 
-            {!! csrf_field() !!}
+            @csrf
 
             <div class="card-body">
 

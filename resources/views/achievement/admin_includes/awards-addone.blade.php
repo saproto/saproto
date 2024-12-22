@@ -1,6 +1,6 @@
 <form method="post" action="{{ route('achievement::give') }}">
 
-    {!! csrf_field() !!}
+    @csrf
 
     <div class="card mb-3">
 

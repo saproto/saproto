@@ -48,6 +48,6 @@ class EventCategory extends Model
     {
         return Activity::query()->whereHas('event', function ($q) {
             $q->where('category_id', $this->id);
-        })->get()->average('price');
+        })->average('price') ?? 0;
     }
 }

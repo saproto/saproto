@@ -11,14 +11,16 @@
         <div class="col-5">
             <div class="card">
                 <div class="card-header">
-                    {{ $cur_category == null ? 'Add new category' : 'Edit category: '.$cur_category->name }}
+                    {{ empty($cur_category) ? 'Add new category' : 'Edit category: '.$cur_category->name }}
                 </div>
                 <div class="card-body">
+
                     <form
-                        action="{{ !empty($cur_category) ? route('event::categories.update', ['category' => $cur_category->id]):route("event::categories.store") }}"
+                        action="{{ !empty($cur_category) ? route('event::categories.update', ['category'=>$cur_category]) : route("event::categories.store") }}"
+
                         method="POST">
-                        <input type="hidden" name="_method" value="{{ !empty($cur_category) ?  "PUT" : "POST" }}">
-                        {{ csrf_field()}}
+                        <input type="hidden" name="_method" value="{{ !empty($cur_category) ? "PUT" : "POST" }}">
+                        @csrf
 
                         <label for="name">Category Name:</label>
                         <input type="text" class="form-control mb-3" id="name" name="name"
@@ -32,7 +34,8 @@
 
                         <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if($cur_category)
-                            <a class="btn btn-warning float-end me-1" href="{{ route('event::categories.create') }}">Cancel</a>
+                            <a class="btn btn-warning float-end me-1"
+                               href="{{ route('event::categories.create') }}">Cancel</a>
                         @endif
                     </form>
                 </div>
@@ -59,15 +62,16 @@
                                         <a href="{{ route('event::categories.edit', ['category' => $category]) }}">
                                             <i class="fas fa-edit me-2 ms-1 mt-1"></i>
                                         </a>
+
                                         @include('components.modals.confirm-modal', [
-                                           'action' => route('event::categories.destroy', ['category' => $category]),
-                                           'method'=>'DELETE',
-                                           'classes' => 'fa fa-trash-alt text-danger',
-                                           'text' => '',
-                                           'confirm'=>'Delete',
-                                           'message' => "<p>Are you sure you want to delete this category? All events that currently have this category will
-                                            become <b>uncategorised</b>.</p>",
-                                        ])
+                                          'action' => route('event::categories.destroy', ['category' => $category]),
+                                          'method'=>'DELETE',
+                                          'confirm' => 'Delete the event category',
+                                          'classes' => 'fa fa-trash text-danger',
+                                          'text' => '',
+                                          'message' => "Are you sure you want to delete this category. All events that currently have this category will
+                        become <b>uncategorised</b>",
+                                      ])
                                     </div>
                                 </div>
                             @endforeach
@@ -81,6 +85,5 @@
             </div>
         </div>
     </div>
+
 @endsection
-
-

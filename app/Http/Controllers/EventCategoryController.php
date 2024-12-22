@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventCategoryRequest;
 use App\Models\EventCategory;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
@@ -14,13 +14,9 @@ class EventCategoryController extends Controller
         return view('event.categories', ['cur_category' => null]);
     }
 
-    public function store(Request $request)
+    public function store(EventCategoryRequest $request)
     {
-        $validated = $this->validate($request, [
-            'name' => 'required|string|min:5',
-            'icon' => 'required|string|min:5|starts_with:fa',
-        ]);
-        $category = EventCategory::query()->create($validated);
+        $category = EventCategory::query()->create($request->validated());
 
         Session::flash('flash_message', 'The category '.$category->name.' has been created.');
 
@@ -32,14 +28,9 @@ class EventCategoryController extends Controller
         return view('event.categories', ['cur_category' => $category]);
     }
 
-    public function update(Request $request, EventCategory $category)
+    public function update(EventCategoryRequest $request, EventCategory $category)
     {
-        $validated = $this->validate($request, [
-            'name' => 'required|string|min:5',
-            'icon' => 'required|string|min:5|starts_with:fa',
-        ]);
-
-        $category->update($validated);
+        $category->update($request->validated());
 
         Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
 

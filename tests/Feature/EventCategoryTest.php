@@ -36,7 +36,7 @@ it('lets the board create a new event category', function () {
         ->get('/events/categories/1/edit')
         ->assertSee($event['name']);
 
-    $response->assertSee('Edit category: '.$event['name']);
+    $response->assertSee('Edit category: ' . $event['name']);
 
     $this->assertDatabaseHas('event_categories', [
         'name' => $event['name'],
@@ -53,7 +53,7 @@ it('lets the board delete an event category', function () {
     $event = EventCategory::factory()->create();
 
     $response = $this->actingAs($member->user)
-        ->delete('/events/categories/'.$event->id);
+        ->delete('/events/categories/' . $event->id);
     $response->assertRedirect('/events/categories/create');
     $response->assertStatus(302);
     $this->assertDatabaseMissing('event_categories',
