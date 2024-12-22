@@ -18,49 +18,55 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 
 class EventController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $data = [[], [], []];
-        $data[0] = Event::getEventBlockQuery()
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '<=', strtotime('+1 week'));
+        $category = EventCategory::query()->find($request->input('category'));
 
-        $data[1] = Event::getEventBlockQuery()
+        //if there is a category, get only the events that are in that category
+        $eventQuery = Event::getEventBlockQuery()
+            ->when($category, static function ($query) use ($category) {
+                $query->whereHas('Category', static function ($q) use ($category) {
+                    $q->where('id', $category->id)->where('deleted_at', null);
+                });
+            });
+
+        $data = [[], [], []];
+
+        // Get the events for the next week
+        $data[0] = (clone $eventQuery)
+            ->where('start', '>=', strtotime('now'))
+            ->where('start', '<=', strtotime('+1 week'))
+            ->get();
+
+        // Get the events for the next month
+        $data[1] = (clone $eventQuery)
             ->where('start', '>=', strtotime('now'))
             ->where('start', '>', strtotime('+1 week'))
-            ->where('start', '<=', strtotime('+1 month'));
+            ->where('start', '<=', strtotime('+1 month'))
+            ->get();
 
-        $data[2] = Event::getEventBlockQuery()
+        // Get the events for the next year
+        $data[2] = (clone $eventQuery)
             ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 month'));
+            ->where('start', '>', strtotime('+1 month'))
+            ->get();
 
-        $category = EventCategory::query()->find($request->input('category'));
-        foreach ($data as $index => $query) {
-            if ($category) {
-                $data[$index] = $query->whereHas('Category', static function ($q) use ($category) {
-                    $q->where('id', $category->id)->where('deleted_at', '=', null);
-                });
-            }
+        $years = $this->getAvailableYears();
 
-            $data[$index] = $query->get();
-        }
-
-        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-
-        $reminder = Auth::check() ? Auth::user()->getCalendarAlarm() : null;
+        $reminder = Auth::user()?->getCalendarAlarm();
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
@@ -81,8 +87,10 @@ class EventController extends Controller
         return view('event.notclosed', ['activities' => $activities]);
     }
 
-    /** @return View */
-    public function show($id)
+    /**
+     * @throws ApiException
+     */
+    public function show(string $id): View
     {
         $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
             ->with('tickets', 'tickets.product')
@@ -136,16 +144,15 @@ class EventController extends Controller
         $event->category()->associate($category);
         $event->save();
 
-        Session::flash('flash_message', "Your event '".$event->title."' has been added.");
+        Session::flash('flash_message', "Your event '" . $event->title . "' has been added.");
 
         return Redirect::route('event::show', ['id' => $event->getPublicId()]);
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $event = Event::query()->findOrFail($id);
 
@@ -153,12 +160,11 @@ class EventController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, $id)
+    public function update(StoreEventRequest $request, int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -204,65 +210,65 @@ class EventController extends Controller
         $changed_important_details = $event->start !== strtotime($request->start) || $event->end !== strtotime($request->end) || $event->location != $request->location;
 
         if ($changed_important_details) {
-            Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
+            Session::flash('flash_message', "Your event '" . $event->title . "' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
         } else {
-            Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
+            Session::flash('flash_message', "Your event '" . $event->title . "' has been saved.");
         }
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $year
      * @return View
      */
-    public function archive(Request $request, $year)
+    public function archive(Request $request, int $year)
     {
-        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
-        $events = Event::getEventBlockQuery()
-            ->where('start', '>', strtotime($year.'-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
-            ->get();
+        /** @var EventCategory|null $category */
+        $category = EventCategory::query()->find($request->input('category'));
 
-        $category = EventCategory::query()->find($request->category);
+        //if there is a category, get only the events that are in that category
+        $eventsPerMonth = Event::getEventBlockQuery()
+            ->unless(empty($category), static function ($query) use ($category) {
+                $query->whereHas('Category', static function ($q) use ($category) {
+                    $q->where('id', $category->id)->where('deleted_at', null);
+                });
+            })->where('start', '>', strtotime($year . '-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year . '-12-31 23:59:59'))
+            ->get()
+            ->groupBy(fn(Event $event) => Carbon::createFromTimestamp($event->start)->month);
 
-        $months = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $months[$i] = [];
-        }
-
-        foreach ($events as $event) {
-            if (! $category || $category == $event->category) {
-                $months[intval(date('n', $event->start))][] = $event;
-            }
-        }
+        $years = $this->getAvailableYears();
 
         return view('event.archive', [
             'years' => $years,
             'year' => $year,
-            'months' => $months,
+            'eventsPerMonth' => $eventsPerMonth,
             'cur_category' => $category,
         ]);
     }
 
+    private function getAvailableYears(): Collection
+    {
+        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn() => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
+    }
+
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
 
         if ($event->activity !== null) {
-            Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
+            Session::flash('flash_message', "You cannot delete event '" . $event->title . "' since it has a participation details.");
 
             return Redirect::back();
         }
 
-        Session::flash('flash_message', "The event '".$event->title."' has been deleted.");
+        Session::flash('flash_message', "The event '" . $event->title . "' has been deleted.");
 
         $event->delete();
 
@@ -270,23 +276,21 @@ class EventController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function forceLogin($id)
+    public function forceLogin(int $id)
     {
         return Redirect::route('event::show', ['id' => $id]);
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|View
      */
-    public function admin($id)
+    public function admin(int $id)
     {
         $event = Event::query()->findOrFail($id);
 
-        if (! $event->isEventAdmin(Auth::user())) {
+        if (!$event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
             return Redirect::back();
@@ -296,14 +300,13 @@ class EventController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|View
      */
-    public function scan($id)
+    public function scan(int $id)
     {
         $event = Event::query()->findOrFail($id);
 
-        if (! $event->isEventAdmin(Auth::user())) {
+        if (!$event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
             return Redirect::back();
@@ -313,15 +316,14 @@ class EventController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function finclose(Request $request, $id)
+    public function finclose(Request $request, int $id)
     {
         /** @var Activity $activity */
         $activity = Activity::query()->findOrFail($id);
 
-        if ($activity->event && ! $activity->event->over()) {
+        if ($activity->event && !$activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
 
             return Redirect::back();
@@ -349,7 +351,7 @@ class EventController extends Controller
 
         $product = Product::query()->create([
             'account_id' => $account->id,
-            'name' => 'Activity: '.($activity->event ? $activity->event->title : $activity->comment),
+            'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
             'price' => $activity->price,
         ]);
         $product->save();
@@ -368,10 +370,10 @@ class EventController extends Controller
     }
 
     /**
-     * @param  Event  $event
+     * @param Event $event
      * @return RedirectResponse
      */
-    public function linkAlbum(Request $request, $event)
+    public function linkAlbum(Request $request, int $event)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($event);
@@ -381,31 +383,31 @@ class EventController extends Controller
         $album->event()->associate($event);
         $album->save();
 
-        Session::flash('flash_message', 'The album '.$album->name.' has been linked to this activity!');
+        Session::flash('flash_message', 'The album ' . $album->name . ' has been linked to this activity!');
 
         return Redirect::back();
     }
 
     /**
-     * @param  PhotoAlbum  $album
+     * @param int $album
      * @return RedirectResponse
      */
-    public function unlinkAlbum($album)
+    public function unlinkAlbum(int $album)
     {
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($album);
         $album->event()->dissociate();
         $album->save();
 
-        Session::flash('flash_message', 'The album '.$album->name.' has been unlinked from an activity!');
+        Session::flash('flash_message', 'The album ' . $album->name . ' has been unlinked from an activity!');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $limit
+     * @param int $limit
      */
-    public function apiUpcomingEvents($limit, Request $request): array
+    public function apiUpcomingEvents(int $limit, Request $request): array
     {
         $user = Auth::user() ?? null;
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
@@ -415,22 +417,22 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->activity->isParticipating($user) &&
-                ! $event->activity->isHelping($user) &&
-                ! $event->activity->isOrganising($user)
-            ))) {
+                        !$event->activity->isParticipating($user) &&
+                        !$event->activity->isHelping($user) &&
+                        !$event->activity->isOrganising($user)
+                    ))) {
                 continue;
             }
 
-            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn($item) => (object)[
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn($item) => (object)[
                 'name' => $item->name,
                 'photo' => $item->photo_preview,
             ]) : null);
-            $data[] = (object) [
+            $data[] = (object)[
                 'id' => $event->id,
                 'title' => $event->title,
                 'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
@@ -454,7 +456,7 @@ class EventController extends Controller
                 'price' => ($event->activity ? $event->activity->price : null),
                 'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
                 'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
-                'user_signedup_backup' => (bool) ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'user_signedup_backup' => (bool)($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
                 'user_signedup_id' => ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
@@ -504,7 +506,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param  string|null  $personal_key
+     * @param string|null $personal_key
      * @return \Illuminate\Http\Response
      */
     public function icalCalendar($personal_key = null)
@@ -517,38 +519,38 @@ class EventController extends Controller
 VERSION:2.0
 PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN
 CALSCALE:GREGORIAN
-'.
-            'X-WR-CALNAME:'.$calendar_name."\r\n".
-            "X-WR-CALDESC:All of Proto's events, straight from the website!"."\r\n".
-            'BEGIN:VTIMEZONE'."\r\n".
-            'TZID:Central European Standard Time'."\r\n".
-            'BEGIN:STANDARD'."\r\n".
-            'DTSTART:20161002T030000'."\r\n".
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10'."\r\n".
-            'TZNAME:Central European Standard Time'."\r\n".
-            'TZOFFSETFROM:+0200'."\r\n".
-            'TZOFFSETTO:+0100'."\r\n".
-            'END:STANDARD'."\r\n".
-            'BEGIN:DAYLIGHT'."\r\n".
-            'DTSTART:20160301T020000'."\r\n".
-            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3'."\r\n".
-            'TZNAME:Central European Daylight Time'."\r\n".
-            'TZOFFSETFROM:+0100'."\r\n".
-            'TZOFFSETTO:+0200'."\r\n".
-            'END:DAYLIGHT'."\r\n".
-            'END:VTIMEZONE'."\r\n";
+' .
+            'X-WR-CALNAME:' . $calendar_name . "\r\n" .
+            "X-WR-CALDESC:All of Proto's events, straight from the website!" . "\r\n" .
+            'BEGIN:VTIMEZONE' . "\r\n" .
+            'TZID:Central European Standard Time' . "\r\n" .
+            'BEGIN:STANDARD' . "\r\n" .
+            'DTSTART:20161002T030000' . "\r\n" .
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10' . "\r\n" .
+            'TZNAME:Central European Standard Time' . "\r\n" .
+            'TZOFFSETFROM:+0200' . "\r\n" .
+            'TZOFFSETTO:+0100' . "\r\n" .
+            'END:STANDARD' . "\r\n" .
+            'BEGIN:DAYLIGHT' . "\r\n" .
+            'DTSTART:20160301T020000' . "\r\n" .
+            'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3' . "\r\n" .
+            'TZNAME:Central European Daylight Time' . "\r\n" .
+            'TZOFFSETFROM:+0100' . "\r\n" .
+            'TZOFFSETTO:+0200' . "\r\n" .
+            'END:DAYLIGHT' . "\r\n" .
+            'END:VTIMEZONE' . "\r\n";
 
         $reminder = $user ? $user->getCalendarAlarm() : null;
 
-        $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
+        $relevant_only = $user?->getCalendarRelevantSetting();
 
         foreach (Event::query()->where('start', '>', strtotime('-6 months'))->get() as $event) {
             /** @var Event $event */
-            if (! $event->mayViewEvent(Auth::user())) {
+            if (!$event->mayViewEvent(Auth::user())) {
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;
             }
 
@@ -557,7 +559,7 @@ CALSCALE:GREGORIAN
             } elseif ($event->activity !== null && $event->activity->participants == -1) {
                 $info_text = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
-                $info_text = 'Sign-up required! There are roughly '.$event->activity->freeSpots().' of '.$event->activity->participants.' places left.';
+                $info_text = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
             } elseif ($event->tickets->count() > 0) {
                 $info_text = 'Ticket purchase required.';
             } else {
@@ -585,29 +587,29 @@ CALSCALE:GREGORIAN
             }
 
             $calendar .= 'BEGIN:VEVENT
-'.
-                sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
-                sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
-                sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
-                sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
-                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
-                sprintf('LOCATION:%s', $event->location)."\r\n".
+' .
+                sprintf('UID:%s@proto.utwente.nl', $event->id) . "\r\n" .
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at))) . "\r\n" .
+                sprintf('DTSTART:%s', date('Ymd\THis', $event->start)) . "\r\n" .
+                sprintf('DTEND:%s', date('Ymd\THis', $event->end)) . "\r\n" .
+                sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title)) . "\r\n" .
+                sprintf('DESCRIPTION:%s', $info_text . ' More information: ' . route('event::show', ['id' => $event->getPublicId()])) . "\r\n" .
+                sprintf('LOCATION:%s', $event->location) . "\r\n" .
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
-                )."\r\n".
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
-                sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
+                ) . "\r\n" .
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at))) . "\r\n" .
+                sprintf('SEQUENCE:%s', $event->update_sequence) . "\r\n";
 
             if ($reminder && $status) {
                 $calendar .= 'BEGIN:VALARM
-'.
-                    sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
-                    'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
-                    'END:VALARM'."\r\n";
+' .
+                    sprintf('TRIGGER:-PT%dM', ceil($reminder * 60)) . "\r\n" .
+                    'ACTION:DISPLAY' . "\r\n" .
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start)) . "\r\n" .
+                    'END:VALARM' . "\r\n";
             }
 
             $calendar .= 'END:VEVENT
@@ -624,7 +626,7 @@ CALSCALE:GREGORIAN
                 $line = str_replace($search, $replace, $line);
             }
 
-            $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true)."\r\n";
+            $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true) . "\r\n";
         }
 
         return Response::make($calendar_wrapped)
@@ -632,73 +634,9 @@ CALSCALE:GREGORIAN
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
     }
 
-    /**
-     * @return View
-     */
-    public function categoryAdmin(Request $request)
-    {
-        $category = EventCategory::query()->find($request->id);
-
-        return view('event.categories', ['cur_category' => $category]);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    public function categoryStore(Request $request)
-    {
-        $category = new EventCategory;
-        $category->name = $request->input('name');
-        $category->icon = $request->input('icon');
-        $category->save();
-
-        Session::flash('flash_message', 'The category '.$category->name.' has been created.');
-
-        return Redirect::back();
-    }
-
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function categoryUpdate(Request $request, $id)
-    {
-        $category = EventCategory::query()->findOrFail($id);
-        $category->name = $request->input('name');
-        $category->icon = $request->input('icon');
-        $category->save();
-
-        Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
-
-        return Redirect::back();
-    }
-
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function categoryDestroy($id)
-    {
-        $category = EventCategory::query()->findOrFail($id);
-        $events = $category->events;
-        if ($events) {
-            foreach ($events as $event) {
-                $event->category()->dissociate();
-            }
-        }
-
-        $category->delete();
-
-        Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
-
-        return Redirect::route('event::category::admin', ['category' => null]);
-    }
-
     public function copyEvent(Request $request)
     {
-        $event = Event::query()->findOrFail($request->id);
+        $event = Event::query()->findOrFail($request->input('id'));
 
         $oldStart = Carbon::createFromTimestamp($event->start);
 
@@ -711,7 +649,7 @@ CALSCALE:GREGORIAN
         $diff = $newDate - $event->start;
 
         $newEvent = $event->withoutRelations()->replicate()->fill([
-            'title' => $event->title.' [copy]',
+            'title' => $event->title . ' [copy]',
             'secret' => $event->publication ? false : $event->secret,
             'start' => $newDate,
             'end' => $event->end + $diff,
