@@ -1,93 +1,84 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
-import { createThemes } from 'tw-colors';
-import Color from 'color';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
-/** @type {function(*, *): *} */
-
-const alpha = (clr, val) => Color(clr).alpha(val).toString();
-const lighten = (clr, val) => Color(clr).lighten(val).toString();
-const darken = (clr, val) => Color(clr).darken(val).toString();
-
-const colors = (clr, { inverse = false, step = 0.1 } = {}) => ({
-  DEFAULT: clr,
-  light: inverse ? darken(clr, step) : lighten(clr, step),
-  dark: inverse ? lighten(clr, step) : darken(clr, step),
-});
-
-const baseThemes = {
-  light: {
-    primary: colors('#83b71a'),
-    secondary: colors('#6c757d'),
-    success: colors('#00aac0'),
-    info: colors('#00aac0'),
-    warning: colors('#f37e16'),
-    danger: colors('#c50005'),
-    dark: '#303030',
-    light: '#f1f1f1',
-    back: {
-      DEFAULT: '#ffffff',
-      light: '#f1f1f1',
-      dark: '#303030',
-    },
-    front: {
-      DEFAULT: '#000000',
-      light: '#424242',
-      dark: '#ffffff',
-    },
-  },
-  dark: {
-    primary: colors('#83b71a'),
-    secondary: colors('#6c757d'),
-    success: colors('#00aac0'),
-    info: colors('#00aac0'),
-    warning: colors('#f37e16'),
-    danger: colors('#c50005'),
-    dark: '#303030',
-    light: '#f1f1f1',
-    back: {
-      DEFAULT: '#303030',
-      light: '#424242',
-      dark: '#212121',
-    },
-    front: {
-      DEFAULT: '#ffffff',
-      light: '#c2c2c2',
-      dark: '#ffffff',
-    },
-  },
-};
-
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./resources/views/app.blade.php', './resources/js/**/*.{js,ts,vue}'],
-  safelist: [],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Lato', ...defaultTheme.fontFamily.sans],
-      },
-      colors: {},
-    },
-  },
+    darkMode: 'class',
+    content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+        './resources/js/**/*.{ts,tsx,vue}',
+    ],
 
-  plugins: [
-    createThemes(({ light, dark }) => ({
-      light: light(baseThemes.light),
-      dark: dark(baseThemes.dark),
-      broto: dark({
-        ...baseThemes.dark,
-        primary: colors('#b57000'),
-        success: colors('#cdd911'),
-      }),
-      nightMode: dark({
-        ...baseThemes.dark,
-        back: {
-          DEFAULT: '#1e2f62',
-          light: '#05103A',
-          dark: '#0c1f66',
+    theme: {
+        container: {
+            center: true,
+            padding: '2rem',
+            screens: {
+                '2xl': '1400px',
+            },
         },
-      }),
-    })),
-    forms,
-  ],
+        extend: {
+            colors: {
+                border: 'hsl(var(--border))',
+                input: 'hsl(var(--input))',
+                ring: 'hsl(var(--ring))',
+                background: 'hsl(var(--background))',
+                foreground: 'hsl(var(--foreground))',
+                primary: {
+                    DEFAULT: 'hsl(var(--primary))',
+                    foreground: 'hsl(var(--primary-foreground))',
+                },
+                secondary: {
+                    DEFAULT: 'hsl(var(--secondary))',
+                    foreground: 'hsl(var(--secondary-foreground))',
+                },
+                destructive: {
+                    DEFAULT: 'hsl(var(--destructive))',
+                    foreground: 'hsl(var(--destructive-foreground))',
+                },
+                muted: {
+                    DEFAULT: 'hsl(var(--muted))',
+                    foreground: 'hsl(var(--muted-foreground))',
+                },
+                accent: {
+                    DEFAULT: 'hsl(var(--accent))',
+                    foreground: 'hsl(var(--accent-foreground))',
+                },
+                popover: {
+                    DEFAULT: 'hsl(var(--popover))',
+                    foreground: 'hsl(var(--popover-foreground))',
+                },
+                card: {
+                    DEFAULT: 'hsl(var(--card))',
+                    foreground: 'hsl(var(--card-foreground))',
+                },
+            },
+            borderRadius: {
+                lg: 'var(--radius)',
+                md: 'calc(var(--radius) - 2px)',
+                sm: 'calc(var(--radius) - 4px)',
+            },
+            fontFamily: {
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            keyframes: {
+                'accordion-down': {
+                    from: { height: 0 },
+                    to: { height: 'var(--radix-accordion-content-height)' },
+                },
+                'accordion-up': {
+                    from: { height: 'var(--radix-accordion-content-height)' },
+                    to: { height: 0 },
+                },
+            },
+            animation: {
+                'accordion-down': 'accordion-down 0.2s ease-out',
+                'accordion-up': 'accordion-up 0.2s ease-out',
+            },
+        },
+    },
+
+    plugins: [forms, require('tailwindcss-animate')],
 };

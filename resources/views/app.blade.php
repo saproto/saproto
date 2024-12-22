@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -14,7 +14,7 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/js/app.ts', "resources/js/Pages/{$page['component']}.vue"])
+    @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
     @routes(nonce: csp_nonce())
     @inertiaHead
 
@@ -30,7 +30,6 @@
 
 </head>
 <body class="font-sans antialiased" data-theme='{{config('proto.themes')[Auth::user()?->theme??0]}}'>
-<script src="{{ config('proto.fontawesome_kit') }}" crossorigin="anonymous"></script>
 @inertia
 </body>
 </html>

@@ -44,23 +44,24 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => fn (): ?UserData => $request->user()
+                'user' => fn(): ?UserData => $request->user()
                     ? UserData::from($request->user())
                     : null,
-                'permissions' => fn () => Auth::user()?->getAllPermissions()->pluck('name')->mapWithKeys(fn ($permission) => [$permission => true]),
+                'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
+                'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
             ],
-            'menuItems' => fn (): DataCollection|PaginatedDataCollection|CursorPaginatedDataCollection|Enumerable|AbstractPaginator|Paginator|AbstractCursorPaginator|CursorPaginator|array => MenuData::collect(MenuItem::query()->where(function ($query) {
+            'menuItems' => fn(): DataCollection|PaginatedDataCollection|CursorPaginatedDataCollection|Enumerable|AbstractPaginator|Paginator|AbstractCursorPaginator|CursorPaginator|array => MenuData::collect(MenuItem::query()->where(function ($query) {
                 if (Auth::user()?->cannot('member')) {
                     $query->where('is_member_only', false);
                 }
             })->where('parent')->orderBy('order')->with('page')->with('children')->get()),
-            'csrf' => fn () => csrf_token(),
+            'csrf' => fn() => csrf_token(),
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
                 'message_type' => $request->session()->get('flash_message_type'),
             ],
 
-            'impersonating' => fn (): bool => session('impersonator') !== null,
+            'impersonating' => fn(): bool => session('impersonator') !== null,
         ];
     }
 }
