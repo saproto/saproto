@@ -39,7 +39,7 @@
         "util.promisify": "^1.0.1"
     },
     "devDependencies": {
-        "glob": "^7.1.6",
+        "glob": "^11.0.0",
         "laravel-echo": "^1.17.1",
         "laravel-vite-plugin": "^0.7.8",
         "postcss": "^8.2.7",
