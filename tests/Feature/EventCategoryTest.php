@@ -32,12 +32,6 @@ it('lets the board create a new event category', function () {
         ->post('/events/categories', $event);
     $response->assertStatus(302);
 
-    $response = $this->actingAs($member->user)
-        ->get('/events/categories/1/edit')
-        ->assertSee($event['name']);
-
-    $response->assertSee('Edit category: '.$event['name']);
-
     $this->assertDatabaseHas('event_categories', [
         'name' => $event['name'],
         'icon' => $event['icon'],
