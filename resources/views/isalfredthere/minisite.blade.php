@@ -39,7 +39,7 @@
                 </i>
             </div>
             <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
-                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="472px" height="120px">
+                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="262px" height="120px">
             </a>
 
         </div>
@@ -64,39 +64,39 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const status = document.getElementById('alfred-status');
-        const text = document.getElementById('alfred-text');
-        const time = document.getElementById('alfred-actualtime');
+        const status = document.getElementById("alfred-status");
+        const text = document.getElementById("alfred-text");
+        const time = document.getElementById("alfred-actualtime");
         let oldStatus = null;
         const statuses = {
             there: {
-                text: 'Alfred is there!',
-                htmlElement: document.getElementById('alfred-there'),
-                color: 'bg-success',
+                text: "Alfred is there!",
+                htmlElement: document.getElementById("alfred-there"),
+                color: "bg-success"
             },
             jur: {
-                text: 'Jur is here to help you! <br> <div style="font-size: 20px;">You might have to check Flex Office though...</div>',
-                htmlElement: document.getElementById('jur-there'),
-                color: 'bg-success',
+                text: "Jur is here to help you! <br> <div style=\"font-size: 20px;\">You might have to check Flex Office though...</div>",
+                htmlElement: document.getElementById("jur-there"),
+                color: "bg-success"
             },
             unknown: {
-                text: 'We couldn\'t find Alfred...',
-                htmlElement: document.getElementById('alfred-unknown'),
-                color: 'bg-warning',
+                text: "We couldn't find Alfred...",
+                htmlElement: document.getElementById("alfred-unknown"),
+                color: "bg-warning"
             },
             away: {
-                text: 'Nope, Alfred will be back in a bit.',
-                htmlElement: document.getElementById('alfred-away'),
-                color: 'bg-danger',
+                text: "Nope, Alfred will be back in a bit.",
+                htmlElement: document.getElementById("alfred-away"),
+                color: "bg-danger"
             },
             error: {
-                text: 'We couldn\'t find Alfred...',
-                htmlElement: document.getElementById('alfred-error'),
-                color: 'bg-warning',
-            },
+                text: "We couldn't find Alfred...",
+                htmlElement: document.getElementById("alfred-error"),
+                color: "bg-warning"
+            }
         };
 
-        window.addEventListener('load', _ => {
+        window.addEventListener("load", _ => {
             lookForAlfred();
             setInterval(lookForAlfred, 10000);
         });
@@ -106,9 +106,9 @@
                 .then(data => {
                     //set the extra text Alfred can set himself
                     if (data.text.length > 0) {
-                        text.innerHTML = '"'.concat(data.text, '"');
+                        text.innerHTML = "\"".concat(data.text, "\"");
                     } else {
-                        text.innerHTML = '';
+                        text.innerHTML = "";
                     }
 
                     // keep track if the status has changed, if not do nothing
@@ -119,17 +119,17 @@
 
                     // hide all smileys
                     Object.keys(statuses).forEach((key) => {
-                        statuses[key].htmlElement.classList.add('d-none');
+                        statuses[key].htmlElement.classList.add("d-none");
                     });
 
                     // set the new status
                     setNewStatus(statuses[data.status]);
 
                     // set the time submessage and start the timer if Alfred is away
-                    if (data.status === 'away') {
+                    if (data.status === "away") {
                         time.innerHTML = `That would be ${data.back}.`;
-                        time.classList.remove('d-none');
-                        status.setAttribute('data-countdown-start', data.backunix);
+                        time.classList.remove("d-none");
+                        status.setAttribute("data-countdown-start", data.backunix);
                         window.timerList.forEach((timer) => {
                             timer.start();
                         });
@@ -150,12 +150,12 @@
             status.innerHTML = newStatus.text;
 
             //reveal the correct smiley
-            newStatus.htmlElement.classList.remove('d-none');
+            newStatus.htmlElement.classList.remove("d-none");
 
             // hide the time submessage
-            time.classList.add('d-none');
+            time.classList.add("d-none");
 
-            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+            document.body.classList.remove("bg-success", "bg-warning", "bg-danger");
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color);
         };

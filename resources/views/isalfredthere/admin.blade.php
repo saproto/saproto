@@ -80,7 +80,7 @@
                         @include('components.forms.datetimepicker',[
                             'name' => 'back',
                             'label' => "I'll be back around:",
-                            'placeholder' => $status->status == 'away' ? $status->backunix : strtotime('now +1 hour'),
+                            'placeholder' => $status->status == 'away' ? Carbon::createFromTimestamp($status->backunix) : Carbon::parse('now +1 hour'),
                             'form_class_name' => $status->status == 'away' ? '' : 'd-none'
                         ])
 
@@ -108,27 +108,27 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const dateSelect = document.getElementById('datetimepicker-back-form');
-        const dateBack = document.getElementById('datetimepicker-back');
-        const alfredText = document.getElementById('alfred-text');
+        const dateSelect = document.getElementById("datetimepicker-back-form");
+        const dateBack = document.getElementById("datetimepicker-back");
+        const alfredText = document.getElementById("alfred-text");
 
-        const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'));
+        const radioList = Array.from(document.querySelectorAll(".where_is_alfred input[type=\"radio\"]"));
         radioList.forEach(el => {
-            el.addEventListener('change', _ => {
+            el.addEventListener("change", _ => {
 
-                if (el.checked && el.value === 'away') {
-                    dateSelect.classList.remove('d-none');
-                    alfredText.classList.remove('d-none');
-                    alfredText.querySelector('input').placeholder = 'Additional message';
+                if (el.checked && el.value === "away") {
+                    dateSelect.classList.remove("d-none");
+                    alfredText.classList.remove("d-none");
+                    alfredText.querySelector("input").placeholder = "Additional message";
                     dateBack.required = true;
-                } else if (el.checked && el.value === 'text_only') {
-                    alfredText.classList.remove('d-none');
-                    dateSelect.classList.add('d-none');
-                    alfredText.querySelector('input').placeholder = 'Message!';
+                } else if (el.checked && el.value === "text_only") {
+                    alfredText.classList.remove("d-none");
+                    dateSelect.classList.add("d-none");
+                    alfredText.querySelector("input").placeholder = "Message!";
                     alfredText.required = true;
                 } else {
-                    dateSelect.classList.add('d-none');
-                    alfredText.classList.add('d-none');
+                    dateSelect.classList.add("d-none");
+                    alfredText.classList.add("d-none");
                     dateBack.required = false;
                 }
             });

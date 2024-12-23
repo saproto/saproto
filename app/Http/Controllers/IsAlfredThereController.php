@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Inertia\Inertia;
 use stdClass;
 
 class IsAlfredThereController extends Controller
@@ -16,10 +17,16 @@ class IsAlfredThereController extends Controller
 
     public static $HashMapTextKey = 'is_alfred_there_text';
 
-    /** @return View */
+    /** @return \Inertia\Response */
     public function index()
     {
-        return view('isalfredthere.minisite');
+        $status = self::getAlfredsStatusObject();
+        return Inertia::render('IsAlfredThere/IndexPage', [
+            'status' => $status->status,
+            'text' => $status->text,
+            'back' => $status->back ?? null,
+            'backunix' => $status->backunix ?? Carbon::createFromTimestamp(0)->addSeconds(5)->valueOf(),
+        ]);
     }
 
     /** @return false|string */
@@ -65,7 +72,7 @@ class IsAlfredThereController extends Controller
     public static function getOrCreateHasMapItem($key)
     {
         $item = HashMapItem::query()->where('key', $key)->first();
-        if (! $item) {
+        if (!$item) {
             return HashMapItem::query()->create([
                 'key' => $key,
                 'value' => '',
