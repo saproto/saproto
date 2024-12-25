@@ -1,5 +1,5 @@
-import { glob } from 'glob';
-import { defineConfig } from 'vite';
+import {glob} from 'glob';
+import {defineConfig} from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import eslintPlugin from '@nabla/vite-plugin-eslint';

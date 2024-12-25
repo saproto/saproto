@@ -230,10 +230,10 @@ class EventController extends Controller
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', strtotime($year . '-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year . '-12-31 23:59:59'))
+            })->where('start', '>', strtotime($year.'-01-01 00:00:01'))
+            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
             ->get()
-            ->groupBy(fn(Event $event) => Carbon::createFromTimestamp($event->start)->month);
+            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
 
         $years = $this->getAvailableYears();
 
@@ -247,7 +247,7 @@ class EventController extends Controller
 
     private function getAvailableYears(): Collection
     {
-        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn() => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
+        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
     }
 
     /**
@@ -388,7 +388,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param int $album
      * @return RedirectResponse
      */
     public function unlinkAlbum(int $album)
@@ -403,9 +402,6 @@ class EventController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param int $limit
-     */
     public function apiUpcomingEvents(int $limit, Request $request): array
     {
         $user = Auth::user() ?? null;
