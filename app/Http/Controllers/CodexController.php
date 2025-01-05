@@ -82,9 +82,9 @@ class CodexController extends Controller
         $codex->name = $validated['name'];
         $codex->export = $validated['export'];
         $codex->description = $validated['description'];
+        $codex->save();
         $codex->songs()->sync($validated['songids'] ?? []);
         $codex->texts()->sync($validated['textids'] ?? []);
-        $codex->save();
     }
 
     public function show(Codex $codex)
