@@ -150,7 +150,6 @@
         };
 
         const setNewStatus = (newStatus) => {
-            console.log(newStatus);
             // stop all timers
             window.timerList.forEach((timer) => {
                 timer.stop();
