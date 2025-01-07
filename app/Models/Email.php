@@ -181,13 +181,18 @@ class Email extends Model
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
 
+        if ($this->to_member || $this->to_active || $this->to_pending) {
+            $variable_from[] = '$username';
+            $variable_to[] = $user->member->proto_username ?? '(no username found)';
+        }
+
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
     public function getEventName(): string
     {
         $events = [];
-        if (! $this->to_event) {
+        if (!$this->to_event) {
             return '';
         }
 
@@ -201,7 +206,7 @@ class Email extends Model
     public function getListName(): string
     {
         $lists = [];
-        if (! $this->to_list) {
+        if (!$this->to_list) {
             return '';
         }
 
