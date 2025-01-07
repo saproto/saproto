@@ -192,7 +192,7 @@ class Email extends Model
     public function getEventName(): string
     {
         $events = [];
-        if (!$this->to_event) {
+        if (! $this->to_event) {
             return '';
         }
 
@@ -206,7 +206,7 @@ class Email extends Model
     public function getListName(): string
     {
         $lists = [];
-        if (!$this->to_list) {
+        if (! $this->to_list) {
             return '';
         }
 
