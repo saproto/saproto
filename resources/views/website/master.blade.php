@@ -33,7 +33,8 @@
               content="@yield('og-description','S.A. Proto is the study association for Creative Technology at the University of Twente.')" />
         <meta property="og:image"
               content="@yield('og-image',asset('images/logo/og-image.png'))" />
-    @show
+    @endsection()
+    @yield('opengraph')
 
 </head>
 

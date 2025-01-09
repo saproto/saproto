@@ -37,7 +37,8 @@
                 <div class="card-body text-start d-flex align-items-end">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section('greeting')
-                        @show
+                        @endsection
+                        @yield('greeting')
                     </h2>
                 </div>
             </div>
@@ -70,7 +71,8 @@
             <div class="row justify-content-center">
 
                 @section('left-column')
-                @show
+                @endsection
+                @yield('left-column')
 
             </div>
 
@@ -79,7 +81,8 @@
         <div class="col-xl-3 col-md-6 col-sm-12">
 
             @section('right-column')
-            @show
+            @endsection
+            @yield('right-column')
 
         </div>
 

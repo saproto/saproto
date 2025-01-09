@@ -11,15 +11,18 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     @section('panel-title')
-                    @show
+                    @endsection
+                    @yield('panel-title')
                 </div>
                 <div class="panel-body clearfix">
                     @section('panel-body')
-                    @show
+                    @endsection
+                    @yield('panel-body')
                 </div>
                 <div class="panel-footer clearfix">
                     @section('panel-footer')
-                    @show
+                    @endsection
+                    @yield('panel-footer')
                 </div>
             </div>
 
