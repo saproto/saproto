@@ -16,4 +16,4 @@
     };
 </script>
 
-@vite('resources/assets/js/application.js')
+@vite("resources/assets/js/application.js")

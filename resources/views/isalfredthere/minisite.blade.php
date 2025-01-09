@@ -1,55 +1,60 @@
-@extends('website.layouts.redesign.generic-nonavandfooter')
+@extends("website.layouts.redesign.generic-nonavandfooter")
 
-@section('page-title')
+@section("page-title")
     Is Alfred There?
 @endsection
 
-@push('head')
-    <meta http-equiv="refresh" content="86400">
+@push("head")
+    <meta http-equiv="refresh" content="86400" />
 @endpush
 
-@section('container')
-
+@section("container")
     <div class="row text-white">
-
         <div class="col-md-12 text-center">
+            <h1 class="mt-3 mb-3" style="font-size: 70px">Is Alfred There?</h1>
 
-            <h1 class="mt-3 mb-3" style="font-size: 70px;">Is Alfred There?</h1>
-
-            <h1 id="alfred-status"
+            <h1
+                id="alfred-status"
                 class="mt-3 mb-3 proto-countdown"
-                style="font-size: 50px;"
+                style="font-size: 50px"
                 data-countdown-text-counting="Nope. Alfred will be back in {}."
-                data-countdown-text-finished="Alfred should be there. 👀">
+                data-countdown-text-finished="Alfred should be there. 👀"
+            >
                 We're currently looking for Alfred, please stand by...
             </h1>
             <h4 id="alfred-actualtime"></h4>
             <h1 id="alfred-text"></h1>
             <div class="mt-5 mb-5 flex flex-row">
-                <i class="d-none" id="alfred-error" style="font-size: 120px;"><i
-                        class="fas fa-triangle-exclamation"></i>
-                </i> <i class="d-none" id="alfred-there" style="font-size: 120px;"><i
-                        class="far fa-smile-beam"></i>
-                </i> <i class="d-none" id="jur-there" style="font-size: 120px;"><i
-                        class="far fa-face-grin-squint"></i>
-                </i> <i class="d-none" id="alfred-away" style="font-size: 120px;"><i
-                        class="far fa-grimace"></i>
-                </i> <i class="d-none" id="alfred-unknown" style="font-size: 120px;"><i
-                        class="fas fa-circle-question"></i>
+                <i class="d-none" id="alfred-error" style="font-size: 120px">
+                    <i class="fas fa-triangle-exclamation"></i>
+                </i>
+                <i class="d-none" id="alfred-there" style="font-size: 120px">
+                    <i class="far fa-smile-beam"></i>
+                </i>
+                <i class="d-none" id="jur-there" style="font-size: 120px">
+                    <i class="far fa-face-grin-squint"></i>
+                </i>
+                <i class="d-none" id="alfred-away" style="font-size: 120px">
+                    <i class="far fa-grimace"></i>
+                </i>
+                <i class="d-none" id="alfred-unknown" style="font-size: 120px">
+                    <i class="fas fa-circle-question"></i>
                 </i>
             </div>
-            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
-                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="472px">
+            <a
+                href="//{{ config("app-proto.primary-domain") }}{{ route("homepage", [], false) }}"
+            >
+                <img
+                    src="{{ asset("images/logo/inverse.png") }}"
+                    alt="Proto logo"
+                    width="472px"
+                />
             </a>
-
         </div>
-
     </div>
-
 @endsection
 
-@push('stylesheet')
-
+@push("stylesheet")
     <style rel="stylesheet">
         body {
             background-color: var(--bs-warning);
@@ -59,12 +64,10 @@
             border: none !important;
         }
     </style>
-
 @endpush
 
-@push('javascript')
-
-    @vite('resources/assets/js/echo.js')
+@push("javascript")
+    @vite("resources/assets/js/echo.js")
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const statusElement = document.getElementById('alfred-status');
@@ -74,40 +77,40 @@
             there: {
                 text: 'Alfred is there!',
                 htmlElement: document.getElementById('alfred-there'),
-                color: 'bg-success'
+                color: 'bg-success',
             },
             jur: {
                 text: 'Jur is here to help you! <br> <div style="font-size: 20px;">You might have to check Flex Office though...</div>',
                 htmlElement: document.getElementById('jur-there'),
-                color: 'bg-success'
+                color: 'bg-success',
             },
             unknown: {
-                text: 'We couldn\'t find Alfred...',
+                text: "We couldn't find Alfred...",
                 htmlElement: document.getElementById('alfred-unknown'),
-                color: 'bg-warning'
+                color: 'bg-warning',
             },
             text: {
-                text: 'We couldn\'t find Alfred...',
+                text: "We couldn't find Alfred...",
                 htmlElement: document.getElementById('alfred-unknown'),
-                color: 'bg-warning'
+                color: 'bg-warning',
             },
             away: {
                 text: 'Nope, Alfred will be back in a bit.',
                 htmlElement: document.getElementById('alfred-away'),
-                color: 'bg-danger'
+                color: 'bg-danger',
             },
             error: {
-                text: 'We couldn\'t find Alfred...',
+                text: "We couldn't find Alfred...",
                 htmlElement: document.getElementById('alfred-error'),
-                color: 'bg-warning'
-            }
+                color: 'bg-warning',
+            },
         };
 
-        window.addEventListener('load', _ => {
+        window.addEventListener('load', (_) => {
             updateStatus({
-                status: "{{$status}}",
-                text: "{{$text}}",
-                unix: "{{$unix}}"
+                status: '{{ $status }}',
+                text: '{{ $text }}',
+                unix: '{{ $unix }}',
             });
 
             window.Echo.channel(`isalfredthere`)
@@ -163,7 +166,11 @@
             // hide the time submessage
             time.classList.add('d-none');
 
-            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger');
+            document.body.classList.remove(
+                'bg-success',
+                'bg-warning',
+                'bg-danger',
+            );
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color);
         };

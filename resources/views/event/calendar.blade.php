@@ -1,25 +1,22 @@
-@extends('website.layouts.redesign.generic')
+@extends("website.layouts.redesign.generic")
 
-@section('page-title')
+@section("page-title")
     Calendar
 @endsection
 
-@section('container')
-
-    @include('event.calendar_includes.archivebar')
+@section("container")
+    @include("event.calendar_includes.archivebar")
 
     <div class="row calendar justify-content-center">
-
-        @foreach($events as $key => $section)
-
-            @include('event.calendar_includes.rendermonth', [
-            'events' => $section,
-            'month_name' => ($key == 0 ? 'Soon' : ($key == 1 ? 'This month' : 'Later'))
-            ])
-
+        @foreach ($events as $key => $section)
+            @include(
+                "event.calendar_includes.rendermonth",
+                [
+                    "events" => $section,
+                    "month_name" =>
+                        $key == 0 ? "Soon" : ($key == 1 ? "This month" : "Later"),
+                ]
+            )
         @endforeach
-
     </div>
-
-
 @endsection

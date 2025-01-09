@@ -1,7 +1,8 @@
 <page backtop="15mm" backbottom="15mm" backleft="23mm" backright="23mm">
-
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         h2 {
             margin-bottom: 12mm;
@@ -14,24 +15,25 @@
             font-size: 10pt;
         }
 
-        li { padding-left: 2mm; }
+        li {
+            padding-left: 2mm;
+        }
     </style>
-
 
     <h2>Becoming a member of Study Association Proto</h2>
 
-    @include('users.includes.membershipform_include')
+    @include("users.includes.membershipform_include")
 
-    <div style="height: 30mm;">
+    <div style="height: 30mm">
         <p style="margin-bottom: 0">Signature:</p>
         @if ($signature)
-            <img src="{{ $signature }}" height="150">
+            <img src="{{ $signature }}" height="150" />
         @endif
     </div>
 
     <p>
-        <strong>{{ $user->name }}</strong><br>
-        Enschede, {{ date('F j, Y') }}
+        <strong>{{ $user->name }}</strong>
+        <br />
+        Enschede, {{ date("F j, Y") }}
     </p>
-
 </page>

@@ -1,20 +1,16 @@
-@extends('website.layouts.redesign.dashboard')
+@extends("website.layouts.redesign.dashboard")
 
-@section('page-title')
+@section("page-title")
     Dinnerform Admin
 @endsection
 
-@section('container')
+@section("container")
     <div class="row">
         <div class="col-xl-4">
-
-            @include('dinnerform.admin_includes.dinnerform-details')
-
+            @include("dinnerform.admin_includes.dinnerform-details")
         </div>
         <div class="col-xl-8">
-
-            @include('dinnerform.admin_includes.dinnerform-list')
-
+            @include("dinnerform.admin_includes.dinnerform-list")
         </div>
     </div>
 @endsection

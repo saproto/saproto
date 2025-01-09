@@ -1,18 +1,20 @@
-@extends('auth.template')
+@extends("auth.template")
 
-@section('page-title')
+@section("page-title")
     SSO Authentication
 @endsection
 
-@section('login-body')
-
+@section("login-body")
     <form method="POST" action="{{ $destination }}" id="samlform">
-        <input type="hidden" name="SAMLResponse" value="{{ $response }}">
-        <input type="submit" value="Continue Authentication" class="btn btn-default btn-block">
+        <input type="hidden" name="SAMLResponse" value="{{ $response }}" />
+        <input
+            type="submit"
+            value="Continue Authentication"
+            class="btn btn-default btn-block"
+        />
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        document.getElementById("samlform").submit();
+        document.getElementById('samlform').submit();
     </script>
-
 @endsection
