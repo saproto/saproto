@@ -25,10 +25,12 @@
     @include("users.includes.membershipform_include")
 
     <div style="height: 30mm">
-        <p style="margin-bottom: 0">Signature:</p>
-        @if ($signature)
-            <img src="{{ $signature }}" height="150" />
-        @endif
+        <p style="margin-bottom: 0">
+            Signature:
+            @if ($signature)
+                <img src="{{ $signature }}" height="150" />
+            @endif
+        </p>
     </div>
 
     <p>

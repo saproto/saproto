@@ -8,9 +8,11 @@
     <form method="POST" action="{{ route("login::password::sync") }}">
         @csrf
 
-        <p>Please enter your password below.</p>
+        <p>
+            Please enter your password below.
 
-        <br />
+            <br />
+        </p>
 
         <div class="form-group">
             <input

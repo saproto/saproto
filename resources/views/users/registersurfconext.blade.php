@@ -37,12 +37,14 @@
                 {{ $remote_data["givenname"] }} {{ $remote_data["surname"] }}
             </strong>
         </p>
+
         <p>
             E-mail address:
             <strong>{{ $remote_data["mail"] }}</strong>
             <br />
             <i>You can change this later!</i>
         </p>
+
         <p>
             University account:
             <strong>{{ $remote_data["uid"] }}</strong>
@@ -72,16 +74,16 @@
             >
                 Privacy policy
             </a>
-        </p>
 
-        @include(
-            "components.forms.checkbox",
-            [
-                "name" => "privacy_policy_acceptance",
-                "label" => "I have read and acknowledge the privacy policy.",
-                "required" => true,
-            ]
-        )
+            @include(
+                "components.forms.checkbox",
+                [
+                    "name" => "privacy_policy_acceptance",
+                    "label" => "I have read and acknowledge the privacy policy.",
+                    "required" => true,
+                ]
+            )
+        </p>
 
         <hr />
 

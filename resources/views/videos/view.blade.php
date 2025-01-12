@@ -27,18 +27,18 @@
                     </a>
 
                     @if ($video->event)
-                        <p class="text-end float-end text-white"></p>
-
-                        <a
-                            href="{{ route("event::show", ["id" => $video->event->getPublicId()]) }}"
-                            class="btn btn-info float-end"
-                        >
-                            <i
-                                class="fas fa-calendar me-2"
-                                aria-hidden="true"
-                            ></i>
-                            {{ sprintf("%s (%s)", $video->event->title, date("d-m-Y", $video->event->start)) }}
-                        </a>
+                        <p class="text-end float-end text-white">
+                            <a
+                                href="{{ route("event::show", ["id" => $video->event->getPublicId()]) }}"
+                                class="btn btn-info float-end"
+                            >
+                                <i
+                                    class="fas fa-calendar me-2"
+                                    aria-hidden="true"
+                                ></i>
+                                {{ sprintf("%s (%s)", $video->event->title, date("d-m-Y", $video->event->start)) }}
+                            </a>
+                        </p>
                     @endif
                 </div>
 

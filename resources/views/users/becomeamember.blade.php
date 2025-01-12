@@ -19,6 +19,7 @@
                         official, we need some more information. Please follow
                         the steps below :)
                     </p>
+
                     <p class="card-text">
                         If you have any problems, don't hesitate to come by in
                         the Protopolis (Zilverling A230), and ask one of

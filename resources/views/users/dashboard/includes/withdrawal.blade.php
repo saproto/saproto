@@ -92,6 +92,7 @@
                             </a>
                             to pay manually via iDeal.
                         </p>
+
                         <hr />
                     @endif
 

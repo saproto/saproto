@@ -31,6 +31,7 @@
                         <p>
                             {{ $feedback->feedback }}
                         </p>
+
                         <hr />
                         <p>
                             <sub>

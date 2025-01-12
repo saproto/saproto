@@ -57,14 +57,14 @@
 
         <p class="card-text">
             {!! Markdown::convert($committee->description) !!}
-        </p>
 
-        <a
-            href="mailto:{{ $committee->slug . "@" . Config::string("proto.emaildomain") }}"
-            class="card-link text-info"
-        >
-            E-mail them at
-            {{ $committee->slug . "@" . Config::string("proto.emaildomain") }}
-        </a>
+            <a
+                href="mailto:{{ $committee->slug . "@" . Config::string("proto.emaildomain") }}"
+                class="card-link text-info"
+            >
+                E-mail them at
+                {{ $committee->slug . "@" . Config::string("proto.emaildomain") }}
+            </a>
+        </p>
     </div>
 </div>

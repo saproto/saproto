@@ -47,51 +47,51 @@
                             {{ $user->keep_protube_history ? "" : "not" }}
                         </strong>
                         keeping your history.
+
+                        @if ($user->keep_protube_history)
+                            <a
+                                href="{{ route("protube::togglehistory") }}"
+                                class="btn btn-outline-danger btn-block"
+                            >
+                                Stop keeping my ProTube history.
+                            </a>
+                        @else
+                            <a
+                                href="{{ route("protube::togglehistory") }}"
+                                class="btn btn-outline-primary btn-block"
+                            >
+                                Start keeping my ProTube history.
+                            </a>
+                        @endif
+
+                        @if ($usercount > 0)
+                            <hr />
+
+                            <p class="card-text">
+                                You have put
+                                <strong>{{ $usercount }}</strong>
+                                songs in ProTube. You can anonimyze your
+                                history. We will keep the songs for historic
+                                purposes, but we will remove your name from
+                                them. This action is irreversible.
+
+                                <a
+                                    id="clear-history"
+                                    href="{{ route("protube::clearhistory") }}"
+                                    class="btn btn-outline-danger btn-block"
+                                >
+                                    Clear my ProTube history.
+                                </a>
+                                <script nonce="{{ csp_nonce() }}">
+                                    document
+                                        .getElementById('clear-history')
+                                        .addEventListener('click', (_) =>
+                                            confirm('Are you sure?'),
+                                        );
+                                </script>
+                            </p>
+                        @endif
                     </p>
-
-                    @if ($user->keep_protube_history)
-                        <a
-                            href="{{ route("protube::togglehistory") }}"
-                            class="btn btn-outline-danger btn-block"
-                        >
-                            Stop keeping my ProTube history.
-                        </a>
-                    @else
-                        <a
-                            href="{{ route("protube::togglehistory") }}"
-                            class="btn btn-outline-primary btn-block"
-                        >
-                            Start keeping my ProTube history.
-                        </a>
-                    @endif
-
-                    @if ($usercount > 0)
-                        <hr />
-
-                        <p class="card-text">
-                            You have put
-                            <strong>{{ $usercount }}</strong>
-                            songs in ProTube. You can anonimyze your history. We
-                            will keep the songs for historic purposes, but we
-                            will remove your name from them. This action is
-                            irreversible.
-                        </p>
-
-                        <a
-                            id="clear-history"
-                            href="{{ route("protube::clearhistory") }}"
-                            class="btn btn-outline-danger btn-block"
-                        >
-                            Clear my ProTube history.
-                        </a>
-                        <script nonce="{{ csp_nonce() }}">
-                            document
-                                .getElementById('clear-history')
-                                .addEventListener('click', (_) =>
-                                    confirm('Are you sure?'),
-                                );
-                        </script>
-                    @endif
                 </div>
             </div>
 

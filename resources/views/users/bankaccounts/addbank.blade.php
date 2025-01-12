@@ -119,7 +119,7 @@
 
                             <!-- <p>
                                 <span id="bic-message">Enter your IBAN first.</span>
-                            </p> -->
+                             -->
 
                             <hr />
 

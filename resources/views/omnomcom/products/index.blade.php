@@ -66,13 +66,13 @@
                         <p class="card-text">
                             Bulk update stock by inserting a comma-seperated
                             list of product_id's and the amount you want to add.
-                        </p>
 
-                        <textarea
-                            name="update"
-                            class="form-control w-100"
-                            rows="7"
-                        ></textarea>
+                            <textarea
+                                name="update"
+                                class="form-control w-100"
+                                rows="7"
+                            ></textarea>
+                        </p>
                     </div>
 
                     <div class="card-footer">

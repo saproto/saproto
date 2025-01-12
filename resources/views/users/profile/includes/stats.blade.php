@@ -29,6 +29,7 @@
             Account created on:
             {{ date("F j, Y", strtotime($user->created_at)) }}.
         </p>
+
         <p class="card-text ellipsis">
             <i
                 class="fas fa-calendar-alt fa-fw me-2"
@@ -38,6 +39,7 @@
             ></i>
             Total signups: {{ $signups }}
         </p>
+
         <p class="card-text ellipsis">
             <i
                 class="fas fa-box fa-fw me-2"
@@ -47,6 +49,7 @@
             ></i>
             Total products purchased: {{ $totalproducts }}
         </p>
+
         <p class="card-text ellipsis">
             <i
                 class="fas fa-euro-sign fa-fw me-2"

@@ -22,11 +22,11 @@
                     <p>
                         Scan the code below with your 2FA app and enter your
                         code below to verify.
+
+                        @csrf
+
+                        {!! $tfa_qrcode !!}
                     </p>
-
-                    @csrf
-
-                    {!! $tfa_qrcode !!}
 
                     <p class="py-5">
                         <input
@@ -80,9 +80,11 @@
                 </div>
 
                 <div class="modal-body text-center">
-                    <p>Enter a valid 2FA code from your app to disable 2FA.</p>
+                    <p>
+                        Enter a valid 2FA code from your app to disable 2FA.
 
-                    @csrf
+                        @csrf
+                    </p>
 
                     <p class="py-5">
                         <input

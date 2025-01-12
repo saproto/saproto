@@ -22,13 +22,13 @@
         <p class="card-text">
             This may resolve issues you have logging in to external Proto
             services such as e-mail, network drives or the wiki.
-        </p>
 
-        <a
-            href="{{ route("login::password::sync::index") }}"
-            class="btn btn-outline-info btn-block"
-        >
-            Synchronize passwords
-        </a>
+            <a
+                href="{{ route("login::password::sync::index") }}"
+                class="btn btn-outline-info btn-block"
+            >
+                Synchronize passwords
+            </a>
+        </p>
     </div>
 </div>

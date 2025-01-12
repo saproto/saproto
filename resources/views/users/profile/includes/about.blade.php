@@ -60,31 +60,31 @@
             <a href="mailto:{{ $user->getDisplayEmail() }}">
                 {{ $user->getDisplayEmail() }}
             </a>
+
+            @if ($user->website)
+                <p class="card-text ellipsis">
+                    <i class="fas fa-globe-africa fa-fw me-3"></i>
+                    <a href="{{ $user->websiteUrl() }}">
+                        {{ $user->websiteDisplay() }}
+                    </a>
+                </p>
+            @endif
+
+            @if ($user->phone_visible)
+                <p class="card-text ellipsis">
+                    <i class="fas fa-phone fa-fw me-3" aria-hidden="true"></i>
+                    <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>
+                </p>
+            @endif
+
+            @if ($user->address_visible && $user->address != null)
+                <p class="card-text ellipsis">
+                    <i class="fas fa-home fa-fw me-3" aria-hidden="true"></i>
+                    {{ $user->address->street }} {{ $user->address->number }},
+                    {{ $user->address->city }}
+                </p>
+            @endif
         </p>
-
-        @if ($user->website)
-            <p class="card-text ellipsis">
-                <i class="fas fa-globe-africa fa-fw me-3"></i>
-                <a href="{{ $user->websiteUrl() }}">
-                    {{ $user->websiteDisplay() }}
-                </a>
-            </p>
-        @endif
-
-        @if ($user->phone_visible)
-            <p class="card-text ellipsis">
-                <i class="fas fa-phone fa-fw me-3" aria-hidden="true"></i>
-                <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>
-            </p>
-        @endif
-
-        @if ($user->address_visible && $user->address != null)
-            <p class="card-text ellipsis">
-                <i class="fas fa-home fa-fw me-3" aria-hidden="true"></i>
-                {{ $user->address->street }} {{ $user->address->number }},
-                {{ $user->address->city }}
-            </p>
-        @endif
 
         <p class="card-text ellipsis">
             @if (! $user->is_member)

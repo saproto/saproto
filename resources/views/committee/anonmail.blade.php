@@ -29,13 +29,13 @@
 
                         <p class="card-text">
                             Please write your anonymous message below.
-                        </p>
 
-                        <textarea
-                            name="message"
-                            class="form-control"
-                            rows="10"
-                        ></textarea>
+                            <textarea
+                                name="message"
+                                class="form-control"
+                                rows="10"
+                            ></textarea>
+                        </p>
                     </div>
 
                     <div class="card-footer">

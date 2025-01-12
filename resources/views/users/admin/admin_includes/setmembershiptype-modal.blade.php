@@ -25,39 +25,40 @@
                     <p>
                         Are you sure you want to change the membership type of
                         {{ $user->name }}?
+
+                        <span class="me-1">Membership type:</span>
+                        <select
+                            class="form-select px-2 py-1"
+                            aria-label="Membership types"
+                            name="type"
+                        >
+                            <option>Regular member</option>
+                            <option
+                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
+                                value="honorary"
+                            >
+                                Honorary member
+                            </option>
+                            <option
+                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
+                                value="lifelong"
+                            >
+                                Lifelong member
+                            </option>
+                            <option
+                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
+                                value="donor"
+                            >
+                                Donor
+                            </option>
+                            <option
+                                @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
+                                value="pet"
+                            >
+                                Pet member
+                            </option>
+                        </select>
                     </p>
-                    <span class="me-1">Membership type:</span>
-                    <select
-                        class="form-select px-2 py-1"
-                        aria-label="Membership types"
-                        name="type"
-                    >
-                        <option>Regular member</option>
-                        <option
-                            @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
-                            value="honorary"
-                        >
-                            Honorary member
-                        </option>
-                        <option
-                            @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
-                            value="lifelong"
-                        >
-                            Lifelong member
-                        </option>
-                        <option
-                            @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
-                            value="donor"
-                        >
-                            Donor
-                        </option>
-                        <option
-                            @selected($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
-                            value="pet"
-                        >
-                            Pet member
-                        </option>
-                    </select>
                 </div>
                 <div class="modal-footer">
                     <button

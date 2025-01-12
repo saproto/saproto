@@ -85,15 +85,16 @@
                                 Forgot your password?
                             </a>
                             )
+
+                            <input
+                                class="form-control"
+                                type="password"
+                                name="password"
+                                placeholder="Your current password."
+                            />
+                            <br />
                         </p>
 
-                        <input
-                            class="form-control"
-                            type="password"
-                            name="password"
-                            placeholder="Your current password."
-                        />
-                        <br />
                         <p>
                             <strong>Note:</strong>
                             If you still have open payments, you

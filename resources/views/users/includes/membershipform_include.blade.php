@@ -10,6 +10,7 @@
     <b>{{ $date->format("M, d, Y") }}</b>
     ,
 </p>
+
 <p>... wishes to become a member of Study Association Proto.</p>
 <p>
     The undersigned is aware of the
@@ -43,6 +44,7 @@
     of the association and promises to follow them. (Please note that the Dutch
     version of the documents are leading.)
 </p>
+
 <p>
     Membership of the association is renewed annually, following a timely notice
     reminding the member their membership will be renewed. Membership may be
@@ -51,6 +53,7 @@
     the association, including the membership fee, in a timely manner via any of
     the payment options made available by the association.
 </p>
+
 <p>
     For the administration of the association, the undersigned provided at the
     time of registration the e-mail address
@@ -58,8 +61,10 @@
     and phone number
     <b>{{ $user->phone }}</b>
     , as well as the following physical address:
+
+    @php($address = $user->address)
 </p>
-@php($address = $user->address)
+
 <ul>
     <li><b>{{ $address->street }} {{ $address->number }}</b></li>
     <li><b>{{ $address->zipcode }} {{ $address->city }}</b></li>

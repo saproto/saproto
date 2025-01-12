@@ -29,20 +29,20 @@
                                 &euro;{{ number_format(\App\Http\Controllers\WithdrawalController::openOrderlinesSum(), 2, ",", ".") }}
                             </strong>
                             .
-                        </p>
 
-                        @php($wd = Carbon::createFromFormat("Y-m-d", date("Y-m-25")))
-                        @include(
-                            "components.forms.datetimepicker",
-                            [
-                                "name" => "date",
-                                "label" => "Withdrawal date:",
-                                "placeholder" => strtotime(
-                                    Carbon::now()->day > 20 ? $wd->addMonth() : $wd,
-                                ),
-                                "format" => "date",
-                            ]
-                        )
+                            @php($wd = Carbon::createFromFormat("Y-m-d", date("Y-m-25")))
+                            @include(
+                                "components.forms.datetimepicker",
+                                [
+                                    "name" => "date",
+                                    "label" => "Withdrawal date:",
+                                    "placeholder" => strtotime(
+                                        Carbon::now()->day > 20 ? $wd->addMonth() : $wd,
+                                    ),
+                                    "format" => "date",
+                                ]
+                            )
+                        </p>
 
                         <div class="form-group">
                             <label for="name">Maximum amount per user:</label>

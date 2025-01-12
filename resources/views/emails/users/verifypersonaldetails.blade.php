@@ -50,37 +50,37 @@
             University account:
             <strong>{{ $user->edu_username }}</strong>
         @endif
+
+        @if ($user->address)
+            <p>
+                <strong>Address</strong>
+                <br />
+                {{ $user->address->street }} {{ $user->address->number }}
+                <br />
+                {{ $user->address->zipcode }}, {{ $user->address->city }}
+                <br />
+                {{ $user->address->country }}
+            </p>
+        @endif
+
+        @if ($user->bank)
+            <p>
+                <strong>SEPA direct withdrawal authorization</strong>
+                <br />
+                IBAN:
+                <strong>{{ $user->bank->iban }}</strong>
+                <br />
+                BIC:
+                <strong>{{ $user->bank->bic }}</strong>
+                <br />
+                Authorization ID:
+                <strong>{{ $user->bank->machtigingid }}</strong>
+                <br />
+                Authorization given:
+                <strong>{{ $user->bank->created_at }}</strong>
+            </p>
+        @endif
     </p>
-
-    @if ($user->address)
-        <p>
-            <strong>Address</strong>
-            <br />
-            {{ $user->address->street }} {{ $user->address->number }}
-            <br />
-            {{ $user->address->zipcode }}, {{ $user->address->city }}
-            <br />
-            {{ $user->address->country }}
-        </p>
-    @endif
-
-    @if ($user->bank)
-        <p>
-            <strong>SEPA direct withdrawal authorization</strong>
-            <br />
-            IBAN:
-            <strong>{{ $user->bank->iban }}</strong>
-            <br />
-            BIC:
-            <strong>{{ $user->bank->bic }}</strong>
-            <br />
-            Authorization ID:
-            <strong>{{ $user->bank->machtigingid }}</strong>
-            <br />
-            Authorization given:
-            <strong>{{ $user->bank->created_at }}</strong>
-        </p>
-    @endif
 
     <p>
         @if ($user->member)

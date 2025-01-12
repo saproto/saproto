@@ -67,69 +67,71 @@
     </div>
 
     <div class="card-body">
-        <p style="white-space: pre-wrap">{{ $feedback->feedback }}</p>
+        <p style="white-space: pre-wrap">
+            {{ $feedback->feedback }}
 
-        @if ($feedback->reply)
-            <hr />
-            <i
-                class="me-1 fa {{ $feedback->accepted ? "fa-circle-check text-primary" : "fa-circle-xmark text-danger" }}"
-                aria-hidden="true"
-            ></i>
-            <b>Board:</b>
-            {{ $feedback->reply }}
-        @endif
+            @if ($feedback->reply)
+                <hr />
+                <i
+                    class="me-1 fa {{ $feedback->accepted ? "fa-circle-check text-primary" : "fa-circle-xmark text-danger" }}"
+                    aria-hidden="true"
+                ></i>
+                <b>Board:</b>
+                {{ $feedback->reply }}
+            @endif
 
-        @if (Auth::user()->can("board") && $controls)
-            <div
-                class="collapse mt-3"
-                id="feedback__{{ $feedback->id }}__collapse"
-            >
-                <form
-                    method="post"
-                    action="{{ route("feedback::reply", ["id" => $feedback->id]) }}"
+            @if (Auth::user()->can("board") && $controls)
+                <div
+                    class="collapse mt-3"
+                    id="feedback__{{ $feedback->id }}__collapse"
                 >
-                    {{ csrf_field() }}
-                    <label for="feedback__{{ $feedback->id }}__reply">
-                        Reply:
-                    </label>
-                    <textarea
-                        id="feedback__{{ $feedback->id }}__reply"
-                        class="form-control mb-2"
-                        rows="2"
-                        cols="30"
-                        name="reply"
-                        placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
-                        required
+                    <form
+                        method="post"
+                        action="{{ route("feedback::reply", ["id" => $feedback->id]) }}"
                     >
+                        {{ csrf_field() }}
+                        <label for="feedback__{{ $feedback->id }}__reply">
+                            Reply:
+                        </label>
+                        <textarea
+                            id="feedback__{{ $feedback->id }}__reply"
+                            class="form-control mb-2"
+                            rows="2"
+                            cols="30"
+                            name="reply"
+                            placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
+                            required
+                        >
 {{ $feedback->reply ?? "" }}</textarea
-                    >
-                    <div class="btn-group w-100">
-                        <button
-                            type="submit"
-                            name="responseBtn"
-                            value="accept"
-                            class="btn btn-primary"
                         >
-                            <i class="fas fa-circle-check"></i>
-                            Accept
-                        </button>
-                        <button
-                            type="submit"
-                            name="responseBtn"
-                            value="reject"
-                            class="btn btn-danger"
-                        >
-                            <i class="fas fa-circle-xmark"></i>
-                            Reject
-                        </button>
-                    </div>
-                    <p class="text-center mt-1">
-                        <i class="fas fa-triangle-exclamation"></i>
-                        Replying will email this member.
-                    </p>
-                </form>
-            </div>
-        @endif
+                        <div class="btn-group w-100">
+                            <button
+                                type="submit"
+                                name="responseBtn"
+                                value="accept"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-circle-check"></i>
+                                Accept
+                            </button>
+                            <button
+                                type="submit"
+                                name="responseBtn"
+                                value="reject"
+                                class="btn btn-danger"
+                            >
+                                <i class="fas fa-circle-xmark"></i>
+                                Reject
+                            </button>
+                        </div>
+                        <p class="text-center mt-1">
+                            <i class="fas fa-triangle-exclamation"></i>
+                            Replying will email this member.
+                        </p>
+                    </form>
+                </div>
+            @endif
+        </p>
     </div>
 
     <div class="card-footer ps-0">

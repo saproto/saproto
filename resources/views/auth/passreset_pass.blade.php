@@ -14,28 +14,28 @@
             You're resetting the password for:
             <br />
             <strong>{{ $reset->user->name }}</strong>
+
+            <input
+                id="password"
+                type="password"
+                name="password"
+                class="form-control mb-3"
+                minlength="10"
+                placeholder="New password (at least 10 characters)"
+            />
+
+            <input
+                id="password2"
+                type="password"
+                name="password_confirmation"
+                class="form-control mb-3"
+                minlength="10"
+                placeholder="New password (again)"
+            />
+
+            <button type="submit" class="btn btn-success btn-block">
+                Reset password for {{ $reset->user->calling_name }}
+            </button>
         </p>
-
-        <input
-            id="password"
-            type="password"
-            name="password"
-            class="form-control mb-3"
-            minlength="10"
-            placeholder="New password (at least 10 characters)"
-        />
-
-        <input
-            id="password2"
-            type="password"
-            name="password_confirmation"
-            class="form-control mb-3"
-            minlength="10"
-            placeholder="New password (again)"
-        />
-
-        <button type="submit" class="btn btn-success btn-block">
-            Reset password for {{ $reset->user->calling_name }}
-        </button>
     </form>
 @endsection

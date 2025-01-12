@@ -21,6 +21,7 @@
                         prototypes that only need better building materials:
                         CreaTe students have seen it all.
                     </p>
+
                     <p class="card-text">
                         Interaction Technology aims to combine a scientific
                         mindset with specialist technical knowledge. I-Techers
@@ -49,6 +50,7 @@
                         Proto consists of circa 700 members and 35 committees,
                         all held together by a full-time student board.
                     </p>
+
                     <p class="card-text">
                         Besides organising lots of interesting activities for
                         entertainment and/or educational purposes, the community

@@ -30,17 +30,18 @@
                     @else
                             various payment methods.
                     @endif
+
+                    @if ($use_fees)
+                        <p>
+                            <strong>Important!</strong>
+                            Using this service you will incur a transaction fee
+                            on top of your outstanding balance for some methods.
+                            This transaction will appear in your OmNomCom
+                            history after payment. Hover on a payment method's
+                            icon to see the transaction fee.
+                        </p>
+                    @endif
                 </p>
-                @if ($use_fees)
-                    <p>
-                        <strong>Important!</strong>
-                        Using this service you will incur a transaction fee on
-                        top of your outstanding balance for some methods. This
-                        transaction will appear in your OmNomCom history after
-                        payment. Hover on a payment method's icon to see the
-                        transaction fee.
-                    </p>
-                @endif
 
                 <p>
                     If you wish to pay only a part of your outstanding balance,

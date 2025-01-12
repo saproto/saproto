@@ -107,21 +107,22 @@
                     application and looking for an option similar to
                     <i>Import calendar by URL</i>
                     . You can then to copy the URL below.
+
+                    <input
+                        id="ical-url"
+                        class="form-control"
+                        value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}"
+                        readonly
+                    />
+                    <script nonce="{{ csp_nonce() }}">
+                        document
+                            .getElementById('ical-url')
+                            .addEventListener('click', (e) => {
+                                e.target.focus();
+                                e.target.select();
+                            });
+                    </script>
                 </p>
-                <input
-                    id="ical-url"
-                    class="form-control"
-                    value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}"
-                    readonly
-                />
-                <script nonce="{{ csp_nonce() }}">
-                    document
-                        .getElementById('ical-url')
-                        .addEventListener('click', (e) => {
-                            e.target.focus();
-                            e.target.select();
-                        });
-                </script>
 
                 <hr />
 

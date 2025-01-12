@@ -48,6 +48,7 @@
                                 This company is currently looking to fill these
                                 positions:
                             </p>
+
                             <ul class="list-group">
                                 @foreach ($company->joboffers as $joboffer)
                                     <a
