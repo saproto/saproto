@@ -29,7 +29,7 @@
                     <tr>
                         <th>Creditor identifier</th>
                         <td>
-                            {{ Config::string("proto.sepa_info.creditor_id") }}
+                            {{ Config::string('proto.sepa_info.creditor_id') }}
                         </td>
                     </tr>
                 </tbody>
@@ -50,7 +50,7 @@
 
                 <a
                     class="btn btn-outline-info w-50"
-                    href="{{ route("user::bank::edit") }}"
+                    href="{{ route('user::bank::edit') }}"
                 >
                     Update authorization
                 </a>
@@ -61,7 +61,7 @@
     <a
         type="submit"
         class="btn btn-outline-info btn-block mb-3"
-        href="{{ route("user::bank::create") }}"
+        href="{{ route('user::bank::create') }}"
     >
         Issue SEPA direct withdrawal authorisation
     </a>
@@ -87,7 +87,7 @@
                             authorization until you have settled all your
                             purchases with Proto. You can await the next
                             withdrawal, or head over to your
-                            <a href="{{ route("omnomcom::orders::index") }}">
+                            <a href="{{ route('omnomcom::orders::index') }}">
                                 purchase history
                             </a>
                             to pay manually via iDeal.
@@ -110,7 +110,7 @@
                         you can always add a new authorization.
                     </p>
                 </div>
-                <form method="POST" action="{{ route("user::bank::delete") }}">
+                <form method="POST" action="{{ route('user::bank::delete') }}">
                     @csrf
                     <div class="modal-footer">
                         <div class="btn-group btn-block">

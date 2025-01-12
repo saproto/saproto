@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form
                 method="post"
-                action="{{ route("user::2fa::create") }}"
+                action="{{ route('user::2fa::create') }}"
                 class="form-horizontal"
             >
                 <div class="modal-header">
@@ -64,7 +64,7 @@
         <div class="modal-content">
             <form
                 method="post"
-                action="{{ route("user::2fa::delete") }}"
+                action="{{ route('user::2fa::delete') }}"
                 class="form-horizontal"
             >
                 <div class="modal-header">

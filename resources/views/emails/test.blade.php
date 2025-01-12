@@ -1,8 +1,8 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>
-        Hey {{ App\Models\User::orderByRaw("RAND()")->first()->calling_name }},
+        Hey {{ App\Models\User::orderByRaw('RAND()')->first()->calling_name }},
     </p>
 
     <p>

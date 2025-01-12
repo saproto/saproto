@@ -1,11 +1,11 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->name }},</p>
 
     <p>
         I'm writing to let you know that we will soon renew your membership for
-        academic year {{ date("Y") }}/{{ date("Y") + 1 }}. If you wish to
+        academic year {{ date('Y') }}/{{ date('Y') + 1 }}. If you wish to
         continue your membership of S.A. Proto, there is nothing you need to do!
         Please remember that this means you will automatically be charged your
         membership fee around October 1.
@@ -16,9 +16,9 @@
         us know by replying to this e-mail before September 1. If you do so your
         membership will be terminated immediately and you will not be charged
         the membership fee for academic year
-        {{ date("Y") }}/{{ date("Y") + 1 }}. If you don't reply to this e-mail
+        {{ date('Y') }}/{{ date('Y') + 1 }}. If you don't reply to this e-mail
         before September 1, we will assume that you wish to continue your
-        membership for academic year {{ date("Y") }}/{{ date("Y") + 1 }}.
+        membership for academic year {{ date('Y') }}/{{ date('Y') + 1 }}.
     </p>
 
     <p>
@@ -30,7 +30,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.secretary") }}
+        {{ Config::string('proto.secretary') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

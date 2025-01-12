@@ -9,10 +9,10 @@
                 @foreach ($unreviewed as $feedback)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                         @include(
-                            "feedbackboards.include.feedback",
+                            'feedbackboards.include.feedback',
                             [
-                                "feedback" => $feedback,
-                                "controls" => false,
+                                'feedback' => $feedback,
+                                'controls' => false,
                             ]
                         )
                     </div>

@@ -6,10 +6,10 @@
             @if (count($events) > 0)
                 @foreach ($events ?? [] as $counter => $event)
                     @include(
-                        "event.display_includes.event_block",
+                        'event.display_includes.event_block',
                         [
-                            "event" => $event,
-                            "lazyload" => $counter > 5,
+                            'event' => $event,
+                            'lazyload' => $counter > 5,
                         ]
                     )
                 @endforeach

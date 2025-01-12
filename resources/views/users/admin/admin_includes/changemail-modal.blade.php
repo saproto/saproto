@@ -9,7 +9,7 @@
         <form
             class="form-horizontal"
             method="post"
-            action="{{ route("user::changemail", ["id" => $user->id]) }}"
+            action="{{ route('user::changemail', ['id' => $user->id]) }}"
         >
             @csrf
 

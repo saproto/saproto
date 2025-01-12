@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Tickets Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("tickets::create") }}"
+                        href="{{ route('tickets::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new ticket.
@@ -37,7 +37,7 @@
                                 <td style="max-width: 200px">
                                     @if ($ticket->event)
                                         <a
-                                            href="{{ route("event::show", ["id" => $ticket->event->getPublicId()]) }}"
+                                            href="{{ route('event::show', ['id' => $ticket->event->getPublicId()]) }}"
                                         >
                                             {{ $ticket->event->title }}
                                         </a>
@@ -45,7 +45,7 @@
                                 </td>
                                 <td style="max-width: 200px">
                                     <a
-                                        href="{{ route("omnomcom::products::edit", ["id" => $ticket->product->id]) }}"
+                                        href="{{ route('omnomcom::products::edit', ['id' => $ticket->product->id]) }}"
                                     >
                                         {{ $ticket->product->name }}
                                     </a>
@@ -53,16 +53,16 @@
                                 <td style="min-width: 200px">
                                     from
                                     <i>
-                                        {{ date("d-m-Y H:i", $ticket->available_from) }}
+                                        {{ date('d-m-Y H:i', $ticket->available_from) }}
                                     </i>
                                     <br />
                                     till
                                     <i>
-                                        {{ date("d-m-Y H:i", $ticket->available_to) }}
+                                        {{ date('d-m-Y H:i', $ticket->available_to) }}
                                     </i>
                                 </td>
                                 <td>
-                                    {{ $ticket->members_only ? "Members" : "Everyone" }}
+                                    {{ $ticket->members_only ? 'Members' : 'Everyone' }}
                                 </td>
                                 <td>
                                     @if ($ticket->has_buy_limit)
@@ -75,7 +75,7 @@
                                 </td>
                                 <td>
                                     <a
-                                        href="{{ route("tickets::edit", ["id" => $ticket->id]) }}"
+                                        href="{{ route('tickets::edit', ['id' => $ticket->id]) }}"
                                     >
                                         <i
                                             class="fas fa-edit"
@@ -84,7 +84,7 @@
                                     </a>
                                     <a
                                         class="text-danger ms-2"
-                                        href="{{ route("tickets::delete", ["id" => $ticket->id]) }}"
+                                        href="{{ route('tickets::delete', ['id' => $ticket->id]) }}"
                                     >
                                         <i
                                             class="fas fa-trash"

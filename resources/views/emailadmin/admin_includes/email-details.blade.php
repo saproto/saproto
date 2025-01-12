@@ -1,13 +1,13 @@
 <form
     method="post"
-    action="{{ $email == null ? route("email::store") : route("email::update", ["id" => $email->id]) }}"
+    action="{{ $email == null ? route('email::store') : route('email::update', ['id' => $email->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            @yield("page-title")
+            @yield('page-title')
         </div>
 
         <div class="card-body">
@@ -21,7 +21,7 @@
                             id="description"
                             name="description"
                             placeholder="A short description that only the board can see."
-                            value="{{ $email->description ?? "" }}"
+                            value="{{ $email->description ?? '' }}"
                             required
                         />
                     </div>
@@ -36,7 +36,7 @@
                             id="subject"
                             name="subject"
                             placeholder="The e-mail subject."
-                            value="{{ $email->subject ?? "" }}"
+                            value="{{ $email->subject ?? '' }}"
                             required
                         />
                     </div>
@@ -68,11 +68,11 @@
                                 type="text"
                                 class="form-control"
                                 placeholder="board"
-                                value="{{ $email->sender_address ?? "" }}"
+                                value="{{ $email->sender_address ?? '' }}"
                                 required
                             />
                             <span class="input-group-text" id="basic-addon2">
-                                @ {{ Config::string("proto.emaildomain") }}
+                                @ {{ Config::string('proto.emaildomain') }}
                             </span>
                         </div>
                     </div>
@@ -82,11 +82,11 @@
             <div class="form-group">
                 <label for="editor">E-mail</label>
                 @include(
-                    "components.forms.markdownfield",
+                    'components.forms.markdownfield',
                     [
-                        "name" => "body",
-                        "placeholder" => "Text goes here.",
-                        "value" => $email ? $email->body : null,
+                        'name' => 'body',
+                        'placeholder' => 'Text goes here.',
+                        'value' => $email ? $email->body : null,
                     ]
                 )
             </div>
@@ -97,54 +97,54 @@
                         <label>Recipients:</label>
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "type" => "radio",
-                                "id" => "destination_type_all_members",
-                                "name" => "destinationType",
-                                "checked" => $email?->to_member,
-                                "required" => true,
-                                "value" => "members",
-                                "label" => "All members",
+                                'type' => 'radio',
+                                'id' => 'destination_type_all_members',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_member,
+                                'required' => true,
+                                'value' => 'members',
+                                'label' => 'All members',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "type" => "radio",
-                                "id" => "destination_type_active_members",
-                                "name" => "destinationType",
-                                "checked" => $email?->to_active,
-                                "required" => true,
-                                "value" => "active",
-                                "label" => "All active members",
+                                'type' => 'radio',
+                                'id' => 'destination_type_active_members',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_active,
+                                'required' => true,
+                                'value' => 'active',
+                                'label' => 'All active members',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "type" => "radio",
-                                "id" => "destination_type_pending_members",
-                                "name" => "destinationType",
-                                "checked" => $email?->to_pending,
-                                "required" => true,
-                                "value" => "pending",
-                                "label" => "All pending members",
+                                'type' => 'radio',
+                                'id' => 'destination_type_pending_members',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_pending,
+                                'required' => true,
+                                'value' => 'pending',
+                                'label' => 'All pending members',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "type" => "radio",
-                                "id" => "destination_type_event",
-                                "name" => "destinationType",
-                                "checked" => $email?->to_event,
-                                "required" => true,
-                                "value" => "event",
-                                "label" => "These events:",
+                                'type' => 'radio',
+                                'id' => 'destination_type_event',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_event,
+                                'required' => true,
+                                'value' => 'event',
+                                'label' => 'These events:',
                             ]
                         )
 
@@ -176,15 +176,15 @@
                         </div>
 
                         <div
-                            class="form-group {{ $email?->to_event ?: "d-none" }} mt-1 mb-2"
+                            class="form-group {{ $email?->to_event ?: 'd-none' }} mt-1 mb-2"
                             id="backupDiv"
                         >
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "toBackup",
-                                    "checked" => $email?->to_backup,
-                                    "label" => "Send to backup users",
+                                    'name' => 'toBackup',
+                                    'checked' => $email?->to_backup,
+                                    'label' => 'Send to backup users',
                                 ]
                             )
                             <em>
@@ -195,14 +195,14 @@
                         </div>
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "type" => "radio",
-                                "id" => "destination_type_lists",
-                                "name" => "destinationType",
-                                "checked" => $email?->to_list && $email?->to_backup,
-                                "value" => "lists",
-                                "label" => "These e-mail lists:",
+                                'type' => 'radio',
+                                'id' => 'destination_type_lists',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_list && $email?->to_backup,
+                                'value' => 'lists',
+                                'label' => 'These e-mail lists:',
                             ]
                         )
 
@@ -211,7 +211,7 @@
                             name="listSelect[]"
                             id="listSelect"
                             class="form-control"
-                            {{ $email?->to_list ? "" : 'disabled="disabled"' }}
+                            {{ $email?->to_list ? '' : 'disabled="disabled"' }}
                         >
                             @foreach (App\Models\EmailList::all() as $list)
                                 <option
@@ -227,11 +227,11 @@
 
                 <div class="col-md-6">
                     @include(
-                        "components.forms.datetimepicker",
+                        'components.forms.datetimepicker',
                         [
-                            "name" => "time",
-                            "label" => "Scheduled:",
-                            "placeholder" => $email
+                            'name' => 'time',
+                            'label' => 'Scheduled:',
+                            'placeholder' => $email
                                 ? $email->time
                                 : strtotime(Carbon::now()->endOfDay()),
                         ]
@@ -245,38 +245,38 @@
                 Save
             </button>
 
-            <a href="{{ route("email::index") }}" class="btn btn-default">
+            <a href="{{ route('email::index') }}" class="btn btn-default">
                 Cancel
             </a>
         </div>
     </div>
 </form>
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const eventSelect = document.getElementById('eventSelect');
-        const listSelect = document.getElementById('listSelect');
+        const eventSelect = document.getElementById('eventSelect')
+        const listSelect = document.getElementById('listSelect')
         const destinationSelectList = Array.from(
-            document.getElementsByName('destinationType'),
-        );
-        const backupToggle = document.getElementById('backupDiv');
+            document.getElementsByName('destinationType')
+        )
+        const backupToggle = document.getElementById('backupDiv')
         const toggleList = {
             event: [false, true, false],
             members: [true, true, true],
             active: [true, true, true],
             pending: [true, true, true],
             lists: [true, false, true],
-        };
+        }
 
         destinationSelectList.forEach((el) => {
             el.addEventListener('click', (e) => {
-                const toggle = toggleList[el.value];
-                eventSelect.disabled = toggle[0];
-                listSelect.disabled = toggle[1];
+                const toggle = toggleList[el.value]
+                eventSelect.disabled = toggle[0]
+                listSelect.disabled = toggle[1]
 
-                if (toggle[2]) backupToggle.classList.add('d-none');
-                else backupToggle.classList.remove('d-none');
-            });
-        });
+                if (toggle[2]) backupToggle.classList.add('d-none')
+                else backupToggle.classList.remove('d-none')
+            })
+        })
     </script>
 @endpush

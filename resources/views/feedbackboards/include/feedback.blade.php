@@ -5,12 +5,12 @@
                 {{ $feedback->voteScore() }}
             </span>
             <span
-                class="{{ $feedback->userVote(Auth::user()) == 1 ? "text-info" : "text-white" }}"
+                class="{{ $feedback->userVote(Auth::user()) == 1 ? 'text-info' : 'text-white' }}"
             >
                 <i class="upvote fas fa-thumbs-up cursor-pointer"></i>
             </span>
             <span
-                class="{{ $feedback->userVote(Auth::user()) == -1 ? "text-danger" : "text-white" }}"
+                class="{{ $feedback->userVote(Auth::user()) == -1 ? 'text-danger' : 'text-white' }}"
             >
                 <i class="downvote fas fa-thumbs-down cursor-pointer"></i>
             </span>
@@ -18,32 +18,32 @@
 
         @if (! $feedback->reviewed && $feedback->category->review && ! $feedback->deleted_at && Auth::user()->id === $feedback->category->reviewer_id)
             <a
-                href="{{ route("feedback::approve", ["id" => $feedback->id, "id" => $feedback->id]) }}"
+                href="{{ route('feedback::approve', ['id' => $feedback->id, 'id' => $feedback->id]) }}"
                 class="float-end"
             >
                 <i class="reply me-1 fa-solid fa-circle-check"></i>
             </a>
         @endif
 
-        @if ((Auth::user()->id == $feedback->user?->id && ! $feedback->reply) || (Auth::user()->can("board") && $feedback->deleted_at))
+        @if ((Auth::user()->id == $feedback->user?->id && ! $feedback->reply) || (Auth::user()->can('board') && $feedback->deleted_at))
             @include(
-                "components.modals.confirm-modal",
+                'components.modals.confirm-modal',
                 [
-                    "action" => route("feedback::delete", ["id" => $feedback->id]),
-                    "text" => '<i class="delete fas fa-trash"></i>',
-                    "title" => "Confirm Delete",
-                    "message" =>
-                        "Are you sure you want to delete this potentially good feedback?",
-                    "confirm" => "Delete",
-                    "classes" => "float-end me-3",
+                    'action' => route('feedback::delete', ['id' => $feedback->id]),
+                    'text' => '<i class="delete fas fa-trash"></i>',
+                    'title' => 'Confirm Delete',
+                    'message' =>
+                        'Are you sure you want to delete this potentially good feedback?',
+                    'confirm' => 'Delete',
+                    'classes' => 'float-end me-3',
                 ]
             )
         @endif
 
-        @can("board")
+        @can('board')
             @if (! $feedback->deleted_at)
                 <a
-                    href="{{ route("feedback::archive", ["id" => $feedback->id]) }}"
+                    href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
                     class="float-end"
                 >
                     <i class="archive me-3 fas fa-box-archive hover-danger"></i>
@@ -57,7 +57,7 @@
                 @endif
             @else
                 <a
-                    href="{{ route("feedback::archive", ["id" => $feedback->id]) }}"
+                    href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
                     class="float-end"
                 >
                     <i class="restore me-3 fas fa-trash-restore"></i>
@@ -73,21 +73,21 @@
             @if ($feedback->reply)
                 <hr />
                 <i
-                    class="me-1 fa {{ $feedback->accepted ? "fa-circle-check text-primary" : "fa-circle-xmark text-danger" }}"
+                    class="me-1 fa {{ $feedback->accepted ? 'fa-circle-check text-primary' : 'fa-circle-xmark text-danger' }}"
                     aria-hidden="true"
                 ></i>
                 <b>Board:</b>
                 {{ $feedback->reply }}
             @endif
 
-            @if (Auth::user()->can("board") && $controls)
+            @if (Auth::user()->can('board') && $controls)
                 <div
                     class="collapse mt-3"
                     id="feedback__{{ $feedback->id }}__collapse"
                 >
                     <form
                         method="post"
-                        action="{{ route("feedback::reply", ["id" => $feedback->id]) }}"
+                        action="{{ route('feedback::reply', ['id' => $feedback->id]) }}"
                     >
                         {{ csrf_field() }}
                         <label for="feedback__{{ $feedback->id }}__reply">
@@ -102,7 +102,7 @@
                             placeholder="A reply to this {{ strtolower(str_singular($feedback->category->title)) }}."
                             required
                         >
-{{ $feedback->reply ?? "" }}</textarea
+{{ $feedback->reply ?? '' }}</textarea
                         >
                         <div class="btn-group w-100">
                             <button
@@ -138,20 +138,20 @@
         <div class="text-muted text-end mt-2">
             <em>
                 <sub>
-                    @if (Auth::user()->can("board") || $feedback->category->show_publisher)
+                    @if (Auth::user()->can('board') || $feedback->category->show_publisher)
                         By
-                        {{ $feedback->user?->name ?? "before we kept track!" }}
+                        {{ $feedback->user?->name ?? 'before we kept track!' }}
                         --
                     @endif
 
-                    {{ $feedback->created_at->format("j M Y, H:i") }}
+                    {{ $feedback->created_at->format('j M Y, H:i') }}
                 </sub>
             </em>
         </div>
     </div>
 </div>
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         if ({{ isset($controls) }}) {
             document
@@ -160,22 +160,22 @@
                     element.addEventListener('click', (event) => {
                         const enabled = document
                             .getElementById(
-                                'feedback__{{ $feedback->id }}__collapse',
+                                'feedback__{{ $feedback->id }}__collapse'
                             )
-                            .classList.toggle('show');
+                            .classList.toggle('show')
                         if (enabled) {
                             document
                                 .getElementById(
-                                    'feedback__{{ $feedback->id }}__reply',
+                                    'feedback__{{ $feedback->id }}__reply'
                                 )
-                                .focus();
+                                .focus()
                         } else {
                             document.getElementById(
-                                'feedback__{{ $feedback->id }}__reply',
-                            ).value = '';
+                                'feedback__{{ $feedback->id }}__reply'
+                            ).value = ''
                         }
-                    });
-                });
+                    })
+                })
         }
     </script>
 @endpush

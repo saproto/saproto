@@ -1,16 +1,16 @@
 <div class="row justify-content-center">
     <form
         method="post"
-        action="{{ route("dinnerform::orderline::store", ["id" => $dinnerform->id]) }}"
+        action="{{ route('dinnerform::orderline::store', ['id' => $dinnerform->id]) }}"
     >
         @csrf
 
         <div class="card mb-3">
             <div class="card-header bg-dark text-white">
                 Add an order with us at {{ $dinnerform->restaurant }}
-                @if (Auth::user()->can("tipcie"))
+                @if (Auth::user()->can('tipcie'))
                     <a
-                        href="{{ route("dinnerform::edit", ["id" => $dinnerform->id]) }}"
+                        href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}"
                         class="btn btn-warning badge float-end"
                     >
                         <i class="fas fa-edit me-1"></i>
@@ -80,10 +80,10 @@
                 </div>
                 @if (! $dinnerform->event)
                     @include(
-                        "components.forms.checkbox",
+                        'components.forms.checkbox',
                         [
-                            "name" => "helper",
-                            "label" => "Are you a helper at this event?",
+                            'name' => 'helper',
+                            'label' => 'Are you a helper at this event?',
                         ]
                     )
                 @else
@@ -92,7 +92,7 @@
                             <div class="alert alert-info text-center">
                                 You are a helper for this event and therefore
                                 receive
-                                {{ $dinnerform->regular_discount_percentage ? "an additional" : "a" }}
+                                {{ $dinnerform->regular_discount_percentage ? 'an additional' : 'a' }}
                                 discount of
                                 <strong>
                                     €{{ $dinnerform->helper_discount }}

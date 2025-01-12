@@ -9,7 +9,7 @@
                 src="{!! $user->generatePhotoPath(50, 50) !!}"
             />
             <a
-                href="{{ route("user::profile", ["id" => $user->getPublicId()]) }}"
+                href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
             >
                 <strong>{{ $user->name }}</strong>
                 <br />

@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     OmNomCom Product Category Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("omnomcom::categories::create") }}"
+                        href="{{ route('omnomcom::categories::create') }}"
                         class="float-end badge bg-success"
                     >
                         Add new category
@@ -35,20 +35,20 @@
                                     </td>
                                     <td>
                                         <a
-                                            href="{{ route("omnomcom::categories::show", ["id" => $category->id]) }}"
+                                            href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}"
                                         >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
                                         @include(
-                                            "components.modals.confirm-modal",
+                                            'components.modals.confirm-modal',
                                             [
-                                                "action" => route("omnomcom::categories::delete", [
-                                                    "id" => $category->id,
+                                                'action' => route('omnomcom::categories::delete', [
+                                                    'id' => $category->id,
                                                 ]),
-                                                "text" => '<i class="fas fa-trash text-danger"></i>',
-                                                "title" => "Confirm Delete",
-                                                "message" => "Are you sure you want to delete category $category->name",
-                                                "confirm" => "Delete",
+                                                'text' => '<i class="fas fa-trash text-danger"></i>',
+                                                'title' => 'Confirm Delete',
+                                                'message' => "Are you sure you want to delete category $category->name",
+                                                'confirm' => 'Delete',
                                             ]
                                         )
                                     </td>

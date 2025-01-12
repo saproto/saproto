@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Actual membership totals
 @endsection
 
-@section("container")
+@section('container')
     <div class="row d-inline-flex justify-content-center w-100">
         <div class="col-10">
             <div class="card mb-3">
@@ -19,11 +19,11 @@
                             </label>
                             <div class="col-sm-auto">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "start",
-                                        "format" => "date",
-                                        "placeholder" => $start,
+                                        'name' => 'start',
+                                        'format' => 'date',
+                                        'placeholder' => $start,
                                     ]
                                 )
                             </div>
@@ -35,11 +35,11 @@
                             </label>
                             <div class="col-sm-auto">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "end",
-                                        "format" => "date",
-                                        "placeholder" => $end,
+                                        'name' => 'end',
+                                        'format' => 'date',
+                                        'placeholder' => $end,
                                     ]
                                 )
                             </div>
@@ -127,7 +127,7 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     {{-- chart.js and the date adapter --}}
     <script
         nonce="{{ csp_nonce() }}"
@@ -139,34 +139,34 @@
     ></script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const ctx = document.getElementById('chart');
-        var chart = null;
-        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!};
+        const ctx = document.getElementById('chart')
+        var chart = null
+        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
 
         function createDataSets(data) {
             let myData = {
                 datasets: [],
-            };
+            }
             Object.values(data).forEach((product) => {
-                let prices = [];
+                let prices = []
                 product.forEach((item) => {
-                    date = new Date(item.Start * 1000);
+                    date = new Date(item.Start * 1000)
                     date = date.setFullYear(
                         date.getFullYear(),
                         date.getMonth(),
-                        1,
-                    );
+                        1
+                    )
                     prices.push({
                         x: date,
                         y: item.Total,
-                    });
-                });
-                myData.datasets.push({ label: product[0].Board, data: prices });
-            });
-            return myData;
+                    })
+                })
+                myData.datasets.push({ label: product[0].Board, data: prices })
+            })
+            return myData
         }
 
-        console.log('creating chart');
+        console.log('creating chart')
 
         chart = new Chart(ctx, {
             type: 'line',
@@ -185,6 +185,6 @@
                 responsive: true,
             },
             data: createDataSets(data),
-        });
+        })
     </script>
 @endpush

@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hi {{ $user->calling_name }},</p>
 
     <p>
@@ -10,9 +10,9 @@
 
         <img
             alt="The board wishing you a happy birthday"
-            src="{{ asset("images/emails/birthday.jpg") }}"
+            src="{{ asset('images/emails/birthday.jpg') }}"
         />
     </p>
 
-    <p>Have a great day, Board {{ Config::string("proto.boardnumber") }}</p>
+    <p>Have a great day, Board {{ Config::string('proto.boardnumber') }}</p>
 @endsection

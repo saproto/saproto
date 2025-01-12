@@ -25,7 +25,7 @@
                             <td class="text-muted">#{{ $dinnerform->id }}</td>
                             <td>
                                 <a
-                                    href="{{ route("dinnerform::show", ["id" => $dinnerform->id]) }}"
+                                    href="{{ route('dinnerform::show', ['id' => $dinnerform->id]) }}"
                                 >
                                     {{ $dinnerform->restaurant }}
                                 </a>
@@ -33,7 +33,7 @@
                             <td>
                                 @isset($dinnerform->event)
                                     <a
-                                        href="{{ route("event::show", ["id" => $dinnerform->event->getPublicId()]) }}"
+                                        href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}"
                                     >
                                         {{ $dinnerform->event->title }}
                                     </a>
@@ -64,10 +64,10 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $dinnerform->start->format("Y m-d H:i") }}
+                                {{ $dinnerform->start->format('Y m-d H:i') }}
                             </td>
                             <td>
-                                {{ $dinnerform->end->format("Y m-d H:i") }}
+                                {{ $dinnerform->end->format('Y m-d H:i') }}
                             </td>
                             <td>
                                 €{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}
@@ -76,7 +76,7 @@
                                 @if ($dinnerform->orderedBy)
                                     <a
                                         class="btn btn-info badge"
-                                        href="{{ route("user::profile", ["id" => $dinnerform->orderedBy->getPublicId()]) }}"
+                                        href="{{ route('user::profile', ['id' => $dinnerform->orderedBy->getPublicId()]) }}"
                                     >
                                         {{ $dinnerform->orderedBy->name }}
                                     </a>
@@ -85,7 +85,7 @@
                             <td class="text-center px-4">
                                 <a
                                     class="btn btn-info badge"
-                                    href="{{ route("dinnerform::admin", ["id" => $dinnerform->id]) }}"
+                                    href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}"
                                 >
                                     View orders
                                 </a>
@@ -94,30 +94,30 @@
                                 @if (! $dinnerform->closed)
                                     @if ($dinnerform->isCurrent())
                                         @include(
-                                            "components.modals.confirm-modal",
+                                            'components.modals.confirm-modal',
                                             [
-                                                "action" => route("dinnerform::close", ["id" => $dinnerform->id]),
-                                                "text" => '<i class="fas fa-ban text-warning me-4"></i>',
-                                                "title" => "Confirm Close",
-                                                "message" => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
-                                                "confirm" => "Close",
+                                                'action' => route('dinnerform::close', ['id' => $dinnerform->id]),
+                                                'text' => '<i class="fas fa-ban text-warning me-4"></i>',
+                                                'title' => 'Confirm Close',
+                                                'message' => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
+                                                'confirm' => 'Close',
                                             ]
                                         )
                                     @endif
 
                                     <a
-                                        href="{{ route("dinnerform::edit", ["id" => $dinnerform->id]) }}"
+                                        href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}"
                                     >
                                         <i class="fas fa-edit me-4"></i>
                                     </a>
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("dinnerform::delete", ["id" => $dinnerform->id]),
-                                            "text" => '<i class="fas fa-trash text-danger"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?<br><br> This will also delete all orderlines!",
-                                            "confirm" => "Delete",
+                                            'action' => route('dinnerform::delete', ['id' => $dinnerform->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?<br><br> This will also delete all orderlines!",
+                                            'confirm' => 'Delete',
                                         ]
                                     )
                                 @endif

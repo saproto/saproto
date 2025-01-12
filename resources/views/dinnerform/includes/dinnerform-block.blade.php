@@ -2,7 +2,7 @@
     <div class="card-body text-start">
         <a
             class="stretched-link text-decoration-none"
-            href="{{ route("dinnerform::show", ["id" => $dinnerform->id]) }}"
+            href="{{ route('dinnerform::show', ['id' => $dinnerform->id]) }}"
         >
             @if ($dinnerform->hasExpired())
                 <div class="btn btn-danger btn-block mb-3">
@@ -36,7 +36,7 @@
 
         <span>
             <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-            {{ $dinnerform->generateTimespanText("D j M, H:i", "H:i", "-") }}
+            {{ $dinnerform->generateTimespanText('D j M, H:i', 'H:i', '-') }}
         </span>
 
         <br />

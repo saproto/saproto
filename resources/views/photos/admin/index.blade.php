@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Photo Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="col-lg-3">
             <div class="card mb-3">
@@ -15,14 +15,14 @@
                 <div class="card-body">
                     <form
                         method="post"
-                        action="{{ route("photo::admin::index") }}"
+                        action="{{ route('photo::admin::index') }}"
                         class="form-main"
                     >
                         {{ csrf_field() }}
                         <div class="input-group">
                             <input
                                 class="form-control"
-                                value="{{ $query ?? "" }}"
+                                value="{{ $query ?? '' }}"
                                 placeholder="Search albums"
                                 type="search"
                                 name="query"
@@ -45,7 +45,7 @@
 
                 <form
                     method="post"
-                    action="{{ route("photo::admin::create") }}"
+                    action="{{ route('photo::admin::create') }}"
                 >
                     {{ csrf_field() }}
                     <div class="card-body">
@@ -60,18 +60,18 @@
                             />
                         </div>
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "date",
-                                "label" => "Album date:",
-                                "placeholder" => strtotime(Carbon::now()),
+                                'name' => 'date',
+                                'label' => 'Album date:',
+                                'placeholder' => strtotime(Carbon::now()),
                             ]
                         )
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "private",
-                                "label" => "Private album",
+                                'name' => 'private',
+                                'label' => 'Private album',
                             ]
                         )
                     </div>
@@ -100,20 +100,20 @@
                         @foreach ($unpublished as $album)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
                                 @include(
-                                    "website.home.cards.card-bg-image",
+                                    'website.home.cards.card-bg-image',
                                     [
-                                        "url" => route("photo::admin::edit", ["id" => $album->id]),
-                                        "img" => $album->thumb(),
-                                        "html" => sprintf(
-                                            "<sub>%s</sub><br>%s<strong>%s</strong>",
-                                            date("M j, Y", $album->date_taken),
+                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'img' => $album->thumb(),
+                                        'html' => sprintf(
+                                            '<sub>%s</sub><br>%s<strong>%s</strong>',
+                                            date('M j, Y', $album->date_taken),
                                             $album->private
                                                 ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>'
                                                 : null,
                                             $album->name,
                                         ),
-                                        "photo_pop" => true,
-                                        "height" => 150,
+                                        'photo_pop' => true,
+                                        'height' => 150,
                                     ]
                                 )
                             </div>
@@ -133,20 +133,20 @@
                         @foreach ($published as $album)
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
                                 @include(
-                                    "website.home.cards.card-bg-image",
+                                    'website.home.cards.card-bg-image',
                                     [
-                                        "url" => route("photo::admin::edit", ["id" => $album->id]),
-                                        "img" => $album->thumb(),
-                                        "html" => sprintf(
-                                            "<sub>%s</sub><br>%s<strong>%s</strong>",
-                                            date("M j, Y", $album->date_taken),
+                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'img' => $album->thumb(),
+                                        'html' => sprintf(
+                                            '<sub>%s</sub><br>%s<strong>%s</strong>',
+                                            date('M j, Y', $album->date_taken),
                                             $album->private
                                                 ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>'
                                                 : null,
                                             $album->name,
                                         ),
-                                        "photo_pop" => true,
-                                        "height" => 150,
+                                        'photo_pop' => true,
+                                        'height' => 150,
                                     ]
                                 )
                             </div>

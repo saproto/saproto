@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Become a member of S.A. Proto!
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body">
@@ -24,7 +24,7 @@
                         If you have any problems, don't hesitate to come by in
                         the Protopolis (Zilverling A230), and ask one of
                         <a
-                            href="{{ route("page::show", ["slug" => "board"]) }}"
+                            href="{{ route('page::show', ['slug' => 'board']) }}"
                         >
                             our board members
                         </a>
@@ -39,7 +39,7 @@
                         </div>
 
                         @foreach ($todo as $item)
-                            @include("users.becomeamember_include", $item)
+                            @include('users.becomeamember_include', $item)
                         @endforeach
                     @endif
 
@@ -49,7 +49,7 @@
                         </div>
 
                         @foreach ($done as $item)
-                            @include("users.becomeamember_include", $item)
+                            @include('users.becomeamember_include', $item)
                         @endforeach
                     @endif
                 </ul>

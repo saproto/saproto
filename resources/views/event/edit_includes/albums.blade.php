@@ -4,7 +4,7 @@
 
         <form
             method="post"
-            action="{{ route("event::linkalbum", ["event" => $event->id]) }}"
+            action="{{ route('event::linkalbum', ['event' => $event->id]) }}"
         >
             @csrf
 
@@ -17,7 +17,7 @@
                     <span class="badge bg-primary">
                         {{ $album->name }}
                         <a
-                            href="{{ route("event::unlinkalbum", ["album" => $album->id]) }}"
+                            href="{{ route('event::unlinkalbum', ['album' => $album->id]) }}"
                         >
                             <i class="fas fa-times ms-2 text-white"></i>
                         </a>
@@ -28,11 +28,11 @@
                     <hr />
                 @endif
 
-                @if (\App\Models\PhotoAlbum::whereNull("event_id")->count() > 0)
+                @if (\App\Models\PhotoAlbum::whereNull('event_id')->count() > 0)
                     <select name="album_id" class="form-control" required>
-                        @foreach (\App\Models\PhotoAlbum::whereNull("event_id")->orderBy("date_taken", "desc")->get()as $album)
+                        @foreach (\App\Models\PhotoAlbum::whereNull('event_id')->orderBy('date_taken', 'desc')->get()as $album)
                             <option value="{{ $album->id }}">
-                                {{ date("Y-m-d", $album->date_taken) }} :
+                                {{ date('Y-m-d', $album->date_taken) }} :
                                 {{ $album->name }}
                             </option>
                         @endforeach
@@ -44,7 +44,7 @@
                 @endif
             </div>
 
-            @if (\App\Models\PhotoAlbum::whereNull("event_id")->count() > 0)
+            @if (\App\Models\PhotoAlbum::whereNull('event_id')->count() > 0)
                 <div class="card-footer">
                     <input
                         type="submit"

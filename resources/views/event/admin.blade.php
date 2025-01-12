@@ -1,14 +1,14 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Event Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <a
-                href="{{ route("event::checklist", ["id" => $event->id]) }}"
+                href="{{ route('event::checklist', ['id' => $event->id]) }}"
                 class="btn btn-success btn-block mb-3"
             >
                 Participant Checklist
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <a
                             class="btn btn-success btn-block disabled"
-                            href="{{ route("event::scan", ["id" => $event->id]) }}"
+                            href="{{ route('event::scan', ['id' => $event->id]) }}"
                         >
                             Start Scanner Application for Event
                         </a>
@@ -102,7 +102,7 @@
                                                             Date of Purchase
                                                         </th>
                                                         <th>Ticket Scanned</th>
-                                                        @can("board")
+                                                        @can('board')
                                                             <th></th>
                                                         @endcan
                                                     </tr>
@@ -175,13 +175,13 @@
                                                             >
                                                                 <a
                                                                     data-id="{{ $purchase->barcode }}"
-                                                                    class="{{ $purchase->scanned ? "unscan" : "scan" }} dontprint"
+                                                                    class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint"
                                                                     href="#"
                                                                 >
-                                                                    {{ $purchase->scanned ? "Unscan" : "Scan Manually" }}
+                                                                    {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
                                                                 </a>
                                                             </td>
-                                                            @can("board")
+                                                            @can('board')
                                                                 <td
                                                                     class="dontprint"
                                                                 >
@@ -191,18 +191,18 @@
                                                                         Paid
                                                                     @else
                                                                         @include(
-                                                                            "components.modals.confirm-modal",
+                                                                            'components.modals.confirm-modal',
                                                                             [
-                                                                                "action" => route("omnomcom::orders::delete", [
-                                                                                    "id" => $purchase->orderline->id,
+                                                                                'action' => route('omnomcom::orders::delete', [
+                                                                                    'id' => $purchase->orderline->id,
                                                                                 ]),
-                                                                                "classes" => "badge bg-danger",
-                                                                                "text" => "Delete",
-                                                                                "title" => "Confirm Delete",
-                                                                                "message" =>
-                                                                                    "Are you sure you want to delete one ticket for " .
+                                                                                'classes' => 'badge bg-danger',
+                                                                                'text' => 'Delete',
+                                                                                'title' => 'Confirm Delete',
+                                                                                'message' =>
+                                                                                    'Are you sure you want to delete one ticket for ' .
                                                                                     $purchase->user->name .
-                                                                                    "?",
+                                                                                    '?',
                                                                             ]
                                                                         )
                                                                     @endif
@@ -228,51 +228,48 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', (_) => {
-            const scanList = Array.from(
-                document.getElementsByClassName('scan'),
-            );
+            const scanList = Array.from(document.getElementsByClassName('scan'))
             const unscanList = Array.from(
-                document.getElementsByClassName('unscan'),
-            );
-            scanList.forEach((el) => setEventListener(el, false));
-            unscanList.forEach((el) => setEventListener(el, true));
-        });
+                document.getElementsByClassName('unscan')
+            )
+            scanList.forEach((el) => setEventListener(el, false))
+            unscanList.forEach((el) => setEventListener(el, true))
+        })
 
         const scanRequest = (barcode, unscan) =>
-            get('{{ route("api::scan", ["event" => $event->id]) }}', {
+            get('{{ route('api::scan', ['event' => $event->id]) }}', {
                 barcode: barcode,
                 ...(unscan && { unscan: true }),
-            });
+            })
 
         function setEventListener(el, unscan) {
             el.addEventListener('click', (e) => {
-                e.preventDefault();
-                let barcode = e.target.getAttribute('data-id');
-                let parent = e.target.parentElement;
-                if (barcode === undefined)
-                    throw new Error("Can't find barcode");
+                e.preventDefault()
+                let barcode = e.target.getAttribute('data-id')
+                let parent = e.target.parentElement
+                if (barcode === undefined) throw new Error("Can't find barcode")
                 scanRequest(barcode, unscan)
                     .then((_) => {
-                        console.log('Scanned barcode ' + barcode);
-                        let link = document.createElement('a');
-                        link.href = '#';
-                        link.setAttribute('data-id', barcode);
-                        link.innerHTML = unscan ? 'Scan Manually' : 'Unscan';
+                        console.log('Scanned barcode ' + barcode)
+                        let link = document.createElement('a')
+                        link.href = '#'
+                        link.setAttribute('data-id', barcode)
+                        link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
                         link.className = unscan
                             ? 'scan dontprint'
-                            : 'unscan dontprint';
-                        parent.innerHTML = '';
-                        parent.append(link);
-                        setEventListener(link, !unscan);
+                            : 'unscan dontprint'
+                        parent.innerHTML = ''
+                        parent.append(link)
+                        setEventListener(link, !unscan)
                     })
                     .catch((err) => {
-                        console.error(err);
-                        window.alert("Couldn't register scan.");
-                    });
-            });
+                        console.error(err)
+                        window.alert("Couldn't register scan.")
+                    })
+            })
         }
     </script>
 @endpush

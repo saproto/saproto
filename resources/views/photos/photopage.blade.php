@@ -1,16 +1,16 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Photo
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-12 col-lg-10 col-xl-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-end">
                     <a
-                        href="{{ route("photo::album::list", ["id" => $photo->album_id, "page" => $photo->getAlbumPageNumber(24)]) }}"
+                        href="{{ route('photo::album::list', ['id' => $photo->album_id, 'page' => $photo->getAlbumPageNumber(24)]) }}"
                         class="btn btn-success float-start me-3"
                     >
                         <i class="fas fa-images me-2"></i>
@@ -23,7 +23,7 @@
 
                     @if ($previous != null && $previous->id != $photo->id)
                         <a
-                            href="{{ route("photo::view", ["id" => $previous]) }}"
+                            href="{{ route('photo::view', ['id' => $previous]) }}"
                             class="btn btn-dark me-3"
                         >
                             <i class="fas fa-arrow-left"></i>
@@ -31,8 +31,8 @@
                     @endif
 
                     <a
-                        href="{{ route("photo::likes", ["id" => $photo->id]) }}"
-                        class="btn {{ $photo->liked_by_me ? "btn-info" : "btn-outline-info" }} me-3"
+                        href="{{ route('photo::likes', ['id' => $photo->id]) }}"
+                        class="btn {{ $photo->liked_by_me ? 'btn-info' : 'btn-outline-info' }} me-3"
                     >
                         <i class="fas fa-heart"></i>
                         {{ $photo->likes_count }}
@@ -52,7 +52,7 @@
 
                     @if ($next != null && $next->id != $photo->id)
                         <a
-                            href="{{ route("photo::view", ["id" => $next]) }}"
+                            href="{{ route('photo::view', ['id' => $next]) }}"
                             class="btn btn-dark"
                         >
                             <i class="fas fa-arrow-right"></i>
@@ -73,9 +73,9 @@
                     If there is a photo that you would like removed, please
                     contact
                     <a
-                        href="mailto:photos&#64;{{ Config::string("proto.emaildomain") }}"
+                        href="mailto:photos&#64;{{ Config::string('proto.emaildomain') }}"
                     >
-                        photos&#64;{{ Config::string("proto.emaildomain") }}.
+                        photos&#64;{{ Config::string('proto.emaildomain') }}.
                     </a>
                 </div>
             </div>
@@ -83,7 +83,7 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.addEventListener('keydown', e => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
@@ -113,9 +113,9 @@
         history.replaceState(
             null,
             document.title,
-            location.pathname + '#!/history',
-        );
-        history.pushState(null, document.title, location.pathname);
+            location.pathname + '#!/history'
+        )
+        history.pushState(null, document.title, location.pathname)
 
         window.addEventListener(
             'popstate',
@@ -124,18 +124,18 @@
                     history.replaceState(
                         null,
                         document.title,
-                        location.pathname,
-                    );
+                        location.pathname
+                    )
                     setTimeout(
                         (_) =>
                             location.replace(
-                                '{{ route("photo::album::list", ["id" => $photo->album_id]) . "?page=" . $photo->albumPage }}',
+                                '{{ route('photo::album::list', ['id' => $photo->album_id]) . '?page=' . $photo->albumPage }}'
                             ),
-                        10,
-                    );
+                        10
+                    )
                 }
             },
-            false,
-        );
+            false
+        )
     </script>
 @endpush

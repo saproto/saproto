@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Activity Administration
 @endsection
 
-@section("container")
+@section('container')
     @if (count($activities) > 0)
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -36,7 +36,7 @@
                         @foreach ($activities as $activity)
                             <form
                                 method="post"
-                                action="{{ route("event::financial::close", ["id" => $activity->id]) }}"
+                                action="{{ route('event::financial::close', ['id' => $activity->id]) }}"
                             >
                                 <tr>
                                     {{ csrf_field() }}
@@ -44,12 +44,12 @@
                                     <td>
                                         @if ($activity->event)
                                             <a
-                                                href="{{ route("event::show", ["id" => $activity->event->getPublicId()]) }}"
+                                                href="{{ route('event::show', ['id' => $activity->event->getPublicId()]) }}"
                                             >
                                                 {{ $activity->event->title }}
                                             </a>
                                             <br />
-                                            {{ date("D j F Y", $activity->event->start) }}
+                                            {{ date('D j F Y', $activity->event->start) }}
                                         @endif
                                     </td>
 
@@ -75,7 +75,7 @@
                                             name="account"
                                             class="form-control"
                                         >
-                                            @foreach (\App\Models\Account::orderBy("account_number", "asc")->get() as $account)
+                                            @foreach (\App\Models\Account::orderBy('account_number', 'asc')->get() as $account)
                                                 <option
                                                     value="{{ $account->id }}"
                                                 >

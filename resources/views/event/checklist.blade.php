@@ -1,21 +1,21 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Participant checklist for {{ $event->title }}
     <a
-        href="{{ route("event::show", ["id" => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
         class="btn btn-default float-end"
     >
         Back to event
     </a>
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8 col-sm-10 col-xs-12">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body">
@@ -62,10 +62,10 @@
                                     <td>
                                         @if ($participation)
                                             <span
-                                                class="cursor-pointer is_present badge bg-{{ $participation->is_present ? "success" : "danger" }}"
+                                                class="cursor-pointer is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }}"
                                                 data-id="{{ $participation->id }}"
                                             >
-                                                {{ $participation->is_present ? "Present" : "Absent" }}
+                                                {{ $participation->is_present ? 'Present' : 'Absent' }}
                                             </span>
                                         @endif
                                     </td>
@@ -123,25 +123,25 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        present = document.getElementById('present');
+        present = document.getElementById('present')
 
         document.querySelectorAll('.is_present').forEach((el) => {
             el.onclick = (_) => {
                 get(
-                    '{{ route("event::togglepresence", ["id" => "id"]) }}'.replace(
+                    '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
                         'id',
-                        el.getAttribute('data-id'),
-                    ),
+                        el.getAttribute('data-id')
+                    )
                 ).then((data) => {
-                    el.classList.toggle('bg-success');
-                    el.classList.toggle('bg-danger');
+                    el.classList.toggle('bg-success')
+                    el.classList.toggle('bg-danger')
                     el.innerHTML =
-                        el.innerHTML === 'Present' ? 'Absent' : 'Present';
-                    present.innerHTML = data;
-                });
-            };
-        });
+                        el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                    present.innerHTML = data
+                })
+            }
+        })
     </script>
 @endpush

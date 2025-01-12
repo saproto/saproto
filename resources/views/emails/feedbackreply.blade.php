@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey there {{ $user->calling_name }},</p>
 
     <p>
@@ -41,14 +41,14 @@
                 <p>
                     <sub>
                         {{ $user->name }} --
-                        {{ $feedback->created_at->format("j M Y, H:i") }}
+                        {{ $feedback->created_at->format('j M Y, H:i') }}
                     </sub>
                 </p>
             </td>
         </tr>
     </table>
 
-    <p>And the board {{ $accepted ? "liked it!" : "replied with:" }}</p>
+    <p>And the board {{ $accepted ? 'liked it!' : 'replied with:' }}</p>
 
     <table
         style="
@@ -67,7 +67,7 @@
 
                 <hr />
                 <p>
-                    <sub>Board of S.A. Proto -- {{ date("j M Y, H:i") }}</sub>
+                    <sub>Board of S.A. Proto -- {{ date('j M Y, H:i') }}</sub>
                 </p>
             </td>
         </tr>
@@ -77,7 +77,7 @@
         <sup style="line-height: 1.5">
             You receive this e-mail because you posted something on the
             <a
-                href="{{ route("feedback::index", ["category" => $feedback->category->url]) }}"
+                href="{{ route('feedback::index', ['category' => $feedback->category->url]) }}"
             >
                 {{ $feedback->category->title }} board
             </a>

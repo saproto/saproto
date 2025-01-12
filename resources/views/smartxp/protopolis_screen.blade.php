@@ -1,10 +1,10 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("page-title")
+@section('page-title')
     Protopolis Screen v12
 @endsection
 
-@push("stylesheet")
+@push('stylesheet')
     <style>
         html {
             width: 100vw;
@@ -68,11 +68,11 @@
     </style>
 @endpush
 
-@section("body")
+@section('body')
     <div class="row text-black">
         {{-- narrowcasting --}}
         <div class="col-9 protubecard">
-            @include("narrowcasting.display")
+            @include('narrowcasting.display')
         </div>
 
         <div class="ms-2 col h-auto d-flex flex-column">
@@ -130,283 +130,282 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         function updateTimetable() {
-            const timetable = document.getElementById('timetable');
-            timetable.innerHTML = '';
-            get('{{ route("api::screen::timetable") }}')
+            const timetable = document.getElementById('timetable')
+            timetable.innerHTML = ''
+            get('{{ route('api::screen::timetable') }}')
                 .then((data) => {
                     if (data.length > 0) {
-                        let count = 0;
+                        let count = 0
                         data.forEach((timetableItem) => {
-                            if (count >= 3) return;
+                            if (count >= 3) return
                             if (!timetableItem.over) {
-                                let start = moment.unix(timetableItem.start);
-                                let end = moment.unix(timetableItem.end);
+                                let start = moment.unix(timetableItem.start)
+                                let end = moment.unix(timetableItem.end)
                                 let time =
                                     start.format('HH:mm') +
                                     ' - ' +
-                                    end.format('HH:mm');
-                                let title = timetableItem.title;
+                                    end.format('HH:mm')
+                                let title = timetableItem.title
 
-                                let activityDiv = document.createElement('div');
-                                activityDiv.className = 'activity';
+                                let activityDiv = document.createElement('div')
+                                activityDiv.className = 'activity'
 
                                 if (timetableItem.studyShort) {
                                     let yearSpan =
-                                        document.createElement('span');
-                                    yearSpan.className = 'float-end ms-2';
+                                        document.createElement('span')
+                                    yearSpan.className = 'float-end ms-2'
                                     yearSpan.innerHTML =
                                         '<i class="fas fa-graduation-cap fa-fw me-2"></i>' +
                                         timetableItem.studyShort +
                                         ' ' +
                                         (timetableItem.year
                                             ? 'Year ' + timetableItem.year
-                                            : '');
-                                    activityDiv.appendChild(yearSpan);
+                                            : '')
+                                    activityDiv.appendChild(yearSpan)
                                 }
 
                                 let titleStrong =
-                                    document.createElement('strong');
-                                titleStrong.innerHTML = timetableItem.type;
-                                activityDiv.appendChild(titleStrong);
-                                activityDiv.innerHTML += '<br>';
+                                    document.createElement('strong')
+                                titleStrong.innerHTML = timetableItem.type
+                                activityDiv.appendChild(titleStrong)
+                                activityDiv.innerHTML += '<br>'
 
-                                let titleSpan = document.createElement('span');
+                                let titleSpan = document.createElement('span')
                                 titleSpan.className = timetableItem.current
                                     ? 'current'
-                                    : '';
-                                titleSpan.innerHTML = title;
-                                activityDiv.appendChild(titleSpan);
+                                    : ''
+                                titleSpan.innerHTML = title
+                                activityDiv.appendChild(titleSpan)
 
-                                let locationDiv = document.createElement('div');
-                                locationDiv.className = 'w-100 h-10';
+                                let locationDiv = document.createElement('div')
+                                locationDiv.className = 'w-100 h-10'
                                 locationDiv.innerHTML +=
                                     '<i class="fas fa-clock fa-fw me-1"></i>' +
-                                    time;
+                                    time
 
-                                let placeSpan = document.createElement('span');
-                                placeSpan.className = 'float-end';
+                                let placeSpan = document.createElement('span')
+                                placeSpan.className = 'float-end'
                                 placeSpan.innerHTML =
                                     '<i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
-                                    timetableItem.place;
-                                locationDiv.appendChild(placeSpan);
-                                activityDiv.appendChild(locationDiv);
-                                activityDiv.innerHTML += '<br>';
-                                activityDiv.innerHTML += '<hr>';
+                                    timetableItem.place
+                                locationDiv.appendChild(placeSpan)
+                                activityDiv.appendChild(locationDiv)
+                                activityDiv.innerHTML += '<br>'
+                                activityDiv.innerHTML += '<hr>'
 
-                                timetable.appendChild(activityDiv);
-                                count++;
+                                timetable.appendChild(activityDiv)
+                                count++
                             }
-                        });
+                        })
                         if (count === 0) {
                             timetable.innerHTML =
-                                '<div class="notice">No more lectures today!</div>';
+                                '<div class="notice">No more lectures today!</div>'
                         }
                     } else {
                         timetable.innerHTML =
-                            '<div class="notice">No lectures today!</div>';
+                            '<div class="notice">No lectures today!</div>'
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error(err)
                     timetable.innerHTML =
-                        '<div class="notice">Lectures could not be found...</div>';
-                });
+                        '<div class="notice">Lectures could not be found...</div>'
+                })
         }
 
         function updateActivities() {
-            get('{{ route("api::events::upcoming", ["limit" => 4]) }}')
+            get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
                 .then((data) => {
                     if (data.length > 0) {
-                        document.getElementById('activities').innerHTML = '';
+                        document.getElementById('activities').innerHTML = ''
                         data.forEach((activity) => {
-                            let start = moment.unix(activity.start);
-                            let end = moment.unix(activity.end);
-                            let time;
+                            let start = moment.unix(activity.start)
+                            let end = moment.unix(activity.end)
+                            let time
                             if (start.format('DD-MM') === end.format('DD-MM')) {
                                 time =
                                     start.format('DD-MM, HH:mm') +
                                     ' - ' +
-                                    end.format('HH:mm');
+                                    end.format('HH:mm')
                             } else {
                                 time =
                                     start.format('DD-MM, HH:mm') +
                                     ' - ' +
-                                    end.format('DD-MM, HH:mm');
+                                    end.format('DD-MM, HH:mm')
                             }
-                            let newDiv = document.createElement('div');
+                            let newDiv = document.createElement('div')
                             newDiv.className =
                                 'activity bg-img protubecard protubebackground flex-grow-1' +
-                                (activity.over ? 'past' : '');
-                            newDiv.style.padding = '15px';
+                                (activity.over ? 'past' : '')
+                            newDiv.style.padding = '15px'
                             if (activity.image) {
                                 newDiv.style.background =
                                     'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url(' +
                                     activity.image +
-                                    ')';
-                                newDiv.style.backgroundSize = 'cover';
+                                    ')'
+                                newDiv.style.backgroundSize = 'cover'
                                 newDiv.style.backgroundPosition =
-                                    'center center';
-                                newDiv.style.backgroundRepeat = 'no-repeat';
+                                    'center center'
+                                newDiv.style.backgroundRepeat = 'no-repeat'
                             }
 
-                            let titleDiv = document.createElement('div');
-                            titleDiv.style.overflowX = 'hidden';
-                            titleDiv.style.display = 'block';
-                            titleDiv.className = 'mx-2';
+                            let titleDiv = document.createElement('div')
+                            titleDiv.style.overflowX = 'hidden'
+                            titleDiv.style.display = 'block'
+                            titleDiv.className = 'mx-2'
 
-                            let titleH3 = document.createElement('h3');
-                            titleH3.style.whiteSpace = 'nowrap';
-                            titleH3.style.width = 'fit-content';
+                            let titleH3 = document.createElement('h3')
+                            titleH3.style.whiteSpace = 'nowrap'
+                            titleH3.style.width = 'fit-content'
 
-                            let titleSpan = document.createElement('span');
-                            titleSpan.innerHTML = activity.title;
-                            titleSpan.className = 'me-5';
-                            titleSpan.style.display = 'inline-block';
-                            titleH3.appendChild(titleSpan);
+                            let titleSpan = document.createElement('span')
+                            titleSpan.innerHTML = activity.title
+                            titleSpan.className = 'me-5'
+                            titleSpan.style.display = 'inline-block'
+                            titleH3.appendChild(titleSpan)
 
-                            titleDiv.appendChild(titleH3);
-                            let timeDiv = document.createElement('div');
+                            titleDiv.appendChild(titleH3)
+                            let timeDiv = document.createElement('div')
                             timeDiv.innerHTML =
-                                '<i class="fas fa-clock fa-fw me-1"></i>' +
-                                time;
+                                '<i class="fas fa-clock fa-fw me-1"></i>' + time
 
-                            let locationSpan = document.createElement('div');
+                            let locationSpan = document.createElement('div')
                             locationSpan.innerHTML =
                                 '<i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
                                 activity.location +
-                                '</span>';
+                                '</span>'
 
-                            newDiv.appendChild(titleDiv);
-                            newDiv.appendChild(timeDiv);
-                            newDiv.appendChild(locationSpan);
+                            newDiv.appendChild(titleDiv)
+                            newDiv.appendChild(timeDiv)
+                            newDiv.appendChild(locationSpan)
                             document
                                 .getElementById('activities')
-                                .appendChild(newDiv);
-                        });
+                                .appendChild(newDiv)
+                        })
 
                         document
                             .getElementById('activities')
                             .childNodes.forEach((activity) => {
-                                let div = activity.childNodes[0];
-                                let H3 = div.childNodes[0];
+                                let div = activity.childNodes[0]
+                                let H3 = div.childNodes[0]
                                 if (H3.clientWidth > div.clientWidth) {
-                                    H3.classList.add('scroll-title');
+                                    H3.classList.add('scroll-title')
                                     H3.appendChild(
-                                        H3.childNodes[0].cloneNode(true),
-                                    );
+                                        H3.childNodes[0].cloneNode(true)
+                                    )
                                 }
-                            });
+                            })
                     } else {
                         document.getElementById('activities').innerHTML =
-                            '<div class="notice">No upcoming activities!</div>';
+                            '<div class="notice">No upcoming activities!</div>'
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error(err)
                     document.getElementById('activities').innerHTML =
-                        '<div class="notice">Something went wrong during retrieval...</div>';
-                });
+                        '<div class="notice">Something went wrong during retrieval...</div>'
+                })
         }
 
         function updateProtopeners() {
-            const timetable = document.getElementById('protopeners-timetable');
-            const protopolisFa = document.getElementById('protopolis-fa');
+            const timetable = document.getElementById('protopeners-timetable')
+            const protopolisFa = document.getElementById('protopolis-fa')
 
-            get('{{ route("api::screen::timetable::protopeners") }}')
+            get('{{ route('api::screen::timetable::protopeners') }}')
                 .then((data) => {
                     if (data.length > 0) {
                         document.getElementById(
-                            'protopeners-timetable',
-                        ).innerHTML = '';
+                            'protopeners-timetable'
+                        ).innerHTML = ''
                         let open = false,
-                            count = 0;
+                            count = 0
                         data.forEach((protOpener) => {
-                            if (protOpener.over || count > 1) return;
-                            else if (protOpener.current) open = true;
-                            let start = moment.unix(protOpener.start);
-                            let end = moment.unix(protOpener.end);
+                            if (protOpener.over || count > 1) return
+                            else if (protOpener.current) open = true
+                            let start = moment.unix(protOpener.start)
+                            let end = moment.unix(protOpener.end)
                             let time =
                                 start.format('HH:mm') +
                                 ' - ' +
-                                end.format('HH:mm');
+                                end.format('HH:mm')
 
-                            let newDiv = document.createElement('div');
+                            let newDiv = document.createElement('div')
                             newDiv.className =
                                 'activity ' +
-                                (protOpener.current ? 'current' : '');
+                                (protOpener.current ? 'current' : '')
 
-                            let timeDiv = document.createElement('div');
-                            timeDiv.className = 'float-start h-100';
-                            timeDiv.innerHTML = time;
+                            let timeDiv = document.createElement('div')
+                            timeDiv.className = 'float-start h-100'
+                            timeDiv.innerHTML = time
 
-                            let titleDiv = document.createElement('div');
-                            titleDiv.className = 'float-end h-100';
+                            let titleDiv = document.createElement('div')
+                            titleDiv.className = 'float-end h-100'
                             titleDiv.innerHTML =
-                                '<strong>' + protOpener.title + '</strong>';
+                                '<strong>' + protOpener.title + '</strong>'
 
-                            newDiv.appendChild(timeDiv);
-                            newDiv.appendChild(titleDiv);
+                            newDiv.appendChild(timeDiv)
+                            newDiv.appendChild(titleDiv)
 
                             let protOpenDiv = document.getElementById(
-                                'protopeners-timetable',
-                            );
-                            protOpenDiv.appendChild(newDiv);
+                                'protopeners-timetable'
+                            )
+                            protOpenDiv.appendChild(newDiv)
                             protOpenDiv.appendChild(
-                                document.createElement('br'),
-                            );
+                                document.createElement('br')
+                            )
                             protOpenDiv.appendChild(
-                                document.createElement('hr'),
-                            );
+                                document.createElement('hr')
+                            )
 
-                            count++;
-                        });
+                            count++
+                        })
                         if (open) {
                             protopolisFa.classList.replace(
                                 'fa-door-closed',
-                                'fa-door-open',
-                            );
+                                'fa-door-open'
+                            )
                         } else {
                             protopolisFa.classList.replace(
                                 'fa-door-open',
-                                'fa-door-closed',
-                            );
+                                'fa-door-closed'
+                            )
                         }
                         if (count === 0)
                             timetable.innerHTML =
-                                '<div class="notice">Protopolis closed for today!</div>';
+                                '<div class="notice">Protopolis closed for today!</div>'
                     } else {
                         timetable.innerHTML =
-                            '<div class="notice">Protopolis closed today!</div>';
+                            '<div class="notice">Protopolis closed today!</div>'
                     }
                 })
                 .catch((err) => {
-                    console.error(err);
+                    console.error(err)
                     timetable.innerHTML =
-                        '<div class="notice">Something went wrong during retrieval...</div>';
-                });
+                        '<div class="notice">Something went wrong during retrieval...</div>'
+                })
         }
 
         function updateClock() {
             document.getElementById('clock').innerHTML =
-                moment().format('HH:mm:ss');
+                moment().format('HH:mm:ss')
         }
 
         window.addEventListener('load', (_) => {
-            updateTimetable();
-            updateActivities();
-            updateProtopeners();
-            updateClock();
+            updateTimetable()
+            updateActivities()
+            updateProtopeners()
+            updateClock()
 
-            const everySecond = 1000;
-            const everyMinute = 60 * 1000;
-            const everyFiveMinutes = 5 * 60 * 1000;
-            setInterval(updateTimetable, everyFiveMinutes);
-            setInterval(updateActivities, everyFiveMinutes);
-            setInterval(updateProtopeners, everyMinute);
-            setInterval(updateClock, everySecond);
-        });
+            const everySecond = 1000
+            const everyMinute = 60 * 1000
+            const everyFiveMinutes = 5 * 60 * 1000
+            setInterval(updateTimetable, everyFiveMinutes)
+            setInterval(updateActivities, everyFiveMinutes)
+            setInterval(updateProtopeners, everyMinute)
+            setInterval(updateClock, everySecond)
+        })
     </script>
 @endpush

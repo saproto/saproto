@@ -1,24 +1,24 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     News Admin
 @endsection
 
-@section("container")
+@section('container')
     <div id="news-admin" class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("news::create", ["is_weekly" => true]) }}"
+                        href="{{ route('news::create', ['is_weekly' => true]) }}"
                         class="badge bg-warning float-end ms-3"
                     >
                         Create a new weekly.
                     </a>
 
                     <a
-                        href="{{ route("news::create", ["is_weekly" => false]) }}"
+                        href="{{ route('news::create', ['is_weekly' => false]) }}"
                         class="badge bg-info float-end"
                     >
                         Create a new news item.
@@ -41,7 +41,7 @@
                                 <td class="title">{{ $newsitem->title }}</td>
                                 <td class="published-at">
                                     <span
-                                        class="text-{{ $newsitem->isPublished() ? "primary" : "muted" }}"
+                                        class="text-{{ $newsitem->isPublished() ? 'primary' : 'muted' }}"
                                     >
                                         {{ $newsitem->published_at }}
                                     </span>
@@ -59,19 +59,19 @@
                                     </a>
 
                                     <a
-                                        href="{{ route("news::edit", ["id" => $newsitem->id]) }}"
+                                        href="{{ route('news::edit', ['id' => $newsitem->id]) }}"
                                     >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("news::delete", ["id" => $newsitem->id]),
-                                            "text" => '<i class="fas fa-trash text-danger"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" => "Are you sure you want to delete this news item?",
-                                            "confirm" => "Delete",
+                                            'action' => route('news::delete', ['id' => $newsitem->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => 'Are you sure you want to delete this news item?',
+                                            'confirm' => 'Delete',
                                         ]
                                     )
                                 </td>

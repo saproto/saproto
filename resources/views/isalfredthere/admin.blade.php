@@ -1,6 +1,6 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     IsAlfredThere.nl
 @endsection
 
@@ -9,18 +9,18 @@
     use Carbon\Carbon;
 @endphp
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
             <form
                 method="post"
-                action="{{ route("minisites::isalfredthere::update") }}"
+                action="{{ route('minisites::isalfredthere::update') }}"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body where_is_alfred">
@@ -29,7 +29,7 @@
                                 You are there!
                             @elseif ($status == IsAlfredThereEnum::AWAY->value)
                                 You'll be back at
-                                {{ Carbon::parse($unix)->format("Y-m-d H:i") }}.
+                                {{ Carbon::parse($unix)->format('Y-m-d H:i') }}.
                             @elseif ($status == IsAlfredThereEnum::JUR->value)
                                 You do not seem to be Alfred. Do you happen to feel like a Jur today?
                             @else
@@ -47,7 +47,7 @@
                                 id="where_is_alfred_1"
                                 value="there"
                                 required
-                                {{ $status == IsAlfredThereEnum::THERE->value ? "checked" : "" }}
+                                {{ $status == IsAlfredThereEnum::THERE->value ? 'checked' : '' }}
                             />
                             <label
                                 class="form-check-label"
@@ -65,7 +65,7 @@
                                 id="where_is_jur"
                                 value="jur"
                                 required
-                                {{ $status == IsAlfredThereEnum::JUR->value ? "checked" : "" }}
+                                {{ $status == IsAlfredThereEnum::JUR->value ? 'checked' : '' }}
                             />
                             <label class="form-check-label" for="where_is_jur">
                                 I'm not Alfred, I'm Jur!
@@ -80,7 +80,7 @@
                                 id="where_is_alfred_2"
                                 value="away"
                                 required
-                                {{ $status == IsAlfredThereEnum::AWAY->value ? "checked" : "" }}
+                                {{ $status == IsAlfredThereEnum::AWAY->value ? 'checked' : '' }}
                             />
                             <label
                                 class="form-check-label"
@@ -98,7 +98,7 @@
                                 id="where_is_alfred_3"
                                 value="unknown"
                                 required
-                                {{ $status == IsAlfredThereEnum::UNKNOWN->value ? "checked" : "" }}
+                                {{ $status == IsAlfredThereEnum::UNKNOWN->value ? 'checked' : '' }}
                             />
                             <label
                                 class="form-check-label"
@@ -116,7 +116,7 @@
                                 id="where_is_alfred_4"
                                 value="text"
                                 required
-                                {{ $status == IsAlfredThereEnum::TEXT_ONLY->value ? "checked" : "" }}
+                                {{ $status == IsAlfredThereEnum::TEXT_ONLY->value ? 'checked' : '' }}
                             />
                             <label
                                 class="form-check-label"
@@ -127,22 +127,22 @@
                         </div>
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "back",
-                                "label" => "I'll be back around:",
-                                "placeholder" =>
+                                'name' => 'back',
+                                'label' => "I'll be back around:",
+                                'placeholder' =>
                                     $status == IsAlfredThereEnum::AWAY->value
                                         ? Carbon::parse($unix)->timestamp
-                                        : strtotime("now +1 hour"),
-                                "form_class_name" =>
-                                    $status == IsAlfredThereEnum::AWAY->value ? "" : "d-none",
+                                        : strtotime('now +1 hour'),
+                                'form_class_name' =>
+                                    $status == IsAlfredThereEnum::AWAY->value ? '' : 'd-none',
                             ]
                         )
 
                         <div
                             id="alfred-text"
-                            class="{{ $status == IsAlfredThereEnum::AWAY->value || $status == IsAlfredThereEnum::TEXT_ONLY->value ? "" : "d-none" }}"
+                            class="{{ $status == IsAlfredThereEnum::AWAY->value || $status == IsAlfredThereEnum::TEXT_ONLY->value ? '' : 'd-none' }}"
                         >
                             <br />
                             <input
@@ -169,35 +169,35 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const dateSelect = document.getElementById('datetimepicker-back-form');
-        const dateBack = document.getElementById('datetimepicker-back');
-        const alfredText = document.getElementById('alfred-text');
+        const dateSelect = document.getElementById('datetimepicker-back-form')
+        const dateBack = document.getElementById('datetimepicker-back')
+        const alfredText = document.getElementById('alfred-text')
 
         const radioList = Array.from(
-            document.querySelectorAll('.where_is_alfred input[type="radio"]'),
-        );
+            document.querySelectorAll('.where_is_alfred input[type="radio"]')
+        )
         radioList.forEach((el) => {
             el.addEventListener('change', (_) => {
                 if (
                     el.checked &&
                     el.value === '{{ IsAlfredThereEnum::AWAY }}'
                 ) {
-                    dateSelect.classList.remove('d-none');
-                    alfredText.classList.remove('d-none');
+                    dateSelect.classList.remove('d-none')
+                    alfredText.classList.remove('d-none')
                     alfredText.querySelector('input').placeholder =
-                        'Additional message';
-                    dateBack.required = true;
+                        'Additional message'
+                    dateBack.required = true
                 } else if (el.checked && el.value === 'text') {
-                    alfredText.classList.remove('d-none');
-                    dateSelect.classList.add('d-none');
-                    alfredText.querySelector('input').placeholder = 'Message!';
-                    alfredText.required = true;
+                    alfredText.classList.remove('d-none')
+                    dateSelect.classList.add('d-none')
+                    alfredText.querySelector('input').placeholder = 'Message!'
+                    alfredText.required = true
                 } else {
-                    dateSelect.classList.add('d-none');
-                    alfredText.classList.add('d-none');
-                    dateBack.required = false;
+                    dateSelect.classList.add('d-none')
+                    alfredText.classList.add('d-none')
+                    dateBack.required = false
                 }
-            });
-        });
+            })
+        })
     </script>
 @endsection

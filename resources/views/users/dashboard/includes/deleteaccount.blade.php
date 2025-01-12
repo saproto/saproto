@@ -8,7 +8,7 @@
         Close your Proto account
     </button>
 
-    <form action="{{ route("user::delete") }}" method="POST">
+    <form action="{{ route('user::delete') }}" method="POST">
         <div
             id="modal-user-delete"
             class="modal fade"
@@ -79,7 +79,7 @@
                             To close your account, please confirm your current
                             account password below. (
                             <a
-                                href="{{ route("login::password::reset") }}"
+                                href="{{ route('login::password::reset') }}"
                                 target="_blank"
                             >
                                 Forgot your password?

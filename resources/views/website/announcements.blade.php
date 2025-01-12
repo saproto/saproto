@@ -29,11 +29,11 @@
                 </div>
             </div>
 
-            @push("javascript")
+            @push('javascript')
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
                     window.addEventListener('load', (_) => {
-                        modals['{{ $announcement->modal_id }}'].show();
-                    });
+                        modals['{{ $announcement->modal_id }}'].show()
+                    })
                 </script>
             @endpush
         @else
@@ -45,7 +45,7 @@
                     <span class="float-end">
                         <a
                             class="text-black"
-                            href="{{ route("announcement::dismiss", ["id" => $announcement->id]) }}"
+                            href="{{ route('announcement::dismiss', ['id' => $announcement->id]) }}"
                         >
                             <i
                                 class="fas fa-xmark-circle"

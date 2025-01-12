@@ -1,16 +1,16 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     <strong>{{ $account->name }}</strong>
     account aggregation
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center mb-5">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body">

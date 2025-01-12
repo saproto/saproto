@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $override == null ? "Create new override." : "Edit override." }}
+@section('page-title')
+    {{ $override == null ? 'Create new override.' : 'Edit override.' }}
 @endsection
 
-@section("container")
+@section('container')
     <form
-        action="{{ ! empty($override) ? route("dmx.overrides.update", ["override" => $override->id]) : route("dmx.overrides.store") }}"
+        action="{{ ! empty($override) ? route('dmx.overrides.update', ['override' => $override->id]) : route('dmx.overrides.store') }}"
         method="POST"
     >
         <input
             type="hidden"
             name="_method"
-            value="{{ ! empty($override) ? "PUT" : "POST" }}"
+            value="{{ ! empty($override) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
 
@@ -20,7 +20,7 @@
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -52,7 +52,7 @@
                                         class="form-control"
                                         id="red"
                                         name="red"
-                                        value="{{ $override ? $override->red() : "" }}"
+                                        value="{{ $override ? $override->red() : '' }}"
                                         required
                                     />
                                 </div>
@@ -63,7 +63,7 @@
                                         class="form-control"
                                         id="green"
                                         name="green"
-                                        value="{{ $override ? $override->green() : "" }}"
+                                        value="{{ $override ? $override->green() : '' }}"
                                         required
                                     />
                                 </div>
@@ -74,7 +74,7 @@
                                         class="form-control"
                                         id="blue"
                                         name="blue"
-                                        value="{{ $override ? $override->blue() : "" }}"
+                                        value="{{ $override ? $override->blue() : '' }}"
                                         required
                                     />
                                 </div>
@@ -88,7 +88,7 @@
                                 class="form-control"
                                 id="brightness"
                                 name="brightness"
-                                value="{{ $override ? $override->brightness() : "" }}"
+                                value="{{ $override ? $override->brightness() : '' }}"
                                 required
                             />
                         </div>
@@ -96,11 +96,11 @@
                         <hr />
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "start",
-                                "label" => "Override start:",
-                                "placeholder" => $override
+                                'name' => 'start',
+                                'label' => 'Override start:',
+                                'placeholder' => $override
                                     ? $override->start
                                     : strtotime(Carbon::now()),
                             ]
@@ -109,11 +109,11 @@
                         <div class="form-group">
                             <label for="end">Override end:</label>
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "end",
-                                    "label" => "Override end:",
-                                    "placeholder" => $override
+                                    'name' => 'end',
+                                    'label' => 'Override end:',
+                                    'placeholder' => $override
                                         ? $override->end
                                         : strtotime(Carbon::now()->endOfDay()),
                                 ]
@@ -127,7 +127,7 @@
                         </button>
 
                         <a
-                            href="{{ route("dmx.overrides.index") }}"
+                            href="{{ route('dmx.overrides.index') }}"
                             class="btn btn-default"
                         >
                             Cancel

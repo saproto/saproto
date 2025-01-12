@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     ProTube Hits
 @endsection
 
-@section("container")
+@section('container')
     <div class="btn text-center btn-block mb-3">
         <i class="fas fa-bolt me-3"></i>
         ProTube is developed with
@@ -37,11 +37,11 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        @if ($period == "alltime")
+                        @if ($period == 'alltime')
                             All-time
-                        @elseif ($period == "month")
+                        @elseif ($period == 'month')
                             Last Months
-                        @elseif ($period == "week")
+                        @elseif ($period == 'week')
                             Last Weeks
                         @endif
                         Top 10
@@ -55,9 +55,9 @@
                         @else
                             @foreach ($content as $video)
                                 @include(
-                                    "protube.includes.song_block",
+                                    'protube.includes.song_block',
                                     [
-                                        "video" => $video,
+                                        'video' => $video,
                                     ]
                                 )
                             @endforeach

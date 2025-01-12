@@ -1,19 +1,19 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Welcome Messages
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body">
-                    @include("welcomemessages.addmessage")
+                    @include('welcomemessages.addmessage')
                 </div>
 
                 @if (count($messages) > 0)
@@ -32,7 +32,7 @@
                                 <td>
                                     @if ($message->user->isMember)
                                         <a
-                                            href="{{ route("user::profile", ["id" => $message->user->getPublicId()]) }}"
+                                            href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}"
                                         >
                                             {{ $message->user->name }}
                                         </a>
@@ -44,25 +44,25 @@
                                 <td>{{ $message->message }}</td>
 
                                 <td>
-                                    {{ $message->updated_at->format("d/m/Y") }}
+                                    {{ $message->updated_at->format('d/m/Y') }}
                                 </td>
 
                                 <td>
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("welcomeMessages.destroy", [
-                                                "welcomeMessage" => $message->id,
+                                            'action' => route('welcomeMessages.destroy', [
+                                                'welcomeMessage' => $message->id,
                                             ]),
-                                            "method" => "DELETE",
-                                            "classes" => "fas fa-trash text-danger",
-                                            "text" => "",
-                                            "confirm" => "Delete",
-                                            "title" => "Confirm deleting the welcome message",
-                                            "message" =>
-                                                "Are you sure you want to delete the welcome message of " .
+                                            'method' => 'DELETE',
+                                            'classes' => 'fas fa-trash text-danger',
+                                            'text' => '',
+                                            'confirm' => 'Delete',
+                                            'title' => 'Confirm deleting the welcome message',
+                                            'message' =>
+                                                'Are you sure you want to delete the welcome message of ' .
                                                 $message->user->name .
-                                                "?",
+                                                '?',
                                         ]
                                     )
                                 </td>

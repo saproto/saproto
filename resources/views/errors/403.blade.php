@@ -1,10 +1,10 @@
-@extends("errors.template")
+@extends('errors.template')
 
-@section("page-title")
+@section('page-title')
     Unauthorised
 @endsection
 
-@section("page-body")
+@section('page-body')
     @if (isset($exception) && ! empty($exception->getMessage()))
         {{ $exception->getMessage() }}
     @else

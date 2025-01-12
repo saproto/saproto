@@ -40,15 +40,15 @@
                     @if ($dinnerform->isCurrent())
                         <td>
                             @include(
-                                "components.modals.confirm-modal",
+                                'components.modals.confirm-modal',
                                 [
-                                    "action" => route("dinnerform::orderline::delete", [
-                                        "id" => $order->id,
+                                    'action' => route('dinnerform::orderline::delete', [
+                                        'id' => $order->id,
                                     ]),
-                                    "text" => '<i class="fas fa-trash text-danger"></i>',
-                                    "title" => "Confirm Delete",
-                                    "message" => "Are you sure you want to delete your order: $order->description at $dinnerform->restaurant?",
-                                    "confirm" => "Delete",
+                                    'text' => '<i class="fas fa-trash text-danger"></i>',
+                                    'title' => 'Confirm Delete',
+                                    'message' => "Are you sure you want to delete your order: $order->description at $dinnerform->restaurant?",
+                                    'confirm' => 'Delete',
                                 ]
                             )
                         </td>

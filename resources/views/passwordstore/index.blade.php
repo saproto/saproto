@@ -1,27 +1,27 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@push("head")
+@push('head')
     <meta
         http-equiv="refresh"
-        content="{{ Session::get("passwordstore-verify") - time() }}"
+        content="{{ Session::get('passwordstore-verify') - time() }}"
     />
 @endpush
 
-@section("page-title")
+@section('page-title')
     Password Store
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-12 col-sm-2 mb-3">
             <a
-                href="{{ route("passwordstore::create", ["type" => "password"]) }}"
+                href="{{ route('passwordstore::create', ['type' => 'password']) }}"
                 class="btn btn-success btn-block mb-3"
             >
                 Add Password
             </a>
             <a
-                href="{{ route("passwordstore::create", ["type" => "note"]) }}"
+                href="{{ route('passwordstore::create', ['type' => 'note']) }}"
                 class="btn btn-success btn-block"
             >
                 Add Secure Note
@@ -142,19 +142,19 @@
                                         </td>
 
                                         <td
-                                            class="{{ $password->age() > 12 ? "text-danger" : "text-primary" }}"
+                                            class="{{ $password->age() > 12 ? 'text-danger' : 'text-primary' }}"
                                         >
                                             {{ $password->age() }} months
                                         </td>
 
                                         <td>
                                             <a
-                                                href="{{ route("passwordstore::edit", ["id" => $password->id]) }}"
+                                                href="{{ route('passwordstore::edit', ['id' => $password->id]) }}"
                                             >
                                                 <i class="fas fa-edit me-2"></i>
                                             </a>
                                             <a
-                                                href="{{ route("passwordstore::delete", ["id" => $password->id]) }}"
+                                                href="{{ route('passwordstore::delete', ['id' => $password->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-trash text-danger"
@@ -211,18 +211,18 @@
     @endforeach
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
-            const copy = el.getAttribute('data-copy');
+            const copy = el.getAttribute('data-copy')
             el.addEventListener('click', (_) => {
-                navigator.clipboard.writeText(copy);
-                let tooltip = tooltips[el.id];
-                tooltip.show();
+                navigator.clipboard.writeText(copy)
+                let tooltip = tooltips[el.id]
+                tooltip.show()
                 setTimeout((_) => {
-                    tooltip.hide();
-                }, 1000);
-            });
-        });
+                    tooltip.hide()
+                }, 1000)
+            })
+        })
     </script>
 @endpush

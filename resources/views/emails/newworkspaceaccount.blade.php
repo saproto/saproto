@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->name }},</p>
 
     <p>
@@ -13,8 +13,8 @@
         other Google Workspace services. To make use of this account you will
         have to sync the password with your proto account. This should be done
         here:
-        <a href="{{ route("login::password::sync") }}">
-            {{ route("login::password::sync") }}
+        <a href="{{ route('login::password::sync') }}">
+            {{ route('login::password::sync') }}
         </a>
         .
     </p>

@@ -4,7 +4,7 @@
     @if ($event != null)
         <form
             method="post"
-            action="{{ route("event::addsignup", ["id" => $event->id]) }}"
+            action="{{ route('event::addsignup', ['id' => $event->id]) }}"
         >
             @csrf
 
@@ -20,12 +20,12 @@
                 <div class="row">
                     <div class="col-md-6">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "registration_start",
-                                "label" => "Sign-up start:",
-                                "placeholder" => old("registration_start")
-                                    ? strtotime(old("registration_start"))
+                                'name' => 'registration_start',
+                                'label' => 'Sign-up start:',
+                                'placeholder' => old('registration_start')
+                                    ? strtotime(old('registration_start'))
                                     : ($event->activity
                                         ? $event->activity->registration_start
                                         : null),
@@ -35,12 +35,12 @@
 
                     <div class="col-md-6">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "registration_end",
-                                "label" => "Sign-up end:",
-                                "placeholder" => old("registration_end")
-                                    ? strtotime(old("registration_end"))
+                                'name' => 'registration_end',
+                                'label' => 'Sign-up end:',
+                                'placeholder' => old('registration_end')
+                                    ? strtotime(old('registration_end'))
                                     : ($event->activity
                                         ? $event->activity->registration_end
                                         : null),
@@ -50,12 +50,12 @@
 
                     <div class="col-md-6">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "deregistration_end",
-                                "label" => "Sign-out end:",
-                                "placeholder" => old("registration_end")
-                                    ? strtotime(old("deregistration_end"))
+                                'name' => 'deregistration_end',
+                                'label' => 'Sign-out end:',
+                                'placeholder' => old('registration_end')
+                                    ? strtotime(old('deregistration_end'))
                                     : ($event->activity
                                         ? $event->activity->deregistration_end
                                         : null),
@@ -81,7 +81,7 @@
                                 class="form-control"
                                 id="price"
                                 name="price"
-                                value="{{ $event->activity ? $event->activity->price : "0" }}"
+                                value="{{ $event->activity ? $event->activity->price : '0' }}"
                                 placeholder="15"
                                 required
                             />
@@ -115,7 +115,7 @@
                                 class="form-control"
                                 id="no_show_fee"
                                 name="no_show_fee"
-                                value="{{ old("no_show_fee") ?? ($event->activity ? $event->activity->no_show_fee : "0") }}"
+                                value="{{ old('no_show_fee') ?? ($event->activity ? $event->activity->no_show_fee : '0') }}"
                                 placeholder="15"
                                 required
                             />
@@ -140,7 +140,7 @@
                             name="participants"
                             min="-1"
                             required
-                            value="{{ old("participants", $event->activity?->participants) }}"
+                            value="{{ old('participants', $event->activity?->participants) }}"
                         />
                     </div>
 
@@ -160,20 +160,20 @@
                                 id="redirect_url"
                                 name="redirect_url"
                                 placeholder="https://forms.gle/..."
-                                value="{{ $event->activity?->redirect_url ?? "" }}"
+                                value="{{ $event->activity?->redirect_url ?? '' }}"
                             />
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "hide_participants",
-                                "checked" =>
-                                    (isset($request) && $request->exists("hide_participants")) ||
+                                'name' => 'hide_participants',
+                                'checked' =>
+                                    (isset($request) && $request->exists('hide_participants')) ||
                                     $event->activity?->hide_participants,
-                                "label" =>
+                                'label' =>
                                     'Hide participants  <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>',
                             ]
                         )
@@ -194,7 +194,7 @@
                     @if ($event->activity)
                         <div class="col-6">
                             <a
-                                href="{{ route("event::deletesignup", ["id" => $event->id]) }}"
+                                href="{{ route('event::deletesignup', ['id' => $event->id]) }}"
                                 class="btn btn-danger btn-block"
                             >
                                 Remove sign-up

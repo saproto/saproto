@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Videos Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-2">
-            <form method="post" action="{{ route("video::admin::create") }}">
+            <form method="post" action="{{ route('video::admin::create') }}">
                 {!! csrf_field() !!}
 
                 <div class="card mb-3">
@@ -53,7 +53,7 @@
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -76,15 +76,15 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {{ date("d-m-Y", $video->getUnixTimeStamp()) }}
+                                    {{ date('d-m-Y', $video->getUnixTimeStamp()) }}
                                 </td>
                                 <td>{{ $video->getHumanDuration() }}</td>
                                 <td>
                                     @if ($video->event)
                                         <a
-                                            href="{{ route("event::show", ["id" => $video->event->getPublicId()]) }}"
+                                            href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
                                         >
-                                            {{ sprintf("%s (%s)", $video->event->title, date("d-m-Y", $video->event->start)) }}
+                                            {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
                                         </a>
                                     @else
                                         <i class="opacity-50">none</i>
@@ -92,23 +92,23 @@
                                 </td>
                                 <td>
                                     <a
-                                        href="{{ route("video::show", ["id" => $video->id]) }}"
+                                        href="{{ route('video::show', ['id' => $video->id]) }}"
                                     >
                                         <i class="fas fa-play me-2"></i>
                                     </a>
                                     <a
-                                        href="{{ route("video::admin::edit", ["id" => $video->id]) }}"
+                                        href="{{ route('video::admin::edit', ['id' => $video->id]) }}"
                                     >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("video::admin::delete", ["id" => $video->id]),
-                                            "text" => '<i class="fas fa-trash text-danger"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" => "Are you sure you want to delete this video: $video->title",
-                                            "confirm" => "Delete",
+                                            'action' => route('video::admin::delete', ['id' => $video->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete this video: $video->title",
+                                            'confirm' => 'Delete',
                                         ]
                                     )
                                 </td>

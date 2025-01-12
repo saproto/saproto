@@ -92,7 +92,7 @@
                 <img
                     height="120px"
                     width="472px"
-                    src="{{ asset("images/logo/inverse.png") }}"
+                    src="{{ asset('images/logo/inverse.png') }}"
                     alt="inverse proto logo"
                 />
             </div>
@@ -100,7 +100,7 @@
 
         <p class="text-center mt-3 mb-2">
             <sub>
-                &copy; {{ date("Y") }} S.A. Proto. All rights reserved.
+                &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">
                     Please familiarize yourself with our
                     <a
@@ -133,7 +133,7 @@
                 <i class="fas fa-heart text-primary"></i>
                 by the folks of the
                 <a
-                    href="{{ "https://" . Config::array("proto.domains.developers")[0] }}"
+                    href="{{ 'https://' . Config::array('proto.domains.developers')[0] }}"
                     target="_blank"
                     class="text-white"
                 >

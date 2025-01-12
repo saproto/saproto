@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Menu Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("menu::create") }}"
+                        href="{{ route('menu::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new menu item.
@@ -43,7 +43,7 @@
                                     </td>
                                     <td>
                                         <a
-                                            href="{{ route("menu::edit", ["id" => $menuItem->id]) }}"
+                                            href="{{ route('menu::edit', ['id' => $menuItem->id]) }}"
                                         >
                                             <i
                                                 class="fas fa-edit me-2 text-white"
@@ -51,19 +51,19 @@
                                         </a>
 
                                         @include(
-                                            "components.modals.confirm-modal",
+                                            'components.modals.confirm-modal',
                                             [
-                                                "action" => route("menu::delete", ["id" => $menuItem->id]),
-                                                "text" => '<i class="fas fa-trash me-2 text-danger"></i>',
-                                                "title" => "Confirm Delete",
-                                                "message" => "Are you sure you want to delete this menu item?",
-                                                "confirm" => "Delete",
+                                                'action' => route('menu::delete', ['id' => $menuItem->id]),
+                                                'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
+                                                'title' => 'Confirm Delete',
+                                                'message' => 'Are you sure you want to delete this menu item?',
+                                                'confirm' => 'Delete',
                                             ]
                                         )
 
                                         @if (! $index == 0)
                                             <a
-                                                href="{{ route("menu::orderUp", ["id" => $menuItem->id]) }}"
+                                                href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-arrow-up me-2 text-white"
@@ -73,7 +73,7 @@
 
                                         @if (! $index == count($menuItems))
                                             <a
-                                                href="{{ route("menu::orderDown", ["id" => $menuItem->id]) }}"
+                                                href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-arrow-down me-2 text-white"
@@ -83,7 +83,7 @@
                                     </td>
                                 </tr>
                                 @if ($menuItem->children->count() > 0)
-                                    @foreach ($menuItem->children()->orderBy("order")->get()as $childItem)
+                                    @foreach ($menuItem->children()->orderBy('order')->get()as $childItem)
                                         <tr>
                                             <td class="ps-5">
                                                 {{ $childItem->menuname }}
@@ -102,7 +102,7 @@
                                             </td>
                                             <td>
                                                 <a
-                                                    href="{{ route("menu::edit", ["id" => $childItem->id]) }}"
+                                                    href="{{ route('menu::edit', ['id' => $childItem->id]) }}"
                                                 >
                                                     <i
                                                         class="fas fa-edit me-2"
@@ -110,19 +110,19 @@
                                                 </a>
 
                                                 @include(
-                                                    "components.modals.confirm-modal",
+                                                    'components.modals.confirm-modal',
                                                     [
-                                                        "action" => route("menu::delete", ["id" => $childItem->id]),
-                                                        "text" => '<i class="fas fa-trash me-2 text-danger"></i>',
-                                                        "title" => "Confirm Delete",
-                                                        "message" => "Are you sure you want to delete this menu item?",
-                                                        "confirm" => "Delete",
+                                                        'action' => route('menu::delete', ['id' => $childItem->id]),
+                                                        'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
+                                                        'title' => 'Confirm Delete',
+                                                        'message' => 'Are you sure you want to delete this menu item?',
+                                                        'confirm' => 'Delete',
                                                     ]
                                                 )
 
                                                 @if (! $childItem->isFirst())
                                                     <a
-                                                        href="{{ route("menu::orderUp", ["id" => $childItem->id]) }}"
+                                                        href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}"
                                                     >
                                                         <i
                                                             class="fas fa-arrow-up me-2"
@@ -132,7 +132,7 @@
 
                                                 @if (! $childItem->isLast())
                                                     <a
-                                                        href="{{ route("menu::orderDown", ["id" => $childItem->id]) }}"
+                                                        href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}"
                                                     >
                                                         <i
                                                             class="fas fa-arrow-down me-2"

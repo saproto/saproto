@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $account == null ? "Create new account." : "Edit account " . $account->account_number . "." }}
+@section('page-title')
+    {{ $account == null ? 'Create new account.' : 'Edit account ' . $account->account_number . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <form
         method="post"
-        action="{{ $account == null ? route("omnomcom::accounts::store") : route("omnomcom::accounts::update", ["id" => $account->id]) }}"
+        action="{{ $account == null ? route('omnomcom::accounts::store') : route('omnomcom::accounts::update', ['id' => $account->id]) }}"
         enctype="multipart/form-data"
     >
         @csrf
@@ -16,7 +16,7 @@
             <div class="col-md-3">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -28,7 +28,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="Magical Accessories"
-                                value="{{ $account->name ?? "" }}"
+                                value="{{ $account->name ?? '' }}"
                                 required
                             />
                         </div>
@@ -41,7 +41,7 @@
                                 id="account_number"
                                 name="account_number"
                                 placeholder="1234"
-                                value="{{ $account->account_number ?? "" }}"
+                                value="{{ $account->account_number ?? '' }}"
                                 required
                             />
                         </div>
@@ -52,7 +52,7 @@
                             Submit
                         </button>
                         <a
-                            href="{{ route("omnomcom::accounts::index") }}"
+                            href="{{ route('omnomcom::accounts::index') }}"
                             class="btn btn-default"
                         >
                             Cancel

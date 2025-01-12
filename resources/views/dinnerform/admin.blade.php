@@ -1,20 +1,20 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Dinnerform Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="card mb-3 col-lg-8 ms-auto me-auto">
         <div class="card-header bg-dark text-white mb-1">
             <span>
                 Dinnerform orderline overview for
                 <strong>{{ $dinnerform->restaurant }}</strong>
                 ordered on
-                <strong>{{ $dinnerform->end->format("Y m-d") }}</strong>
+                <strong>{{ $dinnerform->end->format('Y m-d') }}</strong>
             </span>
             <a
-                href="{{ route("dinnerform::create") }}"
+                href="{{ route('dinnerform::create') }}"
                 class="btn btn-info badge float-end ms-2"
             >
                 <i class="fas fa-hand-point-left me-1"></i>
@@ -22,26 +22,26 @@
             </a>
             @if ($dinnerform->isCurrent())
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("dinnerform::close", ["id" => $dinnerform->id]),
-                        "text" => '<i class="fas fa-ban me-1"></i> Close dinnerform!',
-                        "title" => "Confirm Close",
-                        "message" => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
-                        "confirm" => "Close",
-                        "classes" => "btn btn-warning badge float-end",
+                        'action' => route('dinnerform::close', ['id' => $dinnerform->id]),
+                        'text' => '<i class="fas fa-ban me-1"></i> Close dinnerform!',
+                        'title' => 'Confirm Close',
+                        'message' => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
+                        'confirm' => 'Close',
+                        'classes' => 'btn btn-warning badge float-end',
                     ]
                 )
-            @elseif (! $dinnerform->closed && Auth::user()->can("finadmin"))
+            @elseif (! $dinnerform->closed && Auth::user()->can('finadmin'))
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("dinnerform::process", ["id" => $dinnerform->id]),
-                        "text" => '<i class="fas fa-file-export me-1"></i> Process dinnerform',
-                        "title" => "Confirm processing dinnerform",
-                        "message" => "Are you sure you want to process the dinnerform from $dinnerform->restaurant?<br> This will convert all dinnerform orderlines to orderlines and mean none of the orderlines can be changed anymore!",
-                        "confirm" => "Process",
-                        "classes" => "btn btn-danger badge float-end",
+                        'action' => route('dinnerform::process', ['id' => $dinnerform->id]),
+                        'text' => '<i class="fas fa-file-export me-1"></i> Process dinnerform',
+                        'title' => 'Confirm processing dinnerform',
+                        'message' => "Are you sure you want to process the dinnerform from $dinnerform->restaurant?<br> This will convert all dinnerform orderlines to orderlines and mean none of the orderlines can be changed anymore!",
+                        'confirm' => 'Process',
+                        'classes' => 'btn btn-danger badge float-end',
                     ]
                 )
             @else
@@ -126,20 +126,20 @@
                                 <td class="text-center">
                                     @if (! $order->closed)
                                         <a
-                                            href="{{ route("dinnerform::orderline::edit", ["id" => $order->id]) }}"
+                                            href="{{ route('dinnerform::orderline::edit', ['id' => $order->id]) }}"
                                         >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
                                         @include(
-                                            "components.modals.confirm-modal",
+                                            'components.modals.confirm-modal',
                                             [
-                                                "action" => route("dinnerform::orderline::delete", [
-                                                    "id" => $order->id,
+                                                'action' => route('dinnerform::orderline::delete', [
+                                                    'id' => $order->id,
                                                 ]),
-                                                "text" => '<i class="fas fa-trash text-danger"></i>',
-                                                "title" => "Confirm Delete",
-                                                "message" => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
-                                                "confirm" => "Delete",
+                                                'text' => '<i class="fas fa-trash text-danger"></i>',
+                                                'title' => 'Confirm Delete',
+                                                'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
+                                                'confirm' => 'Delete',
                                             ]
                                         )
                                     @endif

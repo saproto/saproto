@@ -15,16 +15,16 @@
                 <div class="list-group-item d-flex justify-content-between">
                     <div>
                         <a
-                            href="{{ route("omnomcom::mywithdrawal", ["id" => $withdrawal->id]) }}"
+                            href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}"
                         >
-                            {{ date("d-m-Y", strtotime($withdrawal->date)) }}
+                            {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                         </a>
                     </div>
-                    @if ($withdrawal->failedWithdrawals->contains("user_id", Auth::user()->id) || $withdrawal->id == "temp")
+                    @if ($withdrawal->failedWithdrawals->contains('user_id', Auth::user()->id) || $withdrawal->id == 'temp')
                         <i class="fas fa-times text-danger mt-1"></i>
                     @else
                         <div>
-                            {{ $withdrawal->closed ? "Closed" : "Pending" }}
+                            {{ $withdrawal->closed ? 'Closed' : 'Pending' }}
                         </div>
                     @endif
                     <div>
@@ -47,17 +47,17 @@
         <ul class="list-group list-group-flush">
             @foreach ($molliePayments as $transaction)
                 <li class="list-group-item">
-                    @if ($transaction->mollie_id != "temp")
+                    @if ($transaction->mollie_id != 'temp')
                         @php
                             $status = App\Models\MollieTransaction::translateStatus($transaction->translatedStatus());
                         @endphp
 
                         <a
-                            href="{{ route("omnomcom::mollie::status", ["id" => $transaction->id]) }}"
+                            href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}"
                         >
-                            {{ date("d-m-Y H:i", strtotime($transaction->created_at)) }}
+                            {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
                             <i
-                                class="fas ms-2 {{ $status == "open" ? " fa-spinner text-normal" : "" }} {{ $status == "failed" ? "fa-times text-danger" : "" }} {{ $status == "paid" ? "fa-check text-success" : "" }} {{ $status == "unknown" ? "fa-question text-normal" : "" }}"
+                                class="fas ms-2 {{ $status == 'open' ? ' fa-spinner text-normal' : '' }} {{ $status == 'failed' ? 'fa-times text-danger' : '' }} {{ $status == 'paid' ? 'fa-check text-success' : '' }} {{ $status == 'unknown' ? 'fa-question text-normal' : '' }}"
                             ></i>
                         </a>
                     @else

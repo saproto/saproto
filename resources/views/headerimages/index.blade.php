@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Header Images
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
                         class="badge bg-info float-end"
-                        href="{{ route("headerimages.create") }}"
+                        href="{{ route('headerimages.create') }}"
                     >
                         Add header image.
                     </a>
@@ -32,14 +32,14 @@
                             <tr>
                                 <td>
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("headerimages.destroy", ["headerimage" => $image]),
-                                            "method" => "DELETE",
-                                            "confirm" => "Delete the headerimage",
-                                            "classes" => "fa fa-trash text-danger",
-                                            "text" => "",
-                                            "message" => "Are you sure you want to delete the headerimage?",
+                                            'action' => route('headerimages.destroy', ['headerimage' => $image]),
+                                            'method' => 'DELETE',
+                                            'confirm' => 'Delete the headerimage',
+                                            'classes' => 'fa fa-trash text-danger',
+                                            'text' => '',
+                                            'message' => 'Are you sure you want to delete the headerimage?',
                                         ]
                                     )
                                 </td>
@@ -47,7 +47,7 @@
                                     <strong>{{ $image->title }}</strong>
                                     <br />
                                     <em>
-                                        {!! $image->user ? $image->user->name : "None" !!}
+                                        {!! $image->user ? $image->user->name : 'None' !!}
                                     </em>
                                 </td>
                                 <td>

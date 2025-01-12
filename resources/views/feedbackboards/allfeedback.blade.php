@@ -4,11 +4,11 @@
             class="d-flex align-items-center justify-items-center justify-content-between mb-2"
         >
             <span class="">{{ $category->title }}</span>
-            @can("board")
+            @can('board')
                 <div>
                     @if (count($data) > 0)
                         <a
-                            href="{{ route("feedback::archiveall", ["category" => $category->url]) }}"
+                            href="{{ route('feedback::archiveall', ['category' => $category->url]) }}"
                             class="ms-3 btn btn-danger"
                         >
                             <i class="fas fa-box-archive text-white"></i>
@@ -17,7 +17,7 @@
                     @endif
 
                     <a
-                        href="{{ route("feedback::archived", ["category" => $category->url]) }}"
+                        href="{{ route('feedback::archived', ['category' => $category->url]) }}"
                         class="float-end ms-3 btn btn-info"
                     >
                         <i class="fas fa-inbox text-white"></i>
@@ -26,7 +26,7 @@
                 </div>
             @endcan
         </div>
-        @if ($data->links() != "")
+        @if ($data->links() != '')
             {{ $data->withQueryString()->links() }}
         @endif
     </div>
@@ -37,10 +37,10 @@
                 @foreach ($data as $key => $entry)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                         @include(
-                            "feedbackboards.include.feedback",
+                            'feedbackboards.include.feedback',
                             [
-                                "feedback" => $entry,
-                                "controls" => true,
+                                'feedback' => $entry,
+                                'controls' => true,
                             ]
                         )
                     </div>
@@ -54,7 +54,7 @@
         @endif
     </div>
 
-    @if ($data->links() != "")
+    @if ($data->links() != '')
         <div class="card-footer">
             {{ $data->withQueryString()->links() }}
         </div>

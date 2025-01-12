@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 // Custom variables
-@import "partials/variables";
+@import 'partials/variables';
 
 //background colour
 $body-bg: #f3f3f3;
@@ -9,13 +9,13 @@ $body-bg: #f3f3f3;
 $light: #fff;
 
 //import bootstrap after setting variables
-@import "bootstrap";
+@import 'bootstrap';
 
 // Vendors (S)CSS
-@import "partials/vendors";
+@import 'partials/vendors';
 
 // concatenated SCSS from views
-@import "partials/components";
+@import 'partials/components';
 
 //select2
 .select2-dropdown {

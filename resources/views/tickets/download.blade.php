@@ -54,7 +54,7 @@
         </p>
 
         <p>
-            <sub>#{{ str_pad($ticket->id, 5, "0", STR_PAD_LEFT) }}</sub>
+            <sub>#{{ str_pad($ticket->id, 5, '0', STR_PAD_LEFT) }}</sub>
             <br />
             <barcode class="barcode" value="{{ $ticket->barcode }}"></barcode>
         </p>
@@ -74,7 +74,7 @@
     <div class="half">
         <img
             style="margin-top: 30mm"
-            src="{{ str_replace("https", "http", public_path("images/logo/regular.png")) }}"
+            src="{{ str_replace('https', 'http', public_path('images/logo/regular.png')) }}"
             id="protologo"
             alt="proto logo"
         />

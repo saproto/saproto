@@ -3,7 +3,7 @@
 
     <div class="card-body">
         <a
-            href="{{ route("login::password::change::index") }}"
+            href="{{ route('login::password::change::index') }}"
             class="btn btn-outline-info btn-block"
         >
             Change Proto password
@@ -24,7 +24,7 @@
             services such as e-mail, network drives or the wiki.
 
             <a
-                href="{{ route("login::password::sync::index") }}"
+                href="{{ route('login::password::sync::index') }}"
                 class="btn btn-outline-info btn-block"
             >
                 Synchronize passwords

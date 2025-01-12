@@ -1,11 +1,11 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey {{ $calling_name }},</p>
 
     <p>
         You receive this e-mail because you have signed up for
-        <a href="{{ route("event::show", ["id" => $event_id]) }}">
+        <a href="{{ route('event::show', ['id' => $event_id]) }}">
             {{ $event_title }}
         </a>
         and were placed on the back-up list. We are happy to tell you that you

@@ -1,12 +1,12 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->name }},</p>
 
     <p>
         You receive this e-mail because you, or somebody else, used this e-mail
         address while signing up for an account on the website of
-        <a href="{{ route("homepage") }}">Study Association Proto</a>
+        <a href="{{ route('homepage') }}">Study Association Proto</a>
         . If this wasn't you, please reply to this e-mail and we'll sort
         everything out. If it was you, great! Welcome! You will receive a
         separate e-mail with instructions on how to set your password.
@@ -16,7 +16,7 @@
         Just as a heads-up, registering an account doesn't make you a member of
         Study Association Proto. If you're interested in becoming a member,
         please do follow the instructions over
-        <a href="{{ route("becomeamember") }}">here</a>
+        <a href="{{ route('becomeamember') }}">here</a>
         . Should this e-mail raise any questions, please don't hesitate to get
         in touch.
     </p>
@@ -34,7 +34,7 @@
         in the
         <i>e-mail lists</i>
         section of your
-        <a href="{{ route("user::dashboard::show") }}">dashboard</a>
+        <a href="{{ route('user::dashboard::show') }}">dashboard</a>
         .
     </p>
 

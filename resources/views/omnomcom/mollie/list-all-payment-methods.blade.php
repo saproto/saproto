@@ -10,7 +10,7 @@
             id="{{ $method->id }}"
             autocomplete="off"
             value="{{ $method->id }}"
-            {{ count($methods) == 1 ? "checked" : "" }}
+            {{ count($methods) == 1 ? 'checked' : '' }}
         />
         <span>{{ $method->description }}</span>
         <svg

@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Edit Song
 @endsection
 
-@section("container")
+@section('container')
     <form
-        action="{{ ! empty($song) ? route("codexSong.update", ["codexSong" => $song]) : route("codexSong.store") }}"
+        action="{{ ! empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route('codexSong.store') }}"
         method="POST"
     >
         <input
             type="hidden"
             name="_method"
-            value="{{ ! empty($song) ? "PUT" : "POST" }}"
+            value="{{ ! empty($song) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
@@ -26,7 +26,7 @@
                             <div class="form-group mb-3">
                                 <input
                                     type="text"
-                                    value="{{ $song->title ?? "" }}"
+                                    value="{{ $song->title ?? '' }}"
                                     class="form-control"
                                     id="title"
                                     name="title"
@@ -38,7 +38,7 @@
                             <div class="form-group mb-3">
                                 <input
                                     type="text"
-                                    value="{{ $song->artist ?? "" }}"
+                                    value="{{ $song->artist ?? '' }}"
                                     class="form-control"
                                     id="artist"
                                     name="artist"
@@ -50,7 +50,7 @@
                             <div class="form-group mb-3">
                                 <input
                                     type="text"
-                                    value="{{ $song->youtube ?? "" }}"
+                                    value="{{ $song->youtube ?? '' }}"
                                     class="form-control"
                                     id="youtube"
                                     name="youtube"
@@ -68,7 +68,7 @@
                                 @foreach ($categories as $category)
                                     <option
                                         value="{{ $category->id }}"
-                                        {{ $category->id === $myCategories ? "selected" : "" }}
+                                        {{ $category->id === $myCategories ? 'selected' : '' }}
                                     >
                                         {{ $category->name }}
                                     </option>
@@ -79,11 +79,11 @@
                             <label for="lyrics">Lyrics:</label>
                             <div class="form-group mb-3">
                                 @include(
-                                    "components.forms.markdownfield",
+                                    'components.forms.markdownfield',
                                     [
-                                        "name" => "lyrics",
-                                        "placeholder" => "Awesome lyrics here!",
-                                        "value" => $song->lyrics ?? "",
+                                        'name' => 'lyrics',
+                                        'placeholder' => 'Awesome lyrics here!',
+                                        'value' => $song->lyrics ?? '',
                                     ]
                                 )
                             </div>

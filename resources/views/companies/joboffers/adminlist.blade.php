@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Job offer Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("joboffers::create") }}"
+                        href="{{ route('joboffers::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new job offer.
@@ -34,12 +34,12 @@
 
                             <td class="text-end">
                                 <a
-                                    href="{{ route("joboffers::edit", ["id" => $joboffer->id]) }}"
+                                    href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}"
                                 >
                                     <i class="fas fa-edit me-2 fa-fw"></i>
                                 </a>
                                 <a
-                                    href="{{ route("joboffers::delete", ["id" => $joboffer->id]) }}"
+                                    href="{{ route('joboffers::delete', ['id' => $joboffer->id]) }}"
                                 >
                                     <i
                                         class="fas fa-trash text-danger fa-fw"

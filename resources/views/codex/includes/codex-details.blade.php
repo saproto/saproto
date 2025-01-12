@@ -10,7 +10,7 @@
                 id="name"
                 name="name"
                 placeholder="A super cool codex!"
-                value="{{ $codex->name ?? "" }}"
+                value="{{ $codex->name ?? '' }}"
                 required
             />
         </div>
@@ -23,7 +23,7 @@
                 class="form-control"
                 id="export"
                 name="export"
-                value="{{ $codex->export ?? "" }}"
+                value="{{ $codex->export ?? '' }}"
             />
         </div>
 
@@ -35,7 +35,7 @@
                 class="form-control"
                 id="description"
                 name="description"
-                value="{{ $codex->description ?? "" }}"
+                value="{{ $codex->description ?? '' }}"
             />
         </div>
     </div>

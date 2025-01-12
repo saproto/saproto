@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey!</p>
 
     <p>I just ran the membership cleanup program.</p>

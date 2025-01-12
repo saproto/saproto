@@ -6,9 +6,9 @@
         </div>
         <div class="card-body">
             @foreach ($featuredEvents as $key => $event)
-                @include("event.display_includes.event_block", ["event" => $event, "countdown" => true])
+                @include('event.display_includes.event_block', ['event' => $event, 'countdown' => true])
 
-                @php($week = date("W", $event->start))
+                @php($week = date('W', $event->start))
             @endforeach
         </div>
     </div>

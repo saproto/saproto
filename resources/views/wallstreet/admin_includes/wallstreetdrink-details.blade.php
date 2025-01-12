@@ -1,13 +1,13 @@
 <form
     method="post"
-    action="{{ ! isset($currentDrink) ? route("wallstreet::store") : route("wallstreet::update", ["id" => $currentDrink->id]) }}"
+    action="{{ ! isset($currentDrink) ? route('wallstreet::store') : route('wallstreet::update', ['id' => $currentDrink->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            {{ ! isset($currentDrink) ? "Create WallstreetDrink" : "Edit WallstreetDrink" }}
+            {{ ! isset($currentDrink) ? 'Create WallstreetDrink' : 'Edit WallstreetDrink' }}
         </div>
 
         <div class="card-body">
@@ -16,12 +16,12 @@
                 <div class="col-md-6">
                     <!-- Start -->
                     @include(
-                        "components.forms.datetimepicker",
+                        'components.forms.datetimepicker',
                         [
-                            "name" => "start_time",
-                            "label" => "Opens at:",
-                            "placeholder" => $currentDrink ? $currentDrink->start_time : null,
-                            "input_class_name" => "mb-3",
+                            'name' => 'start_time',
+                            'label' => 'Opens at:',
+                            'placeholder' => $currentDrink ? $currentDrink->start_time : null,
+                            'input_class_name' => 'mb-3',
                         ]
                     )
 
@@ -38,7 +38,7 @@
                             name="price_decrease"
                             placeholder="0"
                             min="0"
-                            value="{{ $currentDrink->price_decrease ?? "" }}"
+                            value="{{ $currentDrink->price_decrease ?? '' }}"
                             required
                         />
                     </div>
@@ -54,7 +54,7 @@
                             id="minimum_price"
                             name="minimum_price"
                             placeholder="0"
-                            value="{{ $currentDrink->minimum_price ?? "" }}"
+                            value="{{ $currentDrink->minimum_price ?? '' }}"
                             required
                         />
                     </div>
@@ -64,12 +64,12 @@
                 <div class="col-md-6">
                     <!-- End -->
                     @include(
-                        "components.forms.datetimepicker",
+                        'components.forms.datetimepicker',
                         [
-                            "name" => "end_time",
-                            "label" => "Closes at:",
-                            "placeholder" => $currentDrink ? $currentDrink->end_time : null,
-                            "input_class_name" => "mb-3",
+                            'name' => 'end_time',
+                            'label' => 'Closes at:',
+                            'placeholder' => $currentDrink ? $currentDrink->end_time : null,
+                            'input_class_name' => 'mb-3',
                         ]
                     )
 
@@ -86,7 +86,7 @@
                             id="price_increase"
                             name="price_increase"
                             placeholder="0"
-                            value="{{ $currentDrink->price_increase ?? "" }}"
+                            value="{{ $currentDrink->price_increase ?? '' }}"
                             required
                         />
                     </div>
@@ -110,7 +110,7 @@
                             min="0"
                             name="random_events_chance"
                             placeholder="0"
-                            value="{{ $currentDrink->random_events_chance ?? "" }}"
+                            value="{{ $currentDrink->random_events_chance ?? '' }}"
                             required
                         />
                     </div>
@@ -122,15 +122,15 @@
 
             @if ($currentDrink)
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("wallstreet::delete", ["id" => $currentDrink->id]),
-                        "text" => "Delete",
-                        "title" => "Confirm Delete",
-                        "classes" => "btn btn-danger ms-2",
-                        "message" =>
-                            "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
-                        "confirm" => "Delete",
+                        'action' => route('wallstreet::delete', ['id' => $currentDrink->id]),
+                        'text' => 'Delete',
+                        'title' => 'Confirm Delete',
+                        'classes' => 'btn btn-danger ms-2',
+                        'message' =>
+                            'Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!',
+                        'confirm' => 'Delete',
                     ]
                 )
             @endif

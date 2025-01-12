@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Edit Text Type
 @endsection
 
-@section("container")
+@section('container')
     <form
-        action="{{ ! empty($textType) ? route("codexTextType.update", ["codexTextType" => $textType]) : route("codexTextType.store") }}"
+        action="{{ ! empty($textType) ? route('codexTextType.update', ['codexTextType' => $textType]) : route('codexTextType.store') }}"
         method="POST"
     >
         <input
             type="hidden"
             name="_method"
-            value="{{ ! empty($textType) ? "PUT" : "POST" }}"
+            value="{{ ! empty($textType) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
@@ -25,7 +25,7 @@
                             <div class="form-group mb-3">
                                 <input
                                     type="text"
-                                    value="{{ $textType->type ?? "" }}"
+                                    value="{{ $textType->type ?? '' }}"
                                     class="form-control"
                                     id="type"
                                     name="type"

@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Orderline wizard
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="column">
             <form
                 method="post"
-                action="{{ route("omnomcom::orders::storebulk") }}"
+                action="{{ route('omnomcom::orders::storebulk') }}"
             >
                 @csrf
 
@@ -19,7 +19,7 @@
                     >
                         <h5>Add orderlines</h5>
                         <a
-                            href="{{ route("omnomcom::orders::adminlist") }}"
+                            href="{{ route('omnomcom::orders::adminlist') }}"
                             class="btn btn-default"
                         >
                             Back to Orderline Overview
@@ -144,57 +144,57 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document
             .getElementById('orderline-add-row')
             .addEventListener('click', (e) => {
-                e.preventDefault();
+                e.preventDefault()
 
                 const prevRow = Array.from(
-                    document.getElementsByClassName('orderline-row'),
-                ).pop();
-                const newRow = prevRow.cloneNode(true);
-                document.getElementById('orderline-rows').append(newRow);
+                    document.getElementsByClassName('orderline-row')
+                ).pop()
+                const newRow = prevRow.cloneNode(true)
+                document.getElementById('orderline-rows').append(newRow)
 
-                const deleteBtn = newRow.querySelector('.orderline-delete-row');
+                const deleteBtn = newRow.querySelector('.orderline-delete-row')
                 deleteBtn.addEventListener('click', (e) => {
-                    newRow.remove();
-                    calculateTotalPrice();
-                });
-                deleteBtn.disabled = false;
+                    newRow.remove()
+                    calculateTotalPrice()
+                })
+                deleteBtn.disabled = false
 
-                calculateTotalPrice();
-            });
+                calculateTotalPrice()
+            })
 
         document
             .getElementById('orderline-modal')
             .addEventListener('change', (_) => {
-                calculateTotalPrice();
-            });
+                calculateTotalPrice()
+            })
 
         function calculateTotalPrice() {
             const rows = Array.from(
-                document.getElementsByClassName('orderline-row'),
-            );
+                document.getElementsByClassName('orderline-row')
+            )
             const totalPrice = rows.reduce((total, el) => {
-                let currentPrice;
+                let currentPrice
                 const product = el.querySelector(
-                    '.orderline-product option:checked',
-                );
-                const productPrice = el.querySelector('.orderline-price');
-                const units = el.querySelector('.orderline-units').value;
+                    '.orderline-product option:checked'
+                )
+                const productPrice = el.querySelector('.orderline-price')
+                const units = el.querySelector('.orderline-units').value
                 if (productPrice.value === '')
-                    currentPrice = product.getAttribute('data-price');
-                else currentPrice = productPrice.value;
-                return total + currentPrice * units;
-            }, 0);
+                    currentPrice = product.getAttribute('data-price')
+                else currentPrice = productPrice.value
+                return total + currentPrice * units
+            }, 0)
             document.getElementById('total-price').innerHTML =
-                '&euro; ' + totalPrice.toFixed(2);
+                '&euro; ' + totalPrice.toFixed(2)
         }
 
         window.addEventListener('load', (_) => {
-            calculateTotalPrice();
-        });
+            calculateTotalPrice()
+        })
     </script>
 @endpush

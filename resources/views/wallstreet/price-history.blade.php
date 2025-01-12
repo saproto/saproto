@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Wallsteet drink chart!
 @endsection
 
-@section("container")
+@section('container')
     <div
         style="position: relative; height: 90vh; width: 95vw; margin-left: auto"
     >
@@ -12,9 +12,9 @@
     </div>
 @endsection
 
-@vite("resources/assets/js/echo.js")
+@vite('resources/assets/js/echo.js')
 
-@push("javascript")
+@push('javascript')
     {{-- chart.js and the date adapter --}}
     <script
         nonce="{{ csp_nonce() }}"
@@ -28,10 +28,10 @@
     <script nonce="{{ csp_nonce() }}">
         // Initialize when page is loaded
         window.addEventListener('load', (_) => {
-            const ctx = document.getElementById('myChart');
+            const ctx = document.getElementById('myChart')
 
             get(
-                `{{ route("api::wallstreet::all_prices", ["id" => $id]) }}`,
+                `{{ route('api::wallstreet::all_prices', ['id' => $id]) }}`
             ).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
@@ -54,26 +54,26 @@
                                     return {
                                         x: Date.parse(price.created_at),
                                         y: price.price,
-                                    };
+                                    }
                                 }),
-                            };
+                            }
                         }),
                     },
-                });
+                })
 
-                let id = {{ $id }};
+                let id = {{ $id }}
                 //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
                     'NewWallstreetPrice',
                     (e) => {
                         const dataset = chart.data.datasets.find(
-                            (dataset) => dataset.label === e.data.product.name,
-                        );
+                            (dataset) => dataset.label === e.data.product.name
+                        )
                         if (dataset) {
                             dataset.data.push({
                                 x: Date.parse(e.data.created_at),
                                 y: e.data.price,
-                            });
+                            })
                         } else {
                             //if a new product is added the dataset is created
                             chart.data.datasets.push({
@@ -84,12 +84,12 @@
                                         y: e.data.price,
                                     },
                                 ],
-                            });
+                            })
                         }
-                        chart.update('none');
-                    },
-                );
-            });
-        });
+                        chart.update('none')
+                    }
+                )
+            })
+        })
     </script>
 @endpush

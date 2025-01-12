@@ -6,20 +6,20 @@
     >
         {!! $title !!}
 
-        @if (Auth::user()->can("board") && isset($edition) && isset($edit) && count(array_filter($memberships, fn ($n) => $n->deleted_at == null)) > 0)
+        @if (Auth::user()->can('board') && isset($edition) && isset($edit) && count(array_filter($memberships, fn ($n) => $n->deleted_at == null)) > 0)
             @include(
-                "components.modals.confirm-modal",
+                'components.modals.confirm-modal',
                 [
-                    "action" => route("committee::membership::endedition", [
-                        "edition" => $edition,
-                        "committee" => $committee->id,
+                    'action' => route('committee::membership::endedition', [
+                        'edition' => $edition,
+                        'committee' => $committee->id,
                     ]),
-                    "text" => "End edition <i class='fas fa-ban'></i>",
-                    "title" => "Confirm the ending of this edition",
-                    "message" =>
-                        "Are you sure you want to end all memberships in this edition?",
-                    "confirm" => "End",
-                    "classes" => "badge bg-danger float-end mt-1",
+                    'text' => "End edition <i class='fas fa-ban'></i>",
+                    'title' => 'Confirm the ending of this edition',
+                    'message' =>
+                        'Are you sure you want to end all memberships in this edition?',
+                    'confirm' => 'End',
+                    'classes' => 'badge bg-danger float-end mt-1',
                 ]
             )
         @endcan
@@ -27,15 +27,15 @@
 
     <div
         id="committee_collapse_{{ $unique }}"
-        class="collapse {{ $display ? "show" : null }}"
+        class="collapse {{ $display ? 'show' : null }}"
         data-parent="#committee_collapse"
     >
         <div class="card-body">
             @foreach ($memberships as $i => $membership)
                 @include(
-                    "committee.include.render-membership",
+                    'committee.include.render-membership',
                     [
-                        "membership" => $membership,
+                        'membership' => $membership,
                     ]
                 )
             @endforeach

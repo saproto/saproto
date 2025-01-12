@@ -150,41 +150,41 @@
 
 @push("javascript")
     <script nonce="{{ csp_nonce() }}">
-        const typeUrl = document.getElementById('information_type_url');
-        const redirectUrl = document.getElementById('redirect_url');
+        const typeUrl = document.getElementById('information_type_url')
+        const redirectUrl = document.getElementById('redirect_url')
         const typeDescription = document.getElementById(
-            'information_type_description',
-        );
+            'information_type_description'
+        )
         const typeSelector = document.getElementById(
-            'information_type_selector',
-        );
-        const easymde = window.easyMDEFields['markdownfield-description'];
+            'information_type_selector'
+        )
+        const easymde = window.easyMDEFields['markdownfield-description']
 
-        updateInformationDisplay();
-        typeSelector.addEventListener('change', updateInformationDisplay);
+        updateInformationDisplay()
+        typeSelector.addEventListener('change', updateInformationDisplay)
 
         function updateInformationDisplay() {
             switch (typeSelector.value) {
                 case 'description':
-                    typeDescription.classList.remove('d-none');
-                    typeUrl.classList.add('d-none');
-                    redirectUrl.value = '';
-                    redirectUrl.required = false;
-                    break;
+                    typeDescription.classList.remove('d-none')
+                    typeUrl.classList.add('d-none')
+                    redirectUrl.value = ''
+                    redirectUrl.required = false
+                    break
                 case 'url':
-                    typeDescription.classList.add('d-none');
-                    typeUrl.classList.remove('d-none');
-                    redirectUrl.required = true;
-                    easymde.value('');
-                    break;
+                    typeDescription.classList.add('d-none')
+                    typeUrl.classList.remove('d-none')
+                    redirectUrl.required = true
+                    easymde.value('')
+                    break
                 default:
-                    typeUrl.classList.add('d-none');
-                    typeUrl.querySelector('input').value = '';
-                    typeDescription.classList.add('d-none');
-                    typeDescription.querySelectorAll('input').value = '';
-                    typeSelector.required = true;
-                    easymde.value('');
-                    break;
+                    typeUrl.classList.add('d-none')
+                    typeUrl.querySelector('input').value = ''
+                    typeDescription.classList.add('d-none')
+                    typeDescription.querySelectorAll('input').value = ''
+                    typeSelector.required = true
+                    easymde.value('')
+                    break
             }
         }
     </script>

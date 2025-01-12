@@ -9,7 +9,7 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <p class="card-text">
-                                    {{ $rfid->name ?? "Nameless card" }}
+                                    {{ $rfid->name ?? 'Nameless card' }}
                                     <br />
                                     <sup class="texttext-muted">
                                         Last used: {{ $rfid->updated_at }}
@@ -18,14 +18,14 @@
 
                                     <a
                                         class="btn btn-sm btn-outline-danger"
-                                        href="{{ route("user::rfid::delete", ["id" => $rfid->id]) }}"
+                                        href="{{ route('user::rfid::delete', ['id' => $rfid->id]) }}"
                                     >
                                         Delete
                                     </a>
 
                                     <a
                                         class="btn btn-sm btn-outline-info"
-                                        href="{{ route("user::rfid::edit", ["id" => $rfid->id]) }}"
+                                        href="{{ route('user::rfid::edit', ['id' => $rfid->id]) }}"
                                     >
                                         Rename
                                     </a>

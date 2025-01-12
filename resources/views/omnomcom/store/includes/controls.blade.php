@@ -10,7 +10,7 @@
         <i class="fas fa-cookie-bite me-2"></i>
         Complete order
     </button>
-    @if ($store["cash_allowed"])
+    @if ($store['cash_allowed'])
         <button
             id="purchase-cash-initiate"
             class="purchase-button btn btn-lg bg-dark me-2 float-end"
@@ -21,7 +21,7 @@
         </button>
     @endif
 
-    @if ($store["bank_card_allowed"])
+    @if ($store['bank_card_allowed'])
         <button
             id="purchase-bank-card-initiate"
             class="purchase-button btn btn-lg bg-dark me-2 float-end"
@@ -49,7 +49,7 @@
                 <div
                     class="cart-product-image-inner"
                     style="
-                        background-image: url({{ asset("images/font-awesome/fa-cart-shopping.svg") }});
+                        background-image: url({{ asset('images/font-awesome/fa-cart-shopping.svg') }});
                     "
                 ></div>
             </div>

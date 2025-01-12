@@ -7,7 +7,7 @@
 
     <b>{{ $user->name }}</b>
     , born on
-    <b>{{ $date->format("M, d, Y") }}</b>
+    <b>{{ $date->format('M, d, Y') }}</b>
     ,
 </p>
 

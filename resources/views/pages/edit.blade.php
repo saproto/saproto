@@ -1,6 +1,6 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     @if ($new)
         Create new page
     @else
@@ -8,7 +8,7 @@
     @endif
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form
@@ -18,7 +18,7 @@
             >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -32,7 +32,7 @@
                                 id="title"
                                 name="title"
                                 placeholder="About Proto"
-                                value="{{ $item->title ?? "" }}"
+                                value="{{ $item->title ?? '' }}"
                                 required
                             />
                         </div>
@@ -42,7 +42,7 @@
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        {{ route("page::show", "") }}/
+                                        {{ route('page::show', '') }}/
                                     </span>
                                 </div>
                                 <input
@@ -50,38 +50,38 @@
                                     class="form-control"
                                     name="slug"
                                     placeholder="about-proto"
-                                    value="{{ $item->slug ?? "" }}"
+                                    value="{{ $item->slug ?? '' }}"
                                     required
                                 />
                             </div>
                         </div>
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "is_member_only",
-                                "checked" => $item?->is_member_only,
-                                "label" => "Member only",
+                                'name' => 'is_member_only',
+                                'checked' => $item?->is_member_only,
+                                'label' => 'Member only',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "show_attachments",
-                                "checked" => $item?->show_attachments,
-                                "label" => "Show attachments next to page",
+                                'name' => 'show_attachments',
+                                'checked' => $item?->show_attachments,
+                                'label' => 'Show attachments next to page',
                             ]
                         )
 
                         <div class="form-group">
                             <label for="content">Content</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "content",
-                                    "placeholder" => "Text goes here.",
-                                    "value" => $item ? $item->content : null,
+                                    'name' => 'content',
+                                    'placeholder' => 'Text goes here.',
+                                    'value' => $item ? $item->content : null,
                                 ]
                             )
                         </div>
@@ -93,7 +93,7 @@
                         </button>
 
                         <a
-                            href="{{ route("page::list") }}"
+                            href="{{ route('page::list') }}"
                             class="btn btn-default"
                         >
                             Cancel
@@ -107,7 +107,7 @@
             <div class="col-md-3">
                 <form
                     method="post"
-                    action="{{ route("page::image", ["id" => $item->id]) }}"
+                    action="{{ route('page::image', ['id' => $item->id]) }}"
                     enctype="multipart/form-data"
                 >
                     @csrf
@@ -152,7 +152,7 @@
 
                 <form
                     method="post"
-                    action="{{ route("page::file::create", ["id" => $item->id]) }}"
+                    action="{{ route('page::file::create', ['id' => $item->id]) }}"
                     enctype="multipart/form-data"
                 >
                     @csrf
@@ -182,7 +182,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (substr($file->mime, 0, 5) == "image")
+                                            @if (substr($file->mime, 0, 5) == 'image')
                                                 <a
                                                     class="pageEdit_insertImage"
                                                     href="#"
@@ -205,7 +205,7 @@
                                                 </a>
                                             @endif
                                             <a
-                                                href="{{ route("page::file::delete", ["id" => $item->id, "file_id" => $file->id]) }}"
+                                                href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-trash text-danger"
@@ -247,32 +247,32 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Borrowed from https://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
             const cm =
-                document.getElementsByClassName('.CodeMirror')[0].CodeMirror;
-            const doc = cm.getDoc();
-            const cursor = doc.getCursor(); // gets the line number in the cursor position
-            const line = doc.getLine(cursor.line); // get the line contents
+                document.getElementsByClassName('.CodeMirror')[0].CodeMirror
+            const doc = cm.getDoc()
+            const cursor = doc.getCursor() // gets the line number in the cursor position
+            const line = doc.getLine(cursor.line) // get the line contents
             const pos = {
                 // create a new object to avoid mutation of the original selection
                 line: cursor.line,
                 ch: line.length - 1, // set the character position to the end of the line
-            };
-            doc.replaceRange('\n' + data + '\n', pos); // adds a new line
+            }
+            doc.replaceRange('\n' + data + '\n', pos) // adds a new line
         }
 
         const insertLinks = document.querySelectorAll(
-            '.pageEdit_insertLink, .pageEdit_insertImage',
-        );
+            '.pageEdit_insertLink, .pageEdit_insertImage'
+        )
         insertLinks.forEach((el) => {
             el.addEventListener('click', (e) => {
-                e.preventDefault();
-                const linkUrl = e.target.getAttribute('rel');
-                insertLineAtCursor(`[Link text](${linkUrl})`);
-            });
-        });
+                e.preventDefault()
+                const linkUrl = e.target.getAttribute('rel')
+                insertLineAtCursor(`[Link text](${linkUrl})`)
+            })
+        })
     </script>
 @endpush

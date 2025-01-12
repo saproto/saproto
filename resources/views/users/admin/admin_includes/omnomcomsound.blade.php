@@ -21,7 +21,7 @@
                     </audio>
                 </div>
                 <a
-                    href="{{ route("user::member::omnomcomsound::delete", ["id" => $user->id]) }}"
+                    href="{{ route('user::member::omnomcomsound::delete', ['id' => $user->id]) }}"
                     class="btn btn-outline-danger btn-block"
                 >
                     <i class="fas fa-trash-alt"></i>
@@ -40,7 +40,7 @@
 
         <form
             method="post"
-            action="{{ route("user::member::omnomcomsound::update", ["id" => $user->id]) }}"
+            action="{{ route('user::member::omnomcomsound::update', ['id' => $user->id]) }}"
             enctype="multipart/form-data"
         >
             @csrf

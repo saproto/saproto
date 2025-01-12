@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Generate Supplier Order
 @endsection
 
-@section("container")
+@section('container')
     @if (count($orders) > 0)
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card mb-3">
-                    <div class="card-header">@yield("page-title")</div>
+                    <div class="card-header">@yield('page-title')</div>
 
                     <div class="card-body">
                         <a
@@ -62,7 +62,7 @@
                                     </td>
                                     <td>
                                         <a
-                                            href="{{ route("omnomcom::products::edit", ["id" => $order->product->id]) }}"
+                                            href="{{ route('omnomcom::products::edit', ['id' => $order->product->id]) }}"
                                         >
                                             {{ $order->product->name }}
                                         </a>

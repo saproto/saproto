@@ -1,7 +1,7 @@
 <form
     class="form-horizontal"
     method="post"
-    action="{{ route("user::admin::update", ["id" => $user->id]) }}"
+    action="{{ route('user::admin::update', ['id' => $user->id]) }}"
 >
     @csrf
 
@@ -31,12 +31,12 @@
 
             @if ($user->completed_profile)
                 @include(
-                    "components.forms.datetimepicker",
+                    'components.forms.datetimepicker',
                     [
-                        "name" => "birthdate",
-                        "label" => "Birthday:",
-                        "format" => "date",
-                        "placeholder" => strtotime($user->birthdate),
+                        'name' => 'birthdate',
+                        'label' => 'Birthday:',
+                        'format' => 'date',
+                        'placeholder' => strtotime($user->birthdate),
                     ]
                 )
             @endif

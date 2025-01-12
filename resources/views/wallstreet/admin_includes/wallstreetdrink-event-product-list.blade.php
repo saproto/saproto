@@ -4,7 +4,7 @@
     </div>
     <form
         method="post"
-        action="{{ route("wallstreet::events::products::create", ["id" => $currentEvent->id]) }}"
+        action="{{ route('wallstreet::events::products::create', ['id' => $currentEvent->id]) }}"
     >
         @csrf
         <div class="row mx-2 mb-3">
@@ -33,7 +33,7 @@
             <div class="card-footer">
                 @foreach ($currentEvent->products as $product)
                     <a
-                        href="{{ route("wallstreet::events::products::remove", ["id" => $currentEvent->id, "productId" => $product->id]) }}"
+                        href="{{ route('wallstreet::events::products::remove', ['id' => $currentEvent->id, 'productId' => $product->id]) }}"
                     >
                         <span class="badge rounded-pill bg-warning">
                             {{ $product->name }}

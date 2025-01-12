@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $company == null ? "Create new company." : "Edit company " . $company->name . "." }}
+@section('page-title')
+    {{ $company == null ? 'Create new company.' : 'Edit company ' . $company->name . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <form
         method="post"
-        action="{{ $company == null ? route("companies::store") : route("companies::update", ["id" => $company->id]) }}"
+        action="{{ $company == null ? route('companies::store') : route('companies::update', ['id' => $company->id]) }}"
         enctype="multipart/form-data"
     >
         @csrf
@@ -16,7 +16,7 @@
             <div class="col-md-4">
                 <div class="card md-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -39,7 +39,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="Aperture Science"
-                                value="{{ $company->name ?? "" }}"
+                                value="{{ $company->name ?? '' }}"
                                 required
                             />
                         </div>
@@ -52,7 +52,7 @@
                                 id="url"
                                 name="url"
                                 placeholder="http://www.aperturescience.com/"
-                                value="{{ $company->url ?? "" }}"
+                                value="{{ $company->url ?? '' }}"
                                 required
                             />
                         </div>
@@ -60,29 +60,29 @@
                         <hr />
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "on_carreer_page",
-                                "checked" => $company?->on_carreer_page,
-                                "label" => "Visible on the career page",
+                                'name' => 'on_carreer_page',
+                                'checked' => $company?->on_carreer_page,
+                                'label' => 'Visible on the career page',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "in_logo_bar",
-                                "checked" => $company?->in_logo_bar,
-                                "label" => "Place logo in the logo bar",
+                                'name' => 'in_logo_bar',
+                                'checked' => $company?->in_logo_bar,
+                                'label' => 'Place logo in the logo bar',
                             ]
                         )
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "on_membercard",
-                                "checked" => $company?->on_membercard,
-                                "label" => "Visible on membercard page",
+                                'name' => 'on_membercard',
+                                'checked' => $company?->on_membercard,
+                                'label' => 'Visible on membercard page',
                             ]
                         )
 
@@ -107,7 +107,7 @@
                         </button>
 
                         <a
-                            href="{{ route("companies::admin") }}"
+                            href="{{ route('companies::admin') }}"
                             class="btn btn-default"
                         >
                             Cancel
@@ -126,13 +126,13 @@
                         <div class="col-6">
                             <label for="editor">Company excerpt</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "excerpt",
-                                    "placeholder" => ! $company
-                                        ? "A small paragraph about this company."
+                                    'name' => 'excerpt',
+                                    'placeholder' => ! $company
+                                        ? 'A small paragraph about this company.'
                                         : null,
-                                    "value" => ! $company ? null : $company->excerpt,
+                                    'value' => ! $company ? null : $company->excerpt,
                                 ]
                             )
                         </div>
@@ -140,13 +140,13 @@
                         <div class="col-6">
                             <label for="editor">Company description</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "description",
-                                    "placeholder" => ! $company
-                                        ? "A text dedicated to the company. Be as elaborate as you need to be!"
+                                    'name' => 'description',
+                                    'placeholder' => ! $company
+                                        ? 'A text dedicated to the company. Be as elaborate as you need to be!'
                                         : null,
-                                    "value" => ! $company ? null : $company->description,
+                                    'value' => ! $company ? null : $company->description,
                                 ]
                             )
                         </div>
@@ -154,13 +154,13 @@
                         <div class="col-6">
                             <label for="editor">Membercard excerpt</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "membercard_excerpt",
-                                    "placeholder" => ! $company
-                                        ? "A small paragraph about what this company does on our membercard."
+                                    'name' => 'membercard_excerpt',
+                                    'placeholder' => ! $company
+                                        ? 'A small paragraph about what this company does on our membercard.'
                                         : null,
-                                    "value" => ! $company ? null : $company->membercard_excerpt,
+                                    'value' => ! $company ? null : $company->membercard_excerpt,
                                 ]
                             )
                         </div>
@@ -168,13 +168,13 @@
                         <div class="col-6">
                             <label for="editor">Membercard description</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "membercard_long",
-                                    "placeholder" => ! $company
-                                        ? "A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!"
+                                    'name' => 'membercard_long',
+                                    'placeholder' => ! $company
+                                        ? 'A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!'
                                         : null,
-                                    "value" => ! $company ? null : $company->membercard_long,
+                                    'value' => ! $company ? null : $company->membercard_long,
                                 ]
                             )
                         </div>

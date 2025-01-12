@@ -3,7 +3,7 @@
         <?php $products_in_category = []; ?>
 
         <div
-            class="category-view {{ $category == $categories[0] ? "" : "inactive" }}"
+            class="category-view {{ $category == $categories[0] ? '' : 'inactive' }}"
             data-id="{{ $category->category->id }}"
         >
             <?php /** @var $product \App\Models\Product */
@@ -18,7 +18,7 @@
                     ?>
 
                     <div
-                        class="product col-3 {{ $product->stock <= 0 ? "nostock" : "" }}"
+                        class="product col-3 {{ $product->stock <= 0 ? 'nostock' : '' }}"
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
@@ -42,7 +42,7 @@
 
                                 <div class="product-price">
                                     &euro;
-                                    {{ number_format($product->price, 2, ".", "") }}
+                                    {{ number_format($product->price, 2, '.', '') }}
                                 </div>
 
                                 @if ($product->stock < 1000)
@@ -58,8 +58,8 @@
 
             @if (count($products_in_category) > 0)
                 <div
-                    class="product col-3 random {{ count($products_in_category) <= 1 ? "nostock" : "" }}"
-                    data-list="{{ implode(",", $products_in_category) }}"
+                    class="product col-3 random {{ count($products_in_category) <= 1 ? 'nostock' : '' }}"
+                    data-list="{{ implode(',', $products_in_category) }}"
                     data-stock="{{ count($products_in_category) }}"
                 >
                     <div class="product-inner">
@@ -67,7 +67,7 @@
                             <div
                                 class="product-image-inner"
                                 style="
-                                    background-image: url('{{ asset("images/omnomcom/dice.png") }}');
+                                    background-image: url('{{ asset('images/omnomcom/dice.png') }}');
                                 "
                             ></div>
                         </div>

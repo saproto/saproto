@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->name }},</p>
 
     <p>
@@ -40,7 +40,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.secretary") }}
+        {{ Config::string('proto.secretary') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

@@ -1,13 +1,13 @@
 <form
     method="post"
-    action="{{ ! isset($currentEvent) ? route("wallstreet::events::store") : route("wallstreet::events::update", ["id" => $currentEvent->id]) }}"
+    action="{{ ! isset($currentEvent) ? route('wallstreet::events::store') : route('wallstreet::events::update', ['id' => $currentEvent->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            {{ ! isset($currentEvent) ? "Create WallstreetDrink Event" : "Edit WallstreetDrink Event" }}
+            {{ ! isset($currentEvent) ? 'Create WallstreetDrink Event' : 'Edit WallstreetDrink Event' }}
         </div>
 
         <div class="card-body">
@@ -23,7 +23,7 @@
                             id="name"
                             name="title"
                             placeholder="A keg fell of the truck!"
-                            value="{{ old("title", $currentEvent->name ?? "") }}"
+                            value="{{ old('title', $currentEvent->name ?? '') }}"
                             required
                         />
                     </div>
@@ -46,7 +46,7 @@
                         id="percentage"
                         name="percentage"
                         placeholder="-10"
-                        value="{{ $currentEvent->percentage ?? "" }}"
+                        value="{{ $currentEvent->percentage ?? '' }}"
                         required
                     />
                 </div>
@@ -59,7 +59,7 @@
                     @else
                         <image
                             class="mb-3"
-                            src="{{ $currentEvent->image->generatePath() ?? "" }}"
+                            src="{{ $currentEvent->image->generatePath() ?? '' }}"
                         />
                     @endif
                     <input
@@ -71,15 +71,15 @@
                 </div>
                 <label for="editor">Description</label>
                 @include(
-                    "components.forms.markdownfield",
+                    'components.forms.markdownfield',
                     [
-                        "name" => "description",
-                        "placeholder" =>
+                        'name' => 'description',
+                        'placeholder' =>
                             $currentEvent == null
-                                ? "A keg fell of the Grolsch truck and now we have to empty it! What a pity..."
+                                ? 'A keg fell of the Grolsch truck and now we have to empty it! What a pity...'
                                 : null,
-                        "value" => old(
-                            "description",
+                        'value' => old(
+                            'description',
                             $currentEvent == null ? null : $currentEvent->description,
                         ),
                     ]
@@ -91,16 +91,16 @@
 
             @if ($currentEvent)
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("wallstreet::events::delete", [
-                            "id" => $currentEvent->id,
+                        'action' => route('wallstreet::events::delete', [
+                            'id' => $currentEvent->id,
                         ]),
-                        "text" => "Delete",
-                        "title" => "Confirm Delete",
-                        "classes" => "btn btn-danger ms-2",
-                        "message" => "Are you sure you want to remove this wallstreet event?",
-                        "confirm" => "Delete",
+                        'text' => 'Delete',
+                        'title' => 'Confirm Delete',
+                        'classes' => 'btn btn-danger ms-2',
+                        'message' => 'Are you sure you want to remove this wallstreet event?',
+                        'confirm' => 'Delete',
                     ]
                 )
             @endif

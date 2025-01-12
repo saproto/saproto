@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
         Mollie Transaction #{{ $transaction->id }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <table class="table table-borderless table-sm">
@@ -30,18 +30,18 @@
                     <tr>
                         <th>Status</th>
                         <td>
-                            @if (App\Models\MollieTransaction::translateStatus($mollie->status) == "open")
+                            @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'open')
                                 <a href="{{ $transaction->payment_url }}">
                                     <span class="label label-success">
                                         {{ $mollie->status }} - Continue
                                         Payment
                                     </span>
                                 </a>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == "paid")
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'paid')
                                 <span class="label label-success">
                                     {{ $mollie->status }}
                                 </span>
-                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == "failed")
+                            @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
                                 <span class="label label-danger">
                                     {{ $mollie->status }}
                                 </span>
@@ -55,7 +55,7 @@
                 </table>
 
                 <div class="card-body">
-                    @if (App\Models\MollieTransaction::translateStatus($mollie->status) == "failed")
+                    @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
                         <p>
                             This payment has failed. All orderlines associated
                             with this payment have been set back to unpaid. You
@@ -82,7 +82,7 @@
                                     <tr>
                                         <td>
                                             <strong>&euro;</strong>
-                                            {{ number_format($orderline->total_price, 2, ".", "") }}
+                                            {{ number_format($orderline->total_price, 2, '.', '') }}
                                         </td>
                                         <td>
                                             {{ $orderline->units }}x
@@ -91,7 +91,7 @@
                                             </strong>
                                         </td>
                                         <td>
-                                            {{ date("Y-m-d H:i:s", strtotime($orderline->created_at)) }}
+                                            {{ date('Y-m-d H:i:s', strtotime($orderline->created_at)) }}
                                         </td>
                                     </tr>
                                 @endforeach

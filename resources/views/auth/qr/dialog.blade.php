@@ -1,10 +1,10 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     QR Code One-Time Authentication
 @endsection
 
-@section("login-body")
+@section('login-body')
     <p>
         Are you sure you want to approve
         <br />
@@ -14,7 +14,7 @@
 
     <p>
         <a
-            href="{{ route("qr::approve", ["code" => $code]) }}"
+            href="{{ route('qr::approve', ['code' => $code]) }}"
             class="btn btn-success"
         >
             Approve

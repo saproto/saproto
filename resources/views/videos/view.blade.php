@@ -1,16 +1,16 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     {{ $video->title }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8 col-sm-10 col-xs-12">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
                     <a
-                        href="{{ route("video::index") }}"
+                        href="{{ route('video::index') }}"
                         class="btn btn-info me-2"
                     >
                         <i class="fas fa-arrow-left"></i>
@@ -29,14 +29,14 @@
                     @if ($video->event)
                         <p class="text-end float-end text-white">
                             <a
-                                href="{{ route("event::show", ["id" => $video->event->getPublicId()]) }}"
+                                href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
                                 class="btn btn-info float-end"
                             >
                                 <i
                                     class="fas fa-calendar me-2"
                                     aria-hidden="true"
                                 ></i>
-                                {{ sprintf("%s (%s)", $video->event->title, date("d-m-Y", $video->event->start)) }}
+                                {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
                             </a>
                         </p>
                     @endif

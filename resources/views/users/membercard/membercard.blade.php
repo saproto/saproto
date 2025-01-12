@@ -55,12 +55,12 @@
                 <div id="name">{{ $user->name }}</div>
                 <div class="heading">Member since</div>
                 <div>
-                    {{ $user->member->created_at->timestamp < 0 ? "Before we kept track!" : date("F j, Y", strtotime($user->member->created_at)) }}
+                    {{ $user->member->created_at->timestamp < 0 ? 'Before we kept track!' : date('F j, Y', strtotime($user->member->created_at)) }}
                 </div>
                 <div class="heading">Card validity</div>
                 <div>
-                    {{ date("M Y") }} -
-                    {{ date("M Y", strtotime("+3 years")) }}
+                    {{ date('M Y') }} -
+                    {{ date('M Y', strtotime('+3 years')) }}
                 </div>
                 <barcode
                     id="barcode"
@@ -77,7 +77,7 @@
             @else
                 <img
                     id="photo"
-                    src="{{ public_path("images/default-avatars/other.png") }}"
+                    src="{{ public_path('images/default-avatars/other.png') }}"
                 />
             @endif
         @endif

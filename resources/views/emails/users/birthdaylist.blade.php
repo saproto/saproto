@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey,</p>
 
     <p>
@@ -10,10 +10,10 @@
 
     <p>
         @foreach ($users as $user)
-            <a href="{{ route("user::profile", ["id" => $user["id"]]) }}">
-                {{ $user["name"] }}
+            <a href="{{ route('user::profile', ['id' => $user['id']]) }}">
+                {{ $user['name'] }}
             </a>
-            turns {{ $user["age"] }}
+            turns {{ $user['age'] }}
             <br />
         @endforeach
     </p>

@@ -1,6 +1,6 @@
-@extends("website.home.shared")
+@extends('website.home.shared')
 
-@section("greeting")
+@section('greeting')
     <strong>Hi {{ Auth::user()->calling_name }},</strong>
     <br />
     @if ($message != null)
@@ -10,11 +10,11 @@
     @endif
 @endsection
 
-@section("left-column")
+@section('left-column')
     <div class="col-xl-4 col-md-12">
-        @include("website.home.cards.featuredevents", ["featuredEvents" => $featuredEvents])
+        @include('website.home.cards.featuredevents', ['featuredEvents' => $featuredEvents])
 
-        @include("website.home.cards.leaderboards")
+        @include('website.home.cards.leaderboards')
 
         @if (count($birthdays) > 0)
             <div class="card mb-3">
@@ -24,14 +24,14 @@
                 </div>
                 <div class="card-body">
                     @foreach ($birthdays as $key => $user)
-                        @php($emojies = ["🎉", "🎈", "🎂", "🎊"])
+                        @php($emojies = ['🎉', '🎈', '🎂', '🎊'])
 
                         @include(
-                            "users.includes.usercard",
+                            'users.includes.usercard',
                             [
-                                "user" => $user,
-                                "subtitle" => sprintf(
-                                    "<em>has their birthday today!</em> %s",
+                                'user' => $user,
+                                'subtitle' => sprintf(
+                                    '<em>has their birthday today!</em> %s',
                                     $emojies[array_rand($emojies)],
                                 ),
                             ]
@@ -43,7 +43,7 @@
     </div>
 
     <div class="col-xl-4 col-md-12">
-        @include("website.home.cards.upcomingevents", ["events" => $upcomingEvents])
+        @include('website.home.cards.upcomingevents', ['events' => $upcomingEvents])
     </div>
 
     <div class="col-xl-4 col-md-12">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="card-body">
                     @foreach ($dinnerforms as $dinnerform)
-                        @include("dinnerform.includes.dinnerform-block", ["dinnerform" => $dinnerform])
+                        @include('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
                     @endforeach
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="card-footer">
                     <a
-                        href="{{ route("news::showWeeklyPreview", ["id" => $weekly->id]) }}"
+                        href="{{ route('news::showWeeklyPreview', ['id' => $weekly->id]) }}"
                         class="btn btn-info btn-block my-2"
                     >
                         Continue reading
@@ -108,10 +108,10 @@
                 <div class="card-body">
                     @foreach ($videos as $video)
                         @include(
-                            "videos.includes.video_block",
+                            'videos.includes.video_block',
                             [
-                                "video" => $video,
-                                "photo_pop" => false,
+                                'video' => $video,
+                                'photo_pop' => false,
                             ]
                         )
                     @endforeach
@@ -121,8 +121,8 @@
     </div>
 @endsection
 
-@section("right-column")
-    @include("website.home.cards.recentalbums", ["albums" => $albums])
+@section('right-column')
+    @include('website.home.cards.recentalbums', ['albums' => $albums])
 
     @parent
 
@@ -136,22 +136,22 @@
                 @foreach ($newsitems as $index => $newsitem)
                     <div style="max-height: 300px">
                         @include(
-                            "website.home.cards.card-bg-image",
+                            'website.home.cards.card-bg-image',
                             [
-                                "height" => $newsitem->is_weekly ? 80 : 120,
-                                "url" => $newsitem->url,
-                                "img" => $newsitem->featuredImage
+                                'height' => $newsitem->is_weekly ? 80 : 120,
+                                'url' => $newsitem->url,
+                                'img' => $newsitem->featuredImage
                                     ? $newsitem->featuredImage->generateImagePath(600, 300)
                                     : ($newsitem->is_weekly
-                                        ? url("images/weekly-cover.png")
+                                        ? url('images/weekly-cover.png')
                                         : null),
-                                "html" => sprintf(
-                                    "<strong>%s</strong><br><em>Published %s</em>",
+                                'html' => sprintf(
+                                    '<strong>%s</strong><br><em>Published %s</em>',
                                     $newsitem->title,
                                     Carbon::parse($newsitem->published_at)->diffForHumans(),
                                 ),
-                                "photo_pop" => $newsitem->featuredImage,
-                                "leftborder" => "info",
+                                'photo_pop' => $newsitem->featuredImage,
+                                'leftborder' => 'info',
                             ]
                         )
                     </div>
@@ -170,7 +170,7 @@
             @endif
 
             <a
-                href="{{ route("news::index") }}"
+                href="{{ route('news::index') }}"
                 class="btn btn-info btn-block"
             >
                 View older news

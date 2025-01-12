@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
         {{ $joboffer->company->name }}: {{ $joboffer->title }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card mb-3">
@@ -29,9 +29,9 @@
 
                     <h6 class="card-subtitle mb-3 text-muted">
                         Posted on
-                        {{ date_format($joboffer->created_at, "d-m-Y") }} for
+                        {{ date_format($joboffer->created_at, 'd-m-Y') }} for
                         <a
-                            href="{{ route("companies::show", ["id" => $joboffer->company->id]) }}"
+                            href="{{ route('companies::show', ['id' => $joboffer->company->id]) }}"
                             class="text-info"
                         >
                             {{ $joboffer->company->name }}

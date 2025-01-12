@@ -1,34 +1,34 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Change committee membership: {{ $membership->user->name }} @ The
     {{ $membership->committee->name }}
 @endsection
 
-@section("panel-title")
+@section('panel-title')
     
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4 col-sm-8 col-xs-12">
             <form
                 class="form-horizontal"
-                action="{{ route("committee::membership::update", ["id" => $membership->id]) }}"
+                action="{{ route('committee::membership::update', ['id' => $membership->id]) }}"
                 method="post"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
                         @include(
-                            "committee.include.render-membership",
+                            'committee.include.render-membership',
                             [
-                                "membership" => $membership,
+                                'membership' => $membership,
                             ]
                         )
 
@@ -59,25 +59,25 @@
                         <div class="row">
                             <div class="col-6">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "start",
-                                        "label" => "Since",
-                                        "placeholder" => strtotime($membership->created_at),
+                                        'name' => 'start',
+                                        'label' => 'Since',
+                                        'placeholder' => strtotime($membership->created_at),
                                     ]
                                 )
                             </div>
                             <div class="col-6">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "end",
-                                        "label" => "Until",
-                                        "placeholder" =>
+                                        'name' => 'end',
+                                        'label' => 'Until',
+                                        'placeholder' =>
                                             $membership->deleted_at == null
                                                 ? null
                                                 : strtotime($membership->deleted_at),
-                                        "not_required" => true,
+                                        'not_required' => true,
                                     ]
                                 )
                             </div>
@@ -90,7 +90,7 @@
                         </button>
 
                         <a
-                            href="{{ route("committee::membership::delete", ["id" => $membership->id]) }}"
+                            href="{{ route('committee::membership::delete', ['id' => $membership->id]) }}"
                             class="btn btn-danger float-end me-4"
                         >
                             Was never a member

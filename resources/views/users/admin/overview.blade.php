@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     User Administration
 @endsection
 
-@section("container")
+@section('container')
     <div id="user-admin" class="row justify-content-center">
         <div class="col-md-3">
-            <form method="get" action="{{ route("user::admin::index") }}">
+            <form method="get" action="{{ route('user::admin::index') }}">
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-white">
                         Search in users
@@ -89,7 +89,7 @@
         <div class="col-md-9">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -115,12 +115,12 @@
 
                             @foreach ($users as $user)
                                 <tr
-                                    class="{{ $user->deleted_at ? "opacity-50" : "" }}"
+                                    class="{{ $user->deleted_at ? 'opacity-50' : '' }}"
                                 >
                                     <td class="controls" class="ps-3">
                                         @if (! $user->deleted_at)
                                             <a
-                                                href="{{ route("user::admin::details", ["id" => $user->id]) }}"
+                                                href="{{ route('user::admin::details', ['id' => $user->id]) }}"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
                                                 title="Go to user admin"
@@ -134,7 +134,7 @@
 
                                             @if ($user->is_member)
                                                 <a
-                                                    href="{{ route("user::profile", ["id" => $user->getPublicId()]) }}"
+                                                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Go to public profile"
@@ -152,7 +152,7 @@
                                                 ></i>
                                             @endif
                                             <a
-                                                href="{{ route("user::member::impersonate", ["id" => $user->id]) }}"
+                                                href="{{ route('user::member::impersonate', ['id' => $user->id]) }}"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
                                                 title="Impersonate"
@@ -166,7 +166,7 @@
 
                                             @if ($user->isTempadmin())
                                                 <a
-                                                    href="{{ route("tempadmin::end", ["id" => $user->id]) }}"
+                                                    href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Revoke temp admin"
@@ -179,7 +179,7 @@
                                                 </a>
                                             @else
                                                 <a
-                                                    href="{{ route("tempadmins.create", ["id" => $user->id]) }}"
+                                                    href="{{ route('tempadmins.create', ['id' => $user->id]) }}"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
                                                     title="Grant temp admin till midnight"
@@ -214,7 +214,7 @@
                                         @endif
                                     </td>
                                     <td class="proto-email">
-                                        {{ $user->deleted_at ? "" : $user->email }}
+                                        {{ $user->deleted_at ? '' : $user->email }}
                                     </td>
                                     <td class="proto-username">
                                         @if ($user->is_member)

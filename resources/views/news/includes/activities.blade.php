@@ -15,19 +15,19 @@
 
             @foreach ($upcomingEvents as $event)
                 @php($checked = in_array($event->id, $events))
-                <tr class="{{ $checked ? "" : "opacity-50" }}">
+                <tr class="{{ $checked ? '' : 'opacity-50' }}">
                     <td>{{ $event->title }}</td>
                     <td>
-                        {{ $event->generateTimespanText("l j F, H:i", "H:i", "-") }}
+                        {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                     </td>
                     <td>
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "event[]",
-                                "label" => "Include",
-                                "checked" => $checked,
-                                "value" => $event->id,
+                                'name' => 'event[]',
+                                'label' => 'Include',
+                                'checked' => $checked,
+                                'value' => $event->id,
                             ]
                         )
                     </td>

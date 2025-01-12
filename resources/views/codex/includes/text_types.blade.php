@@ -4,13 +4,13 @@
         @if (! isset($edit))
             <div>
                 <a
-                    href="{{ route("codexText.create") }}"
+                    href="{{ route('codexText.create') }}"
                     class="btn btn-info badge"
                 >
                     New Text
                 </a>
                 <a
-                    href="{{ route("codexTextType.create") }}"
+                    href="{{ route('codexTextType.create') }}"
                     class="btn btn-info badge"
                 >
                     New Text Type
@@ -37,21 +37,21 @@
                         @if (! isset($edit))
                             <div>
                                 <a
-                                    href="{{ route("codexTextType.edit", ["codexTextType" => $textType]) }}"
+                                    href="{{ route('codexTextType.edit', ['codexTextType' => $textType]) }}"
                                     class="btn btn-info badge m-1"
                                 >
                                     Edit
                                 </a>
                                 @include(
-                                    "components.modals.confirm-modal",
+                                    'components.modals.confirm-modal',
                                     [
-                                        "method" => "DELETE",
-                                        "action" => route("codexTextType.destroy", [
-                                            "codexTextType" => $textType,
+                                        'method' => 'DELETE',
+                                        'action' => route('codexTextType.destroy', [
+                                            'codexTextType' => $textType,
                                         ]),
-                                        "classes" => "btn btn-danger badge m-1",
-                                        "text" => "Delete",
-                                        "message" => "Are you sure you want to delete $textType->type? <br> This will also delete <b>all texts</b> in this category",
+                                        'classes' => 'btn btn-danger badge m-1',
+                                        'text' => 'Delete',
+                                        'message' => "Are you sure you want to delete $textType->type? <br> This will also delete <b>all texts</b> in this category",
                                     ]
                                 )
                             </div>
@@ -70,13 +70,13 @@
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
                                             @include(
-                                                "components.forms.checkbox",
+                                                'components.forms.checkbox',
                                                 [
-                                                    "input_class_name" => "",
-                                                    "name" => "textids[]",
-                                                    "checked" => in_array($text->id, $myTextTypes),
-                                                    "value" => $text->id,
-                                                    "label" => "Include",
+                                                    'input_class_name' => '',
+                                                    'name' => 'textids[]',
+                                                    'checked' => in_array($text->id, $myTextTypes),
+                                                    'value' => $text->id,
+                                                    'label' => 'Include',
                                                 ]
                                             )
                                         </div>
@@ -86,19 +86,19 @@
                                     @if (! isset($edit))
                                         <div>
                                             <a
-                                                href="{{ route("codexText.edit", ["codexText" => $text]) }}"
+                                                href="{{ route('codexText.edit', ['codexText' => $text]) }}"
                                                 class="btn btn-info badge m-1"
                                             >
                                                 Edit
                                             </a>
                                             @include(
-                                                "components.modals.confirm-modal",
+                                                'components.modals.confirm-modal',
                                                 [
-                                                    "method" => "DELETE",
-                                                    "action" => route("codexText.destroy", ["codexText" => $text]),
-                                                    "classes" => "btn btn-danger badge m-1",
-                                                    "text" => "Delete",
-                                                    "message" => "Are you sure you want to delete $text->name?",
+                                                    'method' => 'DELETE',
+                                                    'action' => route('codexText.destroy', ['codexText' => $text]),
+                                                    'classes' => 'btn btn-danger badge m-1',
+                                                    'text' => 'Delete',
+                                                    'message' => "Are you sure you want to delete $text->name?",
                                                 ]
                                             )
                                         </div>

@@ -1,10 +1,10 @@
 <header>
     <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route("homepage") }}">
-                @if (! App::environment("production"))
+            <a class="navbar-brand" href="{{ route('homepage') }}">
+                @if (! App::environment('production'))
                     <i class="fas fa-hammer me-2"></i>
-                    <span class="text-uppercase">{{ config("app.env") }}</span>
+                    <span class="text-uppercase">{{ config('app.env') }}</span>
                     |
                 @endif
 
@@ -41,7 +41,7 @@
                                     </a>
 
                                     <ul class="dropdown-menu dropdown">
-                                        @foreach ($menuItem->children->sortBy("order") as $childItem)
+                                        @foreach ($menuItem->children->sortBy('order') as $childItem)
                                             @if (! $childItem->is_member_only || (Auth::check() && Auth::user()->is_member))
                                                 <a
                                                     class="dropdown-item"
@@ -70,7 +70,7 @@
                     @endforeach
 
                     @auth
-                        @canany(["omnomcom", "tipcie", "drafters"])
+                        @canany(['omnomcom', 'tipcie', 'drafters'])
                             <li class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -84,89 +84,89 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @foreach (Config::array("omnomcom.stores") as $name => $store)
-                                        @if (in_array(Request::ip(), $store["addresses"]) || Auth::user()->hasAnyPermission($store["roles"]))
+                                    @foreach (Config::array('omnomcom.stores') as $name => $store)
+                                        @if (in_array(Request::ip(), $store['addresses']) || Auth::user()->hasAnyPermission($store['roles']))
                                             <a
                                                 class="dropdown-item"
-                                                href="{{ route("omnomcom::store::show", ["store" => $name]) }}"
+                                                href="{{ route('omnomcom::store::show', ['store' => $name]) }}"
                                             >
                                                 Open store:
-                                                {{ $store["name"] }}
+                                                {{ $store['name'] }}
                                             </a>
                                         @endif
                                     @endforeach
 
-                                    @can("omnomcom")
+                                    @can('omnomcom')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::orders::adminlist") }}"
+                                            href="{{ route('omnomcom::orders::adminlist') }}"
                                         >
                                             Orders
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::products::index") }}"
+                                            href="{{ route('omnomcom::products::index') }}"
                                         >
                                             Products
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::categories::index") }}"
+                                            href="{{ route('omnomcom::categories::index') }}"
                                         >
                                             Categories
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::generateorder") }}"
+                                            href="{{ route('omnomcom::generateorder') }}"
                                         >
                                             Generate Supplier Order
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::products::statistics") }}"
+                                            href="{{ route('omnomcom::products::statistics') }}"
                                         >
                                             Sales statistics
                                         </a>
                                     @endcan
 
-                                    @can("tipcie")
+                                    @can('tipcie')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("dinnerform::create") }}"
+                                            href="{{ route('dinnerform::create') }}"
                                         >
                                             Dinnerforms
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::tipcie::orderhistory") }}"
+                                            href="{{ route('omnomcom::tipcie::orderhistory') }}"
                                         >
                                             TIPCie Order Overview
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("wallstreet::index") }}"
+                                            href="{{ route('wallstreet::index') }}"
                                         >
                                             Wallstreet Drinks
                                         </a>
                                     @endcan
 
-                                    @cannot("board")
-                                        @canany(["tipcie", "omnomcom"])
+                                    @cannot('board')
+                                        @canany(['tipcie', 'omnomcom'])
                                             <li
                                                 role="separator"
                                                 class="dropdown-divider"
                                             ></li>
                                             <a
                                                 class="dropdown-item"
-                                                href="{{ route("passwordstore::index") }}"
+                                                href="{{ route('passwordstore::index') }}"
                                             >
                                                 Password Store
                                             </a>
@@ -176,7 +176,7 @@
                             </li>
                         @endcanany
 
-                        @canany(["board", "finadmin", "alfred"])
+                        @canany(['board', 'finadmin', 'alfred'])
                             <li id="admin-nav-item" class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -191,28 +191,28 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @can("board")
+                                    @can('board')
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("user::admin::index") }}"
+                                            href="{{ route('user::admin::index') }}"
                                         >
                                             Users
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("tickets::index") }}"
+                                            href="{{ route('tickets::index') }}"
                                         >
                                             Tickets
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("short_urls.index") }}"
+                                            href="{{ route('short_urls.index') }}"
                                         >
                                             Short URLs
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("queries::index") }}"
+                                            href="{{ route('queries::index') }}"
                                         >
                                             Queries
                                         </a>
@@ -223,13 +223,13 @@
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("tempadmins.index") }}"
+                                            href="{{ route('tempadmins.index') }}"
                                         >
                                             Temp ProTube Admin
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ Config::string("protube.remote_url") }}"
+                                            href="{{ Config::string('protube.remote_url') }}"
                                         >
                                             ProTube Admin
                                         </a>
@@ -240,25 +240,25 @@
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("committee::create") }}"
+                                            href="{{ route('committee::create') }}"
                                         >
                                             Add Committee
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("event::create") }}"
+                                            href="{{ route('event::create') }}"
                                         >
                                             Add Event
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("event::categories.create") }}"
+                                            href="{{ route('event::categories.create') }}"
                                         >
                                             Event Categories
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("feedback::category::admin") }}"
+                                            href="{{ route('feedback::category::admin') }}"
                                         >
                                             Feedback Categories
                                         </a>
@@ -269,106 +269,106 @@
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("narrowcasting::index") }}"
+                                            href="{{ route('narrowcasting::index') }}"
                                         >
                                             Narrowcasting
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("companies::admin") }}"
+                                            href="{{ route('companies::admin') }}"
                                         >
                                             Companies
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("joboffers::admin") }}"
+                                            href="{{ route('joboffers::admin') }}"
                                         >
                                             Job offers
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("leaderboards::admin") }}"
+                                            href="{{ route('leaderboards::admin') }}"
                                         >
                                             Leaderboards
                                         </a>
                                     @endcan
 
-                                    @if (Auth::user()->hasAllPermissions(["board", "finadmin"]) || Auth::user()->hasAllPermissions(["board", "closeactivities"]))
+                                    @if (Auth::user()->hasAllPermissions(['board', 'finadmin']) || Auth::user()->hasAllPermissions(['board', 'closeactivities']))
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                     @endif
 
-                                    @can("closeactivities")
+                                    @can('closeactivities')
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("event::financial::list") }}"
+                                            href="{{ route('event::financial::list') }}"
                                         >
                                             Close Activities
                                         </a>
                                     @endcan
 
-                                    @can("finadmin")
+                                    @can('finadmin')
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::accounts::index") }}"
+                                            href="{{ route('omnomcom::accounts::index') }}"
                                         >
                                             Accounts
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::withdrawal::index") }}"
+                                            href="{{ route('omnomcom::withdrawal::index') }}"
                                         >
                                             Withdrawals
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::unwithdrawable") }}"
+                                            href="{{ route('omnomcom::unwithdrawable') }}"
                                         >
                                             Unwithdrawable
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::mollie::index") }}"
+                                            href="{{ route('omnomcom::mollie::index') }}"
                                         >
                                             Mollie Payments
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("omnomcom::payments::statistics") }}"
+                                            href="{{ route('omnomcom::payments::statistics') }}"
                                         >
                                             Cash & Card Payments
                                         </a>
                                     @endcan
 
-                                    @canany(["alfred", "board"])
+                                    @canany(['alfred', 'board'])
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("dmx.fixtures.index") }}"
+                                            href="{{ route('dmx.fixtures.index') }}"
                                         >
                                             Fixtures
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("dmx.overrides.index") }}"
+                                            href="{{ route('dmx.overrides.index') }}"
                                         >
                                             Override
                                         </a>
                                     @endcanany
 
-                                    @canany(["alfred", "sysadmin"])
+                                    @canany(['alfred', 'sysadmin'])
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("minisites::isalfredthere::edit") }}"
+                                            href="{{ route('minisites::isalfredthere::edit') }}"
                                         >
                                             Is Alfred There?
                                         </a>
@@ -377,7 +377,7 @@
                             </li>
                         @endcanany
 
-                        @can("board")
+                        @can('board')
                             <li class="nav-item dropdown">
                                 <a
                                     href="#"
@@ -394,55 +394,55 @@
                                 <ul class="dropdown-menu">
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("menu::list") }}"
+                                        href="{{ route('menu::list') }}"
                                     >
                                         Menu
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("video::admin::index") }}"
+                                        href="{{ route('video::admin::index') }}"
                                     >
                                         Videos
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("page::list") }}"
+                                        href="{{ route('page::list') }}"
                                     >
                                         Pages
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("news::admin") }}"
+                                        href="{{ route('news::admin') }}"
                                     >
                                         News
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("email::index") }}"
+                                        href="{{ route('email::index') }}"
                                     >
                                         Email
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("achievement::index") }}"
+                                        href="{{ route('achievement::index') }}"
                                     >
                                         Achievements
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("leaderboards::admin") }}"
+                                        href="{{ route('leaderboards::admin') }}"
                                     >
                                         Leaderboards
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("welcomeMessages.index") }}"
+                                        href="{{ route('welcomeMessages.index') }}"
                                     >
                                         Welcome Messages
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("news::create", ["is_weekly" => true]) }}"
+                                        href="{{ route('news::create', ['is_weekly' => true]) }}"
                                     >
                                         Weekly Update
                                     </a>
@@ -453,37 +453,37 @@
                                     ></li>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("headerimages.index") }}"
+                                        href="{{ route('headerimages.index') }}"
                                     >
                                         Header Images
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("photo::admin::index") }}"
+                                        href="{{ route('photo::admin::index') }}"
                                     >
                                         Photo Admin
                                     </a>
 
-                                    @can("sysadmin")
+                                    @can('sysadmin')
                                         <li
                                             role="separator"
                                             class="dropdown-divider"
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("alias::index") }}"
+                                            href="{{ route('alias::index') }}"
                                         >
                                             Aliases
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("announcement::index") }}"
+                                            href="{{ route('announcement::index') }}"
                                         >
                                             Announcements
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("authorization::overview") }}"
+                                            href="{{ route('authorization::overview') }}"
                                         >
                                             Authorization
                                         </a>
@@ -493,7 +493,7 @@
                                         ></li>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("codex.index") }}"
+                                            href="{{ route('codex.index') }}"
                                         >
                                             Codices
                                         </a>
@@ -505,7 +505,7 @@
                                     ></li>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("passwordstore::index") }}"
+                                        href="{{ route('passwordstore::index') }}"
                                     >
                                         Password Store
                                     </a>
@@ -513,22 +513,22 @@
                             </li>
                         @endcanany
 
-                        @cannot("board")
+                        @cannot('board')
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
-                                    href="{{ Config::string("protube.remote_url") }}"
+                                    href="{{ Config::string('protube.remote_url') }}"
                                     target="_blank"
                                     role="button"
                                 >
                                     ProTube
-                                    @if (Auth::user()->hasPermissionTo("protube") || Auth::user()->isTempadmin())
+                                    @if (Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
                                         Admin
                                     @endif
                                 </a>
                             </li>
 
-                            @if (Auth::user()->hasAllPermissions(["protography", "header-image"]))
+                            @if (Auth::user()->hasAllPermissions(['protography', 'header-image']))
                                 <li class="nav-item dropdown">
                                     <a
                                         href="#"
@@ -544,13 +544,13 @@
                                     <ul class="dropdown-menu">
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("headerimages.index") }}"
+                                            href="{{ route('headerimages.index') }}"
                                         >
                                             Header Images
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("photo::admin::index") }}"
+                                            href="{{ route('photo::admin::index') }}"
                                         >
                                             Photo Admin
                                         </a>
@@ -558,11 +558,11 @@
                                 </li>
                             @endif
 
-                            @can("protography")
+                            @can('protography')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
-                                        href="{{ route("photo::admin::index") }}"
+                                        href="{{ route('photo::admin::index') }}"
                                         role="button"
                                         aria-haspopup="false"
                                         aria-expanded="false"
@@ -572,11 +572,11 @@
                                 </li>
                             @endcan
 
-                            @can("registermembers")
+                            @can('registermembers')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
-                                        href="{{ route("user::registrationhelper::list") }}"
+                                        href="{{ route('user::registrationhelper::list') }}"
                                         role="button"
                                         aria-haspopup="false"
                                         aria-expanded="false"
@@ -586,11 +586,11 @@
                                 </li>
                             @endcan
 
-                            @can("senate")
+                            @can('senate')
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
-                                        href="{{ route("codex.index") }}"
+                                        href="{{ route('codex.index') }}"
                                         role="button"
                                         aria-haspopup="false"
                                         aria-expanded="false"
@@ -605,7 +605,7 @@
                             <li class="nav-item">
                                 <a
                                     class="nav-link"
-                                    href="{{ route("leaderboards::admin") }}"
+                                    href="{{ route('leaderboards::admin') }}"
                                     role="button"
                                     aria-haspopup="false"
                                     aria-expanded="false"
@@ -619,7 +619,7 @@
 
                 <form
                     method="post"
-                    action="{{ route("search::post") }}"
+                    action="{{ route('search::post') }}"
                     class="form-inline mt-2 mt-md-0 me-2 float-end"
                 >
                     {{ csrf_field() }}
@@ -666,7 +666,7 @@
                                 >
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("user::dashboard::show") }}"
+                                        href="{{ route('user::dashboard::show') }}"
                                     >
                                         Dashboard
                                     </a>
@@ -674,14 +674,14 @@
                                     @if (Auth::user()->is_member)
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("user::profile") }}"
+                                            href="{{ route('user::profile') }}"
                                         >
                                             My Profile
                                         </a>
                                     @else
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("becomeamember") }}"
+                                            href="{{ route('becomeamember') }}"
                                         >
                                             Become a member!
                                         </a>
@@ -709,28 +709,28 @@
 
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("protube::dashboard") }}"
+                                        href="{{ route('protube::dashboard') }}"
                                     >
                                         ProTube Dashboard
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route("omnomcom::orders::index") }}"
+                                        href="{{ route('omnomcom::orders::index') }}"
                                     >
                                         Purchase History
                                     </a>
 
-                                    @if (Session::has("impersonator"))
+                                    @if (Session::has('impersonator'))
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("user::quitimpersonating") }}"
+                                            href="{{ route('user::quitimpersonating') }}"
                                         >
                                             Quit Impersonation
                                         </a>
                                     @else
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route("login::logout") }}"
+                                            href="{{ route('login::logout') }}"
                                         >
                                             Logout
                                         </a>
@@ -743,14 +743,14 @@
                     <form class="form-inline mt-2 mt-md-0">
                         <a
                             class="btn btn-outline-light me-2"
-                            href="{{ route("login::register::index") }}"
+                            href="{{ route('login::register::index') }}"
                         >
                             <i class="fas fa-user-plus me-2"></i>
                             Register
                         </a>
                         <a
                             class="btn btn-light"
-                            href="{{ route("login::show") }}"
+                            href="{{ route('login::show') }}"
                         >
                             <i class="fas fa-id-card fa-fw me-2"></i>
                             Log-in

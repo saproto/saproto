@@ -1,17 +1,17 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Register account
 @endsection
 
-@section("login-body")
+@section('login-body')
     <form
         method="POST"
         class="text-justify"
-        action="{{ route("login::register::surfconext") }}"
+        action="{{ route('login::register::surfconext') }}"
     >
-        @if (Session::get("wizard"))
-            @include("users.registerwizard_macro")
+        @if (Session::get('wizard'))
+            @include('users.registerwizard_macro')
         @else
             <p>
                 You tried to login using a university account we don't
@@ -34,22 +34,22 @@
         <p>
             Name:
             <strong>
-                {{ $remote_data["givenname"] }} {{ $remote_data["surname"] }}
+                {{ $remote_data['givenname'] }} {{ $remote_data['surname'] }}
             </strong>
         </p>
 
         <p>
             E-mail address:
-            <strong>{{ $remote_data["mail"] }}</strong>
+            <strong>{{ $remote_data['mail'] }}</strong>
             <br />
             <i>You can change this later!</i>
         </p>
 
         <p>
             University account:
-            <strong>{{ $remote_data["uid"] }}</strong>
+            <strong>{{ $remote_data['uid'] }}</strong>
             at
-            <strong>{{ $remote_data["org"] }}</strong>
+            <strong>{{ $remote_data['org'] }}</strong>
             <br />
             <i>You can unlink your account later!</i>
         </p>
@@ -76,11 +76,11 @@
             </a>
 
             @include(
-                "components.forms.checkbox",
+                'components.forms.checkbox',
                 [
-                    "name" => "privacy_policy_acceptance",
-                    "label" => "I have read and acknowledge the privacy policy.",
-                    "required" => true,
+                    'name' => 'privacy_policy_acceptance',
+                    'label' => 'I have read and acknowledge the privacy policy.',
+                    'required' => true,
                 ]
             )
         </p>

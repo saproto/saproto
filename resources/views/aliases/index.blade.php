@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Alias Management
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -25,10 +25,10 @@
                             <tr>
                                 <td class="text-end">
                                     <strong>{{ $alias }}</strong>
-                                    @ {{ Config::string("proto.emaildomain") }}
+                                    @ {{ Config::string('proto.emaildomain') }}
 
                                     <a
-                                        href="{{ route("alias::delete", ["id_or_alias" => $alias]) }}"
+                                        href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}"
                                         class="ms-2"
                                     >
                                         <i class="fas fa-trash text-danger"></i>
@@ -37,7 +37,7 @@
                                 <td>
                                     @foreach ($destinations as $destination)
                                         <a
-                                            href="{{ route("alias::delete", ["id_or_alias" => $destination->id]) }}"
+                                            href="{{ route('alias::delete', ['id_or_alias' => $destination->id]) }}"
                                             class="me-2"
                                         >
                                             <i
@@ -50,7 +50,7 @@
                                         @elseif ($destination->user)
                                             @if ($destination->user->isMember)
                                                 <a
-                                                    href="{{ route("user::profile", ["id" => $destination->user->getPublicId()]) }}"
+                                                    href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}"
                                                 >
                                                     @if ($destination->user->trashed())
                                                         <span
@@ -85,7 +85,7 @@
                 <div class="card-body">
                     <p>
                         <a
-                            href="{{ route("alias::create") }}"
+                            href="{{ route('alias::create') }}"
                             class="form-control btn btn-success"
                         >
                             Create a new alias.
@@ -94,7 +94,7 @@
 
                     <p class="text-center">- or -</p>
 
-                    <form method="post" action="{{ route("alias::update") }}">
+                    <form method="post" action="{{ route('alias::update') }}">
                         {{ csrf_field() }}
 
                         <input

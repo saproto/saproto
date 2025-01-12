@@ -1,22 +1,22 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Upload a new header image
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
                 <form
                     method="post"
-                    action="{{ route("headerimages.store") }}"
+                    action="{{ route('headerimages.store') }}"
                     enctype="multipart/form-data"
                 >
                     @csrf
 
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -64,7 +64,7 @@
                         </button>
 
                         <a
-                            href="{{ route("headerimages.index") }}"
+                            href="{{ route('headerimages.index') }}"
                             class="btn btn-default"
                         >
                             Cancel

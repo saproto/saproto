@@ -1,4 +1,4 @@
-<form method="get" action="{{ route("email::filter") }}">
+<form method="get" action="{{ route('email::filter') }}">
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Search emails</div>
 
@@ -9,34 +9,34 @@
                     class="form-control"
                     id="searchterm"
                     name="searchterm"
-                    value="{{ $searchTerm ?? "" }}"
+                    value="{{ $searchTerm ?? '' }}"
                     required
                 />
             </div>
 
             <div class="col">
                 @include(
-                    "components.forms.checkbox",
+                    'components.forms.checkbox',
                     [
-                        "name" => "search_description",
-                        "label" => "Search description",
-                        "checked" => $description ?? true,
+                        'name' => 'search_description',
+                        'label' => 'Search description',
+                        'checked' => $description ?? true,
                     ]
                 )
                 @include(
-                    "components.forms.checkbox",
+                    'components.forms.checkbox',
                     [
-                        "name" => "search_subject",
-                        "label" => "Search subject",
-                        "checked" => $subject ?? false,
+                        'name' => 'search_subject',
+                        'label' => 'Search subject',
+                        'checked' => $subject ?? false,
                     ]
                 )
                 @include(
-                    "components.forms.checkbox",
+                    'components.forms.checkbox',
                     [
-                        "name" => "search_body",
-                        "label" => "Search body",
-                        "checked" => $body ?? false,
+                        'name' => 'search_body',
+                        'label' => 'Search body',
+                        'checked' => $body ?? false,
                     ]
                 )
             </div>

@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Page Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("page::create") }}"
+                        href="{{ route('page::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new page.
@@ -33,9 +33,9 @@
                             <td>{{ $page->title }}</td>
                             <td>
                                 <a
-                                    href="{{ route("page::show", $page->slug) }}"
+                                    href="{{ route('page::show', $page->slug) }}"
                                 >
-                                    {{ route("page::show", $page->slug) }}
+                                    {{ route('page::show', $page->slug) }}
                                 </a>
                             </td>
                             <td>
@@ -45,19 +45,19 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route("page::edit", ["id" => $page->id]) }}"
+                                    href="{{ route('page::edit', ['id' => $page->id]) }}"
                                 >
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
 
                                 @include(
-                                    "components.modals.confirm-modal",
+                                    'components.modals.confirm-modal',
                                     [
-                                        "action" => route("page::delete", ["id" => $page->id]),
-                                        "text" => '<i class="fas fa-trash text-danger"></i>',
-                                        "title" => "Confirm Delete",
-                                        "message" => "Are you sure you want to delete this page?",
-                                        "confirm" => "Delete",
+                                        'action' => route('page::delete', ['id' => $page->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => 'Are you sure you want to delete this page?',
+                                        'confirm' => 'Delete',
                                     ]
                                 )
                             </td>

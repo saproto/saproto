@@ -1,12 +1,12 @@
 <a
     class="btn btn-success btn-block mb-3"
-    href="{{ route("omnomcom::orders::orderline-wizard") }}"
+    href="{{ route('omnomcom::orders::orderline-wizard') }}"
 >
     Add orderline wizard.
     <span class="ms-3">🧙</span>
 </a>
 
-<form method="post" action="{{ route("omnomcom::orders::store") }}">
+<form method="post" action="{{ route('omnomcom::orders::store') }}">
     @csrf
 
     <div class="card mb-3">

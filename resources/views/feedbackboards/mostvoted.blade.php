@@ -6,10 +6,10 @@
         </div>
         <div class="card-body">
             @include(
-                "feedbackboards.include.feedback",
+                'feedbackboards.include.feedback',
                 [
-                    "feedback" => $mostVoted,
-                    "controls" => false,
+                    'feedback' => $mostVoted,
+                    'controls' => false,
                 ]
             )
         </div>

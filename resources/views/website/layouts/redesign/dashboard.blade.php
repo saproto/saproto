@@ -1,11 +1,11 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("body")
-    @include("website.navbar")
+@section('body')
+    @include('website.navbar')
 
     <main role="main" id="dashboard" class="container-fluid border-dark">
-        @include("website.announcements")
+        @include('website.announcements')
 
-        @yield("container")
+        @yield('container')
     </main>
 @endsection

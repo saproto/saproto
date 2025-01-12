@@ -17,7 +17,7 @@
                 </div>
                 <video id="purchase-movie" width="473" height="260">
                     <source
-                        src="{{ asset("videos/omnomcom.webm") }}"
+                        src="{{ asset('videos/omnomcom.webm') }}"
                         type="video/webm"
                     />
                 </video>

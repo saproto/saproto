@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{{ $new ? route("committee::store") : route("committee::update", ["id" => $committee->id]) }}"
+    action="{{ $new ? route('committee::store') : route('committee::update', ['id' => $committee->id]) }}"
 >
     @csrf
 
@@ -20,7 +20,7 @@
                     id="name"
                     name="name"
                     placeholder="Awesome Committee Extraordinaire"
-                    value="{{ ! $new ? $committee->name : "" }}"
+                    value="{{ ! $new ? $committee->name : '' }}"
                 />
             </div>
 
@@ -36,10 +36,10 @@
                         id="slug"
                         name="slug"
                         placeholder="awesome"
-                        value="{{ ! $new ? $committee->slug : "" }}"
+                        value="{{ ! $new ? $committee->slug : '' }}"
                     />
                     <span class="input-group-text">
-                        @ {{ Config::string("proto.emaildomain") }}
+                        @ {{ Config::string('proto.emaildomain') }}
                     </span>
                 </div>
             </div>
@@ -95,14 +95,14 @@
             <div class="form-group mt-1">
                 <div class="input-group" id="isActiveInput">
                     @include(
-                        "components.forms.checkbox",
+                        'components.forms.checkbox',
                         [
-                            "name" => "is_active",
-                            "checked" => ! $new && ! $committee?->is_active,
-                            "label" =>
-                                "Set " .
-                                (! $new && $committee?->is_society ? "society" : "committee") .
-                                " as inactive",
+                            'name' => 'is_active',
+                            'checked' => ! $new && ! $committee?->is_active,
+                            'label' =>
+                                'Set ' .
+                                (! $new && $committee?->is_society ? 'society' : 'committee') .
+                                ' as inactive',
                         ]
                     )
                     {{-- Tooltip to show aditional information --}}
@@ -146,13 +146,13 @@
             <div class="form-group">
                 <label for="editor">Description</label>
                 @include(
-                    "components.forms.markdownfield",
+                    'components.forms.markdownfield',
                     [
-                        "name" => "description",
-                        "placeholder" => $new
-                            ? "Please elaborate on why this committee is awesome."
+                        'name' => 'description',
+                        'placeholder' => $new
+                            ? 'Please elaborate on why this committee is awesome.'
                             : null,
-                        "value" => $new ? null : $committee->description,
+                        'value' => $new ? null : $committee->description,
                     ]
                 )
             </div>
@@ -160,7 +160,7 @@
 
         <div class="card-footer">
             <a
-                href="{{ $new ? "javascript:history.go(-1)" : route("committee::show", ["id" => $committee->getPublicId()]) }}"
+                href="{{ $new ? 'javascript:history.go(-1)' : route('committee::show', ['id' => $committee->getPublicId()]) }}"
                 class="btn btn-light"
             >
                 Cancel
@@ -173,35 +173,35 @@
         </div>
     </div>
 </form>
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Update the is active checkbox when the committee type is changed
         document
             .getElementById('is_society')
             .addEventListener('change', function () {
-                updateIsSociety(this.value === '1');
-            });
+                updateIsSociety(this.value === '1')
+            })
 
         // Update the is active checkbox when the committee type is changed
         function updateIsSociety(isSociety) {
             // Update the checkbox text
             document.getElementById(
-                'isActiveInput',
+                'isActiveInput'
             ).firstElementChild.lastElementChild.innerText =
-                'Set ' + (isSociety ? 'society' : 'committee') + ' as inactive';
+                'Set ' + (isSociety ? 'society' : 'committee') + ' as inactive'
 
             // Update the labels
             document.getElementById('committee_header_label').innerText =
-                (isSociety ? 'Society' : 'Committee') + ' information';
+                (isSociety ? 'Society' : 'Committee') + ' information'
             document.getElementById('committee_name_label').innerText =
-                (isSociety ? 'Society' : 'Committee') + ' name';
+                (isSociety ? 'Society' : 'Committee') + ' name'
             document.getElementById('committee_slug_label').innerText =
-                (isSociety ? 'Society' : 'Committee') + ' e-mail alias';
+                (isSociety ? 'Society' : 'Committee') + ' e-mail alias'
             document.getElementById('committee_type_label').innerText =
-                (isSociety ? 'Society' : 'Committee') + ' visibility';
+                (isSociety ? 'Society' : 'Committee') + ' visibility'
         }
 
         // Set the initial state of the is active checkbox
-        updateIsSociety(Boolean({{ $committee?->is_society ?? 0 }}));
+        updateIsSociety(Boolean({{ $committee?->is_society ?? 0 }}))
     </script>
 @endpush

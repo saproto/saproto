@@ -1,7 +1,7 @@
 <form
     class="form-horizontal"
     method="post"
-    action="{{ route("welcomeMessages.store") }}"
+    action="{{ route('welcomeMessages.store') }}"
     id="addmessage"
 >
     {{ csrf_field() }}

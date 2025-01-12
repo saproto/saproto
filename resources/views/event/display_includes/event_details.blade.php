@@ -8,25 +8,25 @@
         This event is scheduled and not shown yet on the site. For now you can
         only access it directly via the URL. It is scheduled for
         <i>
-            {{ Carbon::createFromTimestamp($event->publication)->format("l j F Y, H:i") }}
+            {{ Carbon::createFromTimestamp($event->publication)->format('l j F Y, H:i') }}
         </i>
     </div>
 @endif
 
-@if (Auth::check() && ($event->isEventAdmin(Auth::user()) || Auth::user()->can("board")))
+@if (Auth::check() && ($event->isEventAdmin(Auth::user()) || Auth::user()->can('board')))
     <div class="row align-content-center mb-3">
         @if ($event->isEventAdmin(Auth::user()))
             <a
-                href="{{ route("event::admin", ["id" => $event->id]) }}"
+                href="{{ route('event::admin', ['id' => $event->id]) }}"
                 class="btn btn-primary float-start col mx-3"
             >
                 Admin
             </a>
         @endif
 
-        @can("board")
+        @can('board')
             <a
-                href="{{ route("event::edit", ["id" => $event->id]) }}"
+                href="{{ route('event::edit', ['id' => $event->id]) }}"
                 class="btn btn-info float-end col mx-3"
             >
                 Edit
@@ -37,7 +37,7 @@
 
 <div class="card mb-3">
     <a
-        href="{{ route("event::index", ["id" => $event->id]) }}"
+        href="{{ route('event::index', ['id' => $event->id]) }}"
         class="btn btn-default"
     >
         Back to calendar
@@ -56,7 +56,7 @@
     <div
         class="card-header bg-light justify-content-between d-inline-flex align-items-center"
     >
-        <h5 class="card-title">@yield("page-title")</h5>
+        <h5 class="card-title">@yield('page-title')</h5>
 
         @if ($event->category)
             <span class="badge rounded-pill bg-info ellipsis float-end mw-100">
@@ -79,7 +79,7 @@
                 @endif
 
                 <a
-                    href="{{ route("committee::show", ["id" => $event->committee->getPublicId()]) }}"
+                    href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}"
                 >
                     {{ $event->committee->name }}
                 </a>
@@ -88,7 +88,7 @@
 
         <li class="list-group-item">
             <i class="fas fa-fw fa-clock" aria-hidden="true"></i>
-            {{ $event->generateTimespanText("l j F Y, H:i", "H:i", "till") }}
+            {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
         </li>
 
         <li class="list-group-item">
@@ -112,7 +112,7 @@
         @if ($event->involves_food == true)
             <a
                 class="list-group-item bg-info text-white"
-                href="{{ route("user::dashboard::show") }}#alergies"
+                href="{{ route('user::dashboard::show') }}#alergies"
             >
                 <i class="fas fa-fw fa-utensils" aria-hidden="true"></i>
                 There will be food, please indicate any allergies or diets on
@@ -129,7 +129,7 @@
 
         @if (! Auth::check())
             <a
-                href="{{ route("becomeamember") }}"
+                href="{{ route('becomeamember') }}"
                 class="list-group-item bg-info text-white text-center"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
@@ -141,7 +141,7 @@
 
         @if (! Auth::check() && ! isset($event->activity))
             <a
-                href="{{ route("event::login", ["id" => $event->getPublicId()]) }}"
+                href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
                 class="list-group-item bg-info text-white text-center"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
@@ -168,13 +168,13 @@
             @if ($event->videos->count() > 0)
                 @foreach ($event->videos as $video)
                     @include(
-                        "website.home.cards.card-bg-image",
+                        'website.home.cards.card-bg-image',
                         [
-                            "url" => route("video::show", ["id" => $video->id]),
-                            "img" => $video->youtube_thumb_url,
-                            "html" => sprintf(
+                            'url' => route('video::show', ['id' => $video->id]),
+                            'img' => $video->youtube_thumb_url,
+                            'html' => sprintf(
                                 '<em>%s</em><br><strong><i class="fas fa-fw fa-play" aria-hidden="true"></i> %s</strong>',
-                                date("M j, Y", strtotime($video->video_date)),
+                                date('M j, Y', strtotime($video->video_date)),
                                 $video->title,
                             ),
                         ]
@@ -185,13 +185,13 @@
             @if ($event->albums->count() > 0)
                 @foreach ($event->albums as $album)
                     @include(
-                        "website.home.cards.card-bg-image",
+                        'website.home.cards.card-bg-image',
                         [
-                            "url" => route("photo::album::list", ["id" => $album->id]),
-                            "img" => $album->thumb(),
-                            "html" => sprintf(
+                            'url' => route('photo::album::list', ['id' => $album->id]),
+                            'img' => $album->thumb(),
+                            'html' => sprintf(
                                 '<em>%s</em><br><strong><i class="fas fa-fw fa-images" aria-hidden="true"></i> %s</strong>',
-                                date("M j, Y", $album->date_taken),
+                                date('M j, Y', $album->date_taken),
                                 $album->name,
                             ),
                         ]

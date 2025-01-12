@@ -1,4 +1,4 @@
-<form method="get" action="{{ route("omnomcom::orders::filter::name") }}">
+<form method="get" action="{{ route('omnomcom::orders::filter::name') }}">
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
             Orderlines from specific user

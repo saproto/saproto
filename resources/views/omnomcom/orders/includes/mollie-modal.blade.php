@@ -25,7 +25,7 @@
                     can pay your outstanding balance using
                     @if (count($methods) > 0)
                         @foreach ($methods as $method)
-                            {{ $method->description . ($loop->last ? "." : ", ") }}
+                            {{ $method->description . ($loop->last ? '.' : ', ') }}
                         @endforeach
                     @else
                             various payment methods.
@@ -49,7 +49,7 @@
                     you would like to pay.
                 </p>
             </div>
-            <form method="post" action="{{ route("omnomcom::mollie::pay") }}">
+            <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
                 @csrf
                 @if ($use_fees)
                     <div class="modal-body text-left container">
@@ -58,7 +58,7 @@
                             class="row justify-content-around btn-group-toggle mb-2"
                             data-bs-toggle="buttons"
                         >
-                            @include("omnomcom.mollie.list-all-payment-methods")
+                            @include('omnomcom.mollie.list-all-payment-methods')
                         </div>
                     </div>
                 @endif

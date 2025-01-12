@@ -1,10 +1,10 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("page-title")
+@section('page-title')
     S.A. Proto | Narrowcasting
 @endsection
 
-@push("stylesheet")
+@push('stylesheet')
     <style>
         html {
             background-color: #333;
@@ -15,6 +15,6 @@
     </style>
 @endpush
 
-@section("body")
-    @include("narrowcasting.display")
+@section('body')
+    @include('narrowcasting.display')
 @endsection

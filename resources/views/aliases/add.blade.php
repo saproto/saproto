@@ -1,16 +1,16 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Add Alias
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
-                <form method="post" action="{{ route("alias::store") }}">
+                <form method="post" action="{{ route('alias::store') }}">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -26,7 +26,7 @@
                                 required
                             />
                             <span class="input-group-text">
-                                @ {{ Config::string("proto.emaildomain") }}
+                                @ {{ Config::string('proto.emaildomain') }}
                             </span>
                         </div>
 
@@ -61,7 +61,7 @@
                         </button>
 
                         <a
-                            href="{{ route("alias::index") }}"
+                            href="{{ route('alias::index') }}"
                             class="btn btn-default"
                         >
                             Cancel
@@ -73,17 +73,17 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.getElementById('user').addEventListener('change', (_) => {
-            document.getElementById('destination').value = '';
-        });
+            document.getElementById('destination').value = ''
+        })
 
         document
             .getElementById('destination')
             .addEventListener('change', (_) => {
-                document.getElementById('destination').focus();
-                document.getElementById('user').value = '';
-            });
+                document.getElementById('destination').focus()
+                document.getElementById('user').value = ''
+            })
     </script>
 @endpush

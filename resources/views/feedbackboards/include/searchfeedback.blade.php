@@ -1,6 +1,6 @@
 <form
     method="get"
-    action="{{ route("feedback::search", ["category" => $category->url]) }}"
+    action="{{ route('feedback::search', ['category' => $category->url]) }}"
 >
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
@@ -15,7 +15,7 @@
                     id="searchTerm"
                     name="searchTerm"
                     placeholder="{{ Auth::user()->calling_name }}"
-                    value="{{ $searchTerm ?? "" }}"
+                    value="{{ $searchTerm ?? '' }}"
                     required
                 />
             </div>

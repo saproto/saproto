@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{{ route("committee::image", ["id" => $committee->id]) }}"
+    action="{{ route('committee::image', ['id' => $committee->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf

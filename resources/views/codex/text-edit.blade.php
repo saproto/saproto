@@ -1,22 +1,22 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Edit Text
 @endsection
 
-@section("container")
+@section('container')
     @php
         /** @var \App\Models\CodexText $text */
     @endphp
 
     <form
-        action="{{ ! empty($text) ? route("codexText.update", ["codexText" => $text]) : route("codexText.store") }}"
+        action="{{ ! empty($text) ? route('codexText.update', ['codexText' => $text]) : route('codexText.store') }}"
         method="POST"
     >
         <input
             type="hidden"
             name="_method"
-            value="{{ ! empty($text) ? "PUT" : "POST" }}"
+            value="{{ ! empty($text) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
@@ -29,7 +29,7 @@
                             <div class="form-group mb-3">
                                 <input
                                     type="text"
-                                    value="{{ $text->name ?? "" }}"
+                                    value="{{ $text->name ?? '' }}"
                                     class="form-control"
                                     id="name"
                                     name="name"
@@ -45,7 +45,7 @@
                             >
                                 @foreach ($textTypes as $textType)
                                     <option
-                                        {{ $selectedTextType?->id === $textType->id ? "selected" : "" }}
+                                        {{ $selectedTextType?->id === $textType->id ? 'selected' : '' }}
                                         value="{{ $textType->id }}"
                                     >
                                         {{ $textType->type }}
@@ -56,11 +56,11 @@
                             <label for="text">Text:</label>
                             <div class="form-group mb-3">
                                 @include(
-                                    "components.forms.markdownfield",
+                                    'components.forms.markdownfield',
                                     [
-                                        "name" => "text",
-                                        "placeholder" => "Place your text here...",
-                                        "value" => $text->text ?? "",
+                                        'name' => 'text',
+                                        'placeholder' => 'Place your text here...',
+                                        'value' => $text->text ?? '',
                                     ]
                                 )
                             </div>

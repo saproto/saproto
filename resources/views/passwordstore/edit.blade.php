@@ -1,29 +1,29 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@push("head")
+@push('head')
     <meta
         http-equiv="refresh"
-        content="{{ Session::get("passwordstore-verify") - time() }}"
+        content="{{ Session::get('passwordstore-verify') - time() }}"
     />
 @endpush
 
-@section("page-title")
-    {{ $password ? "Edit" : "Add" }}
-    {{ $type == "password" ? "Password" : "Secure Note" }}
+@section('page-title')
+    {{ $password ? 'Edit' : 'Add' }}
+    {{ $type == 'password' ? 'Password' : 'Secure Note' }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
                 method="post"
-                action="{{ $password ? route("passwordstore::update", ["id" => $password->id]) : route("passwordstore::store") }}"
+                action="{{ $password ? route('passwordstore::update', ['id' => $password->id]) : route('passwordstore::store') }}"
             >
                 @csrf
 
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -32,7 +32,7 @@
                             class="form-control mb-3"
                             type="text"
                             name="description"
-                            value="{{ $password->description ?? "" }}"
+                            value="{{ $password->description ?? '' }}"
                         />
 
                         <label>Authorized users:</label>
@@ -53,7 +53,7 @@
                             @endforeach
                         </select>
 
-                        @if ($type == "password")
+                        @if ($type == 'password')
                             <input type="hidden" name="type" value="password" />
 
                             <label>Username:</label>
@@ -61,7 +61,7 @@
                                 class="form-control mb-3"
                                 type="text"
                                 name="username"
-                                value="{{ $password ? Crypt::decrypt($password->username) : "" }}"
+                                value="{{ $password ? Crypt::decrypt($password->username) : '' }}"
                             />
 
                             <label>Password:</label>
@@ -69,7 +69,7 @@
                                 class="form-control mb-3"
                                 type="password"
                                 name="password"
-                                value="{{ $password ? Crypt::decrypt($password->password) : "" }}"
+                                value="{{ $password ? Crypt::decrypt($password->password) : '' }}"
                             />
 
                             <label>Website URI:</label>
@@ -77,7 +77,7 @@
                                 class="form-control mb-3"
                                 type="text"
                                 name="url"
-                                value="{{ $password->url ?? "" }}"
+                                value="{{ $password->url ?? '' }}"
                             />
 
                             <label>Comment:</label>
@@ -91,7 +91,7 @@
                             rows="10"
                             placeholder="The content."
                         >
-{{ $password?->note ? Crypt::decrypt($password->note) : "" }}</textarea
+{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea
                         >
                     </div>
 
@@ -103,7 +103,7 @@
                         />
 
                         <a
-                            href="{{ route("passwordstore::index") }}"
+                            href="{{ route('passwordstore::index') }}"
                             class="btn btn-default"
                         >
                             Cancel

@@ -12,7 +12,7 @@
             type="text"
             name="{{ $name }}"
             class="form-control iconpicker rounded-2"
-            value="{{ $placeholder ?? "" }}"
+            value="{{ $placeholder ?? '' }}"
         />
     </div>
 </div>

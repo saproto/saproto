@@ -1,7 +1,7 @@
 <form
     class="form-horizontal"
     method="post"
-    action="{{ route("feedback::store", ["category" => $category]) }}"
+    action="{{ route('feedback::store', ['category' => $category]) }}"
 >
     {{ csrf_field() }}
 

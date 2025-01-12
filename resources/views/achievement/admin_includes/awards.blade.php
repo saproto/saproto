@@ -6,13 +6,13 @@
             @foreach ($achievement->currentOwners(false)->get() as $user)
                 <div class="badge bg-primary">
                     <a
-                        href="{{ route("user::profile", ["id" => $user->getPublicId()]) }}"
+                        href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
                         class="text-white"
                     >
                         {{ $user->name }}
                     </a>
                     <a
-                        href="{{ route("achievement::take", ["id" => $achievement->id, "user" => $user->id]) }}"
+                        href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
                         class="text-white"
                     >
                         <i class="fas fa-times ms-2"></i>
@@ -29,7 +29,7 @@
     <div class="card-footer">
         <form
             method="post"
-            action="{{ route("achievement::award", ["id" => $achievement->id]) }}"
+            action="{{ route('achievement::award', ['id' => $achievement->id]) }}"
         >
             @csrf
 
@@ -39,12 +39,12 @@
             </div>
 
             @include(
-                "components.forms.datetimepicker",
+                'components.forms.datetimepicker',
                 [
-                    "name" => "achieved_on",
-                    "label" => "Achieved on",
-                    "placeholder" => Carbon::now()->timestamp,
-                    "format" => "date",
+                    'name' => 'achieved_on',
+                    'label' => 'Achieved on',
+                    'placeholder' => Carbon::now()->timestamp,
+                    'format' => 'date',
                 ]
             )
 
@@ -67,12 +67,12 @@
             <hr />
 
             @include(
-                "components.modals.confirm-modal",
+                'components.modals.confirm-modal',
                 [
-                    "action" => route("achievement::takeAll", ["id" => $achievement->id]),
-                    "classes" => "btn-outline-danger btn-block",
-                    "text" => "Take from everyone",
-                    "message" => "Are you sure you want to take $achievement->name from everyone?",
+                    'action' => route('achievement::takeAll', ['id' => $achievement->id]),
+                    'classes' => 'btn-outline-danger btn-block',
+                    'text' => 'Take from everyone',
+                    'message' => "Are you sure you want to take $achievement->name from everyone?",
                 ]
             )
         </form>

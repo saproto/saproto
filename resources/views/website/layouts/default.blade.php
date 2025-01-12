@@ -1,9 +1,9 @@
-@extends("website.layouts.content")
+@extends('website.layouts.content')
 
-@section("container")
+@section('container')
     <div id="container" class="container">
-        @include("website.announcements")
+        @include('website.announcements')
 
-        @yield("content")
+        @yield('content')
     </div>
 @endsection

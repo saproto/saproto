@@ -19,7 +19,7 @@
                                 <span
                                     class="badge bg-dark text-white float-end"
                                 >
-                                    #{{ str_pad($purchase->id, 5, "0", STR_PAD_LEFT) }}
+                                    #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>
                                     {{ $purchase->ticket->product->name }}
@@ -28,7 +28,7 @@
 
                                 @if ($purchase->canBeDownloaded())
                                     <a
-                                        href="{{ route("tickets::download", ["id" => $purchase->id]) }}"
+                                        href="{{ route('tickets::download', ['id' => $purchase->id]) }}"
                                         class="card-link text-info"
                                     >
                                         Download PDF
@@ -38,7 +38,7 @@
 
                                     <a
                                         class="card-link text-danger"
-                                        href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::index") }}"
+                                        href="{{ $purchase->orderline->molliePayment->payment_url ?? route('omnomcom::orders::index') }}"
                                     >
                                         Payment Required
                                     </a>
@@ -66,7 +66,7 @@
 
     <form
         method="post"
-        action="{{ route("event::buytickets", ["id" => $event->id]) }}"
+        action="{{ route('event::buytickets', ['id' => $event->id]) }}"
     >
         @csrf
 
@@ -86,7 +86,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route("event::login", ["id" => $event->getPublicId()]) }}"
+                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
                         >
                             log-in
                         </a>
@@ -99,7 +99,7 @@
                         @endphp
 
                         <div
-                            class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? "" : "opacity-50" }}"
+                            class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}"
                         >
                             <div class="card-body">
                                 <p class="card-title">
@@ -143,16 +143,16 @@
                                 <p class="card-text">
                                     @if ($ticket->isAvailable(Auth::user()))
                                         <span class="badge bg-info float-end">
-                                            {{ $ticket->product->stock > Config::integer("proto.maxtickets") ? Config::integer("proto.maxtickets") . "+" : $ticket->product->stock }}
+                                            {{ $ticket->product->stock > Config::integer('proto.maxtickets') ? Config::integer('proto.maxtickets') . '+' : $ticket->product->stock }}
                                             available
                                         </span>
                                     @endif
 
-                                    @if (date("U") > $ticket->available_to)
+                                    @if (date('U') > $ticket->available_to)
                                         Not for sale anymore.
-                                    @elseif (date("U") < $ticket->available_from)
+                                    @elseif (date('U') < $ticket->available_from)
                                         For sale starting
-                                        {{ date("d-m-Y H:i", $ticket->available_from) }}
+                                        {{ date('d-m-Y H:i', $ticket->available_from) }}
                                     @elseif (! $ticket->canBeSoldTo(Auth::user()) && ! Auth::user()->is_member)
                                         This ticket is only available to members!
                                     @elseif ($ticket->product->stock <= 0)
@@ -165,7 +165,7 @@
                                         <strong>On sale!</strong>
                                         <br />
                                         Available until
-                                        {{ date("d-m-Y H:i", $ticket->available_to) }}
+                                        {{ date('d-m-Y H:i', $ticket->available_to) }}
                                     @endif
 
                                     @if ($ticket->isAvailable(Auth::user()))
@@ -179,7 +179,7 @@
                                             data-previous-value="0"
                                         >
                                             @php
-                                                $max = min(Config::integer("proto.maxtickets"), $ticket->product->stock);
+                                                $max = min(Config::integer('proto.maxtickets'), $ticket->product->stock);
                                                 if ($ticket->has_buy_limit) {
                                                     $max = min($max, $ticket->BuyLimitForUser(Auth::user()));
                                                 }
@@ -217,7 +217,7 @@
             @if (Auth::check() && $tickets_available > 0)
                 <div class="card-footer">
                     {{-- No fees of no prepaid (2,4,5) --}}
-                    @if (! Config::boolean("omnomcom.mollie.use_fees") || ! $has_prepay_tickets)
+                    @if (! Config::boolean('omnomcom.mollie.use_fees') || ! $has_prepay_tickets)
                         <button type="submit" class="btn btn-success btn-block">
                             Total:
                             <strong>
@@ -227,8 +227,8 @@
                             Finish purchase!
                         </button>
                         {{-- fees and only prepaid (3) --}}
-                    @elseif (Config::boolean("omnomcom.mollie.use_fees") && $only_prepaid)
-                        @include("event.display_includes.mollie-modal")
+                    @elseif (Config::boolean('omnomcom.mollie.use_fees') && $only_prepaid)
+                        @include('event.display_includes.mollie-modal')
                         <a
                             href="javascript:void();"
                             class="btn btn-primary btn-block"
@@ -250,7 +250,7 @@
                             </strong>
                             Finish purchase!
                         </button>
-                        @include("event.display_includes.mollie-modal")
+                        @include('event.display_includes.mollie-modal')
                         <a
                             hidden
                             id="feesbutton"
@@ -277,10 +277,10 @@
                 </div>
                 <div class="card-body">
                     @include(
-                        "event.display_includes.render_participant_list",
+                        'event.display_includes.render_participant_list',
                         [
-                            "participants" => $ticket->getUsers(),
-                            "event" => null,
+                            'participants' => $ticket->getUsers(),
+                            'event' => null,
                         ]
                     )
                 </div>
@@ -288,42 +288,38 @@
         @endif
     @endforeach
 
-    @push("javascript")
+    @push('javascript')
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            const directPayButton = document.getElementById('directpay');
-            const feesButton = document.getElementById('feesbutton');
+            const directPayButton = document.getElementById('directpay')
+            const feesButton = document.getElementById('feesbutton')
             const selectList = Array.from(
-                document.getElementsByClassName('ticket-select'),
-            );
-            let totalPrepaidSelected = 0;
+                document.getElementsByClassName('ticket-select')
+            )
+            let totalPrepaidSelected = 0
             selectList.forEach((ticket) =>
                 ticket.addEventListener('change', (_) => {
                     const total = selectList.reduce(
                         (agg, el) =>
                             agg + el.getAttribute('data-price') * el.value,
-                        0,
-                    );
+                        0
+                    )
                     document.getElementById('ticket-total').innerHTML =
-                        total.toFixed(2);
+                        total.toFixed(2)
 
                     if (ticket.getAttribute('data-prepaid') === true) {
                         totalPrepaidSelected +=
-                            ticket.value -
-                            ticket.getAttribute('previous-value');
-                        ticket.setAttribute(
-                            'data-previous-value',
-                            ticket.value,
-                        );
+                            ticket.value - ticket.getAttribute('previous-value')
+                        ticket.setAttribute('data-previous-value', ticket.value)
                     }
                     if (totalPrepaidSelected === 0) {
-                        directPayButton?.setAttribute('hidden', '');
-                        feesButton?.removeAttribute('hidden');
+                        directPayButton?.setAttribute('hidden', '')
+                        feesButton?.removeAttribute('hidden')
                     } else if (totalPrepaidSelected > 0) {
-                        directPayButton?.removeAttribute('hidden');
-                        feesButton?.setAttribute('hidden', '');
+                        directPayButton?.removeAttribute('hidden')
+                        feesButton?.setAttribute('hidden', '')
                     }
-                }),
-            );
+                })
+            )
         </script>
     @endpush
 @endif

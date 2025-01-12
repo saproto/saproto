@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey {{ $user->calling_name }},</p>
 
     <p>
@@ -18,7 +18,7 @@
         to date. Below you will find a summary of the most important personal
         information. To view all information about you we process, please visit
         your
-        <a href="{{ route("user::dashboard::show") }}" target="_blank">
+        <a href="{{ route('user::dashboard::show') }}" target="_blank">
             dashboard
         </a>
         on the website. There you can also update most of the information.

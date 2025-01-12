@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     User Registration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
                 method="get"
-                action="{{ route("user::registrationhelper::list") }}"
+                action="{{ route('user::registrationhelper::list') }}"
             >
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-white">
@@ -37,7 +37,7 @@
         <div class="col-md-9">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -56,11 +56,11 @@
                         <tbody>
                             @foreach ($users as $user)
                                 <tr
-                                    class="{{ $user->deleted_at ? "opacity-50" : "" }}"
+                                    class="{{ $user->deleted_at ? 'opacity-50' : '' }}"
                                 >
                                     <td class="text-center">
                                         <a
-                                            href="{{ route("user::registrationhelper::details", ["id" => $user->id]) }}"
+                                            href="{{ route('user::registrationhelper::details', ['id' => $user->id]) }}"
                                         >
                                             <i class="fas fa-info-circle"></i>
                                         </a>

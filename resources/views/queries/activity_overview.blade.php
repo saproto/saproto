@@ -1,16 +1,16 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    Activity Overview between {{ date("Y-m-d", $start) }} and
-    {{ date("Y-m-d", $end) }}
+@section('page-title')
+    Activity Overview between {{ date('Y-m-d', $start) }} and
+    {{ date('Y-m-d', $end) }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body">
@@ -24,11 +24,11 @@
                             </label>
                             <div class="col-sm-auto">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "start",
-                                        "format" => "date",
-                                        "placeholder" => $start,
+                                        'name' => 'start',
+                                        'format' => 'date',
+                                        'placeholder' => $start,
                                     ]
                                 )
                             </div>
@@ -40,11 +40,11 @@
                             </label>
                             <div class="col-sm-auto mb-3">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "end",
-                                        "format" => "date",
-                                        "placeholder" => $end,
+                                        'name' => 'end',
+                                        'format' => 'date',
+                                        'placeholder' => $end,
                                     ]
                                 )
                             </div>
@@ -78,7 +78,7 @@
                             <tr>
                                 <td>
                                     <a
-                                        href="{{ route("event::show", ["id" => $event->getPublicId()]) }}"
+                                        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
                                     >
                                         {{ $event->title }}
                                     </a>
@@ -92,12 +92,12 @@
                                     @endif
                                 </td>
 
-                                <td>{{ date("Y-m-d H:i", $event->start) }}</td>
+                                <td>{{ date('Y-m-d H:i', $event->start) }}</td>
 
                                 <td>
                                     @if ($event->committee)
                                         <a
-                                            href="{{ route("committee::show", ["id" => $event->committee->slug]) }}"
+                                            href="{{ route('committee::show', ['id' => $event->committee->slug]) }}"
                                         >
                                             {{ $event->committee->name }}
                                         </a>
@@ -116,7 +116,7 @@
                                         {{ $event->activity->backupUsers->count() }}
                                     </td>
                                     <td>
-                                        {{ $event->activity->participants !== -1 ? $event->activity->participants : "no limit" }}
+                                        {{ $event->activity->participants !== -1 ? $event->activity->participants : 'no limit' }}
                                     </td>
                                     <td>
                                         {{ $event->activity->getAttendees() }}

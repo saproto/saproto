@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Edit Dinnerform Orderline
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-6">
             <form
                 method="post"
-                action="{{ route("dinnerform::orderline::update", ["id" => $dinnerformOrderline->id]) }}"
+                action="{{ route('dinnerform::orderline::update', ['id' => $dinnerformOrderline->id]) }}"
             >
                 @csrf
 
@@ -46,11 +46,11 @@
                             />
                         </div>
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "helper",
-                                "checked" => $dinnerformOrderline->helper,
-                                "label" => "Were they a helper?",
+                                'name' => 'helper',
+                                'checked' => $dinnerformOrderline->helper,
+                                'label' => 'Were they a helper?',
                             ]
                         )
                     </div>
@@ -63,7 +63,7 @@
                         />
                         <a
                             class="btn btn-danger ms-2"
-                            href="{{ route("dinnerform::admin", ["id" => $dinnerformOrderline->dinnerform->id]) }}"
+                            href="{{ route('dinnerform::admin', ['id' => $dinnerformOrderline->dinnerform->id]) }}"
                         >
                             Cancel
                         </a>

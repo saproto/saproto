@@ -1,22 +1,22 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
-    {{ $card == null ? "Add new RFID card." : "Edit existing RFID card." }}
+@section('page-title')
+    {{ $card == null ? 'Add new RFID card.' : 'Edit existing RFID card.' }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
                 method="post"
-                action="{{ $card == null ? route("user::rfid::add") : route("user::rfid::update", ["id" => $card->id]) }}"
+                action="{{ $card == null ? route('user::rfid::add') : route('user::rfid::update', ['id' => $card->id]) }}"
                 enctype="multipart/form-data"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -28,7 +28,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="My Albert Heijn Bonus Card"
-                                value="{{ $card->name ?? "" }}"
+                                value="{{ $card->name ?? '' }}"
                                 required
                             />
                         </div>
@@ -40,7 +40,7 @@
                         </button>
 
                         <a
-                            href="{{ route("user::dashboard", ["id" => $card->user->id]) }}"
+                            href="{{ route('user::dashboard', ['id' => $card->user->id]) }}"
                             class="btn btn-default"
                         >
                             Cancel

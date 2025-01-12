@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Authorization Matrix
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-xl-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="card-body overflow-auto">
@@ -37,9 +37,9 @@
                                     @foreach ($permissions as $permission)
                                         <td class="text-center">
                                             <span
-                                                class="{{ $role->hasPermissionTo($permission) ? "" : "opacity-25" }}"
+                                                class="{{ $role->hasPermissionTo($permission) ? '' : 'opacity-25' }}"
                                             >
-                                                {{ $role->hasPermissionTo($permission) ? "x" : "o" }}
+                                                {{ $role->hasPermissionTo($permission) ? 'x' : 'o' }}
                                             </span>
                                         </td>
                                     @endforeach
@@ -61,7 +61,7 @@
                     @foreach ($roles as $i => $role)
                         <form
                             method="post"
-                            action="{{ route("authorization::grant", ["id" => $role->id]) }}"
+                            action="{{ route('authorization::grant', ['id' => $role->id]) }}"
                         >
                             <div class="card mb-2">
                                 <div
@@ -80,17 +80,17 @@
                                     <div class="card-body">
                                         @foreach ($role->users as $user)
                                             @include(
-                                                "users.includes.usercard",
+                                                'users.includes.usercard',
                                                 [
-                                                    "user" => $user,
-                                                    "subtitle" => sprintf(
+                                                    'user' => $user,
+                                                    'subtitle' => sprintf(
                                                         '<div class="badge bg-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <a href="%s"><div class="badge bg-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
-                                                        $user->signed_nda ? "primary" : "danger",
-                                                        $user->signed_nda ? "fa-user-shield" : "fa-user-times",
-                                                        route("authorization::revoke", [
-                                                            "id" => $role->id,
-                                                            "user" => $user->id,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <a href="%s"><div class="badge bg-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
+                                                        $user->signed_nda ? 'primary' : 'danger',
+                                                        $user->signed_nda ? 'fa-user-shield' : 'fa-user-times',
+                                                        route('authorization::revoke', [
+                                                            'id' => $role->id,
+                                                            'user' => $user->id,
                                                         ]),
                                                     ),
                                                 ]

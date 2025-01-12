@@ -1,11 +1,11 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Request Username
 @endsection
 
-@section("login-body")
-    <form method="POST" action="{{ route("login::requestusername") }}">
+@section('login-body')
+    <form method="POST" action="{{ route('login::requestusername') }}">
         @csrf
 
         <p>Please enter your e-mail address.</p>
@@ -16,7 +16,7 @@
                 type="email"
                 name="email"
                 class="form-control"
-                value="{{ old("email") }}"
+                value="{{ old('email') }}"
                 placeholder="garrus.vakarian@example.com"
             />
         </div>

@@ -7,9 +7,9 @@
                 @foreach ($committee->upcomingEvents() as $key => $event)
                     <div class="col-6">
                         @include(
-                            "event.display_includes.event_block",
+                            'event.display_includes.event_block',
                             [
-                                "event" => $event,
+                                'event' => $event,
                             ]
                         )
                     </div>
@@ -28,10 +28,10 @@
                 @foreach ($pastEvents as $key => $event)
                     <div class="col-6">
                         @include(
-                            "event.display_includes.event_block",
+                            'event.display_includes.event_block',
                             [
-                                "event" => $event,
-                                "include_year" => true,
+                                'event' => $event,
+                                'include_year' => true,
                             ]
                         )
                     </div>
@@ -56,10 +56,10 @@
                 @foreach ($pastHelpedEvents as $key => $event)
                     <div class="col-6">
                         @include(
-                            "event.display_includes.event_block",
+                            'event.display_includes.event_block',
                             [
-                                "event" => $event,
-                                "include_year" => true,
+                                'event' => $event,
+                                'include_year' => true,
                             ]
                         )
                     </div>

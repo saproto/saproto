@@ -4,14 +4,14 @@
         @if (! isset($edit))
             <div>
                 <a
-                    href="{{ route("codexSong.create") }}"
+                    href="{{ route('codexSong.create') }}"
                     class="btn btn-info badge"
                 >
                     New Song
                 </a>
 
                 <a
-                    href="{{ route("codexSongCategory.create") }}"
+                    href="{{ route('codexSongCategory.create') }}"
                     class="btn btn-info badge"
                 >
                     New Song type
@@ -38,21 +38,21 @@
                         @if (! isset($edit))
                             <div>
                                 <a
-                                    href="{{ route("codexSongCategory.edit", ["codexSongCategory" => $songCategory]) }}"
+                                    href="{{ route('codexSongCategory.edit', ['codexSongCategory' => $songCategory]) }}"
                                     class="btn btn-info badge m-1"
                                 >
                                     Edit
                                 </a>
                                 @include(
-                                    "components.modals.confirm-modal",
+                                    'components.modals.confirm-modal',
                                     [
-                                        "method" => "DELETE",
-                                        "action" => route("codexSongCategory.destroy", [
-                                            "codexSongCategory" => $songCategory,
+                                        'method' => 'DELETE',
+                                        'action' => route('codexSongCategory.destroy', [
+                                            'codexSongCategory' => $songCategory,
                                         ]),
-                                        "classes" => "btn btn-danger badge",
-                                        "text" => "Delete",
-                                        "message" => "Are you sure you want to delete the category $songCategory->name?<br> This will also delete <b>all songs</b> in this category!",
+                                        'classes' => 'btn btn-danger badge',
+                                        'text' => 'Delete',
+                                        'message' => "Are you sure you want to delete the category $songCategory->name?<br> This will also delete <b>all songs</b> in this category!",
                                     ]
                                 )
                             </div>
@@ -71,13 +71,13 @@
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
                                             @include(
-                                                "components.forms.checkbox",
+                                                'components.forms.checkbox',
                                                 [
-                                                    "input_class_name" => "",
-                                                    "name" => "songids[]",
-                                                    "checked" => in_array($song->id, $mySongs ?? []),
-                                                    "value" => $song->id,
-                                                    "label" => "Include",
+                                                    'input_class_name' => '',
+                                                    'name' => 'songids[]',
+                                                    'checked' => in_array($song->id, $mySongs ?? []),
+                                                    'value' => $song->id,
+                                                    'label' => 'Include',
                                                 ]
                                             )
                                         </div>
@@ -87,19 +87,19 @@
                                     @if (! isset($edit))
                                         <div>
                                             <a
-                                                href="{{ route("codexSong.edit", ["codexSong" => $song]) }}"
+                                                href="{{ route('codexSong.edit', ['codexSong' => $song]) }}"
                                                 class="btn btn-info badge m-1"
                                             >
                                                 Edit
                                             </a>
                                             @include(
-                                                "components.modals.confirm-modal",
+                                                'components.modals.confirm-modal',
                                                 [
-                                                    "method" => "DELETE",
-                                                    "action" => route("codexSong.destroy", ["codexSong" => $song]),
-                                                    "classes" => "btn btn-danger badge m-1",
-                                                    "text" => "Delete",
-                                                    "message" => "Are you sure you want to delete $song->title?",
+                                                    'method' => 'DELETE',
+                                                    'action' => route('codexSong.destroy', ['codexSong' => $song]),
+                                                    'classes' => 'btn btn-danger badge m-1',
+                                                    'text' => 'Delete',
+                                                    'message' => "Are you sure you want to delete $song->title?",
                                                 ]
                                             )
                                         </div>

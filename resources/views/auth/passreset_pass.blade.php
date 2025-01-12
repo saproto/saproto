@@ -1,11 +1,11 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Password Reset
 @endsection
 
-@section("login-body")
-    <form method="POST" action="{{ route("login::password::reset::submit") }}">
+@section('login-body')
+    <form method="POST" action="{{ route('login::password::reset::submit') }}">
         @csrf
 
         <input type="hidden" name="token" value="{{ $reset->token }}" />

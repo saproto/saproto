@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     TIPCie Order History
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
                 method="get"
-                action="{{ route("omnomcom::tipcie::orderhistory") }}"
+                action="{{ route('omnomcom::tipcie::orderhistory') }}"
             >
                 <div class="card">
                     <div class="card-header bg-dark text-white">
@@ -32,12 +32,12 @@
                         <hr />
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "date",
-                                "label" => "Orderlines from:",
-                                "placeholder" => date("U"),
-                                "format" => "date",
+                                'name' => 'date',
+                                'label' => 'Orderlines from:',
+                                'placeholder' => date('U'),
+                                'format' => 'date',
                             ]
                         )
                     </div>

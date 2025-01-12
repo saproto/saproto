@@ -1,14 +1,14 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("body")
+@section('body')
     <main
         role="main"
         class="container-fluid pt-3 border-top border-4 border-primary"
     >
-        @include("website.announcements")
+        @include('website.announcements')
 
-        @yield("container")
+        @yield('container')
     </main>
 
-    @include("website.footer")
+    @include('website.footer')
 @endsection

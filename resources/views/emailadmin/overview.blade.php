@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     E-mail Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white mb-1">
                     E-mail lists
                     <a
-                        href="{{ route("email::list::create") }}"
+                        href="{{ route('email::list::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create new list.
@@ -60,24 +60,24 @@
                             <tr>
                                 <td>{{ $list->name }}</td>
                                 <td>
-                                    {{ $list->is_member_only ? "Member only" : "Public" }}
+                                    {{ $list->is_member_only ? 'Member only' : 'Public' }}
                                 </td>
                                 <td>{{ $list->users_count }}</td>
                                 <td>
                                     <a
-                                        href="{{ route("email::list::edit", ["id" => $list->id]) }}"
+                                        href="{{ route('email::list::edit', ['id' => $list->id]) }}"
                                     >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("email::list::delete", ["id" => $list->id]),
-                                            "text" => '<i class="fas fa-trash text-danger"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" => "Are you sure you want to delete e-mail list $list->name?",
-                                            "confirm" => "Delete",
+                                            'action' => route('email::list::delete', ['id' => $list->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete e-mail list $list->name?",
+                                            'confirm' => 'Delete',
                                         ]
                                     )
                                 </td>
@@ -88,12 +88,12 @@
             </div>
 
             @include(
-                "emailadmin.admin_includes.filter",
+                'emailadmin.admin_includes.filter',
                 [
-                    "searchTerm" => $searchTerm ?? null,
-                    "description" => $description ?? null,
-                    "subject" => $subject ?? null,
-                    "body" => $body ?? null,
+                    'searchTerm' => $searchTerm ?? null,
+                    'description' => $description ?? null,
+                    'subject' => $subject ?? null,
+                    'body' => $body ?? null,
                 ]
             )
         </div>
@@ -103,7 +103,7 @@
                 <div class="card-header bg-dark text-white mb-1">
                     Emails
                     <a
-                        href="{{ route("email::create") }}"
+                        href="{{ route('email::create') }}"
                         class="badge bg-info float-end"
                     >
                         Compose email.
@@ -122,7 +122,7 @@
                     </thead>
 
                     @foreach ($emails as $email)
-                        <tr class="{{ $email->sent ? "opacity-50" : "" }}">
+                        <tr class="{{ $email->sent ? 'opacity-50' : '' }}">
                             <td>{{ $email->description }}</td>
                             <td>
                                 @if ($email->sent)
@@ -145,14 +145,14 @@
                                     list(s) {{ $email->getListName() }}
                                 @elseif ($email->to_event)
                                     event(s)
-                                    {{ $email->to_backup ? "with backup users" : "" }}:
+                                    {{ $email->to_backup ? 'with backup users' : '' }}:
                                     @foreach ($email->events()->get() as $event)
                                             {{ $event->title }}.
                                     @endforeach
                                 @endif
                             </td>
                             <td>
-                                {{ date("d-m-Y H:i", $email->time) }}
+                                {{ date('d-m-Y H:i', $email->time) }}
                             </td>
                             <td>
                                 @if (! $email->sent)
@@ -167,38 +167,38 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route("email::show", ["id" => $email->id]) }}"
+                                    href="{{ route('email::show', ['id' => $email->id]) }}"
                                 >
                                     <i class="fas fa-eye me-2 text-info"></i>
                                 </a>
                                 @if (! $email->sent)
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("email::delete", ["id" => $email->id]),
-                                            "text" => '<i class="fas fa-trash text-danger me-2"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" => "Are you sure you want to delete this e-mail?",
-                                            "confirm" => "Delete",
+                                            'action' => route('email::delete', ['id' => $email->id]),
+                                            'text' => '<i class="fas fa-trash text-danger me-2"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => 'Are you sure you want to delete this e-mail?',
+                                            'confirm' => 'Delete',
                                         ]
                                     )
 
                                     @if (! $email->ready)
                                         <a
-                                            href="{{ route("email::toggleready", ["id" => $email->id]) }}"
+                                            href="{{ route('email::toggleready', ['id' => $email->id]) }}"
                                         >
                                             <i
                                                 class="fas fa-paper-plane text-warning me-2"
                                             ></i>
                                         </a>
                                         <a
-                                            href="{{ route("email::edit", ["id" => $email->id]) }}"
+                                            href="{{ route('email::edit', ['id' => $email->id]) }}"
                                         >
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @else
                                         <a
-                                            href="{{ route("email::toggleready", ["id" => $email->id]) }}"
+                                            href="{{ route('email::toggleready', ['id' => $email->id]) }}"
                                         >
                                             <i
                                                 class="fas fa-undo text-info"

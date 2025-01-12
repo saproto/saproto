@@ -1,3 +1,3 @@
 window.theme = (_) => {
-    console.log("ohboi! theme specific javascript.");
-};
+    console.log('ohboi! theme specific javascript.')
+}

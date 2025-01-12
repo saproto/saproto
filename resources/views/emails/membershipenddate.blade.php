@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->name }},</p>
 
     <p>
@@ -11,7 +11,7 @@
     <p>
         Your membership will end at:
         <b>
-            {{ Carbon::createFromTimestamp($user->member->until)->format("d-m-Y") }}.
+            {{ Carbon::createFromTimestamp($user->member->until)->format('d-m-Y') }}.
         </b>
         <br />
         This means that your membership is valid up until this date and will
@@ -29,7 +29,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.secretary") }}
+        {{ Config::string('proto.secretary') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

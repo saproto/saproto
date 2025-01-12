@@ -7,10 +7,10 @@
         @if (count($events) > 0)
             @foreach ($events as $counter => $event)
                 @if ($event->mayViewEvent(Auth::user()) && $event->isPublished())
-                    @include("event.display_includes.event_block", ["event" => $event, "lazyload" => $counter > 4])
+                    @include('event.display_includes.event_block', ['event' => $event, 'lazyload' => $counter > 4])
 
                     @php
-                        $week = date("W", $event->start);
+                        $week = date('W', $event->start);
                     @endphp
                 @endif
             @endforeach
@@ -20,7 +20,7 @@
             </p>
         @endif
 
-        <a href="{{ route("event::index") }}" class="btn btn-info btn-block">
+        <a href="{{ route('event::index') }}" class="btn btn-info btn-block">
             Go to the calendar
         </a>
     </div>

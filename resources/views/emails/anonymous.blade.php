@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey there! Your committee just received an anonymous e-mail.</p>
 
     <hr />

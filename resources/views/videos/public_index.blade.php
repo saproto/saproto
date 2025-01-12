@@ -1,19 +1,19 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Videos
 @endsection
 
-@section("container")
+@section('container')
     <div class="card">
         <div class="card-body">
             <div class="row">
                 @foreach ($videos as $key => $video)
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         @include(
-                            "videos.includes.video_block",
+                            'videos.includes.video_block',
                             [
-                                "video" => $video,
+                                'video' => $video,
                             ]
                         )
                     </div>

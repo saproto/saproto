@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     The FishCam&trade;
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center" style="height: 75vh">
         <div class="col-12 h-100">
             <div id="fishcam-warning" class="card mb-3">
@@ -69,27 +69,27 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const fishcam = document.getElementById('fishcam');
-        const fishcamSrc = document.getElementById('fishcam-src');
-        const activate = document.getElementById('fishcam-activate');
-        const warning = document.getElementById('fishcam-warning');
-        const unavailable = document.getElementById('fishcam-unavailable');
+        const fishcam = document.getElementById('fishcam')
+        const fishcamSrc = document.getElementById('fishcam-src')
+        const activate = document.getElementById('fishcam-activate')
+        const warning = document.getElementById('fishcam-warning')
+        const unavailable = document.getElementById('fishcam-unavailable')
 
         activate.addEventListener('click', () => {
-            fishcamSrc.src = '{{ Config::string("app-proto.fishcam-url") }}';
-            fishcamSrc.classList.remove('d-none');
-            warning.classList.add('d-none');
-        });
+            fishcamSrc.src = '{{ Config::string('app-proto.fishcam-url') }}'
+            fishcamSrc.classList.remove('d-none')
+            warning.classList.add('d-none')
+        })
 
         fishcamSrc.addEventListener('error', () => {
-            unavailable.classList.remove('d-none');
-            fishcam.classList.add('d-none');
-        });
+            unavailable.classList.remove('d-none')
+            fishcam.classList.add('d-none')
+        })
 
         fishcamSrc.addEventListener('load', () => {
-            fishcam.classList.remove('d-none');
-        });
+            fishcam.classList.remove('d-none')
+        })
     </script>
 @endpush

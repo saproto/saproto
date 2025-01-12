@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Leaderboards
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("leaderboards::create") }}"
+                        href="{{ route('leaderboards::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new leaderboard.
@@ -38,12 +38,12 @@
                             <td>{{ count($leaderboard->entries) }}</td>
                             <td>
                                 <a
-                                    href="{{ route("leaderboards::edit", ["id" => $leaderboard->id]) }}"
+                                    href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}"
                                 >
                                     <i class="fas fa-edit me-2 fa-fw"></i>
                                 </a>
                                 <a
-                                    href="{{ route("leaderboards::delete", ["id" => $leaderboard->id]) }}"
+                                    href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}"
                                 >
                                     <i
                                         class="fas fa-trash text-danger fa-fw"

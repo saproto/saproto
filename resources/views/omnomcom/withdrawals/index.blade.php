@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Withdrawal Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("omnomcom::withdrawal::create") }}"
+                        href="{{ route('omnomcom::withdrawal::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new withdrawal.
@@ -41,7 +41,7 @@
                                 <tr>
                                     <td>
                                         <a
-                                            href="{{ route("omnomcom::withdrawal::show", ["id" => $withdrawal->id]) }}"
+                                            href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}"
                                         >
                                             {{ $withdrawal->id }}
                                         </a>
@@ -55,14 +55,14 @@
                                         {{ $withdrawal->total_orderlines_associated }}
                                     </td>
                                     <td>
-                                        &euro;{{ number_format($withdrawal->sum_associated_orderlines, 2, ",", ".") }}
+                                        &euro;{{ number_format($withdrawal->sum_associated_orderlines, 2, ',', '.') }}
                                     </td>
                                     <td>
-                                        {{ $withdrawal->closed ? "Closed" : "Pending" }}
+                                        {{ $withdrawal->closed ? 'Closed' : 'Pending' }}
                                     </td>
                                     <td>
                                         <a
-                                            href="{{ route("omnomcom::withdrawal::show", ["id" => $withdrawal->id]) }}"
+                                            href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}"
                                         >
                                             Withdrawal
                                         </a>
@@ -70,7 +70,7 @@
                                         /
 
                                         <a
-                                            href="{{ route("omnomcom::withdrawal::showAccounts", ["id" => $withdrawal->id]) }}"
+                                            href="{{ route('omnomcom::withdrawal::showAccounts', ['id' => $withdrawal->id]) }}"
                                         >
                                             Accounts
                                         </a>

@@ -1,9 +1,9 @@
-@extends("website.master")
-@section("page-title")
+@extends('website.master')
+@section('page-title')
     Wallstreet Marquee!
 @endsection
 
-@push("stylesheet")
+@push('stylesheet')
     <style nonce="{{ csp_nonce() }}">
         :root {
             --wallstreet-dark: #303030;
@@ -32,7 +32,7 @@
             margin: 0;
             padding: 0;
             background: var(--wallstreet-dark);
-            background-image: url({{ url("images/protons_swatch_grey.png") }});
+            background-image: url({{ url('images/protons_swatch_grey.png') }});
             background-size: 50%;
             overflow: hidden;
         }
@@ -137,7 +137,7 @@
     </style>
 @endpush
 
-@section("body")
+@section('body')
     @if (! $activeDrink)
         <div class="d-flex justify-content-center w-100 h-100">
             <div class="alert alert-danger align-self-center">
@@ -266,12 +266,12 @@
                 <div class="swiper-wrapper">
                     @foreach ($prices as $price)
                         <div
-                            id="{{ preg_replace("/[^a-zA-Z0-9]/", "", $price->name) }}"
+                            id="{{ preg_replace('/[^a-zA-Z0-9]/', '', $price->name) }}"
                             class="swiper-slide card w-25"
                         >
                             <div
-                                class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? "bg-img" : "no-img" }}"
-                                style="{{ sprintf("background: center no-repeat url(%s);", $price->img) }} background-size: cover;"
+                                class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img' }}"
+                                style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;"
                             >
                                 {{-- Title --}}
                                 <div class="fs-4">
@@ -285,16 +285,16 @@
                                     <div id="price" class="fs-5">
                                         €
                                         <span>
-                                            {{ sprintf("%.2f", $price->price) }}
+                                            {{ sprintf('%.2f', $price->price) }}
                                         </span>
                                     </div>
 
                                     {{-- Change --}}
                                     <div
                                         id="diff"
-                                        class="fs-5 {{ $price->diff < 0 ? "text-danger" : "text-green" }}"
+                                        class="fs-5 {{ $price->diff < 0 ? 'text-danger' : 'text-green' }}"
                                     >
-                                        {{ sprintf("%s %.2f%%", $price->diff < 0 ? "▼" : "▲", $price->diff) }}
+                                        {{ sprintf('%s %.2f%%', $price->diff < 0 ? '▼' : '▲', $price->diff) }}
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@
     @endif
 @endsection
 
-@push("javascript")
+@push('javascript')
     {{-- chart.js and the date adapter --}}
     <script
         nonce="{{ csp_nonce() }}"
@@ -322,7 +322,7 @@
         nonce="{{ csp_nonce() }}"
     ></script>
 
-    @vite("resources/assets/js/echo.js")
+    @vite('resources/assets/js/echo.js')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', (_) => {
@@ -335,12 +335,12 @@
                 },
                 slidesPerView: 'auto',
                 speed: 5000,
-            });
+            })
 
-            const ctx = document.getElementById('wallstreet-graph-canvas');
+            const ctx = document.getElementById('wallstreet-graph-canvas')
 
             get(
-                `{{ route("api::wallstreet::all_prices", ["id" => $activeDrink->id]) }}`,
+                `{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`
             ).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
@@ -363,89 +363,89 @@
                                     return {
                                         x: Date.parse(price.created_at),
                                         y: price.price,
-                                    };
+                                    }
                                 }),
-                            };
+                            }
                         }),
                     },
-                });
+                })
 
-                let id = {{ $activeDrink->id }};
+                let id = {{ $activeDrink->id }}
 
-                const modalTitle = document.getElementById('modal-title');
-                const modalBody = document.getElementById('modal-body');
-                const a = new Audio('{{ $sound_path }}');
+                const modalTitle = document.getElementById('modal-title')
+                const modalBody = document.getElementById('modal-body')
+                const a = new Audio('{{ $sound_path }}')
                 //listen to a new wallstreet event
                 window.Echo.private(`wallstreet-prices.${id}`).listen(
                     'NewWallstreetEvent',
                     (e) => {
-                        const event = e.data;
+                        const event = e.data
                         a.play().catch(() => {
                             confirm(
-                                'Click somewhere within the document for the sound to play!',
-                            );
-                        });
+                                'Click somewhere within the document for the sound to play!'
+                            )
+                        })
                         if (event.image) {
-                            modalBody.style.backgroundImage = `url(${event.img})`;
-                            modalBody.style.backgroundSize = 'cover';
-                            modalBody.style.backgroundPosition = 'center';
+                            modalBody.style.backgroundImage = `url(${event.img})`
+                            modalBody.style.backgroundSize = 'cover'
+                            modalBody.style.backgroundPosition = 'center'
                         }
-                        modalTitle.innerText = event.name;
-                        modalBody.innerHTML = event.description;
-                        window.modals.eventModal.show();
+                        modalTitle.innerText = event.name
+                        modalBody.innerHTML = event.description
+                        window.modals.eventModal.show()
                         setTimeout(() => {
-                            window.modals.eventModal.hide();
-                        }, 10000);
-                    },
-                );
+                            window.modals.eventModal.hide()
+                        }, 10000)
+                    }
+                )
 
-                const lossDiv = document.getElementById('current_loss');
+                const lossDiv = document.getElementById('current_loss')
                 Echo.private(`wallstreet-prices.${id}`).listen(
                     'NewWallstreetLossCalculation',
                     (e) => {
-                        lossDiv.innerHTML = '€ ' + e.data.toFixed(2);
-                    },
-                );
+                        lossDiv.innerHTML = '€ ' + e.data.toFixed(2)
+                    }
+                )
 
                 //listen to a new wallstreet price
                 Echo.private(`wallstreet-prices.${id}`).listen(
                     'NewWallstreetPrice',
                     (e) => {
                         let cards = swiper.el.querySelectorAll(
-                            `#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`,
-                        );
+                            `#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`
+                        )
                         if (cards.length > 0) {
                             cards.forEach((card) => {
                                 card.querySelector('#price span').innerText =
-                                    e.data.price.toFixed(2);
+                                    e.data.price.toFixed(2)
                                 card.querySelector('#diff').innerText =
-                                    `${e.data.diff < 0 ? '▼' : '▲'} ${e.data.diff.toFixed(2)}%`;
+                                    `${e.data.diff < 0 ? '▼' : '▲'} ${e.data.diff.toFixed(2)}%`
                                 if (e.data.diff < 0) {
                                     card.querySelector('#diff').classList.add(
-                                        'text-danger',
-                                    );
+                                        'text-danger'
+                                    )
                                     card.querySelector(
-                                        '#diff',
-                                    ).classList.remove('text-green');
+                                        '#diff'
+                                    ).classList.remove('text-green')
                                 } else {
                                     card.querySelector('#diff').classList.add(
-                                        'text-green',
-                                    );
+                                        'text-green'
+                                    )
                                     card.querySelector(
-                                        '#diff',
-                                    ).classList.remove('text-danger');
+                                        '#diff'
+                                    ).classList.remove('text-danger')
                                 }
-                            });
+                            })
                         }
 
                         const dataset = chart.data.datasets.find(
-                            (dataset) => dataset.label === e.data.product.name,
-                        );
+                            (dataset) => dataset.label === e.data.product.name
+                        )
                         if (dataset) {
                             dataset.data.push({
                                 x: Date.parse(e.data.created_at),
                                 y: e.data.price,
-                            });
+                            })
                         } else {
                             //if a new product is added the dataset is created
                             chart.data.datasets.push({
@@ -456,12 +456,12 @@
                                         y: e.data.price,
                                     },
                                 ],
-                            });
+                            })
                         }
-                        chart.update('none');
-                    },
-                );
-            });
-        });
+                        chart.update('none')
+                    }
+                )
+            })
+        })
     </script>
 @endpush

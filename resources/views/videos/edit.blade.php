@@ -1,34 +1,34 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Edit video
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
                 method="post"
-                action="{{ route("video::admin::update", ["id" => $video->id]) }}"
+                action="{{ route('video::admin::update', ['id' => $video->id]) }}"
                 enctype="multipart/form-data"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "video_date",
-                                        "label" => "Video date:",
-                                        "format" => "date",
-                                        "placeholder" => strtotime($video->video_date),
+                                        'name' => 'video_date',
+                                        'label' => 'Video date:',
+                                        'format' => 'date',
+                                        'placeholder' => strtotime($video->video_date),
                                     ]
                                 )
                             </div>
@@ -50,7 +50,7 @@
                                 <br />
                                 <strong>
                                     {{ $video->event->title }}
-                                    ({{ date("d-m-Y", $video->event->start) }})
+                                    ({{ date('d-m-Y', $video->event->start) }})
                                 </strong>
                             </p>
                         @endif
@@ -70,7 +70,7 @@
                         </button>
 
                         <a
-                            href="{{ route("video::admin::index") }}"
+                            href="{{ route('video::admin::index') }}"
                             class="btn btn-default"
                         >
                             Cancel

@@ -1,10 +1,10 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("page-title")
+@section('page-title')
     Weekly newsletter
 @endsection
 
-@section("body")
+@section('body')
     @if ($image_url)
         <img
             src="{{ $image_url }}"
@@ -16,7 +16,7 @@
     <p>
         Hey {{ $user->calling_name }},
 
-        @if ($text != "")
+        @if ($text != '')
             {!! Markdown::convert($text) !!}
         @endif
 
@@ -25,7 +25,7 @@
         @if ($events->count() > 0)
             @foreach ($events as $i => $event)
                 <table
-                    class="table {{ $i % 2 == 0 ? "bg-body" : "table-light" }}"
+                    class="table {{ $i % 2 == 0 ? 'bg-body' : 'table-light' }}"
                     style="margin: 0; padding: 0; border: none"
                     width="100%"
                 >
@@ -43,9 +43,9 @@
                                 <strong>{{ $event->title }}</strong>
                                 @ {{ $event->location }}
                                 <br />
-                                {{ date("l d F, H:i", $event->start) }}
+                                {{ date('l d F, H:i', $event->start) }}
                                 -
-                                {{ $event->end - $event->start >= 3600 * 24 ? date("l d F, H:i", $event->end) : date("H:i", $event->end) }}
+                                {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
                             </p>
 
                             <p>
@@ -66,10 +66,10 @@
                                             <br />
                                         @endif
                                         <i>Sign-up before:</i>
-                                        {{ date("l d F, H:i", $event->activity->registration_end) }}
+                                        {{ date('l d F, H:i', $event->activity->registration_end) }}
                                         <br />
                                         <i>Participation:</i>
-                                        {!! $event->activity->price > 0 ? "&euro;" . number_format($event->activity->price, 2) : "Free!" !!}
+                                        {!! $event->activity->price > 0 ? '&euro;' . number_format($event->activity->price, 2) : 'Free!' !!}
                                         <br />
                                     </p>
                                 @elseif ($event->tickets && count($event->tickets))
@@ -87,7 +87,7 @@
 
                             <p>
                                 <a
-                                    href="{{ route("event::show", ["id" => $event->getPublicId()]) }}"
+                                    href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
                                 >
                                     Learn more! >>
                                 </a>
@@ -120,7 +120,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.internal") }}
+        {{ Config::string('proto.internal') }}
         <br />
         <em>Officer of Internal Affairs</em>
     </p>
@@ -136,7 +136,7 @@
             e-mail, please click
             <a
                 style="color: #00aac0"
-                href="{{ route("unsubscribefromlist", ["hash" => App\Models\EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}"
+                href="{{ route('unsubscribefromlist', ['hash' => App\Models\EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}"
             >
                 here
             </a>

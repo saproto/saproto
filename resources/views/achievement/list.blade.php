@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Achievement Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-end">
         <div class="col">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("achievement::create") }}"
+                        href="{{ route('achievement::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new achievement.
@@ -32,7 +32,7 @@
 
                     @foreach ($achievements as $achievement)
                         <tr
-                            class="{{ $achievement->is_archived ? "text-muted" : null }}"
+                            class="{{ $achievement->is_archived ? 'text-muted' : null }}"
                         >
                             <td
                                 class="hidden-sm hidden-xs {{ $achievement->tier }}"
@@ -55,12 +55,12 @@
                             <td>{{ $achievement->tier }}</td>
                             <td class="text-end">
                                 <a
-                                    href="{{ route("achievement::edit", ["id" => $achievement->id]) }}"
+                                    href="{{ route('achievement::edit', ['id' => $achievement->id]) }}"
                                 >
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
                                 <a
-                                    href="{{ route("achievement::delete", ["id" => $achievement->id]) }}"
+                                    href="{{ route('achievement::delete', ['id' => $achievement->id]) }}"
                                 >
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="col-md-auto">
-            @include("achievement.admin_includes.awards-addone")
+            @include('achievement.admin_includes.awards-addone')
         </div>
     </div>
 @endsection

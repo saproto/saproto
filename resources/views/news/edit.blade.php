@@ -1,6 +1,6 @@
-@extends("website.layouts.redesign.dashboard")
-@php($newsName = $is_weekly ? "weekly" : "news")
-@section("page-title")
+@extends('website.layouts.redesign.dashboard')
+@php($newsName = $is_weekly ? 'weekly' : 'news')
+@section('page-title')
     @if ($new)
         Create a new {{ $newsName }}
     @else
@@ -15,7 +15,7 @@
     @endif
 @endsection
 
-@section("container")
+@section('container')
     <form
         method="post"
         action="@if($new) {{ route("news::store") }} @else {{ route("news::update", ['id' => $item->id]) }} @endif"
@@ -27,7 +27,7 @@
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -40,17 +40,17 @@
                                     id="title"
                                     name="title"
                                     placeholder="Revolutionary new activity!"
-                                    value="{{ $item->title ?? "" }}"
+                                    value="{{ $item->title ?? '' }}"
                                     required
                                 />
                             </div>
 
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "published_at",
-                                    "label" => "Publish at:",
-                                    "placeholder" => $item
+                                    'name' => 'published_at',
+                                    'label' => 'Publish at:',
+                                    'placeholder' => $item
                                         ? strtotime($item->published_at)
                                         : strtotime(Carbon::now()),
                                 ]
@@ -60,11 +60,11 @@
                         <div class="form-group">
                             <label for="editor">Content</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "content",
-                                    "placeholder" => "Text goes here.",
-                                    "value" => $item ? $item->content : null,
+                                    'name' => 'content',
+                                    'placeholder' => 'Text goes here.',
+                                    'value' => $item ? $item->content : null,
                                 ]
                             )
                         </div>
@@ -74,7 +74,7 @@
 
             <div class="col-md-5">
                 <div class="row">
-                    @include("news.includes.activities")
+                    @include('news.includes.activities')
                     @if ($is_weekly && $item?->featuredImage)
                         <div class="card mb-3">
                             <div class="card-header">Replace image</div>
@@ -94,7 +94,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <a
-                                href="{{ route("news::admin") }}"
+                                href="{{ route('news::admin') }}"
                                 class="btn btn-default"
                             >
                                 Cancel
@@ -117,7 +117,7 @@
                             <div class="card-body px-0">
                                 <div class="ratio ratio-21x9 h-100">
                                     <iframe
-                                        src="{{ route("news::showWeeklyPreview", ["id" => $item->id]) }}"
+                                        src="{{ route('news::showWeeklyPreview', ['id' => $item->id]) }}"
                                         title="W3Schools Free Online Web Tutorials"
                                     ></iframe>
                                 </div>
@@ -126,23 +126,23 @@
                             <div class="card-footer">
                                 @if (! $item->published_at)
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("news::sendWeekly", ["id" => $item->id]),
-                                            "text" => "Send weekly!",
-                                            "title" => "Confirm Sending Weekly",
-                                            "classes" =>
-                                                "btn ms-2 " .
+                                            'action' => route('news::sendWeekly', ['id' => $item->id]),
+                                            'text' => 'Send weekly!',
+                                            'title' => 'Confirm Sending Weekly',
+                                            'classes' =>
+                                                'btn ms-2 ' .
                                                 (Carbon::parse($lastWeekly->published_at)->diffInDays(
                                                     Carbon::now(),
                                                 ) < 7
-                                                    ? "btn-danger"
-                                                    : "btn-success"),
-                                            "message" =>
-                                                "Are you sure you want to send this weekly? <br> It was last sent: <b>" .
+                                                    ? 'btn-danger'
+                                                    : 'btn-success'),
+                                            'message' =>
+                                                'Are you sure you want to send this weekly? <br> It was last sent: <b>' .
                                                 Carbon::parse($lastWeekly->published_at)->diffForHumans() .
-                                                "</b> and should only be sent once per week.<br> This will send an email to everyone on the list.",
-                                            "confirm" => "Send",
+                                                '</b> and should only be sent once per week.<br> This will send an email to everyone on the list.',
+                                            'confirm' => 'Send',
                                         ]
                                     )
                                 @else

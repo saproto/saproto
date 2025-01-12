@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     OmNomCom Account Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-2">
             <form
                 method="post"
-                action="{{ route("omnomcom::accounts::aggregate", ["account" => $account->id]) }}"
+                action="{{ route('omnomcom::accounts::aggregate', ['account' => $account->id]) }}"
             >
                 @csrf
 
@@ -33,18 +33,18 @@
 
                     <div class="card-body">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "start",
-                                "label" => "Start",
+                                'name' => 'start',
+                                'label' => 'Start',
                             ]
                         )
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "end",
-                                "label" => "End",
+                                'name' => 'end',
+                                'label' => 'End',
                             ]
                         )
                     </div>
@@ -69,7 +69,7 @@
                         <li class="list-group">
                             @foreach ($products as $product)
                                 <a
-                                    href="{{ route("omnomcom::products::edit", ["id" => $product->id]) }}"
+                                    href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}"
                                     class="list-group-item"
                                 >
                                     {{ $product->name }}

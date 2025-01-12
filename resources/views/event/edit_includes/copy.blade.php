@@ -12,19 +12,19 @@
 
         <form
             method="post"
-            action="{{ route("event::copy", ["id" => $event->id]) }}"
+            action="{{ route('event::copy', ['id' => $event->id]) }}"
         >
             @csrf
 
             <div class="card-body">
                 @include(
-                    "components.forms.datetimepicker",
+                    'components.forms.datetimepicker',
                     [
-                        "name" => "newDate",
-                        "label" => "This will copy the event and move the start to:",
-                        "placeholder" => Carbon::createFromTimestamp($event->start)->addWeek()
+                        'name' => 'newDate',
+                        'label' => 'This will copy the event and move the start to:',
+                        'placeholder' => Carbon::createFromTimestamp($event->start)->addWeek()
                             ->timestamp,
-                        "format" => "date",
+                        'format' => 'date',
                     ]
                 )
             </div>
@@ -33,7 +33,7 @@
                 <input
                     type="submit"
                     class="btn btn-success btn-block"
-                    value="{{ $event->activity ? "Copy the event and signup!" : "Copy the event!" }}"
+                    value="{{ $event->activity ? 'Copy the event and signup!' : 'Copy the event!' }}"
                 />
             </div>
         </form>

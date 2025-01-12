@@ -1,26 +1,26 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Change a Short URL
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
                 <form
-                    action="{{ ! empty($url) ? route("short_urls.update", ["short_url" => $url]) : route("short_urls.store") }}"
+                    action="{{ ! empty($url) ? route('short_urls.update', ['short_url' => $url]) : route('short_urls.store') }}"
                     method="POST"
                 >
                     <input
                         type="hidden"
                         name="_method"
-                        value="{{ ! empty($url) ? "PUT" : "POST" }}"
+                        value="{{ ! empty($url) ? 'PUT' : 'POST' }}"
                     />
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -32,7 +32,7 @@
                                 id="description"
                                 name="description"
                                 placeholder="I don't want to type long URLs..."
-                                value="{{ $url ? $url->description : "" }}"
+                                value="{{ $url ? $url->description : '' }}"
                                 required
                             />
                         </div>
@@ -42,7 +42,7 @@
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        {{ route("short_urls.go", ["short" => null]) }}/
+                                        {{ route('short_urls.go', ['short' => null]) }}/
                                     </span>
                                 </div>
                                 <input
@@ -52,7 +52,7 @@
                                     name="url"
                                     placeholder="awesome-music"
                                     required=""
-                                    value="{{ $url ? $url->url : "" }}"
+                                    value="{{ $url ? $url->url : '' }}"
                                 />
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                     name="target"
                                     placeholder="www.youtube.com/watch?v=M11SvDtPBhA"
                                     required=""
-                                    value="{{ $url ? $url->target : "" }}"
+                                    value="{{ $url ? $url->target : '' }}"
                                 />
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                         </button>
 
                         <a
-                            href="{{ route("short_urls.index") }}"
+                            href="{{ route('short_urls.index') }}"
                             class="btn btn-default"
                         >
                             Cancel

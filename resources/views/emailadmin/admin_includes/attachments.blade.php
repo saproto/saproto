@@ -24,16 +24,16 @@
                         </td>
                         <td>
                             @include(
-                                "components.modals.confirm-modal",
+                                'components.modals.confirm-modal',
                                 [
-                                    "action" => route("email::attachment::delete", [
-                                        "id" => $email->id,
-                                        "file_id" => $attachment->id,
+                                    'action' => route('email::attachment::delete', [
+                                        'id' => $email->id,
+                                        'file_id' => $attachment->id,
                                     ]),
-                                    "text" => '<i class="fas fa-trash text-danger"></i>',
-                                    "title" => "Confirm Delete",
-                                    "message" => "Are you sure you want to delete this attachment?",
-                                    "confirm" => "Delete",
+                                    'text' => '<i class="fas fa-trash text-danger"></i>',
+                                    'title' => 'Confirm Delete',
+                                    'message' => 'Are you sure you want to delete this attachment?',
+                                    'confirm' => 'Delete',
                                 ]
                             )
                         </td>
@@ -53,7 +53,7 @@
                 id="add_attachment"
                 method="post"
                 enctype="multipart/form-data"
-                action="{{ route("email::attachment::create", ["id" => $email->id]) }}"
+                action="{{ route('email::attachment::create', ['id' => $email->id]) }}"
             >
                 @csrf
 
@@ -67,15 +67,15 @@
                 </div>
 
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "form" => "#add_attachment",
-                        "classes" => "btn btn-success btn-block",
-                        "text" => "Upload",
-                        "title" => "Confirm Upload",
-                        "message" =>
-                            "Any unsaved changes to the e-mail will be discarded if you upload an attachment. Are you sure you want to continue?",
-                        "confirm" => "Upload",
+                        'form' => '#add_attachment',
+                        'classes' => 'btn btn-success btn-block',
+                        'text' => 'Upload',
+                        'title' => 'Confirm Upload',
+                        'message' =>
+                            'Any unsaved changes to the e-mail will be discarded if you upload an attachment. Are you sure you want to continue?',
+                        'confirm' => 'Upload',
                     ]
                 )
             </form>

@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     UTwente Address Book Search
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-xl-3 col-lg-12">
-            <form method="post" action="{{ route("search::ldap::post") }}">
+            <form method="post" action="{{ route('search::ldap::post') }}">
                 @csrf
 
                 <div class="card mb-3">
@@ -60,67 +60,67 @@
                                                     <i
                                                         class="fas fa-id-badge fa-fw"
                                                     ></i>
-                                                    {{ $result["givenname"] ?? null }}
-                                                    {{ $result["middlename"] ?? null }}
-                                                    {{ $result["sn"] ?? null }},
-                                                    {{ $result["initials"] ?? null }}
+                                                    {{ $result['givenname'] ?? null }}
+                                                    {{ $result['middlename'] ?? null }}
+                                                    {{ $result['sn'] ?? null }},
+                                                    {{ $result['initials'] ?? null }}
                                                     <br />
 
                                                     <i
                                                         class="fas fa-user-friends fa-fw"
                                                     ></i>
                                                     <em>
-                                                        @if (\Illuminate\Support\Str::startsWith($result["description"], "Student"))
+                                                        @if (\Illuminate\Support\Str::startsWith($result['description'], 'Student'))
                                                             Student
-                                                            {{ $result["department"] ?? null }}
-                                                        @elseif (\Illuminate\Support\Str::startsWith($result["description"], "Employee"))
+                                                            {{ $result['department'] ?? null }}
+                                                        @elseif (\Illuminate\Support\Str::startsWith($result['description'], 'Employee'))
                                                             Employee
-                                                            {{ $result["department"] ?? null }}
+                                                            {{ $result['department'] ?? null }}
                                                         @else
                                                             Functional Account
-                                                            {{ $result["department"] ? "(" . $result->department . ")" : null }}
+                                                            {{ $result['department'] ? '(' . $result->department . ')' : null }}
                                                         @endif
                                                     </em>
 
-                                                    @if (Auth::user()->can("board") && array_key_exists("userprincipalname", $result))
+                                                    @if (Auth::user()->can('board') && array_key_exists('userprincipalname', $result))
                                                         <br />
                                                         <i
                                                             class="fas fa-users-cog fa-fw"
                                                         ></i>
-                                                        {{ $result["userprincipalname"] }}
+                                                        {{ $result['userprincipalname'] }}
                                                     @endif
 
-                                                    @if (array_key_exists("mail", $result))
+                                                    @if (array_key_exists('mail', $result))
                                                         <br />
                                                         <i
                                                             class="fas fa-envelope fa-fw"
                                                         ></i>
                                                         <a
-                                                            href="mailto:{{ $result["mail"] }}"
+                                                            href="mailto:{{ $result['mail'] }}"
                                                         >
-                                                            {{ $result["mail"] }}
+                                                            {{ $result['mail'] }}
                                                         </a>
                                                     @endif
 
-                                                    @if (array_key_exists("telephonenumber", $result))
+                                                    @if (array_key_exists('telephonenumber', $result))
                                                         <br />
                                                         <i
                                                             class="fas fa-phone fa-fw"
                                                         ></i>
                                                         <a
-                                                            href="tel:{{ $result["telephonenumber"] }}"
+                                                            href="tel:{{ $result['telephonenumber'] }}"
                                                         >
-                                                            {{ $result["telephonenumber"] }}
+                                                            {{ $result['telephonenumber'] }}
                                                         </a>
                                                     @endif
 
-                                                    @if (array_key_exists("physicaldeliveryofficename", $result))
+                                                    @if (array_key_exists('physicaldeliveryofficename', $result))
                                                         <br />
                                                         <i
                                                             class="fas fa-map-marker-alt fa-fw"
                                                         ></i>
                                                         Room
-                                                        {{ $result["physicaldeliveryofficename"] }}
+                                                        {{ $result['physicaldeliveryofficename'] }}
                                                     @endif
                                                 </p>
                                             </div>

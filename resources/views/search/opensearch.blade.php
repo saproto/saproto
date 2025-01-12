@@ -9,11 +9,11 @@
     </Description>
     <InputEncoding>UTF-8</InputEncoding>
     <image width="16" height="16" type="image/x-icon">
-        {{ asset("images/favicons/favicon1.png") }}
+        {{ asset('images/favicons/favicon1.png') }}
     </image>
     <Url
         type="text/html"
         method="get"
-        template="{{ route("search::get") }}/?query={searchTerms}"
+        template="{{ route('search::get') }}/?query={searchTerms}"
     />
 </OpenSearchDescription>

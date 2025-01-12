@@ -5,7 +5,7 @@
     @if (! $currentDrink->is_active)
         <form
             method="post"
-            action="{{ route("wallstreet::products::create", ["id" => $currentDrink->id]) }}"
+            action="{{ route('wallstreet::products::create', ['id' => $currentDrink->id]) }}"
         >
             @csrf
             <div class="row mx-2 mb-3">
@@ -38,7 +38,7 @@
             <div class="card-footer">
                 @foreach ($currentDrink->products as $product)
                     <a
-                        href="{{ route("wallstreet::products::remove", ["id" => $currentDrink->id, "productId" => $product->id]) }}"
+                        href="{{ route('wallstreet::products::remove', ['id' => $currentDrink->id, 'productId' => $product->id]) }}"
                     >
                         <span class="badge rounded-pill bg-warning">
                             {{ $product->name }}

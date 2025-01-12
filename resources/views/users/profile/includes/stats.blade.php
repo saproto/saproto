@@ -27,7 +27,7 @@
                 title="The date your account was created."
             ></i>
             Account created on:
-            {{ date("F j, Y", strtotime($user->created_at)) }}.
+            {{ date('F j, Y', strtotime($user->created_at)) }}.
         </p>
 
         <p class="card-text ellipsis">

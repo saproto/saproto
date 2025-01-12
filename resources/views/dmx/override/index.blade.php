@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     DMX Overrides
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("dmx.overrides.create") }}"
+                        href="{{ route('dmx.overrides.create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new override.
@@ -45,9 +45,9 @@
 
                             @foreach ($overrides as $override)
                                 @include(
-                                    "dmx.override.override_macro",
+                                    'dmx.override.override_macro',
                                     [
-                                        "override" => $override,
+                                        'override' => $override,
                                     ]
                                 )
                             @endforeach
@@ -60,9 +60,9 @@
 
                             @foreach ($upcoming_overrides as $override)
                                 @include(
-                                    "dmx.override.override_macro",
+                                    'dmx.override.override_macro',
                                     [
-                                        "override" => $override,
+                                        'override' => $override,
                                     ]
                                 )
                             @endforeach
@@ -75,9 +75,9 @@
 
                             @foreach ($past_overrides as $override)
                                 @include(
-                                    "dmx.override.override_macro",
+                                    'dmx.override.override_macro',
                                     [
-                                        "override" => $override,
+                                        'override' => $override,
                                     ]
                                 )
                             @endforeach

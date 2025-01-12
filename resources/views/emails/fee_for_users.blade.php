@@ -1,10 +1,10 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>
         Dear {{ $user->calling_name }},
 
-        @if ($fee == "remitted")
+        @if ($fee == 'remitted')
             <p>
                 This is an e-mail to let you know that for this academic year
                 your membership has been waived. Although you are a member of
@@ -20,7 +20,7 @@
                 membership fee because you are a member of S.A. Proto during
                 this academic year.
 
-                @if ($fee == "regular")
+                @if ($fee == 'regular')
                     <p>
                         You have been charged the regular membership fee of
                         &euro;{{ number_format($fee_amount, 2) }} because we
@@ -64,7 +64,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.treasurer") }}
+        {{ Config::string('proto.treasurer') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

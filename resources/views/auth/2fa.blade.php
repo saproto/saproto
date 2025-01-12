@@ -1,11 +1,11 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Two Factor Authentication
 @endsection
 
-@section("login-body")
-    <form method="POST" action="{{ route("login::post") }}" autocomplete="off">
+@section('login-body')
+    <form method="POST" action="{{ route('login::post') }}" autocomplete="off">
         @csrf
 
         <div class="form-group">

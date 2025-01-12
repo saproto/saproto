@@ -32,14 +32,14 @@
 
                                 @if ($list->isSubscribed($user))
                                     <a
-                                        href="{{ route("togglelist", ["id" => $list->id]) }}"
+                                        href="{{ route('togglelist', ['id' => $list->id]) }}"
                                         class="badge bg-danger float-end"
                                     >
                                         Unsubscribe
                                     </a>
                                 @elseif (! $list->is_member_only || $user->member)
                                     <a
-                                        href="{{ route("togglelist", ["id" => $list->id]) }}"
+                                        href="{{ route('togglelist', ['id' => $list->id]) }}"
                                         class="badge bg-info float-end"
                                     >
                                         Subscribe

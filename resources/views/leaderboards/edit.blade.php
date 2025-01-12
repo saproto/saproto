@@ -1,47 +1,47 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $leaderboard == null ? "Create new leaderboard." : "Edit leaderboard: " . $leaderboard->name . "." }}
+@section('page-title')
+    {{ $leaderboard == null ? 'Create new leaderboard.' : 'Edit leaderboard: ' . $leaderboard->name . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-5 mb-3">
             <form
                 method="post"
-                action="{{ $leaderboard == null ? route("leaderboards::store") : route("leaderboards::update", ["id" => $leaderboard->id]) }}"
+                action="{{ $leaderboard == null ? route('leaderboards::store') : route('leaderboards::update', ['id' => $leaderboard->id]) }}"
                 enctype="multipart/form-data"
             >
                 @csrf
 
                 <div class="card md-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
-                        @can("board")
+                        @can('board')
                             <div class="form-group autocomplete">
                                 <label for="organisation">
                                     Committee:
-                                    {{ $leaderboard->committee->name ?? "" }}
+                                    {{ $leaderboard->committee->name ?? '' }}
                                 </label>
                                 <input
                                     class="form-control committee-search"
                                     id="organisation"
                                     name="committee"
                                     value="value"
-                                    ="{{ $leaderboard?->committee_id ? $leaderboard->committee_id : "" }}"
+                                    ="{{ $leaderboard?->committee_id ? $leaderboard->committee_id : '' }}"
                                     required
                                 />
                             </div>
 
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "featured",
-                                    "checked" => $leaderboard?->featured,
-                                    "label" =>
+                                    'name' => 'featured',
+                                    'checked' => $leaderboard?->featured,
+                                    'label' =>
                                         'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>',
                                 ]
                             )
@@ -55,7 +55,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="Proto drink beer scores"
-                                value="{{ $leaderboard->name ?? "" }}"
+                                value="{{ $leaderboard->name ?? '' }}"
                                 required
                             />
                         </div>
@@ -68,7 +68,7 @@
                                 id="points_name"
                                 name="points_name"
                                 placeholder="Beers"
-                                value="{{ $leaderboard->points_name ?? "" }}"
+                                value="{{ $leaderboard->points_name ?? '' }}"
                                 required
                             />
                         </div>
@@ -76,24 +76,24 @@
                         <input type="hidden" name="icon" id="icon" required />
 
                         @include(
-                            "components.forms.iconpicker",
+                            'components.forms.iconpicker',
                             [
-                                "name" => "icon",
-                                "placeholder" => isset($leaderboard) ? $leaderboard->icon : null,
-                                "label" => "Icon:",
+                                'name' => 'icon',
+                                'placeholder' => isset($leaderboard) ? $leaderboard->icon : null,
+                                'label' => 'Icon:',
                             ]
                         )
 
                         <div class="form-group">
                             <label for="editor">Description:</label>
                             @include(
-                                "components.forms.markdownfield",
+                                'components.forms.markdownfield',
                                 [
-                                    "name" => "description",
-                                    "placeholder" => ! $leaderboard
-                                        ? "A small paragraph about the leaderboard."
+                                    'name' => 'description',
+                                    'placeholder' => ! $leaderboard
+                                        ? 'A small paragraph about the leaderboard.'
                                         : null,
-                                    "value" => ! $leaderboard ? null : $leaderboard->description,
+                                    'value' => ! $leaderboard ? null : $leaderboard->description,
                                 ]
                             )
                         </div>
@@ -109,7 +109,7 @@
                         @if ($leaderboard != null)
                             <a
                                 class="btn btn-danger float-end"
-                                href="{{ route("leaderboards::delete", ["id" => $leaderboard->id]) }}"
+                                href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}"
                             >
                                 Delete
                             </a>
@@ -123,7 +123,7 @@
             <div class="col-md-5 mb-3">
                 <form
                     method="post"
-                    action="{{ route("leaderboards::entries::create") }}"
+                    action="{{ route('leaderboards::entries::create') }}"
                     enctype="multipart/form-data"
                 >
                     @csrf
@@ -136,7 +136,7 @@
 
                     <div class="card md-3">
                         <div class="card-header bg-dark text-white">
-                            {{ $leaderboard == null ? "Add entries" : "Edit entries for Leaderboard: " . $leaderboard->name }}
+                            {{ $leaderboard == null ? 'Add entries' : 'Edit entries for Leaderboard: ' . $leaderboard->name }}
                         </div>
 
                         <div class="card-body">
@@ -195,7 +195,7 @@
                                                         </td>
                                                         <td>
                                                             <a
-                                                                href="{{ route("leaderboards::entries::delete", ["id" => $entry->id]) }}"
+                                                                href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}"
                                                             >
                                                                 <i
                                                                     class="fas fa-trash text-danger fa-fw"
@@ -243,38 +243,38 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         Array.from(document.getElementsByClassName('le-points')).forEach(
             (el) => {
-                ['click', 'keyup'].forEach((e) =>
+                ;['click', 'keyup'].forEach((e) =>
                     el.addEventListener(e, (e) => {
-                        const id = el.getAttribute('data-id');
-                        const input = el.querySelector('.le-points-input');
-                        let points = input.value;
+                        const id = el.getAttribute('data-id')
+                        const input = el.querySelector('.le-points-input')
+                        let points = input.value
                         if (e.target.classList.contains('le-points-increase'))
-                            points++;
+                            points++
                         else if (
                             e.target.classList.contains('le-points-decrease')
                         )
-                            points--;
-                        input.value = points;
-                        updatePoints(id, points);
-                    }),
-                );
-            },
-        );
+                            points--
+                        input.value = points
+                        updatePoints(id, points)
+                    })
+                )
+            }
+        )
 
         function updatePoints(id, points) {
-            post('{{ route("leaderboards::entries::update") }}', {
+            post('{{ route('leaderboards::entries::update') }}', {
                 id: id,
                 points: points,
             }).catch((err) => {
-                console.error(err);
+                console.error(err)
                 window.alert(
-                    'Something went wrong while updating the points. Please try again.',
-                );
-            });
+                    'Something went wrong while updating the points. Please try again.'
+                )
+            })
         }
     </script>
 @endpush

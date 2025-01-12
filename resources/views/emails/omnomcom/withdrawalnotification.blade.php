@@ -1,19 +1,19 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->calling_name }},</p>
 
     <p>
-        Around {{ date("d-m-Y", strtotime($withdrawal->date)) }} an automatic
+        Around {{ date('d-m-Y', strtotime($withdrawal->date)) }} an automatic
         withdrawal for S.A. Proto will take place to settle your purchases at
         our association. This withdrawal concerns an amount of
-        &euro;{{ number_format($withdrawal->totalForUser($user), 2, ",", "") }}
+        &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }}
         and will be withdrawn from {{ $user->bank->iban }}. Furthermore, this
         withdrawal has the following details:
     </p>
 
     <p>
-        Our creditor ID: {{ Config::string("proto.sepa_info.creditor_id") }}
+        Our creditor ID: {{ Config::string('proto.sepa_info.creditor_id') }}
         <br />
         Your authorization ID: {{ $user->bank->machtigingid }}
         <br />
@@ -24,7 +24,7 @@
         If you would like to know which purchases, activities et cetera are
         included in this withdrawal, please click
         <a
-            href="{{ route("omnomcom::mywithdrawal", ["id" => $withdrawal->id]) }}"
+            href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}"
         >
             here
         </a>
@@ -39,7 +39,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.treasurer") }}
+        {{ Config::string('proto.treasurer') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

@@ -1,7 +1,7 @@
 <form
     class="form-horizontal"
     method="post"
-    action="{{ route("user::changemail", ["id" => $user->id]) }}"
+    action="{{ route('user::changemail', ['id' => $user->id]) }}"
 >
     @csrf
 
@@ -63,7 +63,7 @@
 <form
     class="form-horizontal"
     method="post"
-    action="{{ route("user::dashboard::show") }}"
+    action="{{ route('user::dashboard::show') }}"
 >
     @csrf
 
@@ -85,24 +85,24 @@
                             <th>Studies attended</th>
                             <td>
                                 <span
-                                    class="badge rounded-pill bg-{{ $user->did_study_create ? "primary" : "dark" }} text-white"
+                                    class="badge rounded-pill bg-{{ $user->did_study_create ? 'primary' : 'dark' }} text-white"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
                                     title="Is this incorrect? Let the board know."
                                 >
                                     <i
-                                        class="fas fa-{{ $user->did_study_create ? "check-" : null }}square fa-fw"
+                                        class="fas fa-{{ $user->did_study_create ? 'check-' : null }}square fa-fw"
                                     ></i>
                                     Creative Technology
                                 </span>
                                 <span
-                                    class="badge rounded-pill bg-{{ $user->did_study_itech ? "primary" : "dark" }} text-white"
+                                    class="badge rounded-pill bg-{{ $user->did_study_itech ? 'primary' : 'dark' }} text-white"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
                                     title="Is this incorrect? Let the board know."
                                 >
                                     <i
-                                        class="fas fa-{{ $user->did_study_itech ? "check-" : null }}square fa-fw"
+                                        class="fas fa-{{ $user->did_study_itech ? 'check-' : null }}square fa-fw"
                                     ></i>
                                     Interaction Technology
                                 </span>
@@ -114,14 +114,14 @@
                         <tr>
                             <th>Birthdate</th>
                             <td>
-                                {{ date("F j, Y", strtotime($user->birthdate)) }}
+                                {{ date('F j, Y', strtotime($user->birthdate)) }}
                                 @if ($user->is_member)
                                     @include(
-                                        "components.forms.checkbox",
+                                        'components.forms.checkbox',
                                         [
-                                            "name" => "show_birthday",
-                                            "checked" => $user->show_birthday,
-                                            "label" => "Show to members",
+                                            'name' => 'show_birthday',
+                                            'checked' => $user->show_birthday,
+                                            'label' => 'Show to members',
                                         ]
                                     )
                                 @endif
@@ -136,7 +136,7 @@
                                 {{ $user->utwente_username ?? $user->edu_username }}
                                 <a
                                     class="badge rounded-pill bg-danger float-end"
-                                    href="{{ route("user::edu::delete") }}"
+                                    href="{{ route('user::edu::delete') }}"
                                 >
                                     <i class="fas fa-unlink fa-fw"></i>
                                 </a>
@@ -144,7 +144,7 @@
                                 Not linked
                                 <a
                                     class="badge rounded-pill bg-primary float-end"
-                                    href="{{ route("user::edu::create") }}"
+                                    href="{{ route('user::edu::create') }}"
                                 >
                                     <i class="fas fa-user-plus fa-fw"></i>
                                 </a>
@@ -162,20 +162,20 @@
                                 @if ($user->is_member)
                                     <a
                                         class="badge rounded-pill bg-primary float-end"
-                                        href="{{ route("user::address::edit") }}"
+                                        href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
                                     </a>
                                 @else
                                     <a
                                         class="badge rounded-pill bg-primary float-end ms-2"
-                                        href="{{ route("user::address::edit") }}"
+                                        href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
                                     </a>
                                     <a
                                         class="badge rounded-pill bg-danger float-end"
-                                        href="{{ route("user::address::delete") }}"
+                                        href="{{ route('user::address::delete') }}"
                                     >
                                         <i class="fas fa-eraser fa-fw"></i>
                                     </a>
@@ -199,7 +199,7 @@
                                     @endif
                                     <a
                                         class="badge rounded-pill bg-primary float-end"
-                                        href="{{ route("user::address::togglehidden") }}"
+                                        href="{{ route('user::address::togglehidden') }}"
                                     >
                                         @if ($user->address_visible)
                                             Hide from members.
@@ -209,7 +209,7 @@
                                     </a>
                                 </p>
                             @else
-                                <a href="{{ route("user::address::create") }}">
+                                <a href="{{ route('user::address::create') }}">
                                     Let us know your address
                                 </a>
                             @endif
@@ -230,19 +230,19 @@
                                     value="{{ $user->phone }}"
                                 />
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "phone_visible",
-                                        "checked" => $user->phone_visible,
-                                        "label" => "Show to members",
+                                        'name' => 'phone_visible',
+                                        'checked' => $user->phone_visible,
+                                        'label' => 'Show to members',
                                     ]
                                 )
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "receive_sms",
-                                        "checked" => $user->receive_sms,
-                                        "label" => "Receive messages",
+                                        'name' => 'receive_sms',
+                                        'checked' => $user->receive_sms,
+                                        'label' => 'Receive messages',
                                     ]
                                 )
                             </td>
@@ -269,11 +269,11 @@
                         <td>
                             @if ($user->is_member)
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "show_omnomcom_total",
-                                        "checked" => $user->show_omnomcom_total,
-                                        "label" => 'After checkout, show how much I\'ve spent today.',
+                                        'name' => 'show_omnomcom_total',
+                                        'checked' => $user->show_omnomcom_total,
+                                        'label' => 'After checkout, show how much I\'ve spent today.',
                                     ]
                                 )
                                 <small
@@ -284,11 +284,11 @@
                                 </small>
 
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "show_omnomcom_calories",
-                                        "checked" => $user->show_omnomcom_calories,
-                                        "label" => 'After checkout, show how many calories I\'ve bought today.',
+                                        'name' => 'show_omnomcom_calories',
+                                        'checked' => $user->show_omnomcom_calories,
+                                        'label' => 'After checkout, show how many calories I\'ve bought today.',
                                     ]
                                 )
                                 <small
@@ -300,11 +300,11 @@
                                 </small>
 
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "disable_omnomcom",
-                                        "checked" => $user->disable_omnomcom,
-                                        "label" => 'Don\'t let me use the OmNomCom.',
+                                        'name' => 'disable_omnomcom',
+                                        'checked' => $user->disable_omnomcom,
+                                        'label' => 'Don\'t let me use the OmNomCom.',
                                     ]
                                 )
                                 <small class="d-block text-warning mb-1">
@@ -328,11 +328,11 @@
                             @endif
 
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "keep_omnomcom_history",
-                                    "checked" => $user->keep_omnomcom_history,
-                                    "label" => "Keep my personal orderline history.",
+                                    'name' => 'keep_omnomcom_history',
+                                    'checked' => $user->keep_omnomcom_history,
+                                    'label' => 'Keep my personal orderline history.',
                                 ]
                             )
                             <small class="form-text text-muted mb-2 d-block">
@@ -354,7 +354,7 @@
                                 id="theme"
                                 name="theme"
                             >
-                                @foreach (Config::array("proto.themes") as $i => $name)
+                                @foreach (Config::array('proto.themes') as $i => $name)
                                     <option
                                         value="{{ $i }}"
                                         @selected($user->theme == $i)
@@ -370,12 +370,12 @@
 
                             @if (Carbon::now()->month === Carbon::DECEMBER)
                                 <br />
-                                <a href="{{ route("december::toggle") }}">
+                                <a href="{{ route('december::toggle') }}">
                                     <button
                                         type="button"
                                         class="btn btn-warning"
                                     >
-                                        {{ Cookie::get("disable-december") === "disabled" ? "enable" : "disable" }}
+                                        {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }}
                                         december theme
                                     </button>
                                 </a>
@@ -388,11 +388,11 @@
                             <th>Privacy</th>
                             <td>
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "show_achievements",
-                                        "checked" => $user->show_achievements,
-                                        "label" => "Show my achievements on my profile.",
+                                        'name' => 'show_achievements',
+                                        'checked' => $user->show_achievements,
+                                        'label' => 'Show my achievements on my profile.',
                                     ]
                                 )
                                 <small
@@ -405,11 +405,11 @@
                                 </small>
 
                                 @include(
-                                    "components.forms.checkbox",
+                                    'components.forms.checkbox',
                                     [
-                                        "name" => "profile_in_almanac",
-                                        "checked" => $user->profile_in_almanac,
-                                        "label" => "Use my profile picture in the Lustrum Almanac.",
+                                        'name' => 'profile_in_almanac',
+                                        'checked' => $user->profile_in_almanac,
+                                        'label' => 'Use my profile picture in the Lustrum Almanac.',
                                     ]
                                 )
                                 <small class="form-text text-muted d-block">
@@ -432,7 +432,7 @@
 
             @if ($user->completed_profile && ! $user->member)
                 <a
-                    href="{{ route("user::memberprofile::showclear") }}"
+                    href="{{ route('user::memberprofile::showclear') }}"
                     class="btn btn-outline-danger btn-block mt-3"
                 >
                     Clear information required only for members
@@ -441,7 +441,7 @@
 
             @if (! $user->completed_profile)
                 <a
-                    href="{{ route("user::memberprofile::show") }}"
+                    href="{{ route('user::memberprofile::show') }}"
                     class="btn btn-outline-info btn-block mt-3"
                 >
                     Complete profile for membership

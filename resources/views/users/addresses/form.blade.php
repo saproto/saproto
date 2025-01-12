@@ -1,7 +1,7 @@
 <form
     class="form-horizontal"
     method="POST"
-    action="{{ $action == "add" ? route("user::address::store", ["id" => $user->id]) : route("user::address::update", ["id" => $user->id]) }}"
+    action="{{ $action == 'add' ? route('user::address::store', ['id' => $user->id]) : route('user::address::update', ['id' => $user->id]) }}"
 >
     @csrf
 
@@ -20,7 +20,7 @@
             id="street"
             name="street"
             placeholder="Wallaby Way"
-            value="{{ $address->street ?? "" }}"
+            value="{{ $address->street ?? '' }}"
             required
         />
     </div>
@@ -32,7 +32,7 @@
             id="number"
             name="number"
             placeholder="42"
-            value="{{ $address->number ?? "" }}"
+            value="{{ $address->number ?? '' }}"
             required
         />
     </div>
@@ -44,7 +44,7 @@
             id="zipcode"
             name="zipcode"
             placeholder="2003FN"
-            value="{{ $address->zipcode ?? "" }}"
+            value="{{ $address->zipcode ?? '' }}"
             required
         />
     </div>
@@ -56,7 +56,7 @@
             id="city"
             name="city"
             placeholder="Sydney"
-            value="{{ $address->city ?? "Enschede" }}"
+            value="{{ $address->city ?? 'Enschede' }}"
             required
         />
     </div>
@@ -68,7 +68,7 @@
             id="country"
             name="country"
             placeholder="Australia"
-            value="{{ $address->country ?? "The Netherlands" }}"
+            value="{{ $address->country ?? 'The Netherlands' }}"
             required
         />
     </div>

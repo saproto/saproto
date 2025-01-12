@@ -1,22 +1,22 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $category == null ? "Create new category." : "Edit category " . $category->name . "." }}
+@section('page-title')
+    {{ $category == null ? 'Create new category.' : 'Edit category ' . $category->name . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
             <form
                 method="post"
-                action="{{ $category == null ? route("omnomcom::categories::store") : route("omnomcom::categories::update", ["id" => $category->id]) }}"
+                action="{{ $category == null ? route('omnomcom::categories::store') : route('omnomcom::categories::update', ['id' => $category->id]) }}"
                 enctype="multipart/form-data"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -27,7 +27,7 @@
                             id="name"
                             name="name"
                             placeholder="Special Products for Unicorns"
-                            value="{{ $category->name ?? "" }}"
+                            value="{{ $category->name ?? '' }}"
                             required
                         />
                     </div>
@@ -35,15 +35,15 @@
                     <div class="card-footer">
                         @if ($category)
                             @include(
-                                "components.modals.confirm-modal",
+                                'components.modals.confirm-modal',
                                 [
-                                    "action" => route("omnomcom::categories::delete", [
-                                        "id" => $category->id,
+                                    'action' => route('omnomcom::categories::delete', [
+                                        'id' => $category->id,
                                     ]),
-                                    "classes" => "btn btn-danger",
-                                    "text" => "Delete",
-                                    "title" => "Confirm Delete",
-                                    "message" => "Are you sure you want to delete category $category->name",
+                                    'classes' => 'btn btn-danger',
+                                    'text' => 'Delete',
+                                    'title' => 'Confirm Delete',
+                                    'message' => "Are you sure you want to delete category $category->name",
                                 ]
                             )
                         @endif
@@ -56,7 +56,7 @@
                         </button>
 
                         <a
-                            href="{{ route("omnomcom::categories::index") }}"
+                            href="{{ route('omnomcom::categories::index') }}"
                             class="btn btn-default float-end"
                         >
                             Cancel
@@ -74,7 +74,7 @@
                                 <li class="list-group-item">
                                     {{ $product->name }}
                                     <a
-                                        href="{{ route("omnomcom::products::edit", ["id" => $product->id]) }}"
+                                        href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}"
                                     >
                                         <i class="fa fa-edit float-end"></i>
                                     </a>

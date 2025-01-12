@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{{ $event == null ? route("event::store") : route("event::update", ["id" => $event->id]) }}"
+    action="{{ $event == null ? route('event::store') : route('event::update', ['id' => $event->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
@@ -9,7 +9,7 @@
         <div class="card-header bg-dark text-white">
             <div class="p-1 m-1 fw-bold d-inline-block">Event details</div>
 
-            @include("event.edit_includes.buttonbar")
+            @include('event.edit_includes.buttonbar')
         </div>
 
         <div class="card-body">
@@ -25,7 +25,7 @@
                                 id="name"
                                 name="title"
                                 placeholder="Lightsaber Building in the SmartXp"
-                                value="{{ old("title", $event->title ?? "") }}"
+                                value="{{ old('title', $event->title ?? '') }}"
                                 required
                             />
                         </div>
@@ -39,7 +39,7 @@
                                 id="location"
                                 name="location"
                                 placeholder="SmartXp"
-                                value="{{ old("location", $event->location ?? "") }}"
+                                value="{{ old('location', $event->location ?? '') }}"
                                 required
                             />
                         </div>
@@ -60,19 +60,19 @@
                                 id="maps_location"
                                 name="maps_location"
                                 placeholder="52.239198, 6.857367"
-                                value="{{ old("location", $event->maps_location ?? "") }}"
+                                value="{{ old('location', $event->maps_location ?? '') }}"
                             />
                         </div>
 
                         <!-- Start -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "start",
-                                    "label" => "Event start:",
-                                    "placeholder" => request()->old("start")
-                                        ? strtotime(request()->old("start"))
+                                    'name' => 'start',
+                                    'label' => 'Event start:',
+                                    'placeholder' => request()->old('start')
+                                        ? strtotime(request()->old('start'))
                                         : ($event
                                             ? $event->start
                                             : null),
@@ -83,12 +83,12 @@
                         <!-- End -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "end",
-                                    "label" => "Event end:",
-                                    "placeholder" => request()->old("start")
-                                        ? strtotime(request()->old("end"))
+                                    'name' => 'end',
+                                    'label' => 'Event end:',
+                                    'placeholder' => request()->old('start')
+                                        ? strtotime(request()->old('end'))
                                         : ($event
                                             ? $event->end
                                             : null),
@@ -107,13 +107,13 @@
                             >
                                 <option
                                     value="1"
-                                    @selected(old("secret") === 1 || ($event != null && $event->secret))
+                                    @selected(old('secret') === 1 || ($event != null && $event->secret))
                                 >
                                     Secret
                                 </option>
                                 <option
                                     value="0"
-                                    @selected(old("secret") === 0 || ($event != null && ! $event->secret))
+                                    @selected(old('secret') === 0 || ($event != null && ! $event->secret))
                                 >
                                     Public
                                 </option>
@@ -123,17 +123,17 @@
                         <!-- Publication -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "publication",
-                                    "label" =>
+                                    'name' => 'publication',
+                                    'label' =>
                                         'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
-                                    "placeholder" => old("publication")
-                                        ? strtotime(old("publication"))
+                                    'placeholder' => old('publication')
+                                        ? strtotime(old('publication'))
                                         : ($event
                                             ? $event->publication
                                             : null),
-                                    "not_required" => true,
+                                    'not_required' => true,
                                 ]
                             )
                         </div>
@@ -146,8 +146,8 @@
                                     class="form-control committee-search"
                                     id="organisation"
                                     name="committee"
-                                    placeholder="{{ $event->committee->name ?? "" }}"
-                                    value="{{ $event->committee->id ?? "" }}"
+                                    placeholder="{{ $event->committee->name ?? '' }}"
+                                    value="{{ $event->committee->id ?? '' }}"
                                 />
                             </div>
                         </div>
@@ -195,11 +195,11 @@
                         <!-- External -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "is_external",
-                                    "checked" => $event?->is_external,
-                                    "label" => "This activity is not organized by Proto.",
+                                    'name' => 'is_external',
+                                    'checked' => $event?->is_external,
+                                    'label' => 'This activity is not organized by Proto.',
                                 ]
                             )
                         </div>
@@ -207,11 +207,11 @@
                         <!-- Food -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "involves_food",
-                                    "checked" => $event?->involves_food,
-                                    "label" => "This activity involves people eating food.",
+                                    'name' => 'involves_food',
+                                    'checked' => $event?->involves_food,
+                                    'label' => 'This activity involves people eating food.',
                                 ]
                             )
                         </div>
@@ -219,11 +219,11 @@
                         <!-- Force Calendar -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "force_calendar_sync",
-                                    "checked" => $event?->force_calendar_sync,
-                                    "label" =>
+                                    'name' => 'force_calendar_sync',
+                                    'checked' => $event?->force_calendar_sync,
+                                    'label' =>
                                         'Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>',
                                 ]
                             )
@@ -232,11 +232,11 @@
                         <!-- Feature -->
                         <div class="col-md-6 mb-3">
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "is_featured",
-                                    "checked" => $event?->is_featured,
-                                    "label" => "Feature this event on the homepage.",
+                                    'name' => 'is_featured',
+                                    'checked' => $event?->is_featured,
+                                    'label' => 'Feature this event on the homepage.',
                                 ]
                             )
                         </div>
@@ -257,15 +257,15 @@
                     <div class="form-group">
                         <label for="editor">Description</label>
                         @include(
-                            "components.forms.markdownfield",
+                            'components.forms.markdownfield',
                             [
-                                "name" => "description",
-                                "placeholder" =>
+                                'name' => 'description',
+                                'placeholder' =>
                                     $event == null
-                                        ? "Please elaborate on why this event is awesome."
+                                        ? 'Please elaborate on why this event is awesome.'
                                         : null,
-                                "value" => old(
-                                    "description",
+                                'value' => old(
+                                    'description',
                                     $event == null ? null : $event->description,
                                 ),
                             ]
@@ -275,14 +275,14 @@
                     <div class="form-group">
                         <label for="editor-summary">Summary</label>
                         @include(
-                            "components.forms.markdownfield",
+                            'components.forms.markdownfield',
                             [
-                                "name" => "summary",
-                                "placeholder" =>
+                                'name' => 'summary',
+                                'placeholder' =>
                                     $event == null
-                                        ? "A summary (used in the newsletter for example). Only a small description is required, other details will be added."
+                                        ? 'A summary (used in the newsletter for example). Only a small description is required, other details will be added.'
                                         : null,
-                                "value" => old("summary", $event == null ? null : $event->summary),
+                                'value' => old('summary', $event == null ? null : $event->summary),
                             ]
                         )
                     </div>
@@ -291,7 +291,7 @@
         </div>
 
         <div class="card-footer">
-            @include("event.edit_includes.buttonbar")
+            @include('event.edit_includes.buttonbar')
         </div>
     </div>
 </form>

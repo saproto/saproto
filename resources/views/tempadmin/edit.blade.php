@@ -1,6 +1,6 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     @if ($new)
         New temporary admin
     @else
@@ -8,23 +8,23 @@
     @endif
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <form
-                action="{{ ! empty($item) ? route("tempadmins.update", ["tempadmin" => $item]) : route("tempadmins.store") }}"
+                action="{{ ! empty($item) ? route('tempadmins.update', ['tempadmin' => $item]) : route('tempadmins.store') }}"
                 method="POST"
             >
                 <input
                     type="hidden"
                     name="_method"
-                    value="{{ ! empty($item) ? "PUT" : "POST" }}"
+                    value="{{ ! empty($item) ? 'PUT' : 'POST' }}"
                 />
                 {{ csrf_field() }}
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -46,22 +46,22 @@
                         @endif
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "start_at",
-                                "label" => "Start at:",
-                                "placeholder" => $new
+                                'name' => 'start_at',
+                                'label' => 'Start at:',
+                                'placeholder' => $new
                                     ? strtotime(Carbon::now())
                                     : strtotime($item->start_at),
                             ]
                         )
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "end_at",
-                                "label" => "End at:",
-                                "placeholder" => $new
+                                'name' => 'end_at',
+                                'label' => 'End at:',
+                                'placeholder' => $new
                                     ? strtotime(Carbon::now()->endOfDay())
                                     : strtotime($item->end_at),
                             ]
@@ -73,7 +73,7 @@
                             Submit
                         </button>
                         <a
-                            href="{{ route("tempadmins.index") }}"
+                            href="{{ route('tempadmins.index') }}"
                             class="btn btn-default"
                         >
                             Cancel

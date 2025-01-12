@@ -15,7 +15,7 @@
 
         @if (! empty($include_delete_for))
             <a
-                href="{{ route("achievement::take", ["id" => $achievement->id, "user" => $user->id]) }}"
+                href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
                 class="float-end text-white"
             >
                 <i class="fas fa-trash fa-fw ms-3"></i>

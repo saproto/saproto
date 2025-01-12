@@ -5,7 +5,7 @@
         <div class="card-body">
             <form
                 method="post"
-                action="{{ route("event::addhelp", ["id" => $event->id]) }}"
+                action="{{ route('event::addhelp', ['id' => $event->id]) }}"
             >
                 @csrf
 
@@ -58,14 +58,14 @@
 
                     <form
                         method="post"
-                        action="{{ route("event::updatehelp", ["id" => $committee->pivot->id]) }}"
+                        action="{{ route('event::updatehelp', ['id' => $committee->pivot->id]) }}"
                     >
                         @csrf
 
                         <div class="row">
                             <div class="col-md-3">
                                 <a
-                                    href="{{ route("event::deletehelp", ["id" => $committee->pivot->id]) }}"
+                                    href="{{ route('event::deletehelp', ['id' => $committee->pivot->id]) }}"
                                     class="btn btn-danger btn-sm btn-block"
                                 >
                                     Delete

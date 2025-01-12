@@ -1,4 +1,4 @@
-@php($leaderboard = App\Models\Leaderboard::where("featured", true)->first())
+@php($leaderboard = App\Models\Leaderboard::where('featured', true)->first())
 
 @if ($leaderboard)
     <div class="card mb-3">
@@ -13,14 +13,14 @@
 
         @if (count($leaderboard->entries) > 0)
             <table class="table table-sm mb-0">
-                @foreach ($leaderboard->entries()->orderBy("points", "DESC")->limit(5)->get()as $entry)
+                @foreach ($leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get()as $entry)
                     <tr>
                         <td
                             class="ps-3 place-{{ $loop->index + 1 }}"
                             style="max-width: 50px"
                         >
                             <i
-                                class="fas fa-sm fa-fw {{ $loop->index == 0 ? "fa-crown" : "fa-hashtag" }}"
+                                class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"
                             ></i>
                             {{ $loop->index + 1 }}
                         </td>
@@ -39,7 +39,7 @@
 
         <div class="p-3">
             <a
-                href="{{ route("leaderboards::index") }}"
+                href="{{ route('leaderboards::index') }}"
                 class="btn btn-info btn-block"
             >
                 Go to leaderboards

@@ -41,14 +41,14 @@
             @endif
         @endif
 
-        @can("board")
+        @can('board')
             <p class="card-text ellipsis">
                 <i
                     class="fas fa-user-cog fa-fw me-3 text-info"
                     aria-hidden="true"
                 ></i>
                 <a
-                    href="{{ route("user::admin::details", ["id" => $user->id]) }}"
+                    href="{{ route('user::admin::details', ['id' => $user->id]) }}"
                 >
                     View this user in the user administration.
                 </a>
@@ -94,9 +94,9 @@
                 <i class="fas fa-user-friends fa-fw me-3"></i>
                 Member
 
-                @if (date("U", strtotime($user->member->created_at)) > 0)
+                @if (date('U', strtotime($user->member->created_at)) > 0)
                     as of
-                    {{ date("F j, Y", strtotime($user->member->created_at)) }}.
+                    {{ date('F j, Y', strtotime($user->member->created_at)) }}.
                 @else
                     since
                     <strong>before we kept track</strong>

@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic-nonav")
+@extends('website.layouts.redesign.generic-nonav')
 
-@section("page-title")
+@section('page-title')
     About the website of S.A. Proto
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="col-md-7">
             <div class="row">
@@ -45,7 +45,7 @@
                 <div class="card-body">
                     <p class="card-text">
                         The
-                        <a href="{{ route("homepage") }}">
+                        <a href="{{ route('homepage') }}">
                             website of Study Association Proto
                         </a>
                         was released in the summer of 2016. For as far as you're
@@ -59,7 +59,7 @@
                         The website is open source and actively maintained by a
                         dedicated committee of the association: the
                         <a
-                            href="{{ route("committee::show", ["id" => $committee->getPublicId()]) }}"
+                            href="{{ route('committee::show', ['id' => $committee->getPublicId()]) }}"
                         >
                             {{ $committee->name }}
                         </a>
@@ -74,7 +74,7 @@
                     <p class="card-text">
                         If you find any security flaw on our website, please
                         <a
-                            href="mailto:{{ $committee->slug . "@" . Config::string("proto.emaildomain") }}"
+                            href="mailto:{{ $committee->slug . '@' . Config::string('proto.emaildomain') }}"
                         >
                             e-mail the developers
                         </a>
@@ -125,7 +125,7 @@
                         input and be happy to help you get your idea integrated
                         in the website! Just want to ask something?
                         <a
-                            href="mailto:{{ $committee->slug . "@" . Config::string("proto.emaildomain") }}"
+                            href="mailto:{{ $committee->slug . '@' . Config::string('proto.emaildomain') }}"
                         >
                             Shoot us an e-mail!
                         </a>
@@ -135,17 +135,17 @@
                 <div class="card-footer text-center">
                     <strong>Previous contributors</strong>
                     -
-                    @foreach ($developers["old"] as $i => $dev)
+                    @foreach ($developers['old'] as $i => $dev)
                         @if ($dev->user->isMember)
                             <a
-                                href="{{ route("user::profile", ["id" => $dev->user->getPublicId()]) }}"
+                                href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}"
                             >
                                 {{ $dev->user->name }}
                             </a>
                         @else
                             {{ $dev->user->name }}
                         @endif
-                        @if ($i + 1 < count($developers["old"]))
+                        @if ($i + 1 < count($developers['old']))
                             -
                         @endif
                     @endforeach
@@ -164,13 +164,13 @@
 
                 <div class="card-body">
                     <div class="row">
-                        @foreach ($developers["current"] as $i => $dev)
+                        @foreach ($developers['current'] as $i => $dev)
                             <div class="col-6">
                                 @include(
-                                    "users.includes.usercard",
+                                    'users.includes.usercard',
                                     [
-                                        "user" => $dev->user,
-                                        "subtitle" => sprintf("<em>%s</em>", $dev->role),
+                                        'user' => $dev->user,
+                                        'subtitle' => sprintf('<em>%s</em>', $dev->role),
                                     ]
                                 )
                             </div>

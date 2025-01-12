@@ -1,6 +1,6 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $name }},</p>
 
     <p>
@@ -12,9 +12,9 @@
 
     <p class="text-break">
         <a
-            href="{{ route("login::password::reset::token", ["token" => $token]) }}"
+            href="{{ route('login::password::reset::token', ['token' => $token]) }}"
         >
-            {{ route("login::password::reset::token", ["token" => $token]) }}
+            {{ route('login::password::reset::token', ['token' => $token]) }}
         </a>
     </p>
 

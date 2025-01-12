@@ -1,13 +1,13 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ isset($item) ? "Edit menu item" : "Add new menu item" }}
+@section('page-title')
+    {{ isset($item) ? 'Edit menu item' : 'Add new menu item' }}
 @endsection
 
-@section("container")
+@section('container')
     <form
         method="post"
-        action="{{ ! isset($item) ? route("menu::create") : route("menu::update", ["id" => $item->id]) }}"
+        action="{{ ! isset($item) ? route('menu::create') : route('menu::update', ['id' => $item->id]) }}"
         enctype="multipart/form-data"
     >
         @csrf
@@ -16,7 +16,7 @@
             <div class="col-md-3">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -28,7 +28,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="About Proto"
-                                value="{{ $item->menuname ?? "" }}"
+                                value="{{ $item->menuname ?? '' }}"
                                 required
                             />
                         </div>
@@ -59,11 +59,11 @@
                         </div>
 
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "is_member_only",
-                                "checked" => $item?->is_member_only,
-                                "label" =>
+                                'name' => 'is_member_only',
+                                'checked' => $item?->is_member_only,
+                                'label' =>
                                     '<i class="fas fa-lock" aria-hidden="true"></i> Members only',
                             ]
                         )
@@ -100,7 +100,7 @@
 
                         <div
                             id="other-url-fields"
-                            class="{{ ! isset($item) || isset($item->page_id) ? "d-none" : "" }}"
+                            class="{{ ! isset($item) || isset($item->page_id) ? 'd-none' : '' }}"
                         >
                             <div class="form-group">
                                 <label for="url">Other URL:</label>
@@ -110,7 +110,7 @@
                                     id="url"
                                     name="url"
                                     placeholder="http://www.proto.utwente.nl/"
-                                    value="{{ $item->url ?? "" }}"
+                                    value="{{ $item->url ?? '' }}"
                                 />
                             </div>
 
@@ -125,14 +125,14 @@
                                     </option>
                                     @foreach ($routes as $route)
                                         @php
-                                            $domain = $route->domain() == null ? Config::string("app-proto.primary-domain") : $route->domain();
-                                            $uri = $route->uri() == "/" ? "" : $route->uri();
+                                            $domain = $route->domain() == null ? Config::string('app-proto.primary-domain') : $route->domain();
+                                            $uri = $route->uri() == '/' ? '' : $route->uri();
                                             $url = "https://$domain/$uri";
                                         @endphp
 
                                         <option
                                             value="{{ $url }}"
-                                            @selected(isset($item) && $item->url == "(route) " . $route->getName())
+                                            @selected(isset($item) && $item->url == '(route) ' . $route->getName())
                                         >
                                             [{{ $route->getName() }}] ->
                                             {{ $route->domain() }}/{{ $route->uri }}
@@ -149,7 +149,7 @@
                         </button>
 
                         <a
-                            href="{{ route("menu::list") }}"
+                            href="{{ route('menu::list') }}"
                             class="btn btn-default"
                         >
                             Cancel
@@ -161,18 +161,18 @@
     </form>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const otherUrlOption = document.getElementById('other-url-option');
-        const otherUrlFields = document.getElementById('other-url-fields');
+        const otherUrlOption = document.getElementById('other-url-option')
+        const otherUrlFields = document.getElementById('other-url-fields')
         document.getElementById('page_id').addEventListener('change', (e) => {
             if (otherUrlOption.selected)
-                otherUrlFields.classList.remove('d-none');
-            else otherUrlFields.classList.add('d-none');
-        });
+                otherUrlFields.classList.remove('d-none')
+            else otherUrlFields.classList.add('d-none')
+        })
 
         document.getElementById('route').addEventListener('change', (e) => {
-            document.getElementById('url').value = e.target.value;
-        });
+            document.getElementById('url').value = e.target.value
+        })
     </script>
 @endpush

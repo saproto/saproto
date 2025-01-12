@@ -199,7 +199,7 @@ $event-hover-bg: #aaa !default;
         width: 100%;
         height: 100%;
         background-image: $event-gradient;
-        content: "";
+        content: '';
         z-index: 1;
     }
     &:hover.event::after {
@@ -265,7 +265,7 @@ $event-hover-bg: #aaa !default;
         &:before {
             background-color: white;
             color: white;
-            content: " ";
+            content: ' ';
             display: block;
             border-radius: 50%;
             border: 1px solid $blue;
@@ -282,7 +282,7 @@ $event-hover-bg: #aaa !default;
         }
     }
     input:checked + .card:before {
-        content: "✓";
+        content: '✓';
         background-color: $blue;
         transform: scale(1);
     }
@@ -328,7 +328,7 @@ $photo-hover-gradient: linear-gradient(
         width: 100%;
         height: 100%;
         background-image: $photo-gradient;
-        content: "";
+        content: '';
         z-index: 0;
     }
     &:hover {
@@ -343,12 +343,12 @@ $photo-hover-gradient: linear-gradient(
 }
 
 // Search input
-[type="search"]::-webkit-search-cancel-button {
+[type='search']::-webkit-search-cancel-button {
     -webkit-appearance: none;
     appearance: none;
     height: 14px;
     width: 14px;
-    background-image: url("/resources/assets/images/font-awesome/fa-x.svg");
+    background-image: url('/resources/assets/images/font-awesome/fa-x.svg');
     background-size: 14px 14px;
 }
 
@@ -357,8 +357,8 @@ $photo-hover-gradient: linear-gradient(
     background-image: unset;
     background-color: $dark;
     height: 15px;
-    mask: url("/resources/assets/images/font-awesome/fa-calendar.svg") no-repeat;
-    -webkit-mask: url("/resources/assets/images/font-awesome/fa-calendar.svg")
+    mask: url('/resources/assets/images/font-awesome/fa-calendar.svg') no-repeat;
+    -webkit-mask: url('/resources/assets/images/font-awesome/fa-calendar.svg')
         no-repeat;
     &:hover {
         cursor: pointer;
@@ -455,7 +455,7 @@ a.badge {
                 display: inline-block;
 
                 &:before {
-                    content: "⨯";
+                    content: '⨯';
                     margin-right: 3px;
                 }
 

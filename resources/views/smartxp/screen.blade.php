@@ -12,12 +12,12 @@
 
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
 
         <title>SmartXP Screen v3</title>
 
-        @include("website.assets.stylesheets")
+        @include('website.assets.stylesheets')
 
         <style>
             .h-33 {
@@ -165,7 +165,7 @@
             }
 
             #protube.inactive {
-                background-image: url({{ Config::string("app-proto.fishcam-url") }}) !important;
+                background-image: url({{ Config::string('app-proto.fishcam-url') }}) !important;
             }
 
             #protube-title {
@@ -214,7 +214,7 @@
                     <br />
 
                     <img
-                        src="{{ asset("images/logo/inverse.png") }}"
+                        src="{{ asset('images/logo/inverse.png') }}"
                         class="h-75"
                     />
                 </div>
@@ -284,43 +284,43 @@
             </div>
         </div>
 
-        @include("website.assets.javascripts")
-        @stack("javascript")
+        @include('website.assets.javascripts')
+        @stack('javascript')
 
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             function updateClock() {
-                let now = moment();
+                let now = moment()
                 document.getElementById('clock').innerHTML =
                     '<i class="fas fa-clock fa-fw me-2"></i>' +
-                    now.format('HH:mm:ss');
+                    now.format('HH:mm:ss')
                 document.getElementById('ticker').style.width =
-                    (now.format('s.SSS') / 60) * 100 + '%';
+                    (now.format('s.SSS') / 60) * 100 + '%'
             }
 
             function updateTimetable() {
-                const timetable = document.getElementById('timetable');
+                const timetable = document.getElementById('timetable')
 
-                get('{{ route("api::screen::timetable") }}')
+                get('{{ route('api::screen::timetable') }}')
                     .then((data) => {
                         if (data.length > 0) {
-                            timetable.innerHTML = '';
-                            let count = 0;
+                            timetable.innerHTML = ''
+                            let count = 0
                             for (let i in data) {
-                                if (count >= 4) return;
+                                if (count >= 4) return
                                 if (!data[i].over) {
-                                    let start = moment.unix(data[i].start);
-                                    let end = moment.unix(data[i].end);
+                                    let start = moment.unix(data[i].start)
+                                    let end = moment.unix(data[i].end)
                                     let time =
                                         start.format('HH:mm') +
                                         ' - ' +
-                                        end.format('HH:mm');
-                                    let title = data[i].title;
+                                        end.format('HH:mm')
+                                    let title = data[i].title
                                     let displayTime =
                                         '<i class="fas fa-clock fa-fw me-1"></i>' +
                                         time +
                                         ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
                                         data[i].place +
-                                        '</span>';
+                                        '</span>'
                                     timetable.innerHTML +=
                                         '<div class="activity">' +
                                         (data[i].studyShort
@@ -342,36 +342,35 @@
                                         title +
                                         '</span><br>' +
                                         displayTime +
-                                        '</div>';
-                                    count++;
+                                        '</div>'
+                                    count++
                                 }
                             }
                             if (count === 0) {
                                 timetable.innerHTML =
-                                    '<div class="notice">No more lectures today!</div>';
+                                    '<div class="notice">No more lectures today!</div>'
                             }
                         } else {
                             timetable.innerHTML =
-                                '<div class="notice">No lectures today!</div>';
+                                '<div class="notice">No lectures today!</div>'
                         }
                     })
                     .catch((err) => {
-                        console.error(err);
+                        console.error(err)
                         timetable.innerHTML =
-                            '<div class="notice">Lectures could not be found...</div>';
-                    });
+                            '<div class="notice">Lectures could not be found...</div>'
+                    })
             }
 
             function updateActivities() {
-                get('{{ route("api::events::upcoming", ["limit" => 3]) }}')
+                get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
                     .then((data) => {
                         if (data.length > 0) {
-                            document.getElementById('activities').innerHTML =
-                                '';
+                            document.getElementById('activities').innerHTML = ''
                             for (let i in data) {
-                                let start = moment.unix(data[i].start);
-                                let end = moment.unix(data[i].end);
-                                let time;
+                                let start = moment.unix(data[i].start)
+                                let end = moment.unix(data[i].end)
+                                let time
                                 if (
                                     start.format('DD-MM') ===
                                     end.format('DD-MM')
@@ -379,15 +378,15 @@
                                     time =
                                         start.format('DD-MM, HH:mm') +
                                         ' - ' +
-                                        end.format('HH:mm');
+                                        end.format('HH:mm')
                                 } else {
                                     time =
                                         start.format('DD-MM, HH:mm') +
                                         ' - ' +
-                                        end.format('DD-MM, HH:mm');
+                                        end.format('DD-MM, HH:mm')
                                 }
                                 document.getElementById(
-                                    'activities',
+                                    'activities'
                                 ).innerHTML +=
                                     '<div class="activity ' +
                                     (data[i].current
@@ -401,68 +400,68 @@
                                     time +
                                     ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' +
                                     data[i].location +
-                                    '</span></div>';
+                                    '</span></div>'
                             }
                         } else {
                             document.getElementById('activities').innerHTML =
-                                '<div class="notice">No upcoming activities!</div>';
+                                '<div class="notice">No upcoming activities!</div>'
                         }
                     })
                     .catch((err) => {
-                        console.error(err);
+                        console.error(err)
                         document.getElementById('activities').innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>';
-                    });
+                            '<div class="notice">Something went wrong during retrieval...</div>'
+                    })
             }
 
             function updateBuses() {
-                updateBus(43110270, 43110270, 'businfo-langen');
-                updateBus(43005640, 43005630, 'businfo-wester');
+                updateBus(43110270, 43110270, 'businfo-langen')
+                updateBus(43005640, 43005630, 'businfo-wester')
             }
 
             function updateBus(stop, stop_other_side, id) {
-                const element = document.getElementById(id);
-                get('{{ urldecode(route("api::screen::bus")) }}', {
+                const element = document.getElementById(id)
+                get('{{ urldecode(route('api::screen::bus')) }}', {
                     tpc_id: stop,
                     tpc_id_other: stop_other_side,
                 })
                     .then((data) => {
-                        let combinedBusses = {};
+                        let combinedBusses = {}
                         for (const [key, value] of Object.entries(data)) {
-                            Object.assign(combinedBusses, value.Passes);
+                            Object.assign(combinedBusses, value.Passes)
                         }
                         if (Object.keys(combinedBusses).length > 0) {
-                            element.innerHTML = '';
+                            element.innerHTML = ''
                             Object.entries(combinedBusses).sort(
                                 function (a, b) {
                                     return (
                                         new Date(
-                                            a[1].ExpectedArrivalTime,
+                                            a[1].ExpectedArrivalTime
                                         ).valueOf() -
                                         new Date(
-                                            b[1].ExpectedArrivalTime,
+                                            b[1].ExpectedArrivalTime
                                         ).valueOf()
-                                    );
-                                },
-                            );
+                                    )
+                                }
+                            )
 
                             for (const [key, value] of Object.entries(
-                                combinedBusses,
+                                combinedBusses
                             ).slice(0, 4)) {
                                 let colorLate =
                                     (Math.abs(
                                         new Date(value.ExpectedArrivalTime) -
-                                            new Date(value.TargetArrivalTime),
+                                            new Date(value.TargetArrivalTime)
                                     ) /
                                         1000) *
                                         60 >
                                     1
                                         ? '#ff0000'
-                                        : '#c1ff00';
+                                        : '#c1ff00'
                                 let drivingColor =
                                     value.TripStopStatus === 'DRIVING'
                                         ? '#c1ff00'
-                                        : '#fff';
+                                        : '#fff'
                                 if (value.TripStopStatus !== 'ARRIVED') {
                                     element.innerHTML +=
                                         '<div class="busentry">' +
@@ -481,46 +480,46 @@
                                         value.TripStopStatus +
                                         '</span><br>Towards ' +
                                         value.DestinationName50 +
-                                        '</div>';
+                                        '</div>'
                                 }
                             }
                         } else {
                             element.innerHTML =
-                                '<div class="notice">No buses!</div>';
+                                '<div class="notice">No buses!</div>'
                         }
                     })
                     .catch((err) => {
-                        console.error(err);
+                        console.error(err)
                         element.innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>';
-                    });
+                            '<div class="notice">Something went wrong during retrieval...</div>'
+                    })
             }
 
             function updateProtopeners() {
                 const timetable = document.getElementById(
-                    'protopeners-timetable',
-                );
-                const protopolisFa = document.getElementById('protopolis-fa');
+                    'protopeners-timetable'
+                )
+                const protopolisFa = document.getElementById('protopolis-fa')
 
-                get('{{ route("api::screen::timetable::protopeners") }}')
+                get('{{ route('api::screen::timetable::protopeners') }}')
                     .then((data) => {
                         if (data.length > 0) {
                             document.getElementById(
-                                'protopeners-timetable',
-                            ).innerHTML = '';
+                                'protopeners-timetable'
+                            ).innerHTML = ''
                             let open = false,
-                                count = 0;
+                                count = 0
                             for (let i in data) {
-                                if (data[i].over) continue;
-                                else if (data[i].current) open = true;
-                                let start = moment.unix(data[i].start);
-                                let end = moment.unix(data[i].end);
+                                if (data[i].over) continue
+                                else if (data[i].current) open = true
+                                let start = moment.unix(data[i].start)
+                                let end = moment.unix(data[i].end)
                                 let time =
                                     start.format('HH:mm') +
                                     ' - ' +
-                                    end.format('HH:mm');
+                                    end.format('HH:mm')
                                 document.getElementById(
-                                    'protopeners-timetable',
+                                    'protopeners-timetable'
                                 ).innerHTML +=
                                     '<div class="activity ' +
                                     (data[i].current ? 'current' : '') +
@@ -531,54 +530,54 @@
                                     '   <div class="float-end"><strong>' +
                                     data[i].title +
                                     '</strong></div>' +
-                                    '</div>';
-                                count++;
+                                    '</div>'
+                                count++
                             }
                             if (open) {
-                                protopolisFa.classList.add('green');
+                                protopolisFa.classList.add('green')
                                 protopolisFa.classList.replace(
                                     'fa-door-closed',
-                                    'fa-door-open',
-                                );
+                                    'fa-door-open'
+                                )
                             } else {
-                                protopolisFa.classList.remove('green');
+                                protopolisFa.classList.remove('green')
                                 protopolisFa.classList.replace(
                                     'fa-door-open',
-                                    'fa-door-closed',
-                                );
+                                    'fa-door-closed'
+                                )
                             }
                             if (count === 0)
                                 timetable.innerHTML =
-                                    '<div class="notice">Protopolis closed for today!</div>';
+                                    '<div class="notice">Protopolis closed for today!</div>'
                         } else {
                             timetable.innerHTML =
-                                '<div class="notice">Protopolis closed today!</div>';
+                                '<div class="notice">Protopolis closed today!</div>'
                         }
                     })
                     .catch((err) => {
-                        console.error(err);
+                        console.error(err)
                         timetable.innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>';
-                    });
+                            '<div class="notice">Something went wrong during retrieval...</div>'
+                    })
             }
 
             window.addEventListener('load', (_) => {
-                updateTimetable();
-                updateActivities();
-                updateProtopeners();
-                updateClock();
-                updateBuses();
-                updateProtopeners();
+                updateTimetable()
+                updateActivities()
+                updateProtopeners()
+                updateClock()
+                updateBuses()
+                updateProtopeners()
 
-                const everySecond = 1000;
-                const everyMinute = 60 * 1000;
-                const everyFiveMinutes = 5 * 60 * 1000;
-                setInterval(updateTimetable, everyFiveMinutes);
-                setInterval(updateActivities, everyFiveMinutes);
-                setInterval(updateProtopeners, everyMinute);
-                setInterval(updateClock, everySecond);
-                setInterval(updateBuses, everyFiveMinutes);
-            });
+                const everySecond = 1000
+                const everyMinute = 60 * 1000
+                const everyFiveMinutes = 5 * 60 * 1000
+                setInterval(updateTimetable, everyFiveMinutes)
+                setInterval(updateActivities, everyFiveMinutes)
+                setInterval(updateProtopeners, everyMinute)
+                setInterval(updateClock, everySecond)
+                setInterval(updateBuses, everyFiveMinutes)
+            })
         </script>
     </body>
 </html>

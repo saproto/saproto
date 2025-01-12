@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
         Send an anonymous e-mail to the {{ $committee->name }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6 col-sm-8 col-xs-12">
             <form
                 method="post"
-                action="{{ route("committee::sendanonymousmail", ["id" => $committee->getPublicId()]) }}"
+                action="{{ route('committee::sendanonymousmail', ['id' => $committee->getPublicId()]) }}"
             >
                 @csrf
 

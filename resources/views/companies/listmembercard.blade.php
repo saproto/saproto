@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Promotions for members
 @endsection
 
-@section("container")
+@section('container')
     <div class="row row-eq-height justify-content-center">
         @foreach ($companies as $key => $company)
             <div class="col-md-4 mb-4">
@@ -31,7 +31,7 @@
                         <h5 class="card-title">{{ $company->name }}</h5>
 
                         <a
-                            href="{{ route("membercard::show", ["id" => $company->id]) }}"
+                            href="{{ route('membercard::show', ['id' => $company->id]) }}"
                             class="card-link text-info"
                         >
                             More information

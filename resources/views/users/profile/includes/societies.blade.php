@@ -7,18 +7,18 @@
                 @foreach ($user->societies as $society)
                     <div class="col-md-6 col-xs-12">
                         @include(
-                            "committee.include.committee_block",
+                            'committee.include.committee_block',
                             [
-                                "committee" => $society,
-                                "override_committee_name" => sprintf(
-                                    "<strong>%s</strong> %s",
+                                'committee' => $society,
+                                'override_committee_name' => sprintf(
+                                    '<strong>%s</strong> %s',
                                     $society->name,
                                     $society->pivot->edition,
                                 ),
-                                "footer" => sprintf(
-                                    "<strong>%s</strong><br><sup>Since %s</sup>",
-                                    $society->pivot->role ? $society->pivot->role : "General Member",
-                                    date("j F Y", strtotime($society->pivot->created_at)),
+                                'footer' => sprintf(
+                                    '<strong>%s</strong><br><sup>Since %s</sup>',
+                                    $society->pivot->role ? $society->pivot->role : 'General Member',
+                                    date('j F Y', strtotime($society->pivot->created_at)),
                                 ),
                             ]
                         )
@@ -46,23 +46,23 @@
                 @foreach ($pastsocieties as $societyparticipations)
                     <div class="col-md-6 col-xs-12">
                         @include(
-                            "committee.include.committee_block",
+                            'committee.include.committee_block',
                             [
-                                "committee" => $societyparticipations->committee,
-                                "override_committee_name" => sprintf(
-                                    "<strong>%s</strong> %s",
+                                'committee' => $societyparticipations->committee,
+                                'override_committee_name' => sprintf(
+                                    '<strong>%s</strong> %s',
                                     $societyparticipations->committee->name,
                                     $societyparticipations->edition,
                                 ),
-                                "footer" => sprintf(
-                                    "<strong>%s</strong><br><sup>Between %s and %s</sup>",
+                                'footer' => sprintf(
+                                    '<strong>%s</strong><br><sup>Between %s and %s</sup>',
                                     $societyparticipations->role
                                         ? $societyparticipations->role
-                                        : "General Member",
-                                    date("j F Y", strtotime($societyparticipations->created_at)),
-                                    date("j F Y", strtotime($societyparticipations->deleted_at)),
+                                        : 'General Member',
+                                    date('j F Y', strtotime($societyparticipations->created_at)),
+                                    date('j F Y', strtotime($societyparticipations->deleted_at)),
                                 ),
-                                "photo_pop" => false,
+                                'photo_pop' => false,
                             ]
                         )
                     </div>

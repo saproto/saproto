@@ -1,11 +1,11 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Dear {{ $user->calling_name }},</p>
 
     <p>
         Welcome as the newest member of Study Association Proto! My name is
-        {{ Config::string("proto.internal") }} and I would like to give a
+        {{ Config::string('proto.internal') }} and I would like to give a
         little introduction to the association. The room where you probably just
         signed up in is our association room called the Protopolis. In this room
         we offer free coffee and tea and sell other foods and drinks via the
@@ -36,7 +36,7 @@
         Before you can start using your Proto username outside of the website
         you'll need to activate your username. You do this by synchronizing your
         password to your username
-        <a href="{{ route("login::password::sync::index") }}">here</a>
+        <a href="{{ route('login::password::sync::index') }}">here</a>
         .
     </p>
 
@@ -52,7 +52,7 @@
         policy are made, you should subscribe for notifications in the
         <i>e-mail lists</i>
         section of your
-        <a href="{{ route("user::dashboard::show") }}">dashboard</a>
+        <a href="{{ route('user::dashboard::show') }}">dashboard</a>
         .
     </p>
 
@@ -65,7 +65,7 @@
     <p>
         Kind regards,
         <br />
-        {{ Config::string("proto.internal") }}
+        {{ Config::string('proto.internal') }}
         <br />
         <i>On behalf of the board of Study Association Proto</i>
     </p>

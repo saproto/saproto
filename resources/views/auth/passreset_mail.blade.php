@@ -1,11 +1,11 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Password Reset
 @endsection
 
-@section("login-body")
-    <form method="POST" action="{{ route("login::password::reset::send") }}">
+@section('login-body')
+    <form method="POST" action="{{ route('login::password::reset::send') }}">
         @csrf
 
         <p>
@@ -16,7 +16,7 @@
                 type="email"
                 name="email"
                 class="form-control mb-2"
-                value="{{ old("email") }}"
+                value="{{ old('email') }}"
                 placeholder="garrus.vakarian@example.com"
             />
 

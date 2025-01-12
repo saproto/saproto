@@ -1,14 +1,14 @@
 <div id="archive-bar" class="row justify-content-center px-2">
     <div class="col-12 col-sm-auto text-center mb-2 overflow-auto">
         <div class="btn-group mb-1">
-            @if (Route::currentRouteName() == "event::index")
+            @if (Route::currentRouteName() == 'event::index')
                 <span class="bg-primary text-white px-3 py-2 rounded-start">
                     Upcoming
                 </span>
                 <span class="bg-secondary text-white px-3 py-2">Archive</span>
             @else
                 <a
-                    href="{{ route("event::index", ["category" => $cur_category]) }}"
+                    href="{{ route('event::index', ['category' => $cur_category]) }}"
                     class="btn btn-secondary"
                 >
                     Upcoming
@@ -18,8 +18,8 @@
 
             @foreach ($years as $y)
                 <a
-                    href="{{ route("event::archive", ["year" => $y, "category" => $cur_category]) }}"
-                    class="btn btn-{{ Route::currentRouteName() == "event::archive" && $y == $year ? "primary" : "light" }} {{ $loop->index == count($years) - 1 ? "rounded-end" : "" }}"
+                    href="{{ route('event::archive', ['year' => $y, 'category' => $cur_category]) }}"
+                    class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }} {{ $loop->index == count($years) - 1 ? 'rounded-end' : '' }}"
                 >
                     {{ $y }}
                 </a>
@@ -30,7 +30,7 @@
         <div class="btn-group">
             <button
                 type="button"
-                class="btn btn-info px-4 px-sm-3 {{ ! Auth::check() || ! Auth::user()->can("board") ? "rounded-end" : "" }}"
+                class="btn btn-info px-4 px-sm-3 {{ ! Auth::check() || ! Auth::user()->can('board') ? 'rounded-end' : '' }}"
                 data-bs-toggle="modal"
                 data-bs-target="#calendar-modal"
             >
@@ -40,9 +40,9 @@
                 </span>
             </button>
 
-            @can("board")
+            @can('board')
                 <a
-                    href="{{ route("event::create") }}"
+                    href="{{ route('event::create') }}"
                     class="btn btn-info rounded-end"
                 >
                     <i class="fas fa-calendar-plus me-2"></i>
@@ -56,7 +56,7 @@
             @if (count($categories) > 0)
                 <form
                     class="form-inline ms-3"
-                    action="{{ Route::currentRouteName() == "event::archive" ? route("event::archive", ["year" => $year]) : route("event::index") }}"
+                    action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::index') }}"
                 >
                     <div id="category-search" class="input-group">
                         <div class="input-group-prepend">
@@ -111,16 +111,16 @@
                     <input
                         id="ical-url"
                         class="form-control"
-                        value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}"
+                        value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route('ical::calendar') }}"
                         readonly
                     />
                     <script nonce="{{ csp_nonce() }}">
                         document
                             .getElementById('ical-url')
                             .addEventListener('click', (e) => {
-                                e.target.focus();
-                                e.target.select();
-                            });
+                                e.target.focus()
+                                e.target.select()
+                            })
                     </script>
                 </p>
 
@@ -130,7 +130,7 @@
                     class="btn btn-info btn-block"
                     type="button"
                     target="_blank"
-                    href="https://calendar.google.com/calendar/r?cid={{ urlencode(str_replace("https://", "http://", Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar"))) }}"
+                    href="https://calendar.google.com/calendar/r?cid={{ urlencode(str_replace('https://', 'http://', Auth::check() ? Auth::user()->getIcalUrl() : route('ical::calendar'))) }}"
                 >
                     <i class="fas fa-google me-2" aria-hidden="true"></i>
                     Add to Google Calendar
@@ -149,9 +149,9 @@
                         @endif
 
                         <a
-                            class="btn btn-{{ Auth::check() && Auth::user()->getCalendarRelevantSetting() ? "success" : "danger" }} btn-block mt-2"
+                            class="btn btn-{{ Auth::check() && Auth::user()->getCalendarRelevantSetting() ? 'success' : 'danger' }} btn-block mt-2"
                             type="button"
-                            href="{{ route("event::toggle_relevant_only") }}"
+                            href="{{ route('event::toggle_relevant_only') }}"
                         >
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
@@ -185,13 +185,13 @@
 
                     <form
                         method="post"
-                        action="{{ route("event::set_reminder") }}"
+                        action="{{ route('event::set_reminder') }}"
                     >
                         @csrf
 
                         <div class="row">
                             <div
-                                class="col-6 col-sm-4 d-flex {{ Auth::user()->getCalendarAlarm() ? "" : "offset-sm-2" }}"
+                                class="col-6 col-sm-4 d-flex {{ Auth::user()->getCalendarAlarm() ? '' : 'offset-sm-2' }}"
                             >
                                 <input
                                     id="hours"
@@ -201,7 +201,7 @@
                                     placeholder="0.5"
                                     name="hours"
                                     min="0"
-                                    value="{{ Auth::user()->getCalendarAlarm() ? Auth::user()->getCalendarAlarm() : "" }}"
+                                    value="{{ Auth::user()->getCalendarAlarm() ? Auth::user()->getCalendarAlarm() : '' }}"
                                 />
                                 <label for="hours" class="form-label ms-2 mt-2">
                                     hours

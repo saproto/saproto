@@ -22,17 +22,17 @@
         />
         <meta
             property="og:image"
-            content="{{ asset("images/subsites/smartxp.jpg") }}"
+            content="{{ asset('images/subsites/smartxp.jpg') }}"
         />
 
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
 
         <title>Can I work in the SmartXP?</title>
 
-        @include("website.assets.stylesheets")
+        @include('website.assets.stylesheets')
 
         <style type="text/css">
             * {
@@ -146,10 +146,10 @@
                                 @if (count($day) > 0)
                                     @foreach ($day as $activity)
                                         <div
-                                            class="activity {{ $activity->current ? "current" : ($activity->over ? "past" : "") }}"
+                                            class="activity {{ $activity->current ? 'current' : ($activity->over ? 'past' : '') }}"
                                         >
-                                            {{ date("H:i", $activity->start) }}
-                                            - {{ date("H:i", $activity->end) }}
+                                            {{ date('H:i', $activity->start) }}
+                                            - {{ date('H:i', $activity->end) }}
                                             <br />
                                             <strong>
                                                 {{ $activity->title }}
@@ -175,7 +175,7 @@
                 <div class="col-md-12 mt-3" style="text-align: center">
                     <a href="https://www.proto.utwente.nl/">
                         <img
-                            src="{{ asset("images/logo/inverse.png") }}"
+                            src="{{ asset('images/logo/inverse.png') }}"
                             style="width: 300px; margin: 40px"
                         />
                     </a>
@@ -183,7 +183,7 @@
             </div>
         </div>
 
-        @include("website.assets.javascripts")
-        @stack("javascript")
+        @include('website.assets.javascripts')
+        @stack('javascript')
     </body>
 </html>

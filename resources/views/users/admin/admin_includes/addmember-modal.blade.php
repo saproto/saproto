@@ -7,7 +7,7 @@
 >
     <div class="modal-dialog" role="document">
         <form
-            action="{{ route("user::member::create", ["id" => $user->id]) }}"
+            action="{{ route('user::member::create', ['id' => $user->id]) }}"
             method="post"
         >
             @csrf

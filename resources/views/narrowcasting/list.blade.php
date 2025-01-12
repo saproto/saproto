@@ -1,24 +1,24 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Narrowcasting Admin
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
                         class="badge bg-info float-end"
-                        href="{{ route("narrowcasting::create") }}"
+                        href="{{ route('narrowcasting::create') }}"
                     >
                         Create a new campaign.
                     </a>
                     <a
                         class="badge bg-danger float-end me-2"
-                        href="{{ route("narrowcasting::clear") }}"
+                        href="{{ route('narrowcasting::clear') }}"
                     >
                         Delete all past campaigns.
                     </a>
@@ -39,7 +39,7 @@
 
                         @foreach ($messages as $message)
                             <tr
-                                {!! $message->campaign_end < date("U") ? 'style="opacity: 0.5;"' : "" !!}
+                                {!! $message->campaign_end < date('U') ? 'style="opacity: 0.5;"' : '' !!}
                             >
                                 <td>
                                     @if ($message->youtube_id)
@@ -63,10 +63,10 @@
                                     {{ $message->name }}
                                 </td>
                                 <td>
-                                    {{ date("l F j Y, H:i", $message->campaign_start) }}
+                                    {{ date('l F j Y, H:i', $message->campaign_start) }}
                                 </td>
                                 <td>
-                                    {{ date("l F j Y, H:i", $message->campaign_end) }}
+                                    {{ date('l F j Y, H:i', $message->campaign_end) }}
                                 </td>
                                 <td>
                                     @if ($message->image || $message->youtube_id)
@@ -77,7 +77,7 @@
                                 </td>
                                 <td>
                                     <a
-                                        href="{{ route("narrowcasting::edit", ["id" => $message->id]) }}"
+                                        href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}"
                                     >
                                         <i
                                             class="fas fa-edit me-2"
@@ -85,7 +85,7 @@
                                         ></i>
                                     </a>
                                     <a
-                                        href="{{ route("narrowcasting::delete", ["id" => $message->id]) }}"
+                                        href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}"
                                     >
                                         <i
                                             class="fas fa-trash text-danger"

@@ -1,15 +1,15 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey {{ $user->calling_name }},</p>
 
     <p>
         We're writing to let you know the e-mail address of your Proto account
-        has been changed by {{ $changer["name"] }} from IP address
-        {{ $changer["ip"] }}. Your e-mail address is changed from
-        <i>{{ $email["old"] }}</i>
+        has been changed by {{ $changer['name'] }} from IP address
+        {{ $changer['ip'] }}. Your e-mail address is changed from
+        <i>{{ $email['old'] }}</i>
         to
-        <i>{{ $email["new"] }}</i>
+        <i>{{ $email['new'] }}</i>
         .
     </p>
 

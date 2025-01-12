@@ -19,23 +19,23 @@
                                 </span>
                                 @if ($orderline->canBeDeleted())
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("omnomcom::orders::delete", ["id" => $orderline->id]),
-                                            "text" => '<i class="fas fa-trash text-danger ms-3"></i>',
-                                            "title" => "Confirm Delete",
-                                            "message" =>
-                                                "Are you sure you want to delete this orderline for " .
+                                            'action' => route('omnomcom::orders::delete', ['id' => $orderline->id]),
+                                            'text' => '<i class="fas fa-trash text-danger ms-3"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' =>
+                                                'Are you sure you want to delete this orderline for ' .
                                                 $orderline->user->name .
-                                                "?",
-                                            "confirm" => "Delete",
+                                                '?',
+                                            'confirm' => 'Delete',
                                         ]
                                     )
                                 @endif
                             </td>
                             <td class="text-end" style="min-width: 70px">
                                 &euro;
-                                {{ number_format($orderline->total_price, 2, ".", "") }}
+                                {{ number_format($orderline->total_price, 2, '.', '') }}
                             </td>
                             <td>
                                 <span class="text-muted me-2">
@@ -56,7 +56,7 @@
                                 @if ($orderline->user)
                                     @if ($orderline->user->isMember)
                                         <a
-                                            href="{{ route("user::profile", ["id" => $orderline->user->getPublicId()]) }}"
+                                            href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}"
                                         >
                                             {{ $orderline->user->name }}
                                         </a>
@@ -76,7 +76,7 @@
                                 {{ $orderline->authenticated_by }}
                             </td>
                             <td>
-                                {{ date("Y/m/d H:i:s", strtotime($orderline->created_at)) }}
+                                {{ date('Y/m/d H:i:s', strtotime($orderline->created_at)) }}
                             </td>
                         </tr>
                     @endforeach
@@ -84,7 +84,7 @@
             </table>
         </div>
 
-        @if (method_exists($orderlines, "links"))
+        @if (method_exists($orderlines, 'links'))
             <div class="card-footer pb-0">
                 {!! $orderlines->links() !!}
             </div>
@@ -92,7 +92,7 @@
     @else
         <div class="card-body">
             <p class="text-center mt-3">
-                No orderlines for this {{ $date ? "date" : "user" }}.
+                No orderlines for this {{ $date ? 'date' : 'user' }}.
             </p>
         </div>
     @endif

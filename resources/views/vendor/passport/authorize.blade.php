@@ -1,10 +1,10 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Application Requesting Access
 @endsection
 
-@section("login-body")
+@section('login-body')
     <p>
         <strong>{{ $client->name }}</strong>
     </p>
@@ -33,7 +33,7 @@
 
     <form method="post" action="/oauth/authorize">
         {{ csrf_field() }}
-        {{ method_field("DELETE") }}
+        {{ method_field('DELETE') }}
 
         <input type="hidden" name="state" value="{{ $request->state }}" />
         <input type="hidden" name="client_id" value="{{ $client->id }}" />

@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     OmNomCom statistics
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center mb-3">
         <div class="col-md-3">
             <form method="post">
@@ -12,7 +12,7 @@
 
                 <div class="card">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -27,18 +27,18 @@
                         <hr />
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "start",
-                                "label" => "Start date:",
+                                'name' => 'start',
+                                'label' => 'Start date:',
                             ]
                         )
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "end",
-                                "label" => "End date:",
+                                'name' => 'end',
+                                'label' => 'End date:',
                             ]
                         )
                     </div>

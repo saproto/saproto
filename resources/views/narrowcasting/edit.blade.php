@@ -1,22 +1,22 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $item == null ? "Create new campaign." : "Edit campaign " . $item->name . "." }}
+@section('page-title')
+    {{ $item == null ? 'Create new campaign.' : 'Edit campaign ' . $item->name . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
                 <form
                     method="post"
-                    action="{{ $item == null ? route("narrowcasting::store") : route("narrowcasting::update", ["id" => $item->id]) }}"
+                    action="{{ $item == null ? route('narrowcasting::store') : route('narrowcasting::update', ['id' => $item->id]) }}"
                     enctype="multipart/form-data"
                 >
                     @csrf
 
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -28,26 +28,26 @@
                                 id="name"
                                 name="name"
                                 placeholder="Lightsaber Building in the SmartXp"
-                                value="{{ $item->name ?? "" }}"
+                                value="{{ $item->name ?? '' }}"
                                 required
                             />
                         </div>
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "campaign_start",
-                                "label" => "Campaign start:",
-                                "placeholder" => $item ? $item->campaign_start : date("U"),
+                                'name' => 'campaign_start',
+                                'label' => 'Campaign start:',
+                                'placeholder' => $item ? $item->campaign_start : date('U'),
                             ]
                         )
 
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "name" => "campaign_end",
-                                "label" => "Campaign end:",
-                                "placeholder" => $item ? $item->campaign_end : null,
+                                'name' => 'campaign_end',
+                                'label' => 'Campaign end:',
+                                'placeholder' => $item ? $item->campaign_end : null,
                             ]
                         )
 
@@ -60,7 +60,7 @@
                                 class="form-control"
                                 id="slide_duration"
                                 name="slide_duration"
-                                value="{{ $item->slide_duration ?? "30" }}"
+                                value="{{ $item->slide_duration ?? '30' }}"
                                 required
                             />
                         </div>
@@ -73,7 +73,7 @@
                                 id="youtube_id"
                                 name="youtube_id"
                                 placeholder="Only the ID!"
-                                value="{{ $item->youtube_id ?? "" }}"
+                                value="{{ $item->youtube_id ?? '' }}"
                             />
                         </div>
 
@@ -132,7 +132,7 @@
                         </button>
 
                         <a
-                            href="{{ route("narrowcasting::index") }}"
+                            href="{{ route('narrowcasting::index') }}"
                             class="btn btn-default"
                         >
                             Cancel

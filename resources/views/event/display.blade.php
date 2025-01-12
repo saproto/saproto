@@ -1,29 +1,29 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     {{ $event->title }}
 @endsection
 
-@section("og-description")
-    From {{ $event->generateTimespanText("l j F Y, H:i", "H:i", "till") }} @
+@section('og-description')
+    From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }} @
     {{ $event->location }}.
 
     {{ $event->description }}
 @endsection
 
 @if ($event->image)
-    @section("og-image")
+    @section('og-image')
         {{ $event->image->generateImagePath(800, 300) }}
     @endsection
 @endif
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             @include(
-                "event.display_includes.event_details",
+                'event.display_includes.event_details',
                 [
-                    "event" => $event,
+                    'event' => $event,
                 ]
             )
         </div>
@@ -31,17 +31,17 @@
         @if (Auth::check() && ($event->activity?->withParticipants() || $event->tickets()->count() > 0))
             <div class="col-md-4">
                 @include(
-                    "event.display_includes.tickets",
+                    'event.display_includes.tickets',
                     [
-                        "event" => $event,
-                        "payment_methods" => $payment_methods,
+                        'event' => $event,
+                        'payment_methods' => $payment_methods,
                     ]
                 )
 
                 @include(
-                    "event.display_includes.participation",
+                    'event.display_includes.participation',
                     [
-                        "event" => $event,
+                        'event' => $event,
                     ]
                 )
             </div>
@@ -52,9 +52,9 @@
                 @if ($event->activity?->helpingCommitteeInstances->count() && Auth::user()?->is_member)
                     <div class="card mb-3">
                         @include(
-                            "event.display_includes.helpers",
+                            'event.display_includes.helpers',
                             [
-                                "event" => $event,
+                                'event' => $event,
                             ]
                         )
                     </div>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="card-body">
                             @foreach ($event->dinnerforms()->get() as $dinnerform)
-                                @include("dinnerform.includes.dinnerform-block", ["dinnerform" => $dinnerform])
+                                @include('dinnerform.includes.dinnerform-block', ['dinnerform' => $dinnerform])
                             @endforeach
                         </div>
                     </div>

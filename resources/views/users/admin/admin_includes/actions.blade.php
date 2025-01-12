@@ -7,30 +7,30 @@
     <div class="card-body">
         @includeWhen(
             ! $user->is_member && ! $user->hasUnpaidOrderlines(),
-            "components.modals.confirm-modal",
+            'components.modals.confirm-modal',
             [
-                "action" => route("user::delete", ["id" => $user->id]),
-                "method" => "POST",
-                "text" =>
+                'action' => route('user::delete', ['id' => $user->id]),
+                'method' => 'POST',
+                'text' =>
                     '<button class="btn btn-block btn-danger mb-1"><i class="fas fa-trash"></i> Delete</button>',
-                "title" => "Confirm Delete",
-                "message" => "Are you sure you want to delete this user's account?
-                                                                                                                                                            <div class='form-group mt-2'>
-                                                                                                                                                                <label for='confirm-input'>Confirm by typing the users name ($user->name):</label>
-                                                                                                                                                                <input type='text' class='form-control' id='confirm-input' name='name'
-                                                                                                                                                                       value='' placeholder='$user->name' required>
-                                                                                                                                                            </div>",
-                "confirm" => "Delete",
+                'title' => 'Confirm Delete',
+                'message' => "Are you sure you want to delete this user's account?
+                                                                                                                                                                    <div class='form-group mt-2'>
+                                                                                                                                                                        <label for='confirm-input'>Confirm by typing the users name ($user->name):</label>
+                                                                                                                                                                        <input type='text' class='form-control' id='confirm-input' name='name'
+                                                                                                                                                                               value='' placeholder='$user->name' required>
+                                                                                                                                                                    </div>",
+                'confirm' => 'Delete',
             ]
         )
 
         <a
-            class="btn btn-{{ $user->signed_nda ? "info" : "warning" }} btn-block mb-3"
-            href="{{ route("user::admin::toggle_nda", ["id" => $user->id]) }}"
+            class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
+            href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}"
         >
             User
             <strong>
-                {{ ! $user->signed_nda ? "did not sign" : "signed" }}
+                {{ ! $user->signed_nda ? 'did not sign' : 'signed' }}
             </strong>
             an NDA.
         </a>
@@ -39,21 +39,21 @@
             <li class="list-group-item list-group-item-dark">Actions</li>
             <a
                 class="list-group-item"
-                href="{{ route("user::member::impersonate", ["id" => $user->id]) }}"
+                href="{{ route('user::member::impersonate', ['id' => $user->id]) }}"
             >
                 Impersonate
             </a>
 
             @if ($user->isTempadmin())
                 <a
-                    href="{{ route("tempadmin::end", ["id" => $user->id]) }}"
+                    href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
                     class="list-group-item"
                 >
                     End temporary admin
                 </a>
             @else
                 <a
-                    href="{{ route("tempadmin::make", ["id" => $user->id]) }}"
+                    href="{{ route('tempadmin::make', ['id' => $user->id]) }}"
                     class="list-group-item"
                 >
                     Make temporary admin
@@ -62,7 +62,7 @@
             @if ($user->is_member)
                 <a
                     class="list-group-item"
-                    href="{{ route("user::profile", ["id" => $user->getPublicId()]) }}"
+                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
                 >
                     Go to profile
                 </a>
@@ -70,7 +70,7 @@
 
             @if ($user->disable_omnomcom)
                 <a
-                    href="{{ route("user::admin::unblock_omnomcom", ["id" => $user->id]) }}"
+                    href="{{ route('user::admin::unblock_omnomcom', ['id' => $user->id]) }}"
                     class="list-group-item text-warning"
                 >
                     Unblock OmNomCom
@@ -79,17 +79,17 @@
 
             @isset($user->tfa_totp_key)
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("user::2fa::admindelete", ["id" => $user->id]),
-                        "method" => "POST",
-                        "classes" => "list-group-item text-danger",
-                        "text" => "Disable 2FA",
-                        "title" => "Confirm Disabling 2FA",
-                        "message" =>
-                            "Are you sure you want to disable the two-factor authentication of " .
+                        'action' => route('user::2fa::admindelete', ['id' => $user->id]),
+                        'method' => 'POST',
+                        'classes' => 'list-group-item text-danger',
+                        'text' => 'Disable 2FA',
+                        'title' => 'Confirm Disabling 2FA',
+                        'message' =>
+                            'Are you sure you want to disable the two-factor authentication of ' .
                             $user->name .
-                            " <b>Only continue if you have their consent!</b>",
+                            ' <b>Only continue if you have their consent!</b>',
                     ]
                 )
             @endisset
@@ -100,18 +100,18 @@
             <li class="list-group-item list-group-item-dark">Study</li>
             <a
                 class="list-group-item"
-                href="{{ route("user::admin::toggle_studied_create", ["id" => $user->id]) }}"
+                href="{{ route('user::admin::toggle_studied_create', ['id' => $user->id]) }}"
             >
                 Has
-                {!! $user->did_study_create ? "" : "<strong>not</strong>" !!}
+                {!! $user->did_study_create ? '' : '<strong>not</strong>' !!}
                 studied CreaTe.
             </a>
             <a
                 class="list-group-item"
-                href="{{ route("user::admin::toggle_studied_itech", ["id" => $user->id]) }}"
+                href="{{ route('user::admin::toggle_studied_itech', ['id' => $user->id]) }}"
             >
                 Has
-                {!! $user->did_study_itech ? "" : "<strong>not</strong>" !!}
+                {!! $user->did_study_itech ? '' : '<strong>not</strong>' !!}
                 studied ITech.
             </a>
         </ul>

@@ -1,12 +1,12 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>Hey {{ $calling_name }}!</p>
 
     <p>
         There are new submissions waiting for you to review! They are from the
         <a
-            href="{{ route("feedback::index", ["category" => $category->url]) }}"
+            href="{{ route('feedback::index', ['category' => $category->url]) }}"
         >
             {{ $category->title }}
         </a>
@@ -36,7 +36,7 @@
                         <p>
                             <sub>
                                 {{ $feedback->user->name }} --
-                                {{ $feedback->created_at->format("j M Y, H:i") }}
+                                {{ $feedback->created_at->format('j M Y, H:i') }}
                             </sub>
                         </p>
                     </td>

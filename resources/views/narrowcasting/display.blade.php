@@ -1,4 +1,4 @@
-@push("stylesheet")
+@push('stylesheet')
     <style>
         #container {
             position: relative;
@@ -62,18 +62,18 @@
     <div id="yt-player" class="opacity-0 w-full"></div>
 </div>
 
-@push("javascript")
+@push('javascript')
     <script
         type="text/javascript"
         src="https://www.youtube.com/iframe_api"
         nonce="{{ csp_nonce() }}"
     ></script>
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let campaigns = [];
-        let currentCampaign = 0;
-        let previousWasVideo = false;
-        let youtubePlayer;
-        const hideClass = 'opacity-0';
+        let campaigns = []
+        let currentCampaign = 0
+        let previousWasVideo = false
+        let youtubePlayer
+        const hideClass = 'opacity-0'
 
         function onYouTubeIframeAPIReady() {
             youtubePlayer = new YT.Player('yt-player', {
@@ -89,30 +89,30 @@
                     fs: 0,
                     iv_load_policy: 3,
                 },
-            });
-            setTimeout(updateSlide, 1000);
+            })
+            setTimeout(updateSlide, 1000)
         }
 
         async function updateCampaigns() {
-            await get('{{ route("api::screen::narrowcasting") }}')
+            await get('{{ route('api::screen::narrowcasting') }}')
                 .then((data) => {
                     if (
                         campaigns.length !== 0 &&
                         campaigns.length !== data.length
                     ) {
-                        window.location.reload();
+                        window.location.reload()
                     }
 
-                    campaigns = data;
+                    campaigns = data
                 })
                 .catch((error) =>
-                    console.log('Error loading campaigns from server:', error),
-                );
+                    console.log('Error loading campaigns from server:', error)
+                )
         }
 
         function onPlayerReady(event) {
-            event.target.mute();
-            event.target.playVideo();
+            event.target.mute()
+            event.target.playVideo()
             // updateSlide()
         }
 
@@ -120,81 +120,78 @@
             if (event.data == YT.PlayerState.PLAYING) {
                 setTimeout(
                     updateSlide,
-                    (youtubePlayer.getDuration() - 1) * 1000,
-                );
+                    (youtubePlayer.getDuration() - 1) * 1000
+                )
             }
         }
 
         function updateSlide() {
-            const text = document.getElementById('fullpagetext');
-            const textContainer = document.getElementById('text-container');
-            const slides = document.getElementById('slideshow');
-            const player = document.getElementById('yt-player');
+            const text = document.getElementById('fullpagetext')
+            const textContainer = document.getElementById('text-container')
+            const slides = document.getElementById('slideshow')
+            const player = document.getElementById('yt-player')
 
             if (campaigns.length === 0) {
-                textContainer.innerHTML =
-                    'There are no messages to display. :)';
-                text.classList.remove(hideClass);
-                slides.classList.add(hideClass);
-                player.classList.add(hideClass);
-                setTimeout(updateSlide, 1000);
+                textContainer.innerHTML = 'There are no messages to display. :)'
+                text.classList.remove(hideClass)
+                slides.classList.add(hideClass)
+                player.classList.add(hideClass)
+                setTimeout(updateSlide, 1000)
             } else {
-                textContainer.innerHTML = 'Loading slideshow... :)';
-                text.classList.add(hideClass);
-                player.classList.add(hideClass);
-                slides.classList.add(hideClass);
+                textContainer.innerHTML = 'Loading slideshow... :)'
+                text.classList.add(hideClass)
+                player.classList.add(hideClass)
+                slides.classList.add(hideClass)
 
                 if (currentCampaign >= campaigns.length) {
-                    currentCampaign = 0;
+                    currentCampaign = 0
                 }
-                const campaign = campaigns[currentCampaign];
+                const campaign = campaigns[currentCampaign]
 
                 //hide the last slide
-                let oldCampaign = currentCampaign - 1;
-                if (oldCampaign < 0) oldCampaign += campaigns.length;
-                const oldSlide = document.getElementById(
-                    'slide-' + oldCampaign,
-                );
+                let oldCampaign = currentCampaign - 1
+                if (oldCampaign < 0) oldCampaign += campaigns.length
+                const oldSlide = document.getElementById('slide-' + oldCampaign)
                 if (oldSlide) {
-                    oldSlide.classList.add(hideClass);
+                    oldSlide.classList.add(hideClass)
                 }
 
                 if (campaign.hasOwnProperty('image')) {
-                    slides.classList.remove(hideClass);
+                    slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
                     const slide = document.getElementById(
-                        'slide-' + currentCampaign,
-                    );
+                        'slide-' + currentCampaign
+                    )
                     if (slide) {
-                        slide.classList.remove(hideClass);
+                        slide.classList.remove(hideClass)
                     } else {
                         slides.innerHTML +=
                             '<div id="slide-' +
                             currentCampaign +
                             '" class="slide" style="background-image: url(' +
                             campaign.image +
-                            ');"></div>';
+                            ');"></div>'
                     }
-                    setTimeout(updateSlide, campaign.slide_duration * 1000);
+                    setTimeout(updateSlide, campaign.slide_duration * 1000)
 
-                    previousWasVideo = false;
+                    previousWasVideo = false
                 } else {
-                    youtubePlayer.loadVideoById(campaign.video, 'highres');
-                    youtubePlayer.playVideo();
+                    youtubePlayer.loadVideoById(campaign.video, 'highres')
+                    youtubePlayer.playVideo()
 
-                    player.classList.remove(hideClass);
+                    player.classList.remove(hideClass)
 
-                    previousWasVideo = true;
+                    previousWasVideo = true
                 }
-                currentCampaign++;
+                currentCampaign++
             }
         }
 
         window.addEventListener('load', (_) => {
-            updateCampaigns();
-            const everyTwoHours = 60 * 60 * 2 * 1000;
-            setInterval(updateCampaigns, everyTwoHours);
-        });
+            updateCampaigns()
+            const everyTwoHours = 60 * 60 * 2 * 1000
+            setInterval(updateCampaigns, everyTwoHours)
+        })
     </script>
 @endpush

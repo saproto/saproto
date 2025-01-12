@@ -1,7 +1,7 @@
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
-            @if (($event->isEventAdmin(Auth::user()) || Auth::user()->can("board") || Auth::user()->can("finadmin")) && $event->activity->closed)
+            @if (($event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin')) && $event->activity->closed)
                 <li class="list-group-item bg-danger text-white">
                     This activity is closed and cannot be changed anymore.
                     <br />
@@ -41,7 +41,7 @@
 
                 <strong>
                     @if ($event->activity->price > 0)
-                        &euro;{{ number_format($event->activity->price, 2, ".", ",") }}
+                        &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
                             &euro;0,-
                     @endif
@@ -57,7 +57,7 @@
                 >
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                     &nbsp;&nbsp;Not showing up can cost you
-                    &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, ".", ",") }}
+                    &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
                 </a>
             @endif
 
@@ -65,7 +65,7 @@
                 @if ($event->activity->canUnsubscribe() || $event->activity->getParticipation(Auth::user())->backup)
                     <a
                         class="list-group-item bg-danger text-white"
-                        href="{{ route("event::deleteparticipation", ["participation_id" => $event->activity->getParticipation(Auth::user())->id]) }}"
+                        href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}"
                     >
                         @if ($event->activity->getParticipation(Auth::user())->backup)
                             Sign me out of the back-up list.
@@ -78,12 +78,12 @@
             @else
                 @if ($event->activity->canSubscribeBackup())
                     <a
-                        class="list-group-item text-white bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? "warning" : "success" }}"
-                        href="{{ route("event::addparticipation", ["id" => $event->id]) }}"
+                        class="list-group-item text-white bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }}"
+                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}"
                     >
                         <strong>
                             @if ($event->activity->isFull() || ! $event->activity->canSubscribe())
-                                {{ $event->activity->isFull() ? "Full!" : "Closed!" }}
+                                {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                                 Put me on the back-up list.
                             @else
                                     Sign me up!
@@ -91,7 +91,7 @@
                             |
 
                             @if ($event->activity->price > 0)
-                                &euro;{{ number_format($event->activity->price, 2, ".", ",") }}
+                                &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             @else
                                     Free!
                             @endif
@@ -110,7 +110,7 @@
             @if ($event->activity->canSubscribe())
                 <li class="list-group-item">
                     @if ($event->activity->participants != -1)
-                        {{ $event->activity->freeSpots() == -1 ? "unlimited" : $event->activity->freeSpots() }}
+                        {{ $event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots() }}
                         out of {{ $event->activity->participants }} places
                         available
                     @else
@@ -124,13 +124,13 @@
         <div class="card-body">
             <p class="card-text text-center">
                 <strong>Sign up opens:</strong>
-                {{ date("F j, H:i", $event->activity->registration_start) }}
+                {{ date('F j, H:i', $event->activity->registration_start) }}
                 <br />
                 <strong>Sign up closes:</strong>
-                {{ date("F j, H:i", $event->activity->registration_end) }}
+                {{ date('F j, H:i', $event->activity->registration_end) }}
                 <br />
                 <strong>Sign out possible until:</strong>
-                {{ date("F j, H:i", $event->activity->deregistration_end) }}
+                {{ date('F j, H:i', $event->activity->deregistration_end) }}
                 <br />
                 @if ($event->activity->participants != -1 && ! $event->activity->canSubscribe())
                     <strong>Sign up limit:</strong>
@@ -140,7 +140,7 @@
         </div>
     </div>
 
-    @if ($event->activity->users->count() > 0 || Auth::user()->can("board"))
+    @if ($event->activity->users->count() > 0 || Auth::user()->can('board'))
         <div class="card mb-3">
             <div class="card-header text-center bg-dark text-white">
                 {{ $event->activity->users->count() }} participants
@@ -155,23 +155,23 @@
                 </div>
             @endif()
 
-            @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can("board") || Auth::user()->can("finadmin"))
+            @if (! $event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can('finadmin'))
                 <div class="card-body">
                     @include(
-                        "event.display_includes.render_participant_list",
+                        'event.display_includes.render_participant_list',
                         [
-                            "participants" => $event->activity->users,
-                            "event" => $event,
+                            'participants' => $event->activity->users,
+                            'event' => $event,
                         ]
                     )
                 </div>
             @endif
 
             <div class="card-footer">
-                @if (Auth::user()->can("board") && ! $event->activity->closed)
+                @if (Auth::user()->can('board') && ! $event->activity->closed)
                     <form
                         class="form-horizontal"
-                        action="{{ route("event::addparticipationfor", ["id" => $event->id]) }}"
+                        action="{{ route('event::addparticipationfor', ['id' => $event->id]) }}"
                         method="post"
                     >
                         {{ csrf_field() }}
@@ -210,10 +210,10 @@
 
             <div class="card-body">
                 @include(
-                    "event.display_includes.render_participant_list",
+                    'event.display_includes.render_participant_list',
                     [
-                        "participants" => $event->activity->backupUsers,
-                        "event" => $event,
+                        'participants' => $event->activity->backupUsers,
+                        'event' => $event,
                     ]
                 )
             </div>
@@ -233,7 +233,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route("event::login", ["id" => $event->getPublicId()]) }}"
+                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
                         >
                             log-in
                         </a>
@@ -242,7 +242,7 @@
                 @elseif (! Auth::user()->is_member)
                     <p class="card-text">
                         Please
-                        <a href="{{ route("becomeamember") }}">
+                        <a href="{{ route('becomeamember') }}">
                             become a member
                         </a>
                         to sign-up for this activity.

@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     OmNomCom Product Administration
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="col-md-3">
             <div class="card mb-3">
@@ -14,7 +14,7 @@
                     <form
                         id="product-search-form"
                         method="get"
-                        action="{{ route("omnomcom::products::index") }}"
+                        action="{{ route('omnomcom::products::index') }}"
                     >
                         <div class="input-group">
                             <input
@@ -36,14 +36,14 @@
 
                 <div class="card-body">
                     <a
-                        href="{{ route("omnomcom::products::create") }}"
+                        href="{{ route('omnomcom::products::create') }}"
                         class="btn btn-success btn-block mb-3"
                     >
                         Create a new product
                     </a>
 
                     <a
-                        href="{{ route("omnomcom::products::export_csv") }}"
+                        href="{{ route('omnomcom::products::export_csv') }}"
                         class="btn btn-success btn-block"
                     >
                         Export products as CSV
@@ -53,7 +53,7 @@
 
             <form
                 method="post"
-                action="{{ route("omnomcom::products::bulkupdate") }}"
+                action="{{ route('omnomcom::products::bulkupdate') }}"
             >
                 @csrf
 
@@ -97,7 +97,7 @@
 
                 <div class="card-footer">
                     <a
-                        href="{{ route("omnomcom::products::mutations") }}"
+                        href="{{ route('omnomcom::products::mutations') }}"
                         class="btn btn-success btn-block"
                     >
                         Mutations
@@ -140,25 +140,25 @@
                                         <td>{{ $product->calories }}</td>
                                         <td>{{ $product->stock }}</td>
                                         <td>
-                                            {{ $product->is_visible ? "Yes" : "No" }}
+                                            {{ $product->is_visible ? 'Yes' : 'No' }}
                                         </td>
                                         <td>
-                                            {{ $product->is_alcoholic ? "Yes" : "No" }}
+                                            {{ $product->is_alcoholic ? 'Yes' : 'No' }}
                                         </td>
                                         <td style="min-width: 60px">
                                             <a
-                                                href="{{ route("omnomcom::products::edit", ["id" => $product->id]) }}"
+                                                href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}"
                                             >
                                                 <i class="fas fa-edit me-2"></i>
                                             </a>
                                             @include(
-                                                "components.modals.confirm-modal",
+                                                'components.modals.confirm-modal',
                                                 [
-                                                    "action" => route("omnomcom::products::delete", ["id" => $product->id]),
-                                                    "text" => '<i class="fas fa-trash text-danger"></i>',
-                                                    "title" => "Confirm Delete",
-                                                    "message" => "Are you sure you want to delete $product->name?",
-                                                    "confirm" => "Delete",
+                                                    'action' => route('omnomcom::products::delete', ['id' => $product->id]),
+                                                    'text' => '<i class="fas fa-trash text-danger"></i>',
+                                                    'title' => 'Confirm Delete',
+                                                    'message' => "Are you sure you want to delete $product->name?",
+                                                    'confirm' => 'Delete',
                                                 ]
                                             )
                                         </td>
@@ -168,7 +168,7 @@
                         </table>
                     </div>
 
-                    @if (method_exists($products, "links"))
+                    @if (method_exists($products, 'links'))
                         <div class="card-footer pb-0">
                             {!! $products->links() !!}
                         </div>

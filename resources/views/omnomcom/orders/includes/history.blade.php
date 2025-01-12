@@ -1,6 +1,6 @@
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        @yield("page-title")
+        @yield('page-title')
     </div>
 
     @isset($orderlines)
@@ -8,15 +8,15 @@
             <?php $current_date = null; ?>
 
             @foreach ($orderlines as $orderline)
-                @if (date("d-m-Y", strtotime($orderline->created_at)) != $current_date)
-                    <?php $current_date = date("d-m-Y", strtotime($orderline->created_at)); ?>
+                @if (date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
+                    <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
 
                     <tr class="bg-dark text-white mt-3">
                         <td class="text-end">
                             <i class="fas fa-calendar-alt"></i>
                         </td>
                         <td colspan="3">
-                            {{ date("l, F jS", strtotime($current_date)) }}
+                            {{ date('l, F jS', strtotime($current_date)) }}
                         </td>
                     </tr>
                 @endif
@@ -24,7 +24,7 @@
                 <tr>
                     <td class="text-end">
                         &euro;
-                        {{ number_format($orderline->total_price, 2, ".", "") }}
+                        {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
                         <span class="text-muted me-2">
@@ -42,7 +42,7 @@
                         {!! $orderline->generateHistoryStatus() !!}
                     </td>
                     <td class="pl-4">
-                        {{ date("H:i:s", strtotime($orderline->created_at)) }}
+                        {{ date('H:i:s', strtotime($orderline->created_at)) }}
                     </td>
                 </tr>
             @endforeach

@@ -1,17 +1,17 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     OmNomCom Product Accounts
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("omnomcom::accounts::create") }}"
+                        href="{{ route('omnomcom::accounts::create') }}"
                         class="badge bg-info float-end"
                     >
                         Create a new account.
@@ -34,7 +34,7 @@
                                 <tr>
                                     <td>
                                         <a
-                                            href="{{ route("omnomcom::accounts::show", ["id" => $account->id]) }}"
+                                            href="{{ route('omnomcom::accounts::show', ['id' => $account->id]) }}"
                                         >
                                             {{ $account->name }}
                                         </a>
@@ -47,12 +47,12 @@
                                     </td>
                                     <td style="min-width: 60px">
                                         <a
-                                            href="{{ route("omnomcom::accounts::edit", ["id" => $account->id]) }}"
+                                            href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}"
                                         >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
                                         <a
-                                            href="{{ route("omnomcom::accounts::delete", ["id" => $account->id]) }}"
+                                            href="{{ route('omnomcom::accounts::delete', ['id' => $account->id]) }}"
                                         >
                                             <i
                                                 class="fas fa-trash text-danger"

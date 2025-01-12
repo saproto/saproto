@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
-    {{ $fixture == null ? "Create new fixture." : "Edit fixture " . $fixture->name . "." }}
+@section('page-title')
+    {{ $fixture == null ? 'Create new fixture.' : 'Edit fixture ' . $fixture->name . '.' }}
 @endsection
 
-@section("container")
+@section('container')
     <form
-        action="{{ ! empty($fixture) ? route("dmx.fixtures.update", ["fixture" => $fixture]) : route("dmx.fixtures.store") }}"
+        action="{{ ! empty($fixture) ? route('dmx.fixtures.update', ['fixture' => $fixture]) : route('dmx.fixtures.store') }}"
         method="POST"
     >
         <input
             type="hidden"
             name="_method"
-            value="{{ ! empty($fixture) ? "PUT" : "POST" }}"
+            value="{{ ! empty($fixture) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
 
@@ -20,7 +20,7 @@
             <div class="col-md-4">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -32,7 +32,7 @@
                                 id="name"
                                 name="name"
                                 placeholder="Ground Lights Section 1"
-                                value="{{ $fixture->name ?? "" }}"
+                                value="{{ $fixture->name ?? '' }}"
                                 required
                             />
                         </div>
@@ -65,7 +65,7 @@
                                 class="form-control"
                                 id="channel_start"
                                 name="channel_start"
-                                value="{{ $fixture->channel_start ?? "" }}"
+                                value="{{ $fixture->channel_start ?? '' }}"
                                 required
                             />
                         </div>
@@ -77,7 +77,7 @@
                                 class="form-control"
                                 id="channel_end"
                                 name="channel_end"
-                                value="{{ $fixture->channel_end ?? "" }}"
+                                value="{{ $fixture->channel_end ?? '' }}"
                                 required
                             />
                         </div>
@@ -115,25 +115,25 @@
                                                     </option>
                                                     <option
                                                         value="red"
-                                                        @selected($channel->special_function == "red")
+                                                        @selected($channel->special_function == 'red')
                                                     >
                                                         Red
                                                     </option>
                                                     <option
                                                         value="green"
-                                                        @selected($channel->special_function == "green")
+                                                        @selected($channel->special_function == 'green')
                                                     >
                                                         Green
                                                     </option>
                                                     <option
                                                         value="blue"
-                                                        @selected($channel->special_function == "blue")
+                                                        @selected($channel->special_function == 'blue')
                                                     >
                                                         Blue
                                                     </option>
                                                     <option
                                                         value="brightness"
-                                                        @selected($channel->special_function == "brightness")
+                                                        @selected($channel->special_function == 'brightness')
                                                     >
                                                         Brightness
                                                     </option>
@@ -152,7 +152,7 @@
                         </button>
 
                         <a
-                            href="{{ route("dmx.index") }}"
+                            href="{{ route('dmx.index') }}"
                             class="btn btn-default"
                         >
                             Cancel

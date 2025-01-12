@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     {{ $newsitem->title }}
 @endsection
 
-@section("container")
+@section('container')
     @if ($preview)
         <div class="alert alert-info" role="alert">
             You are currently previewing an unpublished news item.
@@ -12,17 +12,17 @@
     @endif
 
     <div class="row">
-        <div class="{{ count($events) > 0 ? "col-8" : "" }}">
+        <div class="{{ count($events) > 0 ? 'col-8' : '' }}">
             <div class="card mb-3">
                 @if ($newsitem->featuredImage)
                     <img
                         class="card-img-top"
-                        src="{{ $newsitem->featuredImage->generateImagePath("1500", "350") }}"
+                        src="{{ $newsitem->featuredImage->generateImagePath('1500', '350') }}"
                     />
                 @endif
 
                 <div class="card-body">
-                    <h5 class="card-title">@yield("page-title")</h5>
+                    <h5 class="card-title">@yield('page-title')</h5>
 
                     <footer class="blockquote-footer">
                         Published
@@ -31,7 +31,7 @@
                         </span>
                         by
                         <a
-                            href="{{ route("user::profile", ["id" => $newsitem->user->getPublicId()]) }}"
+                            href="{{ route('user::profile', ['id' => $newsitem->user->getPublicId()]) }}"
                         >
                             {{ $newsitem->user->name }}
                         </a>
@@ -54,10 +54,10 @@
                     <div class="card-body">
                         @foreach ($events as $counter => $event)
                             @include(
-                                "event.display_includes.event_block",
+                                'event.display_includes.event_block',
                                 [
-                                    "event" => $event,
-                                    "lazyload" => $counter > 12,
+                                    'event' => $event,
+                                    'lazyload' => $counter > 12,
                                 ]
                             )
                         @endforeach

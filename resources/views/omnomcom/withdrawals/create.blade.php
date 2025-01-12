@@ -1,21 +1,21 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Generate new withdrawal
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="row-md-4">
             <form
                 method="post"
-                action="{{ route("omnomcom::withdrawal::store") }}"
+                action="{{ route('omnomcom::withdrawal::store') }}"
             >
                 @csrf
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body">
@@ -26,20 +26,20 @@
                             </strong>
                             unpaid orderlines for a grand total of
                             <strong>
-                                &euro;{{ number_format(\App\Http\Controllers\WithdrawalController::openOrderlinesSum(), 2, ",", ".") }}
+                                &euro;{{ number_format(\App\Http\Controllers\WithdrawalController::openOrderlinesSum(), 2, ',', '.') }}
                             </strong>
                             .
 
-                            @php($wd = Carbon::createFromFormat("Y-m-d", date("Y-m-25")))
+                            @php($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "date",
-                                    "label" => "Withdrawal date:",
-                                    "placeholder" => strtotime(
+                                    'name' => 'date',
+                                    'label' => 'Withdrawal date:',
+                                    'placeholder' => strtotime(
                                         Carbon::now()->day > 20 ? $wd->addMonth() : $wd,
                                     ),
-                                    "format" => "date",
+                                    'format' => 'date',
                                 ]
                             )
                         </p>
@@ -72,7 +72,7 @@
                         </button>
 
                         <a
-                            href="{{ route("omnomcom::withdrawal::index") }}"
+                            href="{{ route('omnomcom::withdrawal::index') }}"
                             class="btn btn-default"
                         >
                             Cancel

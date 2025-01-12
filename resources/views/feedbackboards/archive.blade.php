@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     {{ $category->title }} Board Archive
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="col-12">
             <div class="card mb-3 mx-4">
@@ -14,7 +14,7 @@
                         Archived {{ $category->title }}
                     </span>
                     <a
-                        href="{{ route("feedback::index", ["category" => $category->url]) }}"
+                        href="{{ route('feedback::index', ['category' => $category->url]) }}"
                         class="float-end ms-3 px-2 py-1 btn btn-info"
                     >
                         <i class="fas fa-eye text-white"></i>
@@ -28,10 +28,10 @@
                             @foreach ($data as $key => $entry)
                                 <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                                     @include(
-                                        "feedbackboards.include.feedback",
+                                        'feedbackboards.include.feedback',
                                         [
-                                            "feedback" => $entry,
-                                            "controls" => true,
+                                            'feedback' => $entry,
+                                            'controls' => true,
                                         ]
                                     )
                                 </div>
@@ -44,7 +44,7 @@
                     @endif
                 </div>
 
-                @if ($data->links() != "")
+                @if ($data->links() != '')
                     <div class="card-footer">
                         {{ $data->links() }}
                     </div>

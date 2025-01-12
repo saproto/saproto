@@ -1,15 +1,15 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@section("page-title")
+@section('page-title')
     Authentication
 @endsection
 
-@section("login-body")
-    <form method="POST" action="{{ route("login::post") }}">
+@section('login-body')
+    <form method="POST" action="{{ route('login::post') }}">
         @csrf
 
         <a
-            href="{{ route("login::edu") }}"
+            href="{{ route('login::edu') }}"
             class="btn btn-success btn-block mb-3"
         >
             <i class="fas fa-university me-2"></i>
@@ -25,7 +25,7 @@
                 id="username"
                 name="email"
                 placeholder="Username or E-mail"
-                value="{{ Session::has("login_username") ? Session::get("login_username") : "" }}"
+                value="{{ Session::has('login_username') ? Session::get('login_username') : '' }}"
             />
 
             <input
@@ -43,7 +43,7 @@
 
             <a
                 class="btn btn-outline-secondary btn-block mb-2"
-                href="{{ route("login::register::index") }}"
+                href="{{ route('login::register::index') }}"
             >
                 <i class="fas fa-user-plus me-2"></i>
                 Create Proto account
@@ -51,7 +51,7 @@
 
             <a
                 class="btn btn-outline-secondary btn-block mb-2"
-                href="{{ route("login::requestusername::index") }}"
+                href="{{ route('login::requestusername::index') }}"
             >
                 <i class="fas fa-question me-2"></i>
                 Forgot your username?
@@ -59,7 +59,7 @@
 
             <a
                 class="btn btn-outline-secondary btn-block mb-2"
-                href="{{ route("login::password::reset") }}"
+                href="{{ route('login::password::reset') }}"
             >
                 <i class="fas fa-question me-2"></i>
                 Forgot your password?

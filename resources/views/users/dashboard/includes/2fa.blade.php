@@ -45,6 +45,6 @@
             </div>
         @endif
 
-        @include("users.2fa.timebased")
+        @include('users.2fa.timebased')
     </div>
 </div>

@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     ProTube Dashboard
 @endsection
 
-@section("container")
+@section('container')
     <div class="row">
         <div class="col-md-4">
             <div class="btn text-center btn-block mb-3">
@@ -44,20 +44,20 @@
                     <p class="card-text">
                         ProTube is currently
                         <strong>
-                            {{ $user->keep_protube_history ? "" : "not" }}
+                            {{ $user->keep_protube_history ? '' : 'not' }}
                         </strong>
                         keeping your history.
 
                         @if ($user->keep_protube_history)
                             <a
-                                href="{{ route("protube::togglehistory") }}"
+                                href="{{ route('protube::togglehistory') }}"
                                 class="btn btn-outline-danger btn-block"
                             >
                                 Stop keeping my ProTube history.
                             </a>
                         @else
                             <a
-                                href="{{ route("protube::togglehistory") }}"
+                                href="{{ route('protube::togglehistory') }}"
                                 class="btn btn-outline-primary btn-block"
                             >
                                 Start keeping my ProTube history.
@@ -77,7 +77,7 @@
 
                                 <a
                                     id="clear-history"
-                                    href="{{ route("protube::clearhistory") }}"
+                                    href="{{ route('protube::clearhistory') }}"
                                     class="btn btn-outline-danger btn-block"
                                 >
                                     Clear my ProTube history.
@@ -86,8 +86,8 @@
                                     document
                                         .getElementById('clear-history')
                                         .addEventListener('click', (_) =>
-                                            confirm('Are you sure?'),
-                                        );
+                                            confirm('Are you sure?')
+                                        )
                                 </script>
                             </p>
                         @endif
@@ -96,7 +96,7 @@
             </div>
 
             <a
-                href="{{ route("protube::top") }}"
+                href="{{ route('protube::top') }}"
                 class="btn btn-primary btn-block"
             >
                 View the public ProTube top hits!
@@ -120,9 +120,9 @@
                     @else
                         @foreach ($usertop as $video)
                             @include(
-                                "protube.includes.song_block",
+                                'protube.includes.song_block',
                                 [
-                                    "video" => $video,
+                                    'video' => $video,
                                 ]
                             )
                         @endforeach
@@ -143,13 +143,13 @@
                 >
                     @foreach ($history as $video)
                         @include(
-                            "protube.includes.song_block",
+                            'protube.includes.song_block',
                             [
-                                "video" => $video,
-                                "hide_played" => true,
-                                "show_text" => sprintf(
-                                    "Played on %s",
-                                    date("H:i:s", strtotime($video->played_at)),
+                                'video' => $video,
+                                'hide_played' => true,
+                                'show_text' => sprintf(
+                                    'Played on %s',
+                                    date('H:i:s', strtotime($video->played_at)),
                                 ),
                             ]
                         )

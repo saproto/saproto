@@ -6,21 +6,21 @@
     <div class="card-body">
         @foreach ($albums as $album)
             @include(
-                "website.home.cards.card-bg-image",
+                'website.home.cards.card-bg-image',
                 [
-                    "url" => route("photo::album::list", ["id" => $album->id]),
-                    "img" => $album->thumb(),
-                    "html" => sprintf(
-                        "<sub>%s</sub><br><strong>%s</strong>",
-                        date("M j, Y", $album->date_taken),
+                    'url' => route('photo::album::list', ['id' => $album->id]),
+                    'img' => $album->thumb(),
+                    'html' => sprintf(
+                        '<sub>%s</sub><br><strong>%s</strong>',
+                        date('M j, Y', $album->date_taken),
                         $album->name,
                     ),
-                    "leftborder" => "info",
+                    'leftborder' => 'info',
                 ]
             )
         @endforeach
 
-        <a href="{{ route("photo::albums") }}" class="btn btn-info btn-block">
+        <a href="{{ route('photo::albums') }}" class="btn btn-info btn-block">
             All photos
         </a>
     </div>

@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{{ route("achievement::icon", ["id" => $achievement->id]) }}"
+    action="{{ route('achievement::icon', ['id' => $achievement->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
@@ -10,11 +10,11 @@
 
         <div class="card-body">
             @include(
-                "components.forms.iconpicker",
+                'components.forms.iconpicker',
                 [
-                    "name" => "fa_icon",
-                    "placeholder" => isset($achievement) ? $achievement->fa_icon : null,
-                    "label" => "Achievement icon:",
+                    'name' => 'fa_icon',
+                    'placeholder' => isset($achievement) ? $achievement->fa_icon : null,
+                    'label' => 'Achievement icon:',
                 ]
             )
 

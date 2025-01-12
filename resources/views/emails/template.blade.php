@@ -10,25 +10,25 @@
         </style>
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
         <link
             rel="search"
             type="application/opensearchdescription+xml"
             title="S.A. Proto"
-            href="{{ route("search::opensearch") }}"
+            href="{{ route('search::opensearch') }}"
         />
 
         <title>
-            @if (! App::environment("production")) 
-            [{{ strtoupper(config("app.env")) }}]
+            @if (! App::environment('production')) 
+            [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
-            Proto | @yield("page-title", "Default Page Title")
+            Proto | @yield('page-title', 'Default Page Title')
         </title>
 
-        @include("website.assets.stylesheets")
+        @include('website.assets.stylesheets')
 
-        @stack("stylesheet")
+        @stack('stylesheet')
     </head>
 
     <body
@@ -56,7 +56,7 @@
                         width: 500px;
                     "
                 >
-                    @yield("body")
+                    @yield('body')
                 </td>
             </tr>
         </table>
@@ -122,16 +122,16 @@
         </table>
 
         <div style="text-align: center">
-            <a href="{{ route("homepage") }}">
+            <a href="{{ route('homepage') }}">
                 @if (Auth::check() && Auth::user()->theme)
                     <img
-                        src="{{ asset("images/logo/" . Config::array("proto.logoThemes")[Auth::user()->theme] . ".png") }}"
+                        src="{{ asset('images/logo/' . Config::array('proto.logoThemes')[Auth::user()->theme] . '.png') }}"
                         style="width: 30%; max-width: 200px"
                         alt="ProtoLogo"
                     />
                 @else
                     <img
-                        src="{{ asset("images/logo/regular.png") }}"
+                        src="{{ asset('images/logo/regular.png') }}"
                         style="width: 30%; max-width: 200px"
                         alt="ProtoLogo"
                     />

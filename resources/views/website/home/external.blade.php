@@ -1,12 +1,12 @@
-@extends("website.home.shared")
+@extends('website.home.shared')
 
-@section("greeting")
+@section('greeting')
     <strong>Welcome to S.A. Proto</strong>
     <br />
     Study Association of Creative Technology and Interaction Technology
 @endsection
 
-@section("left-column")
+@section('left-column')
     <div class="row row-eq-height">
         <div class="col-md-12 col-xl-6 mb-3">
             <div class="card leftborder leftborder-info h-100">
@@ -104,7 +104,7 @@
     <div class="row mb-3">
         <div class="col-md-12 col-xl-6">
             <a
-                href="{{ route("page::show", ["slug" => "contact"]) }}"
+                href="{{ route('page::show', ['slug' => 'contact']) }}"
                 class="btn btn-info btn-block mb-3"
             >
                 <i class="fas fa-user me-2" aria-hidden="true"></i>
@@ -114,7 +114,7 @@
 
         <div class="col-md-12 col-xl-6">
             <a
-                href="{{ route("event::index") }}"
+                href="{{ route('event::index') }}"
                 class="btn btn-info btn-block"
             >
                 <i class="far fa-calendar-alt me-2" aria-hidden="true"></i>
@@ -124,8 +124,8 @@
     </div>
 @endsection
 
-@section("right-column")
-    @include("website.home.cards.recentalbums", ["albums" => $albums])
+@section('right-column')
+    @include('website.home.cards.recentalbums', ['albums' => $albums])
 
     @if (isset($videos) && count($videos) > 0)
         <div class="card mb-3">
@@ -136,10 +136,10 @@
             <div class="card-body">
                 @foreach ($videos as $video)
                     @include(
-                        "videos.includes.video_block",
+                        'videos.includes.video_block',
                         [
-                            "video" => $video,
-                            "photo_pop" => false,
+                            'video' => $video,
+                            'photo_pop' => false,
                         ]
                     )
                 @endforeach

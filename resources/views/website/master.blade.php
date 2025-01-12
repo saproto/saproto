@@ -13,53 +13,53 @@
 
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
         <link
             rel="search"
             type="application/opensearchdescription+xml"
             title="S.A. Proto"
-            href="{{ route("search::opensearch") }}"
+            href="{{ route('search::opensearch') }}"
         />
 
         <title>
-            @if (! App::environment("production")) 
-            [{{ strtoupper(config("app.env")) }}]
+            @if (! App::environment('production')) 
+            [{{ strtoupper(config('app.env')) }}]
             @endif S.A.
-            Proto | @yield("page-title", "Default Page Title")
+            Proto | @yield('page-title', 'Default Page Title')
         </title>
 
-        @stack("head")
+        @stack('head')
 
-        @include("website.assets.stylesheets")
+        @include('website.assets.stylesheets')
 
-        @stack("stylesheet")
+        @stack('stylesheet')
 
-        @section("opengraph")
+        @section('opengraph')
             <meta property="og:url" content="{{ Request::url() }}" />
             <meta property="og:type" content="website" />
             <meta
                 property="og:title"
-                content="@yield("page-title", "Website")"
+                content="@yield('page-title', 'Website')"
             />
             <meta
                 property="og:description"
-                content="@yield("og-description", "S.A. Proto is the study association for Creative Technology at the University of Twente.")"
+                content="@yield('og-description', 'S.A. Proto is the study association for Creative Technology at the University of Twente.')"
             />
             <meta
                 property="og:image"
-                content="@yield("og-image", asset("images/logo/og-image.png"))"
+                content="@yield('og-image', asset('images/logo/og-image.png'))"
             />
         @endsection()
 
-        @yield("opengraph")
+        @yield('opengraph')
     </head>
 
     <body class="template-{{ $viewName }}">
-        @yield("body")
+        @yield('body')
 
         @if (! App::isDownForMaintenance())
-            @include("components.modals.flashmessages")
+            @include('components.modals.flashmessages')
 
             <div
                 class="position-absolute top-0 start-50"
@@ -67,18 +67,18 @@
                 id="alert-wrapper"
             ></div>
 
-            @include("components.modals.achievement-popup")
+            @include('components.modals.achievement-popup')
 
-            @include("components.modals.errormessages")
+            @include('components.modals.errormessages')
 
             <!-- Modals -->
-            @stack("modals")
+            @stack('modals')
 
             <!-- Global scripts -->
-            @include("website.assets.javascripts")
+            @include('website.assets.javascripts')
 
             <!-- Page scripts -->
-            @stack("javascript")
+            @stack('javascript')
         @endif
     </body>
 </html>

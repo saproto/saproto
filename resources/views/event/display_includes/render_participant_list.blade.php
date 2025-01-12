@@ -8,7 +8,7 @@
 
     <div class="btn-group btn-group-sm mb-1">
         <a
-            href="{{ route("user::profile", ["id" => $u->getPublicId()]) }}"
+            href="{{ route('user::profile', ['id' => $u->getPublicId()]) }}"
             class="btn btn-outline-primary"
         >
             <img
@@ -18,9 +18,9 @@
             />
             {{ $u->name }}
         </a>
-        @if (Auth::user()->can("board") && $event && ! $event->activity->closed)
+        @if (Auth::user()->can('board') && $event && ! $event->activity->closed)
             <a
-                href="{{ route("event::deleteparticipation", ["participation_id" => $pid]) }}"
+                href="{{ route('event::deleteparticipation', ['participation_id' => $pid]) }}"
                 class="btn btn-outline-warning"
             >
                 <i class="fas fa-times" aria-hidden="true"></i>

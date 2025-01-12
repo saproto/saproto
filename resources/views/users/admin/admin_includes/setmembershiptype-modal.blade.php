@@ -7,7 +7,7 @@
 >
     <div class="modal-dialog model-sm" role="document">
         <form
-            action="{{ route("user::member::settype", ["id" => $user->id]) }}"
+            action="{{ route('user::member::settype', ['id' => $user->id]) }}"
             method="post"
         >
             @csrf

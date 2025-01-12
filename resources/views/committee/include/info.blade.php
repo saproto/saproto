@@ -11,7 +11,7 @@
 
 @if (Auth::check() && $committee->allow_anonymous_email)
     <a
-        href="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}"
+        href="{{ route('committee::anonymousmail', ['id' => $committee->getPublicId()]) }}"
         class="btn btn-block btn-info mb-3"
     >
         <i class="fas fa-envelope-open fa-fw"></i>
@@ -34,13 +34,13 @@
         />
     @endif
 
-    @if (Auth::check() && ($committee->isMember(Auth::user()) || Auth::user()->can("board") || $committee->allow_anonymous_email))
+    @if (Auth::check() && ($committee->isMember(Auth::user()) || Auth::user()->can('board') || $committee->allow_anonymous_email))
         <div class="card-header bg-dark">
             <div class="row justify-content-end">
-                @can("board")
+                @can('board')
                     <div class="col-4">
                         <a
-                            href="{{ route("committee::edit", ["id" => $committee->id]) }}"
+                            href="{{ route('committee::edit', ['id' => $committee->id]) }}"
                             class="btn btn-primary btn-block"
                         >
                             <i class="fas fa-edit fa-fw"></i>
@@ -53,17 +53,17 @@
     @endif
 
     <div class="card-body">
-        <h5 class="card-title">@yield("page-title")</h5>
+        <h5 class="card-title">@yield('page-title')</h5>
 
         <p class="card-text">
             {!! Markdown::convert($committee->description) !!}
 
             <a
-                href="mailto:{{ $committee->slug . "@" . Config::string("proto.emaildomain") }}"
+                href="mailto:{{ $committee->slug . '@' . Config::string('proto.emaildomain') }}"
                 class="card-link text-info"
             >
                 E-mail them at
-                {{ $committee->slug . "@" . Config::string("proto.emaildomain") }}
+                {{ $committee->slug . '@' . Config::string('proto.emaildomain') }}
             </a>
         </p>
     </div>

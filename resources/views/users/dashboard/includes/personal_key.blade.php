@@ -16,15 +16,15 @@
 
     <div class="card-footer">
         @include(
-            "components.modals.confirm-modal",
+            'components.modals.confirm-modal',
             [
-                "action" => route("user::personal_key::generate"),
-                "classes" => "btn btn-outline-danger btn-block",
-                "text" => "Mine has been compromised, generate me a new one",
-                "title" => "Confirm Regenerate",
-                "message" =>
-                    "Are you sure? This will invalidate any personal links including your personalized calendar.",
-                "confirm" => "Regenerate",
+                'action' => route('user::personal_key::generate'),
+                'classes' => 'btn btn-outline-danger btn-block',
+                'text' => 'Mine has been compromised, generate me a new one',
+                'title' => 'Confirm Regenerate',
+                'message' =>
+                    'Are you sure? This will invalidate any personal links including your personalized calendar.',
+                'confirm' => 'Regenerate',
             ]
         )
     </div>

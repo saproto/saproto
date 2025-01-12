@@ -1,14 +1,14 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
-        Edit {{ $album->name }} ({{ date("M j, Y", $album->date_taken) }})
+@section('page-title')
+        Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
-@section("container")
+@section('container')
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
-            href="{{ route("event::show", ["id" => $album->event->getPublicId()]) }}"
+            href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
         >
             This album is linked to the event {{ $album->event->title }}, click
             here to go to the event.
@@ -18,10 +18,10 @@
     <div class="row">
         <div class="col-lg-3">
             @if ($album->published)
-                @can("publishalbums")
+                @can('publishalbums')
                     <a
                         class="btn btn-warning text-white btn-block mb-3"
-                        href="{{ route("photo::admin::unpublish", ["id" => $album->id]) }}"
+                        href="{{ route('photo::admin::unpublish', ['id' => $album->id]) }}"
                     >
                         This album is published so editing is limited, click
                         here to unpublish the album.
@@ -36,10 +36,10 @@
                     </span>
                 @endcan
             @else
-                @can("publishalbums")
+                @can('publishalbums')
                     <a
                         class="btn btn-danger text-white btn-block mb-3"
-                        href="{{ route("photo::admin::publish", ["id" => $album->id]) }}"
+                        href="{{ route('photo::admin::publish', ['id' => $album->id]) }}"
                     >
                         This album is not yet published, click here to publish
                         the album.
@@ -56,13 +56,13 @@
 
             <a
                 class="btn btn-info text-white btn-block mb-3"
-                href="{{ route("photo::album::list", ["id" => $album->id]) }}"
+                href="{{ route('photo::album::list', ['id' => $album->id]) }}"
             >
                 Preview album
             </a>
 
             <div class="card mb-3">
-                @if (Auth::user()->can("publishalbums") || (Auth::user()->can("protography") && ! $album->published))
+                @if (Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && ! $album->published))
                     <div class="card-header bg-dark text-white text-center">
                         Edit album
                     </div>
@@ -82,20 +82,20 @@
                                 />
                             </div>
                             @include(
-                                "components.forms.datetimepicker",
+                                'components.forms.datetimepicker',
                                 [
-                                    "name" => "date",
-                                    "label" => "Album date:",
-                                    "placeholder" => date($album->date_taken),
-                                    "format" => "date",
+                                    'name' => 'date',
+                                    'label' => 'Album date:',
+                                    'placeholder' => date($album->date_taken),
+                                    'format' => 'date',
                                 ]
                             )
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "private",
-                                    "checked" => $album->private,
-                                    "label" => "Private album",
+                                    'name' => 'private',
+                                    'checked' => $album->private,
+                                    'label' => 'Private album',
                                 ]
                             )
                         </div>
@@ -126,11 +126,11 @@
                         {{ $album->name }}
                         <br />
                         <b>Album date:</b>
-                        {{ date("d-m-Y", $album->date_taken) }}
+                        {{ date('d-m-Y', $album->date_taken) }}
                         <br />
                         <b>Private album:</b>
                         <i
-                            class="fa fa-{{ $album->private ? "check" : "times" }}"
+                            class="fa fa-{{ $album->private ? 'check' : 'times' }}"
                         ></i>
                     </div>
                 @endif
@@ -173,7 +173,7 @@
                             </button>
                             <a
                                 class="btn btn-danger"
-                                href="{{ route("photo::admin::delete", ["id" => $album->id]) }}"
+                                href="{{ route('photo::admin::delete', ['id' => $album->id]) }}"
                             >
                                 Delete Album
                             </a>
@@ -262,17 +262,17 @@
             <div class="card mb-3">
                 <form
                     method="POST"
-                    action="{{ route("photo::admin::action", ["id" => $album->id]) }}"
+                    action="{{ route('photo::admin::action', ['id' => $album->id]) }}"
                 >
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-white text-center">
                         {{ $album->name }}
-                        ({{ date("M j, Y", $album->date_taken) }})
+                        ({{ date('M j, Y', $album->date_taken) }})
                     </div>
 
                     <div class="card-body">
-                        @if (! $album->published || Auth::user()->can("publishalbums"))
+                        @if (! $album->published || Auth::user()->can('publishalbums'))
                             <div class="row">
                                 <div class="col-12 mb-4">
                                     <div
@@ -282,8 +282,8 @@
                                     >
                                         @php
                                             $attr = $album->published
-                                                ? "type=button data-bs-toggle=modal data-bs-target=#published-modal"
-                                                : "type=submit";
+                                                ? 'type=button data-bs-toggle=modal data-bs-target=#published-modal'
+                                                : 'type=submit';
                                         @endphp
 
                                         <button
@@ -368,7 +368,7 @@
                             class="row shift-select"
                         >
                             @foreach ($album->items as $photo)
-                                @include("photos.includes.selectablephoto", ["photo" => $photo])
+                                @include('photos.includes.selectablephoto', ['photo' => $photo])
                             @endforeach
                         </div>
                     </div>
@@ -378,24 +378,24 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script async type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', (_) => {
-            let fileSizeLimit = '{{ $fileSizeLimit }}B';
-            let fileId = 1;
-            let uploadRunning = false;
-            let dropArea = document.getElementById('droparea');
+            let fileSizeLimit = '{{ $fileSizeLimit }}B'
+            let fileId = 1
+            let uploadRunning = false
+            let dropArea = document.getElementById('droparea')
 
             document
                 .getElementById('published-modal')
                 .addEventListener('show.bs.modal', (e) => {
                     const footer = document.querySelector(
-                        '#published-modal .modal-footer',
-                    );
-                    const btn = e.relatedTarget.cloneNode(true);
-                    btn.type = 'submit';
-                    footer.replaceChild(btn, footer.lastChild);
-                });
+                        '#published-modal .modal-footer'
+                    )
+                    const btn = e.relatedTarget.cloneNode(true)
+                    btn.type = 'submit'
+                    footer.replaceChild(btn, footer.lastChild)
+                })
 
             if (
                 dropArea &&
@@ -405,46 +405,46 @@
                 window.Blob
             ) {
                 dropArea.addEventListener('dragenter', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    dropArea.classList.remove('opacity-25');
-                    e.dataTransfer.dropEffect = 'move';
-                });
+                    e.stopPropagation()
+                    e.preventDefault()
+                    dropArea.classList.remove('opacity-25')
+                    e.dataTransfer.dropEffect = 'move'
+                })
                 dropArea.addEventListener('dragleave', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    dropArea.classList.add('opacity-25');
-                });
+                    e.stopPropagation()
+                    e.preventDefault()
+                    dropArea.classList.add('opacity-25')
+                })
 
                 dropArea.addEventListener('dragover', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                });
-                window.addEventListener('drop', dropFiles);
+                    e.stopPropagation()
+                    e.preventDefault()
+                })
+                window.addEventListener('drop', dropFiles)
             }
 
             function dropFiles(e) {
-                console.log(e);
-                e.stopPropagation();
-                e.preventDefault();
-                dropArea.classList.add('opacity-25');
+                console.log(e)
+                e.stopPropagation()
+                e.preventDefault()
+                dropArea.classList.add('opacity-25')
 
-                let files = e.dataTransfer.files;
+                let files = e.dataTransfer.files
                 if (files.length) {
-                    let fileQueue = [];
+                    let fileQueue = []
                     for (const file of files) {
                         if (
                             ['image/png', 'image/jpg', 'image/jpeg'].includes(
-                                file.type,
+                                file.type
                             )
                         ) {
-                            let fr = new FileReader();
+                            let fr = new FileReader()
                             fr.onload = async (_) => {
-                                file.id = fileId++;
-                                fileQueue.push(file);
-                                await uploadFiles(fileQueue);
-                            };
-                            fr.readAsDataURL(file);
+                                file.id = fileId++
+                                fileQueue.push(file)
+                                await uploadFiles(fileQueue)
+                            }
+                            fr.readAsDataURL(file)
                         }
                     }
                 }
@@ -452,57 +452,57 @@
 
             async function uploadFiles(fileQueue) {
                 while (fileQueue.length) {
-                    let file = fileQueue.shift();
-                    let formData = new FormData();
-                    formData.append('file', file);
-                    toggleRunning();
+                    let file = fileQueue.shift()
+                    let formData = new FormData()
+                    formData.append('file', file)
+                    toggleRunning()
                     await post(
-                        '{{ route("photo::admin::upload", ["id" => $album->id], false) }}',
+                        '{{ route('photo::admin::upload', ['id' => $album->id], false) }}',
                         formData,
-                        { parse: false },
+                        { parse: false }
                     )
                         .then((response) => {
                             response.text().then((text) => {
                                 document.getElementById(
-                                    'photo-view',
-                                ).innerHTML += text;
+                                    'photo-view'
+                                ).innerHTML += text
                                 document
                                     .getElementById('error-bar')
-                                    .classList.add('d-none');
+                                    .classList.add('d-none')
                                 document.querySelector(
-                                    '#error-bar ul',
-                                ).innerHTML = '';
-                                toggleRunning();
-                            });
+                                    '#error-bar ul'
+                                ).innerHTML = ''
+                                toggleRunning()
+                            })
                         })
                         .catch((err) => {
-                            let errText;
+                            let errText
                             switch (err.status) {
                                 case 413:
-                                    errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`;
-                                    break;
+                                    errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
+                                    break
                                 default:
-                                    errText = `Error ${err.status}: ${err.statusText}`;
-                                    break;
+                                    errText = `Error ${err.status}: ${err.statusText}`
+                                    break
                             }
-                            console.error(errText, err);
-                            uploadError(file, errText);
-                            toggleRunning();
-                        });
+                            console.error(errText, err)
+                            uploadError(file, errText)
+                            toggleRunning()
+                        })
                 }
             }
 
             function toggleRunning() {
-                uploadRunning = !uploadRunning;
-                const loader = document.getElementById('droparea-loader');
-                loader.classList.toggle('d-none');
+                uploadRunning = !uploadRunning
+                const loader = document.getElementById('droparea-loader')
+                loader.classList.toggle('d-none')
             }
 
             function uploadError(file, err) {
-                document.getElementById('error-bar').classList.remove('d-none');
+                document.getElementById('error-bar').classList.remove('d-none')
                 document.querySelector('#error-bar ul').innerHTML +=
-                    `<li> ${file.name} <small><i>${err}</i></small> </li>`;
+                    `<li> ${file.name} <small><i>${err}</i></small> </li>`
             }
-        });
+        })
     </script>
 @endpush

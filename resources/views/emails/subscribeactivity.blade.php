@@ -1,19 +1,19 @@
-@extends("emails.template")
+@extends('emails.template')
 
-@section("body")
+@section('body')
     <p>
-        Hey {{ $activity["name"] }},
+        Hey {{ $activity['name'] }},
 
-        @if ($activity["help"] !== null)
+        @if ($activity['help'] !== null)
             <p>
                 You receive this e-mail because the board signed you up to help
                 with
                 <a
-                    href="{{ route("event::show", ["id" => $activity["id"]]) }}"
+                    href="{{ route('event::show', ['id' => $activity['id']]) }}"
                 >
-                    {{ $activity["title"] }}
+                    {{ $activity['title'] }}
                 </a>
-                as part of the {{ $activity["help"] }}. If you believe this is
+                as part of the {{ $activity['help'] }}. If you believe this is
                 a mistake, please let us know or head over to the website and
                 sign out of the activity.
             </p>
@@ -21,9 +21,9 @@
             <p>
                 You receive this e-mail because the board signed you up for
                 <a
-                    href="{{ route("event::show", ["id" => $activity["id"]]) }}"
+                    href="{{ route('event::show', ['id' => $activity['id']]) }}"
                 >
-                    {{ $activity["title"] }}
+                    {{ $activity['title'] }}
                 </a>
                 . If you believe this is a mistake, please let us know or head
                 over to the website and sign out of the activity.

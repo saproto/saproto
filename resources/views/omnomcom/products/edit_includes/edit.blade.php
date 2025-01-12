@@ -1,11 +1,11 @@
 <div class="card">
     <form
         method="post"
-        action="{{ $product == null ? route("omnomcom::products::store") : route("omnomcom::products::update", ["id" => $product->id]) }}"
+        action="{{ $product == null ? route('omnomcom::products::store') : route('omnomcom::products::update', ['id' => $product->id]) }}"
         enctype="multipart/form-data"
     >
         <div class="card-header bg-dark text-white">
-            @yield("page-title")
+            @yield('page-title')
         </div>
 
         @csrf
@@ -32,7 +32,7 @@
                         id="name"
                         name="name"
                         placeholder="Bertie Bott's Every Flavour Beans"
-                        value="{{ $product->name ?? "" }}"
+                        value="{{ $product->name ?? '' }}"
                         required
                     />
                 </div>
@@ -49,7 +49,7 @@
                             id="price"
                             name="price"
                             placeholder="0"
-                            value="{{ $product ? number_format($product->price, 2) : "" }}"
+                            value="{{ $product ? number_format($product->price, 2) : '' }}"
                             required
                         />
                     </div>
@@ -65,7 +65,7 @@
                         id="supplier_id"
                         name="supplier_id"
                         placeholder="12345678"
-                        value="{{ $product->supplier_id ?? "" }}"
+                        value="{{ $product->supplier_id ?? '' }}"
                     />
                 </div>
 
@@ -87,7 +87,7 @@
                         id="supplier_collo"
                         name="supplier_collo"
                         placeholder="0"
-                        value="{{ $product->supplier_collo ?? "" }}"
+                        value="{{ $product->supplier_collo ?? '' }}"
                     />
                 </div>
             </div>
@@ -109,7 +109,7 @@
                         id="prev_stock"
                         name="prev_stock"
                         placeholder="0"
-                        value="{{ $product->stock ?? "" }}"
+                        value="{{ $product->stock ?? '' }}"
                     />
                 </div>
 
@@ -129,7 +129,7 @@
                         id="stock"
                         name="stock"
                         placeholder="0"
-                        value="{{ $product->stock ?? "" }}"
+                        value="{{ $product->stock ?? '' }}"
                     />
                 </div>
 
@@ -141,7 +141,7 @@
                         id="preferred_stock"
                         name="preferred_stock"
                         placeholder="0"
-                        value="{{ $product->preferred_stock ?? "" }}"
+                        value="{{ $product->preferred_stock ?? '' }}"
                     />
                 </div>
 
@@ -153,7 +153,7 @@
                         id="max_stock"
                         name="max_stock"
                         placeholder="0"
-                        value="{{ $product->max_stock ?? "" }}"
+                        value="{{ $product->max_stock ?? '' }}"
                     />
                 </div>
             </div>
@@ -168,35 +168,35 @@
                             id="calories"
                             name="calories"
                             placeholder="0"
-                            value="{{ $product->calories ?? "" }}"
+                            value="{{ $product->calories ?? '' }}"
                         />
                     </div>
                 </div>
             </div>
             @include(
-                "components.forms.checkbox",
+                'components.forms.checkbox',
                 [
-                    "name" => "is_visible",
-                    "checked" => $product?->is_visible,
-                    "label" => "Visible in OmNomCom.",
+                    'name' => 'is_visible',
+                    'checked' => $product?->is_visible,
+                    'label' => 'Visible in OmNomCom.',
                 ]
             )
 
             @include(
-                "components.forms.checkbox",
+                'components.forms.checkbox',
                 [
-                    "name" => "is_visible_when_no_stock",
-                    "checked" => $product?->is_visible_when_no_stock,
-                    "label" => "Visible in OmNomCom even when out of stock.",
+                    'name' => 'is_visible_when_no_stock',
+                    'checked' => $product?->is_visible_when_no_stock,
+                    'label' => 'Visible in OmNomCom even when out of stock.',
                 ]
             )
 
             @include(
-                "components.forms.checkbox",
+                'components.forms.checkbox',
                 [
-                    "name" => "is_alcoholic",
-                    "checked" => $product?->is_alcoholic,
-                    "label" => "Product contains alcohol.",
+                    'name' => 'is_alcoholic',
+                    'checked' => $product?->is_alcoholic,
+                    'label' => 'Product contains alcohol.',
                 ]
             )
 
@@ -229,7 +229,7 @@
                         @foreach ($accounts as $account)
                             <option
                                 value="{{ $account?->id }}"
-                                @selected(old("account_id", $account && $product && $account->id == $product->account_id))
+                                @selected(old('account_id', $account && $product && $account->id == $product->account_id))
                             >
                                 {{ $account->name }}
                                 ({{ $account->account_number }})
@@ -257,13 +257,13 @@
         <div class="card-footer clearfix">
             @if ($product)
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("omnomcom::products::delete", ["id" => $product->id]),
-                        "classes" => "btn btn-danger",
-                        "text" => "Delete",
-                        "title" => "Confirm Delete",
-                        "message" => "Are you sure you want to delete $product->name?",
+                        'action' => route('omnomcom::products::delete', ['id' => $product->id]),
+                        'classes' => 'btn btn-danger',
+                        'text' => 'Delete',
+                        'title' => 'Confirm Delete',
+                        'message' => "Are you sure you want to delete $product->name?",
                     ]
                 )
             @endif
@@ -273,7 +273,7 @@
             </button>
 
             <a
-                href="{{ route("omnomcom::products::index") }}"
+                href="{{ route('omnomcom::products::index') }}"
                 class="btn btn-default float-end"
             >
                 Cancel
@@ -281,7 +281,7 @@
 
             @if ($product?->ticket)
                 <a
-                    href="{{ route("tickets::edit", ["id" => $product->ticket->id]) }}"
+                    href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}"
                     class="btn btn-default float-end"
                 >
                     Go to event ticket

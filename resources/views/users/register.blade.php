@@ -1,21 +1,21 @@
-@extends("auth.template")
+@extends('auth.template')
 
-@push("head")
+@push('head')
     {!! htmlScriptTagJsApi() !!}
 @endpush
 
-@section("page-title")
+@section('page-title')
     Register account
 @endsection
 
-@section("login-body")
+@section('login-body')
     <form
         method="POST"
-        action="{{ route("login::register") }}"
+        action="{{ route('login::register') }}"
         class="text-start"
     >
-        @if (Session::get("wizard"))
-            @include("users.registerwizard_macro")
+        @if (Session::get('wizard'))
+            @include('users.registerwizard_macro')
         @endif
 
         {{-- temporarily disabled because the creation of an account with a university account is not fully working --}}
@@ -28,7 +28,7 @@
             <hr>
         --}}
 
-        @if (! Session::get("wizard"))
+        @if (! Session::get('wizard'))
             <p>
                 Using this form you can register a new account on the S.A. Proto
                 website.
@@ -51,7 +51,7 @@
             name="email"
             placeholder="Your e-mail address"
             required
-            value="{{ Session::has("register_persist") ? Session::get("register_persist")["email"] : "" }}"
+            value="{{ Session::has('register_persist') ? Session::get('register_persist')['email'] : '' }}"
         />
 
         <p>
@@ -73,7 +73,7 @@
             name="name"
             placeholder="Full name"
             required
-            value="{{ Session::has("register_persist") ? Session::get("register_persist")["name"] : "" }}"
+            value="{{ Session::has('register_persist') ? Session::get('register_persist')['name'] : '' }}"
         />
 
         <input
@@ -83,7 +83,7 @@
             name="calling_name"
             placeholder="Calling name"
             required
-            value="{{ Session::has("register_persist") ? Session::get("register_persist")["calling_name"] : "" }}"
+            value="{{ Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '' }}"
         />
 
         <hr />
@@ -97,11 +97,11 @@
         </a>
 
         @include(
-            "components.forms.checkbox",
+            'components.forms.checkbox',
             [
-                "name" => "privacy_policy_acceptance",
-                "label" => "I have read and acknowledge the privacy policy.",
-                "required" => true,
+                'name' => 'privacy_policy_acceptance',
+                'label' => 'I have read and acknowledge the privacy policy.',
+                'required' => true,
             ]
         )
 

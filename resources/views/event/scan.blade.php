@@ -19,12 +19,12 @@
 
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
 
         <title>Ticket Scanner for {{ $event->title }}</title>
 
-        @include("website.assets.stylesheets")
+        @include('website.assets.stylesheets')
 
         <style type="text/css">
             * {
@@ -162,11 +162,11 @@
 
         <div id="flash"></div>
 
-        @include("website.assets.javascripts")
+        @include('website.assets.javascripts')
 
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            const feedbackField = document.getElementById('feedback-field');
-            let prevRead = '';
+            const feedbackField = document.getElementById('feedback-field')
+            let prevRead = ''
 
             function initializeCamera() {
                 Quagga.init(
@@ -185,119 +185,119 @@
                         },
                     },
                     (err) => {
-                        if (err) return console.error(err);
-                        Quagga.start();
-                    },
-                );
+                        if (err) return console.error(err)
+                        Quagga.start()
+                    }
+                )
 
                 Quagga.onDetected((data) => {
-                    const code = data.codeResult.code;
+                    const code = data.codeResult.code
                     if (code !== prevRead) {
-                        scan(code);
-                        prevRead = code;
+                        scan(code)
+                        prevRead = code
                     }
-                });
+                })
             }
 
             function setStatus(status) {
                 switch (status) {
                     case 'received':
-                        feedbackField.innerHTML = 'Validating barcode...';
-                        break;
+                        feedbackField.innerHTML = 'Validating barcode...'
+                        break
                     case 'error':
-                        feedbackField.classList.remove('blink');
+                        feedbackField.classList.remove('blink')
                         feedbackField.innerHTML =
-                            'Something went wrong. Try again!';
-                        flash('danger');
-                        setTimeout(setStatus, 1000);
-                        break;
+                            'Something went wrong. Try again!'
+                        flash('danger')
+                        setTimeout(setStatus, 1000)
+                        break
                     case 'ok':
-                        feedbackField.classList.remove('blink');
-                        feedbackField.innerHTML = 'Valid ticket!';
-                        flash('primary');
-                        setTimeout(setStatus, 1000);
-                        break;
+                        feedbackField.classList.remove('blink')
+                        feedbackField.innerHTML = 'Valid ticket!'
+                        flash('primary')
+                        setTimeout(setStatus, 1000)
+                        break
                     default:
-                        feedbackField.classList.add('blink');
-                        feedbackField.innerHTML = 'Searching for barcode...';
-                        break;
+                        feedbackField.classList.add('blink')
+                        feedbackField.innerHTML = 'Searching for barcode...'
+                        break
                 }
             }
 
             const flash = (color) => {
                 document.getElementById('flash').className =
-                    'bg-' + color + ' opacity-0 fade-out-50';
-            };
+                    'bg-' + color + ' opacity-0 fade-out-50'
+            }
 
             function scan(barcode) {
-                if (barcode === '') return;
-                setStatus('received');
-                get('{{ route("api::scan", ["event" => $event->id]) }}', {
+                if (barcode === '') return
+                setStatus('received')
+                get('{{ route('api::scan', ['event' => $event->id]) }}', {
                     barcode: barcode,
                 })
                     .then((res) => parseReply(res.data, res.message, res.code))
                     .catch((err) => {
-                        console.error(err);
-                        setStatus('error');
-                    });
+                        console.error(err)
+                        setStatus('error')
+                    })
             }
 
             function parseReply(data, message, code) {
                 switch (code) {
                     case 500:
-                        flash('danger');
-                        feedbackField.classList.remove('blink');
-                        feedbackField.innerHTML = message;
-                        setTimeout(setStatus, 1000);
-                        break;
+                        flash('danger')
+                        feedbackField.classList.remove('blink')
+                        feedbackField.innerHTML = message
+                        setTimeout(setStatus, 1000)
+                        break
                     case 403:
-                        flash('warning');
-                        feedbackField.classList.remove('blink');
-                        feedbackField.innerHTML = message;
-                        setTimeout(setStatus, 1000);
+                        flash('warning')
+                        feedbackField.classList.remove('blink')
+                        feedbackField.innerHTML = message
+                        setTimeout(setStatus, 1000)
                         document
                             .getElementById('history')
                             .prepend(
                                 createTicketEl(
                                     data,
                                     false,
-                                    'Used on ' + data.scanned,
-                                ),
-                            );
-                        break;
+                                    'Used on ' + data.scanned
+                                )
+                            )
+                        break
                     case 200:
-                        setStatus('ok');
+                        setStatus('ok')
                         document
                             .getElementById('history')
-                            .prepend(createTicketEl(data, true, 'Valid'));
-                        break;
+                            .prepend(createTicketEl(data, true, 'Valid'))
+                        break
                 }
             }
 
             function createTicketEl(data, valid, message) {
-                let el = document.createElement('tr');
+                let el = document.createElement('tr')
                 el.innerHTML = `<td>${data.id}</td>
             <td>${data.user.name}</td>
             <td>${data.ticket.product.name}</td>
             <td>${timeNow()}</td>
-            <td><span class='text-${valid ? 'success' : 'warning'}'>${message}</span></td>`;
-                return el;
+            <td><span class='text-${valid ? 'success' : 'warning'}'>${message}</span></td>`
+                return el
             }
 
             function timeNow() {
-                const d = new Date();
+                const d = new Date()
                 return (
                     ('0' + d.getHours()).slice(-2) +
                     ':' +
                     ('0' + d.getMinutes()).slice(-2) +
                     ':' +
                     ('0' + d.getSeconds()).slice(-2)
-                );
+                )
             }
 
             window.addEventListener('load', (_) => {
-                initializeCamera();
-            });
+                initializeCamera()
+            })
         </script>
     </body>
 </html>

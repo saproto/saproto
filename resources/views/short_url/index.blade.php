@@ -1,18 +1,18 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Short URL Service
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
                         class="badge bg-info float-end"
-                        href="{{ route("short_urls.create") }}"
+                        href="{{ route('short_urls.create') }}"
                     >
                         Create Short URL
                     </a>
@@ -35,19 +35,19 @@
                             <tr>
                                 <td class="ps-2">
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("short_urls.destroy", ["short_url" => $url]),
-                                            "method" => "DELETE",
-                                            "classes" => "fas fa-trash text-danger",
-                                            "text" => "",
-                                            "confirm" => "Delete",
-                                            "title" => "Confirm deleting the url " . $url->url,
-                                            "message" => "Are you sure you want to delete " . $url->url . "?",
+                                            'action' => route('short_urls.destroy', ['short_url' => $url]),
+                                            'method' => 'DELETE',
+                                            'classes' => 'fas fa-trash text-danger',
+                                            'text' => '',
+                                            'confirm' => 'Delete',
+                                            'title' => 'Confirm deleting the url ' . $url->url,
+                                            'message' => 'Are you sure you want to delete ' . $url->url . '?',
                                         ]
                                     )
                                     <a
-                                        href="{{ route("short_urls.edit", ["short_url" => $url]) }}"
+                                        href="{{ route('short_urls.edit', ['short_url' => $url]) }}"
                                         class="fa fa-pencil-alt text-success"
                                     ></a>
                                 </td>
@@ -105,50 +105,50 @@
     </div>
 @endsection
 
-@push("javascript")
+@push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.qr-button').forEach((el) =>
             el.addEventListener('click', (e) => {
                 const modal = document.querySelector(
-                    el.getAttribute('data-bs-target'),
-                );
+                    el.getAttribute('data-bs-target')
+                )
                 modal.querySelector('#qr-modal-url').src =
-                    '{{ route("short_urls.qr_code", "") }}/' +
-                    el.getAttribute('data-url-id');
-                console.log(document.getElementById('qr-modal-url').src);
-            }),
-        );
+                    '{{ route('short_urls.qr_code', '') }}/' +
+                    el.getAttribute('data-url-id')
+                console.log(document.getElementById('qr-modal-url').src)
+            })
+        )
 
         document
             .querySelector('#qr-modal-copy')
             .addEventListener('click', (e) => {
-                const image = document.getElementById('qr-modal-url');
-                const canvas = document.createElement('canvas');
-                const margin = 10; //the margin of the QR code in the image in percentage
-                const scale = 10;
-                canvas.width = image.width * scale;
-                canvas.height = image.height * scale;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                const image = document.getElementById('qr-modal-url')
+                const canvas = document.createElement('canvas')
+                const margin = 10 //the margin of the QR code in the image in percentage
+                const scale = 10
+                canvas.width = image.width * scale
+                canvas.height = image.height * scale
+                const ctx = canvas.getContext('2d')
+                ctx.fillStyle = 'white'
+                ctx.fillRect(0, 0, canvas.width, canvas.height)
                 ctx.drawImage(
                     image,
                     (image.width * (margin / 100) * scale) / 2,
                     (image.height * (margin / 100) * scale) / 2,
                     (1 - margin / 100) * image.width * scale,
-                    (1 - margin / 100) * image.height * scale,
-                );
+                    (1 - margin / 100) * image.height * scale
+                )
                 canvas.toBlob((blob) => {
                     navigator.clipboard.write([
                         new ClipboardItem({ 'image/png': blob }),
-                    ]);
-                }, 'image/png');
-            });
+                    ])
+                }, 'image/png')
+            })
     </script>
 @endpush
 
 @once
-    @push("modals")
+    @push('modals')
         <div class="modal fade" id="qr-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog model-sm" role="document">
                 <form>

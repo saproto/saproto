@@ -1,13 +1,13 @@
 <form
     method="post"
-    action="{{ ! isset($dinnerformCurrent) ? route("dinnerform::store") : route("dinnerform::update", ["id" => $dinnerformCurrent->id]) }}"
+    action="{{ ! isset($dinnerformCurrent) ? route('dinnerform::store') : route('dinnerform::update', ['id' => $dinnerformCurrent->id]) }}"
     enctype="multipart/form-data"
 >
     @csrf
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            {{ ! isset($dinnerformCurrent) ? "Create Dinnerform" : "Edit Dinnerform at $dinnerformCurrent->restaurant" }}
+            {{ ! isset($dinnerformCurrent) ? 'Create Dinnerform' : "Edit Dinnerform at $dinnerformCurrent->restaurant" }}
         </div>
 
         <div class="card-body">
@@ -23,7 +23,7 @@
                             id="restaurant"
                             name="restaurant"
                             placeholder="Elat Roma"
-                            value="{{ $dinnerformCurrent->restaurant ?? "" }}"
+                            value="{{ $dinnerformCurrent->restaurant ?? '' }}"
                             required
                         />
                     </div>
@@ -37,7 +37,7 @@
                             id="description"
                             name="description"
                             placeholder="Order with us at Elat Roma"
-                            value="{{ $dinnerformCurrent->description ?? "" }}"
+                            value="{{ $dinnerformCurrent->description ?? '' }}"
                             required
                         />
                     </div>
@@ -51,7 +51,7 @@
                             id="url"
                             name="url"
                             placeholder="www.elat-roma.nl/"
-                            value="{{ $dinnerformCurrent->url ?? "" }}"
+                            value="{{ $dinnerformCurrent->url ?? '' }}"
                             required
                         />
                     </div>
@@ -66,7 +66,7 @@
                             id="helper-discount"
                             name="helper_discount"
                             placeholder="7.5"
-                            value="{{ $dinnerformCurrent->helper_discount ?? "" }}"
+                            value="{{ $dinnerformCurrent->helper_discount ?? '' }}"
                             required
                         />
                     </div>
@@ -78,7 +78,7 @@
                             <input
                                 class="form-control user-search"
                                 id="ordered_by"
-                                value="{{ $dinnerformCurrent->ordered_by ?? "" }}"
+                                value="{{ $dinnerformCurrent->ordered_by ?? '' }}"
                                 name="ordered_by"
                                 data-label="User:"
                                 required
@@ -91,27 +91,27 @@
                 <div class="col-md-6">
                     <!-- Start -->
                     @include(
-                        "components.forms.datetimepicker",
+                        'components.forms.datetimepicker',
                         [
-                            "name" => "start",
-                            "label" => "Opens at:",
-                            "placeholder" => $dinnerformCurrent
+                            'name' => 'start',
+                            'label' => 'Opens at:',
+                            'placeholder' => $dinnerformCurrent
                                 ? $dinnerformCurrent->start->timestamp
                                 : null,
-                            "input_class_name" => "mb-3",
+                            'input_class_name' => 'mb-3',
                         ]
                     )
 
                     <!-- End -->
                     @include(
-                        "components.forms.datetimepicker",
+                        'components.forms.datetimepicker',
                         [
-                            "name" => "end",
-                            "label" => "Closes at:",
-                            "placeholder" => $dinnerformCurrent
+                            'name' => 'end',
+                            'label' => 'Closes at:',
+                            'placeholder' => $dinnerformCurrent
                                 ? $dinnerformCurrent->end->timestamp
                                 : null,
-                            "input_class_name" => "mb-3",
+                            'input_class_name' => 'mb-3',
                         ]
                     )
 
@@ -123,8 +123,8 @@
                                 class="form-control event-search"
                                 id="event-select"
                                 name="event_select"
-                                value="{{ $dinnerformCurrent ? $dinnerformCurrent->event_id : "" }}"
-                                placeholder="{{ $dinnerformCurrent?->event && $dinnerformCurrent->event->activity ? $dinnerformCurrent->event->title : "" }}"
+                                value="{{ $dinnerformCurrent ? $dinnerformCurrent->event_id : '' }}"
+                                placeholder="{{ $dinnerformCurrent?->event && $dinnerformCurrent->event->activity ? $dinnerformCurrent->event->title : '' }}"
                             />
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                             id="regular-discount"
                             name="regular_discount"
                             placeholder="0"
-                            value="{{ $dinnerformCurrent->regular_discount_percentage ?? "" }}"
+                            value="{{ $dinnerformCurrent->regular_discount_percentage ?? '' }}"
                             required
                         />
                     </div>
@@ -149,11 +149,11 @@
                     <!-- Homepage -->
                     <div class="col-md-12 mb-3 mt-5">
                         @include(
-                            "components.forms.checkbox",
+                            'components.forms.checkbox',
                             [
-                                "name" => "homepage",
-                                "checked" => $dinnerformCurrent?->visible_home_page,
-                                "label" => "Visible on the homepage?",
+                                'name' => 'homepage',
+                                'checked' => $dinnerformCurrent?->visible_home_page,
+                                'label' => 'Visible on the homepage?',
                             ]
                         )
                     </div>
@@ -165,16 +165,16 @@
 
             @if ($dinnerformCurrent)
                 @include(
-                    "components.modals.confirm-modal",
+                    'components.modals.confirm-modal',
                     [
-                        "action" => route("dinnerform::delete", [
-                            "id" => $dinnerformCurrent->id,
+                        'action' => route('dinnerform::delete', [
+                            'id' => $dinnerformCurrent->id,
                         ]),
-                        "text" => "Delete",
-                        "title" => "Confirm Delete",
-                        "classes" => "btn btn-danger ms-2",
-                        "message" => "Are you sure you want to remove the dinnerform opening $dinnerformCurrent->start ordering at $dinnerformCurrent->restaurant?<br><br> This will also delete all orderlines!",
-                        "confirm" => "Delete",
+                        'text' => 'Delete',
+                        'title' => 'Confirm Delete',
+                        'classes' => 'btn btn-danger ms-2',
+                        'message' => "Are you sure you want to remove the dinnerform opening $dinnerformCurrent->start ordering at $dinnerformCurrent->restaurant?<br><br> This will also delete all orderlines!",
+                        'confirm' => 'Delete',
                     ]
                 )
             @endif

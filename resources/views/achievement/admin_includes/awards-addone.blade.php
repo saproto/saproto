@@ -1,4 +1,4 @@
-<form method="post" action="{{ route("achievement::give") }}">
+<form method="post" action="{{ route('achievement::give') }}">
     @csrf
 
     <div class="card mb-3">
@@ -26,12 +26,12 @@
                 />
             </div>
             @include(
-                "components.forms.datetimepicker",
+                'components.forms.datetimepicker',
                 [
-                    "name" => "achieved_on",
-                    "label" => "Achieved on",
-                    "placeholder" => Carbon::now()->timestamp,
-                    "format" => "date",
+                    'name' => 'achieved_on',
+                    'label' => 'Achieved on',
+                    'placeholder' => Carbon::now()->timestamp,
+                    'format' => 'date',
                 ]
             )
             <div class="form-group">

@@ -1,9 +1,9 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("body")
+@section('body')
     <main role="main" id="nonavandfooter" class="container-fluid pt-3">
-        @include("website.announcements")
+        @include('website.announcements')
 
-        @yield("container")
+        @yield('container')
     </main>
 @endsection

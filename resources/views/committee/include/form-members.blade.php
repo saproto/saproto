@@ -1,7 +1,7 @@
 @if (! $new)
     <form
         class="form-horizontal"
-        action="{{ route("committee::membership::store") }}"
+        action="{{ route('committee::membership::store') }}"
         method="post"
     >
         @csrf
@@ -59,22 +59,22 @@
                 <div class="row">
                     <div class="col-6">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "format" => "date",
-                                "name" => "start",
-                                "label" => "Since",
+                                'format' => 'date',
+                                'name' => 'start',
+                                'label' => 'Since',
                             ]
                         )
                     </div>
                     <div class="col-6">
                         @include(
-                            "components.forms.datetimepicker",
+                            'components.forms.datetimepicker',
                             [
-                                "format" => "date",
-                                "name" => "end",
-                                "label" => "Until",
-                                "not_required" => true,
+                                'format' => 'date',
+                                'name' => 'end',
+                                'label' => 'Until',
+                                'not_required' => true,
                             ]
                         )
                     </div>

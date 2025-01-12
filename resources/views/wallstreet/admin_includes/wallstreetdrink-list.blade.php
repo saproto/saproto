@@ -4,7 +4,7 @@
         <div>
             <a
                 class="btn btn-info badge"
-                href="{{ route("wallstreet::marquee") }}"
+                href="{{ route('wallstreet::marquee') }}"
             >
                 View Marquee Screen!
             </a>
@@ -35,10 +35,10 @@
                                 #{{ $wallstreetDrink->id }}
                             </td>
                             <td>
-                                {{ Carbon::createFromTimestamp($wallstreetDrink->start_time)->format("m-d-Y H:i") }}
+                                {{ Carbon::createFromTimestamp($wallstreetDrink->start_time)->format('m-d-Y H:i') }}
                             </td>
                             <td>
-                                {{ Carbon::createFromTimestamp($wallstreetDrink->end_time)->format("m-d-Y H:i") }}
+                                {{ Carbon::createFromTimestamp($wallstreetDrink->end_time)->format('m-d-Y H:i') }}
                             </td>
                             <td>€{{ $wallstreetDrink->minimum_price }}</td>
                             <td>€{{ $wallstreetDrink->price_decrease }}</td>
@@ -51,7 +51,7 @@
                             <td class="text-center px-4">
                                 <a
                                     class="btn btn-info badge"
-                                    href="{{ route("wallstreet::statistics", ["id" => $wallstreetDrink->id]) }}"
+                                    href="{{ route('wallstreet::statistics', ['id' => $wallstreetDrink->id]) }}"
                                 >
                                     View Price History
                                 </a>
@@ -60,35 +60,35 @@
                             <td>
                                 @if ($wallstreetDrink->isCurrent())
                                     @include(
-                                        "components.modals.confirm-modal",
+                                        'components.modals.confirm-modal',
                                         [
-                                            "action" => route("wallstreet::close", ["id" => $wallstreetDrink->id]),
-                                            "text" => '<i class="fas fa-ban text-warning me-4"></i>',
-                                            "title" => "Confirm Close",
-                                            "message" =>
-                                                "Are you sure you want to close this wallstreet drink early? The drink will close automatically at:" .
+                                            'action' => route('wallstreet::close', ['id' => $wallstreetDrink->id]),
+                                            'text' => '<i class="fas fa-ban text-warning me-4"></i>',
+                                            'title' => 'Confirm Close',
+                                            'message' =>
+                                                'Are you sure you want to close this wallstreet drink early? The drink will close automatically at:' .
                                                 Carbon::createFromTimestamp($wallstreetDrink->end_time)->format(
-                                                    "m-d-Y H:i",
+                                                    'm-d-Y H:i',
                                                 ),
-                                            "confirm" => "Close",
+                                            'confirm' => 'Close',
                                         ]
                                     )
                                 @endif
 
                                 <a
-                                    href="{{ route("wallstreet::edit", ["id" => $wallstreetDrink->id]) }}"
+                                    href="{{ route('wallstreet::edit', ['id' => $wallstreetDrink->id]) }}"
                                 >
                                     <i class="fas fa-edit me-4"></i>
                                 </a>
                                 @include(
-                                    "components.modals.confirm-modal",
+                                    'components.modals.confirm-modal',
                                     [
-                                        "action" => route("wallstreet::delete", ["id" => $wallstreetDrink->id]),
-                                        "text" => '<i class="fas fa-trash text-danger"></i>',
-                                        "title" => "Confirm Delete",
-                                        "message" =>
-                                            "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
-                                        "confirm" => "Delete",
+                                        'action' => route('wallstreet::delete', ['id' => $wallstreetDrink->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' =>
+                                            'Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!',
+                                        'confirm' => 'Delete',
                                     ]
                                 )
                             </td>

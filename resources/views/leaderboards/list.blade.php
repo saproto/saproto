@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Leaderboards
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div id="leaderboard-accordion" class="col-10 col-md-6">
             @foreach ($leaderboards as $leaderboard)
@@ -20,7 +20,7 @@
 
                     <div
                         id="collapse-leaderboard-{{ $leaderboard->id }}"
-                        class="table-responsive collapse {{ $loop->index == 0 ? "show" : "" }}"
+                        class="table-responsive collapse {{ $loop->index == 0 ? 'show' : '' }}"
                         data-parent="#leaderboard-accordion"
                     >
                         @if ($leaderboard->description)
@@ -41,14 +41,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($leaderboard->entries->sortByDesc("points") as $entry)
+                                    @foreach ($leaderboard->entries->sortByDesc('points') as $entry)
                                         <tr>
                                             <td
                                                 class="ps-3 place-{{ $loop->index + 1 }}"
                                                 style="max-width: 50px"
                                             >
                                                 <i
-                                                    class="fas fa-sm fa-fw {{ $loop->index == 0 ? "fa-crown" : "fa-hashtag" }}"
+                                                    class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"
                                                 ></i>
                                                 {{ $loop->index + 1 }}
                                             </td>

@@ -2,7 +2,7 @@
 
 // Custom variables
 
-@import "partials/variables";
+@import 'partials/variables';
 
 //colors
 
@@ -23,16 +23,16 @@ $info: #028090;
 $brand-primary: #a31824;
 
 $theme-colors: (
-    "primary": $brand-primary,
-    "secondary": $secondary,
-    "brand-primary": $brand-primary,
-    "success": $info,
-    "info": $info,
-    "warning": $warning,
-    "danger": $danger,
-    "omnomcom": $omnomcom,
-    "dark": $dark,
-    "light": $light,
+    'primary': $brand-primary,
+    'secondary': $secondary,
+    'brand-primary': $brand-primary,
+    'success': $info,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'omnomcom': $omnomcom,
+    'dark': $dark,
+    'light': $light,
 );
 
 //body
@@ -142,13 +142,13 @@ $popover-bg: $blue-light;
 $popover-header-bg: $blue-medium;
 
 //import bootstrap after setting variables
-@import "bootstrap";
+@import 'bootstrap';
 
 // Vendors (S)CSS
-@import "partials/vendors";
+@import 'partials/vendors';
 
 // concatenated SCSS from views
-@import "partials/components";
+@import 'partials/components';
 
 .text-dark {
     color: #f1f1f1 !important;

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 // Custom variables
-@import "partials/variables";
+@import 'partials/variables';
 
 //background colour
 $body-bg: #f3f3f3;
@@ -13,13 +13,13 @@ $link-color: $info;
 $link-hover-color: lighten($info, 10%);
 
 //import bootstrap after setting variables
-@import "bootstrap";
+@import 'bootstrap';
 
 // Vendors (S)CSS
-@import "partials/vendors";
+@import 'partials/vendors';
 
 // concatenated SCSS from views
-@import "partials/components";
+@import 'partials/components';
 
 .select2-dropdown {
     background-color: #fff !important;

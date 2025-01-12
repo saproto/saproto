@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Stock Mutations
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card">
@@ -13,7 +13,7 @@
                     <form
                         id="mut_filter_form"
                         method="get"
-                        action="{{ route("omnomcom::products::mutations") }}"
+                        action="{{ route('omnomcom::products::mutations') }}"
                     >
                         @csrf
 
@@ -27,7 +27,7 @@
                                         id="product_name"
                                         name="product_name"
                                         placeholder="Will to live"
-                                        value="{{ request()->input("product_name") }}"
+                                        value="{{ request()->input('product_name') }}"
                                     />
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                         id="author_name"
                                         name="author_name"
                                         placeholder="John Doe"
-                                        value="{{ request()->input("author_name") }}"
+                                        value="{{ request()->input('author_name') }}"
                                     />
                                 </div>
                             </div>
@@ -49,12 +49,12 @@
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "after",
-                                        "label" => "Show after:",
-                                        "placeholder" => request()->has("after")
-                                            ? strtotime(request()->input("after"))
+                                        'name' => 'after',
+                                        'label' => 'Show after:',
+                                        'placeholder' => request()->has('after')
+                                            ? strtotime(request()->input('after'))
                                             : 563886000,
                                     ]
                                 )
@@ -62,12 +62,12 @@
 
                             <div class="col-md-12 mb-3">
                                 @include(
-                                    "components.forms.datetimepicker",
+                                    'components.forms.datetimepicker',
                                     [
-                                        "name" => "before",
-                                        "label" => "Show before:",
-                                        "placeholder" => request()->has("before")
-                                            ? strtotime(request()->input("before"))
+                                        'name' => 'before',
+                                        'label' => 'Show before:',
+                                        'placeholder' => request()->has('before')
+                                            ? strtotime(request()->input('before'))
                                             : time(),
                                     ]
                                 )
@@ -76,11 +76,11 @@
 
                         <div class="row-md-12 mb-3">
                             @include(
-                                "components.forms.checkbox",
+                                'components.forms.checkbox',
                                 [
-                                    "name" => "also_positive",
-                                    "checked" => request()->has("also_positive"),
-                                    "label" => "Also show positive mutations",
+                                    'name' => 'also_positive',
+                                    'checked' => request()->has('also_positive'),
+                                    'label' => 'Also show positive mutations',
                                 ]
                             )
                         </div>
@@ -91,7 +91,7 @@
 
                             <button
                                 type="submit"
-                                formaction="{{ route("omnomcom::products::mutations_export") }}"
+                                formaction="{{ route('omnomcom::products::mutations_export') }}"
                                 class="btn btn-success mb-3"
                             >
                                 Export as CSV
@@ -105,7 +105,7 @@
         <div class="col-md-7">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
                 <div class="card-body">
                     @if (count($mutations) > 0)
@@ -131,19 +131,19 @@
                                             <td>{{ $mutation->before }}</td>
                                             <td>{{ $mutation->after }}</td>
                                             <td
-                                                class="text-{{ $mutation->delta() > 0 ? "white" : "danger" }}"
+                                                class="text-{{ $mutation->delta() > 0 ? 'white' : 'danger' }}"
                                             >
                                                 {{ $mutation->delta() }}
                                             </td>
                                             <td>
                                                 <a
-                                                    href="{{ route("user::profile", ["id" => $mutation->user->getPublicId()]) }}"
+                                                    href="{{ route('user::profile', ['id' => $mutation->user->getPublicId()]) }}"
                                                 >
                                                     {{ $mutation->user->name }}
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $mutation->is_bulk ? "Yes" : "No" }}
+                                                {{ $mutation->is_bulk ? 'Yes' : 'No' }}
                                             </td>
                                             <td>{{ $mutation->date() }}</td>
                                         </tr>
@@ -151,7 +151,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if (method_exists($mutations, "links"))
+                        @if (method_exists($mutations, 'links'))
                             <div class="card-footer pb-0">
                                 {!! $mutations->links() !!}
                             </div>

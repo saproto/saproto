@@ -1,17 +1,17 @@
-@extends("website.master")
+@extends('website.master')
 
-@section("body")
+@section('body')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-5 text-center">
                 <div class="card mb-3 mt-5">
                     <div class="card-header text-center bg-dark text-white">
                         S.A. Proto |
-                        @yield("page-title")
+                        @yield('page-title')
                     </div>
 
                     <div class="card-body text-center">
-                        @yield("login-body")
+                        @yield('login-body')
                     </div>
 
                     <a
@@ -23,7 +23,7 @@
                 </div>
 
                 <img
-                    src="{{ asset("images/logo/regular.png") }}"
+                    src="{{ asset('images/logo/regular.png') }}"
                     width="60%"
                     class="mb-3 mt-5"
                     alt="Proto logo"

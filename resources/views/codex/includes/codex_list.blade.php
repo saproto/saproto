@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-header d-inline-flex justify-content-between">
         Codices
-        <a href="{{ route("codex.create") }}" class="btn btn-info badge">
+        <a href="{{ route('codex.create') }}" class="btn btn-info badge">
             New Codex
         </a>
     </div>
@@ -18,25 +18,25 @@
                     {{ $codex->name }}
                     <span>
                         <a
-                            href="{{ route("codex.show", ["codex" => $codex]) }}"
+                            href="{{ route('codex.show', ['codex' => $codex]) }}"
                             class="btn btn-primary badge"
                         >
                             Export
                         </a>
                         <a
-                            href="{{ route("codex.edit", ["codex" => $codex]) }}"
+                            href="{{ route('codex.edit', ['codex' => $codex]) }}"
                             class="btn btn-info badge"
                         >
                             Edit
                         </a>
                         @include(
-                            "components.modals.confirm-modal",
+                            'components.modals.confirm-modal',
                             [
-                                "method" => "DELETE",
-                                "action" => route("codex.destroy", ["codex" => $codex]),
-                                "classes" => "btn btn-danger badge",
-                                "text" => "Delete",
-                                "message" => "Are you sure you want to delete $codex->name?",
+                                'method' => 'DELETE',
+                                'action' => route('codex.destroy', ['codex' => $codex]),
+                                'classes' => 'btn btn-danger badge',
+                                'text' => 'Delete',
+                                'message' => "Are you sure you want to delete $codex->name?",
                             ]
                         )
                     </span>

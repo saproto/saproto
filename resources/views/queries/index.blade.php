@@ -1,15 +1,15 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Queries
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    @yield("page-title")
+                    @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
@@ -30,7 +30,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route("queries::activity_overview") }}"
+                                    href="{{ route('queries::activity_overview') }}"
                                 >
                                     <i class="fas fa-running"></i>
                                 </a>
@@ -45,7 +45,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route("queries::membership_totals") }}"
+                                    href="{{ route('queries::membership_totals') }}"
                                 >
                                     <i class="fas fa-running"></i>
                                 </a>
@@ -59,7 +59,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route("queries::activity_statistics") }}"
+                                    href="{{ route('queries::activity_statistics') }}"
                                 >
                                     <i class="fas fa-running"></i>
                                 </a>

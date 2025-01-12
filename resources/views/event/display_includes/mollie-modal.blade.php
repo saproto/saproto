@@ -27,9 +27,9 @@
                     your tickets using
                     @foreach ($payment_methods as $method)
                         @if ($loop->last)
-                            {{ $method->description . "." }}
+                            {{ $method->description . '.' }}
                         @else
-                            {{ $method->description . ", " }}
+                            {{ $method->description . ', ' }}
                         @endif
                     @endforeach
                 </p>
@@ -49,10 +49,10 @@
                     data-bs-toggle="buttons"
                 >
                     @include(
-                        "omnomcom.mollie.list-all-payment-methods",
+                        'omnomcom.mollie.list-all-payment-methods',
                         [
-                            "methods" => $payment_methods,
-                            "use_fees" => true,
+                            'methods' => $payment_methods,
+                            'use_fees' => true,
                         ]
                     )
                 </div>

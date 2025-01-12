@@ -1,10 +1,10 @@
-@extends("website.layouts.redesign.generic")
+@extends('website.layouts.redesign.generic')
 
-@section("page-title")
+@section('page-title')
     Interesting job offers
 @endsection
 
-@section("container")
+@section('container')
     <div class="row row-eq-height">
         @if (count($companies) > 0)
             @foreach ($companies as $key => $company)
@@ -32,7 +32,7 @@
                             <h5 class="card-title">{{ $company->name }}</h5>
 
                             <a
-                                href="{{ route("companies::show", ["id" => $company->id]) }}"
+                                href="{{ route('companies::show', ['id' => $company->id]) }}"
                                 class="card-link text-info"
                             >
                                 Learn more
@@ -52,7 +52,7 @@
                             <ul class="list-group">
                                 @foreach ($company->joboffers as $joboffer)
                                     <a
-                                        href="{{ $joboffer->redirect_url ?? route("joboffers::show", ["id" => $joboffer->id]) }}"
+                                        href="{{ $joboffer->redirect_url ?? route('joboffers::show', ['id' => $joboffer->id]) }}"
                                         class="list-group-item leftborder-info leftborder"
                                     >
                                         {{ $joboffer->title }}

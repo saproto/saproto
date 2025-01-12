@@ -237,43 +237,43 @@
         </div>
 
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            const search = document.getElementById('search_query');
+            const search = document.getElementById('search_query')
             const results = Array.from(
-                document.getElementsByClassName('result'),
-            );
+                document.getElementsByClassName('result')
+            )
             search.addEventListener('keyup', (_) => {
-                let query = search.value;
+                let query = search.value
                 results.forEach((el) =>
-                    el.classList.replace('result_left', 'd-none'),
-                );
+                    el.classList.replace('result_left', 'd-none')
+                )
                 if (query.length > 2) {
                     results.forEach((el) =>
-                        el.classList.replace('result_left', 'd-none'),
-                    );
-                    let c = 1;
+                        el.classList.replace('result_left', 'd-none')
+                    )
+                    let c = 1
                     results.forEach((el) => {
                         let name = el
                             .querySelector('.result_name')
                             .innerHTML.toLowerCase()
-                            .replace(/[^a-zA-Z0-9]/g, '');
+                            .replace(/[^a-zA-Z0-9]/g, '')
                         let category = el
                             .querySelector('.result_category')
                             .innerHTML.toLowerCase()
-                            .replace(/[^a-zA-Z0-9]/g, '');
+                            .replace(/[^a-zA-Z0-9]/g, '')
                         let queryMod = query
                             .toLowerCase()
-                            .replace(/[^a-zA-Z0-9]/g, '');
+                            .replace(/[^a-zA-Z0-9]/g, '')
                         if (
                             name.indexOf(queryMod) > -1 ||
                             category.indexOf(queryMod) > -1
                         ) {
-                            el.classList.remove('d-none');
-                            if (c % 2 === 1) el.classList.add('result_left');
-                            c++;
+                            el.classList.remove('d-none')
+                            if (c % 2 === 1) el.classList.add('result_left')
+                            c++
                         }
-                    });
+                    })
                 }
-            });
+            })
         </script>
     </body>
 </html>

@@ -1,23 +1,23 @@
-@extends("website.layouts.redesign.dashboard")
+@extends('website.layouts.redesign.dashboard')
 
-@section("page-title")
+@section('page-title')
     Announcements
 @endsection
 
-@section("container")
+@section('container')
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
-                    @yield("page-title")
+                    @yield('page-title')
                     <a
-                        href="{{ route("announcement::clear") }}"
+                        href="{{ route('announcement::clear') }}"
                         class="badge bg-info float-end"
                     >
                         Delete all past announcements.
                     </a>
                     <a
-                        href="{{ route("announcement::create") }}"
+                        href="{{ route('announcement::create') }}"
                         class="badge bg-info float-end me-2"
                     >
                         Add announcement.
@@ -38,7 +38,7 @@
 
                         @foreach ($announcements as $announcement)
                             <tr
-                                {!! ! $announcement->show_by_time ? 'style="opacity: 0.5;"' : "" !!}
+                                {!! ! $announcement->show_by_time ? 'style="opacity: 0.5;"' : '' !!}
                             >
                                 <td>{{ $announcement->description }}</td>
                                 <td>{{ $announcement->display_from }}</td>
@@ -46,12 +46,12 @@
                                 <td>{{ $announcement->is_visible }}</td>
                                 <td>
                                     <a
-                                        href="{{ route("announcement::edit", ["id" => $announcement->id]) }}"
+                                        href="{{ route('announcement::edit', ['id' => $announcement->id]) }}"
                                     >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
                                     <a
-                                        href="{{ route("announcement::delete", ["id" => $announcement->id]) }}"
+                                        href="{{ route('announcement::delete', ['id' => $announcement->id]) }}"
                                     >
                                         <i class="fas fa-trash"></i>
                                     </a>

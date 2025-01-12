@@ -1,7 +1,7 @@
 <form
     method="post"
     enctype="multipart/form-data"
-    action="{{ route("user::pic::update") }}"
+    action="{{ route('user::pic::update') }}"
 >
     @csrf
 
@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-3">
                     <a
-                        href="{{ route("user::pic::delete") }}"
+                        href="{{ route('user::pic::delete') }}"
                         class="btn btn-outline-danger btn-block"
                     >
                         <i class="fas fa-trash-alt"></i>
