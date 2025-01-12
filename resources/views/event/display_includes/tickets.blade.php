@@ -25,25 +25,25 @@
                                     {{ $purchase->ticket->product->name }}
                                 </strong>
                                 (&euro;{{ number_format($purchase->orderline->total_price, 2) }})
+
+                                @if ($purchase->canBeDownloaded())
+                                    <a
+                                        href="{{ route("tickets::download", ["id" => $purchase->id]) }}"
+                                        class="card-link text-info"
+                                    >
+                                        Download PDF
+                                    </a>
+                                @else
+                                    <?php $has_unpaid_tickets = true; ?>
+
+                                    <a
+                                        class="card-link text-danger"
+                                        href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::index") }}"
+                                    >
+                                        Payment Required
+                                    </a>
+                                @endif
                             </p>
-
-                            @if ($purchase->canBeDownloaded())
-                                <a
-                                    href="{{ route("tickets::download", ["id" => $purchase->id]) }}"
-                                    class="card-link text-info"
-                                >
-                                    Download PDF
-                                </a>
-                            @else
-                                <?php $has_unpaid_tickets = true; ?>
-
-                                <a
-                                    class="card-link text-danger"
-                                    href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::index") }}"
-                                >
-                                    Payment Required
-                                </a>
-                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -167,39 +167,39 @@
                                         Available until
                                         {{ date("d-m-Y H:i", $ticket->available_to) }}
                                     @endif
+
+                                    @if ($ticket->isAvailable(Auth::user()))
+                                        <select
+                                            required
+                                            class="form-control ticket-select"
+                                            name="tickets[{{ $ticket->id }}]"
+                                            autocomplete="off"
+                                            data-price="{{ $ticket->product->price }}"
+                                            data-prepaid="{{ $ticket->is_prepaid }}"
+                                            data-previous-value="0"
+                                        >
+                                            @php
+                                                $max = min(Config::integer("proto.maxtickets"), $ticket->product->stock);
+                                                if ($ticket->has_buy_limit) {
+                                                    $max = min($max, $ticket->BuyLimitForUser(Auth::user()));
+                                                }
+                                            @endphp
+
+                                            @for ($i = 0; $i <= $max; $i++)
+                                                <option value="{{ $i }}">
+                                                    {{ $i }}x
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    @endif
+
+                                    @if ($ticket->show_participants)
+                                        <i>
+                                            Note: with this ticket your name
+                                            will be visible on the event page
+                                        </i>
+                                    @endif
                                 </p>
-
-                                @if ($ticket->isAvailable(Auth::user()))
-                                    <select
-                                        required
-                                        class="form-control ticket-select"
-                                        name="tickets[{{ $ticket->id }}]"
-                                        autocomplete="off"
-                                        data-price="{{ $ticket->product->price }}"
-                                        data-prepaid="{{ $ticket->is_prepaid }}"
-                                        data-previous-value="0"
-                                    >
-                                        @php
-                                            $max = min(Config::integer("proto.maxtickets"), $ticket->product->stock);
-                                            if ($ticket->has_buy_limit) {
-                                                $max = min($max, $ticket->BuyLimitForUser(Auth::user()));
-                                            }
-                                        @endphp
-
-                                        @for ($i = 0; $i <= $max; $i++)
-                                            <option value="{{ $i }}">
-                                                {{ $i }}x
-                                            </option>
-                                        @endfor
-                                    </select>
-                                @endif
-
-                                @if ($ticket->show_participants)
-                                    <i>
-                                        Note: with this ticket your name will be
-                                        visible on the event page
-                                    </i>
-                                @endif
                             </div>
                         </div>
                     @endforeach

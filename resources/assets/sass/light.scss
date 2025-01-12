@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 // Custom variables
-@import 'partials/variables';
+@import "partials/variables";
 
 //background colour
-$body-bg: #F3F3F3;
+$body-bg: #f3f3f3;
 
 $light: #fff;
 
@@ -13,26 +13,26 @@ $link-color: $info;
 $link-hover-color: lighten($info, 10%);
 
 //import bootstrap after setting variables
-@import 'bootstrap';
+@import "bootstrap";
 
 // Vendors (S)CSS
-@import 'partials/vendors';
+@import "partials/vendors";
 
 // concatenated SCSS from views
-@import 'partials/components';
+@import "partials/components";
 
 .select2-dropdown {
-  background-color: #fff !important;
-  border: 1px solid rgba(0,0,0,.125) !important;
+    background-color: #fff !important;
+    border: 1px solid rgba(0, 0, 0, 0.125) !important;
 }
 
 //buttons
 .btn.lampOn:hover {
-  background: $primary;
-  border-color: $primary;
+    background: $primary;
+    border-color: $primary;
 }
 
 .btn.lampOff:hover {
-  background: $warning;
-  border-color: $warning;
+    background: $warning;
+    border-color: $warning;
 }

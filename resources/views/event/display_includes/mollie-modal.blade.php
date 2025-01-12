@@ -33,6 +33,7 @@
                         @endif
                     @endforeach
                 </p>
+
                 <p>
                     <strong>Important!</strong>
                     Using this service you will incur a transaction fee on top
