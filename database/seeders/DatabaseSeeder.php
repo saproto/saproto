@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         Model::unguard();
 
-        $output->task('setting roles and permissions', fn() => Artisan::call('proto:syncroles'));
+        $output->task('setting roles and permissions', fn () => Artisan::call('proto:syncroles'));
 
         $adminPassword = Str::random();
 
