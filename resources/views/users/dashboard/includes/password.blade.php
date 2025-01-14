@@ -2,8 +2,10 @@
     <div class="card-header bg-dark text-white">Password</div>
 
     <div class="card-body">
-
-        <a href="{{ route('login::password::change::index') }}" class="mb-2 btn btn-outline-info btn-block">
+        <a
+            href="{{ route('login::password::change::index') }}"
+            class="mb-2 btn btn-outline-info btn-block"
+        >
             Change Proto password
         </a>
 
