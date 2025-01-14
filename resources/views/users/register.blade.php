@@ -97,6 +97,8 @@
 
         <hr />
 
+        <button type="submit" class="btn btn-success btn-block">Create my account</button>
+
         <div class="text-center mt-1">
             <input
                 hidden
@@ -124,7 +126,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let additionalNameInputs = document.getElementById(
             'regular-account-creation'
         )
