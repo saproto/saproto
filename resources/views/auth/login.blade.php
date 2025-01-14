@@ -10,8 +10,12 @@
 
         {!! csrf_field() !!}
 
-        <a href="{{ route('login::surf::login') }}" class="btn btn-success btn-block mb-3">
-            <i class="fas fa-university me-2"></i> Login with a university account
+        <a
+            href="{{ route('login::surf::login') }}"
+            class="btn btn-success btn-block mb-3"
+        >
+            <i class="fas fa-university me-2"></i>
+            Login with a university account
         </a>
 
         <p>
