@@ -25,33 +25,33 @@ class OmNomController extends Controller
     public function display(Request $request, ?string $store_slug = null)
     {
 
-        if (empty($store_slug) && Auth::user()?->canAny(collect(config('omnomcom.stores'))->pluck('roles')->flatten())) {
+        if (empty($store_slug) && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
 
-        if (! array_key_exists($store_slug, config('omnomcom.stores'))) {
+        if (! array_key_exists($store_slug, Config::array('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
 
             return Redirect::route('homepage');
         }
 
-        $store = config('omnomcom.stores')[$store_slug];
+        $store = Config::array('omnomcom.stores')[$store_slug];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
+        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
             abort(403);
         }
 
         $categories = $this->getCategories($store);
 
-        if ($store_slug == 'tipcie') {
+        $minors = collect();
+
+        if ($store_slug === 'tipcie') {
             $minors = User::query()
                 ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
                 ->whereHas('member', static function ($q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
                 ->get();
-        } else {
-            $minors = collect();
         }
 
         return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'store_slug' => $store_slug, 'minors' => $minors]);
@@ -68,13 +68,14 @@ class OmNomController extends Controller
      */
     public function stock(Request $request)
     {
-        if (! array_key_exists($request->store, config('omnomcom.stores'))) {
+        $stores = Config::array('omnomcom.stores');
+        if (! array_key_exists($request->store, $stores)) {
             abort(404);
         }
 
-        $store = config('omnomcom.stores')[$request->store];
+        $store = $stores[$request->store];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
+        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
             abort(403);
         }
 
@@ -100,13 +101,13 @@ class OmNomController extends Controller
      */
     public function buy(Request $request, string $store_slug)
     {
-        $stores = config('omnomcom.stores');
+        $stores = Config::array('omnomcom.stores');
         $result = new stdClass;
         $result->status = 'ERROR';
 
         if (array_key_exists($store_slug, $stores)) {
             $store = $stores[$store_slug];
-            if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->hasAnyPermission($store->roles)) {
+            if (! in_array($request->ip(), $store['addresses']) && ! Auth::user()->hasAnyPermission($store['roles'])) {
                 $result->message = 'You are not authorized to do this.';
 
                 return json_encode($result);
@@ -180,13 +181,13 @@ class OmNomController extends Controller
         $payedCash = $request->input('cash');
         $payedCard = $request->input('bank_card');
 
-        if ($payedCash && ! $store->cash_allowed) {
+        if ($payedCash && ! $store['cash_allowed']) {
             $result->message = 'You cannot use cash in this store.';
 
             return json_encode($result);
         }
 
-        if ($payedCard && ! $store->bank_card_allowed) {
+        if ($payedCard && ! $store['bank_card_allowed']) {
             $result->message = 'You cannot use a bank card in this store.';
 
             return json_encode($result);
@@ -203,6 +204,7 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
 
+                /** @var Product $product */
                 if (! $product->isVisible()) {
                     $result->message = 'You tried to buy a product that is not available!';
 
@@ -222,10 +224,9 @@ class OmNomController extends Controller
                 }
 
                 $isDuringRestrictedHours = date('Hi') <= str_replace(':', '', Config::string('omnomcom.alcohol-start')) && date('Hi') >= str_replace(':', '', Config::string('omnomcom.alcohol-end'));
-                if ($product->is_alcoholic && $store->alcohol_time_constraint && $isDuringRestrictedHours) {
+                if ($product->is_alcoholic && $store['alcohol_time_constraint'] && $isDuringRestrictedHours) {
                     $result->message = "You can't buy alcohol at the moment; alcohol can only be bought between ".config('omnomcom.alcohol-start').' and '.config('omnomcom.alcohol-end').'.';
 
-                    return json_encode($result);
                 }
             }
         }
@@ -234,7 +235,7 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::query()->find($id);
 
-                if ($product->id == config('omnomcom.protube-skip')) {
+                if ($product->id == Config::integer('omnomcom.protube-skip')) {
                     $skipped = ProTubeApiService::skipSong();
                     if (! $skipped) {
                         continue;
@@ -295,10 +296,10 @@ class OmNomController extends Controller
         return view('omnomcom.products.generateorder', ['orders' => $orders]);
     }
 
-    private function getCategories($store): array
+    private function getCategories(array $store): array
     {
         $categories = [];
-        foreach ($store->categories as $category) {
+        foreach ($store['categories'] as $category) {
             $cat = ProductCategory::query()->find($category);
             if ($cat) {
                 $prods = $cat->sortedProducts();

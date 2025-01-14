@@ -28,9 +28,13 @@
         <input type="text" class="form-control mb-3" id="email" name="email" placeholder="Your e-mail address" required value="{{ old('email') }}">
 
         <p>
-            Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
-            sent to this e-mail address.
-            <br><i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
+            Your e-mail address will also be your username. Please enter a valid
+            e-mail address as your password will be sent to this e-mail address.
+            <br />
+            <i>
+                Note: For practical reasons you cannot set your e-mail address
+                to an ".utwente.nl" account.
+            </i>
         </p>
 
         <div id="regular-account-creation" {{ empty(old('create_without_ut_account')) ? "hidden" : "" }}>
@@ -39,26 +43,30 @@
             <input type="text" class="form-control mt-1" id="name" name="name" placeholder="Full name" value="{{ old('name') }}">
         </div>
 
-        <hr>
+        <hr />
 
-        <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
-           target="_blank" class="btn btn-outline-secondary btn-block mb-2">
+        <a
+            href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+            target="_blank"
+            class="btn btn-outline-secondary btn-block mb-2"
+        >
             Privacy policy
         </a>
 
-        @include('components.forms.checkbox', [
-            'name' => 'privacy_policy_acceptance',
-            'label' => 'I have read and acknowledge the privacy policy.',
-            'required' => true
-        ])
+        @include(
+            'components.forms.checkbox',
+            [
+                'name' => 'privacy_policy_acceptance',
+                'label' => 'I have read and acknowledge the privacy policy.',
+                'required' => true,
+            ]
+        )
 
-        <hr>
+        <hr />
 
         {!! htmlFormSnippet() !!}
 
-        <hr>
-
-        <button type="submit" class="btn btn-success btn-block">Create my account</button>
+        <hr />
 
         <div class="text-center mt-1">
             <input hidden class="form-check-input" id="create_without_ut_account" name="create_without_ut_account" type="checkbox" autocomplete="off" {{ !empty(old('create_without_ut_account')) ? "checked" : "" }}/>
@@ -71,7 +79,6 @@
         </div>
 
     </form>
-
 @endsection
 
 @push('javascript')

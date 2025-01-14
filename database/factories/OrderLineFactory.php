@@ -6,6 +6,8 @@ use App\Models\Committee;
 use App\Models\OrderLine;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Config;
+use Override;
 
 /**
  * @extends Factory<OrderLine>
@@ -17,6 +19,7 @@ class OrderLineFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         /** @var Product $product */
@@ -25,7 +28,7 @@ class OrderLineFactory extends Factory
         $nbUnits = fake()->randomDigitNotNull();
         $paidCash = fake()->boolean(5);
         if ($paidCash) {
-            $tipcie = Committee::query()->find(config('proto.committee')['tipcie']);
+            $tipcie = Committee::query()->find(Config::integer('proto.committee.tipcie'));
             $cashierId = $tipcie->users()->inRandomOrder()->first()->id;
         }
 

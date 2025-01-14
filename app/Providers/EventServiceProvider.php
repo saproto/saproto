@@ -6,6 +6,7 @@ use App\Handlers\Events\AuthLoginEventHandler;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Override;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,7 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register any other events for your application.
      */
+    #[Override]
     public function boot(): void
     {
         parent::boot();

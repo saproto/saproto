@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
 class FeeCron extends Command
@@ -56,7 +57,7 @@ class FeeCron extends Command
         $usersToCharge = User::query()->whereHas('member', function ($q) {
             $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
         })->whereDoesntHave('orderlines', function ($q) use ($yearstart) {
-            $q->whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
+            $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
         })->with('member.UtAccount');
 
         $charged = (object) [
@@ -67,9 +68,9 @@ class FeeCron extends Command
         ];
 
         $feeProducts = [
-            'regular' => Product::query()->findOrFail(config('omnomcom.fee.regular')),
-            'reduced' => Product::query()->findOrFail(config('omnomcom.fee.reduced')),
-            'remitted' => Product::query()->findOrFail(config('omnomcom.fee.remitted')),
+            'regular' => Product::query()->findOrFail(Config::integer('omnomcom.fee.regular')),
+            'reduced' => Product::query()->findOrFail(Config::integer('omnomcom.fee.reduced')),
+            'remitted' => Product::query()->findOrFail(Config::integer('omnomcom.fee.remitted')),
         ];
         $usersToCharge->chunkById(100, function ($users) use ($feeProducts, $charged) {
             /** @var User $user */

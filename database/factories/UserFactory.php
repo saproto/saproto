@@ -4,7 +4,9 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * @extends Factory<User>
@@ -16,6 +18,7 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    #[Override]
     public function definition(): array
     {
         $gender = fake()->randomElement(['male', 'female']);
@@ -43,7 +46,7 @@ class UserFactory extends Factory
             'show_omnomcom_total' => fake()->boolean(),
             'show_omnomcom_calories' => fake()->boolean(),
             'disable_omnomcom' => fake()->boolean(),
-            'theme' => fake()->randomElement(array_keys(config('proto.themes'))),
+            'theme' => fake()->randomElement(array_keys(Config::array('proto.themes'))),
             'did_study_create' => fake()->boolean(25),
             'did_study_itech' => fake()->boolean(25),
         ];

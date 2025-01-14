@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Override;
 
 /**
  * Member Model.
@@ -69,6 +71,7 @@ class Member extends Model
 
     protected $guarded = ['id', 'user_id'];
 
+    #[Override]
     protected function casts(): array
     {
         return [
@@ -134,7 +137,7 @@ class Member extends Model
         $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
 
         return OrderLine::query()
-            ->whereIn('product_id', array_values(config('omnomcom.fee')))
+            ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))
             ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
@@ -146,9 +149,9 @@ class Member extends Model
 
         if ($membershipOrderline != null) {
             return match ($this->getMembershipOrderline()->product->id) {
-                config('omnomcom.fee')['regular'] => 'primary',
-                config('omnomcom.fee')['reduced'] => 'secondary',
-                config('omnomcom.fee')['remitted'] => 'non-paying',
+                Config::integer('omnomcom.fee.regular') => 'primary',
+                Config::integer('omnomcom.fee.reduced') => 'secondary',
+                Config::integer('omnomcom.fee.remitted') => 'non-paying',
                 default => 'unknown',
             };
         }

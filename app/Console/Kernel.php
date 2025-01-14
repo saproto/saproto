@@ -12,6 +12,7 @@ use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
 use App\Console\Commands\FileCleanup;
+use App\Console\Commands\GoogleSync;
 use App\Console\Commands\MakeAdmin;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
@@ -35,6 +36,7 @@ use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Override;
 
 class Kernel extends ConsoleKernel
 {
@@ -74,17 +76,19 @@ class Kernel extends ConsoleKernel
         ReplaceQuestionMarkWithSingleQuoteInCodex::class,
         TempAdminCleanup::class,
         SyncUTAccounts::class,
+        GoogleSync::class,
     ];
 
     /**
      * Define the application's command schedule.
      */
+    #[Override]
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('proto:emailcron')->everyMinute();
-        $schedule->command('proto:dasync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:usercleanup')->hourly();
+        $schedule->command('proto:gsync')->at('00:01');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');

@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Override;
 
 /**
  * Storage Entry Model.
@@ -119,8 +121,8 @@ class StorageEntry extends Model
     public function generatePath(): string
     {
         $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
-        if (config('app-proto.assets-domain')) {
-            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        if (Config::get('app-proto.assets-domain') != null) {
+            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 
         return $url;
@@ -129,8 +131,8 @@ class StorageEntry extends Model
     public function generateImagePath(?int $w, ?int $h): string
     {
         $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
-        if (config('app-proto.assets-domain')) {
-            return str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        if (Config::get('app-proto.assets-domain') != null) {
+            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
         }
 
         return $url;
@@ -179,6 +181,7 @@ class StorageEntry extends Model
         return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();

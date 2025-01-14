@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -46,7 +47,7 @@ class TicketController extends Controller
         $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
         $ticket->has_buy_limit = $request->has('has_buy_limit');
-        $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
+        $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
@@ -94,7 +95,7 @@ class TicketController extends Controller
 
         $ticket->members_only = $request->has('is_members_only');
         $ticket->has_buy_limit = $request->has('has_buy_limit');
-        $ticket->buy_limit = $request->input('buy_limit') ?? $ticket->buy_limit;
+        $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
@@ -344,8 +345,8 @@ class TicketController extends Controller
                 return Redirect::back();
             }
 
-            if ($amount > config('proto.maxtickets')) {
-                Session::flash('flash_message', 'You tried to buy more then '.config('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".config('proto.maxtickets').' at a time. Entire order cancelled.');
+            if ($amount > Config::integer('proto.maxtickets')) {
+                Session::flash('flash_message', 'You tried to buy more then '.Config::integer('proto.maxtickets')." of ticket '".$ticket->product->name."', you can only buy ".Config::integer('proto.maxtickets').' at a time. Entire order cancelled.');
 
                 return Redirect::back();
             }
@@ -369,7 +370,7 @@ class TicketController extends Controller
             for ($i = 0; $i < $amount; $i++) {
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
 
-                //Non-members can only buy prepaid tickets, as we have no way of resolving their payment otherwise.
+                // Non-members can only buy prepaid tickets, as we have no way of resolving their payment otherwise.
                 if ($ticket->is_prepaid || ! Auth::user()->is_member) {
                     $prepaid_tickets[] = $oid;
                     $total_cost += $ticket->product->price;
@@ -388,14 +389,14 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && ! $request->has('method') && $prepaid_tickets !== []) {
             Session::flash('flash_message', 'No payment method is selected!');
 
             return Redirect::back();
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if (config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
             $payment_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);

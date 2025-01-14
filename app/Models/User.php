@@ -25,11 +25,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Override;
 use Solitweb\DirectAdmin\DirectAdmin;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -75,6 +78,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property string|null $discord_id
+ * @property-read string|null $proto_email
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
@@ -167,6 +171,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
+    protected $casts = [
+        'deleted_at' => 'datetime',
+    ];
+
     public function getPublicId(): ?string
     {
         return $this->is_member ? $this->member->proto_username : null;
@@ -208,7 +216,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
-    private function getGroups(): BelongsToMany
+    public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
             ->where(static function ($query) {
@@ -216,7 +224,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
             ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
+            ->withPivot(['id', 'role', 'edition'])
             ->withTimestamps()
             ->orderByPivot('created_at', 'desc');
     }
@@ -231,19 +239,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
+    public function tickets(): BelongsToMany
+    {
+        return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
+    }
+
     public function committees(): BelongsToMany
     {
-        return $this->getGroups()->where('is_society', false);
+        return $this->groups()->where('is_society', false);
     }
 
     public function societies(): BelongsToMany
     {
-        return $this->getGroups()->where('is_society', true);
-    }
-
-    public function member(): HasOne
-    {
-        return $this->hasOne(Member::class);
+        return $this->groups()->where('is_society', true);
     }
 
     public function bank(): HasOne
@@ -254,6 +262,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);
+    }
+
+    public function member(): HasOne
+    {
+        return $this->hasOne(Member::class);
+    }
+
+    public function welcomeMessage(): HasOne
+    {
+        return $this->hasOne(WelcomeMessage::class);
     }
 
     public function orderlines(): HasMany
@@ -291,11 +309,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->hasMany(MollieTransaction::class);
     }
 
-    public function tickets(): BelongsToMany
-    {
-        return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
-    }
-
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
@@ -320,14 +333,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
 
         // Update DirectAdmin Password
-        if ($this->is_member) {
+        if ($this->is_member && ! App::environment('local')) {
             $da = new DirectAdmin;
-            $da->connect(config('directadmin.da-hostname'), config('directadmin.da-port'));
-            $da->set_login(config('directadmin.da-username'), config('directadmin.da-password'));
+            $da->connect(Config::string('directadmin.da-hostname'), Config::string('directadmin.da-port'));
+            $da->set_login(Config::string('directadmin.da-username'), Config::string('directadmin.da-password'));
             $da->set_method('POST');
             $da->query('/CMD_API_POP', [
                 'action' => 'modify',
-                'domain' => config('directadmin.da-domain'),
+                'domain' => Config::string('directadmin.da-domain'),
                 'user' => $this->member->proto_username,
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,
@@ -417,9 +430,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
+    public function getProtoEmailAttribute(): ?string
+    {
+        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null;
+    }
+
     public function getDisplayEmail(): string
     {
-        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return $this->proto_email ?? $this->email;
     }
 
     /**
@@ -446,8 +464,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return string */
-    public function getPersonalKey()
+    public function getPersonalKey(): ?string
     {
         if ($this->personal_key == null) {
             $this->generateNewPersonalKey();
@@ -552,6 +569,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [
