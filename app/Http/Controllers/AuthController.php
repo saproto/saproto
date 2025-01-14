@@ -8,13 +8,9 @@ use App\Models\Member;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use Exception;
-use Google\Service\Directory;
-use Google\Service\Directory\User as GoogleUser;
-use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
@@ -25,7 +21,6 @@ use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
 use PragmaRX\Google2FA\Google2FA;
-use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectResponse;
 
 class AuthController extends Controller
 {
@@ -47,7 +42,7 @@ class AuthController extends Controller
      * Register a new account.
      * It is possible to register an account without a UT account, the user will automatically be redirected.
      */
-    public function register(Request $request): RedirectResponse|HttpFoundationRedirectResponse
+    public function register(Request $request): RedirectResponse|View
     {
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],

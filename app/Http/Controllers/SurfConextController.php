@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -61,12 +62,14 @@ class SurfConextController extends Controller
     /**
      * Send the user to surfconext to login to create a new account
      */
-    public static function createAccount(string $email): HttpFoundationRedirectResponse
+    public static function createAccount(string $email): View
     {
         Session::flash(self::SESSION_FLASH_KEY, self::CREATE_ACCOUNT);
         Session::flash(self::SESSION_FLASH_KEY_EMAIL, $email);
-        return Socialite::driver('saml2')
-            ->redirect();
+        $url = Socialite::driver('saml2')
+            ->redirect()->getTargetUrl();
+        
+        return view('auth.surfconextRedirect', ['url' => $url]);
     }
 
     /**
