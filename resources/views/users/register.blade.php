@@ -97,7 +97,9 @@
 
         <hr />
 
-        <button type="submit" class="btn btn-success btn-block">Create my account</button>
+        <button type="submit" class="btn btn-success btn-block">
+            Create my account
+        </button>
 
         <div class="text-center mt-1">
             <input
