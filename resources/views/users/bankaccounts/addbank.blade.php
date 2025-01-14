@@ -81,7 +81,7 @@
 
                             @endif
 
-                            {!! csrf_field() !!}
+                            @csrf
                             <div class="form-group">
                                 <label for="iban">IBAN Bank Account Number</label>
                                 <input type="text" class="form-control text-uppercase" id="iban" name="iban"
@@ -196,7 +196,7 @@
         submit.addEventListener('click', _ => {
             submit.disabled = true;
             if (bic.value.length >= 8) {
-                get('{{ route('api::verify_iban') }}', { 'iban': iban.value, 'bic': bic.value })
+                get('{{ route('api::verify_iban') }}', {'iban': iban.value, 'bic': bic.value})
                     .then(data => {
                         if (data.status === true) {
                             form.submit();
