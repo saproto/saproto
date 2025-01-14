@@ -1,6 +1,7 @@
 @php($leaderboard = App\Models\Leaderboard::where('featured', true)->first())
 
 @if ($leaderboard)
+    @php($entries = $leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get())
     <div class="card mb-3">
         <div
             class="card-header bg-dark"
@@ -11,9 +12,9 @@
             {{ $leaderboard->name }} Leaderboard
         </div>
 
-        @if (count($leaderboard->entries) > 0)
+        @if ($entries->count() > 0)
             <table class="table table-sm mb-0">
-                @foreach ($leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get()as $entry)
+                @foreach ($entries as $entry)
                     <tr>
                         <td
                             class="ps-3 place-{{ $loop->index + 1 }}"
