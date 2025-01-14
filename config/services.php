@@ -1,5 +1,8 @@
 <?php
 
+use LightSaml\SamlConstants;
+use SocialiteProviders\Saml2\OasisAttributeNameUris;
+
 return [
 
     /*
@@ -35,10 +38,10 @@ return [
         // Need to exclude from CSRF verification
         'sp_acs' => 'surf/callback',
         'sp_sign_assertions' => true,
-        'sp_default_binding_method' => \LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST,
+        'sp_default_binding_method' => SamlConstants::BINDING_SAML2_HTTP_POST,
         'attribute_map' => [
-            'uid' => \SocialiteProviders\Saml2\OasisAttributeNameUris::UID,
-            'organization' => "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+            'uid' => OasisAttributeNameUris::UID,
+            'organization' => 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
         ],
     ],
 ];

@@ -15,6 +15,6 @@ class VerifyCsrfToken extends Middleware
         'image/*',
         'file/*',
         // Saml2 (surfconext) callback location
-        'surf/callback'
+        'surf/callback',
     ];
 }

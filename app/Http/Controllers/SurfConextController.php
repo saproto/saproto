@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -16,10 +17,13 @@ class SurfConextController extends Controller
 {
     // Some constants to keep track of the action we're performing
     const SESSION_FLASH_KEY = 'surfconext_action';
+
     const SESSION_FLASH_KEY_EMAIL = 'new_account_email';
 
     const CREATE_ACCOUNT = 'create_account';
+
     const LINK_ACCOUNT = 'link_account';
+
     const LOGIN = 'login';
 
     /**
@@ -28,6 +32,7 @@ class SurfConextController extends Controller
     public function login(): HttpFoundationRedirectResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LOGIN);
+
         return Socialite::driver('saml2')
             ->redirect();
     }
@@ -38,6 +43,7 @@ class SurfConextController extends Controller
     public function linkAccount(): HttpFoundationRedirectResponse
     {
         Session::flash(self::SESSION_FLASH_KEY, self::LINK_ACCOUNT);
+
         return Socialite::driver('saml2')
             ->redirect();
     }
@@ -68,7 +74,7 @@ class SurfConextController extends Controller
         Session::flash(self::SESSION_FLASH_KEY_EMAIL, $email);
         $url = Socialite::driver('saml2')
             ->redirect()->getTargetUrl();
-        
+
         return view('auth.surfconextRedirect', ['url' => $url]);
     }
 
@@ -92,22 +98,16 @@ class SurfConextController extends Controller
 
         if ($user->organization !== 'utwente.nl') {
             Session::flash('flash_message', 'We only support University of Twente accounts.');
+
             return Redirect::back();
         }
 
-        switch (Session::get(self::SESSION_FLASH_KEY)) {
-            case self::CREATE_ACCOUNT:
-                return $this->handleCreateNewAccount($user);
-                break;
-            case self::LINK_ACCOUNT:
-                return $this->handleLinkAccount($user);
-                break;
-            case self::LOGIN:
-                return $this->handleLoginUser($user);
-                break;
-            default:
-                throw new \Exception('Invalid action');
-        }
+        return match (Session::get(self::SESSION_FLASH_KEY)) {
+            self::CREATE_ACCOUNT => $this->handleCreateNewAccount($user),
+            self::LINK_ACCOUNT => $this->handleLinkAccount($user),
+            self::LOGIN => $this->handleLoginUser($user),
+            default => throw new Exception('Invalid action'),
+        };
     }
 
     /**
@@ -115,10 +115,11 @@ class SurfConextController extends Controller
      */
     protected function handleLoginUser(mixed $utUser): RedirectResponse
     {
-        $user = User::where('utwente_username', $utUser->uid)->first();
+        $user = User::query()->where('utwente_username', $utUser->uid)->first();
 
         if (empty($user)) {
             Session::flash('flash_message', 'This University of Twente account is not registered to a user.');
+
             return Redirect::route('login::show');
         }
 
@@ -133,20 +134,21 @@ class SurfConextController extends Controller
         $email = Session::get(self::SESSION_FLASH_KEY_EMAIL);
 
         if (empty($email)) {
-            throw new \Exception('An error occurred while creating the account');
+            throw new Exception('An error occurred while creating the account');
         }
 
         // We're in a create new account attempt, do not log them in
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
-            AuthController::loginUser(User::where('utwente_username', $utUser->uid)->first());
+            AuthController::loginUser(User::query()->where('utwente_username', $utUser->uid)->first());
+
             return Redirect::route('user::dashboard::show');
         }
 
         User::register(
-            $email, 
-            $utUser->first_name, 
-            $utUser->first_name . " " . $utUser->last_name, 
+            $email,
+            $utUser->first_name,
+            $utUser->first_name.' '.$utUser->last_name,
             $utUser->uid,
             $utUser->email);
 
@@ -163,7 +165,8 @@ class SurfConextController extends Controller
         // We're in a link account attempt, but it already exists. Log them in instead
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
-            AuthController::loginUser(User::where('utwente_username', $utUser->uid)->first());
+            AuthController::loginUser(User::query()->where('utwente_username', $utUser->uid)->first());
+
             return Redirect::route('user::dashboard::show');
         }
 
@@ -173,17 +176,17 @@ class SurfConextController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Successfully linked your University of Twente account.');
+
         return Redirect::route('user::dashboard::show');
     }
 
     /**
      * Helper function to check if the user already exists, based on the utwente username
-     * 
-     * @param string $utwenteId (studentnumber)
-     * @return bool
+     *
+     * @param  string  $utwenteId  (studentnumber)
      */
-    protected function accountAlreadyExists (string $utwenteId): bool
+    protected function accountAlreadyExists(string $utwenteId): bool
     {
-        return User::where('utwente_username', $utwenteId)->exists();
+        return User::query()->where('utwente_username', $utwenteId)->exists();
     }
 }

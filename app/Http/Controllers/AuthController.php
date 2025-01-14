@@ -54,7 +54,7 @@ class AuthController extends Controller
         ]);
 
         // create with UT account, redirect to UT login
-        if (!$request->has('create_without_ut_account')) {
+        if (! $request->has('create_without_ut_account')) {
             return SurfConextController::createAccount($request->email);
         }
 
@@ -116,7 +116,7 @@ class AuthController extends Controller
 
         return Redirect::route($request->route, $request->parameters);
     }
-    
+
     /* These are the static helper functions of the AuthController for more overview and modularity. */
     /**
      * This static function takes a supplied username and password,

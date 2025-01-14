@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
@@ -581,17 +580,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      * Register a new user.
      * This method will send a confirmation email and a password reset email.
      * The user will be subscribed to the default email lists.
-     * 
-     * @param string $email
-     * @param string $callingName
-     * @param string $fullName
-     * @param string|null $utwenteId
-     * @param string|null $utwenteEmail
-     * @return User
      */
-    public static function register(string $email, string $callingName, string $fullName, string $utwenteId = null, string $utwenteEmail = null): User
+    public static function register(string $email, string $callingName, string $fullName, ?string $utwenteId = null, ?string $utwenteEmail = null): User
     {
-        $user = User::create([
+        $user = \App\Models\User::query()->create([
             'email' => $email,
             'calling_name' => $callingName,
             'name' => $fullName,

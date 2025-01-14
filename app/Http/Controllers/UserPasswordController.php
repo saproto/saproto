@@ -39,7 +39,7 @@ class UserPasswordController extends Controller
 
     /**
      * Show the page to reset the password.
-     * 
+     *
      * @param  string  $token  The reset token, as e-mailed to the user.
      */
     public function resetPasswordIndex(string $token): RedirectResponse|View
@@ -86,7 +86,6 @@ class UserPasswordController extends Controller
 
         return Redirect::route('login::password::reset');
     }
-
 
     /**
      * Show the page to synchronize passwords.
