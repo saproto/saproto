@@ -5,19 +5,16 @@
     </div>
 
     <div class="card-body">
-        @includeWhen(
-            ! $user->is_member && ! $user->hasUnpaidOrderlines(),
-            'components.modals.confirm-modal',
-            [
-                'action' => route('user::delete', ['id' => $user->id]),
-                'method' => 'POST',
-                'text' =>
-                    '<button class="btn btn-block btn-danger mb-1"><i class="fas fa-trash"></i> Delete</button>',
-                'title' => 'Confirm Delete',
-                'message' => "Are you sure you want to delete this user's account?
-                'confirm' => 'Delete',
-            ]
-        )
+        @includeWhen
+        ( ! $user->is_member && ! $user->hasUnpaidOrderlines(),
+        'components.modals.confirm-modal', [ 'action' => route('user::delete',
+        ['id' => $user->id]), 'method' => 'POST', 'text' => '
+        <button class="btn btn-block btn-danger mb-1">
+            <i class="fas fa-trash"></i>
+            Delete
+        </button>
+        ', 'title' => 'Confirm Delete', 'message' => "Are you sure you want to
+        delete this user's account? 'confirm' => 'Delete', ] )
 
         <a
             class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
