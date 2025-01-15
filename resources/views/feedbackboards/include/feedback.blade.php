@@ -130,8 +130,7 @@
                     </p>
                 </form>
             </div>
-            @endif
-            </p>
+        @endif
     </div>
 
     <div class="card-footer ps-0">
