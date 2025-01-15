@@ -14,7 +14,8 @@
                 'text' =>
                     '<button class="btn btn-block btn-danger mb-1"><i class="fas fa-trash"></i> Delete</button>',
                 'title' => 'Confirm Delete',
-                'message' => "Are you sure you want to delete this user's account?                                                                                                                                                                                                                               </div>",
+                'message' =>
+                    "Are you sure you want to delete this user's account?                                                                                                                                                                                                                               </div>",
                 'confirm' => 'Delete',
             ]
         )

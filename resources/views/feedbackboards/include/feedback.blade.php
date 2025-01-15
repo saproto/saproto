@@ -159,18 +159,18 @@
                     element.addEventListener('click', (event) => {
                         const enabled = document
                             .getElementById(
-                                'feedback__{{ $feedback->id }}__collapse',
+                                'feedback__{{ $feedback->id }}__collapse'
                             )
                             .classList.toggle('show')
                         if (enabled) {
                             document
                                 .getElementById(
-                                    'feedback__{{ $feedback->id }}__reply',
+                                    'feedback__{{ $feedback->id }}__reply'
                                 )
                                 .focus()
                         } else {
                             document.getElementById(
-                                'feedback__{{ $feedback->id }}__reply',
+                                'feedback__{{ $feedback->id }}__reply'
                             ).value = ''
                         }
                     })
