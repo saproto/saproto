@@ -15,7 +15,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: 🔍 Read .env
-        run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env
+        run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
