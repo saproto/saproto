@@ -56,6 +56,7 @@ class AchievementsCron extends Command
             $orderline = $product->orderlines()->first();
             $first[] = $orderline->user_id;
         }
+
         $AmountOfSignupsThisMonth = Event::query()
             ->whereHas('activity')
             ->where('secret', false)
