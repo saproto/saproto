@@ -33,7 +33,8 @@ class FileController extends Controller
 
     public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
     {
-        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
+        $cacheKey = 12;
+        $cacheKey = 'image:' . $entry->hash . '; w:' . $w . '; h:' . $h;
         if (Storage::disk('local')->missing($entry->filename)) {
             abort(404, 'File not found');
         }
@@ -73,7 +74,7 @@ class FileController extends Controller
             return 'You cannot do this at the moment. Please use the network printer.';
         }
 
-        $payload = base64_encode(json_encode((object) [
+        $payload = base64_encode(json_encode((object)[
             'secret' => Config::string('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
@@ -82,9 +83,9 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://'.Config::string('app-proto.printer-host').':'.Config::string('app-proto.printer-port').'/?data='.$payload);
+            $result = file_get_contents('http://' . Config::string('app-proto.printer-host') . ':' . Config::string('app-proto.printer-port') . '/?data=' . $payload);
         } catch (Exception $exception) {
-            return 'Exception while connecting to the printer server: '.$exception->getMessage();
+            return 'Exception while connecting to the printer server: ' . $exception->getMessage();
         }
 
         return $result !== false ? $result : 'Something went wrong while connecting to the printer server.';

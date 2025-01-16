@@ -103,7 +103,10 @@
                 <span
                     class="badge bg-warning float-end mb-1"
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
+                    data-bs-placement=
+
+
+                        "top"
                     title="Scheduled activities can only be visited if the schedule date is past. You can see it now because you are an admin."
                 >
                     <i class="fas fa-eye-slash fa-fw me-1"></i>
