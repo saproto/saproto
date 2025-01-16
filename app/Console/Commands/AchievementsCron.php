@@ -65,8 +65,7 @@ class AchievementsCron extends Command
             ->count();
 
         $youDandy = $this->categoryProducts([9]);
-        $fourOClock = Product::where("is_alcoholic",1)->pluck("id")->toArray();
-        $this->line("Amount of alcoholic: " . count($fourOClock));
+        $fourOClock = Product::whereAlcoholic(1)->pluck("id")->toArray();
 
         $bigKid = $this->categoryProducts([21]);
         $goodHuman = $this->categoryProducts([28]);
