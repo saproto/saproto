@@ -43,6 +43,9 @@ jobs:
       - name: Run pint
         run: ./vendor/bin/pint
 
+      - name: Fetch latest changes
+        run: git fetch origin ${{ github.head_ref }}
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
