@@ -140,12 +140,13 @@ class OmNomController extends Controller
 
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::query()->where('auth_token', $request->input('credentials'))->first();
-                $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
                 if (! $qrAuthRequest) {
                     $result->message = 'Invalid authentication token.';
 
                     return json_encode($result);
                 }
+
+                $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
 
                 $user = $qrAuthRequest->authUser();
                 if (! $user) {
