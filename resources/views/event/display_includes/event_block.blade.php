@@ -102,7 +102,10 @@
             @if ($event->publication && ! $event->isPublished())
                 <span
                     class="badge bg-warning float-end mb-1"
-                    data-bs-toggle="tooltip"
+                    data-bs-toggle=
+
+
+                        "tooltip"
                     data-bs-placement="top"
                     title="Scheduled activities can only be visited if the schedule date is past. You can see it now because you are an admin."
                 >
