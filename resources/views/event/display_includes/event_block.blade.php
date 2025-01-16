@@ -1,6 +1,7 @@
 @php
     /** @var \App\Models\Event $event*/
 @endphp
+
 @if ($event->mayViewEvent(Auth::user()))
     <a
         class="card mb-3 leftborder leftborder-info text-decoration-none"
