@@ -1,8 +1,6 @@
 <?php
 
-
 use App\Models\Member;
-use App\Models\User;
 
 it('renders the user admin page', function () {
     /** @var Member $member */
