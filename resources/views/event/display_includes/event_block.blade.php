@@ -1,16 +1,16 @@
+@php
+    /** @var \App\Models\Event $event*/
+@endphp
+
 @if ($event->mayViewEvent(Auth::user()))
     <a
         class="card mb-3 leftborder leftborder-info text-decoration-none"
-        href="{{ route("event::show", ["id" => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
     >
         <div
-            class="card-body event text-start {{ $event->image ? "bg-img" : "no-img" }}"
-            @if (empty($lazyload) && $event->image)
-                style="{{ sprintf("background: center no-repeat url(%s);", $event->image->generateImagePath(800, 300)) }}
-                                                                                                                                                                                                                                                                                                                                                                                                background-size: cover;"
-            @elseif ($event->image)
-                data-bgimage="{{ $event->image->generateImagePath(800, 300) ?? "" }}"
-            @endif
+            class="card-body event text-start {{ $event->image ? 'bg-img' : 'no-img' }}"
+            style="{{ empty($lazyload) && $event->image ? 'background-size: cover; background: center no-repeat url(' . $event->image->generateImagePath(800, 300) . ')' : '' }}"
+            data-bgimage="{{ ! empty($lazyload) && $event->image ? $event->image->generateImagePath(800, 300) ?? '' : '' }}"
         >
             {{-- Countdown --}}
             @if (! empty($countdown))
@@ -130,9 +130,9 @@
             <span>
                 <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
                 @if (isset($include_year))
-                    {{ $event->generateTimespanText("D j M Y, H:i", "H:i", "-") }}
+                    {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
                 @else
-                    {{ $event->generateTimespanText("D j M, H:i", "H:i", "-") }}
+                    {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
                 @endif
             </span>
 
