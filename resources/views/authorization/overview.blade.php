@@ -79,12 +79,22 @@
                                 >
                                     <div class="card-body">
                                         @foreach ($role->users as $user)
+                                            {{-- format-ignore-start --}}
                                             @include(
                                                 'users.includes.usercard',
                                                 [
                                                     'user' => $user,
                                                     'subtitle' => sprintf(
-                                                        '<div class="badge bg-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <a href="%s"><div class="badge bg-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
+                                                        '<div class="badge bg-%s text-white">
+                                                            <i class="fas fa-fw %s"></i>
+                                                            NDA
+                                                        </div>
+                                                        <a href="%s">
+                                                            <div class="badge bg-warning">
+                                                                <i class="fas fa-fw fa-undo"></i>
+                                                                Revoke
+                                                            </div>
+                                                        </a>',
                                                         $user->signed_nda ? 'primary' : 'danger',
                                                         $user->signed_nda ? 'fa-user-shield' : 'fa-user-times',
                                                         route('authorization::revoke', [
@@ -94,6 +104,7 @@
                                                     ),
                                                 ]
                                             )
+                                            {{-- format-ignore-end --}}
                                         @endforeach
                                     </div>
 
