@@ -60,7 +60,24 @@ class OmNomController extends Controller
     /** @return View */
     public function miniSite()
     {
-        return view('omnomcom.minisite');
+        $products = Product::query()->where('is_visible', true)
+            ->where(function ($query) {
+                $query
+                    ->where('is_visible_when_no_stock', true)
+                    ->orWhere('stock', '>', 0);
+            })
+            ->whereHas('categories', function ($query) {
+                $query->whereIn(
+                    'product_categories.id',
+                    Config::array(
+                        'omnomcom.stores.protopolis.categories'
+                    )
+                );
+            })
+            ->with('image', 'categories')
+            ->get();
+
+        return view('omnomcom.minisite', ['products' => $products]);
     }
 
     /**
