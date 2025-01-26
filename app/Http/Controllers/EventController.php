@@ -37,7 +37,7 @@ class EventController extends Controller
     {
         $category = EventCategory::query()->find($request->input('category'));
 
-        //if there is a category, get only the events that are in that category
+        // if there is a category, get only the events that are in that category
         $eventQuery = Event::getEventBlockQuery()
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function ($q) use ($category) {
@@ -224,7 +224,7 @@ class EventController extends Controller
         /** @var EventCategory|null $category */
         $category = EventCategory::query()->find($request->input('category'));
 
-        //if there is a category, get only the events that are in that category
+        // if there is a category, get only the events that are in that category
         $eventsPerMonth = Event::getEventBlockQuery()
             ->unless(empty($category), static function ($query) use ($category) {
                 $query->whereHas('Category', static function ($q) use ($category) {

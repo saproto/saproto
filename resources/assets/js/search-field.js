@@ -1,4 +1,4 @@
-import BaseComponent from 'bootstrap/js/src/base-component';
+import BaseComponent from 'bootstrap/js/src/base-component'
 
 /**
  * ------------------------------------------------------------------------
@@ -15,16 +15,16 @@ const CLASS_NAME_SELECTED_CONTAINER = 'selected-items';
 const CLASS_NAME_SELECTED = 'selected-item';
 
 const Default = {
-  optionTemplate: (el, item) => (el.innerHTML = item.name),
-  selectedTemplate: (item) => item.name ?? item.id,
-  sorter: null,
-};
+    optionTemplate: (el, item) => (el.innerHTML = item.name),
+    selectedTemplate: (item) => item.name ?? item.id,
+    sorter: null,
+}
 
 const DefaultType = {
-  optionTemplate: 'function',
-  selectedTemplate: 'function',
-  sorter: '(null|function)',
-};
+    optionTemplate: 'function',
+    selectedTemplate: 'function',
+    sorter: '(null|function)',
+}
 
 /**
  * ------------------------------------------------------------------------
@@ -79,27 +79,33 @@ class SearchField extends BaseComponent {
     this._inputElement = this._createInputElement();
     this._inputElement.value = this._element.value;
 
-    this._element.parentNode.append(this._resultsContainer);
-    this._element.parentNode.append(this._invalidMessage);
-    if (this._multiple) this._element.parentNode.append(this._selectedContainer);
-    else this._element.parentNode.append(this._inputElement);
+        this._element.parentNode.append(this._resultsContainer)
+        this._element.parentNode.append(this._invalidMessage)
+        if (this._multiple)
+            this._element.parentNode.append(this._selectedContainer)
+        else this._element.parentNode.append(this._inputElement)
 
     this._element.classList.add(CLASS_NAME_SEARCH_FIELD);
     this._element.name = '';
     this._element.value = this._element.placeholder;
     this._element.required = false;
 
-    this._element.form.removeEventListener('submit', preventSubmitBounce);
-    this._element.form.addEventListener('submit', this._checkRequired.bind(this));
-    this._element.onkeyup = debounce(this._search.bind(this));
-  }
+        this._element.form.removeEventListener('submit', preventSubmitBounce)
+        this._element.form.addEventListener(
+            'submit',
+            this._checkRequired.bind(this)
+        )
+        this._element.onkeyup = debounce(this._search.bind(this))
+    }
 
-  _checkRequired(e) {
-    const selectedAny = this._selectedContainer.children.length !== 0 || this._inputElement.value !== '';
-    if (!this._required || selectedAny) return true;
-    this._invalidMessage.style.display = 'block';
-    e.preventDefault();
-  }
+    _checkRequired(e) {
+        const selectedAny =
+            this._selectedContainer.children.length !== 0 ||
+            this._inputElement.value !== ''
+        if (!this._required || selectedAny) return true
+        this._invalidMessage.style.display = 'block'
+        e.preventDefault()
+    }
 
   _createInvalidMessage() {
     let el = document.createElement('div');
@@ -116,17 +122,17 @@ class SearchField extends BaseComponent {
     return el;
   }
 
-  _createResultElement(item) {
-    let el = document.createElement('div');
-    el.classList.add(CLASS_NAME_RESULT);
-    this._config.optionTemplate(el, item);
-    el.addEventListener('click', (_) => {
-      if (this._multiple) this._addSelected(item);
-      else this._setSelected(item);
-      this._search();
-    });
-    return el;
-  }
+    _createResultElement(item) {
+        let el = document.createElement('div')
+        el.classList.add(CLASS_NAME_RESULT)
+        this._config.optionTemplate(el, item)
+        el.addEventListener('click', (_) => {
+            if (this._multiple) this._addSelected(item)
+            else this._setSelected(item)
+            this._search()
+        })
+        return el
+    }
 
   _createInputElement() {
     let input = document.createElement('input');
@@ -143,22 +149,22 @@ class SearchField extends BaseComponent {
     return el;
   }
 
-  _createSelectedElement(item) {
-    let el = document.createElement('span');
-    el.innerHTML = this._config.selectedTemplate(item);
-    el.classList.add(CLASS_NAME_SELECTED);
-    el.onclick = (_) => {
-      el.remove();
-      if (this._selectedContainer.children.length === 0) {
-        this._element.required = true;
-        this._selectedContainer.style.display = 'none';
-      }
-    };
-    let input = this._createInputElement();
-    input.value = item.id;
-    el.append(input);
-    return el;
-  }
+    _createSelectedElement(item) {
+        let el = document.createElement('span')
+        el.innerHTML = this._config.selectedTemplate(item)
+        el.classList.add(CLASS_NAME_SELECTED)
+        el.onclick = (_) => {
+            el.remove()
+            if (this._selectedContainer.children.length === 0) {
+                this._element.required = true
+                this._selectedContainer.style.display = 'none'
+            }
+        }
+        let input = this._createInputElement()
+        input.value = item.id
+        el.append(input)
+        return el
+    }
 
   _setSelected(item) {
     this._inputElement.value = item.id;
@@ -184,26 +190,32 @@ class SearchField extends BaseComponent {
     this._resultsContainer.append(item);
   }
 
-  _search() {
-    this.clearResults();
+    _search() {
+        this.clearResults()
 
-    if (this._element.value.length < 3) return this._setResults('<span>type at least 3 characters</span>');
-    this._setResults('<span>searching...</span>');
+        if (this._element.value.length < 3)
+            return this._setResults('<span>type at least 3 characters</span>')
+        this._setResults('<span>searching...</span>')
 
     this._invalidMessage.style.display = 'none';
 
-    get(this._route, { q: this._element.value })
-      .then((data) => {
-        if (data.length === 0) return this._setResults('<span>no results</span>');
-        this.clearResults();
-        if (this._config.sorter) data.sort(this._config.sorter);
-        data.forEach((item) => this._addResults(this._createResultElement(item)));
-      })
-      .catch((err) => {
-        this._setResults('<span class="text-danger">there was an error!</span>');
-        console.error(err);
-      });
-  }
+        get(this._route, { q: this._element.value })
+            .then((data) => {
+                if (data.length === 0)
+                    return this._setResults('<span>no results</span>')
+                this.clearResults()
+                if (this._config.sorter) data.sort(this._config.sorter)
+                data.forEach((item) =>
+                    this._addResults(this._createResultElement(item))
+                )
+            })
+            .catch((err) => {
+                this._setResults(
+                    '<span class="text-danger">there was an error!</span>'
+                )
+                console.error(err)
+            })
+    }
 }
 
-export default SearchField;
+export default SearchField
