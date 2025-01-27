@@ -18,10 +18,10 @@ class PhotoAlbumController extends Controller
         return view('photos.albums.list', ['albums' => $albums]);
     }
 
-    public function show(PhotoAlbum $photoAlbum): View|RedirectResponse
+    public function show(PhotoAlbum $photoalbum): View|RedirectResponse
     {
-        $photos = $photoAlbum->items()->orderBy('date_taken', 'desc')->paginate(24);
+        $photos = $photoalbum->items()->orderBy('date_taken', 'desc')->paginate(24);
 
-        return view('photos.albums.show', ['album' => $photoAlbum, 'photos' => $photos]);
+        return view('photos.albums.show', ['album' => $photoalbum, 'photos' => $photos]);
     }
 }
