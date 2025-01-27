@@ -890,7 +890,8 @@ Route::middleware('forcedomain')->group(function () {
         });
         /* --- Routes related to the photo admin. (Protography only) --- */
         Route::prefix('admin')->name('admin::')->middleware(['permission:protography'])->group(function () {
-            Route::post('{photoalbum}/upload', ['store', PhotoController::class])->name('upload');
+            //            Route::post('{photoalbum}/upload', ['store', PhotoController::class])->name('upload');
+            Route::post('{photoalbum}/upload', 'PhotoController@store')->name('upload');
 
             Route::get('publish/{photoalbum}', ['publish', PhotoAlbumAdminController::class])->middleware(['permission:publishalbums'])->name('publish');
             Route::get('unpublish/{photoalbum}', ['unpublish', PhotoAlbumAdminController::class])->middleware(['permission:publishalbums'])->name('unpublish');

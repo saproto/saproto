@@ -14,9 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Auth;
 use Override;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Photo model.
@@ -46,10 +43,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  *
  * @mixin Eloquent
  */
-class Photo extends Model implements HasMedia
+class Photo extends Model
 {
     use HasFactory;
-    use InteractsWithMedia;
 
     protected $table = 'photos';
 
@@ -72,32 +68,6 @@ class Photo extends Model implements HasMedia
                 $query->where('published', true);
             }));
         });
-    }
-
-    #[Override]
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('photos')
-            ->useDisk($this->private ? 'private' : 'public');
-    }
-
-    #[Override]
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion('big')
-            ->width(1920)
-            ->height(1080)
-            ->nonQueued();
-
-        $this->addMediaConversion('medium')
-            ->width(1280)
-            ->height(720)
-            ->nonQueued();
-
-        $this->addMediaConversion('small')
-            ->width(640)
-            ->height(360)
-            ->nonQueued();
     }
 
     public function album(): BelongsTo

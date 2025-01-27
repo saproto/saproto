@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
+use App\Models\StorageEntry;
 use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -32,7 +35,7 @@ class PhotoController extends Controller
     public function show() {}
 
     /**
-     * @return JsonResponse
+     * @return JsonResponse|string
      */
     public function store(Request $request, PhotoAlbum $photoalbum)
     {
@@ -49,13 +52,12 @@ class PhotoController extends Controller
         }
 
         try {
-            $photo = Photo::query()->create(['private' => true]);
-            $media = $photo->addMediaFromRequest('file')->toMediaCollection('photos');
+            $uploadFile = $request->file('file');
 
-            return response()->json([
-                'message' => $media,
-            ]);
-            //            return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
+            $photo = $this->createPhotoFromUpload($uploadFile, $photoalbum->id);
+
+            return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
+
         } catch (Exception $exception) {
             return response()->json([
                 'message' => $exception,
@@ -82,5 +84,25 @@ class PhotoController extends Controller
         ]);
 
         return Redirect::route('photo::view', ['id' => $photo_id]);
+    }
+
+    /**
+     * @throws FileNotFoundException
+     */
+    private function createPhotoFromUpload(UploadedFile $uploaded_photo, int $album_id): Photo
+    {
+        $path = 'photos/'.$album_id.'/';
+
+        $file = new StorageEntry;
+        $file->createFromFile($uploaded_photo, $path);
+        $file->save();
+
+        $photo = new Photo;
+        $photo->date_taken = $uploaded_photo->getCTime();
+        $photo->album_id = $album_id;
+        $photo->file_id = $file->id;
+        $photo->save();
+
+        return $photo;
     }
 }
