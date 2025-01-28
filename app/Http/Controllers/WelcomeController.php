@@ -15,6 +15,7 @@ class WelcomeController extends Controller
     public function index()
     {
         $messages = WelcomeMessage::query()->orderBy('created_at', 'desc')->with('user')->get();
+
         return view('welcomemessages.list', ['messages' => $messages]);
     }
 
@@ -28,7 +29,7 @@ class WelcomeController extends Controller
             'message' => 'required|string',
         ]);
         $message = WelcomeMessage::query()->where('user_id', $request->user_id)->first();
-        if (!$message) {
+        if (! $message) {
             $message = new WelcomeMessage;
             $message->user_id = $request->user_id;
             $message->message = $request->message;
