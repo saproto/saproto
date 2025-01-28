@@ -19,7 +19,7 @@
     </div>
 @endif
 
-@if (count($pastEvents) > 0)
+@if ($pastEvents->count() > 0)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Previously organised</div>
 
@@ -42,10 +42,10 @@
 @endif
 
 @php
-    $pastHelpedEvents = $committee->pastHelpedEvents(6);
+    $pastHelpedEvents = $committee->pastHelpedEvents()->take(6);
 @endphp
 
-@if (count($pastHelpedEvents) > 0)
+@if ($pastHelpedEvents->count() > 0)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
             Events previously helped at

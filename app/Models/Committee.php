@@ -97,21 +97,18 @@ class Committee extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->slug.'@'.Config::string('proto.emaildomain');
+        return $this->slug . '@' . Config::string('proto.emaildomain');
     }
 
     /**
-     * @param  int  $n  the number of events to return
+     * @return Builder
      */
-    public function pastEvents(int $n): Collection|array
+    public function pastEvents(): Builder
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
+        return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
+            ->when(!Auth::user()?->can('board'), static function ($q) {
+                $q->where('secret', '=', 0);
+            });
     }
 
     public function upcomingEvents(): Collection|array
@@ -125,7 +122,7 @@ class Committee extends Model
         return $events->where('secret', '=', 0)->get();
     }
 
-    public function pastHelpedEvents($n): Collection|array
+    public function pastHelpedEvents(): Builder
     {
         return Event::query()->whereHas('activity', function ($q) {
             $q->whereHas('helpingCommittees', function ($q) {
@@ -138,9 +135,7 @@ class Committee extends Model
                     ->orWhereNull('publication');
             })
             ->where('end', '<', time())
-            ->orderBy('created_at')
-            ->take($n)
-            ->get();
+            ->orderBy('created_at');
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
@@ -151,13 +146,14 @@ class Committee extends Model
             ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
             ->orderBy('created_at', 'desc')
             ->orderBy('deleted_at', 'desc')
+            ->with('user.photo')
             ->get();
 
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;
