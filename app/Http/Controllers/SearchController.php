@@ -52,7 +52,7 @@ class SearchController extends Controller
         if ($presearch_pages) {
             foreach ($presearch_pages as $page) {
                 /** @var Page $page */
-                if (!$page->is_member_only || Auth::user()?->is_member) {
+                if (! $page->is_member_only || Auth::user()?->is_member) {
                     $pages[] = $page;
                 }
             }
@@ -98,7 +98,7 @@ class SearchController extends Controller
         if ($presearch_photo_albums) {
             foreach ($presearch_photo_albums as $album) {
                 /** @var PhotoAlbum $album */
-                if (!$album->private || Auth::user()?->can('protography')) {
+                if (! $album->private || Auth::user()?->can('protography')) {
                     $photoAlbums[] = $album;
                 }
             }
@@ -116,7 +116,7 @@ class SearchController extends Controller
 
     public function ldapSearch(Request $request)
     {
-        if (!$request->has('query')) {
+        if (! $request->has('query')) {
             Session::flash('flash_message', 'Please include a search query.');
 
             return Redirect::back();
@@ -154,7 +154,7 @@ class SearchController extends Controller
         $result = LdapController::searchUtwente($search);
         // check that we have a valid response
         if (isset($result->error)) {
-            Session::flash('flash_message', 'Something went wrong while searching the UT LDAP server.' . ($result->error ? ' ' . $result->error : ''));
+            Session::flash('flash_message', 'Something went wrong while searching the UT LDAP server.'.($result->error ? ' '.$result->error : ''));
 
             return Redirect::back();
         }
@@ -177,7 +177,7 @@ class SearchController extends Controller
         $users = $this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->with('photo')->get() ?? [];
         foreach ($users as $user) {
             /** @var User $user */
-            $result[] = (object)[
+            $result[] = (object) [
                 'id' => $user->id,
                 'name' => $user->name,
                 'is_member' => $user->is_member,
@@ -233,7 +233,7 @@ class SearchController extends Controller
             $check_at_least_one_valid_term = true;
         }
 
-        if (!$check_at_least_one_valid_term) {
+        if (! $check_at_least_one_valid_term) {
             return null;
         }
 
