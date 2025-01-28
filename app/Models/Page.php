@@ -61,19 +61,16 @@ class Page extends Model
 
     protected $with = ['featuredImage'];
 
-    /** @return BelongsTo */
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'featured_image_id');
     }
 
-    /** @return BelongsToMany */
     public function files(): BelongsToMany
     {
         return $this->belongsToMany(StorageEntry::class, 'pages_files', 'page_id', 'file_id');
     }
 
-    /** @return string */
     public function getUrl(): string
     {
         return route('page::show', $this->slug);
