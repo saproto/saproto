@@ -39,7 +39,7 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        if (!Auth::user()?->is_member) {
+        if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header, 'albums' => $albums]);
         }
 

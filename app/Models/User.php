@@ -379,14 +379,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function isInCommittee(Committee $committee): bool
     {
-        return $committee->users()->where('user_id', $this->id)->exists();
-    }
-
-    public function isInCommitteeBySlug(string $slug): bool
-    {
-        $committee = Committee::query()->where('slug', $slug)->first();
-
-        return $committee && $this->isInCommittee($committee);
+        return $committee->users->where('user_id', $this->id)->exists();
     }
 
     public function isActiveMember(): bool
