@@ -26,10 +26,10 @@ use Spatie\Permission\Models\Permission;
 
 class UserDashboardController extends Controller
 {
-    public function show(?string $page = null): Response
+    public function show(): View
     {
         /** @var User $user */
-        $user = User::with('bank', 'member')->findOrFail(Auth::user()->id);
+        $user = Auth::user();
 
         $qrcode = null;
         $tfakey = null;
@@ -41,11 +41,7 @@ class UserDashboardController extends Controller
 
         $memberships = $user->getMemberships();
 
-        return Inertia::render('SettingsPage', [
-            'user' => UserData::from($user),
-            'memberships' => $memberships,
-            'settingsPage' => $page,
-        ]);
+        return view('users.dashboard.dashboard', ['user' => $user, 'memberships' => $memberships, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
     }
 
     /**

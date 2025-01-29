@@ -10,7 +10,12 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
-                    <a href="{{ route('page::create') }}" class="badge bg-info float-end">Create a new page.</a>
+                    <a
+                        href="{{ route('page::create') }}"
+                        class="badge bg-info float-end"
+                    >
+                        Create a new page.
+                    </a>
                 </div>
 
                 <table class="table table-sm table-hover">
@@ -27,7 +32,9 @@
                         <tr>
                             <td>{{ $page->title }}</td>
                             <td>
-                                <a href="{{ route('page::show', $page->slug) }}">
+                                <a
+                                    href="{{ route('page::show', $page->slug) }}"
+                                >
                                     {{ route('page::show', $page->slug) }}
                                 </a>
                             </td>
@@ -37,7 +44,9 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('page::edit', ['id' => $page->id]) }}">
+                                <a
+                                    href="{{ route('page::edit', ['id' => $page->id]) }}"
+                                >
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
 

@@ -9,7 +9,9 @@
         <div class="col-md-3">
             <form method="get" action="{{ route('user::admin::index') }}">
                 <div class="card mb-4">
-                    <div class="card-header bg-dark text-white">Search in users</div>
+                    <div class="card-header bg-dark text-white">
+                        Search in users
+                    </div>
                     <div class="card-body">
                         <div class="input-group mb-2">
                             <input
@@ -31,7 +33,9 @@
                                     value="users"
                                     @if($filter == 'users') checked @endif
                                 />
-                                <label class="form-check-label" for="users">Users</label>
+                                <label class="form-check-label" for="users">
+                                    Users
+                                </label>
                             </div>
                             <div class="form-check me-2">
                                 <input
@@ -42,7 +46,9 @@
                                     value="members"
                                     @if($filter == 'members') checked @endif
                                 />
-                                <label class="form-check-label" for="members">Members</label>
+                                <label class="form-check-label" for="members">
+                                    Members
+                                </label>
                             </div>
                             <div class="form-check me-2">
                                 <input
@@ -53,7 +59,9 @@
                                     value="pending"
                                     @if($filter == 'pending') checked @endif
                                 />
-                                <label class="form-check-label" for="pending">Pending</label>
+                                <label class="form-check-label" for="pending">
+                                    Pending
+                                </label>
                             </div>
                             <div class="form-check">
                                 <input
@@ -64,7 +72,9 @@
                                     value=""
                                     @if($filter == null) checked @endif
                                 />
-                                <label class="form-check-label" for="all">All</label>
+                                <label class="form-check-label" for="all">
+                                    All
+                                </label>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-info">
@@ -104,7 +114,9 @@
                             @endphp
 
                             @foreach ($users as $user)
-                                <tr class="{{ $user->deleted_at ? 'opacity-50' : '' }}">
+                                <tr
+                                    class="{{ $user->deleted_at ? 'opacity-50' : '' }}"
+                                >
                                     <td class="controls" class="ps-3">
                                         @if (! $user->deleted_at)
                                             <a
@@ -160,7 +172,10 @@
                                                     title="Revoke temp admin"
                                                     class="text-decoration-none"
                                                 >
-                                                    <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
+                                                    <i
+                                                        class="fas fa-user-lock fa-fw text-dark"
+                                                        aria-hidden="true"
+                                                    ></i>
                                                 </a>
                                             @else
                                                 <a
@@ -170,12 +185,17 @@
                                                     title="Grant temp admin till midnight"
                                                     class="text-decoration-none"
                                                 >
-                                                    <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
+                                                    <i
+                                                        class="fas fa-user-clock fa-fw text-dark"
+                                                        aria-hidden="true"
+                                                    ></i>
                                                 </a>
                                             @endif
                                         @endif
                                     </td>
-                                    <td class="userid text-end">#{{ $user->id }}</td>
+                                    <td class="userid text-end">
+                                        #{{ $user->id }}
+                                    </td>
                                     <td>{{ $user->calling_name }}</td>
                                     <td class="fullname">{{ $user->name }}</td>
                                     <td class="membertype">
@@ -183,12 +203,14 @@
                                             Deleted
                                         @elseif ($user->member)
                                             @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::PENDING)
-                                                <strong class="text-warning">Pending</strong>
+                                                <strong class="text-warning">
+                                                    Pending
+                                                </strong>
                                             @else
                                                 <strong>Member</strong>
                                             @endif
                                         @else
-                                            User
+                                                User
                                         @endif
                                     </td>
                                     <td class="proto-email">

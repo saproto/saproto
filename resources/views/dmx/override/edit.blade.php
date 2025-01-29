@@ -9,7 +9,11 @@
         action="{{ ! empty($override) ? route('dmx.overrides.update', ['override' => $override->id]) : route('dmx.overrides.store') }}"
         method="POST"
     >
-        <input type="hidden" name="_method" value="{{ ! empty($override) ? 'PUT' : 'POST' }}" />
+        <input
+            type="hidden"
+            name="_method"
+            value="{{ ! empty($override) ? 'PUT' : 'POST' }}"
+        />
         {{ csrf_field() }}
 
         <div class="row justify-content-center">
@@ -22,7 +26,12 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Fixtures to override:</label>
-                            <select class="form-control" name="fixtures[]" multiple required>
+                            <select
+                                class="form-control"
+                                name="fixtures[]"
+                                multiple
+                                required
+                            >
                                 @foreach ($fixtures as $fixture)
                                     <option
                                         value="{{ $fixture->id }}"
@@ -91,7 +100,9 @@
                             [
                                 'name' => 'start',
                                 'label' => 'Override start:',
-                                'placeholder' => $override ? $override->start : strtotime(Carbon::now()),
+                                'placeholder' => $override
+                                    ? $override->start
+                                    : strtotime(Carbon::now()),
                             ]
                         )
 
@@ -102,16 +113,25 @@
                                 [
                                     'name' => 'end',
                                     'label' => 'Override end:',
-                                    'placeholder' => $override ? $override->end : strtotime(Carbon::now()->endOfDay()),
+                                    'placeholder' => $override
+                                        ? $override->end
+                                        : strtotime(Carbon::now()->endOfDay()),
                                 ]
                             )
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('dmx.overrides.index') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('dmx.overrides.index') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>

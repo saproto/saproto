@@ -56,9 +56,16 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('email::index') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('email::index') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </form>

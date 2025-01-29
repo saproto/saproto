@@ -20,7 +20,9 @@
                 placeholder="garrus.vakarian@example.com"
             />
 
-            <button type="submit" class="btn btn-success btn-block">Send password reset link</button>
+            <button type="submit" class="btn btn-success btn-block">
+                Send password reset link
+            </button>
         </p>
 
         <hr />

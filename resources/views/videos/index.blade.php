@@ -11,19 +11,34 @@
                 {!! csrf_field() !!}
 
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">Add new video</div>
+                    <div class="card-header bg-dark text-white">
+                        Add new video
+                    </div>
 
                     <div class="card-body">
                         <div class="alert alert-danger" role="alert">
-                            This feature is currently disabled due to our disabled YouTube API Key.
+                            This feature is currently disabled due to our
+                            disabled YouTube API Key.
                         </div>
 
                         <label>YouTube video ID:</label>
-                        <input disabled type="text" class="form-control" name="youtube_id" placeholder="M11SvDtPBhA" />
+                        <input
+                            disabled
+                            type="text"
+                            class="form-control"
+                            name="youtube_id"
+                            placeholder="M11SvDtPBhA"
+                        />
                     </div>
 
                     <div class="card-footer text-center">
-                        <button disabled type="submit" class="btn btn-success btn-block">Add video</button>
+                        <button
+                            disabled
+                            type="submit"
+                            class="btn btn-success btn-block"
+                        >
+                            Add video
+                        </button>
                         <br />
                         Developed with
                         <span class="text-danger">
@@ -66,7 +81,9 @@
                                 <td>{{ $video->getHumanDuration() }}</td>
                                 <td>
                                     @if ($video->event)
-                                        <a href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}">
+                                        <a
+                                            href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
+                                        >
                                             {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
                                         </a>
                                     @else
@@ -74,10 +91,14 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('video::show', ['id' => $video->id]) }}">
+                                    <a
+                                        href="{{ route('video::show', ['id' => $video->id]) }}"
+                                    >
                                         <i class="fas fa-play me-2"></i>
                                     </a>
-                                    <a href="{{ route('video::admin::edit', ['id' => $video->id]) }}">
+                                    <a
+                                        href="{{ route('video::admin::edit', ['id' => $video->id]) }}"
+                                    >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
                                     @include(

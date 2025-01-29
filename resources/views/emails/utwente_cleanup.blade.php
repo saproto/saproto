@@ -5,7 +5,10 @@
         Hey!
 
         @if (count($unlinked) > 0)
-            <p>I just checked the validity of UTwente accounts. I found {{ count($unlinked) }} inactive accounts:</p>
+            <p>
+                I just checked the validity of UTwente accounts. I found
+                {{ count($unlinked) }} inactive accounts:
+            </p>
 
             <ul>
                 @foreach ($unlinked as $message)
@@ -13,7 +16,10 @@
                 @endforeach
             </ul>
         @else
-            <p>I just checked the validity of UTwente accounts. All accounts seem to be active.</p>
+            <p>
+                I just checked the validity of UTwente accounts. All accounts
+                seem to be active.
+            </p>
         @endif
     </p>
 

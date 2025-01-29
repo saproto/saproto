@@ -1,7 +1,10 @@
 @extends('website.layouts.redesign.dashboard')
 
 @push('head')
-    <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}" />
+    <meta
+        http-equiv="refresh"
+        content="{{ Session::get('passwordstore-verify') - time() }}"
+    />
 @endpush
 
 @section('page-title')
@@ -33,7 +36,11 @@
                         />
 
                         <label>Authorized users:</label>
-                        <select name="permission_id" class="form-control mb-3" required>
+                        <select
+                            name="permission_id"
+                            class="form-control mb-3"
+                            required
+                        >
                             @foreach (Permission::all() as $permission)
                                 @can($permission->name)
                                     <option
@@ -78,15 +85,29 @@
                             <input type="hidden" name="type" value="note" />
                         @endif
 
-                        <textarea class="form-control mb-3" name="note" rows="10" placeholder="The content.">
+                        <textarea
+                            class="form-control mb-3"
+                            name="note"
+                            rows="10"
+                            placeholder="The content."
+                        >
 {{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea
                         >
                     </div>
 
                     <div class="card-footer">
-                        <input type="submit" value="Save" class="btn btn-success float-end" />
+                        <input
+                            type="submit"
+                            value="Save"
+                            class="btn btn-success float-end"
+                        />
 
-                        <a href="{{ route('passwordstore::index') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('passwordstore::index') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </form>

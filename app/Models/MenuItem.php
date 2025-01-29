@@ -47,8 +47,6 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
-    protected $appends = ['parsed_url'];
-
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id', 'id');
@@ -60,11 +58,6 @@ class MenuItem extends Model
     }
 
     public function getUrl(): ?string
-    {
-        return $this->getParsedUrlAttribute();
-    }
-
-    public function getParsedUrlAttribute(): ?string
     {
         if (str_starts_with($this->url, '(route) ')) {
             try {

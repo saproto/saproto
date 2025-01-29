@@ -50,7 +50,10 @@
                         target="_blank"
                         class="btn btn-xs btn-outline-primary btn-block btn-sm"
                     >
-                        <i class="fab fa-spotify fa-fw me-2" aria-hidden="true"></i>
+                        <i
+                            class="fab fa-spotify fa-fw me-2"
+                            aria-hidden="true"
+                        ></i>
                         Listen on Spotify
                     </a>
                 @endif

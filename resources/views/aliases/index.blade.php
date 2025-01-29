@@ -27,7 +27,10 @@
                                     <strong>{{ $alias }}</strong>
                                     @ {{ Config::string('proto.emaildomain') }}
 
-                                    <a href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}" class="ms-2">
+                                    <a
+                                        href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}"
+                                        class="ms-2"
+                                    >
                                         <i class="fas fa-trash text-danger"></i>
                                     </a>
                                 </td>
@@ -37,7 +40,9 @@
                                             href="{{ route('alias::delete', ['id_or_alias' => $destination->id]) }}"
                                             class="me-2"
                                         >
-                                            <i class="fas fa-trash text-danger"></i>
+                                            <i
+                                                class="fas fa-trash text-danger"
+                                            ></i>
                                         </a>
 
                                         @if ($destination->destination)
@@ -48,7 +53,9 @@
                                                     href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}"
                                                 >
                                                     @if ($destination->user->trashed())
-                                                        <span class="text-decoration-line-through">
+                                                        <span
+                                                            class="text-decoration-line-through"
+                                                        >
                                                             {{ $destination->user->name }}
                                                         </span>
                                                     @else
@@ -77,7 +84,10 @@
 
                 <div class="card-body">
                     <p>
-                        <a href="{{ route('alias::create') }}" class="form-control btn btn-success">
+                        <a
+                            href="{{ route('alias::create') }}"
+                            class="form-control btn btn-success"
+                        >
                             Create a new alias.
                         </a>
                     </p>
@@ -87,12 +97,24 @@
                     <form method="post" action="{{ route('alias::update') }}">
                         {{ csrf_field() }}
 
-                        <input class="form-control mb-3" name="from" placeholder="old alias name" />
-                        <input class="form-control" name="into" placeholder="new alias name" />
+                        <input
+                            class="form-control mb-3"
+                            name="from"
+                            placeholder="old alias name"
+                        />
+                        <input
+                            class="form-control"
+                            name="into"
+                            placeholder="new alias name"
+                        />
 
                         <br />
 
-                        <input type="submit" class="form-control btn btn-success" value="Rename" />
+                        <input
+                            type="submit"
+                            class="form-control btn btn-success"
+                            value="Rename"
+                        />
                     </form>
                 </div>
             </div>

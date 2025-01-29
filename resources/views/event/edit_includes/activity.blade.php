@@ -6,12 +6,17 @@
             /** @var \App\Models\Event $event */
         @endphp
 
-        <form method="post" action="{{ route('event::addsignup', ['id' => $event->id]) }}">
+        <form
+            method="post"
+            action="{{ route('event::addsignup', ['id' => $event->id]) }}"
+        >
             @csrf
 
             <div class="card-body">
                 @if (! $event->activity)
-                    <p class="card-text text-center">No sign-up details are currently configured.</p>
+                    <p class="card-text text-center">
+                        No sign-up details are currently configured.
+                    </p>
 
                     <hr />
                 @endif
@@ -66,7 +71,12 @@
                         <label for="price">Participation cost:</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">&euro;</span>
+                                <span
+                                    class="input-group-text"
+                                    id="basic-addon1"
+                                >
+                                    &euro;
+                                </span>
                             </div>
                             <input
                                 type="number"
@@ -95,7 +105,12 @@
                         </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">&euro;</span>
+                                <span
+                                    class="input-group-text"
+                                    id="basic-addon1"
+                                >
+                                    &euro;
+                                </span>
                             </div>
                             <input
                                 type="number"
@@ -159,7 +174,9 @@
                             'components.forms.checkbox',
                             [
                                 'name' => 'hide_participants',
-                                'checked' => (isset($request) && $request->exists('hide_participants')) || $event->activity?->hide_participants,
+                                'checked' =>
+                                    (isset($request) && $request->exists('hide_participants')) ||
+                                    $event->activity?->hide_participants,
                                 'label' =>
                                     'Hide participants  <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>',
                             ]
@@ -171,7 +188,11 @@
             <div class="card-footer">
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <input type="submit" class="btn btn-success btn-block" value="Save sign-up details" />
+                        <input
+                            type="submit"
+                            class="btn btn-success btn-block"
+                            value="Save sign-up details"
+                        />
                     </div>
 
                     @if ($event->activity)
@@ -189,7 +210,10 @@
         </form>
     @else
         <div class="card-body">
-            <p class="card-text text-center">You must save this event before being able to add sign-up details.</p>
+            <p class="card-text text-center">
+                You must save this event before being able to add sign-up
+                details.
+            </p>
         </div>
     @endif
 </div>

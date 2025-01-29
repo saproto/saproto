@@ -5,10 +5,13 @@
 
     <p>
         We received word from your bank that the automatic withdrawal of
-        <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
+        <a
+            href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}"
+        >
             {{ date('d-m-Y', strtotime($withdrawal->date)) }}
         </a>
-        has been denied. This can be due to any number of reasons, but usually it is one of the following:
+        has been denied. This can be due to any number of reasons, but usually
+        it is one of the following:
     </p>
 
     <ul>
@@ -22,24 +25,26 @@
     </ul>
 
     <p>
-        We will try again during the next withdrawal. This means that in your order history you will find a new order of
+        We will try again during the next withdrawal. This means that in your
+        order history you will find a new order of
         &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }}.
     </p>
 
     <p>
-        If your bank account details have changed, please be sure to issue a new withdrawal authorisation. You can do so
+        If your bank account details have changed, please be sure to issue a new
+        withdrawal authorisation. You can do so
         <a href="{{ route('user::bank::edit', ['id' => $user->id]) }}">here</a>
         .
     </p>
 
     <p>
-        If you have issues paying for your OmNomCom purchases, please get in touch with us. Together we can think of a
-        solution.
+        If you have issues paying for your OmNomCom purchases, please get in
+        touch with us. Together we can think of a solution.
     </p>
 
     <p>
-        I hope to have informed you well via this e-mail, but should you have any questions left you can always send me
-        a message.
+        I hope to have informed you well via this e-mail, but should you have
+        any questions left you can always send me a message.
     </p>
 
     <p>

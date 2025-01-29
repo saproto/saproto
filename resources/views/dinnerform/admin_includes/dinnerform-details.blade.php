@@ -95,7 +95,9 @@
                         [
                             'name' => 'start',
                             'label' => 'Opens at:',
-                            'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->timestamp : null,
+                            'placeholder' => $dinnerformCurrent
+                                ? $dinnerformCurrent->start->timestamp
+                                : null,
                             'input_class_name' => 'mb-3',
                         ]
                     )
@@ -106,7 +108,9 @@
                         [
                             'name' => 'end',
                             'label' => 'Closes at:',
-                            'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->timestamp : null,
+                            'placeholder' => $dinnerformCurrent
+                                ? $dinnerformCurrent->end->timestamp
+                                : null,
                             'input_class_name' => 'mb-3',
                         ]
                     )
@@ -127,7 +131,9 @@
 
                     <!-- Regular Discount -->
                     <div class="col-md-12 mb-3">
-                        <label for="regular-discount">Regular discount %:</label>
+                        <label for="regular-discount">
+                            Regular discount %:
+                        </label>
                         <input
                             type="number"
                             step="0.01"

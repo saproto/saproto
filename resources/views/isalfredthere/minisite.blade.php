@@ -41,8 +41,14 @@
                     <i class="fas fa-circle-question"></i>
                 </i>
             </div>
-            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
-                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="472px" />
+            <a
+                href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}"
+            >
+                <img
+                    src="{{ asset('images/logo/inverse.png') }}"
+                    alt="Proto logo"
+                    width="472px"
+                />
             </a>
         </div>
     </div>
@@ -160,7 +166,11 @@
             // hide the time submessage
             time.classList.add('d-none')
 
-            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger')
+            document.body.classList.remove(
+                'bg-success',
+                'bg-warning',
+                'bg-danger'
+            )
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color)
         }

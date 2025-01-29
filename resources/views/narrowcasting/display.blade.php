@@ -63,7 +63,11 @@
 </div>
 
 @push('javascript')
-    <script type="text/javascript" src="https://www.youtube.com/iframe_api" nonce="{{ csp_nonce() }}"></script>
+    <script
+        type="text/javascript"
+        src="https://www.youtube.com/iframe_api"
+        nonce="{{ csp_nonce() }}"
+    ></script>
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let campaigns = []
         let currentCampaign = 0
@@ -92,13 +96,18 @@
         async function updateCampaigns() {
             await get('{{ route('api::screen::narrowcasting') }}')
                 .then((data) => {
-                    if (campaigns.length !== 0 && campaigns.length !== data.length) {
+                    if (
+                        campaigns.length !== 0 &&
+                        campaigns.length !== data.length
+                    ) {
                         window.location.reload()
                     }
 
                     campaigns = data
                 })
-                .catch((error) => console.log('Error loading campaigns from server:', error))
+                .catch((error) =>
+                    console.log('Error loading campaigns from server:', error)
+                )
         }
 
         function onPlayerReady(event) {
@@ -109,7 +118,10 @@
 
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
-                setTimeout(updateSlide, (youtubePlayer.getDuration() - 1) * 1000)
+                setTimeout(
+                    updateSlide,
+                    (youtubePlayer.getDuration() - 1) * 1000
+                )
             }
         }
 
@@ -148,7 +160,9 @@
                     slides.classList.remove(hideClass)
 
                     //show the new slide if it exists, otherwise create it
-                    const slide = document.getElementById('slide-' + currentCampaign)
+                    const slide = document.getElementById(
+                        'slide-' + currentCampaign
+                    )
                     if (slide) {
                         slide.classList.remove(hideClass)
                     } else {

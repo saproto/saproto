@@ -15,7 +15,13 @@
         <span>{{ $method->description }}</span>
         <svg
             class="mb-2 mb-md-3"
-            style="position: absolute; bottom: 0; left: 0; right: 0; margin: auto"
+            style="
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            "
             width="90"
             height="68"
             data-html="true"
@@ -28,7 +34,12 @@
             @endforeach
 "
         >
-            <image xlink:href="{{ $method->image->svg }}" src="{{ $method->image->size1x }}" width="90" height="68" />
+            <image
+                xlink:href="{{ $method->image->svg }}"
+                src="{{ $method->image->size1x }}"
+                width="90"
+                height="68"
+            />
         </svg>
     </div>
 @endforeach

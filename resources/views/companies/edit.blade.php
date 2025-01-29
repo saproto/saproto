@@ -89,22 +89,38 @@
                         <hr />
 
                         <div class="custom-file">
-                            <input id="image" type="file" class="form-control" name="image" />
-                            <label class="form-label" for="image">Upload a new image</label>
+                            <input
+                                id="image"
+                                type="file"
+                                class="form-control"
+                                name="image"
+                            />
+                            <label class="form-label" for="image">
+                                Upload a new image
+                            </label>
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('companies::admin') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('companies::admin') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-8">
                 <div class="card md-3">
-                    <div class="card-header bg-dark text-white">Description</div>
+                    <div class="card-header bg-dark text-white">
+                        Description
+                    </div>
 
                     <div class="card-body row">
                         <div class="col-6">
@@ -113,7 +129,9 @@
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'excerpt',
-                                    'placeholder' => ! $company ? 'A small paragraph about this company.' : null,
+                                    'placeholder' => ! $company
+                                        ? 'A small paragraph about this company.'
+                                        : null,
                                     'value' => ! $company ? null : $company->excerpt,
                                 ]
                             )
@@ -125,7 +143,9 @@
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'description',
-                                    'placeholder' => ! $company ? 'A text dedicated to the company. Be as elaborate as you need to be!' : null,
+                                    'placeholder' => ! $company
+                                        ? 'A text dedicated to the company. Be as elaborate as you need to be!'
+                                        : null,
                                     'value' => ! $company ? null : $company->description,
                                 ]
                             )
@@ -137,7 +157,9 @@
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'membercard_excerpt',
-                                    'placeholder' => ! $company ? 'A small paragraph about what this company does on our membercard.' : null,
+                                    'placeholder' => ! $company
+                                        ? 'A small paragraph about what this company does on our membercard.'
+                                        : null,
                                     'value' => ! $company ? null : $company->membercard_excerpt,
                                 ]
                             )

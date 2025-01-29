@@ -14,7 +14,9 @@
 
                 <div class="list-group-item d-flex justify-content-between">
                     <div>
-                        <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
+                        <a
+                            href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}"
+                        >
                             {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                         </a>
                     </div>
@@ -25,7 +27,9 @@
                             {{ $withdrawal->closed ? 'Closed' : 'Pending' }}
                         </div>
                     @endif
-                    <div>&euro;{{ number_format($withdrawal->orderlines_sum_total_price, 2) }}</div>
+                    <div>
+                        &euro;{{ number_format($withdrawal->orderlines_sum_total_price, 2) }}
+                    </div>
                 </div>
             @endforeach
         </ul>
@@ -48,16 +52,22 @@
                             $status = App\Models\MollieTransaction::translateStatus($transaction->translatedStatus());
                         @endphp
 
-                        <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
+                        <a
+                            href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}"
+                        >
                             {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
                             <i
                                 class="fas ms-2 {{ $status == 'open' ? ' fa-spinner text-normal' : '' }} {{ $status == 'failed' ? 'fa-times text-danger' : '' }} {{ $status == 'paid' ? 'fa-check text-success' : '' }} {{ $status == 'unknown' ? 'fa-question text-normal' : '' }}"
                             ></i>
                         </a>
                     @else
-                        <span>This payment is corrupt, please contact board</span>
+                        <span>
+                            This payment is corrupt, please contact board
+                        </span>
                     @endif
-                    <span class="float-right">&euro;{{ number_format($transaction->amount, 2) }}</span>
+                    <span class="float-right">
+                        &euro;{{ number_format($transaction->amount, 2) }}
+                    </span>
                 </li>
             @endforeach
         </ul>

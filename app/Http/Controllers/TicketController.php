@@ -37,21 +37,23 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        Event::query()->findOrFail($request->input('event'));
-        Product::query()->findOrFail($request->input('product'));
-        $validated = $request->validate([
-            'event' => 'required|integer',
-            'product' => 'required|integer',
-            'is_members_only' => 'nullable|boolean',
-            'has_buy_limit' => 'nullable|boolean',
-            'buy_limit' => 'nullable|integer',
-            'is_prepaid' => 'nullable|boolean',
-            'available_from' => 'required|date',
-            'available_to' => 'required|date',
-            'show_participants' => 'nullable|boolean',
-        ]);
+        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
+            Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turning It Off And On Again committee.');
 
-        Ticket::query()->create($validated);
+            return Redirect::back();
+        }
+
+        $ticket = new Ticket;
+        $ticket->event_id = Event::query()->findOrFail($request->input('event'))->id;
+        $ticket->product_id = Product::query()->findOrFail($request->input('product'))->id;
+        $ticket->members_only = $request->has('is_members_only');
+        $ticket->has_buy_limit = $request->has('has_buy_limit');
+        $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
+        $ticket->is_prepaid = $request->has('is_prepaid');
+        $ticket->available_from = strtotime($request->input('available_from'));
+        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->show_participants = $request->has('show_participants');
+        $ticket->save();
 
         Session::flash('flash_message', 'The ticket has been created!');
 
@@ -73,6 +75,11 @@ class TicketController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
+            Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
+
+            return Redirect::back();
+        }
 
         /** @var Ticket $ticket */
         $ticket = Ticket::query()->findOrFail($id);
@@ -145,7 +152,7 @@ class TicketController extends Controller
         return Redirect::back();
     }
 
-    public function scanPostApi(Request $request): array
+    public function scanApi($event, Request $request): array
     {
         if (! $request->has('barcode')) {
             return [
@@ -157,7 +164,7 @@ class TicketController extends Controller
 
         $unscan = $request->has('unscan');
 
-        $event = Event::query()->find($request->input('event'));
+        $event = Event::query()->find($event);
         if ($event === null) {
             return [
                 'code' => 500,

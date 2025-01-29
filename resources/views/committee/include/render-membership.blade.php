@@ -11,7 +11,10 @@
                     date('M \'y', strtotime($membership->created_at)),
                     date('M \'y', strtotime($membership->deleted_at)),
                 )
-                : sprintf('Since %s', date('j F Y', strtotime($membership->created_at))),
+                : sprintf(
+                    'Since %s',
+                    date('j F Y', strtotime($membership->created_at)),
+                ),
         ),
         'footer' =>
             Route::current()->getName() == 'committee::edit'

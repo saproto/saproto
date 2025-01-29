@@ -11,7 +11,7 @@
                                 @if (date('U', strtotime($user->member->created_at)) > 0)
                                     {{ date('F j, Y', strtotime($user->member->created_at)) }}
                                 @else
-                                    Before we kept track
+                                        Before we kept track
                                 @endif
                             </td>
                         </tr>
@@ -47,7 +47,9 @@
                                         {{ Config::string('proto.emaildomain') }}
                                     </span>
                                     <br />
-                                    <sup class="text-muted">Forwards to {{ $user->email }}</sup>
+                                    <sup class="text-muted">
+                                        Forwards to {{ $user->email }}
+                                    </sup>
                                 </td>
                             </tr>
                         @endif
@@ -69,7 +71,8 @@
                                     Not yet determined
                                     <br />
                                     <sup class="text-muted">
-                                        Will be determined when membership fee is charged for this year.
+                                        Will be determined when membership fee
+                                        is charged for this year.
                                     </sup>
                                 </td>
                             @endif
@@ -79,28 +82,38 @@
                                 <th>Special status</th>
                                 <td>
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
-                                        <span class="badge rounded-pill bg-primary">
+                                        <span
+                                            class="badge rounded-pill bg-primary"
+                                        >
                                             Honorary member!
                                             <i class="fas fa-trophy ms-1"></i>
                                         </span>
                                     @endif
 
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::DONOR)
-                                        <span class="badge rounded-pill bg-primary">
+                                        <span
+                                            class="badge rounded-pill bg-primary"
+                                        >
                                             Donor
-                                            <i class="far fa-hand-holding-usd ms-1"></i>
+                                            <i
+                                                class="far fa-hand-holding-usd ms-1"
+                                            ></i>
                                         </span>
                                     @endif
 
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
-                                        <span class="badge rounded-pill bg-primary">
+                                        <span
+                                            class="badge rounded-pill bg-primary"
+                                        >
                                             Lifelong member
                                             <i class="fas fa-clock s-1"></i>
                                         </span>
                                     @endif
 
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
-                                        <span class="badge rounded-pill bg-primary">
+                                        <span
+                                            class="badge rounded-pill bg-primary"
+                                        >
                                             Pet member
                                             <i class="fas fa-cat ms-1"></i>
                                         </span>
@@ -163,9 +176,13 @@
                                         -
                                         {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                         <br />
-                                        <span class="badge rounded-pill bg-warning">
+                                        <span
+                                            class="badge rounded-pill bg-warning"
+                                        >
                                             No digital membership form
-                                            <i class="fas fa-times-circle ms-1"></i>
+                                            <i
+                                                class="fas fa-times-circle ms-1"
+                                            ></i>
                                         </span>
                                     </td>
                                 @endif
@@ -195,9 +212,13 @@
                                         Since
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                         <br />
-                                        <span class="badge rounded-pill bg-warning">
+                                        <span
+                                            class="badge rounded-pill bg-warning"
+                                        >
                                             No digital membership form
-                                            <i class="fas fa-times-circle ms-1"></i>
+                                            <i
+                                                class="fas fa-times-circle ms-1"
+                                            ></i>
                                         </span>
                                     </td>
                                 @endif
@@ -208,8 +229,11 @@
             </table>
 
             <small>
-                If you would like to end your membership, please contact the secretary at
-                <a href="mailto:secretary@proto.utwente.nl">secretary@proto.utwente.nl</a>
+                If you would like to end your membership, please contact the
+                secretary at
+                <a href="mailto:secretary@proto.utwente.nl">
+                    secretary@proto.utwente.nl
+                </a>
                 .
             </small>
         </div>

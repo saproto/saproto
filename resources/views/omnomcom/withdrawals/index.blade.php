@@ -10,7 +10,10 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('omnomcom::withdrawal::create') }}" class="badge bg-info float-end">
+                    <a
+                        href="{{ route('omnomcom::withdrawal::create') }}"
+                        class="badge bg-info float-end"
+                    >
                         Create a new withdrawal.
                     </a>
                 </div>
@@ -37,7 +40,9 @@
                             @foreach ($withdrawals as $withdrawal)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
+                                        <a
+                                            href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}"
+                                        >
                                             {{ $withdrawal->id }}
                                         </a>
                                     </td>
@@ -56,7 +61,9 @@
                                         {{ $withdrawal->closed ? 'Closed' : 'Pending' }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
+                                        <a
+                                            href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}"
+                                        >
                                             Withdrawal
                                         </a>
 

@@ -21,12 +21,18 @@
 
     <div class="card-footer">
         @if (! $user->discord_id)
-            <a href="{{ route('api::discord::redirect') }}" class="btn btn-outline-info btn-block">
+            <a
+                href="{{ route('api::discord::redirect') }}"
+                class="btn btn-outline-info btn-block"
+            >
                 <i class="fa-solid fa-link"></i>
                 Link Discord
             </a>
         @else
-            <a href="{{ route('api::discord::unlink') }}" class="btn btn-outline-info btn-block">
+            <a
+                href="{{ route('api::discord::unlink') }}"
+                class="btn btn-outline-info btn-block"
+            >
                 <i class="fa-solid fa-link-slash"></i>
                 Unlink Discord
             </a>

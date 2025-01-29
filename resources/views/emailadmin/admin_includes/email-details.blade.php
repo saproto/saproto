@@ -175,7 +175,10 @@
                             </div>
                         </div>
 
-                        <div class="form-group {{ $email?->to_event ?: 'd-none' }} mt-1 mb-2" id="backupDiv">
+                        <div
+                            class="form-group {{ $email?->to_event ?: 'd-none' }} mt-1 mb-2"
+                            id="backupDiv"
+                        >
                             @include(
                                 'components.forms.checkbox',
                                 [
@@ -186,7 +189,8 @@
                             )
                             <em>
                                 <b>Note:</b>
-                                Specify in your e-mail that the recipient is not automatically enrolled in the activity!
+                                Specify in your e-mail that the recipient is not
+                                automatically enrolled in the activity!
                             </em>
                         </div>
 
@@ -210,7 +214,10 @@
                             {{ $email?->to_list ? '' : 'disabled="disabled"' }}
                         >
                             @foreach (App\Models\EmailList::all() as $list)
-                                <option value="{{ $list->id }}" @selected($email?->hasRecipientList($list))>
+                                <option
+                                    value="{{ $list->id }}"
+                                    @selected($email?->hasRecipientList($list))
+                                >
                                     {{ $list->name }}
                                 </option>
                             @endforeach
@@ -224,7 +231,9 @@
                         [
                             'name' => 'time',
                             'label' => 'Scheduled:',
-                            'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay()),
+                            'placeholder' => $email
+                                ? $email->time
+                                : strtotime(Carbon::now()->endOfDay()),
                         ]
                     )
                 </div>
@@ -232,9 +241,13 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-success float-end">Save</button>
+            <button type="submit" class="btn btn-success float-end">
+                Save
+            </button>
 
-            <a href="{{ route('email::index') }}" class="btn btn-default">Cancel</a>
+            <a href="{{ route('email::index') }}" class="btn btn-default">
+                Cancel
+            </a>
         </div>
     </div>
 </form>
@@ -243,7 +256,9 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
-        const destinationSelectList = Array.from(document.getElementsByName('destinationType'))
+        const destinationSelectList = Array.from(
+            document.getElementsByName('destinationType')
+        )
         const backupToggle = document.getElementById('backupDiv')
         const toggleList = {
             event: [false, true, false],

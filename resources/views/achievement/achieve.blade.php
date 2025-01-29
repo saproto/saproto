@@ -10,7 +10,9 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <h5 class="card-title">
-                        <i class="fas fa-{{ $achievement->fa_icon }} fa-fw me-2"></i>
+                        <i
+                            class="fas fa-{{ $achievement->fa_icon }} fa-fw me-2"
+                        ></i>
                         {{ $achievement->name }}
                     </h5>
                 </div>

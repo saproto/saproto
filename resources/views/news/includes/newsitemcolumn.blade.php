@@ -31,7 +31,12 @@
                                     : ($newsitem->is_weekly
                                         ? url('images/weekly-cover.png')
                                         : null),
-                                'html' => sprintf('<div class="w-100">%s %s %s</div>', $title, $weekly, $published),
+                                'html' => sprintf(
+                                    '<div class="w-100">%s %s %s</div>',
+                                    $title,
+                                    $weekly,
+                                    $published,
+                                ),
                                 'height' => '180',
                                 'photo_pop' => $newsitem->featuredImage,
                             ]

@@ -27,7 +27,7 @@ use Override;
  * @property string $description
  * @property int $start
  * @property int $end
- * @property Carbon|null $publication
+ * @property int|null $publication
  * @property int|null $image_id
  * @property int|null $committee_id
  * @property int|null $category_id
@@ -102,11 +102,6 @@ class Event extends Model
     {
         return [
             'deleted_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'start' => 'datetime',
-            'end' => 'datetime',
-            'publication' => 'datetime',
         ];
     }
 
@@ -174,7 +169,7 @@ class Event extends Model
 
     public function isPublished(): bool
     {
-        return $this->publication < Carbon::now();
+        return $this->publication < Carbon::now()->timestamp;
     }
 
     public function image(): BelongsTo
@@ -249,12 +244,13 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return $this->start->format($long_format).' '.$combiner.' '.(
-            $this->end->diffInDays($this->start) < 1) !== ''
-            ?
-            $this->end->format($short_format)
-            :
-            $this->end->format($long_format);
+        return date($long_format, $this->start).' '.$combiner.' '.(
+            (($this->end - $this->start) < 3600 * 24)
+                ?
+                date($short_format, $this->end)
+                :
+                date($long_format, $this->end)
+        );
     }
 
     /**
@@ -365,10 +361,10 @@ class Event extends Model
     public function getFormattedDateAttribute(): object
     {
         return (object) [
-            'simple' => $this->start->format('M d, Y'),
-            'year' => $this->start->format('Y'),
-            'month' => $this->start->format('M Y'),
-            'time' => $this->start->format('H:i'),
+            'simple' => date('M d, Y', $this->start),
+            'year' => date('Y', $this->start),
+            'month' => date('M Y', $this->start),
+            'time' => date('H:i', $this->start),
         ];
     }
 

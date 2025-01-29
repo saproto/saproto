@@ -1,11 +1,19 @@
-<form class="form-horizontal" method="post" action="{{ route('feedback::store', ['category' => $category]) }}">
+<form
+    class="form-horizontal"
+    method="post"
+    action="{{ route('feedback::store', ['category' => $category]) }}"
+>
     {{ csrf_field() }}
 
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white">Add your own {{ str_singular($category->title) }}</div>
+        <div class="card-header bg-dark text-white">
+            Add your own {{ str_singular($category->title) }}
+        </div>
 
         <div class="card-body">
-            <label for="new-feedback">New {{ str_singular($category->title) }}:</label>
+            <label for="new-feedback">
+                New {{ str_singular($category->title) }}:
+            </label>
             <textarea
                 id="new-feedback"
                 class="form-control"

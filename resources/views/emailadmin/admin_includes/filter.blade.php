@@ -43,7 +43,11 @@
         </div>
 
         <div class="card-footer">
-            <input type="submit" class="btn btn-success btn-block" value="Search emails" />
+            <input
+                type="submit"
+                class="btn btn-success btn-block"
+                value="Search emails"
+            />
         </div>
     </div>
 </form>

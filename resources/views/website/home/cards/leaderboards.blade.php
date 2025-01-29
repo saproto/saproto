@@ -16,8 +16,13 @@
             <table class="table table-sm mb-0">
                 @foreach ($entries as $entry)
                     <tr>
-                        <td class="ps-3 place-{{ $loop->index + 1 }}" style="max-width: 50px">
-                            <i class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"></i>
+                        <td
+                            class="ps-3 place-{{ $loop->index + 1 }}"
+                            style="max-width: 50px"
+                        >
+                            <i
+                                class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"
+                            ></i>
                             {{ $loop->index + 1 }}
                         </td>
                         <td>{{ $entry->user->name }}</td>
@@ -34,7 +39,12 @@
         @endif
 
         <div class="p-3">
-            <a href="{{ route('leaderboards::index') }}" class="btn btn-info btn-block">Go to leaderboards</a>
+            <a
+                href="{{ route('leaderboards::index') }}"
+                class="btn btn-info btn-block"
+            >
+                Go to leaderboards
+            </a>
         </div>
     </div>
 @endif

@@ -10,7 +10,10 @@
             ></i>
         </div>
 
-        <form method="post" action="{{ route('event::copy', ['id' => $event->id]) }}">
+        <form
+            method="post"
+            action="{{ route('event::copy', ['id' => $event->id]) }}"
+        >
             @csrf
 
             <div class="card-body">
@@ -19,7 +22,8 @@
                     [
                         'name' => 'newDate',
                         'label' => 'This will copy the event and move the start to:',
-                        'placeholder' => Carbon::createFromTimestamp($event->start)->addWeek()->timestamp,
+                        'placeholder' => Carbon::createFromTimestamp($event->start)->addWeek()
+                            ->timestamp,
                         'format' => 'date',
                     ]
                 )

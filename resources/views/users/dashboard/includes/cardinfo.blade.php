@@ -11,7 +11,9 @@
                                 <p class="card-text">
                                     {{ $rfid->name ?? 'Nameless card' }}
                                     <br />
-                                    <sup class="texttext-muted">Last used: {{ $rfid->updated_at }}</sup>
+                                    <sup class="texttext-muted">
+                                        Last used: {{ $rfid->updated_at }}
+                                    </sup>
                                     <br />
 
                                     <a
@@ -30,7 +32,9 @@
 
                                     <br />
 
-                                    <sub class="text-muted">Card ID: {{ $rfid->card_id }}</sub>
+                                    <sub class="text-muted">
+                                        Card ID: {{ $rfid->card_id }}
+                                    </sub>
                                 </p>
                             </div>
                         </div>
@@ -39,7 +43,8 @@
             </div>
         @else
             <p class="card-text text-center">
-                You have no cards linked to your account. You can link cards at the OmNomCom.
+                You have no cards linked to your account. You can link cards at
+                the OmNomCom.
             </p>
         @endif
     </div>

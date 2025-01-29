@@ -23,13 +23,16 @@ function request(method, url, params, options) {
     const result = fetch(url, options)
     return result.then((response) => {
         if (!response.ok) throw response
-        if (options.parse !== undefined && options.parse === false) return response
+        if (options.parse !== undefined && options.parse === false)
+            return response
         return response.json()
     })
 }
 
-global.get = (url, params = {}, options = {}) => request('GET', url, params, options)
-global.post = (url, params = {}, options = {}) => request('POST', url, params, options)
+global.get = (url, params = {}, options = {}) =>
+    request('GET', url, params, options)
+global.post = (url, params = {}, options = {}) =>
+    request('POST', url, params, options)
 
 // Method to debounce function calls
 global.debounce = (callback, timeout = 300) => {
@@ -50,7 +53,13 @@ let currentAlert = null
 
 const createAlertElement = (type, message) => {
     const el = document.createElement('div')
-    el.classList.add('fade', 'show', 'alert', `alert-${type}`, 'alert-dismissible')
+    el.classList.add(
+        'fade',
+        'show',
+        'alert',
+        `alert-${type}`,
+        'alert-dismissible'
+    )
     el.role = 'alert'
     el.innerHTML = `<div>${message}</div><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`
     return el

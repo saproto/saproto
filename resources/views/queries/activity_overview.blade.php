@@ -16,7 +16,12 @@
                 <div class="card-body">
                     <form method="get">
                         <div class="row">
-                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
+                            <label
+                                for="datetimepicker-start"
+                                class="col-sm-auto col-form-label pe-0"
+                            >
+                                Start:
+                            </label>
                             <div class="col-sm-auto">
                                 @include(
                                     'components.forms.datetimepicker',
@@ -27,7 +32,12 @@
                                     ]
                                 )
                             </div>
-                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
+                            <label
+                                for="datetimepicker-start"
+                                class="col-sm-auto col-form-label pe-0"
+                            >
+                                End:
+                            </label>
                             <div class="col-sm-auto mb-3">
                                 @include(
                                     'components.forms.datetimepicker',
@@ -40,7 +50,9 @@
                             </div>
 
                             <div class="col-sm-auto">
-                                <button type="submit" class="btn btn-success">Find activities!</button>
+                                <button type="submit" class="btn btn-success">
+                                    Find activities!
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -65,7 +77,9 @@
                         @foreach ($events as $event)
                             <tr>
                                 <td>
-                                    <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
+                                    <a
+                                        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+                                    >
                                         {{ $event->title }}
                                     </a>
                                 </td>
@@ -74,7 +88,7 @@
                                     @if ($event->category)
                                         {{ $event->category->name }}
                                     @else
-                                        Not set
+                                            Not set
                                     @endif
                                 </td>
 
@@ -82,11 +96,15 @@
 
                                 <td>
                                     @if ($event->committee)
-                                        <a href="{{ route('committee::show', ['id' => $event->committee->slug]) }}">
+                                        <a
+                                            href="{{ route('committee::show', ['id' => $event->committee->slug]) }}"
+                                        >
                                             {{ $event->committee->name }}
                                         </a>
                                     @else
-                                        <span class="font-italic text-muted">not set</span>
+                                        <span class="font-italic text-muted">
+                                            not set
+                                        </span>
                                     @endif
                                 </td>
 
@@ -106,19 +124,29 @@
                                     <td>€{{ $event->activity->price }}</td>
                                 @else
                                     <td>
-                                        <span class="font-italic text-muted">no activity</span>
+                                        <span class="font-italic text-muted">
+                                            no activity
+                                        </span>
                                     </td>
                                     <td>
-                                        <span class="font-italic text-muted">no activity</span>
+                                        <span class="font-italic text-muted">
+                                            no activity
+                                        </span>
                                     </td>
                                     <td>
-                                        <span class="font-italic text-muted">no activity</span>
+                                        <span class="font-italic text-muted">
+                                            no activity
+                                        </span>
                                     </td>
                                     <td>
-                                        <span class="font-italic text-muted">no activity</span>
+                                        <span class="font-italic text-muted">
+                                            no activity
+                                        </span>
                                     </td>
                                     <td>
-                                        <span class="font-italic text-muted">no activity</span>
+                                        <span class="font-italic text-muted">
+                                            no activity
+                                        </span>
                                     </td>
                                 @endif
                             </tr>

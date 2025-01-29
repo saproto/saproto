@@ -38,7 +38,9 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-center text-muted mt-3">No archived {{ $category->title }}.</p>
+                        <p class="text-center text-muted mt-3">
+                            No archived {{ $category->title }}.
+                        </p>
                     @endif
                 </div>
 

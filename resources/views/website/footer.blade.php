@@ -5,7 +5,10 @@
                 <strong>
                     <span class="fas fa-home"></span>
                     &nbsp;&nbsp;
-                    <a class="org url text-white" href="https://www.saproto.nl/">
+                    <a
+                        class="org url text-white"
+                        href="https://www.saproto.nl/"
+                    >
                         <span class="green">S.A. Proto</span>
                     </a>
                 </strong>
@@ -31,31 +34,54 @@
                 <br />
                 <span class="fas fa-phone fa-fw"></span>
                 &nbsp;&nbsp;
-                <a class="tel text-white" href="tel:+31534894423">+31 (0)53 489 4423</a>
+                <a class="tel text-white" href="tel:+31534894423">
+                    +31 (0)53 489 4423
+                </a>
                 <br />
                 <span class="fas fa-envelope fa-fw"></span>
                 &nbsp;&nbsp;
-                <a class="email text-white" href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
+                <a
+                    class="email text-white"
+                    href="mailto:board@proto.utwente.nl"
+                >
+                    board@proto.utwente.nl
+                </a>
             </div>
 
             <div class="col-3 d-none d-lg-block text-end">
                 <br />
-                <a class="text-white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
+                <a
+                    class="text-white"
+                    href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw"
+                    target="_blank"
+                >
                     YouTube&nbsp;&nbsp;
                     <i class="fab fa-fw fa-youtube" aria-hidden="true"></i>
                 </a>
                 <br />
-                <a class="text-white" href="https://www.linkedin.com/company/s-a-proto/" target="_blank">
+                <a
+                    class="text-white"
+                    href="https://www.linkedin.com/company/s-a-proto/"
+                    target="_blank"
+                >
                     LinkedIn&nbsp;&nbsp;
                     <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i>
                 </a>
                 <br />
-                <a class="text-white" href="https://www.instagram.com/s.a.proto/" target="_blank">
+                <a
+                    class="text-white"
+                    href="https://www.instagram.com/s.a.proto/"
+                    target="_blank"
+                >
                     Instagram&nbsp;&nbsp;
                     <i class="fab fa-fw fa-instagram" aria-hidden="true"></i>
                 </a>
                 <br />
-                <a class="text-white" href="https://www.proto.utwente.nl/page/privacy" target="_blank">
+                <a
+                    class="text-white"
+                    href="https://www.proto.utwente.nl/page/privacy"
+                    target="_blank"
+                >
                     Privacy Policy&nbsp;&nbsp;
                     <i class="fa fa-shield" aria-hidden="true"></i>
                 </a>
@@ -85,13 +111,22 @@
                         privacy policy
                     </a>
                     and
-                    <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
+                    <a
+                        href="https://wiki.proto.utwente.nl/ict/responsible-disclosure"
+                        class="text-white"
+                    >
                         responsible disclosure policy
                     </a>
                     .
                 </span>
                 The website source is available on
-                <a href="https://github.com/saproto/saproto" target="_blank" class="text-white">GitHub</a>
+                <a
+                    href="https://github.com/saproto/saproto"
+                    target="_blank"
+                    class="text-white"
+                >
+                    GitHub
+                </a>
                 .
                 <br />
                 This website has been created with

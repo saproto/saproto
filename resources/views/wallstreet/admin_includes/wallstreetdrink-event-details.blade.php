@@ -57,9 +57,17 @@
                     @if ($currentEvent?->image == null)
                         <label for="image">Set event image:</label>
                     @else
-                        <image class="mb-3" src="{{ $currentEvent->image->generatePath() ?? '' }}" />
+                        <image
+                            class="mb-3"
+                            src="{{ $currentEvent->image->generatePath() ?? '' }}"
+                        />
                     @endif
-                    <input type="file" id="image" class="form-control" name="image" />
+                    <input
+                        type="file"
+                        id="image"
+                        class="form-control"
+                        name="image"
+                    />
                 </div>
                 <label for="editor">Description</label>
                 @include(
@@ -70,7 +78,10 @@
                             $currentEvent == null
                                 ? 'A keg fell of the Grolsch truck and now we have to empty it! What a pity...'
                                 : null,
-                        'value' => old('description', $currentEvent == null ? null : $currentEvent->description),
+                        'value' => old(
+                            'description',
+                            $currentEvent == null ? null : $currentEvent->description,
+                        ),
                     ]
                 )
             </div>

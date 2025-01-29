@@ -15,7 +15,8 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        Edit order by {{ $dinnerformOrderline->user->name }} for dinnerform at
+                        Edit order by {{ $dinnerformOrderline->user->name }}
+                        for dinnerform at
                         {{ $dinnerformOrderline->dinnerform->restaurant }}
                     </div>
 
@@ -55,7 +56,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <input type="submit" class="btn btn-success" value="Edit" />
+                        <input
+                            type="submit"
+                            class="btn btn-success"
+                            value="Edit"
+                        />
                         <a
                             class="btn btn-danger ms-2"
                             href="{{ route('dinnerform::admin', ['id' => $dinnerformOrderline->dinnerform->id]) }}"

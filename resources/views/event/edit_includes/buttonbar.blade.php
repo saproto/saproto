@@ -1,5 +1,7 @@
 @if ($event)
-    <button type="submit" class="btn btn-success float-end ms-2">Update event details</button>
+    <button type="submit" class="btn btn-success float-end ms-2">
+        Update event details
+    </button>
     @include(
         'components.modals.confirm-modal',
         [
@@ -9,10 +11,15 @@
             'message' => 'Are you sure you want to delete this event?',
         ]
     )
-    <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}" class="btn btn-default float-end">
+    <a
+        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        class="btn btn-default float-end"
+    >
         Back to event
     </a>
 @else
     <button type="submit" class="btn btn-success float-end ms-2">Create</button>
-    <a href="{{ route('event::index') }}" class="btn btn-default float-end">Back to calendar</a>
+    <a href="{{ route('event::index') }}" class="btn btn-default float-end">
+        Back to calendar
+    </a>
 @endif

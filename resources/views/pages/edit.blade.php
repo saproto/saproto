@@ -41,7 +41,9 @@
                             <label for="slug">URL:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">{{ route('page::show', '') }}/</span>
+                                    <span class="input-group-text">
+                                        {{ route('page::show', '') }}/
+                                    </span>
                                 </div>
                                 <input
                                     type="text"
@@ -86,9 +88,16 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('page::list') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('page::list') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </form>
@@ -112,17 +121,29 @@
                             />
                         @endif
 
-                        <div class="card-header bg-dark text-white">Featured image</div>
+                        <div class="card-header bg-dark text-white">
+                            Featured image
+                        </div>
 
                         <div class="card-body">
                             <div class="custom-file">
-                                <input id="image" type="file" class="form-control" name="image" />
-                                <label class="form-label" for="image">Upload featured image</label>
+                                <input
+                                    id="image"
+                                    type="file"
+                                    class="form-control"
+                                    name="image"
+                                />
+                                <label class="form-label" for="image">
+                                    Upload featured image
+                                </label>
                             </div>
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-success float-end btn-block">
+                            <button
+                                type="submit"
+                                class="btn btn-success float-end btn-block"
+                            >
                                 Replace featured image
                             </button>
                         </div>
@@ -137,7 +158,9 @@
                     @csrf
 
                     <div class="card mb-3">
-                        <div class="card-header bg-dark text-white mb-1">Attachments</div>
+                        <div class="card-header bg-dark text-white mb-1">
+                            Attachments
+                        </div>
 
                         @if ($item->files->count() > 0)
                             <table class="table table-hover table-sm">
@@ -151,7 +174,10 @@
                                 @foreach ($item->files as $file)
                                     <tr>
                                         <td class="ps-3 ellipsis">
-                                            <a href="{{ $file->generatePath() }}" target="_blank">
+                                            <a
+                                                href="{{ $file->generatePath() }}"
+                                                target="_blank"
+                                            >
                                                 {{ $file->original_filename }}
                                             </a>
                                         </td>
@@ -162,7 +188,9 @@
                                                     href="#"
                                                     rel="{{ $file->generateImagePath(1000, null) }}"
                                                 >
-                                                    <i class="fas fa-image me-2 fa-fw"></i>
+                                                    <i
+                                                        class="fas fa-image me-2 fa-fw"
+                                                    ></i>
                                                 </a>
                                             @else
                                                 <a
@@ -171,13 +199,17 @@
                                                     role="button"
                                                     rel="{{ $file->generatePath() }}"
                                                 >
-                                                    <i class="fas fa-link me-2 fa-fw"></i>
+                                                    <i
+                                                        class="fas fa-link me-2 fa-fw"
+                                                    ></i>
                                                 </a>
                                             @endif
                                             <a
                                                 href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                             >
-                                                <i class="fas fa-trash text-danger"></i>
+                                                <i
+                                                    class="fas fa-trash text-danger"
+                                                ></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -187,13 +219,26 @@
 
                         <div class="card-body">
                             <div class="custom-file">
-                                <input id="files" type="file" class="form-control" name="files[]" multiple />
-                                <label class="form-label" for="files">Upload a file</label>
+                                <input
+                                    id="files"
+                                    type="file"
+                                    class="form-control"
+                                    name="files[]"
+                                    multiple
+                                />
+                                <label class="form-label" for="files">
+                                    Upload a file
+                                </label>
                             </div>
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-success btn-block">Upload file</button>
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-block"
+                            >
+                                Upload file
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -206,7 +251,8 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Borrowed from https://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
-            const cm = document.getElementsByClassName('.CodeMirror')[0].CodeMirror
+            const cm =
+                document.getElementsByClassName('.CodeMirror')[0].CodeMirror
             const doc = cm.getDoc()
             const cursor = doc.getCursor() // gets the line number in the cursor position
             const line = doc.getLine(cursor.line) // get the line contents
@@ -218,7 +264,9 @@
             doc.replaceRange('\n' + data + '\n', pos) // adds a new line
         }
 
-        const insertLinks = document.querySelectorAll('.pageEdit_insertLink, .pageEdit_insertImage')
+        const insertLinks = document.querySelectorAll(
+            '.pageEdit_insertLink, .pageEdit_insertImage'
+        )
         insertLinks.forEach((el) => {
             el.addEventListener('click', (e) => {
                 e.preventDefault()

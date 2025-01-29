@@ -10,7 +10,10 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
-                    <a href="{{ route('omnomcom::categories::create') }}" class="float-end badge bg-success">
+                    <a
+                        href="{{ route('omnomcom::categories::create') }}"
+                        class="float-end badge bg-success"
+                    >
                         Add new category
                     </a>
                 </div>
@@ -31,7 +34,9 @@
                                         products
                                     </td>
                                     <td>
-                                        <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
+                                        <a
+                                            href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}"
+                                        >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
                                         @include(

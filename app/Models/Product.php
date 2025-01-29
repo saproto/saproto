@@ -90,7 +90,7 @@ class Product extends Model
             }
         }
 
-        return '';
+        return null;
     }
 
     public function categories(): BelongsToMany

@@ -75,11 +75,6 @@ class Member extends Model
     protected function casts(): array
     {
         return [
-            'is_lifelong' => 'boolean',
-            'is_honorary' => 'boolean',
-            'is_donor' => 'boolean',
-            'is_pending' => 'boolean',
-            'is_pet' => 'boolean',
             'deleted_at' => 'datetime',
             'membership_type' => MembershipTypeEnum::class,
         ];

@@ -2,13 +2,19 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+        />
 
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-        <link rel="shortcut icon" href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}" />
+        <link
+            rel="shortcut icon"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
+        />
         <link
             rel="search"
             type="application/opensearchdescription+xml"
@@ -29,10 +35,16 @@
             property="og:description"
             content="@yield('og-description', 'S.A. Proto is the study association for Creative Technology at the University of Twente.')"
         />
-        <meta property="og:image" content="@yield('og-image', asset('images/logo/og-image.png'))" />
+        <meta
+            property="og:image"
+            content="@yield('og-image', asset('images/logo/og-image.png'))"
+        />
         @show
     </head>
-    <body class="font-sans antialiased" data-theme="{{ config('proto.themes')[Auth::user()?->theme ?? 0] }}">
+    <body
+        class="font-sans antialiased"
+        data-theme="{{ config('proto.themes')[Auth::user()?->theme ?? 0] }}"
+    >
         @inertia
     </body>
 </html>

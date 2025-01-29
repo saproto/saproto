@@ -27,7 +27,9 @@
 
                     <!-- Price decrease per Minute -->
                     <div class="col-md-12 mb-3">
-                        <label for="price_decrease">€ decrease per minute:</label>
+                        <label for="price_decrease">
+                            € decrease per minute:
+                        </label>
                         <input
                             type="number"
                             step="0.01"
@@ -73,7 +75,9 @@
 
                     <!-- increase per sold item -->
                     <div class="col-md-12 mb-3">
-                        <label for="price_increase">€ increase per sold item:</label>
+                        <label for="price_increase">
+                            € increase per sold item:
+                        </label>
                         <input
                             type="number"
                             step="0.01"
@@ -89,7 +93,9 @@
 
                     <!-- The chance a random event happens per minute -->
                     <div class="col-md-12 mb-3">
-                        <label for="random_events_chance">Random event chance/min:</label>
+                        <label for="random_events_chance">
+                            Random event chance/min:
+                        </label>
                         <i
                             class="fas fa-info-circle"
                             data-bs-toggle="tooltip"

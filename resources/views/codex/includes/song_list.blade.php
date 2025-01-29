@@ -3,9 +3,19 @@
         Songs
         @if (! isset($edit))
             <div>
-                <a href="{{ route('codexSong.create') }}" class="btn btn-info badge">New Song</a>
+                <a
+                    href="{{ route('codexSong.create') }}"
+                    class="btn btn-info badge"
+                >
+                    New Song
+                </a>
 
-                <a href="{{ route('codexSongCategory.create') }}" class="btn btn-info badge">New Song type</a>
+                <a
+                    href="{{ route('codexSongCategory.create') }}"
+                    class="btn btn-info badge"
+                >
+                    New Song type
+                </a>
             </div>
         @endif
     </div>
@@ -49,10 +59,15 @@
                         @endif
                     </span>
 
-                    <div id="collapse-song{{ $songCategory->id }}" class="collapse">
+                    <div
+                        id="collapse-song{{ $songCategory->id }}"
+                        class="collapse"
+                    >
                         <div class="card-body cursor-default">
                             @foreach ($songCategory->songs as $song)
-                                <span class="w-100 d-inline-flex justify-content-between">
+                                <span
+                                    class="w-100 d-inline-flex justify-content-between"
+                                >
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
                                             @include(

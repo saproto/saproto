@@ -7,7 +7,10 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form method="POST" action="{{ route('user::memberprofile::complete') }}">
+            <form
+                method="POST"
+                action="{{ route('user::memberprofile::complete') }}"
+            >
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
                         @yield('page-title')
@@ -20,7 +23,10 @@
 
                         <input type="hidden" name="verified" value="true" />
 
-                        <p class="text-center">Please check that you've entered the information below correctly.</p>
+                        <p class="text-center">
+                            Please check that you've entered the information
+                            below correctly.
+                        </p>
 
                         <hr />
 
@@ -34,7 +40,10 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-primary btn-block">
+                        <button
+                            type="submit"
+                            class="btn btn-outline-primary btn-block"
+                        >
                             The information above is correct.
                         </button>
                     </div>

@@ -51,7 +51,6 @@
         "globalcitizen/php-iban": "4.2.3",
         "graham-campbell/markdown": "^15.2",
         "guzzlehttp/guzzle": "^7.5",
-        "intervention/image": "^3.5.0",
         "jwilsson/spotify-web-api-php": "^6.0",
         "laravel/framework": "^11.31.0",
         "laravel/helpers": "^1.7.0",

@@ -8,10 +8,16 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Albums</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Albums
+                </div>
 
                 <div class="card-body">
-                    <form method="post" action="{{ route('photo::admin::index') }}" class="form-main">
+                    <form
+                        method="post"
+                        action="{{ route('photo::admin::index') }}"
+                        class="form-main"
+                    >
                         {{ csrf_field() }}
                         <div class="input-group">
                             <input
@@ -21,7 +27,10 @@
                                 type="search"
                                 name="query"
                             />
-                            <button type="submit" class="input-group-text btn btn-info">
+                            <button
+                                type="submit"
+                                class="input-group-text btn btn-info"
+                            >
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -30,14 +39,25 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Add Album</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Add Album
+                </div>
 
-                <form method="post" action="{{ route('photo::admin::create') }}">
+                <form
+                    method="post"
+                    action="{{ route('photo::admin::create') }}"
+                >
                     {{ csrf_field() }}
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Album name:</label>
-                            <input required type="text" id="name" name="name" class="form-control" />
+                            <input
+                                required
+                                type="text"
+                                id="name"
+                                name="name"
+                                class="form-control"
+                            />
                         </div>
                         @include(
                             'components.forms.datetimepicker',
@@ -57,7 +77,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <input type="submit" class="btn btn-success btn-block" value="Add Album" />
+                        <input
+                            type="submit"
+                            class="btn btn-success btn-block"
+                            value="Add Album"
+                        />
                     </div>
                 </form>
             </div>
@@ -65,7 +89,9 @@
 
         <div class="col-lg-9">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Unpublished albums</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Unpublished albums
+                </div>
 
                 <div class="card-body">
                     <div class="row"></div>
@@ -96,7 +122,9 @@
                 </div>
             </div>
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Published albums</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Published albums
+                </div>
 
                 <div class="card-body">
                     <div class="row"></div>

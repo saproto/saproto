@@ -62,13 +62,23 @@
                     {{ date('M Y') }} -
                     {{ date('M Y', strtotime('+3 years')) }}
                 </div>
-                <barcode id="barcode" label="none" value="{{ $user->id }}"></barcode>
+                <barcode
+                    id="barcode"
+                    label="none"
+                    value="{{ $user->id }}"
+                ></barcode>
             </div>
 
             @if ($user->photo)
-                <img id="photo" src="data:image/webp;base64,{{ $user->photo->getBase64(450, 450) }}" />
+                <img
+                    id="photo"
+                    src="data:image/webp;base64,{{ $user->photo->getBase64(450, 450) }}"
+                />
             @else
-                <img id="photo" src="{{ public_path('images/default-avatars/other.png') }}" />
+                <img
+                    id="photo"
+                    src="{{ public_path('images/default-avatars/other.png') }}"
+                />
             @endif
         @endif
     </div>

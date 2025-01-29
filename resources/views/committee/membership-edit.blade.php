@@ -73,7 +73,10 @@
                                     [
                                         'name' => 'end',
                                         'label' => 'Until',
-                                        'placeholder' => $membership->deleted_at == null ? null : strtotime($membership->deleted_at),
+                                        'placeholder' =>
+                                            $membership->deleted_at == null
+                                                ? null
+                                                : strtotime($membership->deleted_at),
                                         'not_required' => true,
                                     ]
                                 )
@@ -82,7 +85,9 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Save</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Save
+                        </button>
 
                         <a
                             href="{{ route('committee::membership::delete', ['id' => $membership->id]) }}"
@@ -91,7 +96,12 @@
                             Was never a member
                         </a>
 
-                        <a href="javascript:history.go(-1);" class="btn btn-default float-end">Cancel</a>
+                        <a
+                            href="javascript:history.go(-1);"
+                            class="btn btn-default float-end"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </form>

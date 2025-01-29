@@ -53,7 +53,6 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
-
 /* --- use App\Http\Controllers\RadioController; --- */
 
 use App\Http\Controllers\ShortUrlController;
@@ -105,7 +104,6 @@ Route::middleware('forcedomain')->group(function () {
     Route::controller(HomeController::class)->group(function () {
         Route::get('developers', 'developers');
         Route::get('', 'show')->name('homepage');
-        Route::post('', 'post')->name('homepage::post');
         Route::get('fishcam', 'fishcam')->middleware(['member'])->name('fishcam');
     });
 
@@ -496,11 +494,12 @@ Route::middleware('forcedomain')->group(function () {
                 Route::post('close/{id}', 'finclose')->name('close');
             });
 
+            // Event related admin (Board only)
             Route::middleware(['permission:board'])->group(function () {
                 // Events admin
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
-                Route::get('edit/{event}', 'edit')->name('edit');
+                Route::get('edit/{id}', 'edit')->name('edit');
                 Route::post('update/{id}', 'update')->name('update');
                 Route::get('delete/{id}', 'destroy')->name('delete');
 
@@ -899,9 +898,16 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Fetching images: Public --- */
-    Route::get('image/{id}/{hash}/{name?}', [FileController::class, 'getImage'])->name('image::get');
+    Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
+        Route::get('{id}/{hash}', 'getImage')->name('get');
+        Route::get('{id}/{hash}/{name}', 'getImage');
+    });
+
     /* --- Fetching files: Public   --- */
-    Route::get('file/{id}/{hash}/{name?}', [FileController::class, 'get'])->name('file::get');
+    Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
+        Route::get('{id}/{hash}', 'get')->name('get');
+        Route::get('{id}/{hash}/{name}', 'get');
+    });
 
     /* --- Routes related to Spotify. (Board) --- */
     Route::get('spotify/oauth', [SpotifyController::class, 'oauthTool'])->name('spotify::oauth')->middleware(['auth', 'permission:board']);
@@ -1043,9 +1049,7 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
-        Route::get('/', function () {
-            return inertia('Welcome');
-        })->name('index');
+        Route::get('/', fn () => inertia('Welcome'))->name('index');
     });
 
     /* --- Route related to the december theme --- */
@@ -1056,4 +1060,4 @@ Route::middleware('forcedomain')->group(function () {
     })->name('december::toggle');
 });
 
-require __DIR__ . '/minisites.php';
+require __DIR__.'/minisites.php';

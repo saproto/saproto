@@ -5,7 +5,8 @@
 @endsection
 
 @section('og-description')
-    From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }} @ {{ $event->location }}.
+    From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }} @
+    {{ $event->location }}.
 
     {{ $event->description }}
 @endsection

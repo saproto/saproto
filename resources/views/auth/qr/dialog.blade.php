@@ -13,6 +13,11 @@
     </p>
 
     <p>
-        <a href="{{ route('qr::approve', ['code' => $code]) }}" class="btn btn-success">Approve</a>
+        <a
+            href="{{ route('qr::approve', ['code' => $code]) }}"
+            class="btn btn-success"
+        >
+            Approve
+        </a>
     </p>
 @endsection

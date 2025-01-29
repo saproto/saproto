@@ -1,5 +1,7 @@
 <div class="card">
-    <div class="card-header bg-dark text-white">People helping this activity</div>
+    <div class="card-header bg-dark text-white">
+        People helping this activity
+    </div>
 
     <ul class="list-group list-group-flush">
         @foreach ($event->activity->helpingCommitteeInstances as $key => $instance)
@@ -13,7 +15,9 @@
                     </strong>
 
                     @if ($event->activity->helpingUsers($instance->id)->count() < 1)
-                        <p class="card-text">No people are currently helping.</p>
+                        <p class="card-text">
+                            No people are currently helping.
+                        </p>
                     @else
                         @include(
                             'event.display_includes.render_participant_list',
@@ -53,11 +57,18 @@
                             <div class="row mb-3">
                                 <div class="col-9">
                                     <div class="form-group autocomplete">
-                                        <input class="form-control user-search" name="user_id" required />
+                                        <input
+                                            class="form-control user-search"
+                                            name="user_id"
+                                            required
+                                        />
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <button class="btn btn-outline-primary btn-block" type="submit">
+                                    <button
+                                        class="btn btn-outline-primary btn-block"
+                                        type="submit"
+                                    >
                                         <i class="fas fa-plus-circle"></i>
                                     </button>
                                 </div>

@@ -19,7 +19,12 @@
         </p>
 
         <p>
-            <a class="btn btn-default btn-block" href="{{ route('login::password::reset') }}">Forgot your password?</a>
+            <a
+                class="btn btn-default btn-block"
+                href="{{ route('login::password::reset') }}"
+            >
+                Forgot your password?
+            </a>
         </p>
 
         <hr />
@@ -55,7 +60,11 @@
         <p>- or -</p>
 
         <p>
-            <a href="https://tap.utwente.nl/tap/" class="btn btn-default btn-block" target="_blank">
+            <a
+                href="https://tap.utwente.nl/tap/"
+                class="btn btn-default btn-block"
+                target="_blank"
+            >
                 Change your UTwente password
             </a>
         </p>

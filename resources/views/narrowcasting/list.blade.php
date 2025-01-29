@@ -10,10 +10,16 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge bg-info float-end" href="{{ route('narrowcasting::create') }}">
+                    <a
+                        class="badge bg-info float-end"
+                        href="{{ route('narrowcasting::create') }}"
+                    >
                         Create a new campaign.
                     </a>
-                    <a class="badge bg-danger float-end me-2" href="{{ route('narrowcasting::clear') }}">
+                    <a
+                        class="badge bg-danger float-end me-2"
+                        href="{{ route('narrowcasting::clear') }}"
+                    >
                         Delete all past campaigns.
                     </a>
                 </div>
@@ -32,15 +38,28 @@
                         </thead>
 
                         @foreach ($messages as $message)
-                            <tr {!! $message->campaign_end < date('U') ? 'style="opacity: 0.5;"' : '' !!}>
+                            <tr
+                                {!! $message->campaign_end < date('U') ? 'style="opacity: 0.5;"' : '' !!}
+                            >
                                 <td>
                                     @if ($message->youtube_id)
-                                        <i class="fab fa-youtube" aria-hidden="true"></i>
+                                        <i
+                                            class="fab fa-youtube"
+                                            aria-hidden="true"
+                                        ></i>
                                     @elseif ($message->image)
-                                        <i class="fas fa-picture-o" aria-hidden="true"></i>
+                                        <i
+                                            class="fas fa-picture-o"
+                                            aria-hidden="true"
+                                        ></i>
                                     @endif
                                 </td>
-                                <td style="overflow-wrap: break-word; max-width: 160px">
+                                <td
+                                    style="
+                                        overflow-wrap: break-word;
+                                        max-width: 160px;
+                                    "
+                                >
                                     {{ $message->name }}
                                 </td>
                                 <td>
@@ -57,11 +76,21 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}">
-                                        <i class="fas fa-edit me-2" aria-hidden="true"></i>
+                                    <a
+                                        href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}"
+                                    >
+                                        <i
+                                            class="fas fa-edit me-2"
+                                            aria-hidden="true"
+                                        ></i>
                                     </a>
-                                    <a href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}">
-                                        <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                    <a
+                                        href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}"
+                                    >
+                                        <i
+                                            class="fas fa-trash text-danger"
+                                            aria-hidden="true"
+                                        ></i>
                                     </a>
                                 </td>
                             </tr>

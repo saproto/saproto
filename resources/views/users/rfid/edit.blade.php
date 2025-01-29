@@ -35,9 +35,14 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('user::dashboard', ['id' => $card->user->id]) }}" class="btn btn-default">
+                        <a
+                            href="{{ route('user::dashboard', ['id' => $card->user->id]) }}"
+                            class="btn btn-default"
+                        >
                             Cancel
                         </a>
                     </div>

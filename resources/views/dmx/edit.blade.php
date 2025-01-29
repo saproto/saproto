@@ -9,7 +9,11 @@
         action="{{ ! empty($fixture) ? route('dmx.fixtures.update', ['fixture' => $fixture]) : route('dmx.fixtures.store') }}"
         method="POST"
     >
-        <input type="hidden" name="_method" value="{{ ! empty($fixture) ? 'PUT' : 'POST' }}" />
+        <input
+            type="hidden"
+            name="_method"
+            value="{{ ! empty($fixture) ? 'PUT' : 'POST' }}"
+        />
         {{ csrf_field() }}
 
         <div class="row justify-content-center">
@@ -35,9 +39,20 @@
 
                         <div class="form-group">
                             <label for="channel_start">Fixture behavior:</label>
-                            <select class="form-control" name="follow_timetable">
-                                <option value="0" @selected($fixture && ! $fixture->follow_timetable)>Manual</option>
-                                <option value="1" @selected($fixture?->follow_timetable)>
+                            <select
+                                class="form-control"
+                                name="follow_timetable"
+                            >
+                                <option
+                                    value="0"
+                                    @selected($fixture && ! $fixture->follow_timetable)
+                                >
+                                    Manual
+                                </option>
+                                <option
+                                    value="1"
+                                    @selected($fixture?->follow_timetable)
+                                >
                                     Automatic via timetable
                                 </option>
                             </select>
@@ -74,7 +89,10 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-6">
-                                            <label>Name for channel {{ $channel->id }}:</label>
+                                            <label>
+                                                Name for channel
+                                                {{ $channel->id }}:
+                                            </label>
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -85,13 +103,20 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="channel_start">Channel type:</label>
+                                                <label for="channel_start">
+                                                    Channel type:
+                                                </label>
                                                 <select
                                                     class="form-control"
                                                     name="special_function[{{ $channel->id }}]"
                                                 >
-                                                    <option value="none">None</option>
-                                                    <option value="red" @selected($channel->special_function == 'red')>
+                                                    <option value="none">
+                                                        None
+                                                    </option>
+                                                    <option
+                                                        value="red"
+                                                        @selected($channel->special_function == 'red')
+                                                    >
                                                         Red
                                                     </option>
                                                     <option
@@ -122,9 +147,16 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('dmx.index') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('dmx.index') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>

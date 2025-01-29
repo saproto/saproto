@@ -14,7 +14,9 @@
             @if ($product != null && $product->image != null)
                 <div class="d-flex justify-content-center">
                     <div class="product-image bg-dark mb-2">
-                        <img src="{!! $product->image->generateImagePath(null, null) !!}" />
+                        <img
+                            src="{!! $product->image->generateImagePath(null, null) !!}"
+                        />
                     </div>
                 </div>
 
@@ -204,7 +206,11 @@
                 <div class="col-md-6">
                     <label for="max_stock">Product categories:</label>
 
-                    <select multiple name="product_categories[]" class="form-control">
+                    <select
+                        multiple
+                        name="product_categories[]"
+                        class="form-control"
+                    >
                         @foreach ($categories as $catogory)
                             <option
                                 value="{{ $catogory->id }}"
@@ -236,8 +242,15 @@
             <hr />
 
             <div class="custom-file">
-                <input type="file" class="form-control" id="image" name="image" />
-                <label class="form-label" for="image">Update product image</label>
+                <input
+                    type="file"
+                    class="form-control"
+                    id="image"
+                    name="image"
+                />
+                <label class="form-label" for="image">
+                    Update product image
+                </label>
             </div>
         </div>
 
@@ -255,9 +268,16 @@
                 )
             @endif
 
-            <button type="submit" class="btn btn-success float-end ms-3">Submit</button>
+            <button type="submit" class="btn btn-success float-end ms-3">
+                Submit
+            </button>
 
-            <a href="{{ route('omnomcom::products::index') }}" class="btn btn-default float-end">Cancel</a>
+            <a
+                href="{{ route('omnomcom::products::index') }}"
+                class="btn btn-default float-end"
+            >
+                Cancel
+            </a>
 
             @if ($product?->ticket)
                 <a

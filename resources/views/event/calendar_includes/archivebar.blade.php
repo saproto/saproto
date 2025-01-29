@@ -2,10 +2,15 @@
     <div class="col-12 col-sm-auto text-center mb-2 overflow-auto">
         <div class="btn-group mb-1">
             @if (Route::currentRouteName() == 'event::index')
-                <span class="bg-primary text-white px-3 py-2 rounded-start">Upcoming</span>
+                <span class="bg-primary text-white px-3 py-2 rounded-start">
+                    Upcoming
+                </span>
                 <span class="bg-secondary text-white px-3 py-2">Archive</span>
             @else
-                <a href="{{ route('event::index', ['category' => $cur_category]) }}" class="btn btn-secondary">
+                <a
+                    href="{{ route('event::index', ['category' => $cur_category]) }}"
+                    class="btn btn-secondary"
+                >
                     Upcoming
                 </a>
                 <span class="bg-primary text-white px-3 py-2">Archive</span>
@@ -30,13 +35,20 @@
                 data-bs-target="#calendar-modal"
             >
                 <i class="fas fa-calendar-alt"></i>
-                <span class="d-none d-sm-inline-block ms-2">Import Calendar</span>
+                <span class="d-none d-sm-inline-block ms-2">
+                    Import Calendar
+                </span>
             </button>
 
             @can('board')
-                <a href="{{ route('event::create') }}" class="btn btn-info rounded-end">
+                <a
+                    href="{{ route('event::create') }}"
+                    class="btn btn-info rounded-end"
+                >
                     <i class="fas fa-calendar-plus me-2"></i>
-                    <span class="d-none d-sm-inline-block ms-2">Create Event</span>
+                    <span class="d-none d-sm-inline-block ms-2">
+                        Create Event
+                    </span>
                 </a>
             @endcan
 
@@ -52,10 +64,19 @@
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
-                        <select id="category" name="category" class="form-control">
-                            <option value="" @selected(! $cur_category)>All</option>
+                        <select
+                            id="category"
+                            name="category"
+                            class="form-control"
+                        >
+                            <option value="" @selected(! $cur_category)>
+                                All
+                            </option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" @selected($cur_category == $category)>
+                                <option
+                                    value="{{ $category->id }}"
+                                    @selected($cur_category == $category)
+                                >
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -72,12 +93,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Import our calendar into yours!</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
             </div>
             <div class="modal-body">
                 <p>
-                    If you want to, you can import our calendar into yours. This can be easily done by going to your
-                    favorite calendar application and looking for an option similar to
+                    If you want to, you can import our calendar into yours. This
+                    can be easily done by going to your favorite calendar
+                    application and looking for an option similar to
                     <i>Import calendar by URL</i>
                     . You can then to copy the URL below.
 
@@ -88,10 +115,12 @@
                         readonly
                     />
                     <script nonce="{{ csp_nonce() }}">
-                        document.getElementById('ical-url').addEventListener('click', (e) => {
-                            e.target.focus()
-                            e.target.select()
-                        })
+                        document
+                            .getElementById('ical-url')
+                            .addEventListener('click', (e) => {
+                                e.target.focus()
+                                e.target.select()
+                            })
                     </script>
                 </p>
 
@@ -112,7 +141,9 @@
 
                     <p class="text-center">
                         @if (Auth::user()->getCalendarRelevantSetting())
-                            <strong>Your are currently only syncing relevant events.</strong>
+                            <strong>
+                                Your are currently only syncing relevant events.
+                            </strong>
                         @else
                                 You are currently syncing all events.
                         @endif
@@ -125,11 +156,14 @@
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
                             @else
-                                Sync only relevant events.
+                                    Sync only relevant events.
                             @endif
                         </a>
 
-                        <sub>Relevant events are events you either attend, organize or help with.</sub>
+                        <sub>
+                            Relevant events are events you either attend,
+                            organize or help with.
+                        </sub>
                     </p>
 
                     <hr />
@@ -137,17 +171,22 @@
                     <p class="text-center">
                         <sub>
                             @if (Auth::user()->getCalendarAlarm())
-                                You are currently receiving a reminder {{ Auth::user()->getCalendarAlarm() }} hours
+                                You are currently receiving a reminder
+                                {{ Auth::user()->getCalendarAlarm() }} hours
                                 before an activity you participate in.
                             @else
                                 You are currently
                                 <strong>not</strong>
-                                receiving a reminder before an activity you participate in.
+                                receiving a reminder before an activity you
+                                participate in.
                             @endif
                         </sub>
                     </p>
 
-                    <form method="post" action="{{ route('event::set_reminder') }}">
+                    <form
+                        method="post"
+                        action="{{ route('event::set_reminder') }}"
+                    >
                         @csrf
 
                         <div class="row">
@@ -164,16 +203,26 @@
                                     min="0"
                                     value="{{ Auth::user()->getCalendarAlarm() ? Auth::user()->getCalendarAlarm() : '' }}"
                                 />
-                                <label for="hours" class="form-label ms-2 mt-2">hours</label>
+                                <label for="hours" class="form-label ms-2 mt-2">
+                                    hours
+                                </label>
                             </div>
                             <div class="col-6 col-sm-4">
-                                <button class="btn btn-success btn-block" type="submit" name="save">
+                                <button
+                                    class="btn btn-success btn-block"
+                                    type="submit"
+                                    name="save"
+                                >
                                     Set reminder.
                                 </button>
                             </div>
                             @if (Auth::user()->getCalendarAlarm())
                                 <div class="col-sm-4">
-                                    <button class="btn btn-danger btn-block" type="submit" name="delete">
+                                    <button
+                                        class="btn btn-danger btn-block"
+                                        type="submit"
+                                        name="delete"
+                                    >
                                         Remove reminder.
                                     </button>
                                 </div>
@@ -182,7 +231,10 @@
                     </form>
 
                     <p class="text-center">
-                        <sub>Reminders are not supported in Google Calendar. Blame Google. 😟</sub>
+                        <sub>
+                            Reminders are not supported in Google Calendar.
+                            Blame Google. 😟
+                        </sub>
                     </p>
                 @endif
             </div>

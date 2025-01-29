@@ -11,7 +11,12 @@
                 <div class="card-header">
                     <form method="get">
                         <div class="row">
-                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
+                            <label
+                                for="datetimepicker-start"
+                                class="col-sm-auto col-form-label pe-0"
+                            >
+                                Start:
+                            </label>
                             <div class="col-sm-auto">
                                 @include(
                                     'components.forms.datetimepicker',
@@ -22,7 +27,12 @@
                                     ]
                                 )
                             </div>
-                            <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
+                            <label
+                                for="datetimepicker-start"
+                                class="col-sm-auto col-form-label pe-0"
+                            >
+                                End:
+                            </label>
                             <div class="col-sm-auto">
                                 @include(
                                     'components.forms.datetimepicker',
@@ -35,7 +45,9 @@
                             </div>
 
                             <div class="col-sm-auto">
-                                <button type="submit" class="btn btn-success">Find activities!</button>
+                                <button type="submit" class="btn btn-success">
+                                    Find activities!
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -89,7 +101,9 @@
                                         </td>
                                     @endif
                                     {{-- Avg costs --}}
-                                    <td>€{{ round($category->average_cost(), 2) }}</td>
+                                    <td>
+                                        €{{ round($category->average_cost(), 2) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -101,7 +115,10 @@
                     <h4>Events per month per board</h4>
                 </div>
                 <div class="card-body">
-                    <div class="w-100" style="position: relative; margin-left: auto">
+                    <div
+                        class="w-100"
+                        style="position: relative; margin-left: auto"
+                    >
                         <canvas id="chart"></canvas>
                     </div>
                 </div>
@@ -112,7 +129,10 @@
 
 @push('javascript')
     {{-- chart.js and the date adapter --}}
-    <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        nonce="{{ csp_nonce() }}"
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
     <script
         nonce="{{ csp_nonce() }}"
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
@@ -131,7 +151,11 @@
                 let prices = []
                 product.forEach((item) => {
                     date = new Date(item.Start * 1000)
-                    date = date.setFullYear(date.getFullYear(), date.getMonth(), 1)
+                    date = date.setFullYear(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        1
+                    )
                     prices.push({
                         x: date,
                         y: item.Total,

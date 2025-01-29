@@ -50,7 +50,9 @@
                             [
                                 'name' => 'display_from',
                                 'label' => 'Start:',
-                                'placeholder' => $announcement ? Carbon::parse($announcement->display_from) : Carbon::now(),
+                                'placeholder' => $announcement
+                                    ? strtotime($announcement->display_from)
+                                    : strtotime(Carbon::now()),
                             ]
                         )
 
@@ -59,24 +61,9 @@
                             [
                                 'name' => 'display_till',
                                 'label' => 'End:',
-                                'placeholder' => $announcement ? Carbon::parse($announcement->display_till) : Carbon::now()->endOfDay(),
-                            ]
-                        )
-                        @include(
-                            'components.forms.datetimepicker',
-                            [
-                                'name' => 'display_from',
-                                'label' => 'Start:',
-                                'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now()),
-                            ]
-                        )
-
-                        @include(
-                            'components.forms.datetimepicker',
-                            [
-                                'name' => 'display_till',
-                                'label' => 'End:',
-                                'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()),
+                                'placeholder' => $announcement
+                                    ? strtotime($announcement->display_till)
+                                    : strtotime(Carbon::now()->endOfDay()),
                             ]
                         )
 
@@ -121,24 +108,42 @@
 
                         <div class="form-group">
                             <label for="show-style">Announcement style:</label>
-                            <select id="show-style" name="show_style" class="form-control">
-                                <option value="0" @selected(old('show_style', $announcement?->show_style == 0))>
+                            <select
+                                id="show-style"
+                                name="show_style"
+                                class="form-control"
+                            >
+                                <option
+                                    value="0"
+                                    @selected(old('show_style', $announcement?->show_style == 0))
+                                >
                                     Primary (Green)
                                 </option>
-                                <option value="1" @selected(old('show_style', $announcement?->show_style == 1))>
+                                <option
+                                    value="1"
+                                    @selected(old('show_style', $announcement?->show_style == 1))
+                                >
                                     Info (Blue)
                                 </option>
-                                <option value="2" @selected(old('show_style', $announcement?->show_style == 2))>
+                                <option
+                                    value="2"
+                                    @selected(old('show_style', $announcement?->show_style == 2))
+                                >
                                     Warning (Yellow)
                                 </option>
-                                <option value="3" @selected(old('show_style', $announcement?->show_style == 3))>
+                                <option
+                                    value="3"
+                                    @selected(old('show_style', $announcement?->show_style == 3))
+                                >
                                     Danger (Red)
                                 </option>
                             </select>
                         </div>
 
                         <p>
-                            <strong>Users that can see this announcement:</strong>
+                            <strong>
+                                Users that can see this announcement:
+                            </strong>
                         </p>
 
                         <div class="row">
@@ -213,9 +218,19 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end ms-4">Submit</button>
+                        <button
+                            type="submit"
+                            class="btn btn-success float-end ms-4"
+                        >
+                            Submit
+                        </button>
 
-                        <a href="{{ route('announcement::index') }}" class="btn btn-default pull-end">Back</a>
+                        <a
+                            href="{{ route('announcement::index') }}"
+                            class="btn btn-default pull-end"
+                        >
+                            Back
+                        </a>
                     </div>
                 </div>
             </form>

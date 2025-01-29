@@ -4,10 +4,16 @@
 
         <div class="card-body">
             <p class="card-text">
-                <strong>{{ $email->recipients()->count() }} people will receive this e-mail:</strong>
+                <strong>
+                    {{ $email->recipients()->count() }} people will receive
+                    this e-mail:
+                </strong>
             </p>
 
-            <p class="card-text" style="max-height: 200px; overflow-y: auto; overflow-x: hidden">
+            <p
+                class="card-text"
+                style="max-height: 200px; overflow-y: auto; overflow-x: hidden"
+            >
                 @foreach ($email->recipients() as $recipient)
                     {{ $recipient->name }}
                     <br />

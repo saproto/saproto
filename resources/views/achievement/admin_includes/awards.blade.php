@@ -5,7 +5,10 @@
         @if ($achievement->currentOwners(false)->count())
             @foreach ($achievement->currentOwners(false)->get() as $user)
                 <div class="badge bg-primary">
-                    <a href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}" class="text-white">
+                    <a
+                        href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"
+                        class="text-white"
+                    >
                         {{ $user->name }}
                     </a>
                     <a
@@ -17,12 +20,17 @@
                 </div>
             @endforeach
         @else
-            <p class="card-text text-center">Nobody obtained this achievement yet</p>
+            <p class="card-text text-center">
+                Nobody obtained this achievement yet
+            </p>
         @endif
     </div>
 
     <div class="card-footer">
-        <form method="post" action="{{ route('achievement::award', ['id' => $achievement->id]) }}">
+        <form
+            method="post"
+            action="{{ route('achievement::award', ['id' => $achievement->id]) }}"
+        >
             @csrf
 
             <div class="form-group autocomplete">
@@ -41,11 +49,20 @@
             )
 
             <div class="form-group">
-                <label for="description" class="text-secondary">(optional) description:</label>
-                <input class="form-control" id="description" name="description" data-label="description" />
+                <label for="description" class="text-secondary">
+                    (optional) description:
+                </label>
+                <input
+                    class="form-control"
+                    id="description"
+                    name="description"
+                    data-label="description"
+                />
             </div>
 
-            <button type="submit" class="mt-3 btn btn-success btn-block">Award</button>
+            <button type="submit" class="mt-3 btn btn-success btn-block">
+                Award
+            </button>
 
             <hr />
 

@@ -4,7 +4,8 @@
     <p>Hey!</p>
 
     <p>
-        I just ran the membership fee program. The following people had their membership fee charged.
+        I just ran the membership fee program. The following people had their
+        membership fee charged.
 
         @if (count($charged_fees->regular) > 0)
             <p>
@@ -32,7 +33,10 @@
 
         @if (count($charged_fees->remitted) > 0)
             <p>
-                <strong>Exceptions who don't pay membership fee, resolve manually as needed</strong>
+                <strong>
+                    Exceptions who don't pay membership fee, resolve manually as
+                    needed
+                </strong>
             </p>
 
             <ul>

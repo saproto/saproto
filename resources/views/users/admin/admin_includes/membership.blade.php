@@ -10,7 +10,9 @@
 
     <div class="card-body">
         <ul class="list-group mb-3">
-            <li class="list-group-item list-group-item-dark">Membership actions</li>
+            <li class="list-group-item list-group-item-dark">
+                Membership actions
+            </li>
 
             @if ($user->is_member)
                 @if (! $user->member->until)
@@ -109,7 +111,9 @@
 
         @if ($user->is_member)
             <ul class="list-group mb-3">
-                <li class="list-group-item list-group-item-dark">Current Membership</li>
+                <li class="list-group-item list-group-item-dark">
+                    Current Membership
+                </li>
                 <li class="table-responsiv list-group-item">
                     <table class="w-100">
                         <thead>
@@ -138,7 +142,7 @@
                                         Pet
                                         <i class="fas fa-paw"></i>
                                     @else
-                                        Regular
+                                            Regular
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -179,7 +183,9 @@
 
         @if ($memberships['pending']->count() > 0)
             <ul class="list-group mb-3">
-                <li class="list-group-item list-group-item-dark">Pending Membership(s)</li>
+                <li class="list-group-item list-group-item-dark">
+                    Pending Membership(s)
+                </li>
                 <li class="table-responsive list-group-item">
                     <table class="w-100">
                         <thead>
@@ -200,7 +206,10 @@
                                                 href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
                                                 class="text-decoration-none"
                                             >
-                                                <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
+                                                <i
+                                                    class="fas fa-download fa-fw me-2 text-info"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </a>
                                             @include(
                                                 'components.modals.confirm-modal',
@@ -227,7 +236,9 @@
 
         @if ($memberships['previous']->count() > 0)
             <ul class="list-group mb-3">
-                <li class="list-group-item list-group-item-dark">Previous Membership(s)</li>
+                <li class="list-group-item list-group-item-dark">
+                    Previous Membership(s)
+                </li>
                 <li class="table-responsive list-group-item">
                     <table class="w-100">
                         <thead>
@@ -252,7 +263,10 @@
                                                 href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}"
                                                 class="text-decoration-none"
                                             >
-                                                <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
+                                                <i
+                                                    class="fas fa-download fa-fw me-2 text-info"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </a>
                                             @include(
                                                 'components.modals.confirm-modal',

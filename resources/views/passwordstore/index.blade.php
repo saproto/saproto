@@ -1,7 +1,10 @@
 @extends('website.layouts.redesign.dashboard')
 
 @push('head')
-    <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}" />
+    <meta
+        http-equiv="refresh"
+        content="{{ Session::get('passwordstore-verify') - time() }}"
+    />
 @endpush
 
 @section('page-title')
@@ -17,14 +20,19 @@
             >
                 Add Password
             </a>
-            <a href="{{ route('passwordstore::create', ['type' => 'note']) }}" class="btn btn-success btn-block">
+            <a
+                href="{{ route('passwordstore::create', ['type' => 'note']) }}"
+                class="btn btn-success btn-block"
+            >
                 Add Secure Note
             </a>
         </div>
 
         <div class="col-12 col-sm-8">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">Password store</div>
+                <div class="card-header bg-dark text-white mb-1">
+                    Password store
+                </div>
 
                 @if (count($passwords) > 0)
                     <div class="table-responsive">
@@ -53,9 +61,15 @@
                                     <tr>
                                         <td class="text-end">
                                             @if ($password->username == null)
-                                                <i class="fas fa-sticky-note" aria-hidden="true"></i>
+                                                <i
+                                                    class="fas fa-sticky-note"
+                                                    aria-hidden="true"
+                                                ></i>
                                             @else
-                                                <i class="fas fa-key" aria-hidden="true"></i>
+                                                <i
+                                                    class="fas fa-key"
+                                                    aria-hidden="true"
+                                                ></i>
                                             @endif
                                         </td>
 
@@ -67,8 +81,14 @@
 
                                         <td class="text-center">
                                             @if ($password->url)
-                                                <a href="{{ $password->url }}" target="_blank">
-                                                    <i class="fas fa-globe-africa" aria-hidden="true"></i>
+                                                <a
+                                                    href="{{ $password->url }}"
+                                                    target="_blank"
+                                                >
+                                                    <i
+                                                        class="fas fa-globe-africa"
+                                                        aria-hidden="true"
+                                                    ></i>
                                                 </a>
                                             @endif
                                         </td>
@@ -83,7 +103,9 @@
                                                     data-bs-trigger="manual"
                                                     title="Copied!"
                                                 >
-                                                    <i class="fas fa-user me-1"></i>
+                                                    <i
+                                                        class="fas fa-user me-1"
+                                                    ></i>
                                                 </a>
                                             @endif
                                         </td>
@@ -98,7 +120,9 @@
                                                     data-bs-trigger="manual"
                                                     title="Copied!"
                                                 >
-                                                    <i class="fas fa-key me-1"></i>
+                                                    <i
+                                                        class="fas fa-key me-1"
+                                                    ></i>
                                                 </a>
                                             @endif
                                         </td>
@@ -110,21 +134,31 @@
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#passwordmodal-{{ $password->id }}"
                                                 >
-                                                    <i class="fas fa-sticky-note"></i>
+                                                    <i
+                                                        class="fas fa-sticky-note"
+                                                    ></i>
                                                 </a>
                                             @endif
                                         </td>
 
-                                        <td class="{{ $password->age() > 12 ? 'text-danger' : 'text-primary' }}">
+                                        <td
+                                            class="{{ $password->age() > 12 ? 'text-danger' : 'text-primary' }}"
+                                        >
                                             {{ $password->age() }} months
                                         </td>
 
                                         <td>
-                                            <a href="{{ route('passwordstore::edit', ['id' => $password->id]) }}">
+                                            <a
+                                                href="{{ route('passwordstore::edit', ['id' => $password->id]) }}"
+                                            >
                                                 <i class="fas fa-edit me-2"></i>
                                             </a>
-                                            <a href="{{ route('passwordstore::delete', ['id' => $password->id]) }}">
-                                                <i class="fas fa-trash text-danger"></i>
+                                            <a
+                                                href="{{ route('passwordstore::delete', ['id' => $password->id]) }}"
+                                            >
+                                                <i
+                                                    class="fas fa-trash text-danger"
+                                                ></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -134,7 +168,9 @@
                     </div>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-centerØ">There is nothing for you to see.</p>
+                        <p class="card-text text-centerØ">
+                            There is nothing for you to see.
+                        </p>
                     </div>
                 @endif
             </div>
@@ -156,7 +192,12 @@
                             <h5 class="modal-title">
                                 {{ $password->description }}
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
                         </div>
                         <div class="modal-body">
                             <textarea class="form-control" rows="15" readonly>

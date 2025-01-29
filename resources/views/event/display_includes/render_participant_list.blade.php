@@ -1,10 +1,16 @@
 @foreach ($participants as $user)
-    <?php $pid = $user::class == \App\Models\User::class && $event ? $user->pivot->id : $user->id; ?>
+    <?php $pid =
+        $user::class == \App\Models\User::class && $event
+            ? $user->pivot->id
+            : $user->id; ?>
 
     <?php $u = $user::class == \App\Models\User::class ? $user : $user->user; ?>
 
     <div class="btn-group btn-group-sm mb-1">
-        <a href="{{ route('user::profile', ['id' => $u->getPublicId()]) }}" class="btn btn-outline-primary">
+        <a
+            href="{{ route('user::profile', ['id' => $u->getPublicId()]) }}"
+            class="btn btn-outline-primary"
+        >
             <img
                 src="{{ $u->generatePhotoPath(25, 25) }}"
                 class="rounded-circle me-1"

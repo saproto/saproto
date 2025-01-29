@@ -92,7 +92,7 @@ class EventController extends Controller
     public function show(string $id): View
     {
         $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
-            ->with('tickets', 'tickets.product', 'activity.users')
+            ->with('tickets', 'tickets.product')
             ->firstOrFail();
 
         $methods = [];
@@ -152,6 +152,8 @@ class EventController extends Controller
      */
     public function edit(int $id)
     {
+        $event = Event::query()->findOrFail($id);
+
         return view('event.edit', ['event' => $event]);
     }
 

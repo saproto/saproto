@@ -1,7 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Personal Overview for the {{ date('d-m-Y', strtotime($withdrawal->date)) }} Withdrawal
+    Personal Overview for the {{ date('d-m-Y', strtotime($withdrawal->date)) }}
+    Withdrawal
     <br />
     Withdrawal status: {{ $withdrawal->closed ? 'Closed' : 'Paid' }}
 @endsection
@@ -13,7 +14,10 @@
                 <div class="card-body">
                     @if ($withdrawal->getFailedWithdrawal(Auth::user()))
                         <div class="alert alert-danger text-center">
-                            <i class="fas fa-times fa-fw me-2" aria-hidden="true"></i>
+                            <i
+                                class="fas fa-times fa-fw me-2"
+                                aria-hidden="true"
+                            ></i>
                             This withdrawal has failed.
                         </div>
                     @endif
@@ -30,7 +34,9 @@
             @else
                 <div class="card mb-3">
                     <div class="card-body">
-                        <p class="card-text text-center">You are not included in this withdrawal.</p>
+                        <p class="card-text text-center">
+                            You are not included in this withdrawal.
+                        </p>
                     </div>
                 </div>
             @endif

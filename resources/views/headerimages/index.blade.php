@@ -10,7 +10,12 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge bg-info float-end" href="{{ route('headerimages.create') }}">Add header image.</a>
+                    <a
+                        class="badge bg-info float-end"
+                        href="{{ route('headerimages.create') }}"
+                    >
+                        Add header image.
+                    </a>
                 </div>
 
                 <div class="table-responsive">

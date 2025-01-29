@@ -2,10 +2,12 @@
     <div class="card-header bg-dark text-white">E-mail preferences</div>
     <div class="card-body">
         <p class="card-text">
-            We offer a number of e-mail lists you can subscribe to to receive information related to you. We chose this
-            approach so that you can finely tune what information is relevant for you. You can always unsubscribe from
-            an e-mail list below, or by following the link at the bottom of an e-mail. Please note that you cannot
-            unsubscribe for some e-mails.
+            We offer a number of e-mail lists you can subscribe to to receive
+            information related to you. We chose this approach so that you can
+            finely tune what information is relevant for you. You can always
+            unsubscribe from an e-mail list below, or by following the link at
+            the bottom of an e-mail. Please note that you cannot unsubscribe for
+            some e-mails.
         </p>
 
         <p class="card-text">
@@ -15,9 +17,16 @@
                 <div class="accordion" id="email__accordion">
                     @foreach (App\Models\EmailList::all() as $i => $list)
                         <div class="card border">
-                            <div class="card-header border-bottom-0 cursor-pointer">
-                                <span data-bs-toggle="collapse" data-bs-target="#email__collapse__{{ $list->id }}">
-                                    <i class="fas fa-sm fa-fw fa-caret-down"></i>
+                            <div
+                                class="card-header border-bottom-0 cursor-pointer"
+                            >
+                                <span
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#email__collapse__{{ $list->id }}"
+                                >
+                                    <i
+                                        class="fas fa-sm fa-fw fa-caret-down"
+                                    ></i>
                                     {{ $list->name }}
                                 </span>
 
@@ -36,7 +45,9 @@
                                         Subscribe
                                     </a>
                                 @else
-                                    <span class="badge bg-dark float-end">Members only</span>
+                                    <span class="badge bg-dark float-end">
+                                        Members only
+                                    </span>
                                 @endif
                             </div>
 

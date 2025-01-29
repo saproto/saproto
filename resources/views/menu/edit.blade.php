@@ -35,8 +35,17 @@
 
                         <div class="form-group">
                             <label for="parent">Parent:</label>
-                            <select class="form-control" name="parent" id="parent">
-                                <option @selected(! isset($item) || $item->parent == null) value>No parent</option>
+                            <select
+                                class="form-control"
+                                name="parent"
+                                id="parent"
+                            >
+                                <option
+                                    @selected(! isset($item) || $item->parent == null)
+                                    value
+                                >
+                                    No parent
+                                </option>
                                 @foreach ($topMenuItems as $topMenuItem)
                                     <option
                                         value="{{ $topMenuItem->id }}"
@@ -54,16 +63,27 @@
                             [
                                 'name' => 'is_member_only',
                                 'checked' => $item?->is_member_only,
-                                'label' => '<i class="fas fa-lock" aria-hidden="true"></i> Members only',
+                                'label' =>
+                                    '<i class="fas fa-lock" aria-hidden="true"></i> Members only',
                             ]
                         )
 
                         <div class="form-group">
                             <label for="page_id">Target page:</label>
-                            <select class="form-control" name="page_id" id="page_id">
-                                <option disabled @selected(! isset($item))>Select a page...</option>
+                            <select
+                                class="form-control"
+                                name="page_id"
+                                id="page_id"
+                            >
+                                <option disabled @selected(! isset($item))>
+                                    Select a page...
+                                </option>
                                 <option disabled>---</option>
-                                <option id="other-url-option" @selected(isset($item) && $item->page_id) value>
+                                <option
+                                    id="other-url-option"
+                                    @selected(isset($item) && $item->page_id)
+                                    value
+                                >
                                     Other URL
                                 </option>
                                 <option disabled>---</option>
@@ -97,7 +117,10 @@
                             <div class="form-group">
                                 <label for="route">Existing Route:</label>
                                 <select class="form-control" id="route">
-                                    <option disabled @selected(! isset($item) || $item->url == null)>
+                                    <option
+                                        disabled
+                                        @selected(! isset($item) || $item->url == null)
+                                    >
                                         Select a route...
                                     </option>
                                     @foreach ($routes as $route)
@@ -111,7 +134,8 @@
                                             value="{{ $url }}"
                                             @selected(isset($item) && $item->url == '(route) ' . $route->getName())
                                         >
-                                            [{{ $route->getName() }}] -> {{ $route->domain() }}/{{ $route->uri }}
+                                            [{{ $route->getName() }}] ->
+                                            {{ $route->domain() }}/{{ $route->uri }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -120,9 +144,16 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">
+                            Submit
+                        </button>
 
-                        <a href="{{ route('menu::list') }}" class="btn btn-default">Cancel</a>
+                        <a
+                            href="{{ route('menu::list') }}"
+                            class="btn btn-default"
+                        >
+                            Cancel
+                        </a>
                     </div>
                 </div>
             </div>
@@ -135,7 +166,8 @@
         const otherUrlOption = document.getElementById('other-url-option')
         const otherUrlFields = document.getElementById('other-url-fields')
         document.getElementById('page_id').addEventListener('change', (e) => {
-            if (otherUrlOption.selected) otherUrlFields.classList.remove('d-none')
+            if (otherUrlOption.selected)
+                otherUrlFields.classList.remove('d-none')
             else otherUrlFields.classList.add('d-none')
         })
 

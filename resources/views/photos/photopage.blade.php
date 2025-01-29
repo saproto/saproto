@@ -22,7 +22,10 @@
                     @endphp
 
                     @if ($previous != null && $previous->id != $photo->id)
-                        <a href="{{ route('photo::view', ['id' => $previous]) }}" class="btn btn-dark me-3">
+                        <a
+                            href="{{ route('photo::view', ['id' => $previous]) }}"
+                            class="btn btn-dark me-3"
+                        >
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
@@ -48,7 +51,10 @@
                     @endif
 
                     @if ($next != null && $next->id != $photo->id)
-                        <a href="{{ route('photo::view', ['id' => $next]) }}" class="btn btn-dark">
+                        <a
+                            href="{{ route('photo::view', ['id' => $next]) }}"
+                            class="btn btn-dark"
+                        >
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif
@@ -64,8 +70,11 @@
             <div class="card mb-3">
                 <div class="card-body text-center">
                     <i class="fas fa-shield-alt fa-fw me-3"></i>
-                    If there is a photo that you would like removed, please contact
-                    <a href="mailto:photos&#64;{{ Config::string('proto.emaildomain') }}">
+                    If there is a photo that you would like removed, please
+                    contact
+                    <a
+                        href="mailto:photos&#64;{{ Config::string('proto.emaildomain') }}"
+                    >
                         photos&#64;{{ Config::string('proto.emaildomain') }}.
                     </a>
                 </div>
@@ -101,14 +110,22 @@
     </script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        history.replaceState(null, document.title, location.pathname + '#!/history')
+        history.replaceState(
+            null,
+            document.title,
+            location.pathname + '#!/history'
+        )
         history.pushState(null, document.title, location.pathname)
 
         window.addEventListener(
             'popstate',
             function () {
                 if (location.hash === '#!/history') {
-                    history.replaceState(null, document.title, location.pathname)
+                    history.replaceState(
+                        null,
+                        document.title,
+                        location.pathname
+                    )
                     setTimeout(
                         (_) =>
                             location.replace(

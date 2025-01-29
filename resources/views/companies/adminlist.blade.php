@@ -10,7 +10,10 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('companies::create') }}" class="badge bg-info float-end">
+                    <a
+                        href="{{ route('companies::create') }}"
+                        class="badge bg-info float-end"
+                    >
                         Create a new company.
                     </a>
                 </div>
@@ -31,7 +34,10 @@
                             <tr>
                                 <td class="name">{{ $company->name }}</td>
                                 <td class="url">
-                                    <a href="{{ $company->url }}" target="_blank">
+                                    <a
+                                        href="{{ $company->url }}"
+                                        target="_blank"
+                                    >
                                         {{ $company->url }}
                                     </a>
                                 </td>
@@ -42,7 +48,9 @@
                                     {{ $company->in_logo_bar ? 'Yes' : 'No' }}
                                 </td>
                                 <td>
-                                    <a href="{{ route('companies::edit', ['id' => $company->id]) }}">
+                                    <a
+                                        href="{{ route('companies::edit', ['id' => $company->id]) }}"
+                                    >
                                         <i class="fas fa-edit me-2 fa-fw"></i>
                                     </a>
 
@@ -58,14 +66,22 @@
                                     )
 
                                     @if ($company->sort > 0)
-                                        <a href="{{ route('companies::orderUp', ['id' => $company->id]) }}">
-                                            <i class="fas fa-arrow-up me-2 fa-fw text-info"></i>
+                                        <a
+                                            href="{{ route('companies::orderUp', ['id' => $company->id]) }}"
+                                        >
+                                            <i
+                                                class="fas fa-arrow-up me-2 fa-fw text-info"
+                                            ></i>
                                         </a>
                                     @endif
 
                                     @if ($company->sort != $companies->count())
-                                        <a href="{{ route('companies::orderDown', ['id' => $company->id]) }}">
-                                            <i class="fas fa-arrow-down me-2 fa-fw text-info"></i>
+                                        <a
+                                            href="{{ route('companies::orderDown', ['id' => $company->id]) }}"
+                                        >
+                                            <i
+                                                class="fas fa-arrow-down me-2 fa-fw text-info"
+                                            ></i>
                                         </a>
                                     @endif
                                 </td>

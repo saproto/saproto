@@ -65,8 +65,12 @@
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)
                                     @if ($company->image)
-                                        <div class="swiper-slide justify-content-center align-items-center d-flex">
-                                            <a href="{{ route("companies::show", ["id" => $company->id]) }}">
+                                        <div
+                                            class="swiper-slide justify-content-center align-items-center d-flex"
+                                        >
+                                            <a
+                                                href="{{ route("companies::show", ["id" => $company->id]) }}"
+                                            >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"
                                                     src="{{ $company->image->generateImagePath(null, 50) }}"

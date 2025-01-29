@@ -55,7 +55,9 @@
                                 [
                                     'name' => 'published_at',
                                     'label' => 'Publish at:',
-                                    'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now()),
+                                    'placeholder' => $item
+                                        ? strtotime($item->published_at)
+                                        : strtotime(Carbon::now()),
                                 ]
                             )
                         @endif
@@ -83,7 +85,12 @@
                             <div class="card-header">Replace image</div>
                             <div class="card-body">
                                 <div class="custom-file">
-                                    <input id="featured-image" type="file" class="form-control" name="image" />
+                                    <input
+                                        id="featured-image"
+                                        type="file"
+                                        class="form-control"
+                                        name="image"
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -91,8 +98,18 @@
 
                     <div class="card mb-3">
                         <div class="card-body">
-                            <a href="{{ route('news::admin') }}" class="btn btn-default">Cancel</a>
-                            <button type="submit" class="btn btn-success float-end">Save as {{ $newsName }}</button>
+                            <a
+                                href="{{ route('news::admin') }}"
+                                class="btn btn-default"
+                            >
+                                Cancel
+                            </a>
+                            <button
+                                type="submit"
+                                class="btn btn-success float-end"
+                            >
+                                Save as {{ $newsName }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -121,7 +138,11 @@
                                             'title' => 'Confirm Sending Weekly',
                                             'classes' =>
                                                 'btn ms-2 ' .
-                                                (Carbon::parse($lastWeekly->published_at)->diffInDays(Carbon::now()) < 7 ? 'btn-danger' : 'btn-success'),
+                                                (Carbon::parse($lastWeekly->published_at)->diffInDays(
+                                                    Carbon::now(),
+                                                ) < 7
+                                                    ? 'btn-danger'
+                                                    : 'btn-success'),
                                             'message' =>
                                                 'Are you sure you want to send this weekly? <br> It was last sent: <b>' .
                                                 Carbon::parse($lastWeekly->published_at)->diffForHumans() .
@@ -149,7 +170,12 @@
 
                             <div class="card-body">
                                 <div class="custom-file">
-                                    <input id="featured-image" type="file" class="form-control" name="image" />
+                                    <input
+                                        id="featured-image"
+                                        type="file"
+                                        class="form-control"
+                                        name="image"
+                                    />
                                 </div>
                             </div>
                         </div>

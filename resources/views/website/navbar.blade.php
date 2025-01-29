@@ -43,7 +43,10 @@
                                     <ul class="dropdown-menu dropdown">
                                         @foreach ($menuItem->children->sortBy('order') as $childItem)
                                             @if (! $childItem->is_member_only || (Auth::check() && Auth::user()->is_member))
-                                                <a class="dropdown-item" href="{{ $childItem->getUrl() }}">
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="{{ $childItem->getUrl() }}"
+                                                >
                                                     {{ $childItem->menuname }}
                                                 </a>
                                             @endif
@@ -94,41 +97,77 @@
                                     @endforeach
 
                                     @can('omnomcom')
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::orders::adminlist') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::orders::adminlist') }}"
+                                        >
                                             Orders
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::products::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::products::index') }}"
+                                        >
                                             Products
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::categories::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::categories::index') }}"
+                                        >
                                             Categories
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::generateorder') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::generateorder') }}"
+                                        >
                                             Generate Supplier Order
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::products::statistics') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::products::statistics') }}"
+                                        >
                                             Sales statistics
                                         </a>
                                     @endcan
 
                                     @can('tipcie')
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('dinnerform::create') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('dinnerform::create') }}"
+                                        >
                                             Dinnerforms
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::tipcie::orderhistory') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::tipcie::orderhistory') }}"
+                                        >
                                             TIPCie Order Overview
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('wallstreet::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('wallstreet::index') }}"
+                                        >
                                             Wallstreet Drinks
                                         </a>
                                     @endcan
 
                                     @cannot('board')
                                         @canany(['tipcie', 'omnomcom'])
-                                            <li role="separator" class="dropdown-divider"></li>
-                                            <a class="dropdown-item" href="{{ route('passwordstore::index') }}">
+                                            <li
+                                                role="separator"
+                                                class="dropdown-divider"
+                                            ></li>
+                                            <a
+                                                class="dropdown-item"
+                                                href="{{ route('passwordstore::index') }}"
+                                            >
                                                 Password Store
                                             </a>
                                         @endcanany
@@ -153,79 +192,184 @@
 
                                 <ul class="dropdown-menu">
                                     @can('board')
-                                        <a class="dropdown-item" href="{{ route('user::admin::index') }}">Users</a>
-                                        <a class="dropdown-item" href="{{ route('tickets::index') }}">Tickets</a>
-                                        <a class="dropdown-item" href="{{ route('short_urls.index') }}">Short URLs</a>
-                                        <a class="dropdown-item" href="{{ route('queries::index') }}">Queries</a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('user::admin::index') }}"
+                                        >
+                                            Users
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('tickets::index') }}"
+                                        >
+                                            Tickets
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('short_urls.index') }}"
+                                        >
+                                            Short URLs
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('queries::index') }}"
+                                        >
+                                            Queries
+                                        </a>
 
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('tempadmins.index') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('tempadmins.index') }}"
+                                        >
                                             Temp ProTube Admin
                                         </a>
-                                        <a class="dropdown-item" href="{{ Config::string('protube.remote_url') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ Config::string('protube.remote_url') }}"
+                                        >
                                             ProTube Admin
                                         </a>
 
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('committee::create') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('committee::create') }}"
+                                        >
                                             Add Committee
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('event::create') }}">Add Event</a>
-                                        <a class="dropdown-item" href="{{ route('event::categories.create') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('event::create') }}"
+                                        >
+                                            Add Event
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('event::categories.create') }}"
+                                        >
                                             Event Categories
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('feedback::category::admin') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('feedback::category::admin') }}"
+                                        >
                                             Feedback Categories
                                         </a>
 
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('narrowcasting::index') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('narrowcasting::index') }}"
+                                        >
                                             Narrowcasting
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('companies::admin') }}">Companies</a>
-                                        <a class="dropdown-item" href="{{ route('joboffers::admin') }}">Job offers</a>
-                                        <a class="dropdown-item" href="{{ route('leaderboards::admin') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('companies::admin') }}"
+                                        >
+                                            Companies
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('joboffers::admin') }}"
+                                        >
+                                            Job offers
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('leaderboards::admin') }}"
+                                        >
                                             Leaderboards
                                         </a>
                                     @endcan
 
                                     @if (Auth::user()->hasAllPermissions(['board', 'finadmin']) || Auth::user()->hasAllPermissions(['board', 'closeactivities']))
-                                        <li role="separator" class="dropdown-divider"></li>
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
                                     @endif
 
                                     @can('closeactivities')
-                                        <a class="dropdown-item" href="{{ route('event::financial::list') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('event::financial::list') }}"
+                                        >
                                             Close Activities
                                         </a>
                                     @endcan
 
                                     @can('finadmin')
-                                        <a class="dropdown-item" href="{{ route('omnomcom::accounts::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::accounts::index') }}"
+                                        >
                                             Accounts
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::withdrawal::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::withdrawal::index') }}"
+                                        >
                                             Withdrawals
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::unwithdrawable') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::unwithdrawable') }}"
+                                        >
                                             Unwithdrawable
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::mollie::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::mollie::index') }}"
+                                        >
                                             Mollie Payments
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('omnomcom::payments::statistics') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('omnomcom::payments::statistics') }}"
+                                        >
                                             Cash & Card Payments
                                         </a>
                                     @endcan
 
                                     @canany(['alfred', 'board'])
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('dmx.fixtures.index') }}">Fixtures</a>
-                                        <a class="dropdown-item" href="{{ route('dmx.overrides.index') }}">Override</a>
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('dmx.fixtures.index') }}"
+                                        >
+                                            Fixtures
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('dmx.overrides.index') }}"
+                                        >
+                                            Override
+                                        </a>
                                     @endcanany
 
                                     @canany(['alfred', 'sysadmin'])
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('minisites::isalfredthere::edit') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('minisites::isalfredthere::edit') }}"
+                                        >
                                             Is Alfred There?
                                         </a>
                                     @endcanany
@@ -248,39 +392,121 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route('menu::list') }}">Menu</a>
-                                    <a class="dropdown-item" href="{{ route('video::admin::index') }}">Videos</a>
-                                    <a class="dropdown-item" href="{{ route('page::list') }}">Pages</a>
-                                    <a class="dropdown-item" href="{{ route('news::admin') }}">News</a>
-                                    <a class="dropdown-item" href="{{ route('email::index') }}">Email</a>
-                                    <a class="dropdown-item" href="{{ route('achievement::index') }}">Achievements</a>
-                                    <a class="dropdown-item" href="{{ route('leaderboards::admin') }}">Leaderboards</a>
-                                    <a class="dropdown-item" href="{{ route('welcomeMessages.index') }}">
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('menu::list') }}"
+                                    >
+                                        Menu
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('video::admin::index') }}"
+                                    >
+                                        Videos
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('page::list') }}"
+                                    >
+                                        Pages
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('news::admin') }}"
+                                    >
+                                        News
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('email::index') }}"
+                                    >
+                                        Email
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('achievement::index') }}"
+                                    >
+                                        Achievements
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('leaderboards::admin') }}"
+                                    >
+                                        Leaderboards
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('welcomeMessages.index') }}"
+                                    >
                                         Welcome Messages
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('news::create', ['is_weekly' => true]) }}">
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('news::create', ['is_weekly' => true]) }}"
+                                    >
                                         Weekly Update
                                     </a>
 
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route('headerimages.index') }}">Header Images</a>
-                                    <a class="dropdown-item" href="{{ route('photo::admin::index') }}">Photo Admin</a>
+                                    <li
+                                        role="separator"
+                                        class="dropdown-divider"
+                                    ></li>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('headerimages.index') }}"
+                                    >
+                                        Header Images
+                                    </a>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('photo::admin::index') }}"
+                                    >
+                                        Photo Admin
+                                    </a>
 
                                     @can('sysadmin')
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('alias::index') }}">Aliases</a>
-                                        <a class="dropdown-item" href="{{ route('announcement::index') }}">
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('alias::index') }}"
+                                        >
+                                            Aliases
+                                        </a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('announcement::index') }}"
+                                        >
                                             Announcements
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('authorization::overview') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('authorization::overview') }}"
+                                        >
                                             Authorization
                                         </a>
-                                        <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route('codex.index') }}">Codices</a>
+                                        <li
+                                            role="separator"
+                                            class="dropdown-divider"
+                                        ></li>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('codex.index') }}"
+                                        >
+                                            Codices
+                                        </a>
                                     @endcan
 
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route('passwordstore::index') }}">
+                                    <li
+                                        role="separator"
+                                        class="dropdown-divider"
+                                    ></li>
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('passwordstore::index') }}"
+                                    >
                                         Password Store
                                     </a>
                                 </ul>
@@ -316,10 +542,16 @@
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('headerimages.index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('headerimages.index') }}"
+                                        >
                                             Header Images
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('photo::admin::index') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('photo::admin::index') }}"
+                                        >
                                             Photo Admin
                                         </a>
                                     </ul>
@@ -399,7 +631,10 @@
                             name="query"
                             style="max-width: 125px"
                         />
-                        <button type="submit" class="input-group-text btn btn-info">
+                        <button
+                            type="submit"
+                            class="input-group-text btn btn-info"
+                        >
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -426,39 +661,79 @@
                                     />
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end mt-2">
-                                    <a class="dropdown-item" href="{{ route('user::dashboard::show') }}">Dashboard</a>
+                                <div
+                                    class="dropdown-menu dropdown-menu-end mt-2"
+                                >
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('user::dashboard::show') }}"
+                                    >
+                                        Dashboard
+                                    </a>
 
                                     @if (Auth::user()->is_member)
-                                        <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('user::profile') }}"
+                                        >
+                                            My Profile
+                                        </a>
                                     @else
-                                        <a class="dropdown-item" href="{{ route('becomeamember') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('becomeamember') }}"
+                                        >
                                             Become a member!
                                         </a>
                                     @endif
 
-                                    <a href="https://saproto.nl/go/discord" target="_blank" class="dropdown-item">
-                                        <span class="fa-brands fa-discord"></span>
+                                    <a
+                                        href="https://saproto.nl/go/discord"
+                                        target="_blank"
+                                        class="dropdown-item"
+                                    >
+                                        <span
+                                            class="fa-brands fa-discord"
+                                        ></span>
                                         Discord
-                                        <span class="badge bg-secondary" style="transform: translateY(-1px)">
+                                        <span
+                                            class="badge bg-secondary"
+                                            style="transform: translateY(-1px)"
+                                        >
                                             <i class="fas fa-user me-1"></i>
-                                            <span id="discord__online">...</span>
+                                            <span id="discord__online">
+                                                ...
+                                            </span>
                                         </span>
                                     </a>
 
-                                    <a class="dropdown-item" href="{{ route('protube::dashboard') }}">
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('protube::dashboard') }}"
+                                    >
                                         ProTube Dashboard
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('omnomcom::orders::index') }}">
+                                    <a
+                                        class="dropdown-item"
+                                        href="{{ route('omnomcom::orders::index') }}"
+                                    >
                                         Purchase History
                                     </a>
 
                                     @if (Session::has('impersonator'))
-                                        <a class="dropdown-item" href="{{ route('user::quitimpersonating') }}">
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('user::quitimpersonating') }}"
+                                        >
                                             Quit Impersonation
                                         </a>
                                     @else
-                                        <a class="dropdown-item" href="{{ route('login::logout') }}">Logout</a>
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('login::logout') }}"
+                                        >
+                                            Logout
+                                        </a>
                                     @endif
                                 </div>
                             </li>
@@ -466,11 +741,17 @@
                     </form>
                 @else
                     <form class="form-inline mt-2 mt-md-0">
-                        <a class="btn btn-outline-light me-2" href="{{ route('login::register::index') }}">
+                        <a
+                            class="btn btn-outline-light me-2"
+                            href="{{ route('login::register::index') }}"
+                        >
                             <i class="fas fa-user-plus me-2"></i>
                             Register
                         </a>
-                        <a class="btn btn-light" href="{{ route('login::show') }}">
+                        <a
+                            class="btn btn-light"
+                            href="{{ route('login::show') }}"
+                        >
                             <i class="fas fa-id-card fa-fw me-2"></i>
                             Log-in
                         </a>

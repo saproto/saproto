@@ -3,11 +3,17 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta
+            name="viewport"
+            content="initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
         <meta http-equiv="refresh" content="3600" />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-        <link rel="shortcut icon" href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}" />
+        <link
+            rel="shortcut icon"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
+        />
 
         <title>SmartXP Screen v3</title>
 
@@ -207,12 +213,17 @@
 
                     <br />
 
-                    <img src="{{ asset('images/logo/inverse.png') }}" class="h-75" />
+                    <img
+                        src="{{ asset('images/logo/inverse.png') }}"
+                        class="h-75"
+                    />
                 </div>
 
                 <div class="box-partial h-33">
                     <div id="protube" class="box inactive h-100">
-                        <div id="protube-title" class="box-header">Connecting to ProTube...</div>
+                        <div id="protube-title" class="box-header">
+                            Connecting to ProTube...
+                        </div>
 
                         <div id="protube-ticker"></div>
                     </div>
@@ -221,7 +232,10 @@
                 <div class="box-partial h-33">
                     <div id="protopeners" class="box h-100">
                         <div class="box-header small">
-                            <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
+                            <i
+                                class="fas fa-door-closed fa-fw me-2"
+                                id="protopolis-fa"
+                            ></i>
                             Protopolis
                         </div>
 
@@ -277,8 +291,10 @@
             function updateClock() {
                 let now = moment()
                 document.getElementById('clock').innerHTML =
-                    '<i class="fas fa-clock fa-fw me-2"></i>' + now.format('HH:mm:ss')
-                document.getElementById('ticker').style.width = (now.format('s.SSS') / 60) * 100 + '%'
+                    '<i class="fas fa-clock fa-fw me-2"></i>' +
+                    now.format('HH:mm:ss')
+                document.getElementById('ticker').style.width =
+                    (now.format('s.SSS') / 60) * 100 + '%'
             }
 
             function updateTimetable() {
@@ -294,7 +310,10 @@
                                 if (!data[i].over) {
                                     let start = moment.unix(data[i].start)
                                     let end = moment.unix(data[i].end)
-                                    let time = start.format('HH:mm') + ' - ' + end.format('HH:mm')
+                                    let time =
+                                        start.format('HH:mm') +
+                                        ' - ' +
+                                        end.format('HH:mm')
                                     let title = data[i].title
                                     let displayTime =
                                         '<i class="fas fa-clock fa-fw me-1"></i>' +
@@ -309,7 +328,9 @@
                                               '<i class="fas fa-graduation-cap fa-fw me-2"></i>' +
                                               data[i].studyShort +
                                               ' ' +
-                                              (data[i].year ? 'Year ' + data[i].year : '') +
+                                              (data[i].year
+                                                  ? 'Year ' + data[i].year
+                                                  : '') +
                                               '</span> '
                                             : null) +
                                         '<strong>' +
@@ -326,15 +347,18 @@
                                 }
                             }
                             if (count === 0) {
-                                timetable.innerHTML = '<div class="notice">No more lectures today!</div>'
+                                timetable.innerHTML =
+                                    '<div class="notice">No more lectures today!</div>'
                             }
                         } else {
-                            timetable.innerHTML = '<div class="notice">No lectures today!</div>'
+                            timetable.innerHTML =
+                                '<div class="notice">No lectures today!</div>'
                         }
                     })
                     .catch((err) => {
                         console.error(err)
-                        timetable.innerHTML = '<div class="notice">Lectures could not be found...</div>'
+                        timetable.innerHTML =
+                            '<div class="notice">Lectures could not be found...</div>'
                     })
             }
 
@@ -347,14 +371,29 @@
                                 let start = moment.unix(data[i].start)
                                 let end = moment.unix(data[i].end)
                                 let time
-                                if (start.format('DD-MM') === end.format('DD-MM')) {
-                                    time = start.format('DD-MM, HH:mm') + ' - ' + end.format('HH:mm')
+                                if (
+                                    start.format('DD-MM') ===
+                                    end.format('DD-MM')
+                                ) {
+                                    time =
+                                        start.format('DD-MM, HH:mm') +
+                                        ' - ' +
+                                        end.format('HH:mm')
                                 } else {
-                                    time = start.format('DD-MM, HH:mm') + ' - ' + end.format('DD-MM, HH:mm')
+                                    time =
+                                        start.format('DD-MM, HH:mm') +
+                                        ' - ' +
+                                        end.format('DD-MM, HH:mm')
                                 }
-                                document.getElementById('activities').innerHTML +=
+                                document.getElementById(
+                                    'activities'
+                                ).innerHTML +=
                                     '<div class="activity ' +
-                                    (data[i].current ? 'current' : data[i].over ? 'past' : '') +
+                                    (data[i].current
+                                        ? 'current'
+                                        : data[i].over
+                                          ? 'past'
+                                          : '') +
                                     '"><strong>' +
                                     data[i].title +
                                     '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' +
@@ -393,27 +432,44 @@
                         }
                         if (Object.keys(combinedBusses).length > 0) {
                             element.innerHTML = ''
-                            Object.entries(combinedBusses).sort(function (a, b) {
-                                return (
-                                    new Date(a[1].ExpectedArrivalTime).valueOf() -
-                                    new Date(b[1].ExpectedArrivalTime).valueOf()
-                                )
-                            })
+                            Object.entries(combinedBusses).sort(
+                                function (a, b) {
+                                    return (
+                                        new Date(
+                                            a[1].ExpectedArrivalTime
+                                        ).valueOf() -
+                                        new Date(
+                                            b[1].ExpectedArrivalTime
+                                        ).valueOf()
+                                    )
+                                }
+                            )
 
-                            for (const [key, value] of Object.entries(combinedBusses).slice(0, 4)) {
+                            for (const [key, value] of Object.entries(
+                                combinedBusses
+                            ).slice(0, 4)) {
                                 let colorLate =
-                                    (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) /
+                                    (Math.abs(
+                                        new Date(value.ExpectedArrivalTime) -
+                                            new Date(value.TargetArrivalTime)
+                                    ) /
                                         1000) *
                                         60 >
                                     1
                                         ? '#ff0000'
                                         : '#c1ff00'
-                                let drivingColor = value.TripStopStatus === 'DRIVING' ? '#c1ff00' : '#fff'
+                                let drivingColor =
+                                    value.TripStopStatus === 'DRIVING'
+                                        ? '#c1ff00'
+                                        : '#fff'
                                 if (value.TripStopStatus !== 'ARRIVED') {
                                     element.innerHTML +=
                                         '<div class="busentry">' +
                                         `<span style=color:${colorLate}>` +
-                                        new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0, 5) +
+                                        new Date(value.ExpectedArrivalTime)
+                                            .toISOString()
+                                            .substr(11, 8)
+                                            .substr(0, 5) +
                                         '</span>' +
                                         ' ' +
                                         value.TransportType +
@@ -428,23 +484,29 @@
                                 }
                             }
                         } else {
-                            element.innerHTML = '<div class="notice">No buses!</div>'
+                            element.innerHTML =
+                                '<div class="notice">No buses!</div>'
                         }
                     })
                     .catch((err) => {
                         console.error(err)
-                        element.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
+                        element.innerHTML =
+                            '<div class="notice">Something went wrong during retrieval...</div>'
                     })
             }
 
             function updateProtopeners() {
-                const timetable = document.getElementById('protopeners-timetable')
+                const timetable = document.getElementById(
+                    'protopeners-timetable'
+                )
                 const protopolisFa = document.getElementById('protopolis-fa')
 
                 get('{{ route('api::screen::timetable::protopeners') }}')
                     .then((data) => {
                         if (data.length > 0) {
-                            document.getElementById('protopeners-timetable').innerHTML = ''
+                            document.getElementById(
+                                'protopeners-timetable'
+                            ).innerHTML = ''
                             let open = false,
                                 count = 0
                             for (let i in data) {
@@ -452,8 +514,13 @@
                                 else if (data[i].current) open = true
                                 let start = moment.unix(data[i].start)
                                 let end = moment.unix(data[i].end)
-                                let time = start.format('HH:mm') + ' - ' + end.format('HH:mm')
-                                document.getElementById('protopeners-timetable').innerHTML +=
+                                let time =
+                                    start.format('HH:mm') +
+                                    ' - ' +
+                                    end.format('HH:mm')
+                                document.getElementById(
+                                    'protopeners-timetable'
+                                ).innerHTML +=
                                     '<div class="activity ' +
                                     (data[i].current ? 'current' : '') +
                                     '">' +
@@ -468,20 +535,29 @@
                             }
                             if (open) {
                                 protopolisFa.classList.add('green')
-                                protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
+                                protopolisFa.classList.replace(
+                                    'fa-door-closed',
+                                    'fa-door-open'
+                                )
                             } else {
                                 protopolisFa.classList.remove('green')
-                                protopolisFa.classList.replace('fa-door-open', 'fa-door-closed')
+                                protopolisFa.classList.replace(
+                                    'fa-door-open',
+                                    'fa-door-closed'
+                                )
                             }
                             if (count === 0)
-                                timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
+                                timetable.innerHTML =
+                                    '<div class="notice">Protopolis closed for today!</div>'
                         } else {
-                            timetable.innerHTML = '<div class="notice">Protopolis closed today!</div>'
+                            timetable.innerHTML =
+                                '<div class="notice">Protopolis closed today!</div>'
                         }
                     })
                     .catch((err) => {
                         console.error(err)
-                        timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
+                        timetable.innerHTML =
+                            '<div class="notice">Something went wrong during retrieval...</div>'
                     })
             }
 

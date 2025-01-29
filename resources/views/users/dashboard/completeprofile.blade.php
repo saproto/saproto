@@ -7,7 +7,10 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form method="POST" action="{{ route('user::memberprofile::complete') }}">
+            <form
+                method="POST"
+                action="{{ route('user::memberprofile::complete') }}"
+            >
                 @csrf
 
                 <div class="card mb-3">
@@ -47,7 +50,10 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-primary float-end btn-block">
+                        <button
+                            type="submit"
+                            class="btn btn-outline-primary float-end btn-block"
+                        >
                             Complete profile
                         </button>
                     </div>

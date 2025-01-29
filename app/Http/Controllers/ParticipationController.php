@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ToastResponses;
 use App\Mail\ActivityMovedFromBackup;
 use App\Mail\ActivitySubscribedTo;
 use App\Mail\ActivityUnsubscribedFrom;
@@ -19,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Inertia\Inertia;
 
 class ParticipationController extends Controller
 {
@@ -31,31 +29,13 @@ class ParticipationController extends Controller
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
-            Session::flash('flash_message_type', ToastResponses::ERROR);
-            Session::flash('flash_message', 'You cannot subscribe for '.$event->title.'.');
-
-            return to_route('event::show', ['id' => $event->getPublicId()]);
-        }
-
-        if ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
-            Session::flash('flash_message', 'You are already subscribed for '.$event->title.'.');
-            Session::flash('flash_message_type', ToastResponses::ERROR);
-
-            return to_route('event::show', ['id' => $event->getPublicId()]);
-        }
-
-        if (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
-            Session::flash('flash_message_type', ToastResponses::ERROR);
-            Session::flash('flash_message', 'You cannot subscribe for '.$event->title.' at this time.');
-
-            return to_route('event::show', ['id' => $event->getPublicId()]);
-        }
-
-        if ($event->activity->closed) {
-            Session::flash('flash_message_type', ToastResponses::ERROR);
-            Session::flash('flash_message', 'This activity is closed, you cannot change participation anymore.');
-
-            return to_route('event::show', ['id' => $event->getPublicId()]);
+            abort(403, 'You cannot subscribe for '.$event->title.'.');
+        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+            abort(403, 'You are already subscribed for '.$event->title.'.');
+        } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
+            abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
+        } elseif ($event->activity->closed) {
+            abort(403, 'This activity is closed, you cannot change participation anymore.');
         }
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
@@ -63,30 +43,21 @@ class ParticipationController extends Controller
         $is_web = Auth::guard('web')->user();
 
         if ($request->has('helping_committee_id')) {
-            /** @var HelpingCommittee $helping */
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
             if (! $helping->committee->isMember(Auth::user())) {
-                Session::flash('flash_message_type', ToastResponses::ERROR);
-                Session::flash('flash_message', 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
-
-                return to_route('event::show', ['id' => $event->getPublicId()]);
+                abort(403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
             }
 
             if ($helping->users->count() >= $helping->amount) {
-                Session::flash('flash_message', 'There are already enough people of your committee helping, thanks though!');
-                Session::flash('flash_message_type', ToastResponses::WARNING);
-
-                return to_route('event::show', ['id' => $event->getPublicId()]);
+                abort(403, 'There are already enough people of your committee helping, thanks though!');
             }
 
             $data['committees_activities_id'] = $helping->id;
         } elseif ($is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                Session::flash('flash_message_type', ToastResponses::WARNING);
                 Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
                 $data['backup'] = true;
             } else {
-                Session::flash('flash_message_type', ToastResponses::SUCCESS);
                 Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
             }
         } elseif ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -98,7 +69,6 @@ class ParticipationController extends Controller
         $participation->save();
 
         $event->updateUniqueUsersCount();
-
         if (! $is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
                 $message = 'You have been placed on the back-up list for '.$event->title.'.';
@@ -114,10 +84,10 @@ class ParticipationController extends Controller
         }
 
         if ($event->activity->redirect_url) {
-            return Inertia::location($event->activity->redirect_url);
+            return Redirect::to($event->activity->redirect_url);
         }
 
-        return to_route('event::show', ['id' => $event->getPublicId()]);
+        return Redirect::back();
     }
 
     /**

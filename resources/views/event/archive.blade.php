@@ -14,7 +14,10 @@
                     'event.calendar_includes.rendermonth',
                     [
                         'events' => $events,
-                        'month_name' => date('F Y', strtotime($year . '-' . $monthNumber . '-25')),
+                        'month_name' => date(
+                            'F Y',
+                            strtotime($year . '-' . $monthNumber . '-25'),
+                        ),
                     ]
                 )
             @endif

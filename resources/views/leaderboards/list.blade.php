@@ -43,7 +43,10 @@
                                 <tbody>
                                     @foreach ($leaderboard->entries->sortByDesc('points') as $entry)
                                         <tr>
-                                            <td class="ps-3 place-{{ $loop->index + 1 }}" style="max-width: 50px">
+                                            <td
+                                                class="ps-3 place-{{ $loop->index + 1 }}"
+                                                style="max-width: 50px"
+                                            >
                                                 <i
                                                     class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"
                                                 ></i>
@@ -51,7 +54,9 @@
                                             </td>
                                             <td>{{ $entry->user->name }}</td>
                                             <td class="pe-4">
-                                                <i class="fa {{ $leaderboard->icon }}"></i>
+                                                <i
+                                                    class="fa {{ $leaderboard->icon }}"
+                                                ></i>
                                                 {{ $entry->points }}
                                             </td>
                                         </tr>
@@ -60,7 +65,9 @@
                             </table>
                         @else
                             <hr />
-                            <p class="text-muted text-center pt-3">There are no entries yet.</p>
+                            <p class="text-muted text-center pt-3">
+                                There are no entries yet.
+                            </p>
                         @endif
                     </div>
                 </div>

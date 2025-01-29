@@ -7,14 +7,18 @@
 
     @if ($event->hasBoughtTickets(Auth::user()))
         <div class="card mb-3">
-            <div class="card-header ellipsis">Your tickets for {{ $event->title }}</div>
+            <div class="card-header ellipsis">
+                Your tickets for {{ $event->title }}
+            </div>
 
             <div class="card-body">
                 @foreach ($event->getTicketPurchasesFor(Auth::user()) as $i => $purchase)
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-title">
-                                <span class="badge bg-dark text-white float-end">
+                                <span
+                                    class="badge bg-dark text-white float-end"
+                                >
                                     #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>
@@ -52,14 +56,18 @@
                         Attention!
                     </strong>
                     <br />
-                    You have unpaid tickets. You need to pay for your tickets before you can download and use them.
-                    Unpaid tickets will be invalidated if payment takes too long.
+                    You have unpaid tickets. You need to pay for your tickets
+                    before you can download and use them. Unpaid tickets will be
+                    invalidated if payment takes too long.
                 </div>
             @endif
         </div>
     @endif
 
-    <form method="post" action="{{ route('event::buytickets', ['id' => $event->id]) }}">
+    <form
+        method="post"
+        action="{{ route('event::buytickets', ['id' => $event->id]) }}"
+    >
         @csrf
 
         <div class="card mb-3">
@@ -69,13 +77,19 @@
                 $only_prepaid = true;
             @endphp
 
-            <div class="card-header ellipsis">Buy tickets for {{ $event->title }}</div>
+            <div class="card-header ellipsis">
+                Buy tickets for {{ $event->title }}
+            </div>
 
             <div class="card-body">
                 @if (! Auth::check())
                     <p class="card-text">
                         Please
-                        <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a>
+                        <a
+                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                        >
+                            log-in
+                        </a>
                         to buy tickets.
                     </p>
                 @else
@@ -84,27 +98,38 @@
                             /** @var \App\Models\Ticket $ticket */
                         @endphp
 
-                        <div class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}">
+                        <div
+                            class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}"
+                        >
                             <div class="card-body">
                                 <p class="card-title">
                                     @if ($ticket->buyLimitReached(Auth::user()))
-                                        <span class="badge float-end bg-danger">Buy limit reached</span>
+                                        <span class="badge float-end bg-danger">
+                                            Buy limit reached
+                                        </span>
                                     @elseif ($ticket->is_prepaid || ! Auth::user()->is_member)
                                         @php
                                             $has_prepay_tickets = true;
                                         @endphp
 
-                                        <span class="badge bg-danger float-end">Pre-Paid</span>
+                                        <span class="badge bg-danger float-end">
+                                            Pre-Paid
+                                        </span>
                                     @else
                                         @php
                                             $only_prepaid = false;
                                         @endphp
 
-                                        <span class="badge bg-info float-end">Withdrawal</span>
+                                        <span class="badge bg-info float-end">
+                                            Withdrawal
+                                        </span>
 
                                         @if ($ticket->has_buy_limit)
-                                            <span class="badge bg-warning float-end mx-3">
-                                                {{ $ticket->buy_limit }} max per user
+                                            <span
+                                                class="badge bg-warning float-end mx-3"
+                                            >
+                                                {{ $ticket->buy_limit }} max
+                                                per user
                                             </span>
                                         @endif
                                     @endif
@@ -161,13 +186,18 @@
                                             @endphp
 
                                             @for ($i = 0; $i <= $max; $i++)
-                                                <option value="{{ $i }}">{{ $i }}x</option>
+                                                <option value="{{ $i }}">
+                                                    {{ $i }}x
+                                                </option>
                                             @endfor
                                         </select>
                                     @endif
 
                                     @if ($ticket->show_participants)
-                                        <i>Note: with this ticket your name will be visible on the event page</i>
+                                        <i>
+                                            Note: with this ticket your name
+                                            will be visible on the event page
+                                        </i>
                                     @endif
                                 </p>
                             </div>
@@ -208,7 +238,11 @@
                             Get tickets now!
                         </a>
                     @else
-                        <button id="directpay" type="submit" class="btn btn-success btn-block">
+                        <button
+                            id="directpay"
+                            type="submit"
+                            class="btn btn-success btn-block"
+                        >
                             Total:
                             <strong>
                                 &euro;
@@ -258,15 +292,23 @@
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             const directPayButton = document.getElementById('directpay')
             const feesButton = document.getElementById('feesbutton')
-            const selectList = Array.from(document.getElementsByClassName('ticket-select'))
+            const selectList = Array.from(
+                document.getElementsByClassName('ticket-select')
+            )
             let totalPrepaidSelected = 0
             selectList.forEach((ticket) =>
                 ticket.addEventListener('change', (_) => {
-                    const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value, 0)
-                    document.getElementById('ticket-total').innerHTML = total.toFixed(2)
+                    const total = selectList.reduce(
+                        (agg, el) =>
+                            agg + el.getAttribute('data-price') * el.value,
+                        0
+                    )
+                    document.getElementById('ticket-total').innerHTML =
+                        total.toFixed(2)
 
                     if (ticket.getAttribute('data-prepaid') === true) {
-                        totalPrepaidSelected += ticket.value - ticket.getAttribute('previous-value')
+                        totalPrepaidSelected +=
+                            ticket.value - ticket.getAttribute('previous-value')
                         ticket.setAttribute('data-previous-value', ticket.value)
                     }
                     if (totalPrepaidSelected === 0) {

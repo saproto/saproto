@@ -9,7 +9,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxFixtureController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
-        Route::post('scan', ['as' => 'scanPost', 'middleware' => ['auth'], 'uses' => 'TicketController@scanPostApi']);
         Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
     });

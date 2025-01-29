@@ -4,10 +4,14 @@
             <span class="votes d-inline-block">
                 {{ $feedback->voteScore() }}
             </span>
-            <span class="{{ $feedback->userVote(Auth::user()) == 1 ? 'text-info' : 'text-white' }}">
+            <span
+                class="{{ $feedback->userVote(Auth::user()) == 1 ? 'text-info' : 'text-white' }}"
+            >
                 <i class="upvote fas fa-thumbs-up cursor-pointer"></i>
             </span>
-            <span class="{{ $feedback->userVote(Auth::user()) == -1 ? 'text-danger' : 'text-white' }}">
+            <span
+                class="{{ $feedback->userVote(Auth::user()) == -1 ? 'text-danger' : 'text-white' }}"
+            >
                 <i class="downvote fas fa-thumbs-down cursor-pointer"></i>
             </span>
         </span>
@@ -28,7 +32,8 @@
                     'action' => route('feedback::delete', ['id' => $feedback->id]),
                     'text' => '<i class="delete fas fa-trash"></i>',
                     'title' => 'Confirm Delete',
-                    'message' => 'Are you sure you want to delete this potentially good feedback?',
+                    'message' =>
+                        'Are you sure you want to delete this potentially good feedback?',
                     'confirm' => 'Delete',
                     'classes' => 'float-end me-3',
                 ]
@@ -37,16 +42,24 @@
 
         @can('board')
             @if (! $feedback->deleted_at)
-                <a href="{{ route('feedback::archive', ['id' => $feedback->id]) }}" class="float-end">
+                <a
+                    href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
+                    class="float-end"
+                >
                     <i class="archive me-3 fas fa-box-archive hover-danger"></i>
                 </a>
                 @if (! $feedback->reply && $feedback->category->can_reply && $controls)
                     <span class="float-end me-3 cursor-pointer">
-                        <i class="reply fas fa-reply toggle-navbar-{{ $feedback->id }}"></i>
+                        <i
+                            class="reply fas fa-reply toggle-navbar-{{ $feedback->id }}"
+                        ></i>
                     </span>
                 @endif
             @else
-                <a href="{{ route('feedback::archive', ['id' => $feedback->id]) }}" class="float-end">
+                <a
+                    href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
+                    class="float-end"
+                >
                     <i class="restore me-3 fas fa-trash-restore"></i>
                 </a>
             @endif
@@ -68,10 +81,18 @@
         @endif
 
         @if (Auth::user()->can('board') && $controls)
-            <div class="collapse mt-3" id="feedback__{{ $feedback->id }}__collapse">
-                <form method="post" action="{{ route('feedback::reply', ['id' => $feedback->id]) }}">
+            <div
+                class="collapse mt-3"
+                id="feedback__{{ $feedback->id }}__collapse"
+            >
+                <form
+                    method="post"
+                    action="{{ route('feedback::reply', ['id' => $feedback->id]) }}"
+                >
                     {{ csrf_field() }}
-                    <label for="feedback__{{ $feedback->id }}__reply">Reply:</label>
+                    <label for="feedback__{{ $feedback->id }}__reply">
+                        Reply:
+                    </label>
                     <textarea
                         id="feedback__{{ $feedback->id }}__reply"
                         class="form-control mb-2"
@@ -84,11 +105,21 @@
 {{ $feedback->reply ?? '' }}</textarea
                     >
                     <div class="btn-group w-100">
-                        <button type="submit" name="responseBtn" value="accept" class="btn btn-primary">
+                        <button
+                            type="submit"
+                            name="responseBtn"
+                            value="accept"
+                            class="btn btn-primary"
+                        >
                             <i class="fas fa-circle-check"></i>
                             Accept
                         </button>
-                        <button type="submit" name="responseBtn" value="reject" class="btn btn-danger">
+                        <button
+                            type="submit"
+                            name="responseBtn"
+                            value="reject"
+                            class="btn btn-danger"
+                        >
                             <i class="fas fa-circle-xmark"></i>
                             Reject
                         </button>
@@ -122,18 +153,28 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         if ({{ isset($controls) }}) {
-            document.querySelectorAll('.toggle-navbar-{{ $feedback->id }}').forEach((element) => {
-                element.addEventListener('click', (event) => {
-                    const enabled = document
-                        .getElementById('feedback__{{ $feedback->id }}__collapse')
-                        .classList.toggle('show')
-                    if (enabled) {
-                        document.getElementById('feedback__{{ $feedback->id }}__reply').focus()
-                    } else {
-                        document.getElementById('feedback__{{ $feedback->id }}__reply').value = ''
-                    }
+            document
+                .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
+                .forEach((element) => {
+                    element.addEventListener('click', (event) => {
+                        const enabled = document
+                            .getElementById(
+                                'feedback__{{ $feedback->id }}__collapse'
+                            )
+                            .classList.toggle('show')
+                        if (enabled) {
+                            document
+                                .getElementById(
+                                    'feedback__{{ $feedback->id }}__reply'
+                                )
+                                .focus()
+                        } else {
+                            document.getElementById(
+                                'feedback__{{ $feedback->id }}__reply'
+                            ).value = ''
+                        }
+                    })
                 })
-            })
         }
     </script>
 @endpush

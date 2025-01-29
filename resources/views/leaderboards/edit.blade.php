@@ -41,7 +41,8 @@
                                 [
                                     'name' => 'featured',
                                     'checked' => $leaderboard?->featured,
-                                    'label' => 'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>',
+                                    'label' =>
+                                        'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>',
                                 ]
                             )
                         @endcan
@@ -89,7 +90,9 @@
                                 'components.forms.markdownfield',
                                 [
                                     'name' => 'description',
-                                    'placeholder' => ! $leaderboard ? 'A small paragraph about the leaderboard.' : null,
+                                    'placeholder' => ! $leaderboard
+                                        ? 'A small paragraph about the leaderboard.'
+                                        : null,
                                     'value' => ! $leaderboard ? null : $leaderboard->description,
                                 ]
                             )
@@ -97,7 +100,12 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end ms-2">Submit</button>
+                        <button
+                            type="submit"
+                            class="btn btn-success float-end ms-2"
+                        >
+                            Submit
+                        </button>
                         @if ($leaderboard != null)
                             <a
                                 class="btn btn-danger float-end"
@@ -120,7 +128,11 @@
                 >
                     @csrf
 
-                    <input type="hidden" name="leaderboard_id" value="{{ $leaderboard->id }}" />
+                    <input
+                        type="hidden"
+                        name="leaderboard_id"
+                        value="{{ $leaderboard->id }}"
+                    />
 
                     <div class="card md-3">
                         <div class="card-header bg-dark text-white">
@@ -131,14 +143,18 @@
                             @if (count($entries) > 0)
                                 <form action="">
                                     <div class="table-responsive">
-                                        <table class="table table-sm table-hover mb-0">
+                                        <table
+                                            class="table table-sm table-hover mb-0"
+                                        >
                                             <thead>
                                                 <tr>
                                                     <th></th>
                                                     <th>Name</th>
                                                     <th>
                                                         {{ $leaderboard->points_name }}
-                                                        <i class="ms-1 {{ $leaderboard->icon }}"></i>
+                                                        <i
+                                                            class="ms-1 {{ $leaderboard->icon }}"
+                                                        ></i>
                                                     </th>
                                                     <th></th>
                                                     <th></th>
@@ -147,8 +163,13 @@
 
                                             <tbody>
                                                 @foreach ($entries as $entry)
-                                                    <tr class="le-points" data-id="{{ $entry->id }}">
-                                                        <td>#{{ $loop->index + 1 }}</td>
+                                                    <tr
+                                                        class="le-points"
+                                                        data-id="{{ $entry->id }}"
+                                                    >
+                                                        <td>
+                                                            #{{ $loop->index + 1 }}
+                                                        </td>
                                                         <td>
                                                             {{ $entry->user->name }}
                                                         </td>
@@ -159,7 +180,12 @@
                                                                 class="le-points-input"
                                                             />
                                                         </td>
-                                                        <td class="cursor-pointer" style="min-width: 60px">
+                                                        <td
+                                                            class="cursor-pointer"
+                                                            style="
+                                                                min-width: 60px;
+                                                            "
+                                                        >
                                                             <span
                                                                 class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"
                                                             ></span>
@@ -171,7 +197,9 @@
                                                             <a
                                                                 href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}"
                                                             >
-                                                                <i class="fas fa-trash text-danger fa-fw"></i>
+                                                                <i
+                                                                    class="fas fa-trash text-danger fa-fw"
+                                                                ></i>
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -190,11 +218,18 @@
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="form-group autocomplete">
-                                            <input class="form-control user-search" name="user_id" required />
+                                            <input
+                                                class="form-control user-search"
+                                                name="user_id"
+                                                required
+                                            />
                                         </div>
                                     </div>
                                     <div class="col-3">
-                                        <button class="btn btn-outline-primary btn-block" type="submit">
+                                        <button
+                                            class="btn btn-outline-primary btn-block"
+                                            type="submit"
+                                        >
                                             <i class="fas fa-plus-circle"></i>
                                         </button>
                                     </div>
@@ -210,19 +245,25 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        Array.from(document.getElementsByClassName('le-points')).forEach((el) => {
-            ;['click', 'keyup'].forEach((e) =>
-                el.addEventListener(e, (e) => {
-                    const id = el.getAttribute('data-id')
-                    const input = el.querySelector('.le-points-input')
-                    let points = input.value
-                    if (e.target.classList.contains('le-points-increase')) points++
-                    else if (e.target.classList.contains('le-points-decrease')) points--
-                    input.value = points
-                    updatePoints(id, points)
-                })
-            )
-        })
+        Array.from(document.getElementsByClassName('le-points')).forEach(
+            (el) => {
+                ;['click', 'keyup'].forEach((e) =>
+                    el.addEventListener(e, (e) => {
+                        const id = el.getAttribute('data-id')
+                        const input = el.querySelector('.le-points-input')
+                        let points = input.value
+                        if (e.target.classList.contains('le-points-increase'))
+                            points++
+                        else if (
+                            e.target.classList.contains('le-points-decrease')
+                        )
+                            points--
+                        input.value = points
+                        updatePoints(id, points)
+                    })
+                )
+            }
+        )
 
         function updatePoints(id, points) {
             post('{{ route('leaderboards::entries::update') }}', {
@@ -230,7 +271,9 @@
                 points: points,
             }).catch((err) => {
                 console.error(err)
-                window.alert('Something went wrong while updating the points. Please try again.')
+                window.alert(
+                    'Something went wrong while updating the points. Please try again.'
+                )
             })
         }
     </script>

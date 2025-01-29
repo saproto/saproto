@@ -7,7 +7,10 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-2">
-            <form method="post" action="{{ route('omnomcom::accounts::aggregate', ['account' => $account->id]) }}">
+            <form
+                method="post"
+                action="{{ route('omnomcom::accounts::aggregate', ['account' => $account->id]) }}"
+            >
                 @csrf
 
                 <div class="card mb-3">
@@ -24,7 +27,9 @@
                 </div>
 
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">Aggregated sales overview</div>
+                    <div class="card-header bg-dark text-white">
+                        Aggregated sales overview
+                    </div>
 
                     <div class="card-body">
                         @include(
@@ -45,7 +50,9 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success btn-block">Generate</button>
+                        <button type="submit" class="btn btn-success btn-block">
+                            Generate
+                        </button>
                     </div>
                 </div>
             </form>
@@ -53,7 +60,9 @@
 
         <div class="col-md-4">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">Account products</div>
+                <div class="card-header bg-dark text-white mb-1">
+                    Account products
+                </div>
 
                 <div class="card-body pb-0">
                     @if ($products->count() > 0)
@@ -72,7 +81,9 @@
 
                         {!! $products->links() !!}
                     @else
-                        <p class="card-text text-center">There are no products for this account.</p>
+                        <p class="card-text text-center">
+                            There are no products for this account.
+                        </p>
                     @endif
                 </div>
             </div>

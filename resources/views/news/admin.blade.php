@@ -17,7 +17,10 @@
                         Create a new weekly.
                     </a>
 
-                    <a href="{{ route('news::create', ['is_weekly' => false]) }}" class="badge bg-info float-end">
+                    <a
+                        href="{{ route('news::create', ['is_weekly' => false]) }}"
+                        class="badge bg-info float-end"
+                    >
                         Create a new news item.
                     </a>
                 </div>
@@ -37,13 +40,17 @@
                             <tr>
                                 <td class="title">{{ $newsitem->title }}</td>
                                 <td class="published-at">
-                                    <span class="text-{{ $newsitem->isPublished() ? 'primary' : 'muted' }}">
+                                    <span
+                                        class="text-{{ $newsitem->isPublished() ? 'primary' : 'muted' }}"
+                                    >
                                         {{ $newsitem->published_at }}
                                     </span>
                                 </td>
                                 <td>
                                     @if ($newsitem->is_weekly)
-                                        <i class="fas fa-check text-success"></i>
+                                        <i
+                                            class="fas fa-check text-success"
+                                        ></i>
                                     @endif
                                 </td>
                                 <td class="controls">
@@ -51,7 +58,9 @@
                                         <i class="fas fa-link me-2"></i>
                                     </a>
 
-                                    <a href="{{ route('news::edit', ['id' => $newsitem->id]) }}">
+                                    <a
+                                        href="{{ route('news::edit', ['id' => $newsitem->id]) }}"
+                                    >
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 

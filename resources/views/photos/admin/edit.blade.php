@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+        Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
 @section('container')
@@ -10,7 +10,8 @@
             class="btn btn-info btn-block mb-3"
             href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
         >
-            This album is linked to the event {{ $album->event->title }}, click here to go to the event.
+            This album is linked to the event {{ $album->event->title }}, click
+            here to go to the event.
         </a>
     @endif
 
@@ -22,12 +23,16 @@
                         class="btn btn-warning text-white btn-block mb-3"
                         href="{{ route('photo::admin::unpublish', ['id' => $album->id]) }}"
                     >
-                        This album is published so editing is limited, click here to unpublish the album.
+                        This album is published so editing is limited, click
+                        here to unpublish the album.
                     </a>
                 @else
-                    <span class="btn btn-warning text-white btn-block mb-3 cursor-default">
-                        This album is published so editing is limited, ask a Protography admin to unpublish it if you
-                        wish to make changed.
+                    <span
+                        class="btn btn-warning text-white btn-block mb-3 cursor-default"
+                    >
+                        This album is published so editing is limited, ask a
+                        Protography admin to unpublish it if you wish to make
+                        changed.
                     </span>
                 @endcan
             @else
@@ -36,11 +41,15 @@
                         class="btn btn-danger text-white btn-block mb-3"
                         href="{{ route('photo::admin::publish', ['id' => $album->id]) }}"
                     >
-                        This album is not yet published, click here to publish the album.
+                        This album is not yet published, click here to publish
+                        the album.
                     </a>
                 @else
-                    <span class="btn btn-warning text-white btn-block mb-3 cursor-default">
-                        This album is not yet published, ask a Protography admin to publish it.
+                    <span
+                        class="btn btn-warning text-white btn-block mb-3 cursor-default"
+                    >
+                        This album is not yet published, ask a Protography admin
+                        to publish it.
                     </span>
                 @endcan
             @endif
@@ -54,7 +63,9 @@
 
             <div class="card mb-3">
                 @if (Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && ! $album->published))
-                    <div class="card-header bg-dark text-white text-center">Edit album</div>
+                    <div class="card-header bg-dark text-white text-center">
+                        Edit album
+                    </div>
 
                     <form method="post">
                         {{ csrf_field() }}
@@ -90,7 +101,11 @@
                         </div>
 
                         <div class="card-footer">
-                            <input type="submit" class="btn btn-success btn-block mb-1" value="Save" />
+                            <input
+                                type="submit"
+                                class="btn btn-success btn-block mb-1"
+                                value="Save"
+                            />
                             <button
                                 type="button"
                                 class="btn btn-danger btn-block"
@@ -102,7 +117,9 @@
                         </div>
                     </form>
                 @else
-                    <div class="card-header bg-dark text-white text-center">Edit album</div>
+                    <div class="card-header bg-dark text-white text-center">
+                        Edit album
+                    </div>
 
                     <div class="card-body">
                         <b>Album name:</b>
@@ -112,7 +129,9 @@
                         {{ date('d-m-Y', $album->date_taken) }}
                         <br />
                         <b>Private album:</b>
-                        <i class="fa fa-{{ $album->private ? 'check' : 'times' }}"></i>
+                        <i
+                            class="fa fa-{{ $album->private ? 'check' : 'times' }}"
+                        ></i>
                     </div>
                 @endif
             </div>
@@ -128,17 +147,34 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Delete Album</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                Delete Album
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
                         </div>
                         <div class="modal-body">
-                            This will delete the album and all the photos inside.
+                            This will delete the album and all the photos
+                            inside.
                             <br />
                             Are you sure you want to delete the album?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $album->id]) }}">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            >
+                                Close
+                            </button>
+                            <a
+                                class="btn btn-danger"
+                                href="{{ route('photo::admin::delete', ['id' => $album->id]) }}"
+                            >
                                 Delete Album
                             </a>
                         </div>
@@ -147,19 +183,25 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Thumbnail</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Thumbnail
+                </div>
 
                 @if ($album->thumb())
                     <div
                         class="card-body"
                         style="
                             height: 300px;
-                            background: url({{ $album->thumb() }}) no-repeat center;
+                            background: url({{ $album->thumb() }}) no-repeat
+                                center;
                             background-size: cover;
                         "
                     ></div>
                 @else
-                    <div class="card-body d-flex opacity-25" style="height: 300px">
+                    <div
+                        class="card-body d-flex opacity-25"
+                        style="height: 300px"
+                    >
                         <div class="text-center m-auto">
                             <i class="fa fa-image fa-5x"></i>
                             <p>No thumbnail set</p>
@@ -171,20 +213,32 @@
 
         <div class="col-lg-9">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">Add photos</div>
+                <div class="card-header bg-dark text-white text-center">
+                    Add photos
+                </div>
                 @if (! $album->published)
                     <div class="card-body">
-                        <div id="error-bar" class="alert alert-danger d-none" role="alert">
+                        <div
+                            id="error-bar"
+                            class="alert alert-danger d-none"
+                            role="alert"
+                        >
                             <p>The following files failed to upload:</p>
                             <ul></ul>
                         </div>
-                        <div id="upload-view" class="row position-relative"></div>
+                        <div
+                            id="upload-view"
+                            class="row position-relative"
+                        ></div>
                         <div
                             id="droparea"
                             class="d-flex opacity-25 border border-2 border-light rounded-3"
                             style="height: 200px"
                         >
-                            <div id="droparea-content" class="text-center m-auto pointer-events-none">
+                            <div
+                                id="droparea-content"
+                                class="text-center m-auto pointer-events-none"
+                            >
                                 <i class="fa fa-images fa-5x mt-2"></i>
                                 <p>
                                     <span>Drop photos to upload</span>
@@ -199,13 +253,17 @@
                     </div>
                 @else
                     <div class="card-footer text-center">
-                        Uploading is disabled for published albums, unpublish the album to upload extra photos.
+                        Uploading is disabled for published albums, unpublish
+                        the album to upload extra photos.
                     </div>
                 @endif
             </div>
 
             <div class="card mb-3">
-                <form method="POST" action="{{ route('photo::admin::action', ['id' => $album->id]) }}">
+                <form
+                    method="POST"
+                    action="{{ route('photo::admin::action', ['id' => $album->id]) }}"
+                >
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-white text-center">
@@ -217,20 +275,41 @@
                         @if (! $album->published || Auth::user()->can('publishalbums'))
                             <div class="row">
                                 <div class="col-12 mb-4">
-                                    <div class="btn-group" role="group" aria-label="Toolbar">
+                                    <div
+                                        class="btn-group"
+                                        role="group"
+                                        aria-label="Toolbar"
+                                    >
                                         @php
-                                            $attr = $album->published ? 'type=button data-bs-toggle=modal data-bs-target=#published-modal' : 'type=submit';
+                                            $attr = $album->published
+                                                ? 'type=button data-bs-toggle=modal data-bs-target=#published-modal'
+                                                : 'type=submit';
                                         @endphp
 
-                                        <button {{ $attr }} name="action" value="remove" class="btn btn-danger">
+                                        <button
+                                            {{ $attr }}
+                                            name="action"
+                                            value="remove"
+                                            class="btn btn-danger"
+                                        >
                                             <i class="fa fa-trash"></i>
                                             Remove
                                         </button>
-                                        <button {{ $attr }} name="action" value="thumbnail" class="btn btn-success">
+                                        <button
+                                            {{ $attr }}
+                                            name="action"
+                                            value="thumbnail"
+                                            class="btn btn-success"
+                                        >
                                             <i class="fa fa-image"></i>
                                             Set thumbnail
                                         </button>
-                                        <button {{ $attr }} name="action" value="private" class="btn btn-warning">
+                                        <button
+                                            {{ $attr }}
+                                            name="action"
+                                            value="private"
+                                            class="btn btn-warning"
+                                        >
                                             <i class="fa fa-eye"></i>
                                             Toggle private
                                         </button>
@@ -243,10 +322,15 @@
                                         role="dialog"
                                         aria-hidden="true"
                                     >
-                                        <div class="modal-dialog" role="document">
+                                        <div
+                                            class="modal-dialog"
+                                            role="document"
+                                        >
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Perform action</h5>
+                                                    <h5 class="modal-title">
+                                                        Perform action
+                                                    </h5>
                                                     <button
                                                         type="button"
                                                         class="btn-close"
@@ -255,8 +339,9 @@
                                                     ></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    This album has already been published. Are you sure you want perform
-                                                    this action?
+                                                    This album has already been
+                                                    published. Are you sure you
+                                                    want perform this action?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button
@@ -266,7 +351,9 @@
                                                     >
                                                         Close
                                                     </button>
-                                                    <span id="confirm-button"></span>
+                                                    <span
+                                                        id="confirm-button"
+                                                    ></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -275,7 +362,11 @@
                             </div>
                         @endif
 
-                        <div id="photo-view" data-name="photos" class="row shift-select">
+                        <div
+                            id="photo-view"
+                            data-name="photos"
+                            class="row shift-select"
+                        >
                             @foreach ($album->items as $photo)
                                 @include('photos.includes.selectablephoto', ['photo' => $photo])
                             @endforeach
@@ -295,14 +386,24 @@
             let uploadRunning = false
             let dropArea = document.getElementById('droparea')
 
-            document.getElementById('published-modal').addEventListener('show.bs.modal', (e) => {
-                const footer = document.querySelector('#published-modal .modal-footer')
-                const btn = e.relatedTarget.cloneNode(true)
-                btn.type = 'submit'
-                footer.replaceChild(btn, footer.lastChild)
-            })
+            document
+                .getElementById('published-modal')
+                .addEventListener('show.bs.modal', (e) => {
+                    const footer = document.querySelector(
+                        '#published-modal .modal-footer'
+                    )
+                    const btn = e.relatedTarget.cloneNode(true)
+                    btn.type = 'submit'
+                    footer.replaceChild(btn, footer.lastChild)
+                })
 
-            if (dropArea && window.File && window.FileReader && window.FileList && window.Blob) {
+            if (
+                dropArea &&
+                window.File &&
+                window.FileReader &&
+                window.FileList &&
+                window.Blob
+            ) {
                 dropArea.addEventListener('dragenter', (e) => {
                     e.stopPropagation()
                     e.preventDefault()
@@ -332,7 +433,11 @@
                 if (files.length) {
                     let fileQueue = []
                     for (const file of files) {
-                        if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
+                        if (
+                            ['image/png', 'image/jpg', 'image/jpeg'].includes(
+                                file.type
+                            )
+                        ) {
                             let fr = new FileReader()
                             fr.onload = async (_) => {
                                 file.id = fileId++
@@ -351,14 +456,24 @@
                     let formData = new FormData()
                     formData.append('file', file)
                     toggleRunning()
-                    await post('{{ route('photo::admin::upload', ['id' => $album->id], false) }}', formData, {
-                        parse: false,
-                    })
+                    await post(
+                        '{{ route('photo::admin::upload', ['id' => $album->id], false) }}',
+                        formData,
+                        {
+                            parse: false,
+                        }
+                    )
                         .then((response) => {
                             response.text().then((text) => {
-                                document.getElementById('photo-view').innerHTML += text
-                                document.getElementById('error-bar').classList.add('d-none')
-                                document.querySelector('#error-bar ul').innerHTML = ''
+                                document.getElementById(
+                                    'photo-view'
+                                ).innerHTML += text
+                                document
+                                    .getElementById('error-bar')
+                                    .classList.add('d-none')
+                                document.querySelector(
+                                    '#error-bar ul'
+                                ).innerHTML = ''
                                 toggleRunning()
                             })
                         })

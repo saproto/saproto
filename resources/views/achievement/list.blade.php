@@ -10,7 +10,10 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('achievement::create') }}" class="badge bg-info float-end">
+                    <a
+                        href="{{ route('achievement::create') }}"
+                        class="badge bg-info float-end"
+                    >
                         Create a new achievement.
                     </a>
                 </div>
@@ -28,14 +31,20 @@
                     </thead>
 
                     @foreach ($achievements as $achievement)
-                        <tr class="{{ $achievement->is_archived ? 'text-muted' : null }}">
-                            <td class="hidden-sm hidden-xs {{ $achievement->tier }}">
+                        <tr
+                            class="{{ $achievement->is_archived ? 'text-muted' : null }}"
+                        >
+                            <td
+                                class="hidden-sm hidden-xs {{ $achievement->tier }}"
+                            >
                                 @if ($achievement->fa_icon)
                                     <div>
-                                        <i class="{{ $achievement->fa_icon }} fa-fw"></i>
+                                        <i
+                                            class="{{ $achievement->fa_icon }} fa-fw"
+                                        ></i>
                                     </div>
                                 @else
-                                    No icon available
+                                        No icon available
                                 @endif
                             </td>
                             <td>{{ $achievement->name }}</td>
@@ -45,10 +54,14 @@
                             <td>{{ $achievement->desc }}</td>
                             <td>{{ $achievement->tier }}</td>
                             <td class="text-end">
-                                <a href="{{ route('achievement::edit', ['id' => $achievement->id]) }}">
+                                <a
+                                    href="{{ route('achievement::edit', ['id' => $achievement->id]) }}"
+                                >
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
-                                <a href="{{ route('achievement::delete', ['id' => $achievement->id]) }}">
+                                <a
+                                    href="{{ route('achievement::delete', ['id' => $achievement->id]) }}"
+                                >
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
                             </td>

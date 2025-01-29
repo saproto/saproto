@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Mollie Transaction #{{ $transaction->id }}
+        Mollie Transaction #{{ $transaction->id }}
 @endsection
 
 @section('container')
@@ -23,14 +23,19 @@
                     </tr>
                     <tr>
                         <th>Amount</th>
-                        <td>&euro;{{ number_format($mollie->amount->value, 2) }}</td>
+                        <td>
+                            &euro;{{ number_format($mollie->amount->value, 2) }}
+                        </td>
                     </tr>
                     <tr>
                         <th>Status</th>
                         <td>
                             @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'open')
                                 <a href="{{ $transaction->payment_url }}">
-                                    <span class="label label-success">{{ $mollie->status }} - Continue Payment</span>
+                                    <span class="label label-success">
+                                        {{ $mollie->status }} - Continue
+                                        Payment
+                                    </span>
                                 </a>
                             @elseif (App\Models\MollieTransaction::translateStatus($mollie->status) == 'paid')
                                 <span class="label label-success">
@@ -52,13 +57,19 @@
                 <div class="card-body">
                     @if (App\Models\MollieTransaction::translateStatus($mollie->status) == 'failed')
                         <p>
-                            This payment has failed. All orderlines associated with this payment have been set back to
-                            unpaid. You can try to start a new payment.
+                            This payment has failed. All orderlines associated
+                            with this payment have been set back to unpaid. You
+                            can try to start a new payment.
                         </p>
                     @else
-                        <p>Below you can find all the orderlines associated with this payment.</p>
+                        <p>
+                            Below you can find all the orderlines associated
+                            with this payment.
+                        </p>
 
-                        <table class="table table-hover table-borderless table-sm">
+                        <table
+                            class="table table-hover table-borderless table-sm"
+                        >
                             <thead>
                                 <tr>
                                     <th>€</th>
@@ -90,7 +101,12 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ url()->previous() }}" class="btn btn-default btn-block">Go Back</a>
+                    <a
+                        href="{{ url()->previous() }}"
+                        class="btn btn-default btn-block"
+                    >
+                        Go Back
+                    </a>
                 </div>
             </div>
         </div>

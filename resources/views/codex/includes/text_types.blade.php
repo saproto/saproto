@@ -3,8 +3,18 @@
         Text types
         @if (! isset($edit))
             <div>
-                <a href="{{ route('codexText.create') }}" class="btn btn-info badge">New Text</a>
-                <a href="{{ route('codexTextType.create') }}" class="btn btn-info badge">New Text Type</a>
+                <a
+                    href="{{ route('codexText.create') }}"
+                    class="btn btn-info badge"
+                >
+                    New Text
+                </a>
+                <a
+                    href="{{ route('codexTextType.create') }}"
+                    class="btn btn-info badge"
+                >
+                    New Text Type
+                </a>
             </div>
         @endif
     </div>
@@ -48,10 +58,15 @@
                         @endif
                     </span>
 
-                    <div id="collapse-text{{ $textType->id }}" class="collapse">
+                    <div
+                        id="collapse-text{{ $textType->id }}"
+                        class="collapse"
+                    >
                         <div class="card-body cursor-default">
                             @foreach ($textType->texts as $text)
-                                <span class="w-100 d-inline-flex justify-content-between">
+                                <span
+                                    class="w-100 d-inline-flex justify-content-between"
+                                >
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">
                                             @include(

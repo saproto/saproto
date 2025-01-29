@@ -19,7 +19,10 @@
         </span>
         .
 
-        <i class="fab fa-spotify fa-fw ms-3 text-primary" aria-hidden="true"></i>
+        <i
+            class="fab fa-spotify fa-fw ms-3 text-primary"
+            aria-hidden="true"
+        ></i>
         <a
             href="https://open.spotify.com/user/studyassociationproto/playlist/213N4HAIKNZe7H0X3R79I2"
             target="_blank"
@@ -46,7 +49,9 @@
 
                     <div class="card-body">
                         @if (count($content) == 0)
-                            <p class="card-text">This list is currently empty.</p>
+                            <p class="card-text">
+                                This list is currently empty.
+                            </p>
                         @else
                             @foreach ($content as $video)
                                 @include(

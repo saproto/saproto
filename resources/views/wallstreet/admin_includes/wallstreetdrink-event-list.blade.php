@@ -19,9 +19,13 @@
                 <tbody>
                     @foreach ($allEvents as $wallstreetEvent)
                         <tr class="align-middle text-nowrap">
-                            <td class="text-muted">#{{ $wallstreetEvent->id }}</td>
+                            <td class="text-muted">
+                                #{{ $wallstreetEvent->id }}
+                            </td>
                             <td class="text">{{ $wallstreetEvent->name }}</td>
-                            <td class="text">%{{ $wallstreetEvent->percentage }}</td>
+                            <td class="text">
+                                %{{ $wallstreetEvent->percentage }}
+                            </td>
                             <td>
                                 @include(
                                     'components.forms.checkbox',
@@ -35,7 +39,9 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('wallstreet::events::edit', ['id' => $wallstreetEvent->id]) }}">
+                                <a
+                                    href="{{ route('wallstreet::events::edit', ['id' => $wallstreetEvent->id]) }}"
+                                >
                                     <i class="fas fa-edit me-4"></i>
                                 </a>
                                 @include(
@@ -57,7 +63,9 @@
             </table>
         </div>
     @else
-        <div class="text-center text-muted py-3">There are no wallstreet events yet!</div>
+        <div class="text-center text-muted py-3">
+            There are no wallstreet events yet!
+        </div>
     @endif
 </div>
 
@@ -69,17 +77,18 @@
                 //disable the checkbox
                 event.target.disabled = true
                 //send the request
-                get('{{ urldecode(route('api::wallstreet::toggle_event')) }}', { id: event.target.value }).then(
-                    (response) => {
-                        if (response.id != null) {
-                            event.target.checked = response.active
-                            event.target.disabled = false
-                        } else {
-                            event.target.checked = !event.target.checked
-                            event.target.disabled = false
-                        }
+                get(
+                    '{{ urldecode(route('api::wallstreet::toggle_event')) }}',
+                    { id: event.target.value }
+                ).then((response) => {
+                    if (response.id != null) {
+                        event.target.checked = response.active
+                        event.target.disabled = false
+                    } else {
+                        event.target.checked = !event.target.checked
+                        event.target.disabled = false
                     }
-                )
+                })
             })
         })
     </script>

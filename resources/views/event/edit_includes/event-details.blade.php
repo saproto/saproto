@@ -71,7 +71,11 @@
                                 [
                                     'name' => 'start',
                                     'label' => 'Event start:',
-                                    'placeholder' => request()->old('start') ? strtotime(request()->old('start')) : ($event ? $event->start : null),
+                                    'placeholder' => request()->old('start')
+                                        ? strtotime(request()->old('start'))
+                                        : ($event
+                                            ? $event->start
+                                            : null),
                                 ]
                             )
                         </div>
@@ -83,7 +87,11 @@
                                 [
                                     'name' => 'end',
                                     'label' => 'Event end:',
-                                    'placeholder' => request()->old('start') ? strtotime(request()->old('end')) : ($event ? $event->end : null),
+                                    'placeholder' => request()->old('start')
+                                        ? strtotime(request()->old('end'))
+                                        : ($event
+                                            ? $event->end
+                                            : null),
                                 ]
                             )
                         </div>
@@ -91,8 +99,16 @@
                         <!-- Visibility -->
                         <div class="col-md-6 mb-3">
                             <label for="secret">Event visibility:</label>
-                            <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" @selected(old('secret') === 1 || ($event != null && $event->secret))>
+                            <select
+                                id="secret"
+                                name="secret"
+                                class="form-control"
+                                required
+                            >
+                                <option
+                                    value="1"
+                                    @selected(old('secret') === 1 || ($event != null && $event->secret))
+                                >
                                     Secret
                                 </option>
                                 <option
@@ -112,7 +128,11 @@
                                     'name' => 'publication',
                                     'label' =>
                                         'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
-                                    'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
+                                    'placeholder' => old('publication')
+                                        ? strtotime(old('publication'))
+                                        : ($event
+                                            ? $event->publication
+                                            : null),
                                     'not_required' => true,
                                 ]
                             )
@@ -136,7 +156,12 @@
                         <div class="col-md-6 mb-3">
                             <div class="custom-file">
                                 <label for="image">Set event image:</label>
-                                <input type="file" id="image" class="form-control" name="image" />
+                                <input
+                                    type="file"
+                                    id="image"
+                                    class="form-control"
+                                    name="image"
+                                />
                             </div>
                         </div>
 
@@ -145,8 +170,16 @@
                         @if (count($categories) > 0)
                             <div class="col-md-6 mb-3">
                                 <label for="category">Event category:</label>
-                                <select id="category" name="category" class="form-control">
-                                    <option @selected($event && ! $event->category)>Uncategorized</option>
+                                <select
+                                    id="category"
+                                    name="category"
+                                    class="form-control"
+                                >
+                                    <option
+                                        @selected($event && ! $event->category)
+                                    >
+                                        Uncategorized
+                                    </option>
                                     @foreach ($categories as $category)
                                         <option
                                             value="{{ $category->id }}"
@@ -213,7 +246,10 @@
                         <hr />
 
                         <h5>Current image:</h5>
-                        <img src="{!! $event->image->generateImagePath(800, 300) !!}" class="w-100 border" />
+                        <img
+                            src="{!! $event->image->generateImagePath(800, 300) !!}"
+                            class="w-100 border"
+                        />
                     @endif
                 </div>
 
@@ -224,8 +260,14 @@
                             'components.forms.markdownfield',
                             [
                                 'name' => 'description',
-                                'placeholder' => $event == null ? 'Please elaborate on why this event is awesome.' : null,
-                                'value' => old('description', $event == null ? null : $event->description),
+                                'placeholder' =>
+                                    $event == null
+                                        ? 'Please elaborate on why this event is awesome.'
+                                        : null,
+                                'value' => old(
+                                    'description',
+                                    $event == null ? null : $event->description,
+                                ),
                             ]
                         )
                     </div>

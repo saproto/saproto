@@ -11,7 +11,11 @@
             <label
                 for="photo_{{ $photo->id }}"
                 class="card-img photo_pop"
-                style="display: flex; height: 200px; background-image: url({{ $photo->thumbnail() }})"
+                style="
+                    display: flex;
+                    height: 200px;
+                    background-image: url({{ $photo->thumbnail() }});
+                "
             >
                 @if ($photo->private)
                     <p class="card-text ellipsis align-self-end">

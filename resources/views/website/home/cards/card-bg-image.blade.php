@@ -6,7 +6,8 @@
         href="{{ $url ?? '#' }}"
         class="card-body d-flex justify-content-start text-decoration-none {{ isset($photo_pop) && $photo_pop ? 'photo_pop' : 'photo' }}"
         style="
-            background: center no-repeat {{ isset($img) ? "url($img)" : '#333' }};
+            background: center no-repeat
+                {{ isset($img) ? "url($img)" : '#333' }};
             background-size: cover;
             height: {{ $height ?? 100 }}px;
         "

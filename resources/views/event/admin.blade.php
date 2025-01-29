@@ -7,13 +7,18 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <a href="{{ route('event::checklist', ['id' => $event->id]) }}" class="btn btn-success btn-block mb-3">
+            <a
+                href="{{ route('event::checklist', ['id' => $event->id]) }}"
+                class="btn btn-success btn-block mb-3"
+            >
                 Participant Checklist
             </a>
 
             @if ($event->shouldShowDietInfo())
                 <div class="card">
-                    <div class="card-header bg-dark text-white">Diet and allergy information.</div>
+                    <div class="card-header bg-dark text-white">
+                        Diet and allergy information.
+                    </div>
 
                     <div class="card-body">
                         <table class="table">
@@ -38,7 +43,9 @@
         @if (count($event->tickets) > 0)
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">Event tickets</div>
+                    <div class="card-header bg-dark text-white">
+                        Event tickets
+                    </div>
 
                     <div class="card-body">
                         <a
@@ -47,7 +54,10 @@
                         >
                             Start Scanner Application for Event
                         </a>
-                        <i>The ticket scanner is temporarily disabled due to technical issues.</i>
+                        <i>
+                            The ticket scanner is temporarily disabled due to
+                            technical issues.
+                        </i>
 
                         <hr />
 
@@ -63,14 +73,18 @@
                                         {{ $ticket->product->name }}
                                     </strong>
                                     <span class="badge bg-primary float-end">
-                                        {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
+                                        {{ $ticket->sold() }} sold /
+                                        {{ $ticket->product->stock }} available
                                     </span>
                                     <span class="badge bg-info float-end me-4">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
                                     </span>
                                 </div>
 
-                                <div class="collapse" id="ticket-collapse-{{ $ticket->id }}">
+                                <div
+                                    class="collapse"
+                                    id="ticket-collapse-{{ $ticket->id }}"
+                                >
                                     <div class="card-body">
                                         @if ($ticket->purchases->count() > 0)
                                             <table class="table">
@@ -84,7 +98,9 @@
                                                         @endif
 
                                                         <th>Price</th>
-                                                        <th>Date of Purchase</th>
+                                                        <th>
+                                                            Date of Purchase
+                                                        </th>
                                                         <th>Ticket Scanned</th>
                                                         @can('board')
                                                             <th></th>
@@ -103,12 +119,19 @@
                                                             </td>
                                                             <td>
                                                                 @if ($purchase->user->age() >= 18)
-                                                                    <span class="badge bg-success">
-                                                                        <i class="fas fa-check" aria-hidden="true"></i>
+                                                                    <span
+                                                                        class="badge bg-success"
+                                                                    >
+                                                                        <i
+                                                                            class="fas fa-check"
+                                                                            aria-hidden="true"
+                                                                        ></i>
                                                                         18+
                                                                     </span>
                                                                 @else
-                                                                    <span class="badge bg-danger">
+                                                                    <span
+                                                                        class="badge bg-danger"
+                                                                    >
                                                                         <i
                                                                             class="fas fa-exclamation-triangle"
                                                                             aria-hidden="true"
@@ -120,14 +143,18 @@
                                                             @if ($event->shouldShowDietInfo())
                                                                 <td>
                                                                     @if ($purchase->user->hasDiet())
-                                                                        <span class="badge bg-danger">
+                                                                        <span
+                                                                            class="badge bg-danger"
+                                                                        >
                                                                             <i
                                                                                 class="fas fa-exclamation-triangle"
                                                                                 aria-hidden="true"
                                                                             ></i>
                                                                         </span>
                                                                     @else
-                                                                        <span class="label label-success">
+                                                                        <span
+                                                                            class="label label-success"
+                                                                        >
                                                                             <i
                                                                                 class="badge bg-check"
                                                                                 aria-hidden="true"
@@ -143,7 +170,9 @@
                                                             <td>
                                                                 {{ $purchase->created_at }}
                                                             </td>
-                                                            <td class="events-scanned">
+                                                            <td
+                                                                class="events-scanned"
+                                                            >
                                                                 <a
                                                                     data-id="{{ $purchase->barcode }}"
                                                                     class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint"
@@ -153,7 +182,9 @@
                                                                 </a>
                                                             </td>
                                                             @can('board')
-                                                                <td class="dontprint">
+                                                                <td
+                                                                    class="dontprint"
+                                                                >
                                                                     @if ($purchase->scanned)
                                                                         Used
                                                                     @elseif ($purchase->orderline->isPayed())
@@ -168,7 +199,10 @@
                                                                                 'classes' => 'badge bg-danger',
                                                                                 'text' => 'Delete',
                                                                                 'title' => 'Confirm Delete',
-                                                                                'message' => 'Are you sure you want to delete one ticket for ' . $purchase->user->name . '?',
+                                                                                'message' =>
+                                                                                    'Are you sure you want to delete one ticket for ' .
+                                                                                    $purchase->user->name .
+                                                                                    '?',
                                                                             ]
                                                                         )
                                                                     @endif
@@ -179,7 +213,9 @@
                                                 </tbody>
                                             </table>
                                         @else
-                                            <p class="card-text text-center">This ticket has not sold yet.</p>
+                                            <p class="card-text text-center">
+                                                This ticket has not sold yet.
+                                            </p>
                                         @endif
                                     </div>
                                 </div>
@@ -196,7 +232,9 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', (_) => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
-            const unscanList = Array.from(document.getElementsByClassName('unscan'))
+            const unscanList = Array.from(
+                document.getElementsByClassName('unscan')
+            )
             scanList.forEach((el) => setEventListener(el, false))
             unscanList.forEach((el) => setEventListener(el, true))
         })
@@ -220,7 +258,9 @@
                         link.href = '#'
                         link.setAttribute('data-id', barcode)
                         link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
-                        link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
+                        link.className = unscan
+                            ? 'scan dontprint'
+                            : 'unscan dontprint'
                         parent.innerHTML = ''
                         parent.append(link)
                         setEventListener(link, !unscan)

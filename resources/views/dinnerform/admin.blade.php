@@ -13,7 +13,10 @@
                 ordered on
                 <strong>{{ $dinnerform->end->format('Y m-d') }}</strong>
             </span>
-            <a href="{{ route('dinnerform::create') }}" class="btn btn-info badge float-end ms-2">
+            <a
+                href="{{ route('dinnerform::create') }}"
+                class="btn btn-info badge float-end ms-2"
+            >
                 <i class="fas fa-hand-point-left me-1"></i>
                 Return to overview
             </a>
@@ -42,7 +45,9 @@
                     ]
                 )
             @else
-                <span class="badge btn bg-primary cursor-default badge float-end">
+                <span
+                    class="badge btn bg-primary cursor-default badge float-end"
+                >
                     <i class="fas fa-check"></i>
                     Processed!
                 </span>
@@ -66,10 +71,18 @@
                     <tr>
                         <td>{{ $dinnerform->orderCount() }}</td>
                         <td>{{ $dinnerform->helperCount() }}</td>
-                        <td>€{{ number_format($dinnerform->helper_discount, 2) }}</td>
-                        <td>{{ $dinnerform->regular_discount_percentage }}%</td>
-                        <td>€{{ number_format($dinnerform->totalAmount(), 2) }}</td>
-                        <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
+                        <td>
+                            €{{ number_format($dinnerform->helper_discount, 2) }}
+                        </td>
+                        <td>
+                            {{ $dinnerform->regular_discount_percentage }}%
+                        </td>
+                        <td>
+                            €{{ number_format($dinnerform->totalAmount(), 2) }}
+                        </td>
+                        <td>
+                            €{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -91,21 +104,30 @@
                     <tbody>
                         @foreach ($orderList as $order)
                             <tr>
-                                <td class="text-muted">#{{ $order->user->id }}</td>
+                                <td class="text-muted">
+                                    #{{ $order->user->id }}
+                                </td>
                                 <td>
                                     {{ $order->user->name }}
                                 </td>
                                 <td>
                                     @if ($order->helper)
-                                        <i class="fas fa-check text-info" aria-hidden="true"></i>
+                                        <i
+                                            class="fas fa-check text-info"
+                                            aria-hidden="true"
+                                        ></i>
                                     @endif
                                 </td>
                                 <td>{{ $order->description }}</td>
                                 <td>€{{ number_format($order->price, 2) }}</td>
-                                <td>€{{ number_format($order->price_with_discount, 2) }}</td>
+                                <td>
+                                    €{{ number_format($order->price_with_discount, 2) }}
+                                </td>
                                 <td class="text-center">
                                     @if (! $order->closed)
-                                        <a href="{{ route('dinnerform::orderline::edit', ['id' => $order->id]) }}">
+                                        <a
+                                            href="{{ route('dinnerform::orderline::edit', ['id' => $order->id]) }}"
+                                        >
                                             <i class="fas fa-edit me-2"></i>
                                         </a>
                                         @include(
@@ -127,7 +149,9 @@
                     </tbody>
                 </table>
             @else
-                <div class="text-center text-muted pb-3">There are no orders yet!</div>
+                <div class="text-center text-muted pb-3">
+                    There are no orders yet!
+                </div>
             @endif
         </div>
     </div>

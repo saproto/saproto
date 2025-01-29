@@ -13,7 +13,8 @@
             - The calling name of the recipient.
             <br />
             <i>$username</i>
-            - The website username of a member (only available in mails to members!)
+            - The website username of a member (only available in mails to
+            members!)
             <br />
         </p>
     </div>

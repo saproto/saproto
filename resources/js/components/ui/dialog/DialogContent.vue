@@ -12,7 +12,9 @@ import {
 } from 'radix-vue'
 import { computed, type HTMLAttributes } from 'vue'
 
-const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<
+    DialogContentProps & { class?: HTMLAttributes['class'] }
+>()
 const emits = defineEmits<DialogContentEmits>()
 
 const delegatedProps = computed(() => {

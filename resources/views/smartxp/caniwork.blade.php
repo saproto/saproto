@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta
+            name="viewport"
+            content="initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
 
         <meta name="theme-color" content="#C1FF00" />
 
@@ -13,10 +16,19 @@
             property="og:description"
             content="Do you want to know if the SmartXP is available for working? Check the SmartXP timetable here!"
         />
-        <meta property="og:url" content="https://www.caniworkintheSmartXP.nl/" />
-        <meta property="og:image" content="{{ asset('images/subsites/smartxp.jpg') }}" />
+        <meta
+            property="og:url"
+            content="https://www.caniworkintheSmartXP.nl/"
+        />
+        <meta
+            property="og:image"
+            content="{{ asset('images/subsites/smartxp.jpg') }}"
+        />
 
-        <link rel="shortcut icon" href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}" />
+        <link
+            rel="shortcut icon"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
+        />
 
         <title>Can I work in the SmartXP?</title>
 
@@ -146,7 +158,12 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <div class="notice" style="margin-bottom: 25px">Nothing!</div>
+                                    <div
+                                        class="notice"
+                                        style="margin-bottom: 25px"
+                                    >
+                                        Nothing!
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -157,7 +174,10 @@
             <div class="row">
                 <div class="col-md-12 mt-3" style="text-align: center">
                     <a href="https://www.proto.utwente.nl/">
-                        <img src="{{ asset('images/logo/inverse.png') }}" style="width: 300px; margin: 40px" />
+                        <img
+                            src="{{ asset('images/logo/inverse.png') }}"
+                            style="width: 300px; margin: 40px"
+                        />
                     </a>
                 </div>
             </div>
