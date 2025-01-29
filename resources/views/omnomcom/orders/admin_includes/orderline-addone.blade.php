@@ -1,7 +1,4 @@
-<a
-    class="btn btn-success btn-block mb-3"
-    href="{{ route('omnomcom::orders::orderline-wizard') }}"
->
+<a class="btn btn-success btn-block mb-3" href="{{ route('omnomcom::orders::orderline-wizard') }}">
     Add orderline wizard.
     <span class="ms-3">🧙</span>
 </a>
@@ -26,22 +23,12 @@
             </div>
             <div class="form-group autocomplete">
                 <label for="product">Product(s):</label>
-                <input
-                    class="form-control product-search"
-                    id="product"
-                    name="product[]"
-                    multiple
-                    required
-                />
+                <input class="form-control product-search" id="product" name="product[]" multiple required />
             </div>
         </div>
 
         <div class="card-footer">
-            <input
-                type="submit"
-                class="btn btn-success btn-block"
-                value="Save"
-            />
+            <input type="submit" class="btn btn-success btn-block" value="Save" />
         </div>
     </div>
 </form>

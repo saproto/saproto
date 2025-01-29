@@ -173,14 +173,8 @@ $card-collapse-bg: #fff !default;
 }
 
 // Events
-$event-gradient: linear-gradient(
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.8)
-) !default;
-$event-hover-gradient: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.7)
-) !default;
+$event-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8)) !default;
+$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) !default;
 $event-bg: #eee !default;
 $event-hover-bg: #aaa !default;
 
@@ -295,14 +289,8 @@ $event-hover-bg: #aaa !default;
 $photo_pop-color: #fff !default;
 $photo-color: #222 !default;
 $photo-hover-color: #222 !default;
-$photo-gradient: linear-gradient(
-    rgba(255, 255, 255, 0.8),
-    rgba(255, 255, 255, 0.7)
-) !default;
-$photo-hover-gradient: linear-gradient(
-    rgba(255, 255, 255, 0.7),
-    rgba(255, 255, 255, 0.6)
-) !default;
+$photo-gradient: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.7)) !default;
+$photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6)) !default;
 
 .photo_pop {
     color: $photo_pop-color;
@@ -358,8 +346,7 @@ $photo-hover-gradient: linear-gradient(
     background-color: $dark;
     height: 15px;
     mask: url('/resources/assets/images/font-awesome/fa-calendar.svg') no-repeat;
-    -webkit-mask: url('/resources/assets/images/font-awesome/fa-calendar.svg')
-        no-repeat;
+    -webkit-mask: url('/resources/assets/images/font-awesome/fa-calendar.svg') no-repeat;
     &:hover {
         cursor: pointer;
     }

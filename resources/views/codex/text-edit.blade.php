@@ -13,11 +13,7 @@
         action="{{ ! empty($text) ? route('codexText.update', ['codexText' => $text]) : route('codexText.store') }}"
         method="POST"
     >
-        <input
-            type="hidden"
-            name="_method"
-            value="{{ ! empty($text) ? 'PUT' : 'POST' }}"
-        />
+        <input type="hidden" name="_method" value="{{ ! empty($text) ? 'PUT' : 'POST' }}" />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -37,12 +33,7 @@
                             </div>
 
                             <label for="category">Text category:</label>
-                            <select
-                                name="category"
-                                id="category"
-                                class="form-select mb-3"
-                                aria-label="Text categories"
-                            >
+                            <select name="category" id="category" class="form-select mb-3" aria-label="Text categories">
                                 @foreach ($textTypes as $textType)
                                     <option
                                         {{ $selectedTextType?->id === $textType->id ? 'selected' : '' }}
@@ -65,12 +56,7 @@
                                 )
                             </div>
 
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block"
-                            >
-                                Save text!
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block">Save text!</button>
                         </div>
                     </div>
                 </div>

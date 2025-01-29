@@ -10,12 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a
-                        class="badge bg-info float-end"
-                        href="{{ route('short_urls.create') }}"
-                    >
-                        Create Short URL
-                    </a>
+                    <a class="badge bg-info float-end" href="{{ route('short_urls.create') }}">Create Short URL</a>
                 </div>
 
                 <div class="table-responsive">
@@ -51,18 +46,11 @@
                                         class="fa fa-pencil-alt text-success"
                                     ></a>
                                 </td>
-                                <td
-                                    style="
-                                        overflow-wrap: break-word;
-                                        max-width: 200px;
-                                    "
-                                >
+                                <td style="overflow-wrap: break-word; max-width: 200px">
                                     {{ $url->description }}
                                 </td>
                                 <td>
-                                    <span class="text-muted">
-                                        saproto.nl/go
-                                    </span>
+                                    <span class="text-muted">saproto.nl/go</span>
                                     <strong>/{{ $url->url }}</strong>
                                 </td>
                                 <td>
@@ -109,41 +97,34 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.qr-button').forEach((el) =>
             el.addEventListener('click', (e) => {
-                const modal = document.querySelector(
-                    el.getAttribute('data-bs-target')
-                )
+                const modal = document.querySelector(el.getAttribute('data-bs-target'))
                 modal.querySelector('#qr-modal-url').src =
-                    '{{ route('short_urls.qr_code', '') }}/' +
-                    el.getAttribute('data-url-id')
+                    '{{ route('short_urls.qr_code', '') }}/' + el.getAttribute('data-url-id')
                 console.log(document.getElementById('qr-modal-url').src)
             })
         )
 
-        document
-            .querySelector('#qr-modal-copy')
-            .addEventListener('click', (e) => {
-                const image = document.getElementById('qr-modal-url')
-                const canvas = document.createElement('canvas')
-                const margin = 10 //the margin of the QR code in the image in percentage
-                const scale = 10
-                canvas.width = image.width * scale
-                canvas.height = image.height * scale
-                const ctx = canvas.getContext('2d')
-                ctx.fillStyle = 'white'
-                ctx.fillRect(0, 0, canvas.width, canvas.height)
-                ctx.drawImage(
-                    image,
-                    (image.width * (margin / 100) * scale) / 2,
-                    (image.height * (margin / 100) * scale) / 2,
-                    (1 - margin / 100) * image.width * scale,
-                    (1 - margin / 100) * image.height * scale
-                )
-                canvas.toBlob((blob) => {
-                    navigator.clipboard.write([
-                        new ClipboardItem({ 'image/png': blob }),
-                    ])
-                }, 'image/png')
-            })
+        document.querySelector('#qr-modal-copy').addEventListener('click', (e) => {
+            const image = document.getElementById('qr-modal-url')
+            const canvas = document.createElement('canvas')
+            const margin = 10 //the margin of the QR code in the image in percentage
+            const scale = 10
+            canvas.width = image.width * scale
+            canvas.height = image.height * scale
+            const ctx = canvas.getContext('2d')
+            ctx.fillStyle = 'white'
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+            ctx.drawImage(
+                image,
+                (image.width * (margin / 100) * scale) / 2,
+                (image.height * (margin / 100) * scale) / 2,
+                (1 - margin / 100) * image.width * scale,
+                (1 - margin / 100) * image.height * scale
+            )
+            canvas.toBlob((blob) => {
+                navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+            }, 'image/png')
+        })
     </script>
 @endpush
 
@@ -156,12 +137,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Short Url QR Code</h5>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <img
@@ -169,28 +145,15 @@
                                 alt="QR code"
                                 class="bg-white p-2"
                                 src=""
-                                style="
-                                    margin-left: auto;
-                                    margin-right: auto;
-                                    display: block;
-                                "
+                                style="margin-left: auto; margin-right: auto; display: block"
                                 width="400px"
                                 height="400px"
                             />
                         </div>
-                        <div
-                            class="modal-footer d-flex justify-content-between"
-                        >
-                            <i
-                                class="fas fa-info-circle fa-fw"
-                                aria-hidden="true"
-                            ></i>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                             <span>Right click QR to save as svg</span>
-                            <button
-                                type="button"
-                                id="qr-modal-copy"
-                                class="btn btn-primary"
-                            >
+                            <button type="button" id="qr-modal-copy" class="btn btn-primary">
                                 Copy as png with background
                             </button>
                         </div>

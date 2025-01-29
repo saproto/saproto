@@ -52,9 +52,7 @@
                         )
 
                         <div class="form-group">
-                            <label for="slide_duration">
-                                Slide duration in seconds:
-                            </label>
+                            <label for="slide_duration">Slide duration in seconds:</label>
                             <input
                                 type="text"
                                 class="form-control"
@@ -80,8 +78,8 @@
                         <p>
                             <sup>
                                 <strong>Note:</strong>
-                                if a YouTube ID is present, the image file and
-                                slide duration field is ignored and hidden.
+                                if a YouTube ID is present, the image file and slide duration field is ignored and
+                                hidden.
                             </sup>
 
                             @if ($item?->youtube_id)
@@ -97,15 +95,8 @@
                                 </div>
                             @else
                                 <div class="custom-file mb-3">
-                                    <input
-                                        id="image"
-                                        type="file"
-                                        class="form-control"
-                                        name="image"
-                                    />
-                                    <label class="form-label">
-                                        Upload an image
-                                    </label>
+                                    <input id="image" type="file" class="form-control" name="image" />
+                                    <label class="form-label">Upload an image</label>
                                 </div>
 
                                 <p>
@@ -116,10 +107,7 @@
 
                                     @if ($item?->image)
                                         <label>Current image:</label>
-                                        <img
-                                            src="{!! $item->image->generateImagePath(500, null) !!}"
-                                            class="w-100"
-                                        />
+                                        <img src="{!! $item->image->generateImagePath(500, null) !!}" class="w-100" />
                                     @endif
                                 </p>
                             @endif
@@ -127,16 +115,9 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('narrowcasting::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('narrowcasting::index') }}" class="btn btn-default">Cancel</a>
 
                         <p class="text-center mb-0 mt-2">
                             Developed with

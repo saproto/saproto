@@ -24,17 +24,13 @@
                         <tr class="align-middle text-nowrap">
                             <td class="text-muted">#{{ $dinnerform->id }}</td>
                             <td>
-                                <a
-                                    href="{{ route('dinnerform::show', ['id' => $dinnerform->id]) }}"
-                                >
+                                <a href="{{ route('dinnerform::show', ['id' => $dinnerform->id]) }}">
                                     {{ $dinnerform->restaurant }}
                                 </a>
                             </td>
                             <td>
                                 @isset($dinnerform->event)
-                                    <a
-                                        href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}"
-                                    >
+                                    <a href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}">
                                         {{ $dinnerform->event->title }}
                                     </a>
                                 @endisset
@@ -69,9 +65,7 @@
                             <td>
                                 {{ $dinnerform->end->format('Y m-d H:i') }}
                             </td>
-                            <td>
-                                €{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}
-                            </td>
+                            <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
                             <td class="text-center px-4">
                                 @if ($dinnerform->orderedBy)
                                     <a
@@ -105,9 +99,7 @@
                                         )
                                     @endif
 
-                                    <a
-                                        href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}"
-                                    >
+                                    <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
                                         <i class="fas fa-edit me-4"></i>
                                     </a>
                                     @include(

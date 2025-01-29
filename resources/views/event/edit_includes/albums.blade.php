@@ -2,10 +2,7 @@
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Photo albums</div>
 
-        <form
-            method="post"
-            action="{{ route('event::linkalbum', ['event' => $event->id]) }}"
-        >
+        <form method="post" action="{{ route('event::linkalbum', ['event' => $event->id]) }}">
             @csrf
 
             <div class="card-body">
@@ -16,9 +13,7 @@
                 @foreach ($event->albums as $album)
                     <span class="badge bg-primary">
                         {{ $album->name }}
-                        <a
-                            href="{{ route('event::unlinkalbum', ['album' => $album->id]) }}"
-                        >
+                        <a href="{{ route('event::unlinkalbum', ['album' => $album->id]) }}">
                             <i class="fas fa-times ms-2 text-white"></i>
                         </a>
                     </span>
@@ -44,19 +39,13 @@
                         @endforeach
                     </select>
                 @else
-                    <p class="card-text">
-                        There are no albums that can be linked to this event.
-                    </p>
+                    <p class="card-text">There are no albums that can be linked to this event.</p>
                 @endif
             </div>
 
             @if (\App\Models\PhotoAlbum::whereNull('event_id')->count() > 0)
                 <div class="card-footer">
-                    <input
-                        type="submit"
-                        class="btn btn-success btn-block"
-                        value="Link photo album!"
-                    />
+                    <input type="submit" class="btn btn-success btn-block" value="Link photo album!" />
                 </div>
             @endif
         </form>

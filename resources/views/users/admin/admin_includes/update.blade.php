@@ -1,8 +1,4 @@
-<form
-    class="form-horizontal"
-    method="post"
-    action="{{ route('user::admin::update', ['id' => $user->id]) }}"
->
+<form class="form-horizontal" method="post" action="{{ route('user::admin::update', ['id' => $user->id]) }}">
     @csrf
 
     <div class="card mb-3">
@@ -10,14 +6,7 @@
 
         <div class="card-body">
             <label for="name">Name:</label>
-            <input
-                type="text"
-                class="form-control mb-3"
-                id="name"
-                name="name"
-                value="{{ $user->name }}"
-                required
-            />
+            <input type="text" class="form-control mb-3" id="name" name="name" value="{{ $user->name }}" required />
 
             <label for="calling_name">Calling name:</label>
             <input
@@ -43,9 +32,7 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-success btn-block">
-                Update User Account
-            </button>
+            <button type="submit" class="btn btn-success btn-block">Update User Account</button>
         </div>
     </div>
 </form>

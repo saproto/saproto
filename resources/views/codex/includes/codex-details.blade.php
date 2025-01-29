@@ -18,13 +18,7 @@
         <!-- Description -->
         <div class="mb-3">
             <label for="export">Document name:</label>
-            <input
-                type="text"
-                class="form-control"
-                id="export"
-                name="export"
-                value="{{ $codex->export ?? '' }}"
-            />
+            <input type="text" class="form-control" id="export" name="export" value="{{ $codex->export ?? '' }}" />
         </div>
 
         <!-- Description -->

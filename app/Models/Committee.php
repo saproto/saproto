@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Override;
 
 /**
  * Committee Model.
@@ -177,6 +178,7 @@ class Committee extends Model
         return $user->isInCommittee($this);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

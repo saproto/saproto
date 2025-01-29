@@ -7,10 +7,7 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form
-                method="POST"
-                action="{{ route('user::memberprofile::clear') }}"
-            >
+            <form method="POST" action="{{ route('user::memberprofile::clear') }}">
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
                         @yield('page-title')
@@ -19,10 +16,7 @@
                     <div class="card-body">
                         @csrf
 
-                        <p>
-                            If you confirm below, the following information will
-                            be deleted:
-                        </p>
+                        <p>If you confirm below, the following information will be deleted:</p>
 
                         <ul>
                             <li>
@@ -41,12 +35,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button
-                            type="submit"
-                            class="btn btn-outline-primary float-end"
-                        >
-                            Yes, clear my profile
-                        </button>
+                        <button type="submit" class="btn btn-outline-primary float-end">Yes, clear my profile</button>
                     </div>
                 </div>
             </form>

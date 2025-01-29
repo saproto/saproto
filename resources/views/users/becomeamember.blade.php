@@ -14,20 +14,14 @@
 
                 <div class="card-body">
                     <p class="card-text">
-                        Hi there! We're glad that you want to become a member of
-                        our association! Before we can make your membership
-                        official, we need some more information. Please follow
-                        the steps below :)
+                        Hi there! We're glad that you want to become a member of our association! Before we can make
+                        your membership official, we need some more information. Please follow the steps below :)
                     </p>
 
                     <p class="card-text">
-                        If you have any problems, don't hesitate to come by in
-                        the Protopolis (Zilverling A230), and ask one of
-                        <a
-                            href="{{ route('page::show', ['slug' => 'board']) }}"
-                        >
-                            our board members
-                        </a>
+                        If you have any problems, don't hesitate to come by in the Protopolis (Zilverling A230), and ask
+                        one of
+                        <a href="{{ route('page::show', ['slug' => 'board']) }}">our board members</a>
                         to help you.
                     </p>
                 </div>

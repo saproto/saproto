@@ -61,15 +61,11 @@
                                     </td>
                                 </tr>
                                 @foreach ($products as $product)
-                                    <tr
-                                        class="collapse innercollapse innercollapse-{{ $account_id }}-{{ $date }}"
-                                    >
+                                    <tr class="collapse innercollapse innercollapse-{{ $account_id }}-{{ $date }}">
                                         <td></td>
                                         <td></td>
                                         <td>{{ $product->product_name }}</td>
-                                        <td>
-                                            &euro;{{ number_format($product->total, 2) }}
-                                        </td>
+                                        <td>&euro;{{ number_format($product->total, 2) }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
@@ -80,9 +76,7 @@
                                 <td></td>
                                 <td></td>
                                 <td class="text-end">Total</td>
-                                <td class="font-weight-bold">
-                                    &euro; {{ number_format($total, 2) }}
-                                </td>
+                                <td class="font-weight-bold">&euro; {{ number_format($total, 2) }}</td>
                             </tr>
                         @endif
                     </tbody>
@@ -95,16 +89,10 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         window.addEventListener('load', (_) => {
-            const dayList = Array.from(
-                document.getElementsByClassName('collapse')
-            )
+            const dayList = Array.from(document.getElementsByClassName('collapse'))
             dayList.forEach((day) => {
                 day.addEventListener('hide.bs.collapse', (_) => {
-                    const children = [
-                        ...document.getElementsByClassName(
-                            day.getAttribute('data-bs-target').slice(1)
-                        ),
-                    ]
+                    const children = [...document.getElementsByClassName(day.getAttribute('data-bs-target').slice(1))]
                     children.forEach((child) => {
                         child.classList.remove('show')
                     })

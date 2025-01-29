@@ -9,8 +9,7 @@
             @yield('page-title')
             @if ($achievement)
                 <span class="badge bg-info float-end">
-                    Obtained by
-                    {{ $achievement->currentOwners(true)->count() }} members
+                    Obtained by {{ $achievement->currentOwners(true)->count() }} members
                 </span>
             @endif
         </div>
@@ -44,40 +43,12 @@
 
             <div class="form-group">
                 <label for="tier">Tier:</label>
-                <select
-                    class="form-control {{ $achievement->tier ?? '' }}"
-                    name="tier"
-                >
-                    <option
-                        value="COMMON"
-                        @selected($achievement?->tier == 'COMMON')
-                    >
-                        Common
-                    </option>
-                    <option
-                        value="UNCOMMON"
-                        @selected($achievement?->tier == 'UNCOMMON')
-                    >
-                        Uncommon
-                    </option>
-                    <option
-                        value="RARE"
-                        @selected($achievement?->tier == 'RARE')
-                    >
-                        Rare
-                    </option>
-                    <option
-                        value="EPIC"
-                        @selected($achievement?->tier == 'EPIC')
-                    >
-                        Epic
-                    </option>
-                    <option
-                        value="LEGENDARY"
-                        @selected($achievement?->tier == 'LEGENDARY')
-                    >
-                        Legendary
-                    </option>
+                <select class="form-control {{ $achievement->tier ?? '' }}" name="tier">
+                    <option value="COMMON" @selected($achievement?->tier == 'COMMON')>Common</option>
+                    <option value="UNCOMMON" @selected($achievement?->tier == 'UNCOMMON')>Uncommon</option>
+                    <option value="RARE" @selected($achievement?->tier == 'RARE')>Rare</option>
+                    <option value="EPIC" @selected($achievement?->tier == 'EPIC')>Epic</option>
+                    <option value="LEGENDARY" @selected($achievement?->tier == 'LEGENDARY')>Legendary</option>
                 </select>
             </div>
 
@@ -99,18 +70,12 @@
                 ]
             )
 
-            <div
-                id="achieve_page_block"
-                class="d-none"
-                @if(!$achievement || !$achievement->has_page) @endif
-            >
+            <div id="achieve_page_block" class="d-none" @if(!$achievement || !$achievement->has_page) @endif>
                 <div class="form-group">
                     <label for="page_name">Achieve URL</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
-                                saproto.nl/achieve/
-                            </span>
+                            <span class="input-group-text">saproto.nl/achieve/</span>
                         </div>
                         <input
                             type="text"
@@ -137,16 +102,9 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-success float-end">
-                Submit
-            </button>
+            <button type="submit" class="btn btn-success float-end">Submit</button>
 
-            <a
-                href="{{ route('achievement::index') }}"
-                class="btn btn-default"
-            >
-                Cancel
-            </a>
+            <a href="{{ route('achievement::index') }}" class="btn btn-default">Cancel</a>
         </div>
     </div>
 </form>

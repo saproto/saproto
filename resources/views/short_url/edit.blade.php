@@ -12,11 +12,7 @@
                     action="{{ ! empty($url) ? route('short_urls.update', ['short_url' => $url]) : route('short_urls.store') }}"
                     method="POST"
                 >
-                    <input
-                        type="hidden"
-                        name="_method"
-                        value="{{ ! empty($url) ? 'PUT' : 'POST' }}"
-                    />
+                    <input type="hidden" name="_method" value="{{ ! empty($url) ? 'PUT' : 'POST' }}" />
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-white">
@@ -61,9 +57,7 @@
                             <label for="target">Target</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        https://
-                                    </span>
+                                    <span class="input-group-text">https://</span>
                                 </div>
                                 <input
                                     type="text"
@@ -79,16 +73,9 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('short_urls.index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('short_urls.index') }}" class="btn btn-default">Cancel</a>
                     </div>
                 </form>
             </div>

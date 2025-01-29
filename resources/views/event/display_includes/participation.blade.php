@@ -7,11 +7,10 @@
                     <br />
 
                     @if ($event->activity->closedAccount)
-                        (Account
-                        {{ $event->activity->closedAccount->account_number }} ,
+                        (Account {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
                     @else()
-                            (Unknown account.)
+                        (Unknown account.)
                     @endif
                 </li>
             @endif
@@ -24,9 +23,7 @@
                         .
                     </li>
                 @else
-                    <li class="list-group-item bg-success text-white">
-                        You are signed up!
-                    </li>
+                    <li class="list-group-item bg-success text-white">You are signed up!</li>
                 @endif
             @else
                 <li class="list-group-item">
@@ -43,7 +40,7 @@
                     @if ($event->activity->price > 0)
                         &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
-                            &euro;0,-
+                        &euro;0,-
                     @endif
                 </strong>
             </li>
@@ -86,22 +83,19 @@
                                 {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                                 Put me on the back-up list.
                             @else
-                                    Sign me up!
+                                Sign me up!
                             @endif
                             |
 
                             @if ($event->activity->price > 0)
                                 &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             @else
-                                    Free!
+                                Free!
                             @endif
                         </strong>
                         <br />
                         @if ($event->activity->redirect_url)
-                            <i>
-                                Note: Signing up will redirect you to an
-                                external page!
-                            </i>
+                            <i>Note: Signing up will redirect you to an external page!</i>
                         @endif
                     </a>
                 @endif
@@ -111,8 +105,7 @@
                 <li class="list-group-item">
                     @if ($event->activity->participants != -1)
                         {{ $event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots() }}
-                        out of {{ $event->activity->participants }} places
-                        available
+                        out of {{ $event->activity->participants }} places available
                     @else
                         <i class="fas fa-infinity fa-fw"></i>
                         Unlimited places available.
@@ -148,9 +141,7 @@
 
             @if ($event->activity->hide_participants)
                 <div class="card-header text-center bg-warning text-white">
-                    <strong>
-                        The participants for this activity are hidden!
-                    </strong>
+                    <strong>The participants for this activity are hidden!</strong>
                     <i class="fas fa-ghost"></i>
                 </div>
             @endif()
@@ -179,18 +170,11 @@
                         <div class="row mb-3">
                             <div class="col-9">
                                 <div class="form-group autocomplete">
-                                    <input
-                                        class="form-control user-search"
-                                        name="user_id"
-                                        required
-                                    />
+                                    <input class="form-control user-search" name="user_id" required />
                                 </div>
                             </div>
                             <div class="col-3">
-                                <button
-                                    class="btn btn-outline-primary btn-block"
-                                    type="submit"
-                                >
+                                <button class="btn btn-outline-primary btn-block" type="submit">
                                     <i class="fas fa-plus-circle"></i>
                                 </button>
                             </div>
@@ -204,8 +188,7 @@
     @if ($event->activity->backupUsers->count() > 0)
         <div class="card">
             <div class="card-header text-center bg-dark text-white">
-                {{ $event->activity->backupUsers->count() }} people on the
-                back-up list
+                {{ $event->activity->backupUsers->count() }} people on the back-up list
             </div>
 
             <div class="card-body">
@@ -221,30 +204,21 @@
     @endif
 @elseif ($event->activity?->withParticipants())
     <div class="card">
-        <div class="card-header text-center bg-dark text-white">
-            Participate in this activity.
-        </div>
+        <div class="card-header text-center bg-dark text-white">Participate in this activity.</div>
         <div class="card-body">
             <p class="card-text">
-                This activity requires you to sign-up. You can only sign-up when
-                you are a member.
+                This activity requires you to sign-up. You can only sign-up when you are a member.
 
                 @if (! Auth::check())
                     <p class="card-text">
                         Please
-                        <a
-                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
-                        >
-                            log-in
-                        </a>
+                        <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a>
                         if you are already a member.
                     </p>
                 @elseif (! Auth::user()->is_member)
                     <p class="card-text">
                         Please
-                        <a href="{{ route('becomeamember') }}">
-                            become a member
-                        </a>
+                        <a href="{{ route('becomeamember') }}">become a member</a>
                         to sign-up for this activity.
                     </p>
                 @endif
@@ -258,30 +232,21 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">No show fee</h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>
-                    For some activities Proto, or another party, sponsors part
-                    of the participation fee or other costs associated with an
-                    activity. As an example, for a barbecue a sponsor may pay
-                    for the food.
+                    For some activities Proto, or another party, sponsors part of the participation fee or other costs
+                    associated with an activity. As an example, for a barbecue a sponsor may pay for the food.
                 </p>
 
                 <p>
                     For these kinds of activities a
                     <i>no show fee</i>
-                    may be enacted, which compensates for the fact that money
-                    has been spent for people who do not show up. This means
-                    that if you sign up, but don't show up for the activity, the
+                    may be enacted, which compensates for the fact that money has been spent for people who do not show
+                    up. This means that if you sign up, but don't show up for the activity, the
                     <i>no show fee</i>
-                    may be charged to you. This may even be the case for free
-                    activities.
+                    may be charged to you. This may even be the case for free activities.
                 </p>
             </div>
         </div>

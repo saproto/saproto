@@ -27,9 +27,7 @@
                         {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
-                        <span class="text-muted me-2">
-                            {{ $orderline->units }}x
-                        </span>
+                        <span class="text-muted me-2">{{ $orderline->units }}x</span>
                         {{ $orderline->product->name }}
                         @if ($orderline->description)
                             <br />
@@ -49,9 +47,7 @@
         </table>
     @else
         <div class="card-body">
-            <p class="card-text text-center">
-                You didn't buy anything in this month.
-            </p>
+            <p class="card-text text-center">You didn't buy anything in this month.</p>
         </div>
     @endif
 </div>

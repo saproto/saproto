@@ -46,9 +46,7 @@
                                 </div>
 
                                 @if ($product->stock < 1000)
-                                    <div class="product-stock">
-                                        {{ $product->stock }} x
-                                    </div>
+                                    <div class="product-stock">{{ $product->stock }} x</div>
                                 @endif
                             </div>
                         </div>
@@ -66,9 +64,7 @@
                         <div class="product-image">
                             <div
                                 class="product-image-inner"
-                                style="
-                                    background-image: url('{{ asset('images/omnomcom/dice.png') }}');
-                                "
+                                style="background-image: url('{{ asset('images/omnomcom/dice.png') }}')"
                             ></div>
                         </div>
                         <div class="product-details">
@@ -90,18 +86,14 @@
                     <div class="product-inner">
                         <div
                             class="product-image user-image"
-                            style="
-                                background-image: url('{!! $user->generatePhotoPath(200, 200) !!}');
-                            "
+                            style="background-image: url('{!! $user->generatePhotoPath(200, 200) !!}')"
                         ></div>
                         <div class="product-details">
                             <div class="product-name">
                                 {{ $user->name }}
                             </div>
 
-                            <div class="product-stock user-age">
-                                Age: {{ $user->age() }}
-                            </div>
+                            <div class="product-stock user-age">Age: {{ $user->age() }}</div>
                         </div>
                     </div>
                 </div>

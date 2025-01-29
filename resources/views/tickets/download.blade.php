@@ -63,10 +63,9 @@
             <sup>
                 Please
                 <strong>print</strong>
-                this ticket and take it with you to the event. Scanning from
-                mobile phones may work but might be difficult. If you want to
-                show this ticket on your mobile phone, turn up the brightness of
-                your screen to the maximum possible.
+                this ticket and take it with you to the event. Scanning from mobile phones may work but might be
+                difficult. If you want to show this ticket on your mobile phone, turn up the brightness of your screen
+                to the maximum possible.
             </sup>
         </p>
     </div>
@@ -83,9 +82,7 @@
             <sub>
                 the ticketing system is proudly presented to you by the
                 <br />
-                <strong>
-                    Have You Tried Turning It Off And On Again committee
-                </strong>
+                <strong>Have You Tried Turning It Off And On Again committee</strong>
             </sub>
         </p>
     </div>

@@ -29,17 +29,14 @@
                 signaturePad.clear()
             })
 
-            document
-                .getElementById('signature-form')
-                .addEventListener('submit', (e) => {
-                    if (signaturePad.isEmpty()) {
-                        e.preventDefault()
-                        signatureAlert.classList.remove('d-none')
-                    } else {
-                        document.getElementById('signature').value =
-                            signaturePad.toDataURL('image/png')
-                    }
-                })
+            document.getElementById('signature-form').addEventListener('submit', (e) => {
+                if (signaturePad.isEmpty()) {
+                    e.preventDefault()
+                    signatureAlert.classList.remove('d-none')
+                } else {
+                    document.getElementById('signature').value = signaturePad.toDataURL('image/png')
+                }
+            })
         })
     </script>
 @endpush
@@ -58,20 +55,12 @@
                     <b>Signature:</b>
                     <div class="wrapper">
                         <canvas id="signature-pad"></canvas>
-                        <button
-                            id="clear"
-                            class="btn btn-danger position-absolute m-2 px-2 py-1"
-                        >
+                        <button id="clear" class="btn btn-danger position-absolute m-2 px-2 py-1">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div
-                        id="signature-alert"
-                        class="alert alert-danger text-center d-none p-1 my-2 mx-4"
-                        role="alert"
-                    >
-                        We need your signature for the membership contract to be
-                        valid!
+                    <div id="signature-alert" class="alert alert-danger text-center d-none p-1 my-2 mx-4" role="alert">
+                        We need your signature for the membership contract to be valid!
                     </div>
 
                     <p>
@@ -80,11 +69,7 @@
                         Enschede, {{ date('M, d, Y', strtotime('today')) }}
                     </p>
 
-                    <form
-                        id="signature-form"
-                        method="POST"
-                        action="{{ route('memberform::sign') }}"
-                    >
+                    <form id="signature-form" method="POST" action="{{ route('memberform::sign') }}">
                         @csrf
                         <input type="hidden" id="signature" name="signature" />
                         <input type="submit" class="btn btn-info" />

@@ -21,12 +21,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <a
-                        href="{{ route('user::dashboard', ['id' => $user->id]) }}"
-                        class="btn btn-default"
-                    >
-                        Cancel
-                    </a>
+                    <a href="{{ route('user::dashboard', ['id' => $user->id]) }}" class="btn btn-default">Cancel</a>
                 </div>
             </div>
         </div>

@@ -50,8 +50,7 @@
         "swiper": "^8.0.7",
         "tailwind-merge": "^2.5.5",
         "tailwindcss-animate": "^1.0.7",
-        "util.promisify": "^1.0.1",
-        "vue3-toastify": "^0.2.3"
+        "util.promisify": "^1.0.1"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^2.0.0",

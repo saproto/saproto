@@ -14,9 +14,8 @@
 
                 <div class="card-body">
                     <p class="card-text">
-                        These orderlines cannot be withdrawn because they are
-                        associated with a user that doesn't have an active
-                        withdrawal authorization.
+                        These orderlines cannot be withdrawn because they are associated with a user that doesn't have
+                        an active withdrawal authorization.
                     </p>
                 </div>
 
@@ -32,16 +31,10 @@
 
                     <tbody>
                         @foreach ($users as $key => $user)
-                            <tr
-                                class="cursor-pointer"
-                                data-bs-toggle="collapse"
-                                data-bs-target=".collapse-{{ $key }}"
-                            >
+                            <tr class="cursor-pointer" data-bs-toggle="collapse" data-bs-target=".collapse-{{ $key }}">
                                 <th>{{ $key }}</th>
                                 <td>{{ $user->user->name }}</td>
-                                <th>
-                                    &euro; {{ number_format($user->total, 2) }}
-                                </th>
+                                <th>&euro; {{ number_format($user->total, 2) }}</th>
                                 <td></td>
                             </tr>
 

@@ -16,11 +16,7 @@
                         action="{{ ! empty($cur_category) ? route('event::categories.update', ['category' => $cur_category]) : route('event::categories.store') }}"
                         method="POST"
                     >
-                        <input
-                            type="hidden"
-                            name="_method"
-                            value="{{ ! empty($cur_category) ? 'PUT' : 'POST' }}"
-                        />
+                        <input type="hidden" name="_method" value="{{ ! empty($cur_category) ? 'PUT' : 'POST' }}" />
                         @csrf
 
                         <label for="name">Category Name:</label>
@@ -43,14 +39,9 @@
                             ]
                         )
 
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if ($cur_category)
-                            <a
-                                class="btn btn-warning float-end me-1"
-                                href="{{ route('event::categories.create') }}"
-                            >
+                            <a class="btn btn-warning float-end me-1" href="{{ route('event::categories.create') }}">
                                 Cancel
                             </a>
                         @endif
@@ -71,20 +62,12 @@
                                     <div
                                         class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}"
                                     >
-                                        <i
-                                            class="{{ $category->icon }} me-2"
-                                        ></i>
+                                        <i class="{{ $category->icon }} me-2"></i>
                                         {{ $category->name }}
                                     </div>
-                                    <div
-                                        class="bg-white px-2 py-2 my-2 w-25 rounded-end"
-                                    >
-                                        <a
-                                            href="{{ route('event::categories.edit', ['category' => $category]) }}"
-                                        >
-                                            <i
-                                                class="fas fa-edit me-2 ms-1 mt-1"
-                                            ></i>
+                                    <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
+                                        <a href="{{ route('event::categories.edit', ['category' => $category]) }}">
+                                            <i class="fas fa-edit me-2 ms-1 mt-1"></i>
                                         </a>
 
                                         @include(
@@ -105,9 +88,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-center text-muted mb-0">
-                                There are no event categories yet.
-                            </p>
+                            <p class="text-center text-muted mb-0">There are no event categories yet.</p>
                         @endif
                     </div>
                 </div>

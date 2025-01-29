@@ -47,9 +47,7 @@
 
 @if (count($pastHelpedEvents) > 0)
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white">
-            Events previously helped at
-        </div>
+        <div class="card-header bg-dark text-white">Events previously helped at</div>
 
         <div class="card-body">
             <div class="row">

@@ -9,11 +9,7 @@
         action="{{ ! empty($textType) ? route('codexTextType.update', ['codexTextType' => $textType]) : route('codexTextType.store') }}"
         method="POST"
     >
-        <input
-            type="hidden"
-            name="_method"
-            value="{{ ! empty($textType) ? 'PUT' : 'POST' }}"
-        />
+        <input type="hidden" name="_method" value="{{ ! empty($textType) ? 'PUT' : 'POST' }}" />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -31,12 +27,7 @@
                                     name="type"
                                 />
                             </div>
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block"
-                            >
-                                Save text type!
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block">Save text type!</button>
                         </div>
                     </div>
                 </div>

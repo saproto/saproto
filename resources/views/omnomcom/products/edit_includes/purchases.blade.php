@@ -1,7 +1,5 @@
 <div class="card">
-    <div class="card-header bg-dark text-white">
-        Recent orders for this product
-    </div>
+    <div class="card-header bg-dark text-white">Recent orders for this product</div>
 
     @if ($product->orderlines->count() > 0)
         <table class="table table-hover table-sm">
@@ -12,9 +10,7 @@
                         <td>
                             @if ($orderline->user)
                                 @if ($orderline->user->isMember)
-                                    <a
-                                        href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}"
-                                    >
+                                    <a href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}">
                                         {{ $orderline->user->name }}
                                     </a>
                                 @else
@@ -48,9 +44,7 @@
         </div>
     @else
         <div class="card-body">
-            <p class="card-text text-center">
-                There are no orders for this product.
-            </p>
+            <p class="card-text text-center">There are no orders for this product.</p>
         </div>
     @endif
 </div>

@@ -7,10 +7,7 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="row-md-4">
-            <form
-                method="post"
-                action="{{ route('omnomcom::withdrawal::store') }}"
-            >
+            <form method="post" action="{{ route('omnomcom::withdrawal::store') }}">
                 @csrf
 
                 <div class="card mb-3">
@@ -36,9 +33,7 @@
                                 [
                                     'name' => 'date',
                                     'label' => 'Withdrawal date:',
-                                    'placeholder' => strtotime(
-                                        Carbon::now()->day > 20 ? $wd->addMonth() : $wd,
-                                    ),
+                                    'placeholder' => strtotime(Carbon::now()->day > 20 ? $wd->addMonth() : $wd),
                                     'format' => 'date',
                                 ]
                             )
@@ -50,14 +45,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&euro;</span>
                                 </div>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    class="form-control"
-                                    id="max"
-                                    name="max"
-                                    required
-                                />
+                                <input type="number" min="0" class="form-control" id="max" name="max" required />
                                 <span class="input-group-text">
                                     ,
                                     <sup>00</sup>
@@ -67,16 +55,9 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('omnomcom::withdrawal::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('omnomcom::withdrawal::index') }}" class="btn btn-default">Cancel</a>
                     </div>
                 </div>
             </form>

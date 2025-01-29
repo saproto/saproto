@@ -18,10 +18,7 @@
                             <tr class="bg-dark text-white">
                                 <th></th>
                                 @foreach ($permissions as $permission)
-                                    <th
-                                        class="text-end align-middle py-2"
-                                        style="writing-mode: vertical-lr"
-                                    >
+                                    <th class="text-end align-middle py-2" style="writing-mode: vertical-lr">
                                         {{ $permission->name }}
                                     </th>
                                 @endforeach
@@ -53,16 +50,11 @@
 
         <div class="col-xl-3">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
-                    Manage role membership
-                </div>
+                <div class="card-header bg-dark text-white mb-1">Manage role membership</div>
 
                 <div class="card-body accordion" id="role-accordion">
                     @foreach ($roles as $i => $role)
-                        <form
-                            method="post"
-                            action="{{ route('authorization::grant', ['id' => $role->id]) }}"
-                        >
+                        <form method="post" action="{{ route('authorization::grant', ['id' => $role->id]) }}">
                             <div class="card mb-2">
                                 <div
                                     class="card-header bg-info text-white cursor-pointer"
@@ -110,17 +102,10 @@
 
                                     <div class="card-footer">
                                         <div class="form-group autocomplete">
-                                            <input
-                                                class="form-control user-search"
-                                                name="user"
-                                            />
+                                            <input class="form-control user-search" name="user" />
                                         </div>
 
-                                        <input
-                                            type="submit"
-                                            class="btn btn-success btn-block mt-3"
-                                            value="Grant"
-                                        />
+                                        <input type="submit" class="btn btn-success btn-block mt-3" value="Grant" />
                                     </div>
                                 </div>
                             </div>

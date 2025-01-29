@@ -1,22 +1,13 @@
 @if ($user && $user->is_member)
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white">
-            Custom OmNomCom Sound for {{ $user->calling_name }}
-        </div>
+        <div class="card-header bg-dark text-white">Custom OmNomCom Sound for {{ $user->calling_name }}</div>
 
         @if ($user->member->customOmnomcomSound)
             <div class="card-body">
-                <div
-                    class="d-inline-flex flex-wrap justify-content-around mb-2 w-100"
-                >
-                    <div class="d-flex align-items-center">
-                        {{ $user->calling_name }}'s custom sound:
-                    </div>
+                <div class="d-inline-flex flex-wrap justify-content-around mb-2 w-100">
+                    <div class="d-flex align-items-center">{{ $user->calling_name }}'s custom sound:</div>
                     <audio controls class="mw-100">
-                        <source
-                            src="{{ $user->member->customOmnomcomSound->generatePath() }}"
-                            type="audio/mpeg"
-                        />
+                        <source src="{{ $user->member->customOmnomcomSound->generatePath() }}" type="audio/mpeg" />
                         Your browser does not support the audio element.
                     </audio>
                 </div>
@@ -29,8 +20,7 @@
             </div>
         @else
             <div class="text-center m-2">
-                {{ $user->calling_name }} does not have a custom omnomcom
-                sound! Upload an
+                {{ $user->calling_name }} does not have a custom omnomcom sound! Upload an
                 <b>mp3</b>
                 below.
                 <br />
@@ -48,12 +38,7 @@
                 <div class="row">
                     <div class="input-group flex-nowrap">
                         <div class="custom-file">
-                            <input
-                                id="sound"
-                                type="file"
-                                class="form-control"
-                                name="sound"
-                            />
+                            <input id="sound" type="file" class="form-control" name="sound" />
                         </div>
                         <button type="submit" class="btn btn-outline-info">
                             <i class="fas fa-file-upload"></i>

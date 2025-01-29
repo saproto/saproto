@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Override;
 
 /**
  * News Item Model.
@@ -90,6 +91,7 @@ class Newsitem extends Model
         return route('news::show', ['id' => $this->id]);
     }
 
+    #[Override]
     protected function casts(): array
     {
         return [

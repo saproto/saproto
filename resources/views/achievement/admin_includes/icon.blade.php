@@ -18,9 +18,7 @@
                 ]
             )
 
-            <button type="submit" class="btn btn-success btn-block">
-                Save icon
-            </button>
+            <button type="submit" class="btn btn-success btn-block">Save icon</button>
         </div>
     </div>
 </form>

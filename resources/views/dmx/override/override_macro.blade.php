@@ -33,10 +33,7 @@
         End: {{ date('l F j Y, H:i', $override->end) }}
     </td>
     <td>
-        <a
-            class="btn btn-xs btn-default me-2"
-            href="{{ route('dmx.overrides.edit', ['override' => $override->id]) }}"
-        >
+        <a class="btn btn-xs btn-default me-2" href="{{ route('dmx.overrides.edit', ['override' => $override->id]) }}">
             <i class="fas fa-edit"></i>
         </a>
         @include(

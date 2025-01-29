@@ -6,19 +6,14 @@
 
 @section('container')
     @if ($preview)
-        <div class="alert alert-info" role="alert">
-            You are currently previewing an unpublished news item.
-        </div>
+        <div class="alert alert-info" role="alert">You are currently previewing an unpublished news item.</div>
     @endif
 
     <div class="row">
         <div class="{{ count($events) > 0 ? 'col-8' : '' }}">
             <div class="card mb-3">
                 @if ($newsitem->featuredImage)
-                    <img
-                        class="card-img-top"
-                        src="{{ $newsitem->featuredImage->generateImagePath('1500', '350') }}"
-                    />
+                    <img class="card-img-top" src="{{ $newsitem->featuredImage->generateImagePath('1500', '350') }}" />
                 @endif
 
                 <div class="card-body">
@@ -30,9 +25,7 @@
                             {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
                         </span>
                         by
-                        <a
-                            href="{{ route('user::profile', ['id' => $newsitem->user->getPublicId()]) }}"
-                        >
+                        <a href="{{ route('user::profile', ['id' => $newsitem->user->getPublicId()]) }}">
                             {{ $newsitem->user->name }}
                         </a>
                     </footer>

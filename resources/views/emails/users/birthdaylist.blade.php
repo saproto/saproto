@@ -3,10 +3,7 @@
 @section('body')
     <p>Hey,</p>
 
-    <p>
-        Here's a list with all the jarige joppen today. Don't forget to give
-        them their cookie!
-    </p>
+    <p>Here's a list with all the jarige joppen today. Don't forget to give them their cookie!</p>
 
     <p>
         @foreach ($users as $user)

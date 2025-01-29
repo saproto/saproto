@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-        {{ $company->name }}'s promotion for members
+    {{ $company->name }}'s promotion for members
 @endsection
 
 @section('container')
@@ -10,10 +10,7 @@
             <div class="card mb-3">
                 @if ($company->image)
                     <div class="card-header text-center">
-                        <div
-                            class="align-items-center row"
-                            style="height: 200px"
-                        >
+                        <div class="align-items-center row" style="height: 200px">
                             <div class="col d-block">
                                 <img
                                     src="{{ $company->image->generateImagePath(null, null) }}"
@@ -34,9 +31,7 @@
                         {!! Markdown::convert($company->membercard_long) !!}
                     </div>
 
-                    <a href="{{ $company->url }}" class="card-link text-info">
-                        Visit company website
-                    </a>
+                    <a href="{{ $company->url }}" class="card-link text-info">Visit company website</a>
                 </div>
             </div>
         </div>

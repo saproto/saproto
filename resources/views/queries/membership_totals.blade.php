@@ -34,15 +34,9 @@
 
                     <tr>
                         <td>
-                            <strong>
-                                Total number of members that are affiliated with
-                                the UT
-                            </strong>
+                            <strong>Total number of members that are affiliated with the UT</strong>
                             <br />
-                            <sup>
-                                These are the primary members counting towards
-                                the EEMCS subsidy
-                            </sup>
+                            <sup>These are the primary members counting towards the EEMCS subsidy</sup>
                         </td>
                         <td>{{ $ut }}</td>
                     </tr>
@@ -74,10 +68,7 @@
                         <td>
                             <strong>Total number of donors</strong>
                             <br />
-                            <sup>
-                                For this overview donors are also considered
-                                members.
-                            </sup>
+                            <sup>For this overview donors are also considered members.</sup>
                         </td>
                         <td>
                             {{ $count_per_type[\App\Enums\MembershipTypeEnum::DONOR->value] ?? 0 }}
@@ -88,10 +79,7 @@
                         <td>
                             <strong>Total number of pending members</strong>
                             <br />
-                            <sup>
-                                For this overview pending members are not
-                                counted as members.
-                            </sup>
+                            <sup>For this overview pending members are not counted as members.</sup>
                         </td>
                         <td>
                             {{ $count_per_type[\App\Enums\MembershipTypeEnum::PENDING->value] ?? 0 }}
@@ -102,10 +90,7 @@
                         <td>
                             <strong>Total number of pet members</strong>
                             <br />
-                            <sup>
-                                For this overview pet members are not counted as
-                                members.
-                            </sup>
+                            <sup>For this overview pet members are not counted as members.</sup>
                         </td>
                         <td>
                             {{ $count_per_type[\App\Enums\MembershipTypeEnum::PET->value] ?? 0 }}
@@ -117,17 +102,12 @@
                     <hr />
 
                     <p>
-                        <a
-                            href="?export_subsidies"
-                            class="btn btn-success btn-block"
-                        >
+                        <a href="?export_subsidies" class="btn btn-success btn-block">
                             Export overview for UT subsidies.
                         </a>
                         <br />
-                        This overview only includes users whose UT affiliation
-                        could be verified. UTwente numbers are only included if
-                        available, and e-mail addresses are only included if
-                        they are an
+                        This overview only includes users whose UT affiliation could be verified. UTwente numbers are
+                        only included if available, and e-mail addresses are only included if they are an
                         <code>@utwente.nl</code>
                         address.
                     </p>
@@ -135,10 +115,7 @@
                     <hr />
 
                     <p>
-                        <a
-                            href="?export_active"
-                            class="btn btn-success btn-block"
-                        >
+                        <a href="?export_active" class="btn btn-success btn-block">
                             Export overview of active members.
                         </a>
                     </p>

@@ -7,10 +7,7 @@
 @section('container')
     <div id="achievement-accordion">
         @foreach (['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
-            <div
-                class="card mb-3 achievement-{{ $tier }}"
-                id="achievement-{{ $tier }}"
-            >
+            <div class="card mb-3 achievement-{{ $tier }}" id="achievement-{{ $tier }}">
                 <div
                     class="card-header text-reset cursor-pointer"
                     data-bs-toggle="collapse"

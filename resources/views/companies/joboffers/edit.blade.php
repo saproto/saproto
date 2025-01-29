@@ -22,17 +22,8 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="company">Company</label>
-                            <select
-                                id="company"
-                                name="company_id"
-                                class="form-control"
-                                required
-                            >
-                                <option
-                                    value=""
-                                    @if($joboffer == null) selected @endif
-                                    disabled
-                                >
+                            <select id="company" name="company_id" class="form-control" required>
+                                <option value="" @if($joboffer == null) selected @endif disabled>
                                     Select a company...
                                 </option>
                                 @foreach ($companies as $company)
@@ -60,13 +51,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="information_type_selector">
-                                Offer information type
-                            </label>
-                            <select
-                                id="information_type_selector"
-                                class="form-control"
-                            >
+                            <label for="information_type_selector">Offer information type</label>
+                            <select id="information_type_selector" class="form-control">
                                 <option
                                     value=""
                                     @if (! $joboffer || ($joboffer->description == null && $joboffer->redirect_url == null))
@@ -76,25 +62,16 @@
                                 >
                                     Select a type...
                                 </option>
-                                <option
-                                    value="description"
-                                    @if($joboffer?->description != null) selected @endif
-                                >
+                                <option value="description" @if($joboffer?->description != null) selected @endif>
                                     Description
                                 </option>
-                                <option
-                                    value="url"
-                                    @if($joboffer?->redirect_url != null) selected @endif
-                                >
+                                <option value="url" @if($joboffer?->redirect_url != null) selected @endif>
                                     Redirect URL
                                 </option>
                             </select>
                         </div>
 
-                        <div
-                            id="information_type_description"
-                            class="form-group"
-                        >
+                        <div id="information_type_description" class="form-group">
                             <label for="editor-description">Description</label>
                             @include(
                                 "components.forms.markdownfield",
@@ -132,15 +109,8 @@
                     </div>
 
                     <div class="card-footer">
-                        <a
-                            class="btn btn-default"
-                            href="{{ route("joboffers::admin") }}"
-                        >
-                            Cancel
-                        </a>
-                        <button type="submit" class="btn btn-success float-end">
-                            Save
-                        </button>
+                        <a class="btn btn-default" href="{{ route("joboffers::admin") }}">Cancel</a>
+                        <button type="submit" class="btn btn-success float-end">Save</button>
                     </div>
                 </div>
             </div>
@@ -152,12 +122,8 @@
     <script nonce="{{ csp_nonce() }}">
         const typeUrl = document.getElementById('information_type_url')
         const redirectUrl = document.getElementById('redirect_url')
-        const typeDescription = document.getElementById(
-            'information_type_description'
-        )
-        const typeSelector = document.getElementById(
-            'information_type_selector'
-        )
+        const typeDescription = document.getElementById('information_type_description')
+        const typeSelector = document.getElementById('information_type_selector')
         const easymde = window.easyMDEFields['markdownfield-description']
 
         updateInformationDisplay()

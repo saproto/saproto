@@ -41,14 +41,8 @@
                     <i class="fas fa-circle-question"></i>
                 </i>
             </div>
-            <a
-                href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}"
-            >
-                <img
-                    src="{{ asset('images/logo/inverse.png') }}"
-                    alt="Proto logo"
-                    width="472px"
-                />
+            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
+                <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" width="472px" />
             </a>
         </div>
     </div>
@@ -75,9 +69,9 @@
         const time = document.getElementById('alfred-actualtime')
         const statuses = {
             there: {
-                text: "Alfred is there!",
-                htmlElement: document.getElementById("alfred-there"),
-                color: "bg-success"
+                text: 'Alfred is there!',
+                htmlElement: document.getElementById('alfred-there'),
+                color: 'bg-success',
             },
             jur: {
                 text: 'No! But Jur is here to help you! <br> <div style="font-size: 30px;">Please call  +31 53 489 5646 for assistance</div>',
@@ -95,9 +89,9 @@
                 color: 'bg-warning',
             },
             away: {
-                text: "Nope, Alfred will be back in a bit.",
-                htmlElement: document.getElementById("alfred-away"),
-                color: "bg-danger"
+                text: 'Nope, Alfred will be back in a bit.',
+                htmlElement: document.getElementById('alfred-away'),
+                color: 'bg-danger',
             },
             error: {
                 text: "We couldn't find Alfred...",
@@ -166,11 +160,7 @@
             // hide the time submessage
             time.classList.add('d-none')
 
-            document.body.classList.remove(
-                'bg-success',
-                'bg-warning',
-                'bg-danger'
-            )
+            document.body.classList.remove('bg-success', 'bg-warning', 'bg-danger')
             // set the correct color corresponding to the status
             document.body.classList.add(newStatus.color)
         }

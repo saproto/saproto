@@ -141,15 +141,13 @@
     @if (! $activeDrink)
         <div class="d-flex justify-content-center w-100 h-100">
             <div class="alert alert-danger align-self-center">
-                No active drink! Create one in the admin panel and refresh the
-                page!
+                No active drink! Create one in the admin panel and refresh the page!
             </div>
         </div>
     @elseif (! count($prices))
         <div class="d-flex justify-content-center w-100 h-100">
             <div class="alert alert-danger align-self-center">
-                No prices found for this drink! Add some in the admin panel and
-                refresh the page!
+                No prices found for this drink! Add some in the admin panel and refresh the page!
             </div>
         </div>
     @else
@@ -162,28 +160,15 @@
             aria-labelledby="eventModal"
             aria-hidden="true"
         >
-            <div
-                class="modal-dialog modal-dialog-centered"
-                role="document"
-                style="min-width: 70vw"
-            >
-                <div
-                    class="modal-content"
-                    style="min-height: 50vh; min-width: 70vw"
-                >
+            <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 70vw">
+                <div class="modal-content" style="min-height: 50vh; min-width: 70vw">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal-title">
-                            Modal title
-                        </h5>
+                        <h5 class="modal-title" id="modal-title">Modal title</h5>
                     </div>
                     <div
                         class="modal-body"
                         id="modal-body"
-                        style="
-                            min-height: 50vh;
-                            min-width: 70vw;
-                            text-align: center;
-                        "
+                        style="min-height: 50vh; min-width: 70vw; text-align: center"
                     ></div>
                 </div>
             </div>
@@ -200,15 +185,11 @@
                         <div class="fs-1">Drink</div>
                     </div>
                     <div class="wallstreet-info px-4 pb-4 pt-2">
-                        <div class="wallstreet-info-title fs-2 mb-4">
-                            TIPcie Consolidated, Inc.
-                        </div>
+                        <div class="wallstreet-info-title fs-2 mb-4">TIPcie Consolidated, Inc.</div>
                         <div class="wallstreet-info-item">
                             <div>Current loss</div>
                             <div>
-                                <b id="current_loss">
-                                    {{ rand(500, 600) }}.{{ rand(0, 50) }}
-                                </b>
+                                <b id="current_loss">{{ rand(500, 600) }}.{{ rand(0, 50) }}</b>
                             </div>
                         </div>
                         <div class="wallstreet-info-item">
@@ -247,14 +228,9 @@
                     </div>
                 </div>
                 <div class="wallstreet-right px-4 pb-4 pt-2">
-                    <div class="wallstreet-graph-title mb-3 fs-3">
-                        Current stonks
-                    </div>
+                    <div class="wallstreet-graph-title mb-3 fs-3">Current stonks</div>
                     <div class="wallstreet-graph-container">
-                        <canvas
-                            id="wallstreet-graph-canvas"
-                            class="wallstreet-graph-canvas"
-                        ></canvas>
+                        <canvas id="wallstreet-graph-canvas" class="wallstreet-graph-canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -278,9 +254,7 @@
                                     <b>{{ $price->name }}</b>
                                 </div>
 
-                                <div
-                                    class="d-flex flex-row justify-content-between"
-                                >
+                                <div class="d-flex flex-row justify-content-between">
                                     {{-- Price --}}
                                     <div id="price" class="fs-5">
                                         €
@@ -290,10 +264,7 @@
                                     </div>
 
                                     {{-- Change --}}
-                                    <div
-                                        id="diff"
-                                        class="fs-5 {{ $price->diff < 0 ? 'text-danger' : 'text-green' }}"
-                                    >
+                                    <div id="diff" class="fs-5 {{ $price->diff < 0 ? 'text-danger' : 'text-green' }}">
                                         {{ sprintf('%s %.2f%%', $price->diff < 0 ? '▼' : '▲', $price->diff) }}
                                     </div>
                                 </div>
@@ -308,19 +279,13 @@
 
 @push('javascript')
     {{-- chart.js and the date adapter --}}
-    <script
-        nonce="{{ csp_nonce() }}"
-        src="https://cdn.jsdelivr.net/npm/chart.js"
-    ></script>
+    <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
         nonce="{{ csp_nonce() }}"
         src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"
     ></script>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"
-        nonce="{{ csp_nonce() }}"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js" nonce="{{ csp_nonce() }}"></script>
 
     @vite('resources/assets/js/echo.js')
 
@@ -339,9 +304,7 @@
 
             const ctx = document.getElementById('wallstreet-graph-canvas')
 
-            get(
-                `{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`
-            ).then((products) => {
+            get(`{{ route('api::wallstreet::all_prices', ['id' => $activeDrink->id]) }}`).then((products) => {
                 var chart = new Chart(ctx, {
                     type: 'line',
                     options: {
@@ -376,91 +339,67 @@
                 const modalBody = document.getElementById('modal-body')
                 const a = new Audio('{{ $sound_path }}')
                 //listen to a new wallstreet event
-                window.Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetEvent',
-                    (e) => {
-                        const event = e.data
-                        a.play().catch(() => {
-                            confirm(
-                                'Click somewhere within the document for the sound to play!'
-                            )
-                        })
-                        if (event.image) {
-                            modalBody.style.backgroundImage = `url(${event.img})`
-                            modalBody.style.backgroundSize = 'cover'
-                            modalBody.style.backgroundPosition = 'center'
-                        }
-                        modalTitle.innerText = event.name
-                        modalBody.innerHTML = event.description
-                        window.modals.eventModal.show()
-                        setTimeout(() => {
-                            window.modals.eventModal.hide()
-                        }, 10000)
+                window.Echo.private(`wallstreet-prices.${id}`).listen('NewWallstreetEvent', (e) => {
+                    const event = e.data
+                    a.play().catch(() => {
+                        confirm('Click somewhere within the document for the sound to play!')
+                    })
+                    if (event.image) {
+                        modalBody.style.backgroundImage = `url(${event.img})`
+                        modalBody.style.backgroundSize = 'cover'
+                        modalBody.style.backgroundPosition = 'center'
                     }
-                )
+                    modalTitle.innerText = event.name
+                    modalBody.innerHTML = event.description
+                    window.modals.eventModal.show()
+                    setTimeout(() => {
+                        window.modals.eventModal.hide()
+                    }, 10000)
+                })
 
                 const lossDiv = document.getElementById('current_loss')
-                Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetLossCalculation',
-                    (e) => {
-                        lossDiv.innerHTML = '€ ' + e.data.toFixed(2)
-                    }
-                )
+                Echo.private(`wallstreet-prices.${id}`).listen('NewWallstreetLossCalculation', (e) => {
+                    lossDiv.innerHTML = '€ ' + e.data.toFixed(2)
+                })
 
                 //listen to a new wallstreet price
-                Echo.private(`wallstreet-prices.${id}`).listen(
-                    'NewWallstreetPrice',
-                    (e) => {
-                        let cards = swiper.el.querySelectorAll(
-                            `#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`
-                        )
-                        if (cards.length > 0) {
-                            cards.forEach((card) => {
-                                card.querySelector('#price span').innerText =
-                                    e.data.price.toFixed(2)
-                                card.querySelector('#diff').innerText =
-                                    `${e.data.diff < 0 ? '▼' : '▲'} ${e.data.diff.toFixed(2)}%`
-                                if (e.data.diff < 0) {
-                                    card.querySelector('#diff').classList.add(
-                                        'text-danger'
-                                    )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-green')
-                                } else {
-                                    card.querySelector('#diff').classList.add(
-                                        'text-green'
-                                    )
-                                    card.querySelector(
-                                        '#diff'
-                                    ).classList.remove('text-danger')
-                                }
-                            })
-                        }
-
-                        const dataset = chart.data.datasets.find(
-                            (dataset) => dataset.label === e.data.product.name
-                        )
-                        if (dataset) {
-                            dataset.data.push({
-                                x: Date.parse(e.data.created_at),
-                                y: e.data.price,
-                            })
-                        } else {
-                            //if a new product is added the dataset is created
-                            chart.data.datasets.push({
-                                label: e.data.product.name,
-                                data: [
-                                    {
-                                        x: Date.parse(e.data.created_at),
-                                        y: e.data.price,
-                                    },
-                                ],
-                            })
-                        }
-                        chart.update('none')
+                Echo.private(`wallstreet-prices.${id}`).listen('NewWallstreetPrice', (e) => {
+                    let cards = swiper.el.querySelectorAll(`#${e.data.product.name.replace(/[^a-zA-Z0-9]+/g, '')}`)
+                    if (cards.length > 0) {
+                        cards.forEach((card) => {
+                            card.querySelector('#price span').innerText = e.data.price.toFixed(2)
+                            card.querySelector('#diff').innerText =
+                                `${e.data.diff < 0 ? '▼' : '▲'} ${e.data.diff.toFixed(2)}%`
+                            if (e.data.diff < 0) {
+                                card.querySelector('#diff').classList.add('text-danger')
+                                card.querySelector('#diff').classList.remove('text-green')
+                            } else {
+                                card.querySelector('#diff').classList.add('text-green')
+                                card.querySelector('#diff').classList.remove('text-danger')
+                            }
+                        })
                     }
-                )
+
+                    const dataset = chart.data.datasets.find((dataset) => dataset.label === e.data.product.name)
+                    if (dataset) {
+                        dataset.data.push({
+                            x: Date.parse(e.data.created_at),
+                            y: e.data.price,
+                        })
+                    } else {
+                        //if a new product is added the dataset is created
+                        chart.data.datasets.push({
+                            label: e.data.product.name,
+                            data: [
+                                {
+                                    x: Date.parse(e.data.created_at),
+                                    y: e.data.price,
+                                },
+                            ],
+                        })
+                    }
+                    chart.update('none')
+                })
             })
         })
     </script>

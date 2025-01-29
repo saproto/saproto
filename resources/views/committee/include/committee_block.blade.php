@@ -8,16 +8,11 @@
     [
         'url' =>
             $committee->public || (Auth::check() && Auth::user()->can('board'))
-                ? route(
-                    $committee->is_society
-                        ? 'society::show'
-                        : 'committee::show',
-                    ['id' => $committee->getPublicId()],
-                )
+                ? route($committee->is_society ? 'society::show' : 'committee::show', [
+                    'id' => $committee->getPublicId(),
+                ])
                 : '#',
-        'img' => $committee->image
-            ? $committee->image->generateImagePath(450, 300)
-            : null,
+        'img' => $committee->image ? $committee->image->generateImagePath(450, 300) : null,
         'html' => ! $committee->public
             ? sprintf(
                 '<i class="fas fa-lock" %s></i>&nbsp;&nbsp;%s',

@@ -12,35 +12,22 @@
                     <div class="card-header">@yield('page-title')</div>
 
                     <div class="card-body">
-                        <a
-                            href="?csv"
-                            class="btn btn-success btn-block mb-3"
-                            target="_blank"
-                        >
-                            Supplier CSV
-                        </a>
+                        <a href="?csv" class="btn btn-success btn-block mb-3" target="_blank">Supplier CSV</a>
 
                         <p class="card-text">
-                            This table shows how much of each products needs to
-                            be ordered to reach the preferred stock as set for
-                            that product. This list
+                            This table shows how much of each products needs to be ordered to reach the preferred stock
+                            as set for that product. This list
                             <strong>only</strong>
-                            includes products that are set to 'be in stock by
-                            default' and that need to be re-ordered to have
-                            sufficient stock. This is determined by the
-                            <i>
-                                Visible in the OmNomCom even when out of stock
-                            </i>
-                            checkbox in the product's settings. To include or
-                            exclude products from this list, head over to that
-                            product's page and change the setting.
+                            includes products that are set to 'be in stock by default' and that need to be re-ordered to
+                            have sufficient stock. This is determined by the
+                            <i>Visible in the OmNomCom even when out of stock</i>
+                            checkbox in the product's settings. To include or exclude products from this list, head over
+                            to that product's page and change the setting.
                         </p>
                     </div>
 
                     <div class="table-responsive">
-                        <table
-                            class="table table-hover table-borderless table-sm"
-                        >
+                        <table class="table table-hover table-borderless table-sm">
                             <thead>
                                 <tr class="text-nowrap">
                                     <th></th>
@@ -84,17 +71,11 @@
                                                 {{ $order->order_collo }}
                                             </strong>
                                         </td>
-                                        <td class="opacity-50">
-                                            {{ $order->order_products }} units
-                                        </td>
+                                        <td class="opacity-50">{{ $order->order_products }} units</td>
                                         <td>{{ $order->new_stock }}</td>
-                                        <td class="opacity-50">
-                                            + {{ $order->new_surplus }}
-                                        </td>
+                                        <td class="opacity-50">+ {{ $order->new_surplus }}</td>
                                     @else
-                                        <td colspan="8" class="opacity-50">
-                                            No need to order.
-                                        </td>
+                                        <td colspan="8" class="opacity-50">No need to order.</td>
                                     @endif
                                 </tr>
                             @endforeach

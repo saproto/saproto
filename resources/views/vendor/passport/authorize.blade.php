@@ -24,9 +24,7 @@
 
         <input type="hidden" name="state" value="{{ $request->state }}" />
         <input type="hidden" name="client_id" value="{{ $client->id }}" />
-        <button type="submit" class="btn btn-success btn-block mt-2">
-            Give access
-        </button>
+        <button type="submit" class="btn btn-success btn-block mt-2">Give access</button>
     </form>
 
     <p>- or -</p>

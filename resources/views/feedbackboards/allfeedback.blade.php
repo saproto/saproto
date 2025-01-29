@@ -1,8 +1,6 @@
 <div class="card mb-3 w-100">
     <div class="card-header bg-dark text-white">
-        <div
-            class="d-flex align-items-center justify-items-center justify-content-between mb-2"
-        >
+        <div class="d-flex align-items-center justify-items-center justify-content-between mb-2">
             <span class="">{{ $category->title }}</span>
             @can('board')
                 <div>
@@ -48,8 +46,7 @@
             </div>
         @else
             <p class="text-center text-muted mt-3">
-                There are no {{ $category->title }} at the moment, be the first
-                to post a new one!
+                There are no {{ $category->title }} at the moment, be the first to post a new one!
             </p>
         @endif
     </div>

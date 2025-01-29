@@ -27,9 +27,7 @@
                 @if ($i < $achievement->numberOfStars())
                     <i class="text-white fas fa-star"></i>
                 @else
-                    <i
-                        class="achievement-{{ $achievement->tier }} fas fa-star"
-                    ></i>
+                    <i class="achievement-{{ $achievement->tier }} fas fa-star"></i>
                 @endif
             @endfor
         </span>
@@ -40,9 +38,7 @@
 
         @if ($obtained?->description)
             <br />
-            <div class="text-secondary fst-italic">
-                "{{ $obtained->description }}"
-            </div>
+            <div class="text-secondary fst-italic">"{{ $obtained->description }}"</div>
         @endif
     </div>
 

@@ -9,11 +9,7 @@
 @endsection
 
 @section('login-body')
-    <form
-        method="POST"
-        action="{{ route('login::register') }}"
-        class="text-start"
-    >
+    <form method="POST" action="{{ route('login::register') }}" class="text-start">
         @if (Session::get('wizard'))
             @include('users.registerwizard_macro')
         @endif
@@ -29,14 +25,11 @@
         --}}
 
         @if (! Session::get('wizard'))
-            <p>
-                Using this form you can register a new account on the S.A. Proto
-                website.
-            </p>
+            <p>Using this form you can register a new account on the S.A. Proto website.</p>
 
             <p class="fw-bold">
-                Creating and having an account on the website does not make you
-                a member of S.A. Proto and is free of charge.
+                Creating and having an account on the website does not make you a member of S.A. Proto and is free of
+                charge.
             </p>
 
             <hr />
@@ -55,13 +48,10 @@
         />
 
         <p>
-            Your e-mail address will also be your username. Please enter a valid
-            e-mail address as your password will be sent to this e-mail address.
+            Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
+            sent to this e-mail address.
             <br />
-            <i>
-                Note: For practical reasons you cannot set your e-mail address
-                to an ".utwente.nl" account.
-            </i>
+            <i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
         </p>
 
         <hr />
@@ -111,8 +101,6 @@
 
         <hr />
 
-        <button type="submit" class="btn btn-success btn-block">
-            Create my account
-        </button>
+        <button type="submit" class="btn btn-success btn-block">Create my account</button>
     </form>
 @endsection

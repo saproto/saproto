@@ -1,8 +1,6 @@
 @if (count($unreviewed))
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white">
-            {{ $category->title }} (to be reviewed)
-        </div>
+        <div class="card-header bg-dark text-white">{{ $category->title }} (to be reviewed)</div>
 
         <div class="card-body">
             <div class="row">

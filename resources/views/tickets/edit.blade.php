@@ -103,12 +103,7 @@
                                     step="1"
                                     value="{{ $ticket?->buy_limit }}"
                                 />
-                                <span
-                                    class="input-group-text"
-                                    id="basic-addon2"
-                                >
-                                    tickets
-                                </span>
+                                <span class="input-group-text" id="basic-addon2">tickets</span>
                             </div>
                         </div>
 
@@ -117,23 +112,15 @@
                             [
                                 'name' => 'show_participants',
                                 'checked' => $ticket?->show_participants,
-                                'label' =>
-                                    "Show the participant's who bought this ticket on the event.",
+                                'label' => "Show the participant's who bought this ticket on the event.",
                             ]
                         )
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('tickets::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('tickets::index') }}" class="btn btn-default">Cancel</a>
                     </div>
                 </div>
             </form>
@@ -145,9 +132,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.buy_limit_checkbox').forEach((element) => {
             element.addEventListener('click', () => {
-                document
-                    .getElementById('buy_limit__collapse')
-                    .classList.toggle('show')
+                document.getElementById('buy_limit__collapse').classList.toggle('show')
             })
         })
     </script>

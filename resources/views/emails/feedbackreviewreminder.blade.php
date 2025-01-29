@@ -5,9 +5,7 @@
 
     <p>
         There are new submissions waiting for you to review! They are from the
-        <a
-            href="{{ route('feedback::index', ['category' => $category->url]) }}"
-        >
+        <a href="{{ route('feedback::index', ['category' => $category->url]) }}">
             {{ $category->title }}
         </a>
         board!
@@ -17,15 +15,7 @@
         They are the following:
 
         @foreach ($unreviewed as $feedback)
-            <table
-                style="
-                    margin: 0;
-                    padding: 0;
-                    border: none;
-                    background-color: #f0f0f0;
-                    width: 100%;
-                "
-            >
+            <table style="margin: 0; padding: 0; border: none; background-color: #f0f0f0; width: 100%">
                 <tr style="margin: 0; padding: 0; border: none">
                     <td style="margin: 0; padding: 10px 20px; border: none">
                         <p>

@@ -49,9 +49,7 @@ class CountdownTimer extends BaseComponent {
         let attributes = {}
         Object.keys(data).map((key) => {
             let pureKey = key.replace(/^countdown/, '')
-            pureKey =
-                pureKey.charAt(0).toLowerCase() +
-                pureKey.slice(1, pureKey.length)
+            pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length)
             attributes[pureKey] = data[key]
         })
         return attributes
@@ -66,8 +64,7 @@ class CountdownTimer extends BaseComponent {
         let string
         if (days > 1) string = days + ' days'
         else if (days === 1) string = '1 day'
-        else if (hours > 0 || minutes > 0)
-            string = `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`
+        else if (hours > 0 || minutes > 0) string = `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`
         else string = seconds + ' seconds'
         return string
     }
@@ -76,12 +73,7 @@ class CountdownTimer extends BaseComponent {
         const current = new Date().getTime()
         const delta = this._start - current
         this._element.innerHTML =
-            delta < 0
-                ? this._config.textFinished
-                : this._config.textCounting.replace(
-                      '{}',
-                      this._getTimeString(delta)
-                  )
+            delta < 0 ? this._config.textFinished : this._config.textCounting.replace('{}', this._getTimeString(delta))
     }
 }
 

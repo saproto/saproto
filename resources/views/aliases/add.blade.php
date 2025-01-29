@@ -25,47 +25,26 @@
                                 name="alias"
                                 required
                             />
-                            <span class="input-group-text">
-                                @ {{ Config::string('proto.emaildomain') }}
-                            </span>
+                            <span class="input-group-text">@ {{ Config::string('proto.emaildomain') }}</span>
                         </div>
 
                         <hr />
 
-                        <label for="destination">
-                            Forward to an e-mail address:
-                        </label>
+                        <label for="destination">Forward to an e-mail address:</label>
                         <div class="form-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="destination"
-                                name="destination"
-                            />
+                            <input type="text" class="form-control" id="destination" name="destination" />
                         </div>
 
                         <div class="form-group autocomplete">
                             <label for="user">Or forward to a member:</label>
-                            <input
-                                type="text"
-                                name="user"
-                                id="user"
-                                class="user-search form-control"
-                            />
+                            <input type="text" name="user" id="user" class="user-search form-control" />
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('alias::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('alias::index') }}" class="btn btn-default">Cancel</a>
                     </div>
                 </form>
             </div>
@@ -79,11 +58,9 @@
             document.getElementById('destination').value = ''
         })
 
-        document
-            .getElementById('destination')
-            .addEventListener('change', (_) => {
-                document.getElementById('destination').focus()
-                document.getElementById('user').value = ''
-            })
+        document.getElementById('destination').addEventListener('change', (_) => {
+            document.getElementById('destination').focus()
+            document.getElementById('user').value = ''
+        })
     </script>
 @endpush

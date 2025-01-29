@@ -10,10 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
-                    <a
-                        href="{{ route('dmx.overrides.create') }}"
-                        class="badge bg-info float-end"
-                    >
+                    <a href="{{ route('dmx.overrides.create') }}" class="badge bg-info float-end">
                         Create a new override.
                     </a>
                 </div>
@@ -36,8 +33,7 @@
                                 </th>
                                 <th colspan="6">
                                     <i>
-                                        Overrides are applied from the bottom of
-                                        this list to the top. The top most
+                                        Overrides are applied from the bottom of this list to the top. The top most
                                         override is applied last.
                                     </i>
                                 </th>
@@ -85,9 +81,7 @@
                     </div>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            There are no configured overrides.
-                        </p>
+                        <p class="card-text text-center">There are no configured overrides.</p>
                     </div>
                 @endif
             </div>

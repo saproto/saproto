@@ -30,17 +30,13 @@
             </a>
         @endif
 
-        <div id="reload-button" class="btn btn-block px-4 py-2">
-            RELOAD BUTTON
-        </div>
+        <div id="reload-button" class="btn btn-block px-4 py-2">RELOAD BUTTON</div>
     </nav>
 </div>
 
 @push('javascript')
     <script nonce="{{ csp_nonce() }}">
-        document.getElementById('logout-button').onclick = (_) =>
-            (window.location = '{{ route('login::logout') }}')
-        document.getElementById('reload-button').onclick = (_) =>
-            window.location.reload()
+        document.getElementById('logout-button').onclick = (_) => (window.location = '{{ route('login::logout') }}')
+        document.getElementById('reload-button').onclick = (_) => window.location.reload()
     </script>
 @endpush

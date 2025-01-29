@@ -9,9 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white mb-1">
-                        All unclosed activities.
-                    </div>
+                    <div class="card-header bg-dark text-white mb-1">All unclosed activities.</div>
 
                     <table class="table table-hover">
                         <thead>
@@ -53,9 +51,7 @@
                                         @endif
                                     </td>
 
-                                    <td>
-                                        &euro;{{ number_format($activity->price, 2) }}
-                                    </td>
+                                    <td>&euro;{{ number_format($activity->price, 2) }}</td>
 
                                     <td>{{ $activity->users->count() }}</td>
 
@@ -71,16 +67,10 @@
                                     </td>
 
                                     <td>
-                                        <select
-                                            name="account"
-                                            class="form-control"
-                                        >
+                                        <select name="account" class="form-control">
                                             @foreach (\App\Models\Account::orderBy('account_number', 'asc')->get() as $account)
-                                                <option
-                                                    value="{{ $account->id }}"
-                                                >
-                                                    ({{ $account->account_number }}
-                                                    ) {{ $account->name }}
+                                                <option value="{{ $account->id }}">
+                                                    ({{ $account->account_number }} ) {{ $account->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -88,19 +78,9 @@
 
                                     <td>
                                         @if ($activity->event && ! $activity->event->over())
-                                            <button
-                                                class="btn btn-info btn-block"
-                                                disabled
-                                            >
-                                                Not ended yet.
-                                            </button>
+                                            <button class="btn btn-info btn-block" disabled>Not ended yet.</button>
                                         @else
-                                            <button
-                                                type="submit"
-                                                class="btn btn-warning btn-block"
-                                            >
-                                                Close
-                                            </button>
+                                            <button type="submit" class="btn btn-warning btn-block">Close</button>
                                         @endif
                                     </td>
                                 </tr>
@@ -111,8 +91,6 @@
             </div>
         </div>
     @else
-        <p class="text-center mt-3">
-            There are no activities to close! Hurray!
-        </p>
+        <p class="text-center mt-3">There are no activities to close! Hurray!</p>
     @endif
 @endsection

@@ -13,9 +13,7 @@
             <div class="col-md-4 col-sm-6 col-xs-10">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            Your search has returned no results.
-                        </p>
+                        <p class="card-text text-center">Your search has returned no results.</p>
                     </div>
                 </div>
             </div>
@@ -25,9 +23,7 @@
             <div class="col-md-3">
                 @if (count($photoAlbums) > 0)
                     <div class="card">
-                        <div class="card-header bg-dark text-white">
-                            Photo Albums
-                        </div>
+                        <div class="card-header bg-dark text-white">Photo Albums</div>
                         <div class="card-body">
                             @foreach ($photoAlbums as $album)
                                 @include(
@@ -35,11 +31,7 @@
                                     [
                                         'url' => route('photo::album::list', ['id' => $album->id]),
                                         'img' => $album->thumb(),
-                                        'html' => sprintf(
-                                            '<sub>%s</sub><br><strong>%s</strong>',
-                                            date('M j, Y', $album->date_taken),
-                                            $album->name,
-                                        ),
+                                        'html' => sprintf('<sub>%s</sub><br><strong>%s</strong>', date('M j, Y', $album->date_taken), $album->name),
                                         'leftborder' => 'info',
                                     ]
                                 )
@@ -50,9 +42,7 @@
 
                 @if (count($users) > 0)
                     <div class="card">
-                        <div class="card-header bg-dark text-white">
-                            Proto members
-                        </div>
+                        <div class="card-header bg-dark text-white">Proto members</div>
                         <div class="card-body">
                             @foreach ($users as $user)
                                 @include(
@@ -117,9 +107,7 @@
                                 'website.home.cards.card-bg-image',
                                 [
                                     'url' => route('page::show', ['slug' => $page->slug]),
-                                    'img' => $page->featuredImage
-                                        ? $page->featuredImage->generateImagePath(300, 200)
-                                        : null,
+                                    'img' => $page->featuredImage ? $page->featuredImage->generateImagePath(300, 200) : null,
                                     'photo_pop' => true,
                                     'html' => $page->title,
                                     'height' => 100,

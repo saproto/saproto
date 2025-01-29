@@ -5,11 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link
-            href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700"
-            rel="stylesheet"
-            type="text/css"
-        />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700" rel="stylesheet" type="text/css" />
 
         <meta name="viewport" content="width=900, user-scalable=no" />
 
@@ -24,15 +20,9 @@
             content="The OmNomCom Inventory Viewer can tell you if your favourite nom is available in the Protopolis. Give it a try!"
         />
         <meta property="og:url" content="https://www.omnomcom.nl/" />
-        <meta
-            property="og:image"
-            content="{{ asset("images/subsites/omnomcom.jpg") }}"
-        />
+        <meta property="og:image" content="{{ asset("images/subsites/omnomcom.jpg") }}" />
 
-        <link
-            rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
-        />
+        <link rel="shortcut icon" href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}" />
 
         <style>
             html {
@@ -181,9 +171,7 @@
                         /**@var Product $product */
                     @endphp
 
-                    <div
-                        class="result d-none {{ $product->stock <= 0 ? "unavailable" : "" }}"
-                    >
+                    <div class="result d-none {{ $product->stock <= 0 ? "unavailable" : "" }}">
                         <div
                             class="result_image"
                             @if ($product->image)
@@ -194,9 +182,7 @@
                             <div class="result_name">{{ $product->name }}</div>
                             <div class="result_price">
                                 <div class="result_title">Price</div>
-                                <div class="result_data">
-                                    &euro;{{ number_format($product->price, 2) }}
-                                </div>
+                                <div class="result_data">&euro;{{ number_format($product->price, 2) }}</div>
                             </div>
                             <div class="result_amount">
                                 <div class="result_title">Available</div>
@@ -213,28 +199,18 @@
             </div>
 
             <a href="https://www.proto.utwente.nl/">
-                <img
-                    src="{{ asset("images/logo/inverse.png") }}"
-                    style="width: 400px"
-                    alt="{{ $product->name }}"
-                />
+                <img src="{{ asset("images/logo/inverse.png") }}" style="width: 400px" alt="{{ $product->name }}" />
             </a>
         </div>
 
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             const search = document.getElementById('search_query')
-            const results = Array.from(
-                document.getElementsByClassName('result')
-            )
+            const results = Array.from(document.getElementsByClassName('result'))
             search.addEventListener('keyup', (_) => {
                 let query = search.value
-                results.forEach((el) =>
-                    el.classList.replace('result_left', 'd-none')
-                )
+                results.forEach((el) => el.classList.replace('result_left', 'd-none'))
                 if (query.length > 2) {
-                    results.forEach((el) =>
-                        el.classList.replace('result_left', 'd-none')
-                    )
+                    results.forEach((el) => el.classList.replace('result_left', 'd-none'))
                     let c = 1
                     results.forEach((el) => {
                         let name = el
@@ -245,13 +221,8 @@
                             .querySelector('.result_category')
                             .innerHTML.toLowerCase()
                             .replace(/[^a-zA-Z0-9]/g, '')
-                        let queryMod = query
-                            .toLowerCase()
-                            .replace(/[^a-zA-Z0-9]/g, '')
-                        if (
-                            name.indexOf(queryMod) > -1 ||
-                            category.indexOf(queryMod) > -1
-                        ) {
+                        let queryMod = query.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')
+                        if (name.indexOf(queryMod) > -1 || category.indexOf(queryMod) > -1) {
                             el.classList.remove('d-none')
                             if (c % 2 === 1) el.classList.add('result_left')
                             c++

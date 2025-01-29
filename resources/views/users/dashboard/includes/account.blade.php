@@ -1,8 +1,4 @@
-<form
-    class="form-horizontal"
-    method="post"
-    action="{{ route('user::changemail', ['id' => $user->id]) }}"
->
+<form class="form-horizontal" method="post" action="{{ route('user::changemail', ['id' => $user->id]) }}">
     @csrf
 
     <div class="card mb-3">
@@ -10,14 +6,10 @@
 
         <div class="card-body">
             <p>
-                Here you can change your e-mail address. You'll receive an
-                e-mail on both the old and new address for confirmation. You
-                need your password to change your e-mail address.
+                Here you can change your e-mail address. You'll receive an e-mail on both the old and new address for
+                confirmation. You need your password to change your e-mail address.
                 <br />
-                <i>
-                    Note: For practical reasons you cannot set your e-mail
-                    address to an ".utwente.nl" account.
-                </i>
+                <i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
             </p>
 
             <table class="table table-borderless table-sm mb-0">
@@ -53,18 +45,12 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-outline-info btn-block">
-                Change your e-mail
-            </button>
+            <button type="submit" class="btn btn-outline-info btn-block">Change your e-mail</button>
         </div>
     </div>
 </form>
 
-<form
-    class="form-horizontal"
-    method="post"
-    action="{{ route('user::dashboard::show') }}"
->
+<form class="form-horizontal" method="post" action="{{ route('user::dashboard::show') }}">
     @csrf
 
     <div class="card mb-3">
@@ -75,9 +61,7 @@
                 <tbody>
                     <tr>
                         <th>Name</th>
-                        <td>
-                            {{ $user->name }} ({{{ $user->calling_name }}})
-                        </td>
+                        <td>{{ $user->name }} ({{{ $user->calling_name }}})</td>
                     </tr>
 
                     @if ($user->did_study_create || $user->did_study_itech)
@@ -90,9 +74,7 @@
                                     data-bs-placement="bottom"
                                     title="Is this incorrect? Let the board know."
                                 >
-                                    <i
-                                        class="fas fa-{{ $user->did_study_create ? 'check-' : null }}square fa-fw"
-                                    ></i>
+                                    <i class="fas fa-{{ $user->did_study_create ? 'check-' : null }}square fa-fw"></i>
                                     Creative Technology
                                 </span>
                                 <span
@@ -101,9 +83,7 @@
                                     data-bs-placement="bottom"
                                     title="Is this incorrect? Let the board know."
                                 >
-                                    <i
-                                        class="fas fa-{{ $user->did_study_itech ? 'check-' : null }}square fa-fw"
-                                    ></i>
+                                    <i class="fas fa-{{ $user->did_study_itech ? 'check-' : null }}square fa-fw"></i>
                                     Interaction Technology
                                 </span>
                             </td>
@@ -187,14 +167,10 @@
                                 <br />
                                 <p class="text-muted">
                                     @if ($user->address_visible)
-                                        <i
-                                            class="fas fa-user-friends fa-fw me-2"
-                                        ></i>
+                                        <i class="fas fa-user-friends fa-fw me-2"></i>
                                         Visible to members
                                     @else
-                                        <i
-                                            class="fas fa-user-lock fa-fw me-2"
-                                        ></i>
+                                        <i class="fas fa-user-lock fa-fw me-2"></i>
                                         Visible to the board
                                     @endif
                                     <a
@@ -209,9 +185,7 @@
                                     </a>
                                 </p>
                             @else
-                                <a href="{{ route('user::address::create') }}">
-                                    Let us know your address
-                                </a>
+                                <a href="{{ route('user::address::create') }}">Let us know your address</a>
                             @endif
                         </td>
                     </tr>
@@ -276,11 +250,8 @@
                                         'label' => 'After checkout, show how much I\'ve spent today.',
                                     ]
                                 )
-                                <small
-                                    class="form-text text-muted mb-2 d-block"
-                                >
-                                    This feature was requested by members who
-                                    want to be aware of how much they spend.
+                                <small class="form-text text-muted mb-2 d-block">
+                                    This feature was requested by members who want to be aware of how much they spend.
                                 </small>
 
                                 @include(
@@ -291,11 +262,8 @@
                                         'label' => 'After checkout, show how many calories I\'ve bought today.',
                                     ]
                                 )
-                                <small
-                                    class="form-text text-muted mb-2 d-block"
-                                >
-                                    This feature was requested by members who
-                                    want to be aware of how much calories they
+                                <small class="form-text text-muted mb-2 d-block">
+                                    This feature was requested by members who want to be aware of how much calories they
                                     eat.
                                 </small>
 
@@ -309,21 +277,16 @@
                                 )
                                 <small class="d-block text-warning mb-1">
                                     <i class="fas fa-warning me-1"></i>
-                                    Only the board can allow you access to the
-                                    OmNomCom again.
+                                    Only the board can allow you access to the OmNomCom again.
                                 </small>
                                 <small class="d-block mb-1">
                                     <i class="fas fa-info-circle me-1"></i>
-                                    You can still sign-up for activities, and
-                                    the board can manually buy something for you
-                                    if you need that.
+                                    You can still sign-up for activities, and the board can manually buy something for
+                                    you if you need that.
                                 </small>
-                                <small
-                                    class="form-text text-muted mb-2 d-block"
-                                >
-                                    This feature was requested by members who
-                                    wanted some help controlling their personal
-                                    spendings.
+                                <small class="form-text text-muted mb-2 d-block">
+                                    This feature was requested by members who wanted some help controlling their
+                                    personal spendings.
                                 </small>
                             @endif
 
@@ -336,9 +299,8 @@
                                 ]
                             )
                             <small class="form-text text-muted mb-2 d-block">
-                                We are required to keep financial information
-                                for 7 years. If you disable this setting, your
-                                purchases will be anonymised after this time.
+                                We are required to keep financial information for 7 years. If you disable this setting,
+                                your purchases will be anonymised after this time.
                             </small>
                         </td>
                     </tr>
@@ -346,35 +308,22 @@
                     <tr>
                         <th>Website</th>
                         <td>
-                            <label class="form-check-label" for="theme">
-                                Choose a theme
-                            </label>
-                            <select
-                                class="form-control"
-                                id="theme"
-                                name="theme"
-                            >
+                            <label class="form-check-label" for="theme">Choose a theme</label>
+                            <select class="form-control" id="theme" name="theme">
                                 @foreach (Config::array('proto.themes') as $i => $name)
-                                    <option
-                                        value="{{ $i }}"
-                                        @selected($user->theme == $i)
-                                    >
+                                    <option value="{{ $i }}" @selected($user->theme == $i)>
                                         {{ ucwords($name) }}
                                     </option>
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">
-                                This feature was requested by pretty much
-                                everyone.
+                                This feature was requested by pretty much everyone.
                             </small>
 
                             @if (Carbon::now()->month === Carbon::DECEMBER)
                                 <br />
                                 <a href="{{ route('december::toggle') }}">
-                                    <button
-                                        type="button"
-                                        class="btn btn-warning"
-                                    >
+                                    <button type="button" class="btn btn-warning">
                                         {{ Cookie::get('disable-december') === 'disabled' ? 'enable' : 'disable' }}
                                         december theme
                                     </button>
@@ -395,11 +344,8 @@
                                         'label' => 'Show my achievements on my profile.',
                                     ]
                                 )
-                                <small
-                                    class="form-text text-muted d-block mb-2"
-                                >
-                                    Achievements you obtain may reveal some
-                                    personal details.
+                                <small class="form-text text-muted d-block mb-2">
+                                    Achievements you obtain may reveal some personal details.
                                     <br />
                                     Only members can see your achievements.
                                 </small>
@@ -413,10 +359,8 @@
                                     ]
                                 )
                                 <small class="form-text text-muted d-block">
-                                    With this you allow for the use of your
-                                    profile picture in the Lustrum Alamanac if
-                                    one will be published during your Proto
-                                    membership.
+                                    With this you allow for the use of your profile picture in the Lustrum Alamanac if
+                                    one will be published during your Proto membership.
                                 </small>
                             </td>
                         </tr>
@@ -426,24 +370,16 @@
         </div>
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-outline-info btn-block">
-                Save settings
-            </button>
+            <button type="submit" class="btn btn-outline-info btn-block">Save settings</button>
 
             @if ($user->completed_profile && ! $user->member)
-                <a
-                    href="{{ route('user::memberprofile::showclear') }}"
-                    class="btn btn-outline-danger btn-block mt-3"
-                >
+                <a href="{{ route('user::memberprofile::showclear') }}" class="btn btn-outline-danger btn-block mt-3">
                     Clear information required only for members
                 </a>
             @endif
 
             @if (! $user->completed_profile)
-                <a
-                    href="{{ route('user::memberprofile::show') }}"
-                    class="btn btn-outline-info btn-block mt-3"
-                >
+                <a href="{{ route('user::memberprofile::show') }}" class="btn btn-outline-info btn-block mt-3">
                     Complete profile for membership
                 </a>
             @endif

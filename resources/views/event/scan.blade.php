@@ -3,24 +3,15 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-            name="viewport"
-            content="initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         <meta name="theme-color" content="#C1FF00" />
 
         <meta property="og:type" content="website" />
-        <meta
-            property="og:title"
-            content="Ticket Scanner for {{ $event->title }}"
-        />
+        <meta property="og:title" content="Ticket Scanner for {{ $event->title }}" />
 
-        <link
-            rel="shortcut icon"
-            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
-        />
+        <link rel="shortcut icon" href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}" />
 
         <title>Ticket Scanner for {{ $event->title }}</title>
 
@@ -206,8 +197,7 @@
                         break
                     case 'error':
                         feedbackField.classList.remove('blink')
-                        feedbackField.innerHTML =
-                            'Something went wrong. Try again!'
+                        feedbackField.innerHTML = 'Something went wrong. Try again!'
                         flash('danger')
                         setTimeout(setStatus, 1000)
                         break
@@ -225,8 +215,7 @@
             }
 
             const flash = (color) => {
-                document.getElementById('flash').className =
-                    'bg-' + color + ' opacity-0 fade-out-50'
+                document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50'
             }
 
             function scan(barcode) {
@@ -257,19 +246,11 @@
                         setTimeout(setStatus, 1000)
                         document
                             .getElementById('history')
-                            .prepend(
-                                createTicketEl(
-                                    data,
-                                    false,
-                                    'Used on ' + data.scanned
-                                )
-                            )
+                            .prepend(createTicketEl(data, false, 'Used on ' + data.scanned))
                         break
                     case 200:
                         setStatus('ok')
-                        document
-                            .getElementById('history')
-                            .prepend(createTicketEl(data, true, 'Valid'))
+                        document.getElementById('history').prepend(createTicketEl(data, true, 'Valid'))
                         break
                 }
             }

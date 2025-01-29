@@ -13,8 +13,8 @@
 
     <p>
         <i>
-            If this is spam, please contact the Have You Tried Turning It Off
-            And On Again committee. E-mail hash: {{ $hash }}
+            If this is spam, please contact the Have You Tried Turning It Off And On Again committee. E-mail hash:
+            {{ $hash }}
         </i>
     </p>
 @endsection

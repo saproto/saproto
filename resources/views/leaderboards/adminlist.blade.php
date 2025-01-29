@@ -10,10 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a
-                        href="{{ route('leaderboards::create') }}"
-                        class="badge bg-info float-end"
-                    >
+                    <a href="{{ route('leaderboards::create') }}" class="badge bg-info float-end">
                         Create a new leaderboard.
                     </a>
                 </div>
@@ -37,17 +34,11 @@
                             <td>{{ $leaderboard->committee->name }}</td>
                             <td>{{ count($leaderboard->entries) }}</td>
                             <td>
-                                <a
-                                    href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}"
-                                >
+                                <a href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-edit me-2 fa-fw"></i>
                                 </a>
-                                <a
-                                    href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}"
-                                >
-                                    <i
-                                        class="fas fa-trash text-danger fa-fw"
-                                    ></i>
+                                <a href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}">
+                                    <i class="fas fa-trash text-danger fa-fw"></i>
                                 </a>
                             </td>
                         </tr>

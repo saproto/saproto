@@ -9,11 +9,7 @@
         action="{{ ! empty($category) ? route('codexSongCategory.update', ['codexSongCategory' => $category]) : route('codexSongCategory.store') }}"
         method="POST"
     >
-        <input
-            type="hidden"
-            name="_method"
-            value="{{ ! empty($category) ? 'PUT' : 'POST' }}"
-        />
+        <input type="hidden" name="_method" value="{{ ! empty($category) ? 'PUT' : 'POST' }}" />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -31,12 +27,7 @@
                                     name="name"
                                 />
                             </div>
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block"
-                            >
-                                Save song category!
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block">Save song category!</button>
                         </div>
                     </div>
                 </div>

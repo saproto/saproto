@@ -5,23 +5,18 @@
 @endsection
 
 @section('login-body')
-    <form
-        method="POST"
-        class="text-justify"
-        action="{{ route('login::register::surfconext') }}"
-    >
+    <form method="POST" class="text-justify" action="{{ route('login::register::surfconext') }}">
         @if (Session::get('wizard'))
             @include('users.registerwizard_macro')
         @else
             <p>
-                You tried to login using a university account we don't
-                recognize. If you wish to create an account on the Proto
-                website, you can use this here.
+                You tried to login using a university account we don't recognize. If you wish to create an account on
+                the Proto website, you can use this here.
             </p>
 
             <p class="fw-bold">
-                Creating and having an account on the website does not make you
-                a member of S.A. Proto and is free of charge.
+                Creating and having an account on the website does not make you a member of S.A. Proto and is free of
+                charge.
             </p>
 
             <hr />
@@ -33,9 +28,7 @@
 
         <p>
             Name:
-            <strong>
-                {{ $remote_data['givenname'] }} {{ $remote_data['surname'] }}
-            </strong>
+            <strong>{{ $remote_data['givenname'] }} {{ $remote_data['surname'] }}</strong>
         </p>
 
         <p>
@@ -57,11 +50,10 @@
         <hr />
 
         <p>
-            Although you can log-in to your account using your university
-            account, you will also receive an e-mail that'll allow you to set a
-            password. You should do this, because you can also use that password
-            in combination with your e-mail address to log-in, and you can't use
-            your university account everywhere where you log-in to your account.
+            Although you can log-in to your account using your university account, you will also receive an e-mail
+            that'll allow you to set a password. You should do this, because you can also use that password in
+            combination with your e-mail address to log-in, and you can't use your university account everywhere where
+            you log-in to your account.
         </p>
 
         <hr />
@@ -87,8 +79,6 @@
 
         <hr />
 
-        <button type="submit" class="btn btn-success float-end">
-            Create my account
-        </button>
+        <button type="submit" class="btn btn-success float-end">Create my account</button>
     </form>
 @endsection

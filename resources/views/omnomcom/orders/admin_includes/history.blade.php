@@ -24,10 +24,7 @@
                                             'action' => route('omnomcom::orders::delete', ['id' => $orderline->id]),
                                             'text' => '<i class="fas fa-trash text-danger ms-3"></i>',
                                             'title' => 'Confirm Delete',
-                                            'message' =>
-                                                'Are you sure you want to delete this orderline for ' .
-                                                $orderline->user->name .
-                                                '?',
+                                            'message' => 'Are you sure you want to delete this orderline for ' . $orderline->user->name . '?',
                                             'confirm' => 'Delete',
                                         ]
                                     )
@@ -38,9 +35,7 @@
                                 {{ number_format($orderline->total_price, 2, '.', '') }}
                             </td>
                             <td>
-                                <span class="text-muted me-2">
-                                    {{ $orderline->units }}x
-                                </span>
+                                <span class="text-muted me-2">{{ $orderline->units }}x</span>
                             </td>
                             <td style="min-width: 150px">
                                 {{ $orderline->product->name }}
@@ -91,9 +86,7 @@
         @endif
     @else
         <div class="card-body">
-            <p class="text-center mt-3">
-                No orderlines for this {{ $date ? 'date' : 'user' }}.
-            </p>
+            <p class="text-center mt-3">No orderlines for this {{ $date ? 'date' : 'user' }}.</p>
         </div>
     @endif
 </div>

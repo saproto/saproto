@@ -6,7 +6,7 @@
     @if ($message != null)
         {!! $message->message !!}
     @else
-            Nice to see you back!
+        Nice to see you back!
     @endif
 @endsection
 
@@ -30,10 +30,7 @@
                             'users.includes.usercard',
                             [
                                 'user' => $user,
-                                'subtitle' => sprintf(
-                                    '<em>has their birthday today!</em> %s',
-                                    $emojies[array_rand($emojies)],
-                                ),
+                                'subtitle' => sprintf('<em>has their birthday today!</em> %s', $emojies[array_rand($emojies)]),
                             ]
                         )
                     @endforeach
@@ -68,10 +65,7 @@
             </div>
 
             @if ($weekly)
-                <div
-                    class="card-body overflow-hidden"
-                    style="max-height: calc(100vh - 250px)"
-                >
+                <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
                     @if ($weekly->featuredImage)
                         <img
                             width="500px"
@@ -93,9 +87,7 @@
                     </a>
                 </div>
             @else
-                <p class="card-text text-left ms-4 mt-4 mb-4">
-                    Weekly update is coming soon...
-                </p>
+                <p class="card-text text-left ms-4 mt-4 mb-4">Weekly update is coming soon...</p>
             @endif
         </div>
 
@@ -159,22 +151,12 @@
             @else
                 <p class="card-text text-left ms-1 mt-3 mb-4">
                     No recent news. It's
-                    <a
-                        href="https://en.wikipedia.org/wiki/Silly_season"
-                        target="_blank"
-                    >
-                        cucumber time
-                    </a>
+                    <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>
                     . 😴
                 </p>
             @endif
 
-            <a
-                href="{{ route('news::index') }}"
-                class="btn btn-info btn-block"
-            >
-                View older news
-            </a>
+            <a href="{{ route('news::index') }}" class="btn btn-info btn-block">View older news</a>
         </div>
     </div>
 @endsection

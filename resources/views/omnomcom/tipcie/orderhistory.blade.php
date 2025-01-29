@@ -7,14 +7,9 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
-            <form
-                method="get"
-                action="{{ route('omnomcom::tipcie::orderhistory') }}"
-            >
+            <form method="get" action="{{ route('omnomcom::tipcie::orderhistory') }}">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">
-                        TIPCie Orderline History
-                    </div>
+                    <div class="card-header bg-dark text-white">TIPCie Orderline History</div>
 
                     <div class="card-body">
                         <p class="card-text">
@@ -43,11 +38,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <input
-                            type="submit"
-                            class="btn btn-success btn-block"
-                            value="Get orders"
-                        />
+                        <input type="submit" class="btn btn-success btn-block" value="Get orders" />
                     </div>
                 </div>
             </form>
@@ -89,9 +80,7 @@
                     </table>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            No orders for the specified date.
-                        </p>
+                        <p class="card-text text-center">No orders for the specified date.</p>
                     </div>
                 @endif
             </div>
@@ -99,9 +88,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                     Recorded PIN Transactions
-                    <span class="float-end">
-                        &euro; {{ number_format($pinTotal, 2) }}
-                    </span>
+                    <span class="float-end">&euro; {{ number_format($pinTotal, 2) }}</span>
                 </div>
 
                 @if (count($pinOrders) > 0)
@@ -120,9 +107,7 @@
                     </table>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            No PIN orders recorded for the specified date.
-                        </p>
+                        <p class="card-text text-center">No PIN orders recorded for the specified date.</p>
                     </div>
                 @endif
             </div>

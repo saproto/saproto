@@ -10,10 +10,7 @@
             <div class="card mb-3">
                 @if ($company->image)
                     <div class="card-header text-center">
-                        <div
-                            class="align-items-center row"
-                            style="height: 200px"
-                        >
+                        <div class="align-items-center row" style="height: 200px">
                             <div class="col d-block">
                                 <img
                                     class="company-{{ strtolower($company->name) }}"
@@ -35,9 +32,7 @@
                         {!! Markdown::convert($company->description) !!}
                     </div>
 
-                    <a href="{{ $company->url }}" class="card-link text-info">
-                        Visit website
-                    </a>
+                    <a href="{{ $company->url }}" class="card-link text-info">Visit website</a>
                 </div>
             </div>
         </div>

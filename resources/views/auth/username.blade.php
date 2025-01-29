@@ -21,8 +21,6 @@
             />
         </div>
 
-        <button type="submit" class="btn btn-success btn-block">
-            What is my username?
-        </button>
+        <button type="submit" class="btn btn-success btn-block">What is my username?</button>
     </form>
 @endsection

@@ -42,9 +42,7 @@
             </table>
         @else
             <div class="card-body">
-                <p class="card-text text-center">
-                    There are no attachments to this e-mail.
-                </p>
+                <p class="card-text text-center">There are no attachments to this e-mail.</p>
             </div>
         @endif
 
@@ -58,12 +56,7 @@
                 @csrf
 
                 <div class="custom-file mb-3">
-                    <input
-                        type="file"
-                        id="attachment"
-                        class="form-control"
-                        name="attachment"
-                    />
+                    <input type="file" id="attachment" class="form-control" name="attachment" />
                 </div>
 
                 @include(

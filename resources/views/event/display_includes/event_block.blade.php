@@ -15,10 +15,7 @@
             {{-- Countdown --}}
             @if (! empty($countdown))
                 <div class="btn btn-info btn-block mb-3">
-                    <i
-                        class="fas fa-circle-notch fa-fw fa-spin me-2"
-                        aria-hidden="true"
-                    ></i>
+                    <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                     <span
                         class="proto-countdown"
                         data-countdown-start="{{ $event->start }}"
@@ -113,13 +110,8 @@
 
             {{-- Category --}}
             @if ($event->category)
-                <span
-                    class="badge rounded-pill bg-info px-3 me-1 mb-1 d-inline-block mw-100 ellipsis float-end"
-                >
-                    <i
-                        class="{{ $event->category->icon }} fa-fw"
-                        aria-hidden="true"
-                    ></i>
+                <span class="badge rounded-pill bg-info px-3 me-1 mb-1 d-inline-block mw-100 ellipsis float-end">
+                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>
                     {{ $event->category->name }}
                 </span>
             @endif

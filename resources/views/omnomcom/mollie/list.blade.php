@@ -17,18 +17,12 @@
                                 Showing transactions for
                                 <strong>{{ $user->name }}</strong>
                                 . (
-                                <a
-                                    href="{{ route('omnomcom::mollie::index') }}"
-                                >
-                                    Show all
-                                </a>
+                                <a href="{{ route('omnomcom::mollie::index') }}">Show all</a>
                                 )
                             </p>
                         @else
                             <p>
-                                <strong>
-                                    Search for transactions for specific user:
-                                </strong>
+                                <strong>Search for transactions for specific user:</strong>
                             </p>
 
                             <p></p>
@@ -36,19 +30,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group autocomplete">
-                                            <input
-                                                class="form-control user-search"
-                                                name="user_id"
-                                                required
-                                            />
+                                            <input class="form-control user-search" name="user_id" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <input
-                                            type="submit"
-                                            class="btn btn-success"
-                                            value="Search"
-                                        />
+                                        <input type="submit" class="btn btn-success" value="Search" />
                                     </div>
                                 </div>
                             </form>
@@ -70,9 +56,7 @@
                             @foreach ($transactions as $transaction)
                                 <tr>
                                     <td class="text-end">
-                                        <a
-                                            href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}"
-                                        >
+                                        <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
                                             #{{ $transaction->id }}
                                         </a>
                                     </td>
@@ -95,9 +79,7 @@
                                         {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'failed' ? '<i class="fas fa-times ml-2 text-danger"></i>' : '' !!}
                                         {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'paid' ? '<i class="fas fa-check ml-2 text-success"></i>' : '' !!}
                                         {!! App\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == 'unknown' ? '<i class="fas fa-question ml-2 text-normal"></i>' : '' !!}
-                                        <span class="label label-default">
-                                            - {{ $transaction->status }}
-                                        </span>
+                                        <span class="label label-default">- {{ $transaction->status }}</span>
                                     </td>
 
                                     <td>
@@ -113,9 +95,7 @@
                     </div>
                 @else
                     <div class="card-body">
-                        <p class="card-text text-center">
-                            There's no transactions.
-                        </p>
+                        <p class="card-text text-center">There's no transactions.</p>
                     </div>
                 @endif
             </div>
@@ -124,9 +104,7 @@
         @if (! $user)
             <div class="col-md-3">
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white mb-1">
-                        Account overview
-                    </div>
+                    <div class="card-header bg-dark text-white mb-1">Account overview</div>
 
                     <table class="table table-hover table-sm">
                         <thead>
@@ -139,9 +117,7 @@
                             @for ($m = 0; $m <= 11 ; $m++)
                                 <?php
                                 $month = strtotime(sprintf('-%s months', $m));
-                                $total = \App\Http\Controllers\MollieController::getTotalForMonth(
-                                    date('Y-m', $month),
-                                );
+                                $total = \App\Http\Controllers\MollieController::getTotalForMonth(date('Y-m', $month));
                                 ?>
 
                                 <tr>
@@ -161,9 +137,7 @@
                                                 {{ number_format($total, 2) }}
                                             </span>
                                         @else
-                                            <span class="label label-default">
-                                                no transactions
-                                            </span>
+                                            <span class="label label-default">no transactions</span>
                                         @endif
                                     </td>
                                 </tr>

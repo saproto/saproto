@@ -2,10 +2,7 @@
 
 @section('page-title')
     Participant checklist for {{ $event->title }}
-    <a
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
-        class="btn btn-default float-end"
-    >
+    <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}" class="btn btn-default float-end">
         Back to event
     </a>
 @endsection
@@ -73,14 +70,12 @@
                                     <td>
                                         @if ($participation)
                                             @if ($participation->committees_activities_id !== null)
-                                                <span class="badge bg-success">
-                                                    Helper
-                                                </span>
+                                                <span class="badge bg-success">Helper</span>
                                             @else
-                                                    Participant
+                                                Participant
                                             @endif
                                         @else
-                                                Ticket
+                                            Ticket
                                         @endif
                                     </td>
 
@@ -89,18 +84,12 @@
                                     <td>
                                         @if ($user->age() >= 18)
                                             <span class="badge bg-success">
-                                                <i
-                                                    class="fas fa-check"
-                                                    aria-hidden="true"
-                                                ></i>
+                                                <i class="fas fa-check" aria-hidden="true"></i>
                                                 18+
                                             </span>
                                         @else
                                             <span class="badge bg-danger">
-                                                <i
-                                                    class="fas fa-exclamation-triangle"
-                                                    aria-hidden="true"
-                                                ></i>
+                                                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
                                                 18-
                                             </span>
                                         @endif
@@ -130,15 +119,11 @@
         document.querySelectorAll('.is_present').forEach((el) => {
             el.onclick = (_) => {
                 get(
-                    '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
-                        'id',
-                        el.getAttribute('data-id')
-                    )
+                    '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace('id', el.getAttribute('data-id'))
                 ).then((data) => {
                     el.classList.toggle('bg-success')
                     el.classList.toggle('bg-danger')
-                    el.innerHTML =
-                        el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                    el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
                     present.innerHTML = data
                 })
             }

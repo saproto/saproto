@@ -39,10 +39,7 @@
                             ]
                         )
 
-                        <div
-                            id="reviewer"
-                            class="{{ $cur_category?->review ? '' : 'd-none' }}"
-                        >
+                        <div id="reviewer" class="{{ $cur_category?->review ? '' : 'd-none' }}">
                             <label for="user_id">Reviewer Name:</label>
                             <div class="form-group autocomplete">
                                 <input
@@ -72,14 +69,9 @@
                             ]
                         )
 
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if ($cur_category)
-                            <a
-                                class="btn btn-warning float-end me-1"
-                                href="{{ route('feedback::category::admin') }}"
-                            >
+                            <a class="btn btn-warning float-end me-1" href="{{ route('feedback::category::admin') }}">
                                 Cancel
                             </a>
                         @endif
@@ -107,15 +99,9 @@
                                         </a>
                                         {{ $category->reviewer ? ' | Reviewer:' . $category->reviewer->calling_name : '' }}
                                     </div>
-                                    <div
-                                        class="bg-white px-2 py-2 my-2 w-25 rounded-end"
-                                    >
-                                        <a
-                                            href="{{ route('feedback::category::admin', ['id' => $category]) }}"
-                                        >
-                                            <i
-                                                class="fas fa-edit me-2 ms-1 mt-1 float-end"
-                                            ></i>
+                                    <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
+                                        <a href="{{ route('feedback::category::admin', ['id' => $category]) }}">
+                                            <i class="fas fa-edit me-2 ms-1 mt-1 float-end"></i>
                                         </a>
                                         @include(
                                             'components.modals.confirm-modal',
@@ -134,9 +120,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-center text-muted mb-0">
-                                There are no feedback categories yet.
-                            </p>
+                            <p class="text-center text-muted mb-0">There are no feedback categories yet.</p>
                         @endif
                     </div>
                 </div>

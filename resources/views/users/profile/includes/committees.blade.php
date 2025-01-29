@@ -10,16 +10,10 @@
                             'committee.include.committee_block',
                             [
                                 'committee' => $committee,
-                                'override_committee_name' => sprintf(
-                                    '<strong>%s</strong> %s',
-                                    $committee->name,
-                                    $committee->pivot->edition,
-                                ),
+                                'override_committee_name' => sprintf('<strong>%s</strong> %s', $committee->name, $committee->pivot->edition),
                                 'footer' => sprintf(
                                     '<strong>%s</strong><br><sup>Since %s</sup>',
-                                    $committee->pivot->role
-                                        ? $committee->pivot->role
-                                        : 'General Member',
+                                    $committee->pivot->role ? $committee->pivot->role : 'General Member',
                                     date('j F Y', strtotime($committee->pivot->created_at)),
                                 ),
                             ]
@@ -28,9 +22,7 @@
                 @endforeach
             @else
                 <div class="col-12">
-                    <p class="card-text text-center">
-                        Currently not a member of a committee.
-                    </p>
+                    <p class="card-text text-center">Currently not a member of a committee.</p>
                 </div>
             @endif
         </div>
@@ -39,9 +31,7 @@
 
 @if (count($pastcommittees) > 0)
     <div class="card mt-3 mb-3">
-        <div class="card-header bg-dark text-white">
-            Past committee memberships
-        </div>
+        <div class="card-header bg-dark text-white">Past committee memberships</div>
 
         <div class="card-body">
             <div class="row">
@@ -58,9 +48,7 @@
                                 ),
                                 'footer' => sprintf(
                                     '<strong>%s</strong><br><sup>Between %s and %s</sup>',
-                                    $committeeparticipation->role
-                                        ? $committeeparticipation->role
-                                        : 'General Member',
+                                    $committeeparticipation->role ? $committeeparticipation->role : 'General Member',
                                     date('j F Y', strtotime($committeeparticipation->created_at)),
                                     date('j F Y', strtotime($committeeparticipation->deleted_at)),
                                 ),

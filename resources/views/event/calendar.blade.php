@@ -13,8 +13,7 @@
                 'event.calendar_includes.rendermonth',
                 [
                     'events' => $section,
-                    'month_name' =>
-                        $key == 0 ? 'Soon' : ($key == 1 ? 'This month' : 'Later'),
+                    'month_name' => $key == 0 ? 'Soon' : ($key == 1 ? 'This month' : 'Later'),
                 ]
             )
         @endforeach

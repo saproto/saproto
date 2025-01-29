@@ -6,11 +6,7 @@
 
 @section('body')
     @if ($image_url)
-        <img
-            src="{{ $image_url }}"
-            style="width: 100%"
-            alt="featured newsitem image"
-        />
+        <img src="{{ $image_url }}" style="width: 100%" alt="featured newsitem image" />
     @endif
 
     <p>
@@ -74,9 +70,7 @@
                                     </p>
                                 @elseif ($event->tickets && count($event->tickets))
                                     <p>
-                                        <strong>
-                                            Ticket purchase required!
-                                        </strong>
+                                        <strong>Ticket purchase required!</strong>
                                     </p>
                                 @else
                                     <p>
@@ -86,19 +80,14 @@
                             </p>
 
                             <p>
-                                <a
-                                    href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
-                                >
+                                <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                     Learn more! >>
                                 </a>
 
                                 @if ($event->is_external)
                                     <p>
                                         <i>
-                                            <sub>
-                                                This activity is not organized
-                                                by S.A. Proto.
-                                            </sub>
+                                            <sub>This activity is not organized by S.A. Proto.</sub>
                                         </i>
                                     </p>
                                 @endif
@@ -110,10 +99,7 @@
 
             <p>&nbsp;</p>
 
-            <p>
-                If anything about the activities is not clear, please let me
-                know!
-            </p>
+            <p>If anything about the activities is not clear, please let me know!</p>
         @endif
     </p>
 
@@ -131,9 +117,8 @@
 
     <p>
         <sup style="line-height: 1.5">
-            You receive this e-mail because you subscribed to the weekly
-            newsletter of S.A. Proto. If you would like to stop receiving this
-            e-mail, please click
+            You receive this e-mail because you subscribed to the weekly newsletter of S.A. Proto. If you would like to
+            stop receiving this e-mail, please click
             <a
                 style="color: #00aac0"
                 href="{{ route('unsubscribefromlist', ['hash' => App\Models\EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}"

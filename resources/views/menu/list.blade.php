@@ -10,12 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a
-                        href="{{ route('menu::create') }}"
-                        class="badge bg-info float-end"
-                    >
-                        Create a new menu item.
-                    </a>
+                    <a href="{{ route('menu::create') }}" class="badge bg-info float-end">Create a new menu item.</a>
                 </div>
 
                 @if (count($menuItems) > 0)
@@ -42,12 +37,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a
-                                            href="{{ route('menu::edit', ['id' => $menuItem->id]) }}"
-                                        >
-                                            <i
-                                                class="fas fa-edit me-2 text-white"
-                                            ></i>
+                                        <a href="{{ route('menu::edit', ['id' => $menuItem->id]) }}">
+                                            <i class="fas fa-edit me-2 text-white"></i>
                                         </a>
 
                                         @include(
@@ -62,22 +53,14 @@
                                         )
 
                                         @if (! $index == 0)
-                                            <a
-                                                href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}"
-                                            >
-                                                <i
-                                                    class="fas fa-arrow-up me-2 text-white"
-                                                ></i>
+                                            <a href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}">
+                                                <i class="fas fa-arrow-up me-2 text-white"></i>
                                             </a>
                                         @endif
 
                                         @if (! $index == count($menuItems))
-                                            <a
-                                                href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}"
-                                            >
-                                                <i
-                                                    class="fas fa-arrow-down me-2 text-white"
-                                                ></i>
+                                            <a href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}">
+                                                <i class="fas fa-arrow-down me-2 text-white"></i>
                                             </a>
                                         @endif
                                     </td>
@@ -108,12 +91,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a
-                                                    href="{{ route('menu::edit', ['id' => $childItem->id]) }}"
-                                                >
-                                                    <i
-                                                        class="fas fa-edit me-2"
-                                                    ></i>
+                                                <a href="{{ route('menu::edit', ['id' => $childItem->id]) }}">
+                                                    <i class="fas fa-edit me-2"></i>
                                                 </a>
 
                                                 @include(
@@ -128,22 +107,14 @@
                                                 )
 
                                                 @if (! $childItem->isFirst())
-                                                    <a
-                                                        href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}"
-                                                    >
-                                                        <i
-                                                            class="fas fa-arrow-up me-2"
-                                                        ></i>
+                                                    <a href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}">
+                                                        <i class="fas fa-arrow-up me-2"></i>
                                                     </a>
                                                 @endif
 
                                                 @if (! $childItem->isLast())
-                                                    <a
-                                                        href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}"
-                                                    >
-                                                        <i
-                                                            class="fas fa-arrow-down me-2"
-                                                        ></i>
+                                                    <a href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}">
+                                                        <i class="fas fa-arrow-down me-2"></i>
                                                     </a>
                                                 @endif
                                             </td>

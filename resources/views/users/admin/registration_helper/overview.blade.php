@@ -7,14 +7,9 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
-            <form
-                method="get"
-                action="{{ route('user::registrationhelper::list') }}"
-            >
+            <form method="get" action="{{ route('user::registrationhelper::list') }}">
                 <div class="card mb-4">
-                    <div class="card-header bg-dark text-white">
-                        Search Pending Users
-                    </div>
+                    <div class="card-header bg-dark text-white">Search Pending Users</div>
                     <div class="card-body">
                         <div class="input-group mb-2">
                             <input
@@ -55,9 +50,7 @@
 
                         <tbody>
                             @foreach ($users as $user)
-                                <tr
-                                    class="{{ $user->deleted_at ? 'opacity-50' : '' }}"
-                                >
+                                <tr class="{{ $user->deleted_at ? 'opacity-50' : '' }}">
                                     <td class="text-center">
                                         <a
                                             href="{{ route('user::registrationhelper::details', ['id' => $user->id]) }}"

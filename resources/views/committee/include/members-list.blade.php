@@ -7,11 +7,7 @@
                 'committee.include.render-memberships',
                 [
                     'committee' => $committee,
-                    'title' => sprintf(
-                        '%s <strong>%s</strong>',
-                        $committee->name,
-                        $edition,
-                    ),
+                    'title' => sprintf('%s <strong>%s</strong>', $committee->name, $edition),
                     'memberships' => $memberships,
                     'unique' => md5($edition),
                     'display' => $display,

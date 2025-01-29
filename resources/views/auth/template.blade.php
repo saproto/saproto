@@ -14,20 +14,10 @@
                         @yield('login-body')
                     </div>
 
-                    <a
-                        href="/"
-                        class="card-footer text-muted text-center text-decoration-none"
-                    >
-                        Go back to homepage.
-                    </a>
+                    <a href="/" class="card-footer text-muted text-center text-decoration-none">Go back to homepage.</a>
                 </div>
 
-                <img
-                    src="{{ asset('images/logo/regular.png') }}"
-                    width="60%"
-                    class="mb-3 mt-5"
-                    alt="Proto logo"
-                />
+                <img src="{{ asset('images/logo/regular.png') }}" width="60%" class="mb-3 mt-5" alt="Proto logo" />
             </div>
         </div>
     </div>

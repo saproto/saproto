@@ -48,15 +48,8 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
-                        <a
-                            href="{{ route('omnomcom::accounts::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <a href="{{ route('omnomcom::accounts::index') }}" class="btn btn-default">Cancel</a>
                     </div>
                 </div>
             </div>

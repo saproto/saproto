@@ -27,11 +27,7 @@
 
 <div class="card mb-3">
     @if ($committee->image)
-        <img
-            class="card-img-top"
-            src="{{ $committee->image->generateImagePath(800, 300) }}"
-            width="100%"
-        />
+        <img class="card-img-top" src="{{ $committee->image->generateImagePath(800, 300) }}" width="100%" />
     @endif
 
     @if (Auth::check() && ($committee->isMember(Auth::user()) || Auth::user()->can('board') || $committee->allow_anonymous_email))

@@ -13,11 +13,7 @@
         action="{{ ! empty($codex) ? route('codex.update', ['codex' => $codex]) : route('codex.store') }}"
         method="POST"
     >
-        <input
-            type="hidden"
-            name="_method"
-            value="{{ ! empty($codex) ? 'PUT' : 'POST' }}"
-        />
+        <input type="hidden" name="_method" value="{{ ! empty($codex) ? 'PUT' : 'POST' }}" />
         {{ csrf_field() }}
         <div class="row gap-3">
             <div class="col">
@@ -32,12 +28,7 @@
                 <div class="row">
                     <div class="card mb-3 p-3">
                         <div class="d-inline-flex justify-content-between">
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block"
-                            >
-                                Save codex!
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block">Save codex!</button>
                         </div>
                     </div>
                 </div>

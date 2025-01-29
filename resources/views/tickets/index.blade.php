@@ -10,12 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a
-                        href="{{ route('tickets::create') }}"
-                        class="badge bg-info float-end"
-                    >
-                        Create a new ticket.
-                    </a>
+                    <a href="{{ route('tickets::create') }}" class="badge bg-info float-end">Create a new ticket.</a>
                 </div>
 
                 <div class="table-responsive">
@@ -36,17 +31,13 @@
                             <tr>
                                 <td style="max-width: 200px">
                                     @if ($ticket->event)
-                                        <a
-                                            href="{{ route('event::show', ['id' => $ticket->event->getPublicId()]) }}"
-                                        >
+                                        <a href="{{ route('event::show', ['id' => $ticket->event->getPublicId()]) }}">
                                             {{ $ticket->event->title }}
                                         </a>
                                     @endif
                                 </td>
                                 <td style="max-width: 200px">
-                                    <a
-                                        href="{{ route('omnomcom::products::edit', ['id' => $ticket->product->id]) }}"
-                                    >
+                                    <a href="{{ route('omnomcom::products::edit', ['id' => $ticket->product->id]) }}">
                                         {{ $ticket->product->name }}
                                     </a>
                                 </td>
@@ -74,22 +65,14 @@
                                     {{ $ticket->totalAvailable() }}
                                 </td>
                                 <td>
-                                    <a
-                                        href="{{ route('tickets::edit', ['id' => $ticket->id]) }}"
-                                    >
-                                        <i
-                                            class="fas fa-edit"
-                                            aria-hidden="true"
-                                        ></i>
+                                    <a href="{{ route('tickets::edit', ['id' => $ticket->id]) }}">
+                                        <i class="fas fa-edit" aria-hidden="true"></i>
                                     </a>
                                     <a
                                         class="text-danger ms-2"
                                         href="{{ route('tickets::delete', ['id' => $ticket->id]) }}"
                                     >
-                                        <i
-                                            class="fas fa-trash"
-                                            aria-hidden="true"
-                                        ></i>
+                                        <i class="fas fa-trash" aria-hidden="true"></i>
                                     </a>
                                 </td>
                             </tr>

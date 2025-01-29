@@ -10,12 +10,7 @@
             <div class="card mb-4">
                 <div class="card-header bg-dark text-white mb-1">
                     E-mail lists
-                    <a
-                        href="{{ route('email::list::create') }}"
-                        class="badge bg-info float-end"
-                    >
-                        Create new list.
-                    </a>
+                    <a href="{{ route('email::list::create') }}" class="badge bg-info float-end">Create new list.</a>
                 </div>
 
                 <div class="table-responsive">
@@ -64,9 +59,7 @@
                                 </td>
                                 <td>{{ $list->users_count }}</td>
                                 <td>
-                                    <a
-                                        href="{{ route('email::list::edit', ['id' => $list->id]) }}"
-                                    >
+                                    <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
 
@@ -102,12 +95,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     Emails
-                    <a
-                        href="{{ route('email::create') }}"
-                        class="badge bg-info float-end"
-                    >
-                        Compose email.
-                    </a>
+                    <a href="{{ route('email::create') }}" class="badge bg-info float-end">Compose email.</a>
                 </div>
 
                 <table class="table table-sm table-hover">
@@ -128,8 +116,7 @@
                                 @if ($email->sent)
                                     Went to {{ $email->sent_to }} people
                                 @else
-                                    Will go to
-                                    {{ $email->recipients()->count() }} people
+                                    Will go to {{ $email->recipients()->count() }} people
                                 @endif
                                 <br />
                                 via
@@ -144,10 +131,9 @@
                                 @elseif ($email->to_list)
                                     list(s) {{ $email->getListName() }}
                                 @elseif ($email->to_event)
-                                    event(s)
-                                    {{ $email->to_backup ? 'with backup users' : '' }}:
+                                    event(s) {{ $email->to_backup ? 'with backup users' : '' }}:
                                     @foreach ($email->events()->get() as $event)
-                                            {{ $event->title }}.
+                                        {{ $event->title }}.
                                     @endforeach
                                 @endif
                             </td>
@@ -159,16 +145,14 @@
                                     @if ($email->ready)
                                         Queued
                                     @else
-                                            Draft
+                                        Draft
                                     @endif
                                 @else
                                     <i>Sent</i>
                                 @endif
                             </td>
                             <td>
-                                <a
-                                    href="{{ route('email::show', ['id' => $email->id]) }}"
-                                >
+                                <a href="{{ route('email::show', ['id' => $email->id]) }}">
                                     <i class="fas fa-eye me-2 text-info"></i>
                                 </a>
                                 @if (! $email->sent)
@@ -184,25 +168,15 @@
                                     )
 
                                     @if (! $email->ready)
-                                        <a
-                                            href="{{ route('email::toggleready', ['id' => $email->id]) }}"
-                                        >
-                                            <i
-                                                class="fas fa-paper-plane text-warning me-2"
-                                            ></i>
+                                        <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
+                                            <i class="fas fa-paper-plane text-warning me-2"></i>
                                         </a>
-                                        <a
-                                            href="{{ route('email::edit', ['id' => $email->id]) }}"
-                                        >
+                                        <a href="{{ route('email::edit', ['id' => $email->id]) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @else
-                                        <a
-                                            href="{{ route('email::toggleready', ['id' => $email->id]) }}"
-                                        >
-                                            <i
-                                                class="fas fa-undo text-info"
-                                            ></i>
+                                        <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
+                                            <i class="fas fa-undo text-info"></i>
                                         </a>
                                     @endif
                                 @endif

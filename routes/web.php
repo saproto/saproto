@@ -1042,6 +1042,12 @@ Route::middleware('forcedomain')->group(function () {
         Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
     });
 
+    Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
+        Route::get('/', function () {
+            return inertia('Welcome');
+        })->name('index');
+    });
+
     /* --- Route related to the december theme --- */
     Route::get('/december/toggle', function () {
         Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
@@ -1050,4 +1056,4 @@ Route::middleware('forcedomain')->group(function () {
     })->name('december::toggle');
 });
 
-require __DIR__.'/minisites.php';
+require __DIR__ . '/minisites.php';

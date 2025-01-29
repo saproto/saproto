@@ -11,18 +11,12 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-md-3">
-            <a
-                href="{{ route('omnomcom::withdrawal::index') }}"
-                class="btn btn-block btn-dark mb-2"
-            >
+            <a href="{{ route('omnomcom::withdrawal::index') }}" class="btn btn-block btn-dark mb-2">
                 <i class="fas fa-back"></i>
                 Return to overview
             </a>
 
-            <form
-                method="post"
-                action="{{ route('omnomcom::withdrawal::edit', ['id' => $withdrawal->id]) }}"
-            >
+            <form method="post" action="{{ route('omnomcom::withdrawal::edit', ['id' => $withdrawal->id]) }}">
                 @csrf
 
                 <div class="card mb-3">
@@ -46,9 +40,7 @@
                             </tr>
                             <tr>
                                 <th>Sum</th>
-                                <td>
-                                    &euro;{{ number_format($withdrawal->total(), 2) }}
-                                </td>
+                                <td>&euro;{{ number_format($withdrawal->total(), 2) }}</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
@@ -69,11 +61,7 @@
                                 'format' => 'date',
                             ]
                         )
-                        <input
-                            type="submit"
-                            value="Save"
-                            class="btn btn-success btn-block mt-2"
-                        />
+                        <input type="submit" value="Save" class="btn btn-success btn-block mt-2" />
                     </div>
 
                     <div class="card-footer">
@@ -137,9 +125,7 @@
 
         <div class="col-md-9">
             <div class="card mb-3">
-                <div class="card-header mb-1 bg-dark text-white">
-                    Users in this withdrawal
-                </div>
+                <div class="card-header mb-1 bg-dark text-white">Users in this withdrawal</div>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-hover">
@@ -168,18 +154,14 @@
                                     @isset($data->user->bank)
                                         <td>
                                             {{ $data->user->bank->iban }}
-                                            <span class="text-muted">
-                                                / {{ $data->user->bank->bic }}
-                                            </span>
+                                            <span class="text-muted">/ {{ $data->user->bank->bic }}</span>
                                         </td>
                                         <td>
                                             {{ $data->user->bank->machtigingid }}
                                         </td>
                                     @else
                                         <td class="text-warning">
-                                            <i
-                                                class="fa fas fa-exclamation-triangle"
-                                            ></i>
+                                            <i class="fa fas fa-exclamation-triangle"></i>
                                             <strong>No bank account!</strong>
                                         </td>
                                         <td></td>
@@ -187,9 +169,7 @@
                                 @endif
 
                                 <td>{{ $data->orderline_count }}</td>
-                                <td>
-                                    &euro;{{ number_format($data->total_price, 2, ',', '.') }}
-                                </td>
+                                <td>&euro;{{ number_format($data->total_price, 2, ',', '.') }}</td>
                                 @if (! $withdrawal->closed)
                                     <td>
                                         @if ($withdrawal->failedWithdrawals->contains('user_id', $data->user->id))
@@ -198,9 +178,7 @@
                                                 'components.modals.confirm-modal',
                                                 [
                                                     'action' => route('omnomcom::orders::delete', [
-                                                        'id' => $withdrawal->failedWithdrawals
-                                                            ->where('user_id', $data->user->id)
-                                                            ->first()->correction_orderline_id,
+                                                        'id' => $withdrawal->failedWithdrawals->where('user_id', $data->user->id)->first()->correction_orderline_id,
                                                     ]),
                                                     'text' => '(Revert)',
                                                     'title' => 'Confirm Revert',

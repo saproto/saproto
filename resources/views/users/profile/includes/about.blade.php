@@ -1,7 +1,5 @@
 <div id="about" class="card mb-3">
-    <div
-        class="card-header text-bg-dark border-bottom-0 bg-dark position-relative mb-2"
-    >
+    <div class="card-header text-bg-dark border-bottom-0 bg-dark position-relative mb-2">
         <div>
             <h3 class="text-center ellipsis mb-3 mt-4">
                 {{ $user->name }}
@@ -22,20 +20,12 @@
         @if ($user->is_member)
             @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
                 <p class="card-text ellipsis">
-                    <i
-                        class="fas fa-trophy fa-fw me-3 text-primary"
-                        aria-hidden="true"
-                    ></i>
-                    <strong>
-                        {{ $user->calling_name }} is an honorary member.
-                    </strong>
+                    <i class="fas fa-trophy fa-fw me-3 text-primary" aria-hidden="true"></i>
+                    <strong>{{ $user->calling_name }} is an honorary member.</strong>
                 </p>
             @elseif ($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
                 <p class="card-text ellipsis">
-                    <i
-                        class="fas fa-paw fa-fw me-3 text-primary"
-                        aria-hidden="true"
-                    ></i>
+                    <i class="fas fa-paw fa-fw me-3 text-primary" aria-hidden="true"></i>
                     <strong>{{ $user->calling_name }} is a pet.</strong>
                 </p>
             @endif
@@ -43,13 +33,8 @@
 
         @can('board')
             <p class="card-text ellipsis">
-                <i
-                    class="fas fa-user-cog fa-fw me-3 text-info"
-                    aria-hidden="true"
-                ></i>
-                <a
-                    href="{{ route('user::admin::details', ['id' => $user->id]) }}"
-                >
+                <i class="fas fa-user-cog fa-fw me-3 text-info" aria-hidden="true"></i>
+                <a href="{{ route('user::admin::details', ['id' => $user->id]) }}">
                     View this user in the user administration.
                 </a>
             </p>
@@ -95,8 +80,7 @@
                 Member
 
                 @if (date('U', strtotime($user->member->created_at)) > 0)
-                    as of
-                    {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                    as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
                 @else
                     since
                     <strong>before we kept track</strong>

@@ -10,10 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a
-                        href="{{ route('tempadmins.create') }}"
-                        class="float-end bg-info badge"
-                    >
+                    <a href="{{ route('tempadmins.create') }}" class="float-end bg-info badge">
                         Add new temporary admin.
                     </a>
                 </div>
@@ -32,29 +29,21 @@
                     @foreach ($tempadmins as $tempadmin)
                         <tr>
                             <td>
-                                <a
-                                    href="{{ route('user::profile', ['id' => $tempadmin->user->getPublicId()]) }}"
-                                >
+                                <a href="{{ route('user::profile', ['id' => $tempadmin->user->getPublicId()]) }}">
                                     {{ $tempadmin->user->name }}
                                 </a>
                             </td>
                             <td>
-                                <a
-                                    href="{{ route('user::profile', ['id' => $tempadmin->creator->getPublicId()]) }}"
-                                >
+                                <a href="{{ route('user::profile', ['id' => $tempadmin->creator->getPublicId()]) }}">
                                     {{ $tempadmin->creator->name }}
                                 </a>
                             </td>
-                            <td
-                                class="{{ Carbon::parse($tempadmin->start_at)->isPast() ? 'opacity-50' : '' }}"
-                            >
+                            <td class="{{ Carbon::parse($tempadmin->start_at)->isPast() ? 'opacity-50' : '' }}">
                                 {{ $tempadmin->start_at }}
                             </td>
                             <td>{{ $tempadmin->end_at }}</td>
                             <td>
-                                <a
-                                    href="{{ route('tempadmins.edit', ['tempadmin' => $tempadmin]) }}"
-                                >
+                                <a href="{{ route('tempadmins.edit', ['tempadmin' => $tempadmin]) }}">
                                     <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
 
@@ -67,9 +56,7 @@
                                             : '<i class="fas fa-hourglass-end text-danger fa-fw"></i>',
                                         'title' => 'Confirm End Rights',
                                         'message' =>
-                                            'Are you sure you want to end the temporary ProTube admin rights of ' .
-                                            $tempadmin->user->name .
-                                            '?',
+                                            'Are you sure you want to end the temporary ProTube admin rights of ' . $tempadmin->user->name . '?',
                                         'confirm' => 'End Rights',
                                     ]
                                 )
@@ -80,9 +67,7 @@
                     @foreach ($pastTempadmins as $pastTempadmin)
                         <tr class="opacity-50">
                             <td>
-                                <a
-                                    href="{{ route('user::profile', ['id' => $pastTempadmin->user->getPublicId()]) }}"
-                                >
+                                <a href="{{ route('user::profile', ['id' => $pastTempadmin->user->getPublicId()]) }}">
                                     {{ $pastTempadmin->user->name }}
                                 </a>
                             </td>

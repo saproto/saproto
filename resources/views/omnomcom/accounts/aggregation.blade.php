@@ -15,8 +15,7 @@
 
                 <div class="card-body">
                     <p class="card-text">
-                        This table aggregates the total sales values for each
-                        product in the
+                        This table aggregates the total sales values for each product in the
                         <strong>{{ $account->name }}</strong>
                         account between
                         <strong>{{ $start }} - {{ $end }}</strong>

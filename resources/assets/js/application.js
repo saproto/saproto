@@ -23,18 +23,12 @@ if (new Date().getMonth() + 1 !== 12) {
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
 let formList = Array.from(document.getElementsByTagName('form'))
-formList.forEach((form) =>
-    form.addEventListener('submit', preventSubmitBounce, { once: true })
-)
+formList.forEach((form) => form.addEventListener('submit', preventSubmitBounce, { once: true }))
 
 // Get online Discord users
 const discordOnlineCount = document.getElementById('discord__online')
 if (discordOnlineCount) {
-    get(
-        'https://discordapp.com/api/guilds/' +
-            config.discord_server_id +
-            '/widget.json'
-    )
+    get('https://discordapp.com/api/guilds/' + config.discord_server_id + '/widget.json')
         .then((data) => {
             discordOnlineCount.innerHTML = data.presence_count
         })
@@ -46,9 +40,7 @@ if (discordOnlineCount) {
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 
-const tooltipTriggerList = Array.from(
-    document.querySelectorAll('[data-bs-toggle="tooltip"]')
-)
+const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 window.tooltips = {}
 if (tooltipTriggerList.length) {
     tooltipTriggerList.forEach((el) => {
@@ -62,11 +54,8 @@ if (tooltipTriggerList.length) {
 // Enable popover elements
 import { Popover } from 'bootstrap'
 
-const popoverTriggerList = Array.from(
-    document.querySelectorAll('[data-bs-toggle="popover"]')
-)
-if (popoverTriggerList.length)
-    popoverTriggerList.forEach((el) => new Popover(el))
+const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
+if (popoverTriggerList.length) popoverTriggerList.forEach((el) => new Popover(el))
 
 // Enable modal elements
 import { Modal } from 'bootstrap'
@@ -80,9 +69,7 @@ if (modalList.length) {
 }
 
 // Enable custom file input elements
-const customFileInputList = Array.from(
-    document.getElementsByClassName('custom-file-input')
-)
+const customFileInputList = Array.from(document.getElementsByClassName('custom-file-input'))
 if (customFileInputList.length) {
     customFileInputList.forEach((el) => {
         el.addEventListener('change', (_) => {
@@ -113,8 +100,7 @@ if (document.querySelectorAll('.swiper').length) {
         },
         breakpoints: {
             1200: {
-                slidesPerView:
-                    config.company_count > 4 ? 4 : config.company_count,
+                slidesPerView: config.company_count > 4 ? 4 : config.company_count,
                 spaceBetween: 50,
             },
         },
@@ -125,9 +111,7 @@ if (document.querySelectorAll('.swiper').length) {
 import EasyMDE from 'easymde'
 import 'easymde/dist/easymde.min.css'
 
-const markdownFieldList = Array.from(
-    document.getElementsByClassName('markdownfield')
-)
+const markdownFieldList = Array.from(document.getElementsByClassName('markdownfield'))
 if (markdownFieldList.length) {
     window.easyMDEFields = {}
     markdownFieldList.forEach((el) => {
@@ -159,9 +143,7 @@ if (markdownFieldList.length) {
 // Enable FontAwesome icon pickers
 import Iconpicker from 'codethereal-iconpicker'
 
-const iconPickerList = Array.from(
-    document.getElementsByClassName('iconpicker-wrapper')
-)
+const iconPickerList = Array.from(document.getElementsByClassName('iconpicker-wrapper'))
 window.iconPickers = {}
 if (iconPickerList.length) {
     // Get available icons from fontawesome GraphQL api
@@ -192,9 +174,7 @@ if (iconPickerList.length) {
                     showSelectedIn: el.querySelector('.selected-icon'),
                 })
             })
-            console.log(
-                `Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`
-            )
+            console.log(`Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`)
         })
         .catch((err) => {
             console.log('Error retrieving icons for icon pickers: ', err)
@@ -216,9 +196,7 @@ if (navbar) {
 // Scroll to top of collapse on show.
 // https://stackoverflow.com/a/44303674/7316014
 // https://stackoverflow.com/a/18673641/14133333
-const collapseList = Array.from(
-    document.querySelectorAll('.collapse:not(#navbar)')
-)
+const collapseList = Array.from(document.querySelectorAll('.collapse:not(#navbar)'))
 collapseList.map((el) => {
     el.addEventListener('shown.bs.collapse', (e) => {
         let card = e.target.closest('.card').getBoundingClientRect()
@@ -257,9 +235,7 @@ eventSearchList.forEach(
         })
 )
 
-const productSearchList = Array.from(
-    document.querySelectorAll('.product-search')
-)
+const productSearchList = Array.from(document.querySelectorAll('.product-search'))
 productSearchList.forEach(
     (el) =>
         new SearchField(el, config.routes.api_search_product, {
@@ -267,8 +243,7 @@ productSearchList.forEach(
                 el.className = item.is_visible ? '' : 'text-muted'
                 el.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
             },
-            selectedTemplate: (item) =>
-                item.name + (el.multiple ? ` (€${item.price.toFixed(2)})` : ''),
+            selectedTemplate: (item) => item.name + (el.multiple ? ` (€${item.price.toFixed(2)})` : ''),
             sorter: (a, b) => {
                 if (a.is_visible === 0 && b.is_visible === 1) return 1
                 else if (a.is_visible === 1 && b.is_visible === 0) return -1
@@ -277,16 +252,10 @@ productSearchList.forEach(
         })
 )
 
-const committeeSearchList = Array.from(
-    document.querySelectorAll('.committee-search')
-)
-committeeSearchList.forEach(
-    (el) => new SearchField(el, config.routes.api_search_committee)
-)
+const committeeSearchList = Array.from(document.querySelectorAll('.committee-search'))
+committeeSearchList.forEach((el) => new SearchField(el, config.routes.api_search_committee))
 
-const achievementSearchList = Array.from(
-    document.querySelectorAll('.achievement-search')
-)
+const achievementSearchList = Array.from(document.querySelectorAll('.achievement-search'))
 achievementSearchList.forEach(
     (el) =>
         new SearchField(el, config.routes.api_search_achievement, {
@@ -310,11 +279,7 @@ import shiftSelect from './shift-select'
 
 document
     .querySelectorAll('.shift-select')
-    .forEach((el) =>
-        el.hasAttribute('data-name')
-            ? shiftSelect(el, el.getAttribute('data-name'))
-            : null
-    )
+    .forEach((el) => (el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')) : null))
 
 //Lazy load background images
 if ('IntersectionObserver' in window) {
@@ -325,16 +290,13 @@ if ('IntersectionObserver' in window) {
                     entry.target.style.backgroundPosition = 'center'
                     entry.target.style.backgroundRepeat = 'no-repeat'
                     entry.target.style.backgroundSize = 'cover'
-                    entry.target.style.backgroundImage =
-                        "url('" + entry.target.dataset.bgimage + "')"
+                    entry.target.style.backgroundImage = "url('" + entry.target.dataset.bgimage + "')"
                     observer.unobserve(entry.target)
                 }
             })
         }
 
-        const headers = document.querySelectorAll(
-            'div[data-bgimage]:not([data-bgimage=""])'
-        )
+        const headers = document.querySelectorAll('div[data-bgimage]:not([data-bgimage=""])')
         const observer = new IntersectionObserver(handleIntersection, {
             rootMargin: '200px',
         })

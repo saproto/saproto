@@ -10,11 +10,7 @@
             <div class="card">
                 <div class="card-header bg-dark text-white">Filters</div>
                 <div class="card-body">
-                    <form
-                        id="mut_filter_form"
-                        method="get"
-                        action="{{ route('omnomcom::products::mutations') }}"
-                    >
+                    <form id="mut_filter_form" method="get" action="{{ route('omnomcom::products::mutations') }}">
                         @csrf
 
                         <div class="row">
@@ -53,9 +49,7 @@
                                     [
                                         'name' => 'after',
                                         'label' => 'Show after:',
-                                        'placeholder' => request()->has('after')
-                                            ? strtotime(request()->input('after'))
-                                            : 563886000,
+                                        'placeholder' => request()->has('after') ? strtotime(request()->input('after')) : 563886000,
                                     ]
                                 )
                             </div>
@@ -66,9 +60,7 @@
                                     [
                                         'name' => 'before',
                                         'label' => 'Show before:',
-                                        'placeholder' => request()->has('before')
-                                            ? strtotime(request()->input('before'))
-                                            : time(),
+                                        'placeholder' => request()->has('before') ? strtotime(request()->input('before')) : time(),
                                     ]
                                 )
                             </div>
@@ -85,9 +77,7 @@
                             )
                         </div>
                         <div>
-                            <button class="btn btn-success mb-3" type="submit">
-                                Apply
-                            </button>
+                            <button class="btn btn-success mb-3" type="submit">Apply</button>
 
                             <button
                                 type="submit"
@@ -130,9 +120,7 @@
                                             </td>
                                             <td>{{ $mutation->before }}</td>
                                             <td>{{ $mutation->after }}</td>
-                                            <td
-                                                class="text-{{ $mutation->delta() > 0 ? 'white' : 'danger' }}"
-                                            >
+                                            <td class="text-{{ $mutation->delta() > 0 ? 'white' : 'danger' }}">
                                                 {{ $mutation->delta() }}
                                             </td>
                                             <td>

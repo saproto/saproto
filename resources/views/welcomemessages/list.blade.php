@@ -59,10 +59,7 @@
                                             'text' => '',
                                             'confirm' => 'Delete',
                                             'title' => 'Confirm deleting the welcome message',
-                                            'message' =>
-                                                'Are you sure you want to delete the welcome message of ' .
-                                                $message->user->name .
-                                                '?',
+                                            'message' => 'Are you sure you want to delete the welcome message of ' . $message->user->name . '?',
                                         ]
                                     )
                                 </td>

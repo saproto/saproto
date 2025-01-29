@@ -9,18 +9,11 @@
         <div class="col-md-8 col-sm-10 col-xs-12">
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">
-                    <a
-                        href="{{ route('video::index') }}"
-                        class="btn btn-info me-2"
-                    >
+                    <a href="{{ route('video::index') }}" class="btn btn-info me-2">
                         <i class="fas fa-arrow-left"></i>
                     </a>
 
-                    <a
-                        href="{{ $video->getYouTubeUrl() }}"
-                        class="btn btn-danger"
-                        target="_blank"
-                    >
+                    <a href="{{ $video->getYouTubeUrl() }}" class="btn btn-danger" target="_blank">
                         <i class="fab fa-youtube me-2" aria-hidden="true"></i>
                         {{ $video->youtube_title }} by
                         {{ $video->youtube_user_name }}
@@ -32,10 +25,7 @@
                                 href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
                                 class="btn btn-info float-end"
                             >
-                                <i
-                                    class="fas fa-calendar me-2"
-                                    aria-hidden="true"
-                                ></i>
+                                <i class="fas fa-calendar me-2" aria-hidden="true"></i>
                                 {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
                             </a>
                         </p>

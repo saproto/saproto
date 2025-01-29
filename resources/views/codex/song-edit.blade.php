@@ -9,11 +9,7 @@
         action="{{ ! empty($song) ? route('codexSong.update', ['codexSong' => $song]) : route('codexSong.store') }}"
         method="POST"
     >
-        <input
-            type="hidden"
-            name="_method"
-            value="{{ ! empty($song) ? 'PUT' : 'POST' }}"
-        />
+        <input type="hidden" name="_method" value="{{ ! empty($song) ? 'PUT' : 'POST' }}" />
         {{ csrf_field() }}
         <div class="row gap-3 justify-content-center">
             <div class="col-6">
@@ -88,12 +84,7 @@
                                 )
                             </div>
 
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block"
-                            >
-                                Save song!
-                            </button>
+                            <button type="submit" class="btn btn-success btn-block">Save song!</button>
                         </div>
                     </div>
                 </div>

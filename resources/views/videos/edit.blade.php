@@ -35,11 +35,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group autocomplete">
                                     <label for="event">Link to event:</label>
-                                    <input
-                                        id="event"
-                                        class="form-control event-search"
-                                        name="event"
-                                    />
+                                    <input id="event" class="form-control event-search" name="event" />
                                 </div>
                             </div>
                         </div>
@@ -57,24 +53,13 @@
 
                         <hr />
 
-                        <img
-                            src="{{ $video->youtube_thumb_url }}"
-                            alt="video thumbnail"
-                            width="100%"
-                        />
+                        <img src="{{ $video->youtube_thumb_url }}" alt="video thumbnail" width="100%" />
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
-                            Submit
-                        </button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
-                        <a
-                            href="{{ route('video::admin::index') }}"
-                            class="btn btn-default"
-                        >
-                            Cancel
-                        </a>
+                        <a href="{{ route('video::admin::index') }}" class="btn btn-default">Cancel</a>
 
                         <p class="text-center mb-0 mt-2">
                             Developed with
