@@ -2,15 +2,17 @@
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<{ class?: HTMLAttributes['class'] }>()
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+}>()
 </script>
 
 <template>
-  <div
+  <h3
     :class="
-      cn('flex flex-col gap-y-2 text-center sm:text-left', props.class)
+      cn('font-semibold leading-none tracking-tight', props.class)
     "
   >
     <slot />
-  </div>
+  </h3>
 </template>
