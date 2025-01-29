@@ -501,12 +501,11 @@ class EventController extends Controller
     }
 
     /**
-     * @param string|null $personal_key
      * @return \Illuminate\Http\Response
      */
-    public function icalCalendar($personal_key = null)
+    public function icalCalendar(?string $personal_key = null)
     {
-        $user = ($personal_key ? User::query()->where('personal_key', $personal_key)->first() : null);
+        $user = User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first();
 
         $calendar_name = $user ? sprintf('S.A. Proto Calendar for %s', $user->calling_name) : 'S.A. Proto Calendar';
 
@@ -535,13 +534,17 @@ CALSCALE:GREGORIAN
             'END:DAYLIGHT' . "\r\n" .
             'END:VTIMEZONE' . "\r\n";
 
-        $reminder = $user ? $user->getCalendarAlarm() : null;
+        $reminder = $user?->pref_calendar_alarm;
 
-        $relevant_only = $user?->getCalendarRelevantSetting();
-
-        foreach (Event::query()->where('start', '>', strtotime('-6 months'))->get() as $event) {
+        $relevant_only = $user?->pref_calendar_relevant_only;
+        $events = Event::query()
+            ->when(! $user, static fn ($query) => $query->where('secret', false))
+            ->with('committee')
+            ->where('start', '>', strtotime('-6 months'))
+            ->get();
+        foreach ($events as $event) {
             /** @var Event $event */
-            if (!$event->mayViewEvent(Auth::user())) {
+            if (! $event->mayViewEvent($user)) {
                 continue;
             }
 
