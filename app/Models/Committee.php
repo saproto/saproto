@@ -97,7 +97,7 @@ class Committee extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->slug . '@' . Config::string('proto.emaildomain');
+        return $this->slug.'@'.Config::string('proto.emaildomain');
     }
 
     public function pastEvents(): Builder
@@ -114,14 +114,14 @@ class Committee extends Model
             ->organizedEvents()
             ->where('end', '>', time())
             ->orderBy('start', 'desc')
-            ->when(!Auth::user()?->can('board'), static function ($q) {
+            ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where('secret', '=', 0);
             });
     }
 
     public function pastHelpedEvents(): Builder
     {
-        $activityIds = HelpingCommittee::where('committee_id', $this->id)->pluck('activity_id');
+        $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
 
         return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
             $q->whereIn('id', $activityIds);
@@ -150,7 +150,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;
