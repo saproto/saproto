@@ -14,24 +14,24 @@
 
             <table class="table table-borderless table-sm text-muted mb-0">
                 <tbody>
-                <tr>
-                    <th>Type</th>
-                    <td>Recurring</td>
-                </tr>
-                <tr>
-                    <th>Issued on</th>
-                    <td>{{ $user->bank->created_at }}</td>
-                </tr>
-                <tr>
-                    <th>Authorisation reference</th>
-                    <td>{{ $user->bank->machtigingid }}</td>
-                </tr>
-                <tr>
-                    <th>Creditor identifier</th>
-                    <td>
-                        {{ Config::string('proto.sepa_info.creditor_id') }}
-                    </td>
-                </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>Recurring</td>
+                    </tr>
+                    <tr>
+                        <th>Issued on</th>
+                        <td>{{ $user->bank->created_at }}</td>
+                    </tr>
+                    <tr>
+                        <th>Authorisation reference</th>
+                        <td>{{ $user->bank->machtigingid }}</td>
+                    </tr>
+                    <tr>
+                        <th>Creditor identifier</th>
+                        <td>
+                            {{ Config::string('proto.sepa_info.creditor_id') }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
