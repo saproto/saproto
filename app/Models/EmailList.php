@@ -44,7 +44,7 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether user is subscribed to mailing list.
      */
     public function isSubscribed($user): bool
@@ -52,13 +52,20 @@ class EmailList extends Model
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
+    public function scopeSubscribed($query, User $user)
+    {
+        return $query->whereHas('users', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        });
+    }
+
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
     public function subscribe($user): bool
     {
-        if (! $this->isSubscribed($user)) {
+        if (!$this->isSubscribed($user)) {
             EmailListSubscription::query()->create([
                 'user_id' => $user->id,
                 'list_id' => $this->id,
@@ -71,7 +78,7 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
      *
      * @throws Exception
@@ -89,8 +96,8 @@ class EmailList extends Model
     }
 
     /**
-     * @param  int  $user_id
-     * @param  int  $list_id
+     * @param int $user_id
+     * @param int $list_id
      */
     public static function generateUnsubscribeHash($user_id, $list_id): string
     {

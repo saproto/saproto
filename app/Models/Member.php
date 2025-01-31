@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Mollie\Api\Resources\Order;
 use Override;
 
 /**
@@ -138,17 +139,15 @@ class Member extends Model
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }
 
-    public function getMemberType(): ?string
+    public function getMemberType(?OrderLine $membershipOrderline = null): ?string
     {
-        $membershipOrderline = $this->getMembershipOrderline();
-
         if ($membershipOrderline != null) {
-            return match ($this->getMembershipOrderline()->product->id) {
+            return match ($membershipOrderline->product->id) {
                 Config::integer('omnomcom.fee.regular') => 'primary',
                 Config::integer('omnomcom.fee.reduced') => 'secondary',
                 Config::integer('omnomcom.fee.remitted') => 'non-paying',
@@ -170,7 +169,7 @@ class Member extends Model
         if (count($name) > 1) {
             $usernameBase = strtolower(Str::transliterate(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-                .'.'.
+                . '.' .
                 preg_replace('/\PL/u', '', implode('', array_slice($name, 1)))
             ));
         } else {

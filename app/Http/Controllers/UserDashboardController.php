@@ -30,11 +30,11 @@ class UserDashboardController extends Controller
     public function show()
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = Auth::user()->load('roles.permissions');
 
         $qrcode = null;
         $tfakey = null;
-        if (! $user->tfa_totp_key) {
+        if (!$user->tfa_totp_key) {
             $google2fa = new Google2FA;
             $tfakey = $google2fa->generateSecretKey(32);
             $qrcode = (new DNS2D)->getBarcodeSVG($google2fa->getQRCodeUrl('S.A. Proto', $user->name, $tfakey), 'QRCODE');
@@ -65,11 +65,11 @@ class UserDashboardController extends Controller
 
             $auth_check = AuthController::verifyCredentials(Auth::user()->email, $password);
 
-            if (! Auth::user()->can('sysadmin')) {
+            if (!Auth::user()->can('sysadmin')) {
                 foreach ($user->roles as $role) {
                     /** @var Permission $permission */
                     foreach ($role->permissions as $permission) {
-                        if (! Auth::user()->can($permission->name)) {
+                        if (!Auth::user()->can($permission->name)) {
                             abort(403, 'You can not change the email of this person!.');
                         }
                     }
@@ -77,7 +77,7 @@ class UserDashboardController extends Controller
             }
         }
 
-        if ($auth_check == null || ($auth_check->id != $user->id && ! $auth_check->can('board'))) {
+        if ($auth_check == null || ($auth_check->id != $user->id && !$auth_check->can('board'))) {
             Session::flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
 
             return Redirect::back();
@@ -102,11 +102,11 @@ class UserDashboardController extends Controller
             ];
 
             $to = [
-                (object) [
+                (object)[
                     'email' => $email['old'],
                     'name' => $user->name,
                 ],
-                (object) [
+                (object)[
                     'email' => $email['new'],
                     'name' => $user->name,
                 ],
@@ -383,7 +383,7 @@ class UserDashboardController extends Controller
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
         $file = new StorageEntry;
-        $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf', 'S'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
+        $file->createFromData($form->output('membership_form_user_' . $user->id . '.pdf', 'S'), 'application/pdf', 'membership_form_user_' . $user->id . '.pdf');
 
         $member->membershipForm()->associate($file);
         $member->save();
@@ -398,7 +398,7 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (! $user->completed_profile) {
+        if (!$user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
 
@@ -414,7 +414,7 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (! $user->completed_profile) {
+        if (!$user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
         }
 

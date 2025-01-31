@@ -97,7 +97,7 @@ class Committee extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->slug.'@'.Config::string('proto.emaildomain');
+        return $this->slug . '@' . Config::string('proto.emaildomain');
     }
 
     public function pastEvents(): Builder
@@ -108,23 +108,23 @@ class Committee extends Model
             });
     }
 
-    public function upcomingEvents(): Collection|array
+    public function upcomingEvents(): Builder
     {
-        $events = $this->organizedEvents()->where('end', '>', time());
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
+        return $this
+            ->organizedEvents()
+            ->where('end', '>', time())
+            ->orderBy('start', 'desc')
+            ->when(!Auth::user()?->can('board'), static function ($q) {
+                $q->where('secret', '=', 0);
+            });
     }
 
     public function pastHelpedEvents(): Builder
     {
-        return Event::query()->whereHas('activity', function ($q) {
-            $q->whereHas('helpingCommittees', function ($q) {
-                $q->where('committee_id', $this->id);
-            });
+        $activityIds = HelpingCommittee::where('committee_id', $this->id)->pluck('activity_id');
+
+        return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
+            $q->whereIn('id', $activityIds);
         })
             ->where('secret', false)
             ->where(static function ($q) {
@@ -150,7 +150,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;

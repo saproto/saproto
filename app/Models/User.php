@@ -188,7 +188,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function isStale(): bool
     {
-        return ! (
+        return !(
             $this->password ||
             $this->edu_username ||
             strtotime($this->created_at) > strtotime('-1 hour') ||
@@ -327,7 +327,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
 
         // Update DirectAdmin Password
-        if ($this->is_member && ! App::environment('local')) {
+        if ($this->is_member && !App::environment('local')) {
             $da = new DirectAdmin;
             $da->connect(Config::string('directadmin.da-hostname'), Config::string('directadmin.da-port'));
             $da->set_login(Config::string('directadmin.da-username'), Config::string('directadmin.da-password'));
@@ -379,7 +379,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function isInCommittee(Committee $committee): bool
     {
-        return $committee->users->where('user_id', $this->id)->exists();
+        return $committee->users()->where('user_id', $this->id)->exists();
     }
 
     public function isActiveMember(): bool
@@ -400,7 +400,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             return $this->website;
         }
 
-        return 'https://'.$this->website;
+        return 'https://' . $this->website;
     }
 
     public function websiteDisplay(): ?string
@@ -419,7 +419,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function getProtoEmailAttribute(): ?string
     {
-        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null;
+        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username . '@' . config('proto.emaildomain') : null;
     }
 
     public function getDisplayEmail(): string
@@ -512,7 +512,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function toggleCalendarRelevantSetting(): void
     {
-        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
         $this->save();
     }
 
