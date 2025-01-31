@@ -160,7 +160,10 @@
                     @include(
                         'event.display_includes.render_participant_list',
                         [
-                            'participants' => $event->activity->users,
+                            'participants' => $event->activity
+                                ->users()
+                                ->with('photo')
+                                ->get(),
                             'event' => $event,
                         ]
                     )

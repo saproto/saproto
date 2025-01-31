@@ -4,7 +4,7 @@
     </div>
 
     <ul class="list-group list-group-flush">
-        @foreach ($event->activity->helpingCommitteeInstances as $key => $instance)
+        @foreach ($event->activity->helpingCommitteeInstances()->with('committee') as $key => $instance)
             <li class="list-group-item">
                 <p class="card-title">
                     <strong>
@@ -29,10 +29,10 @@
                     @endif
 
                     @if (! $event->activity->closed && $instance->committee->isMember(Auth::user()))
-                        @if ($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
+                        @if ($event->activity->getHelperParticipation(Auth::user(), $instance) !== null)
                             <a
                                 class="btn btn-outline-warning btn-block mt-1"
-                                href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($instance->committee, Auth::user())->id]) }}"
+                                href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelperParticipation(Auth::user(), $instance)->id]) }}"
                             >
                                 I won't help anymore.
                             </a>

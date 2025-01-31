@@ -44,17 +44,14 @@ class ProductCategory extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
-    public function products()
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id');
     }
 
-    public function sortedProducts()
+    public function sortedProducts(): BelongsToMany
     {
-        $products = $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id')->get();
-
-        return $products->sortBy('name');
+        return $this->products()->orderBy('name');
     }
 
     #[Override]

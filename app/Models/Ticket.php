@@ -106,11 +106,8 @@ class Ticket extends Model
 
     public function turnover(): int|float
     {
-        $total = 0;
-        foreach ($this->purchases as $purchase) {
-            $total += $purchase->orderline->total_price;
-        }
-
-        return $total;
+        return OrderLine::query()->whereHas('ticketPurchase', function ($query) {
+            $query->where('ticket_id', $this->id);
+        })->sum('total_price');
     }
 }

@@ -288,7 +288,8 @@ class EventController extends Controller
      */
     public function admin(int $id)
     {
-        $event = Event::query()->findOrFail($id);
+        $event = Event::query()
+            ->with('tickets.purchases.user', 'tickets.purchases.orderline')->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -406,16 +407,24 @@ class EventController extends Controller
     public function apiUpcomingEvents(int $limit, Request $request): array
     {
         $user = Auth::user() ?? null;
-        $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
+        $noFutureLimit = $request->boolean('no_future_limit', false);
 
-        $events = Event::query()->where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::query()
+            ->where('end', '>', strtotime('today'))
+            ->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))
+            ->whereNull('publication')
+            ->orderBy('start')
+            ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
+            ->take($limit)
+            ->get();
+
         $data = [];
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
                 ! $event->activity->isParticipating($user) &&
                 ! $event->activity->isHelping($user) &&
-                ! $event->activity->isOrganising($user)
+                ! $event->isOrganising($user)
             ))) {
                 continue;
             }
@@ -538,18 +547,19 @@ CALSCALE:GREGORIAN
         $reminder = $user?->pref_calendar_alarm;
 
         $relevant_only = $user?->pref_calendar_relevant_only;
-        $events = Event::query()
-            ->when(! $user, static fn ($query) => $query->where('secret', false))
-            ->with('committee')
+        $events = Event::getEventBlockQuery($user)
             ->where('start', '>', strtotime('-6 months'))
+            ->with('committee.users')
+            ->withCount('tickets')
             ->get();
+
         foreach ($events as $event) {
             /** @var Event $event */
             if (! $event->mayViewEvent($user)) {
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->activity?->user_has_tickets || $event->activity?->user_has_helper_participation || $event->activity?->user_has_participation)) {
                 continue;
             }
 
@@ -559,7 +569,7 @@ CALSCALE:GREGORIAN
                 $info_text = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
                 $info_text = 'Sign-up required! There are roughly '.$event->activity->freeSpots().' of '.$event->activity->participants.' places left.';
-            } elseif ($event->tickets->count() > 0) {
+            } elseif ($event->tickets_count > 0) {
                 $info_text = 'Ticket purchase required.';
             } else {
                 $info_text = 'No sign-up necessary.';
@@ -572,13 +582,13 @@ CALSCALE:GREGORIAN
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
                 } elseif ($event->activity) {
-                    if ($event->activity->isHelping($user)) {
+                    if ($event->activity->user_has_helper_participation) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isOnBackupList($user)) {
+                    } elseif ($event->activity->user_has_backup_participation) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->user_has_participation || $event->user_has_tickets) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }

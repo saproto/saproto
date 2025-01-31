@@ -1,10 +1,10 @@
-@if (count($committee->upcomingEvents()) > 0)
+@if ($upcomingEvents->count() > 0)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Upcoming events</div>
 
         <div class="card-body">
             <div class="row">
-                @foreach ($committee->upcomingEvents() as $key => $event)
+                @foreach ($upcomingEvents as $event)
                     <div class="col-6">
                         @include(
                             'event.display_includes.event_block',
@@ -19,13 +19,13 @@
     </div>
 @endif
 
-@if (count($pastEvents) > 0)
+@if ($pastEvents->count() > 0)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Previously organised</div>
 
         <div class="card-body">
             <div class="row">
-                @foreach ($pastEvents as $key => $event)
+                @foreach ($pastEvents as $event)
                     <div class="col-6">
                         @include(
                             'event.display_includes.event_block',
@@ -41,11 +41,7 @@
     </div>
 @endif
 
-@php
-    $pastHelpedEvents = $committee->pastHelpedEvents(6);
-@endphp
-
-@if (count($pastHelpedEvents) > 0)
+@if ($pastHelpedEvents->count() > 0)
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
             Events previously helped at

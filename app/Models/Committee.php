@@ -100,37 +100,31 @@ class Committee extends Model
         return $this->slug.'@'.Config::string('proto.emaildomain');
     }
 
-    /**
-     * @param  int  $n  the number of events to return
-     */
-    public function pastEvents(int $n): Collection|array
+    public function pastEvents(): Builder
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
-    }
-
-    public function upcomingEvents(): Collection|array
-    {
-        $events = $this->organizedEvents()->where('end', '>', time());
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
-    }
-
-    public function pastHelpedEvents($n): Collection|array
-    {
-        return Event::query()->whereHas('activity', function ($q) {
-            $q->whereHas('helpingCommittees', function ($q) {
-                $q->where('committee_id', $this->id);
+        return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where('secret', '=', 0);
             });
+    }
+
+    public function upcomingEvents(): Builder
+    {
+        return $this
+            ->organizedEvents()
+            ->where('end', '>', time())
+            ->orderBy('start', 'desc')
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where('secret', '=', 0);
+            });
+    }
+
+    public function pastHelpedEvents(): Builder
+    {
+        $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
+
+        return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
+            $q->whereIn('id', $activityIds);
         })
             ->where('secret', false)
             ->where(static function ($q) {
@@ -138,9 +132,7 @@ class Committee extends Model
                     ->orWhereNull('publication');
             })
             ->where('end', '<', time())
-            ->orderBy('created_at')
-            ->take($n)
-            ->get();
+            ->orderBy('created_at');
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
@@ -151,6 +143,7 @@ class Committee extends Model
             ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
             ->orderBy('created_at', 'desc')
             ->orderBy('deleted_at', 'desc')
+            ->with('user.photo')
             ->get();
 
         foreach ($memberships as $membership) {
@@ -174,6 +167,6 @@ class Committee extends Model
      */
     public function isMember(User $user): bool
     {
-        return $user->isInCommittee($this);
+        return $this->users->where('users.id', $user->id)->count() > 0;
     }
 }

@@ -12,10 +12,16 @@
 
         <p class="card-text">
             <em>Click on a list for more info.</em>
-
-            @if (App\Models\EmailList::all()->count() > 0)
+            @php(
+                ($lists = App\Models\EmailList::withExists([
+                    'users as user_subscribed' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    },
+                ])->get())
+            )
+            @if ($lists->count() > 0)
                 <div class="accordion" id="email__accordion">
-                    @foreach (App\Models\EmailList::all() as $i => $list)
+                    @foreach ($lists as $i => $list)
                         <div class="card border">
                             <div
                                 class="card-header border-bottom-0 cursor-pointer"
@@ -30,7 +36,7 @@
                                     {{ $list->name }}
                                 </span>
 
-                                @if ($list->isSubscribed($user))
+                                @if ($list->user_subscribed)
                                     <a
                                         href="{{ route('togglelist', ['id' => $list->id]) }}"
                                         class="badge bg-danger float-end"

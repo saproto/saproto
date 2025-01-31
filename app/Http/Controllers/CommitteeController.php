@@ -52,16 +52,20 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && (! Auth::check() || (! Auth::user()->can('board') && ! $committee->isMember(Auth::user())))) {
+        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee?->isMember(Auth::user())) {
             abort(404);
         }
 
-        $pastEvents = $committee->pastEvents(6);
+        $pastEvents = $committee->pastEvents()->take(6)->get();
+        $upcomingEvents = $committee->upcomingEvents()->get();
+        $pastHelpedEvents = $committee->pastHelpedEvents()->take(6)->get();
 
         return view('committee.show', [
             'committee' => $committee,
             'members' => $committee->allMembers(),
             'pastEvents' => $pastEvents,
+            'upcomingEvents' => $upcomingEvents,
+            'pastHelpedEvents' => $pastHelpedEvents,
         ]);
     }
 
