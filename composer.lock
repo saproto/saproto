@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "4247c841b6674f756a4f481c779a2c21",
+  "content-hash": "c76e9b4a46541dda2e51956aff542862",
   "packages": [
     {
       "name": "aacotroneo/laravel-saml2",
@@ -2154,16 +2154,16 @@
     },
     {
       "name": "google/auth",
-      "version": "v1.45.2",
+      "version": "v1.45.3",
       "source": {
         "type": "git",
         "url": "https://github.com/googleapis/google-auth-library-php.git",
-        "reference": "bf86c992aba9452584cb0c63afd52cc1f6a27ccc"
+        "reference": "000d9439f430c6e56cba105c5ab750f5f7d69ea8"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/bf86c992aba9452584cb0c63afd52cc1f6a27ccc",
-        "reference": "bf86c992aba9452584cb0c63afd52cc1f6a27ccc",
+        "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/000d9439f430c6e56cba105c5ab750f5f7d69ea8",
+        "reference": "000d9439f430c6e56cba105c5ab750f5f7d69ea8",
         "shasum": ""
       },
       "require": {
@@ -2209,9 +2209,9 @@
       "support": {
         "docs": "https://googleapis.github.io/google-auth-library-php/main/",
         "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-        "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.45.2"
+        "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.45.3"
       },
-      "time": "2025-01-28T21:56:26+00:00"
+      "time": "2025-01-29T18:17:08+00:00"
     },
     {
       "name": "graham-campbell/manager",
@@ -2980,150 +2980,6 @@
       "time": "2024-12-13T02:48:29+00:00"
     },
     {
-      "name": "intervention/gif",
-      "version": "4.2.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/Intervention/gif.git",
-        "reference": "6addac2c68b4bc0e37d0d3ccedda57eb84729c49"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/Intervention/gif/zipball/6addac2c68b4bc0e37d0d3ccedda57eb84729c49",
-        "reference": "6addac2c68b4bc0e37d0d3ccedda57eb84729c49",
-        "shasum": ""
-      },
-      "require": {
-        "php": "^8.1"
-      },
-      "require-dev": {
-        "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^10.0 || ^11.0",
-        "slevomat/coding-standard": "~8.0",
-        "squizlabs/php_codesniffer": "^3.8"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Intervention\\Gif\\": "src"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Oliver Vogel",
-          "email": "oliver@intervention.io",
-          "homepage": "https://intervention.io/"
-        }
-      ],
-      "description": "Native PHP GIF Encoder/Decoder",
-      "homepage": "https://github.com/intervention/gif",
-      "keywords": [
-        "animation",
-        "gd",
-        "gif",
-        "image"
-      ],
-      "support": {
-        "issues": "https://github.com/Intervention/gif/issues",
-        "source": "https://github.com/Intervention/gif/tree/4.2.1"
-      },
-      "funding": [
-        {
-          "url": "https://paypal.me/interventionio",
-          "type": "custom"
-        },
-        {
-          "url": "https://github.com/Intervention",
-          "type": "github"
-        },
-        {
-          "url": "https://ko-fi.com/interventionphp",
-          "type": "ko_fi"
-        }
-      ],
-      "time": "2025-01-05T10:52:39+00:00"
-    },
-    {
-      "name": "intervention/image",
-      "version": "3.11.0",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/Intervention/image.git",
-        "reference": "6b9ce4fc4485d30117e13935b25bc55a8b894a79"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/Intervention/image/zipball/6b9ce4fc4485d30117e13935b25bc55a8b894a79",
-        "reference": "6b9ce4fc4485d30117e13935b25bc55a8b894a79",
-        "shasum": ""
-      },
-      "require": {
-        "ext-mbstring": "*",
-        "intervention/gif": "^4.2",
-        "php": "^8.1"
-      },
-      "require-dev": {
-        "mockery/mockery": "^1.6",
-        "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^10.0 || ^11.0",
-        "slevomat/coding-standard": "~8.0",
-        "squizlabs/php_codesniffer": "^3.8"
-      },
-      "suggest": {
-        "ext-exif": "Recommended to be able to read EXIF data properly."
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Intervention\\Image\\": "src"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "authors": [
-        {
-          "name": "Oliver Vogel",
-          "email": "oliver@intervention.io",
-          "homepage": "https://intervention.io/"
-        }
-      ],
-      "description": "PHP image manipulation",
-      "homepage": "https://image.intervention.io/",
-      "keywords": [
-        "gd",
-        "image",
-        "imagick",
-        "resize",
-        "thumbnail",
-        "watermark"
-      ],
-      "support": {
-        "issues": "https://github.com/Intervention/image/issues",
-        "source": "https://github.com/Intervention/image/tree/3.11.0"
-      },
-      "funding": [
-        {
-          "url": "https://paypal.me/interventionio",
-          "type": "custom"
-        },
-        {
-          "url": "https://github.com/Intervention",
-          "type": "github"
-        },
-        {
-          "url": "https://ko-fi.com/interventionphp",
-          "type": "ko_fi"
-        }
-      ],
-      "time": "2025-01-18T15:42:14+00:00"
-    },
-    {
       "name": "jean85/pretty-package-versions",
       "version": "2.1.0",
       "source": {
@@ -3293,16 +3149,16 @@
     },
     {
       "name": "laravel/framework",
-      "version": "v11.41.0",
+      "version": "v11.41.3",
       "source": {
         "type": "git",
         "url": "https://github.com/laravel/framework.git",
-        "reference": "42d6ae000c868c2abfa946da46702f2358493482"
+        "reference": "3ef433d5865f30a19b6b1be247586068399b59cc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laravel/framework/zipball/42d6ae000c868c2abfa946da46702f2358493482",
-        "reference": "42d6ae000c868c2abfa946da46702f2358493482",
+        "url": "https://api.github.com/repos/laravel/framework/zipball/3ef433d5865f30a19b6b1be247586068399b59cc",
+        "reference": "3ef433d5865f30a19b6b1be247586068399b59cc",
         "shasum": ""
       },
       "require": {
@@ -3504,7 +3360,7 @@
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
       },
-      "time": "2025-01-28T15:22:55+00:00"
+      "time": "2025-01-30T13:25:22+00:00"
     },
     {
       "name": "laravel/helpers",
@@ -7956,30 +7812,30 @@
     },
     {
       "name": "spatie/laravel-permission",
-      "version": "6.10.1",
+      "version": "6.12.0",
       "source": {
         "type": "git",
         "url": "https://github.com/spatie/laravel-permission.git",
-        "reference": "8bb69d6d67387f7a00d93a2f5fab98860f06e704"
+        "reference": "420ea2a49db480302813d444834baaf7c8674782"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/8bb69d6d67387f7a00d93a2f5fab98860f06e704",
-        "reference": "8bb69d6d67387f7a00d93a2f5fab98860f06e704",
+        "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/420ea2a49db480302813d444834baaf7c8674782",
+        "reference": "420ea2a49db480302813d444834baaf7c8674782",
         "shasum": ""
       },
       "require": {
-        "illuminate/auth": "^8.12|^9.0|^10.0|^11.0",
-        "illuminate/container": "^8.12|^9.0|^10.0|^11.0",
-        "illuminate/contracts": "^8.12|^9.0|^10.0|^11.0",
-        "illuminate/database": "^8.12|^9.0|^10.0|^11.0",
+        "illuminate/auth": "^8.12|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/container": "^8.12|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/contracts": "^8.12|^9.0|^10.0|^11.0|^12.0",
+        "illuminate/database": "^8.12|^9.0|^10.0|^11.0|^12.0",
         "php": "^8.0"
       },
       "require-dev": {
-        "larastan/larastan": "^1.0|^2.0",
         "laravel/passport": "^11.0|^12.0",
-        "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0",
-        "phpunit/phpunit": "^9.4|^10.1"
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^9.4|^10.1|^11.5"
       },
       "type": "library",
       "extra": {
@@ -8027,7 +7883,7 @@
       ],
       "support": {
         "issues": "https://github.com/spatie/laravel-permission/issues",
-        "source": "https://github.com/spatie/laravel-permission/tree/6.10.1"
+        "source": "https://github.com/spatie/laravel-permission/tree/6.12.0"
       },
       "funding": [
         {
@@ -8035,7 +7891,7 @@
           "type": "github"
         }
       ],
-      "time": "2024-11-08T18:45:41+00:00"
+      "time": "2025-01-31T01:07:40+00:00"
     },
     {
       "name": "spatie/laravel-typescript-transformer",
@@ -10707,16 +10563,16 @@
     },
     {
       "name": "tightenco/ziggy",
-      "version": "v2.5.0",
+      "version": "v2.5.1",
       "source": {
         "type": "git",
         "url": "https://github.com/tighten/ziggy.git",
-        "reference": "2b574ba281546884b7bdde6eefa451ba7e0b52f7"
+        "reference": "40df446f6053787edb245381c3b3d80b031b5fc0"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/tighten/ziggy/zipball/2b574ba281546884b7bdde6eefa451ba7e0b52f7",
-        "reference": "2b574ba281546884b7bdde6eefa451ba7e0b52f7",
+        "url": "https://api.github.com/repos/tighten/ziggy/zipball/40df446f6053787edb245381c3b3d80b031b5fc0",
+        "reference": "40df446f6053787edb245381c3b3d80b031b5fc0",
         "shasum": ""
       },
       "require": {
@@ -10771,9 +10627,9 @@
       ],
       "support": {
         "issues": "https://github.com/tighten/ziggy/issues",
-        "source": "https://github.com/tighten/ziggy/tree/v2.5.0"
+        "source": "https://github.com/tighten/ziggy/tree/v2.5.1"
       },
-      "time": "2025-01-23T00:32:18+00:00"
+      "time": "2025-01-31T19:23:01+00:00"
     },
     {
       "name": "tijsverkoyen/css-to-inline-styles",
@@ -11171,12 +11027,12 @@
       "version": "v0.2.2",
       "source": {
         "type": "git",
-        "url": "https://github.com/aarondfrancis/solo.git",
+        "url": "https://github.com/soloterm/solo.git",
         "reference": "2e0ee477aa181753858b70d184132e4b196105e2"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/aarondfrancis/solo/zipball/2e0ee477aa181753858b70d184132e4b196105e2",
+        "url": "https://api.github.com/repos/soloterm/solo/zipball/2e0ee477aa181753858b70d184132e4b196105e2",
         "reference": "2e0ee477aa181753858b70d184132e4b196105e2",
         "shasum": ""
       },
@@ -11219,9 +11075,10 @@
       ],
       "description": "A Laravel package to run multiple commands at once, to aid in local development.",
       "support": {
-        "issues": "https://github.com/aarondfrancis/solo/issues",
-        "source": "https://github.com/aarondfrancis/solo/tree/v0.2.2"
+        "issues": "https://github.com/soloterm/solo/issues",
+        "source": "https://github.com/soloterm/solo/tree/v0.2.2"
       },
+      "abandoned": "soloterm/solo",
       "time": "2024-12-11T19:36:14+00:00"
     },
     {
