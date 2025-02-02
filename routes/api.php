@@ -14,7 +14,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     });
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], static function () {
-        Route::get('info', fn () => Auth::user())->name('info')->middleware('auth:api');
+        Route::get('info', fn() => Auth::user())->name('info')->middleware('auth:api');
         Route::group(['middleware' => ['auth:api'], 'as' => 'qr::'], static function () {
             Route::get('qr_auth_approve/{code}', ['as' => 'approve', 'uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['as' => 'info', 'uses' => 'QrAuthController@apiInfo']);
@@ -41,7 +41,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::get('random_photo', ['as' => 'randomPhoto', 'uses' => 'ApiController@randomPhoto']);
     });
     Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], static function () {
-        Route::get('bus', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
