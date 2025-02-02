@@ -72,7 +72,7 @@
     <div class="row text-black">
         {{-- narrowcasting or protube --}}
         <div class="col-9">
-            @if(!empty($protube))
+            @if (! empty($protube))
                 @include('smartxp.protube_iframe')
             @else
                 @include('narrowcasting.display')
@@ -293,15 +293,15 @@
                         document
                             .getElementById('activities')
                             .childNodes.forEach((activity) => {
-                            let div = activity.childNodes[0]
-                            let H3 = div.childNodes[0]
-                            if (H3.clientWidth > div.clientWidth) {
-                                H3.classList.add('scroll-title')
-                                H3.appendChild(
-                                    H3.childNodes[0].cloneNode(true),
-                                )
-                            }
-                        })
+                                let div = activity.childNodes[0]
+                                let H3 = div.childNodes[0]
+                                if (H3.clientWidth > div.clientWidth) {
+                                    H3.classList.add('scroll-title')
+                                    H3.appendChild(
+                                        H3.childNodes[0].cloneNode(true)
+                                    )
+                                }
+                            })
                     } else {
                         document.getElementById('activities').innerHTML =
                             '<div class="notice">No upcoming activities!</div>'
@@ -322,7 +322,7 @@
                 .then((data) => {
                     if (data.length > 0) {
                         document.getElementById(
-                            'protopeners-timetable',
+                            'protopeners-timetable'
                         ).innerHTML = ''
                         let open = false,
                             count = 0
@@ -354,14 +354,14 @@
                             newDiv.appendChild(titleDiv)
 
                             let protOpenDiv = document.getElementById(
-                                'protopeners-timetable',
+                                'protopeners-timetable'
                             )
                             protOpenDiv.appendChild(newDiv)
                             protOpenDiv.appendChild(
-                                document.createElement('br'),
+                                document.createElement('br')
                             )
                             protOpenDiv.appendChild(
-                                document.createElement('hr'),
+                                document.createElement('hr')
                             )
 
                             count++
@@ -369,12 +369,12 @@
                         if (open) {
                             protopolisFa.classList.replace(
                                 'fa-door-closed',
-                                'fa-door-open',
+                                'fa-door-open'
                             )
                         } else {
                             protopolisFa.classList.replace(
                                 'fa-door-open',
-                                'fa-door-closed',
+                                'fa-door-closed'
                             )
                         }
                         if (count === 0)
