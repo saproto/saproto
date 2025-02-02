@@ -111,12 +111,12 @@ class ApiController extends Controller
         $album = $query->inRandomOrder()->first();
 
         //        if we picked a year and therefore a query where no albums exist, pick a random public album as fallback
-        if (!$album) {
+        if (! $album) {
             $album = $privateQuery->inRandomOrder()->first();
         }
 
         // if we still do not have an album, there are no public albums
-        if (!$album) {
+        if (! $album) {
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
@@ -236,11 +236,11 @@ class ApiController extends Controller
     {
         $user = User::query()->firstWhere('discord_id', $userId);
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
         }
 
-        if (!$user->is_member) {
+        if (! $user->is_member) {
             return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }
 
