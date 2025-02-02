@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
@@ -57,13 +54,14 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
 
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/' . Config::string('proto.google-calendar.smartxp-id') . '/events?singleEvents=true&orderBy=startTime&key=' . Config::string('app-proto.google-key-private') . '&timeMin=' . urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))) . '&timeMax=' . urlencode(date('c', strtotime('next monday')));
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
         } catch (Exception) {
-            return (object)['roster' => $roster, 'occupied' => false];
+            return (object) ['roster' => $roster, 'occupied' => false];
         }
+
         $occupied = false;
         foreach ($data->items as $entry) {
             $end_time = ($entry->end->date ?? $entry->end->dateTime);
@@ -84,7 +82,7 @@ class SmartXpScreenController extends Controller
             }
 
             $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))));
-            $roster[$day][] = (object)[
+            $roster[$day][] = (object) [
                 'title' => $name,
                 'start' => strtotime($start_time),
                 'end' => strtotime($end_time),
@@ -94,14 +92,15 @@ class SmartXpScreenController extends Controller
             ];
         }
 
-        return (object)['roster' => $roster, 'occupied' => $occupied];
+        return (object) ['roster' => $roster, 'occupied' => $occupied];
     }
 
     /** @return View */
     public function canWork()
     {
         $timetable = $this->smartxpTimetable();
+
         return view('smartxp.caniwork', ['timetable' => $timetable->roster,
-            'occupied' => $timetable->occupied,]);
+            'occupied' => $timetable->occupied, ]);
     }
 }

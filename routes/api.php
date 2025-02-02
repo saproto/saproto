@@ -14,7 +14,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     });
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], static function () {
-        Route::get('info', fn() => Auth::user())->name('info')->middleware('auth:api');
+        Route::get('info', fn () => Auth::user())->name('info')->middleware('auth:api');
         Route::group(['middleware' => ['auth:api'], 'as' => 'qr::'], static function () {
             Route::get('qr_auth_approve/{code}', ['as' => 'approve', 'uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['as' => 'info', 'uses' => 'QrAuthController@apiInfo']);
