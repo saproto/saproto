@@ -10,29 +10,29 @@
                     <strong>
                         {{ $instance->committee->name }}
                         @if (Auth::user()->can('board') || Auth::user()->committees->contains($instance->committee))
-                            ({{ $instance->users->count() }}/{{ $instance->amount }})
+                                ({{ $instance->users->count() }}/{{ $instance->amount }})
                         @endif
                     </strong>
 
-                @if ($instance->users->count() < 1)
-                    <p class="card-text">
-                        No people are currently helping.
-                    </p>
-                @else
-                    @include(
-                        'event.display_includes.render_participant_list',
-                        [
-                            'participants' => $instance->users,
-                            'event' => $event,
-                        ]
-                    )
-                @endif
+                    @if ($instance->users->count() < 1)
+                        <p class="card-text">
+                            No people are currently helping.
+                        </p>
+                    @else
+                        @include(
+                            'event.display_includes.render_participant_list',
+                            [
+                                'participants' => $instance->users,
+                                'event' => $event,
+                            ]
+                        )
+                    @endif
 
-                @if (! $event->activity->closed && Auth::user()->committees->contains($instance->committee))
-                    @if ($instance->users->contains(Auth::user()))
-                        <a
-                            class="btn btn-outline-warning btn-block mt-1"
-                            href="{{
+                    @if (! $event->activity->closed && Auth::user()->committees->contains($instance->committee))
+                        @if ($instance->users->contains(Auth::user()))
+                            <a
+                                class="btn btn-outline-warning btn-block mt-1"
+                                href="{{
                                     route('event::deleteparticipation', [
                                         'participation_id' => $instance->users
                                             ->filter(function ($user) {
@@ -41,49 +41,49 @@
                                             ->first()->pivot->id,
                                     ])
                                 }}"
-                        >
-                            I won't help anymore.
-                        </a>
-                    @elseif ($instance->users->count() < $instance->amount)
-                        <a
-                            class="btn btn-outline-success btn-block mt-1"
-                            href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
-                        >
-                            I'll help!
-                        </a>
+                            >
+                                I won't help anymore.
+                            </a>
+                        @elseif ($instance->users->count() < $instance->amount)
+                            <a
+                                class="btn btn-outline-success btn-block mt-1"
+                                href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
+                            >
+                                I'll help!
+                            </a>
+                        @endif
                     @endif
-                @endif
 
-                @if (Auth::user()->can('board') && ! $event->activity->closed)
-                    <form
-                        class="form-horizontal mt-2"
-                        method="post"
-                        action="{{ route('event::addparticipationfor', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
-                    >
-                        {{ csrf_field() }}
+                    @if (Auth::user()->can('board') && ! $event->activity->closed)
+                        <form
+                            class="form-horizontal mt-2"
+                            method="post"
+                            action="{{ route('event::addparticipationfor', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
+                        >
+                            {{ csrf_field() }}
 
-                        <div class="row mb-3">
-                            <div class="col-9">
-                                <div class="form-group autocomplete">
-                                    <input
-                                        class="form-control user-search"
-                                        name="user_id"
-                                        required
-                                    />
+                            <div class="row mb-3">
+                                <div class="col-9">
+                                    <div class="form-group autocomplete">
+                                        <input
+                                            class="form-control user-search"
+                                            name="user_id"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <button
+                                        class="btn btn-outline-primary btn-block"
+                                        type="submit"
+                                    >
+                                        <i class="fas fa-plus-circle"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <button
-                                    class="btn btn-outline-primary btn-block"
-                                    type="submit"
-                                >
-                                    <i class="fas fa-plus-circle"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
                     @endif
-                    </p>
+                </p>
             </li>
         @endforeach
     </ul>
