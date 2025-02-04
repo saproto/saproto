@@ -97,7 +97,7 @@ class Committee extends Model
 
     public function getEmailAttribute(): string
     {
-        return $this->slug.'@'.Config::string('proto.emaildomain');
+        return $this->slug . '@' . Config::string('proto.emaildomain');
     }
 
     public function pastEvents(): Builder
@@ -150,7 +150,7 @@ class Committee extends Model
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+                (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
                 $members['members']['current'][] = $membership;
             } elseif (strtotime($membership->created_at) > date('U')) {
                 $members['members']['future'][] = $membership;
@@ -165,8 +165,12 @@ class Committee extends Model
     /**
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember(User $user): bool
+    public function isMember(?User $user): bool
     {
-        return $this->users->where('users.id', $user->id)->count() > 0;
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        return $user->committees->contains($this);
     }
 }

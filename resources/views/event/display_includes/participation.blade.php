@@ -1,3 +1,4 @@
+@php($authParticipation = $event->activity->getParticipation(Auth::user()))
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
@@ -11,13 +12,13 @@
                         {{ $event->activity->closedAccount->account_number }} ,
                         {{ $event->activity->closedAccount->name }})
                     @else()
-                            (Unknown account.)
+                        (Unknown account.)
                     @endif
                 </li>
             @endif
 
-            @if ($event->activity->getParticipation(Auth::user()) !== null)
-                @if ($event->activity->getParticipation(Auth::user())->backup)
+            @if ($authParticipation !== null)
+                @if ($authParticipation->backup)
                     <li class="list-group-item bg-warning text-white">
                         You are on the
                         <strong>back-up list</strong>
@@ -43,7 +44,7 @@
                     @if ($event->activity->price > 0)
                         &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                     @else
-                            &euro;0,-
+                        &euro;0,-
                     @endif
                 </strong>
             </li>
@@ -61,13 +62,13 @@
                 </a>
             @endif
 
-            @if ($event->activity->getParticipation(Auth::user()) !== null)
-                @if ($event->activity->canUnsubscribe() || $event->activity->getParticipation(Auth::user())->backup)
+            @if ($authParticipation !== null)
+                @if ($event->activity->canUnsubscribe() || $authParticipation->backup)
                     <a
                         class="list-group-item bg-danger text-white"
-                        href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}"
+                        href="{{ route('event::deleteparticipation', ['participation_id' => $authParticipation->id]) }}"
                     >
-                        @if ($event->activity->getParticipation(Auth::user())->backup)
+                        @if ($authParticipation->backup)
                             Sign me out of the back-up list.
                         @else
                             Sign me out.
@@ -86,14 +87,14 @@
                                 {{ $event->activity->isFull() ? 'Full!' : 'Closed!' }}
                                 Put me on the back-up list.
                             @else
-                                    Sign me up!
+                                Sign me up!
                             @endif
                             |
 
                             @if ($event->activity->price > 0)
                                 &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             @else
-                                    Free!
+                                Free!
                             @endif
                         </strong>
                         <br />
@@ -161,9 +162,7 @@
                         'event.display_includes.render_participant_list',
                         [
                             'participants' => $event->activity
-                                ->users()
-                                ->with('photo')
-                                ->get(),
+                                ->users,
                             'event' => $event,
                         ]
                     )
@@ -232,26 +231,26 @@
                 This activity requires you to sign-up. You can only sign-up when
                 you are a member.
 
-                @if (! Auth::check())
-                    <p class="card-text">
-                        Please
-                        <a
-                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
-                        >
-                            log-in
-                        </a>
-                        if you are already a member.
-                    </p>
-                @elseif (! Auth::user()->is_member)
-                    <p class="card-text">
-                        Please
-                        <a href="{{ route('becomeamember') }}">
-                            become a member
-                        </a>
-                        to sign-up for this activity.
-                    </p>
+            @if (! Auth::check())
+                <p class="card-text">
+                    Please
+                    <a
+                        href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                    >
+                        log-in
+                    </a>
+                    if you are already a member.
+                </p>
+            @elseif (! Auth::user()->is_member)
+                <p class="card-text">
+                    Please
+                    <a href="{{ route('becomeamember') }}">
+                        become a member
+                    </a>
+                    to sign-up for this activity.
+                </p>
                 @endif
-            </p>
+                </p>
         </div>
     </div>
 @endif

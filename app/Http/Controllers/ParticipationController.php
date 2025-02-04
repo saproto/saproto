@@ -92,10 +92,9 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function createFor($id, Request $request)
+    public function createFor(int $id, Request $request)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
