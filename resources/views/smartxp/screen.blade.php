@@ -1,583 +1,415 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-            name="viewport"
-            content="initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
-        <meta http-equiv="refresh" content="3600" />
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
+@extends('website.master')
 
-        <link
-            rel="shortcut icon"
-            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
-        />
+@section('page-title')
+    Protopolis Screen v12
+@endsection
 
-        <title>SmartXP Screen v3</title>
+@push('stylesheet')
+    <style>
+        html {
+            width: 100vw;
+            height: 100vh;
+        }
 
-        @include('website.assets.stylesheets')
+        body {
+            height: 100%;
+            background-color: #f1f1f1;
+            padding: 30px;
+        }
 
-        <style>
-            .h-33 {
-                height: 33.33%;
+        span {
+            display: block;
+        }
+
+        #info-row {
+            height: 20%;
+        }
+
+        .protubebackground {
+            background-color: rgb(255 255 255);
+            opacity: 0.8;
+            width: 100%;
+        }
+
+        .protubecard {
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+            border: 0px solid #00aac0;
+            border-left-width: 4px;
+        }
+
+        .font-size-lg {
+            font-size: 1.5rem;
+        }
+
+        .activity.past {
+            opacity: 0.5;
+        }
+
+        span.current {
+            font-weight: bold;
+        }
+
+        .scroll-title {
+            animation: slide-left 15s linear infinite;
+        }
+
+        @keyframes slide-left {
+            0% {
+                -webkit-transform: translateX(0);
+                transform: translateX(0);
             }
-
-            .h-66 {
-                height: 66.66%;
+            100% {
+                -webkit-transform: translateX(-50%);
+                transform: translateX(-50%);
             }
+        }
+    </style>
+@endpush
 
-            .green {
-                color: #c1ff00;
-            }
+@section('body')
+    <div class="row text-black">
+        {{-- narrowcasting or protube --}}
+        <div class="col-9">
+            @if (! empty($protube))
+                @include('smartxp.protube_iframe')
+            @else
+                @include('narrowcasting.display')
+            @endif
+        </div>
 
-            html,
-            body,
-            #container {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                padding: 15px 10px;
-                margin: 0;
-                background-color: #333;
-                overflow: hidden;
-            }
-
-            .box {
-                position: relative;
-                background-color: rgba(0, 0, 0, 0.5);
-                border-bottom: 5px solid #c1ff00;
-                box-shadow: 0 0 20px -7px #000;
-                border-radius: 0.25rem;
-                overflow: hidden;
-            }
-
-            .box-header {
-                font-size: 30px;
-                font-weight: bold;
-                color: #fff;
-                text-align: center;
-                padding: 15px 0;
-                margin: 0 40px;
-                border-bottom: 2px solid #fff;
-            }
-
-            .box-header.small {
-                font-size: 20px;
-                margin: 0 10px;
-            }
-
-            .box-partial {
-                padding: 20px 0;
-            }
-
-            .box-partial:nth-child(1) {
-                padding-top: 0;
-            }
-
-            .box-partial:nth-last-child(1) {
-                padding-bottom: 0;
-            }
-
-            .notice {
-                text-align: center;
-                font-size: 20px;
-                font-weight: bold;
-                margin-top: 20px;
-                color: #fff;
-            }
-
-            #time {
-                height: 70px;
-                line-height: 50px;
-                padding: 5px 0;
-                margin: 0 40px;
-                font-weight: bold;
-                border-bottom: 0;
-                color: #fff;
-                font-size: 35px;
-                overflow: visible;
-            }
-
-            #ticker {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                height: 5px;
-                width: 100%;
-                border-radius: 0.25rem;
-                background-color: #c1ff00;
-            }
-
-            .activity:nth-child(even) {
-                background-color: rgba(255, 255, 255, 0.05);
-            }
-
-            .activity.past {
-                opacity: 0.5;
-            }
-
-            .activity.current {
-                color: #c1ff00;
-            }
-
-            span.current {
-                color: #c1ff00;
-                font-weight: bold;
-            }
-
-            .activity {
-                width: 100%;
-                color: #fff;
-                text-align: left;
-                padding: 20px 40px;
-                font-size: 20px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .busentry:nth-child(1) {
-                padding-top: 10px;
-            }
-
-            .busentry:nth-child(even) {
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-
-            .busentry {
-                padding: 5px 10px 5px 10px;
-                color: #fff;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            #protube {
-                position: relative;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                border-bottom: none;
-            }
-
-            #protube.inactive {
-                background-image: url({{ Config::string('app-proto.fishcam-url') }}) !important;
-            }
-
-            #protube-title {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                text-shadow: 0 0 5px #000;
-                border: none;
-            }
-
-            #protube-ticker {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                height: 5px;
-                width: 100%;
-                background-color: #c1ff00;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div id="container" class="row row-eq-height h-100">
-            <div class="col-md-4">
-                <div class="box-partial h-100">
-                    <div class="box h-100">
-                        <div class="box-header">
-                            <i class="fas fa-calendar-alt fa-fw me-2"></i>
-                            Timetable
-                        </div>
-
-                        <div id="timetable">
-                            <div class="notice">Loading timetable...</div>
-                        </div>
-                    </div>
+        <div class="ms-2 col h-auto d-flex flex-column">
+            {{-- On screen clock --}}
+            <div class="row mb-3">
+                <div
+                    class="protubecard protubebackground p-3 text-center font-weight-bold display-3"
+                >
+                    <div id="clock" class="notice">Loading</div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="box-partial text-center h-33">
-                    <div id="time" class="box">
-                        <div id="clock">NOW!</div>
-                        <div id="ticker"></div>
+            <div class="row flex-grow-1">
+                <div class="protubecard protubebackground p-3">
+                    <div class="box-header font-size-lg">
+                        <i class="fa-solid fa-calendar-days fa-fw me-1"></i>
+                        Timetable
                     </div>
 
-                    <br />
-
-                    <img
-                        src="{{ asset('images/logo/inverse.png') }}"
-                        class="h-75"
-                    />
-                </div>
-
-                <div class="box-partial h-33">
-                    <div id="protube" class="box inactive h-100">
-                        <div id="protube-title" class="box-header">
-                            Connecting to ProTube...
-                        </div>
-
-                        <div id="protube-ticker"></div>
-                    </div>
-                </div>
-
-                <div class="box-partial h-33">
-                    <div id="protopeners" class="box h-100">
-                        <div class="box-header small">
-                            <i
-                                class="fas fa-door-closed fa-fw me-2"
-                                id="protopolis-fa"
-                            ></i>
-                            Protopolis
-                        </div>
-
-                        <div id="protopeners-timetable"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="box-partial h-66">
-                    <div class="box h-100">
-                        <div class="box-header">
-                            <i class="fas fa-calendar-alt fa-fw me-2"></i>
-                            Activities
-                        </div>
-
-                        <div id="activities">
-                            <div class="notice">Loading activities...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box-partial h-33">
-                    <div class="box h-100">
-                        <div class="row px-4">
-                            <div class="col-md-6">
-                                <div class="box-header small">
-                                    <i class="fas fa-bus fa-fw me-1"></i>
-                                    Westerbegraafplaats
-                                </div>
-
-                                <div id="businfo-wester" class="businfo"></div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="box-header small">
-                                    <i class="fas fa-bus fa-fw me-1"></i>
-                                    Langenkampweg
-                                </div>
-
-                                <div id="businfo-langen" class="businfo"></div>
-                            </div>
-                        </div>
+                    <div id="timetable" class="notice">
+                        Loading timetable...
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div id="info-row" class="row text-black d-flex">
+        <div class="col-9 mt-3 h-100" style="padding: 0">
+            <div id="activities" class="d-flex flex-row mb-3 gap-2 h-100">
+                <div
+                    class="notice protubecard protubebackground flex-grow-1 p-2 font-weight-bold"
+                >
+                    <div id="event-loader" class="font-size-lg">
+                        Loading events
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 mt-3 h-100" style="padding: 0 0 0 8px">
+            <div
+                id="protopeners"
+                class="box protubecard protubebackground p-3 h-100"
+            >
+                <div class="box-header font-size-lg">
+                    <i
+                        class="fas fa-door-closed fa-fw me-1"
+                        id="protopolis-fa"
+                    ></i>
+                    Protopolis
+                </div>
 
-        @include('website.assets.javascripts')
-        @stack('javascript')
+                <div id="protopeners-timetable" class="h-100"></div>
+            </div>
+        </div>
+    </div>
+@endsection
 
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            function updateClock() {
-                let now = moment()
-                document.getElementById('clock').innerHTML =
-                    '<i class="fas fa-clock fa-fw me-2"></i>' +
-                    now.format('HH:mm:ss')
-                document.getElementById('ticker').style.width =
-                    (now.format('s.SSS') / 60) * 100 + '%'
-            }
-
-            function updateTimetable() {
-                const timetable = document.getElementById('timetable')
-
-                get('{{ route('api::screen::timetable') }}')
-                    .then((data) => {
-                        if (data.length > 0) {
-                            timetable.innerHTML = ''
-                            let count = 0
-                            for (let i in data) {
-                                if (count >= 4) return
-                                if (!data[i].over) {
-                                    let start = moment.unix(data[i].start)
-                                    let end = moment.unix(data[i].end)
-                                    let time =
-                                        start.format('HH:mm') +
-                                        ' - ' +
-                                        end.format('HH:mm')
-                                    let title = data[i].title
-                                    let displayTime =
-                                        '<i class="fas fa-clock fa-fw me-1"></i>' +
-                                        time +
-                                        ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
-                                        data[i].place +
-                                        '</span>'
-                                    timetable.innerHTML +=
-                                        '<div class="activity">' +
-                                        (data[i].studyShort
-                                            ? '<span class="float-end ms-2">' +
-                                              '<i class="fas fa-graduation-cap fa-fw me-2"></i>' +
-                                              data[i].studyShort +
-                                              ' ' +
-                                              (data[i].year
-                                                  ? 'Year ' + data[i].year
-                                                  : '') +
-                                              '</span> '
-                                            : null) +
-                                        '<strong>' +
-                                        data[i].type +
-                                        '</strong><br>' +
-                                        '<span class="' +
-                                        (data[i].current ? 'current' : '') +
-                                        '">' +
-                                        title +
-                                        '</span><br>' +
-                                        displayTime +
-                                        '</div>'
-                                    count++
-                                }
-                            }
-                            if (count === 0) {
-                                timetable.innerHTML =
-                                    '<div class="notice">No more lectures today!</div>'
-                            }
-                        } else {
-                            timetable.innerHTML =
-                                '<div class="notice">No lectures today!</div>'
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        timetable.innerHTML =
-                            '<div class="notice">Lectures could not be found...</div>'
-                    })
-            }
-
-            function updateActivities() {
-                get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
-                    .then((data) => {
-                        if (data.length > 0) {
-                            document.getElementById('activities').innerHTML = ''
-                            for (let i in data) {
-                                let start = moment.unix(data[i].start)
-                                let end = moment.unix(data[i].end)
-                                let time
-                                if (
-                                    start.format('DD-MM') ===
-                                    end.format('DD-MM')
-                                ) {
-                                    time =
-                                        start.format('DD-MM, HH:mm') +
-                                        ' - ' +
-                                        end.format('HH:mm')
-                                } else {
-                                    time =
-                                        start.format('DD-MM, HH:mm') +
-                                        ' - ' +
-                                        end.format('DD-MM, HH:mm')
-                                }
-                                document.getElementById(
-                                    'activities'
-                                ).innerHTML +=
-                                    '<div class="activity ' +
-                                    (data[i].current
-                                        ? 'current'
-                                        : data[i].over
-                                          ? 'past'
-                                          : '') +
-                                    '"><strong>' +
-                                    data[i].title +
-                                    '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' +
-                                    time +
-                                    ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' +
-                                    data[i].location +
-                                    '</span></div>'
-                            }
-                        } else {
-                            document.getElementById('activities').innerHTML =
-                                '<div class="notice">No upcoming activities!</div>'
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        document.getElementById('activities').innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>'
-                    })
-            }
-
-            function updateBuses() {
-                updateBus(43110270, 43110270, 'businfo-langen')
-                updateBus(43005640, 43005630, 'businfo-wester')
-            }
-
-            function updateBus(stop, stop_other_side, id) {
-                const element = document.getElementById(id)
-                get('{{ urldecode(route('api::screen::bus')) }}', {
-                    tpc_id: stop,
-                    tpc_id_other: stop_other_side,
-                })
-                    .then((data) => {
-                        let combinedBusses = {}
-                        for (const [key, value] of Object.entries(data)) {
-                            Object.assign(combinedBusses, value.Passes)
-                        }
-                        if (Object.keys(combinedBusses).length > 0) {
-                            element.innerHTML = ''
-                            Object.entries(combinedBusses).sort(
-                                function (a, b) {
-                                    return (
-                                        new Date(
-                                            a[1].ExpectedArrivalTime
-                                        ).valueOf() -
-                                        new Date(
-                                            b[1].ExpectedArrivalTime
-                                        ).valueOf()
-                                    )
-                                }
-                            )
-
-                            for (const [key, value] of Object.entries(
-                                combinedBusses
-                            ).slice(0, 4)) {
-                                let colorLate =
-                                    (Math.abs(
-                                        new Date(value.ExpectedArrivalTime) -
-                                            new Date(value.TargetArrivalTime)
-                                    ) /
-                                        1000) *
-                                        60 >
-                                    1
-                                        ? '#ff0000'
-                                        : '#c1ff00'
-                                let drivingColor =
-                                    value.TripStopStatus === 'DRIVING'
-                                        ? '#c1ff00'
-                                        : '#fff'
-                                if (value.TripStopStatus !== 'ARRIVED') {
-                                    element.innerHTML +=
-                                        '<div class="busentry">' +
-                                        `<span style=color:${colorLate}>` +
-                                        new Date(value.ExpectedArrivalTime)
-                                            .toISOString()
-                                            .substr(11, 8)
-                                            .substr(0, 5) +
-                                        '</span>' +
-                                        ' ' +
-                                        value.TransportType +
-                                        ' ' +
-                                        value.LinePublicNumber +
-                                        ` ` +
-                                        `<span style="color: ${drivingColor};">` +
-                                        value.TripStopStatus +
-                                        '</span><br>Towards ' +
-                                        value.DestinationName50 +
-                                        '</div>'
-                                }
-                            }
-                        } else {
-                            element.innerHTML =
-                                '<div class="notice">No buses!</div>'
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(err)
-                        element.innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>'
-                    })
-            }
-
-            function updateProtopeners() {
-                const timetable = document.getElementById(
-                    'protopeners-timetable'
-                )
-                const protopolisFa = document.getElementById('protopolis-fa')
-
-                get('{{ route('api::screen::timetable::protopeners') }}')
-                    .then((data) => {
-                        if (data.length > 0) {
-                            document.getElementById(
-                                'protopeners-timetable'
-                            ).innerHTML = ''
-                            let open = false,
-                                count = 0
-                            for (let i in data) {
-                                if (data[i].over) continue
-                                else if (data[i].current) open = true
-                                let start = moment.unix(data[i].start)
-                                let end = moment.unix(data[i].end)
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        function updateTimetable() {
+            const timetable = document.getElementById('timetable')
+            timetable.innerHTML = ''
+            get('{{ route('api::screen::timetable') }}')
+                .then((data) => {
+                    if (data.length > 0) {
+                        let count = 0
+                        data.forEach((timetableItem) => {
+                            if (count >= 3) return
+                            if (!timetableItem.over) {
+                                let start = moment.unix(timetableItem.start)
+                                let end = moment.unix(timetableItem.end)
                                 let time =
                                     start.format('HH:mm') +
                                     ' - ' +
                                     end.format('HH:mm')
-                                document.getElementById(
-                                    'protopeners-timetable'
-                                ).innerHTML +=
-                                    '<div class="activity ' +
-                                    (data[i].current ? 'current' : '') +
-                                    '">' +
-                                    '   <div class="float-start">' +
-                                    time +
-                                    '</div>' +
-                                    '   <div class="float-end"><strong>' +
-                                    data[i].title +
-                                    '</strong></div>' +
-                                    '</div>'
+                                let title = timetableItem.title
+
+                                let activityDiv = document.createElement('div')
+                                activityDiv.className = 'activity'
+
+                                if (timetableItem.studyShort) {
+                                    let yearSpan =
+                                        document.createElement('span')
+                                    yearSpan.className = 'float-end ms-2'
+                                    yearSpan.innerHTML =
+                                        '<i class="fas fa-graduation-cap fa-fw me-2"></i>' +
+                                        timetableItem.studyShort +
+                                        ' ' +
+                                        (timetableItem.year
+                                            ? 'Year ' + timetableItem.year
+                                            : '')
+                                    activityDiv.appendChild(yearSpan)
+                                }
+
+                                let titleStrong =
+                                    document.createElement('strong')
+                                titleStrong.innerHTML = timetableItem.type
+                                activityDiv.appendChild(titleStrong)
+                                activityDiv.innerHTML += '<br>'
+
+                                let titleSpan = document.createElement('span')
+                                titleSpan.className = timetableItem.current
+                                    ? 'current'
+                                    : ''
+                                titleSpan.innerHTML = title
+                                activityDiv.appendChild(titleSpan)
+
+                                let locationDiv = document.createElement('div')
+                                locationDiv.className = 'w-100 h-10'
+                                locationDiv.innerHTML +=
+                                    '<i class="fas fa-clock fa-fw me-1"></i>' +
+                                    time
+
+                                let placeSpan = document.createElement('span')
+                                placeSpan.className = 'float-end'
+                                placeSpan.innerHTML =
+                                    '<i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
+                                    timetableItem.place
+                                locationDiv.appendChild(placeSpan)
+                                activityDiv.appendChild(locationDiv)
+                                activityDiv.innerHTML += '<br>'
+                                activityDiv.innerHTML += '<hr>'
+
+                                timetable.appendChild(activityDiv)
                                 count++
                             }
-                            if (open) {
-                                protopolisFa.classList.add('green')
-                                protopolisFa.classList.replace(
-                                    'fa-door-closed',
-                                    'fa-door-open'
-                                )
-                            } else {
-                                protopolisFa.classList.remove('green')
-                                protopolisFa.classList.replace(
-                                    'fa-door-open',
-                                    'fa-door-closed'
-                                )
-                            }
-                            if (count === 0)
-                                timetable.innerHTML =
-                                    '<div class="notice">Protopolis closed for today!</div>'
-                        } else {
+                        })
+                        if (count === 0) {
                             timetable.innerHTML =
-                                '<div class="notice">Protopolis closed today!</div>'
+                                '<div class="notice">No more lectures today!</div>'
                         }
-                    })
-                    .catch((err) => {
-                        console.error(err)
+                    } else {
                         timetable.innerHTML =
-                            '<div class="notice">Something went wrong during retrieval...</div>'
-                    })
-            }
+                            '<div class="notice">No lectures today!</div>'
+                    }
+                })
+                .catch((err) => {
+                    console.error(err)
+                    timetable.innerHTML =
+                        '<div class="notice">Lectures could not be found...</div>'
+                })
+        }
 
-            window.addEventListener('load', (_) => {
-                updateTimetable()
-                updateActivities()
-                updateProtopeners()
-                updateClock()
-                updateBuses()
-                updateProtopeners()
+        function updateActivities() {
+            get('{{ route('api::events::upcoming', ['limit' => 4]) }}')
+                .then((data) => {
+                    if (data.length > 0) {
+                        document.getElementById('activities').innerHTML = ''
+                        data.forEach((activity) => {
+                            let start = moment.unix(activity.start)
+                            let end = moment.unix(activity.end)
+                            let time
+                            if (start.format('DD-MM') === end.format('DD-MM')) {
+                                time =
+                                    start.format('DD-MM, HH:mm') +
+                                    ' - ' +
+                                    end.format('HH:mm')
+                            } else {
+                                time =
+                                    start.format('DD-MM, HH:mm') +
+                                    ' - ' +
+                                    end.format('DD-MM, HH:mm')
+                            }
+                            let newDiv = document.createElement('div')
+                            newDiv.className =
+                                'activity bg-img protubecard protubebackground flex-grow-1' +
+                                (activity.over ? 'past' : '')
+                            newDiv.style.padding = '15px'
+                            if (activity.image) {
+                                newDiv.style.background =
+                                    'linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url(' +
+                                    activity.image +
+                                    ')'
+                                newDiv.style.backgroundSize = 'cover'
+                                newDiv.style.backgroundPosition =
+                                    'center center'
+                                newDiv.style.backgroundRepeat = 'no-repeat'
+                            }
 
-                const everySecond = 1000
-                const everyMinute = 60 * 1000
-                const everyFiveMinutes = 5 * 60 * 1000
-                setInterval(updateTimetable, everyFiveMinutes)
-                setInterval(updateActivities, everyFiveMinutes)
-                setInterval(updateProtopeners, everyMinute)
-                setInterval(updateClock, everySecond)
-                setInterval(updateBuses, everyFiveMinutes)
-            })
-        </script>
-    </body>
-</html>
+                            let titleDiv = document.createElement('div')
+                            titleDiv.style.overflowX = 'hidden'
+                            titleDiv.style.display = 'block'
+                            titleDiv.className = 'mx-2'
+
+                            let titleH3 = document.createElement('h3')
+                            titleH3.style.whiteSpace = 'nowrap'
+                            titleH3.style.width = 'fit-content'
+
+                            let titleSpan = document.createElement('span')
+                            titleSpan.innerHTML = activity.title
+                            titleSpan.className = 'me-5'
+                            titleSpan.style.display = 'inline-block'
+                            titleH3.appendChild(titleSpan)
+
+                            titleDiv.appendChild(titleH3)
+                            let timeDiv = document.createElement('div')
+                            timeDiv.innerHTML =
+                                '<i class="fas fa-clock fa-fw me-1"></i>' + time
+
+                            let locationSpan = document.createElement('div')
+                            locationSpan.innerHTML =
+                                '<i class="fas fa-map-marker-alt fa-fw me-1"></i>' +
+                                activity.location +
+                                '</span>'
+
+                            newDiv.appendChild(titleDiv)
+                            newDiv.appendChild(timeDiv)
+                            newDiv.appendChild(locationSpan)
+                            document
+                                .getElementById('activities')
+                                .appendChild(newDiv)
+                        })
+
+                        document
+                            .getElementById('activities')
+                            .childNodes.forEach((activity) => {
+                                let div = activity.childNodes[0]
+                                let H3 = div.childNodes[0]
+                                if (H3.clientWidth > div.clientWidth) {
+                                    H3.classList.add('scroll-title')
+                                    H3.appendChild(
+                                        H3.childNodes[0].cloneNode(true)
+                                    )
+                                }
+                            })
+                    } else {
+                        document.getElementById('activities').innerHTML =
+                            '<div class="notice">No upcoming activities!</div>'
+                    }
+                })
+                .catch((err) => {
+                    console.error(err)
+                    document.getElementById('activities').innerHTML =
+                        '<div class="notice">Something went wrong during retrieval...</div>'
+                })
+        }
+
+        function updateProtopeners() {
+            const timetable = document.getElementById('protopeners-timetable')
+            const protopolisFa = document.getElementById('protopolis-fa')
+
+            get('{{ route('api::screen::timetable::protopeners') }}')
+                .then((data) => {
+                    if (data.length > 0) {
+                        document.getElementById(
+                            'protopeners-timetable'
+                        ).innerHTML = ''
+                        let open = false,
+                            count = 0
+                        data.forEach((protOpener) => {
+                            if (protOpener.over || count > 1) return
+                            else if (protOpener.current) open = true
+                            let start = moment.unix(protOpener.start)
+                            let end = moment.unix(protOpener.end)
+                            let time =
+                                start.format('HH:mm') +
+                                ' - ' +
+                                end.format('HH:mm')
+
+                            let newDiv = document.createElement('div')
+                            newDiv.className =
+                                'activity ' +
+                                (protOpener.current ? 'current' : '')
+
+                            let timeDiv = document.createElement('div')
+                            timeDiv.className = 'float-start h-100'
+                            timeDiv.innerHTML = time
+
+                            let titleDiv = document.createElement('div')
+                            titleDiv.className = 'float-end h-100'
+                            titleDiv.innerHTML =
+                                '<strong>' + protOpener.title + '</strong>'
+
+                            newDiv.appendChild(timeDiv)
+                            newDiv.appendChild(titleDiv)
+
+                            let protOpenDiv = document.getElementById(
+                                'protopeners-timetable'
+                            )
+                            protOpenDiv.appendChild(newDiv)
+                            protOpenDiv.appendChild(
+                                document.createElement('br')
+                            )
+                            protOpenDiv.appendChild(
+                                document.createElement('hr')
+                            )
+
+                            count++
+                        })
+                        if (open) {
+                            protopolisFa.classList.replace(
+                                'fa-door-closed',
+                                'fa-door-open'
+                            )
+                        } else {
+                            protopolisFa.classList.replace(
+                                'fa-door-open',
+                                'fa-door-closed'
+                            )
+                        }
+                        if (count === 0)
+                            timetable.innerHTML =
+                                '<div class="notice">Protopolis closed for today!</div>'
+                    } else {
+                        timetable.innerHTML =
+                            '<div class="notice">Protopolis closed today!</div>'
+                    }
+                })
+                .catch((err) => {
+                    console.error(err)
+                    timetable.innerHTML =
+                        '<div class="notice">Something went wrong during retrieval...</div>'
+                })
+        }
+
+        function updateClock() {
+            document.getElementById('clock').innerHTML =
+                moment().format('HH:mm:ss')
+        }
+
+        window.addEventListener('load', (_) => {
+            updateTimetable()
+            updateActivities()
+            updateProtopeners()
+            updateClock()
+
+            const everySecond = 1000
+            const everyMinute = 60 * 1000
+            const everyFiveMinutes = 5 * 60 * 1000
+            setInterval(updateTimetable, everyFiveMinutes)
+            setInterval(updateActivities, everyFiveMinutes)
+            setInterval(updateProtopeners, everyMinute)
+            setInterval(updateClock, everySecond)
+        })
+    </script>
+@endpush
