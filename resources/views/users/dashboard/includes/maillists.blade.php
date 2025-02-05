@@ -12,11 +12,14 @@
 
         <p class="card-text">
             <em>Click on a list for more info.</em>
-            @php($lists = App\Models\EmailList::withExists([
-                'users as user_subscribed' => function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                },
-            ])->get())
+            @php
+                $lists = App\Models\EmailList::withExists([
+                    'users as user_subscribed' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    },
+                ])->get();
+            @endphp
+
             @if ($lists->count() > 0)
                 <div class="accordion" id="email__accordion">
                     @foreach ($lists as $i => $list)

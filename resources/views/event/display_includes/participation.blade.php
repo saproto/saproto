@@ -1,3 +1,4 @@
+@php($authParticipation = $event->activity->getParticipation(Auth::user()))
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
@@ -16,8 +17,8 @@
                 </li>
             @endif
 
-            @if ($event->activity->getParticipation(Auth::user()) !== null)
-                @if ($event->activity->getParticipation(Auth::user())->backup)
+            @if ($authParticipation !== null)
+                @if ($authParticipation->backup)
                     <li class="list-group-item bg-warning text-white">
                         You are on the
                         <strong>back-up list</strong>
@@ -61,13 +62,13 @@
                 </a>
             @endif
 
-            @if ($event->activity->getParticipation(Auth::user()) !== null)
-                @if ($event->activity->canUnsubscribe() || $event->activity->getParticipation(Auth::user())->backup)
+            @if ($authParticipation !== null)
+                @if ($event->activity->canUnsubscribe() || $authParticipation->backup)
                     <a
                         class="list-group-item bg-danger text-white"
-                        href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}"
+                        href="{{ route('event::deleteparticipation', ['participation_id' => $authParticipation->id]) }}"
                     >
-                        @if ($event->activity->getParticipation(Auth::user())->backup)
+                        @if ($authParticipation->backup)
                             Sign me out of the back-up list.
                         @else
                             Sign me out.
@@ -160,10 +161,7 @@
                     @include(
                         'event.display_includes.render_participant_list',
                         [
-                            'participants' => $event->activity
-                                ->users()
-                                ->with('photo')
-                                ->get(),
+                            'participants' => $event->activity->users,
                             'event' => $event,
                         ]
                     )

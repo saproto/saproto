@@ -4,17 +4,17 @@
     </div>
 
     <ul class="list-group list-group-flush">
-        @foreach ($event->activity->helpingCommitteeInstances()->with('committee') as $key => $instance)
+        @foreach ($event->activity->helpingCommitteeInstances as $key => $instance)
             <li class="list-group-item">
                 <p class="card-title">
                     <strong>
                         {{ $instance->committee->name }}
-                        @if ($instance->committee->isMember(Auth::user()) || Auth::user()->can('board'))
+                        @if (Auth::user()->can('board') || Auth::user()->committees->contains($instance->committee))
                                 ({{ $instance->users->count() }}/{{ $instance->amount }})
                         @endif
                     </strong>
 
-                    @if ($event->activity->helpingUsers($instance->id)->count() < 1)
+                    @if ($instance->users->count() < 1)
                         <p class="card-text">
                             No people are currently helping.
                         </p>
@@ -22,17 +22,25 @@
                         @include(
                             'event.display_includes.render_participant_list',
                             [
-                                'participants' => $event->activity->helpingUsers($instance->id),
+                                'participants' => $instance->users,
                                 'event' => $event,
                             ]
                         )
                     @endif
 
-                    @if (! $event->activity->closed && $instance->committee->isMember(Auth::user()))
-                        @if ($event->activity->getHelperParticipation(Auth::user(), $instance) !== null)
+                    @if (! $event->activity->closed && Auth::user()->committees->contains($instance->committee))
+                        @if ($instance->users->contains(Auth::user()))
                             <a
                                 class="btn btn-outline-warning btn-block mt-1"
-                                href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelperParticipation(Auth::user(), $instance)->id]) }}"
+                                href="{{
+                                    route('event::deleteparticipation', [
+                                        'participation_id' => $instance->users
+                                            ->filter(function ($user) {
+                                                return $user->id === Auth::id();
+                                            })
+                                            ->first()->pivot->id,
+                                    ])
+                                }}"
                             >
                                 I won't help anymore.
                             </a>

@@ -2,7 +2,7 @@
     /**@var \App\Models\Event $event */
 @endphp
 
-@if ($event->tickets()->count() > 0)
+@if ($event->tickets->count() > 0)
     <?php $has_unpaid_tickets = false; ?>
 
     @if ($event->hasBoughtTickets(Auth::user()))
