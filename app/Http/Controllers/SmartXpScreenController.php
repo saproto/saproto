@@ -13,7 +13,7 @@ class SmartXpScreenController extends Controller
      */
     public function show()
     {
-        return view('smartxp.screen');
+        return view('smartxp.screen', ['protube' => true]);
     }
 
     /**
@@ -21,7 +21,7 @@ class SmartXpScreenController extends Controller
      */
     public function showProtopolis()
     {
-        return view('smartxp.screen', ['protube' => true]);
+        return view('smartxp.screen');
     }
 
     public function timetable(): array
