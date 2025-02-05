@@ -92,7 +92,7 @@ class Committee extends Model
 
     public function organizedEvents(): Builder
     {
-        return Event::getEventBlockQuery()->where('committee_id', $this->id);
+        return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
     public function getEmailAttribute(): string
@@ -104,7 +104,10 @@ class Committee extends Model
     {
         return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where('secret', '=', 0);
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
             });
     }
 
@@ -112,10 +115,13 @@ class Committee extends Model
     {
         return $this
             ->organizedEvents()
-            ->where('end', '>', time())
+            ->where('end', '>', Carbon::now()->timestamp)
             ->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where('secret', '=', 0);
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
             });
     }
 
@@ -126,12 +132,14 @@ class Committee extends Model
         return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
             $q->whereIn('id', $activityIds);
         })
-            ->where('secret', false)
-            ->where(static function ($q) {
-                $q->where('publication', '<', time())
-                    ->orWhereNull('publication');
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
             })
-            ->where('end', '<', time())
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->with('committee')
             ->orderBy('created_at');
     }
 
@@ -165,8 +173,12 @@ class Committee extends Model
     /**
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember(User $user): bool
+    public function isMember(?User $user): bool
     {
-        return $this->users->where('users.id', $user->id)->count() > 0;
+        if (! $user instanceof User) {
+            return false;
+        }
+
+        return $user->committees->contains($this);
     }
 }

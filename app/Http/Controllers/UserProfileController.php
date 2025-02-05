@@ -13,10 +13,9 @@ use Illuminate\View\View;
 class UserProfileController extends Controller
 {
     /**
-     * @param  string|null  $id
      * @return View
      */
-    public function show($id = null)
+    public function show(?string $id = null)
     {
         $user = $id == null ? Auth::user() : User::fromPublicId($id);
 
@@ -30,15 +29,15 @@ class UserProfileController extends Controller
         $totalProducts = $this->getProductsPurchased($user);
         $totalSignups = $this->getTotalSignups($user);
         $achievements = $user->achievements;
+        $user->load('committees');
 
         return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney' => $moneySpent, 'signups' => $totalSignups, 'totalproducts' => $totalProducts, 'achievements' => $achievements]);
     }
 
     /**
-     * @param  User  $user
      * @return Collection|CommitteeMembership[]
      */
-    private function getPastMemberships($user, bool $with_societies)
+    private function getPastMemberships(User $user, bool $with_societies)
     {
         return CommitteeMembership::onlyTrashed()
             ->with('committee')
@@ -59,6 +58,6 @@ class UserProfileController extends Controller
 
     private function getTotalSignups($user): int
     {
-        return ActivityParticipation::query()->where('user_id', $user->id)->count();
+        return ActivityParticipation::query()->where('user_id', $user->id)->whereNull('committees_activities_id')->count();
     }
 }
