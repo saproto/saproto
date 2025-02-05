@@ -12,18 +12,20 @@
 
         <p class="card-text">
             <em>Click on a list for more info.</em>
-            @php($lists = App\Models\EmailList::withExists([
-                'users as user_subscribed' => function ($query) use ($user) {
-                    $query->where('user_id', $user->id);
-                },
-            ])->get())
-            @if ($lists->count() > 0)
-                <div class="accordion" id="email__accordion">
-                    @foreach ($lists as $i => $list)
-                        <div class="card border">
-                            <div
-                                class="card-header border-bottom-0 cursor-pointer"
-                            >
+        @php
+            $lists = App\Models\EmailList::withExists([
+                        'users as user_subscribed' => function ($query) use ($user) {
+                            $query->where('user_id', $user->id);
+                        },
+                    ])->get();
+        @endphp
+        @if ($lists->count() > 0)
+            <div class="accordion" id="email__accordion">
+                @foreach ($lists as $i => $list)
+                    <div class="card border">
+                        <div
+                            class="card-header border-bottom-0 cursor-pointer"
+                        >
                                 <span
                                     data-bs-toggle="collapse"
                                     data-bs-target="#email__collapse__{{ $list->id }}"
@@ -34,40 +36,40 @@
                                     {{ $list->name }}
                                 </span>
 
-                                @if ($list->user_subscribed)
-                                    <a
-                                        href="{{ route('togglelist', ['id' => $list->id]) }}"
-                                        class="badge bg-danger float-end"
-                                    >
-                                        Unsubscribe
-                                    </a>
-                                @elseif (! $list->is_member_only || $user->member)
-                                    <a
-                                        href="{{ route('togglelist', ['id' => $list->id]) }}"
-                                        class="badge bg-info float-end"
-                                    >
-                                        Subscribe
-                                    </a>
-                                @else
-                                    <span class="badge bg-dark float-end">
+                            @if ($list->user_subscribed)
+                                <a
+                                    href="{{ route('togglelist', ['id' => $list->id]) }}"
+                                    class="badge bg-danger float-end"
+                                >
+                                    Unsubscribe
+                                </a>
+                            @elseif (! $list->is_member_only || $user->member)
+                                <a
+                                    href="{{ route('togglelist', ['id' => $list->id]) }}"
+                                    class="badge bg-info float-end"
+                                >
+                                    Subscribe
+                                </a>
+                            @else
+                                <span class="badge bg-dark float-end">
                                         Members only
                                     </span>
-                                @endif
-                            </div>
+                            @endif
+                        </div>
 
-                            <div
-                                id="email__collapse__{{ $list->id }}"
-                                class="collapse"
-                                data-parent="#email__accordion"
-                            >
-                                <div class="card-body">
-                                    {!! Markdown::convert($list->description) !!}
-                                </div>
+                        <div
+                            id="email__collapse__{{ $list->id }}"
+                            class="collapse"
+                            data-parent="#email__accordion"
+                        >
+                            <div class="card-body">
+                                {!! Markdown::convert($list->description) !!}
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
+            </div>
             @endif
-        </p>
+            </p>
     </div>
 </div>
