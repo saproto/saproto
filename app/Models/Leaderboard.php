@@ -46,21 +46,19 @@ class Leaderboard extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function committee()
+    public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class, 'committee_id');
     }
 
-    /** @return HasMany */
-    public function entries()
+    public function entries(): HasMany
     {
         return $this->hasMany(LeaderboardEntry::class);
     }
 
     public static function isAdminAny(User $user): bool
     {
-        return \App\Models\Leaderboard::query()->whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
+        return Leaderboard::query()->whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
     }
 
     public function canEdit(User $user): bool
