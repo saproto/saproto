@@ -1,4 +1,4 @@
-@php($authParticipation = $event->activity->getParticipation(Auth::user()))
+@php($authParticipation = $event->activity?->getParticipation(Auth::user()))
 @if ($event->activity && Auth::user()?->is_member && $event->activity->withParticipants())
     <div class="card mb-3">
         <ul class="list-group list-group-flush text-center">
