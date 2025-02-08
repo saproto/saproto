@@ -9,7 +9,7 @@ it('shows the committee page with previous events', function () {
     $user = User::factory()->has(Member::factory())->create();
 
     $event = Event::factory()->has(Committee::factory([
-        'public'=>true
+        'public' => true,
     ]))->create([
         'secret' => false,
         'end' => time() - 500,
