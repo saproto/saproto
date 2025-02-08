@@ -29,13 +29,13 @@ return new class extends Migration
         Schema::table('newsitems', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('user_id')->index()->change();
-            $table->unsignedBigInteger('featured_image_id')->index()->change();
+            $table->unsignedBigInteger('featured_image_id')->nullable()->index()->change();
         });
         Schema::table('activities_users', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('user_id')->change();
             $table->unsignedBigInteger('activity_id')->change();
-            $table->unsignedBigInteger('committees_activities_id')->index()->change();
+            $table->unsignedBigInteger('committees_activities_id')->index()->nullable()->change();
         });
         Schema::table('permissions', function ($table) {
             $table->id()->change();
@@ -60,9 +60,9 @@ return new class extends Migration
         });
         Schema::table('events', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('category_id')->index()->change();
-            $table->unsignedBigInteger('committee_id')->index()->change();
-            $table->unsignedBigInteger('image_id')->index()->change();
+            $table->unsignedBigInteger('category_id')->nullable()->index()->change();
+            $table->unsignedBigInteger('committee_id')->nullable()->index()->change();
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('emails', function ($table) {
             $table->id()->change();
@@ -77,7 +77,7 @@ return new class extends Migration
         });
         Schema::table('dinnerforms', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('event_id')->index()->change();
+            $table->unsignedBigInteger('event_id')->nullable()->index()->change();
             $table->unsignedBigInteger('ordered_by_user_id')->index()->change();
         });
         Schema::table('hashmap', function ($table) {
@@ -116,7 +116,7 @@ return new class extends Migration
         Schema::table('photo_albums', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('thumb_id')->index()->change();
-            $table->unsignedBigInteger('event_id')->index()->change();
+            $table->unsignedBigInteger('event_id')->nullable()->index()->change();
         });
         Schema::table('leaderboards_entries', function ($table) {
             $table->id()->change();
@@ -132,11 +132,11 @@ return new class extends Migration
         Schema::table('members', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('user_id')->index()->change();
-            $table->unsignedBigInteger('omnomcom_sound_id')->index()->change();
+            $table->unsignedBigInteger('omnomcom_sound_id')->nullable()->index()->change();
         });
         Schema::table('narrowcasting', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('image_id')->index()->change();
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('achievements_users', function ($table) {
             $table->id()->change();
@@ -154,8 +154,8 @@ return new class extends Migration
         });
         Schema::table('menuitems', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('parent')->index()->change();
-            $table->unsignedBigInteger('page_id')->index()->change();
+            $table->unsignedBigInteger('parent')->nullable()->index()->change();
+            $table->unsignedBigInteger('page_id')->nullable()->index()->change();
         });
         Schema::table('ticket_purchases', function ($table) {
             $table->id()->change();
@@ -165,7 +165,7 @@ return new class extends Migration
         });
         Schema::table('videos', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('event_id')->index()->change();
+            $table->unsignedBigInteger('event_id')->nullable()->index()->change();
         });
         Schema::table('users_mailinglists', function ($table) {
             $table->id()->change();
@@ -176,11 +176,11 @@ return new class extends Migration
         });
         Schema::table('users', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('image_id')->index()->change();
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('activities', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('event_id')->change();
+            $table->unsignedBigInteger('event_id')->nullable()->change();
         });
         Schema::table('mailinglists', function ($table) {
             $table->id()->change();
@@ -190,8 +190,8 @@ return new class extends Migration
         });
         Schema::table('orderlines', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('user_id')->change();
-            $table->unsignedBigInteger('cashier_id')->index()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->change();
+            $table->unsignedBigInteger('cashier_id')->nullable()->index()->change();
             $table->unsignedBigInteger('product_id')->index()->change();
         });
         Schema::table('pages_files', function ($table) {
@@ -207,11 +207,11 @@ return new class extends Migration
         });
         Schema::table('playedvideos', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('user_id')->index()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->index()->change();
         });
         Schema::table('committees', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('image_id')->index()->change();
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('companies', function ($table) {
             $table->id()->change();
@@ -228,11 +228,11 @@ return new class extends Migration
         });
         Schema::table('pages', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('featured_image_id')->index()->change();
+            $table->unsignedBigInteger('featured_image_id')->nullable()->index()->change();
         });
         Schema::table('headerimages', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('credit_id')->index()->change();
+            $table->unsignedBigInteger('credit_id')->nullable()->index()->change();
             $table->unsignedBigInteger('image_id')->index()->change();
         });
         Schema::table('withdrawals_failed', function ($table) {
@@ -264,7 +264,7 @@ return new class extends Migration
         });
 
         Schema::table('feedback_categories', function (Blueprint $table) {
-            $table->unsignedBigInteger('reviewer_id')->index()->change();
+            $table->unsignedBigInteger('reviewer_id')->nullable()->index()->change();
         });
         Schema::table('event_newsitem', function (Blueprint $table) {
             $table->unsignedBigInteger('event_id')->index()->change();
@@ -304,9 +304,8 @@ return new class extends Migration
         Schema::table('feedback', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->index()->change();
         });
-        Schema::table('wallstreet_drink_event', function (Blueprint $table) {
-            $table->unsignedBigInteger('wallstreet_drink_id')->index()->change();
-            $table->unsignedBigInteger('wallstreet_drink_events_id')->index()->change();
+        Schema::table('wallstreet_drink_events', function (Blueprint $table) {
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('sessions', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->index()->change();
@@ -324,7 +323,7 @@ return new class extends Migration
         });
         Schema::table('products', function (Blueprint $table) {
             $table->unsignedBigInteger('account_id')->index()->change();
-            $table->unsignedBigInteger('image_id')->index()->change();
+            $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('tokens', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->index()->change();
