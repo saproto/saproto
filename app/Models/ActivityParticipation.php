@@ -56,20 +56,17 @@ class ActivityParticipation extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    /** @return BelongsTo */
-    public function activity()
+    public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
     }
 
-    /** @return BelongsTo */
-    public function help()
+    public function help(): BelongsTo
     {
         return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
     }

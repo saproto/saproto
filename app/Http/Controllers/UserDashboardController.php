@@ -30,7 +30,7 @@ class UserDashboardController extends Controller
     public function show()
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = Auth::user()->load('roles.permissions');
 
         $qrcode = null;
         $tfakey = null;

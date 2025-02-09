@@ -176,22 +176,7 @@
             <input type="text" id="search_query" name="query" />
 
             <div id="results">
-                @foreach (Product::where("is_visible", true)
-                        ->where(function ($query) {
-                            $query
-                                ->where("is_visible_when_no_stock", true)
-                                ->orWhere("stock", ">", 0);
-                        })
-                        ->whereHas("categories", function ($query) {
-                            $query->whereIn(
-                                "product_categories.id",
-                                \Illuminate\Support\Facades\Config::array(
-                                    "omnomcom.stores.protopolis.categories"
-                                )
-                            );
-                        })
-                        ->get()
-                    as $i => $product)
+                @foreach ($products as $i => $product)
                     @php
                         /**@var Product $product */
                     @endphp

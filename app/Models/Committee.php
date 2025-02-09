@@ -92,7 +92,7 @@ class Committee extends Model
 
     public function organizedEvents(): Builder
     {
-        return Event::getEventBlockQuery()->where('committee_id', $this->id);
+        return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
     public function getEmailAttribute(): string
@@ -100,47 +100,47 @@ class Committee extends Model
         return $this->slug.'@'.Config::string('proto.emaildomain');
     }
 
-    /**
-     * @param  int  $n  the number of events to return
-     */
-    public function pastEvents(int $n): Collection|array
+    public function pastEvents(): Builder
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->take($n);
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
-    }
-
-    public function upcomingEvents(): Collection|array
-    {
-        $events = $this->organizedEvents()->where('end', '>', time());
-
-        if (Auth::user()?->can('board')) {
-            return $events->get();
-        }
-
-        return $events->where('secret', '=', 0)->get();
-    }
-
-    public function pastHelpedEvents($n): Collection|array
-    {
-        return Event::query()->whereHas('activity', function ($q) {
-            $q->whereHas('helpingCommittees', function ($q) {
-                $q->where('committee_id', $this->id);
+        return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
             });
+    }
+
+    public function upcomingEvents(): Builder
+    {
+        return $this
+            ->organizedEvents()
+            ->where('end', '>', Carbon::now()->timestamp)
+            ->orderBy('start', 'desc')
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
+            });
+    }
+
+    public function pastHelpedEvents(): Builder
+    {
+        $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
+
+        return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
+            $q->whereIn('id', $activityIds);
         })
-            ->where('secret', false)
-            ->where(static function ($q) {
-                $q->where('publication', '<', time())
-                    ->orWhereNull('publication');
+            ->unless(Auth::user()?->can('board'), static function ($q) {
+                $q->where(function ($q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                        ->orWhereNull('publication');
+                });
             })
-            ->where('end', '<', time())
-            ->orderBy('created_at')
-            ->take($n)
-            ->get();
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->with('committee')
+            ->orderBy('created_at');
     }
 
     /** @return array<string, array<string, array<int, CommitteeMembership>>> */
@@ -151,6 +151,7 @@ class Committee extends Model
             ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
             ->orderBy('created_at', 'desc')
             ->orderBy('deleted_at', 'desc')
+            ->with('user.photo')
             ->get();
 
         foreach ($memberships as $membership) {
@@ -172,8 +173,12 @@ class Committee extends Model
     /**
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember(User $user): bool
+    public function isMember(?User $user): bool
     {
-        return $user->isInCommittee($this);
+        if (! $user instanceof User) {
+            return false;
+        }
+
+        return $user->committees->contains($this);
     }
 }

@@ -143,12 +143,10 @@ class Member extends Model
             ->first();
     }
 
-    public function getMemberType(): ?string
+    public function getMemberType(?OrderLine $membershipOrderline = null): ?string
     {
-        $membershipOrderline = $this->getMembershipOrderline();
-
         if ($membershipOrderline != null) {
-            return match ($this->getMembershipOrderline()->product->id) {
+            return match ($membershipOrderline->product->id) {
                 Config::integer('omnomcom.fee.regular') => 'primary',
                 Config::integer('omnomcom.fee.reduced') => 'secondary',
                 Config::integer('omnomcom.fee.remitted') => 'non-paying',

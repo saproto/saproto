@@ -70,7 +70,7 @@
                         </div>
 
                         <ul class="list-group list-group-flush">
-                            @foreach ($category->sortedProducts() as $product)
+                            @foreach ($category->sortedProducts()->get() as $product)
                                 <li class="list-group-item">
                                     {{ $product->name }}
                                     <a

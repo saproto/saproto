@@ -68,6 +68,7 @@
 @endif
 
 @if ($user->bank != null)
+    @php($hasUnpaidOrderlines = $user->hasUnpaidOrderlines())
     <div id="bank-modal-cancel" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -81,7 +82,7 @@
                     ></button>
                 </div>
                 <div class="modal-body">
-                    @if ($user->hasUnpaidOrderlines())
+                    @if ($hasUnpaidOrderlines)
                         <p class="text-danger">
                             You have unpaid orderlines. You cannot revoke your
                             authorization until you have settled all your
@@ -117,7 +118,7 @@
                             <button
                                 type="submit"
                                 class="btn btn-danger w-50"
-                                @disabled($user->hasUnpaidOrderlines())
+                                @disabled($hasUnpaidOrderlines)
                                 }}
                             >
                                 Cancel my authorization

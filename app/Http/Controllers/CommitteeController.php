@@ -23,47 +23,49 @@ use Illuminate\View\View;
 class CommitteeController extends Controller
 {
     /**
-     * @param  bool  $showSociety
      * @return View
      */
-    public function index($showSociety = false)
+    public function index(bool $showSociety = false)
     {
-        $user = Auth::user();
 
-        if (Auth::check() && $user->can('board')) {
-            return view('committee.list', ['data' => Committee::query()->where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
+        if (Auth::user()?->can('board')) {
+            $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();
+
+            return view('committee.list', ['data' => $data, 'society' => $showSociety]);
         }
 
-        $publicGroups = Committee::query()->where('public', 1)->where('is_society', $showSociety)->get();
-        if ($showSociety) {
-            $userGroups = Auth::check() ? $user->societies : [];
-        } else {
-            $userGroups = Auth::check() ? $user->committees : [];
-        }
+        $data = Committee::query()->where(function ($q) use ($showSociety) {
+            $q->where('public', true)->orWhere(function ($q) use ($showSociety) {
+                $q->where('is_society', $showSociety)->whereHas('users', static function ($q) {
+                    $q->where('user_id', Auth::user()?->id);
+                });
+            });
+        })->orderBy('name')->get();
 
-        $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
-
-        return view('committee.list', ['data' => $mergedGroups]);
+        return view('committee.list', ['data' => $data, 'society' => $showSociety]);
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function show($id)
+    public function show(string $id)
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && (! Auth::check() || (! Auth::user()->can('board') && ! $committee->isMember(Auth::user())))) {
+        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee?->isMember(Auth::user())) {
             abort(404);
         }
 
-        $pastEvents = $committee->pastEvents(6);
+        $pastEvents = $committee->pastEvents()->take(6)->get();
+        $upcomingEvents = $committee->upcomingEvents()->get();
+        $pastHelpedEvents = $committee->pastHelpedEvents()->take(6)->get();
 
         return view('committee.show', [
             'committee' => $committee,
             'members' => $committee->allMembers(),
             'pastEvents' => $pastEvents,
+            'upcomingEvents' => $upcomingEvents,
+            'pastHelpedEvents' => $pastHelpedEvents,
         ]);
     }
 
@@ -89,10 +91,9 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $committee = Committee::query()->findOrFail($id);
 

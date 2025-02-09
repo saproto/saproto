@@ -15,7 +15,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: 🔍 Read .env
-        run: grep -E 'PHP_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env
+        run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV && cp .env.ci .env
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -28,6 +28,9 @@ jobs:
 
       - name: lint with prettier
         run: npx prettier --write resources/
+
+      - name: Pull the latest changes
+        run: git pull origin ${{ github.head_ref }}
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5

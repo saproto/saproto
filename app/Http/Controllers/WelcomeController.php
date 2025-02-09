@@ -14,7 +14,9 @@ class WelcomeController extends Controller
     /** @return View */
     public function index()
     {
-        return view('welcomemessages.list', ['messages' => WelcomeMessage::query()->orderBy('created_at', 'desc')->get()]);
+        $messages = WelcomeMessage::query()->orderBy('created_at', 'desc')->with('user')->get();
+
+        return view('welcomemessages.list', ['messages' => $messages]);
     }
 
     /**

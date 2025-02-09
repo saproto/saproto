@@ -56,14 +56,18 @@
 
                         <tr>
                             <th>Membership type</th>
+                            @php
+                                $memberOrderline = $user->member->getMembershipOrderline();
+                                $memberType = $user->member->getMembertype($memberOrderline);
+                            @endphp
 
-                            @if ($user->member->getMembertype())
+                            @if ($memberOrderline)
                                 <td>
-                                    {{ ucfirst($user->member->getMembertype()) }}
+                                    {{ ucfirst($memberType) }}
                                     member
                                     <br />
                                     <sup class="text-muted">
-                                        {{ '€ ' . $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) }}
+                                        {{ '€ ' . $memberOrderline->total_price . ' was paid on ' . date('F j, Y', strtotime($memberOrderline->created_at)) }}
                                     </sup>
                                 </td>
                             @else

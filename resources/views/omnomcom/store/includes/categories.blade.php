@@ -3,9 +3,9 @@
         @foreach ($categories as $category)
             <div
                 class="btn btn-lg btn-category btn-block bg-omnomcom rounded-0 px-2 py-2 text-start {{ $category == $categories[0] ? 'active' : '' }}"
-                data-id="{{ $category->category->id }}"
+                data-id="{{ $category->id }}"
             >
-                {{ $category->category->name }}
+                {{ $category->name }}
             </div>
         @endforeach
 

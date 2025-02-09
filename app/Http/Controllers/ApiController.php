@@ -9,17 +9,17 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\OrderLine;
-use App\Models\Photo;
+use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Random\RandomException;
 use stdClass;
 
 class ApiController extends Controller
@@ -85,42 +85,45 @@ class ApiController extends Controller
     }
 
     /**
-     * @throws Exception
+     * @throws RandomException
      */
-    public function randomPhoto(): JsonResponse
+    public function randomAlbum(): JsonResponse
     {
-        $privateQuery = Photo::query()->where('private', false)->whereHas('album', static function ($query) {
-            $query->where('published', true)->where('private', false);
-        });
-
-        if (! $privateQuery->count()) {
-            return response()->json(['error' => 'No public photos found!.'], 404);
-        }
+        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
+            $query->where('private', false);
+        })->with(['items' => function ($q) {
+            $q->inRandomOrder()->take(6);
+        }])->without('thumbPhoto');
 
         $random = random_int(1, 100);
-        if ($random <= 30) { // 30% chance the photo is from within the last year
+        if ($random <= 30) { // 30% chance the album is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
-        } elseif ($random <= 55) { // 25% chance the photo is from one year ago
+        } elseif ($random <= 55) { // 25% chance the album is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
-        } elseif ($random <= 70) {// 15% chance the photo is from two years ago
+        } elseif ($random <= 70) {// 15% chance the album is from two years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
-        } elseif ($random <= 80) {// 10% chance the photo is from three years ago
+        } elseif ($random <= 80) {// 10% chance the album is from three years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
-        } else {// 20% chance the photo is older than 4 years
+        } else {// 20% chance the album is older than 4 years
             $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
         }
 
-        $photo = $query->inRandomOrder()->with('album')->first();
+        $album = $query->inRandomOrder()->first();
 
-        //        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
-        if (! $photo) {
-            $photo = $privateQuery->inRandomOrder()->with('album')->first();
+        //        if we picked a year and therefore a query where no albums exist, pick a random public album as fallback
+        if (! $album) {
+            $album = $privateQuery->inRandomOrder()->first();
+        }
+
+        // if we still do not have an album, there are no public albums
+        if (! $album) {
+            return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
         return response()->JSON([
-            'url' => $photo->url,
-            'album_name' => $photo->album->name,
-            'date_taken' => Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
+            'photos' => $album->items->pluck('url'),
+            'album_name' => $album->name,
+            'date_taken' => Carbon::createFromTimestamp($album->date_taken)->format('d-m-Y'),
         ]);
     }
 

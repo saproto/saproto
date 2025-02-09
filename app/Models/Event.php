@@ -135,7 +135,7 @@ class Event extends Model
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user)))) {
+        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
@@ -143,26 +143,30 @@ class Event extends Model
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
-    public static function getEventBlockQuery(): Builder
+    public static function getEventBlockQuery(?User $user = null): Builder
     {
+        if (! $user instanceof User) {
+            $user = Auth::user();
+        }
+
         return Event::query()
             ->orderBy('start')
             ->with('image')
-            ->with('activity', static function ($e) {
-                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) {
-                    $q->where('user_id', Auth::id());
-                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) {
-                    $q->where('user_id', Auth::id());
-                }, 'participation as user_has_participation' => static function ($q) {
-                    $q->where('user_id', Auth::id())
+            ->with('activity', static function ($e) use ($user) {
+                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                }, 'participation as user_has_participation' => static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id)
                         ->whereNull('committees_activities_id');
                 },
                 ])->withCount([
                     'users',
                 ]);
-            })->withExists(['tickets as user_has_tickets' => static function ($q) {
-                $q->whereHas('purchases', static function ($q) {
-                    $q->where('user_id', Auth::id());
+            })->withExists(['tickets as user_has_tickets' => static function ($q) use ($user) {
+                $q->whereHas('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
                 });
             }]);
     }
@@ -212,7 +216,7 @@ class Event extends Model
      */
     public function isOrganising(User $user): bool
     {
-        return $this->committee && $user->isInCommittee($this->committee);
+        return $this->committee?->isMember($user) ?? false;
     }
 
     /** @return Collection|TicketPurchase[] */
