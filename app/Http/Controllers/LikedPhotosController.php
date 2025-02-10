@@ -9,8 +9,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use stdClass;
 
-class PhotoController extends Controller
+class LikedPhotosController extends Controller
 {
     /** @return View */
     public function index()
@@ -22,13 +23,13 @@ class PhotoController extends Controller
         return view('photos.list', ['albums' => $albums]);
     }
 
-    public function show(int $id): View|RedirectResponse
+    public function show(): View|RedirectResponse
     {
-        $album = PhotoAlbum::query()->findOrFail($id);
+        $photos = Photo::whereHas('likes', function ($query) {
+            $query->where('user_id', Auth::id());
+        });
 
-        $photos = $album->items()->orderBy('date_taken', 'desc')->paginate(24);
-
-        return view('photos.album', ['album' => $album, 'photos' => $photos]);
+        return view('photos.liked', ['photos' => $photos->paginate(24)]);
     }
 
     /**
@@ -41,9 +42,8 @@ class PhotoController extends Controller
             ->withExists(['likes as liked_by_me' => static function ($q) {
                 $q->where('user_id', Auth::id());
             }])->findOrFail($id);
-        $previous = $photo->getPreviousPhoto();
-        $next = $photo->getNextPhoto();
-        return view('photos.photopage', ['photo' => $photo, 'previous' => $previous, 'next' => $next]);
+
+        return view('photos.photopage', ['photo' => $photo]);
     }
 
     /**

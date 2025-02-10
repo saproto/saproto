@@ -32,6 +32,7 @@ use App\Http\Controllers\IsAlfredThereController;
 use App\Http\Controllers\JobofferController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LeaderboardEntryController;
+use App\Http\Controllers\LikedPhotosController;
 use App\Http\Controllers\MemberCardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MollieController;
@@ -878,6 +879,8 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to photos --- */
     Route::prefix('photos')->name('photo::')->group(function () {
+
+        Route::get('liked', [LikedPhotosController::class, 'show'])->name('liked')->middleware('member');
         // Public routes
         Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');

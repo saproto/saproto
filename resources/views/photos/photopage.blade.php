@@ -16,10 +16,6 @@
                         <i class="fas fa-images me-2"></i>
                         {{ $photo->album->name }}
                     </a>
-                    @php
-                        $previous = $photo->getPreviousPhoto();
-                        $next = $photo->getNextPhoto();
-                    @endphp
 
                     @if ($previous != null && $previous->id != $photo->id)
                         <a
