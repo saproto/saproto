@@ -79,7 +79,8 @@ class EventController extends Controller
         ]);
     }
 
-    public function finindex(): View
+    /** @return View */
+    public function finindex()
     {
         $activities = Activity::query()->where('closed', false)->orderBy('registration_end', 'asc')->get();
 
@@ -92,7 +93,14 @@ class EventController extends Controller
     public function show(string $id): View
     {
         $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
-            ->with('tickets', 'tickets.product')
+            ->with(
+                ['tickets.product',
+                    'activity.users.photo',
+                    'activity.backupUsers.photo',
+                    'activity.helpingCommitteeInstances.committee',
+                    'activity.helpingCommitteeInstances.users.photo',
+                    'videos',
+                    'albums'])
             ->firstOrFail();
 
         $methods = [];
@@ -103,7 +111,8 @@ class EventController extends Controller
         return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
-    public function create(): View
+    /** @return View */
+    public function create()
     {
         return view('event.edit', ['event' => null]);
     }
@@ -286,7 +295,8 @@ class EventController extends Controller
      */
     public function admin(int $id)
     {
-        $event = Event::query()->findOrFail($id);
+        $event = Event::query()
+            ->with('tickets.purchases.user', 'tickets.purchases.orderline')->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -302,7 +312,6 @@ class EventController extends Controller
      */
     public function scan(int $id)
     {
-        /** @var Event $event */
         $event = Event::query()->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
@@ -405,16 +414,24 @@ class EventController extends Controller
     public function apiUpcomingEvents(int $limit, Request $request): array
     {
         $user = Auth::user() ?? null;
-        $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
+        $noFutureLimit = $request->boolean('no_future_limit');
+        /** @var Collection<Event> $events */
+        $events = Event::getEventBlockQuery()
+            ->where('end', '>', strtotime('today'))
+            ->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))
+            ->whereNull('publication')
+            ->orderBy('start')
+            ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
+            ->take($limit)
+            ->get();
 
-        $events = Event::query()->where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->activity->isParticipating($user) &&
-                ! $event->activity->isHelping($user) &&
-                ! $event->activity->isOrganising($user)
+                ! $event->user_has_participation &&
+                ! $event->user_has_helper_participation &&
+                ! $event->isOrganising($user)
             ))) {
                 continue;
             }
@@ -437,28 +454,28 @@ class EventController extends Controller
                     'id' => $event->committee->id,
                     'name' => $event->committee->name,
                 ] : null),
-                'registration_start' => ($event->activity ? $event->activity->registration_start : null),
-                'registration_end' => ($event->activity ? $event->activity->registration_end : null),
-                'deregistration_end' => ($event->activity ? $event->activity->deregistration_end : null),
-                'total_places' => ($event->activity ? $event->activity->participants : null),
-                'available_places' => ($event->activity ? $event->activity->freeSpots() : null),
-                'is_full' => ($event->activity ? $event->activity->isFull() : null),
+                'registration_start' => $event->activity?->registration_start,
+                'registration_end' => $event->activity?->registration_end,
+                'deregistration_end' => $event->activity?->deregistration_end,
+                'total_places' => $event->activity?->participants,
+                'available_places' => $event->activity?->freeSpots(),
+                'is_full' => $event->activity?->isFull(),
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
                 'over' => $event->over(),
                 'has_signup' => $event->activity !== null,
-                'price' => ($event->activity ? $event->activity->price : null),
-                'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
-                'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
-                'user_signedup_backup' => (bool) ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
-                'user_signedup_id' => ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
-                'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
-                'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
-                'can_signout' => ($user && $event->activity ? $event->activity->canUnsubscribe() : null),
+                'price' => $event->activity?->price,
+                'no_show_fee' => $event->activity?->no_show_fee,
+                'user_signedup' => $user && $event->user_has_participation,
+                'user_signedup_backup' => $user && $event->user_has_backup_participation,
+                'user_signedup_id' => ($user && $event->user_has_participation ? $event->activity?->getParticipation($user)->id : null),
+                'can_signup' => ($user && $event->activity?->canSubscribe()),
+                'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
+                'can_signout' => ($user && $event->activity?->canUnsubscribe()),
                 'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
                 'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
+                'is_helping' => ($user && $event->activity ? $event->user_has_helper_participation : null),
                 'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
                 'backupParticipants' => $backupParticipants,
             ];
@@ -537,18 +554,19 @@ CALSCALE:GREGORIAN
         $reminder = $user?->pref_calendar_alarm;
 
         $relevant_only = $user?->pref_calendar_relevant_only;
-        $events = Event::query()
-            ->when(! $user, static fn ($query) => $query->where('secret', false))
-            ->with('committee')
+        $events = Event::getEventBlockQuery($user)
             ->where('start', '>', strtotime('-6 months'))
+            ->with('committee.users')
+            ->withCount('tickets')
             ->get();
+
         foreach ($events as $event) {
             /** @var Event $event */
             if (! $event->mayViewEvent($user)) {
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->activity?->user_has_tickets || $event->activity?->user_has_helper_participation || $event->activity?->user_has_participation)) {
                 continue;
             }
 
@@ -558,7 +576,7 @@ CALSCALE:GREGORIAN
                 $info_text = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
                 $info_text = 'Sign-up required! There are roughly '.$event->activity->freeSpots().' of '.$event->activity->participants.' places left.';
-            } elseif ($event->tickets->count() > 0) {
+            } elseif ($event->tickets_count > 0) {
                 $info_text = 'Ticket purchase required.';
             } else {
                 $info_text = 'No sign-up necessary.';
@@ -571,13 +589,13 @@ CALSCALE:GREGORIAN
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
                 } elseif ($event->activity) {
-                    if ($event->activity->isHelping($user)) {
+                    if ($event->activity->user_has_helper_participation) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isOnBackupList($user)) {
+                    } elseif ($event->activity->user_has_backup_participation) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
+                    } elseif ($event->activity->user_has_participation || $event->user_has_tickets) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }

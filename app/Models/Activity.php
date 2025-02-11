@@ -142,38 +142,13 @@ class Activity extends Validatable
     }
 
     /**
-     * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
-     */
-    public function getHelpingParticipation(Committee $committee, User $user): ?ActivityParticipation
-    {
-        $h = HelpingCommittee::query()->where('activity_id', $this->id)
-            ->where('committee_id', $committee->id)
-            ->first();
-
-        if ($h === null) {
-            return null;
-        }
-
-        return ActivityParticipation::query()->where('activity_id', $this->id)
-            ->where('user_id', $user->id)
-            ->where('committees_activities_id', $h->id)->first();
-    }
-
-    /**
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
-        if ($h == null) {
-            return ActivityParticipation::query()->where('activity_id', $this->id)
-                ->where('user_id', $user->id)
-                ->whereNull('committees_activities_id')
-                ->first();
-        }
-
         return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
-            ->where('committees_activities_id', $h->id)
+            ->whereNull('committees_activities_id')
             ->first();
     }
 
@@ -187,6 +162,14 @@ class Activity extends Validatable
         return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
     }
 
+    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null)
+    {
+        return $this->helpingParticipations()
+            ->where('user_id', $user->id)
+            ->where('committees_activities_id', $h->id)
+            ->first();
+    }
+
     /**
      * @return bool Whether the user participates
      */
@@ -195,29 +178,16 @@ class Activity extends Validatable
         return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
-    public function isOnBackupList(User $user): bool
-    {
-        return $this->backupUsers->where('id', $user->id)->first() !== null;
-    }
-
     /**
      * @return bool Whether the user or committee is helping
      */
     public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
         if ($h instanceof HelpingCommittee) {
-            return $this->getParticipation($user, $h) instanceof ActivityParticipation;
+            return $this->getHelperParticipation($user, $h) instanceof ActivityParticipation;
         }
 
         return ActivityParticipation::query()->where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
-    }
-
-    /**
-     * @return bool Whether the user is organising
-     */
-    public function isOrganising(User $user): ?bool
-    {
-        return $this->event?->committee?->isMember($user);
     }
 
     /**
@@ -237,7 +207,7 @@ class Activity extends Validatable
             return -1;
         }
 
-        return max(($this->participants - count($this->users)), 0);
+        return max(($this->participants - ($this->users_count ?? $this->users->count())), 0);
     }
 
     /**

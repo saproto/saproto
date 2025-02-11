@@ -65,6 +65,7 @@ class HomeController extends Controller
             })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
+            ->with('photo')
             ->get();
 
         $dinnerforms = Dinnerform::query()
