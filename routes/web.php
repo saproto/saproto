@@ -76,6 +76,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
+require __DIR__.'/minisites.php';
 /* Route block convention:
  *
  * Route::controller(C::class)->prefix('section')->name('section::')->middleware(['some:middleware'])->group( function () {
@@ -1059,5 +1060,3 @@ Route::middleware('forcedomain')->group(function () {
         return Redirect::back();
     })->name('december::toggle');
 });
-
-require __DIR__.'/minisites.php';
