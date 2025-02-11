@@ -378,8 +378,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $event
      * @return RedirectResponse
      */
     public function linkAlbum(Request $request, int $event)
