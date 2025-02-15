@@ -56,7 +56,7 @@ return new class extends Migration
         });
         Schema::table('alias', function ($table) {
             $table->id()->change();
-            $table->unsignedBigInteger('user_id')->index()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->index()->change();
         });
         Schema::table('events', function ($table) {
             $table->id()->change();
