@@ -170,6 +170,7 @@ return new class extends Migration
         Schema::table('users_mailinglists', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('list_id')->index()->change();
+            $table->unsignedBigInteger('user_id')->charset(null)->collation(null)->index()->change();
         });
         Schema::table('dmx_fixtures', function ($table) {
             $table->id()->change();
