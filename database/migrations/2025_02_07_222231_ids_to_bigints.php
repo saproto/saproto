@@ -35,7 +35,7 @@ return new class extends Migration
             $table->id()->change();
             $table->unsignedBigInteger('user_id')->change();
             $table->unsignedBigInteger('activity_id')->change();
-            $table->unsignedBigInteger('committees_activities_id')->index()->nullable()->change();
+            $table->unsignedBigInteger('committees_activities_id')->nullable()->index()->change();
         });
         Schema::table('permissions', function ($table) {
             $table->id()->change();
@@ -71,6 +71,9 @@ return new class extends Migration
             $table->id()->change();
             $table->unsignedBigInteger('photo_id')->index()->change();
             $table->unsignedBigInteger('user_id')->index()->change();
+        });
+        Schema::table('dmx_channels', function ($table) {
+            $table->unsignedBigInteger('id')->index()->change();
         });
         Schema::table('dmx_overrides', function ($table) {
             $table->id()->change();
@@ -182,6 +185,7 @@ return new class extends Migration
         Schema::table('activities', function ($table) {
             $table->id()->change();
             $table->unsignedBigInteger('event_id')->nullable()->change();
+            $table->unsignedBigInteger('closed_account')->nullable()->change();
         });
         Schema::table('mailinglists', function ($table) {
             $table->id()->change();
@@ -244,6 +248,19 @@ return new class extends Migration
         });
         Schema::table('failed_jobs', function ($table) {
             $table->id()->change();
+        });
+        Schema::table('soundboard_sounds', function ($table) {
+            $table->id()->change();
+        });
+        Schema::table('tempadmins', function ($table) {
+            $table->id()->change();
+        });
+        Schema::table('products_categories', function ($table) {
+            $table->id()->change();
+        });
+        Schema::table('oauth_clients', function ($table) {
+            $table->id()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->change();
         });
         Schema::table('tickets', function ($table) {
             $table->id()->change();
@@ -309,7 +326,7 @@ return new class extends Migration
             $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('sessions', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->index()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->index()->change();
         });
         Schema::table('codex_codex_text', function (Blueprint $table) {
             $table->unsignedBigInteger('codex')->index()->change();
@@ -327,11 +344,27 @@ return new class extends Migration
             $table->unsignedBigInteger('image_id')->nullable()->index()->change();
         });
         Schema::table('tokens', function (Blueprint $table) {
+            $table->id()->change();
             $table->unsignedBigInteger('user_id')->index()->change();
+        });
+        Schema::table('products', function (Blueprint $table) {
+            $table->id()->change();
         });
         Schema::table('products_categories', function (Blueprint $table) {
             $table->unsignedBigInteger('product_id')->index()->change();
             $table->unsignedBigInteger('category_id')->index()->change();
+        });
+        Schema::table('oauth_auth_codes', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->change();
+            $table->unsignedBigInteger('client_id')->index()->change();
+        });
+        Schema::table('oauth_access_tokens', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->nullable()->change();
+            $table->unsignedBigInteger('client_id')->index()->change();
+        });
+        Schema::table('oauth_personal_access_clients', function (Blueprint $table) {
+            $table->id()->change();
+            $table->unsignedBigInteger('client_id')->change();
         });
         self::reinstateForeign();
     }
