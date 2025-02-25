@@ -29,6 +29,9 @@ jobs:
       - name: lint with prettier
         run: npx prettier --write resources/
 
+      - name: Pull the latest changes
+        run: git pull origin ${{ github.head_ref }}
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

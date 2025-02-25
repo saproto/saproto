@@ -82,15 +82,7 @@ class Product extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        if ($this->image_id) {
-            $image = StorageEntry::query()->find($this->image_id);
-            if ($image) {
-                /** @var StorageEntry $image */
-                return $image->generateImagePath(null, null);
-            }
-        }
-
-        return null;
+        return $this->image?->generateImagePath(null, null);
     }
 
     public function categories(): BelongsToMany

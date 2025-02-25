@@ -11,7 +11,6 @@ use App\Models\CommitteeMembership;
 use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -138,10 +137,8 @@ class AchievementsCron extends Command
 
     /**
      * Give an achievement to a user.
-     *
-     * @param  User  $user
      */
-    private function giveAchievement($user, int $id): void
+    private function giveAchievement(User $user, int $id): void
     {
         $achievement = Achievement::query()->find($id);
 
@@ -163,40 +160,32 @@ class AchievementsCron extends Command
 
     /**
      * Achievement beast = earned 10 achievements or more.
-     *
-     * @param  User  $user
      */
-    private function achievementBeast($user): bool
+    private function achievementBeast(User $user): bool
     {
         return $user->achievements->count() >= 10;
     }
 
     /**
      * Old Fart = member for more than 5 years.
-     *
-     * @param  User  $user
      */
-    private function oldFart($user): bool
+    private function oldFart(User $user): bool
     {
         return $user->is_member && $user->member->created_at < Carbon::now()->subYears(5);
     }
 
     /**
      * Gotta catch 'em all! = be a member of at least 10 different committees.
-     *
-     * @param  User  $user
      */
-    private function gottaCatchEmAll($user): bool
+    private function gottaCatchEmAll(User $user): bool
     {
         return $user->committees()->count() >= 10;
     }
 
     /**
      * Big spender = paid more than the max. amount of money in a month (=€250).
-     *
-     * @param  User  $user
      */
-    private function bigSpender($user): bool
+    private function bigSpender(User $user): bool
     {
         if ($this->notFirstOfMonth()) {
             return false;
@@ -211,10 +200,8 @@ class AchievementsCron extends Command
 
     /**
      * 4ever committee member = has been a committee member for more than three years.
-     *
-     * @param  User  $user
      */
-    private function foreverMember($user): bool
+    private function foreverMember(User $user): bool
     {
         foreach ($user->committees as $committee) {
             $memberships = CommitteeMembership::withTrashed()
@@ -244,20 +231,17 @@ class AchievementsCron extends Command
     /**
      * FIRST!!!! = the first to buy a product.
      *
-     * @param  User  $user
      * @param  int[]  $firsts
      */
-    private function first($user, array $firsts): bool
+    private function first(User $user, array $firsts): bool
     {
         return in_array($user->id, $firsts);
     }
 
     /**
      * Attended a certain number of activities.
-     *
-     * @param  User  $user
      */
-    private function nThActivity($user, int $n): bool
+    private function nThActivity(User $user, int $n): bool
     {
         $participated = ActivityParticipation::query()->where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
@@ -268,11 +252,8 @@ class AchievementsCron extends Command
 
     /**
      * Attended a certain percentage of signups in the last month.
-     *
-     * @param  User  $user
-     * @param  int  $possibleSignups
      */
-    private function percentageParticipation($user, int $percentage, $possibleSignups): bool
+    private function percentageParticipation(User $user, int $percentage, int $possibleSignups): bool
     {
         if ($this->notFirstOfMonth()) {
             return false;
@@ -298,10 +279,9 @@ class AchievementsCron extends Command
     /**
      * Bought a certain number of a set of products.
      *
-     * @param  User  $user
      * @param  int[]  $products
      */
-    private function nThProducts($user, array $products, int $n): bool
+    private function nThProducts(User $user, array $products, int $n): bool
     {
         return $user->orderlines()->whereIn('product_id', $products)->sum('units') >= $n;
     }
@@ -309,10 +289,9 @@ class AchievementsCron extends Command
     /**
      * A percentage of purchases were of a certain set of products.
      *
-     * @param  User  $user
      * @param  int[]  $products
      */
-    private function percentageProducts($user, array $products, float $p): bool
+    private function percentageProducts(User $user, array $products, float $p): bool
     {
         $orders = OrderLine::query()
             ->where('updated_at', '>', Carbon::now()->subMonths())
@@ -335,11 +314,8 @@ class AchievementsCron extends Command
      */
     private function categoryProducts(array $categories): array
     {
-        $products = [];
-        foreach ($categories as $category) {
-            $products = array_merge($products, ProductCategory::query()->find($category)->sortedProducts()->pluck('id')->toArray());
-        }
-
-        return $products;
+        return Product::query()->whereHas('categories', static function ($q) use ($categories) {
+            $q->whereIn('product_categories.id', $categories);
+        })->get('id')->pluck('id')->toArray();
     }
 }

@@ -4,12 +4,12 @@
 
         <div
             class="category-view {{ $category == $categories[0] ? '' : 'inactive' }}"
-            data-id="{{ $category->category->id }}"
+            data-id="{{ $category->id }}"
         >
             <?php /** @var $product \App\Models\Product */
             ?>
 
-            @foreach ($category->products as $product)
+            @foreach ($category->sortedProducts as $product)
                 @if ($product->isVisible())
                     <?php
                     if ($product->stock > 0) {

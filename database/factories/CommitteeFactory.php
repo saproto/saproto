@@ -22,7 +22,7 @@ class CommitteeFactory extends Factory
             'name' => fake()->name(),
             'slug' => fake()->slug(),
             'description' => fake()->text(),
-            'public' => fake()->boolean(),
+            'public' => true,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'allow_anonymous_email' => fake()->unique()->safeEmail(),
