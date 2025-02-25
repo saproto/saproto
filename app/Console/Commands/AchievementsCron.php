@@ -64,7 +64,7 @@ class AchievementsCron extends Command
             ->count();
 
         $youDandy = $this->categoryProducts([9]);
-        $fourOClock = Product::whereAlcoholic(1)->pluck('id')->toArray();
+        $fourOClock = Product::whereIsAlcoholic(true)->pluck('id')->toArray();
 
         $bigKid = $this->categoryProducts([21]);
         $goodHuman = $this->categoryProducts([28]);
@@ -112,13 +112,13 @@ class AchievementsCron extends Command
         $users = User::withoutTrashed()
             ->whereHas('member', static function ($query) {
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
-            })
-            ->get();
+            })->get();
+
         $totalUsers = $users->count();
 
         foreach ($users as $index => $user) {
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
-            $alreadyAchieved = $user->achievements->pluck('id')->toArray();
+            $alreadyAchieved = $user->achievements()->get()->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
@@ -163,7 +163,7 @@ class AchievementsCron extends Command
      */
     private function achievementBeast(User $user): bool
     {
-        return $user->achievements->count() >= 10;
+        return $user->achievements()->count() >= 10;
     }
 
     /**
@@ -203,10 +203,10 @@ class AchievementsCron extends Command
      */
     private function foreverMember(User $user): bool
     {
-        foreach ($user->committees as $committee) {
+        foreach ($user->committees()->get() as $committee) {
             $memberships = CommitteeMembership::withTrashed()
                 ->where('user_id', $user->id)
-                ->where('committee_id', $committee->id)
+                ->where('committee_id', $committee->comittee_id)
                 ->get();
 
             $days = 0;
