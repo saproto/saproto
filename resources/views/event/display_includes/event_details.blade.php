@@ -109,7 +109,7 @@
             @endif
         </li>
 
-        @if ($event->involves_food == true)
+        @if ($event->involves_food)
             <a
                 class="list-group-item bg-info text-white"
                 href="{{ route('user::dashboard::show') }}#alergies"
@@ -120,7 +120,7 @@
             </a>
         @endif
 
-        @if ($event->is_external == true)
+        @if ($event->is_external)
             <li class="list-group-item">
                 <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i>
                 This event is not organized by S.A. Proto

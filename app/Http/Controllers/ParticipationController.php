@@ -30,7 +30,9 @@ class ParticipationController extends Controller
         $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
+            abort(403, 'You are helping at '.$event->title.'.');
+        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
             abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
@@ -92,10 +94,9 @@ class ParticipationController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function createFor($id, Request $request)
+    public function createFor(int $id, Request $request)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -114,7 +115,9 @@ class ParticipationController extends Controller
 
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::query()->findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
+            abort(403, 'You are helping at '.$event->title.'.');
+        } elseif ($event->activity->getParticipation($user) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif ($event->activity->closed) {
             abort(403, 'This activity is closed, you cannot change participation anymore.');

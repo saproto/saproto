@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-xl-3 col-lg-6 col-md-12">
             @include('users.profile.includes.about')
-            @if (Auth::user() == $user)
+            @if (Auth::user() === $user)
                 @include('users.profile.includes.stats')
             @endif
         </div>

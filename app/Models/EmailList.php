@@ -52,6 +52,13 @@ class EmailList extends Model
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
+    public function scopeSubscribed($query, User $user)
+    {
+        return $query->whereHas('users', function ($q) use ($user) {
+            $q->where('user_id', $user->id);
+        });
+    }
+
     /**
      * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.

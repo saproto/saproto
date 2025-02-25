@@ -97,8 +97,8 @@
                                                 'confirm' => 'Delete the event category',
                                                 'classes' => 'fa fa-trash text-danger',
                                                 'text' => '',
-                                                'message' => "Are you sure you want to delete this category. All events that currently have this category will
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                become <b>uncategorised</b>",
+                                                'message' =>
+                                                    'Are you sure you want to delete this category. All events that currently have this category will become <b>uncategorised</b>',
                                             ]
                                         )
                                     </div>

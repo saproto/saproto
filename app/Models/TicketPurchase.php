@@ -51,8 +51,7 @@ class TicketPurchase extends Model
         return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
-    /** @return BelongsTo */
-    public function orderline()
+    public function orderline(): BelongsTo
     {
         return $this->belongsTo(OrderLine::class, 'orderline_id');
     }

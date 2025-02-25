@@ -63,6 +63,7 @@ class HelpingCommittee extends Validatable
         return $this
             ->belongsToMany(User::class, 'activities_users', 'committees_activities_id')
             ->whereNull('activities_users.deleted_at')
+            ->withPivot('id')
             ->withTrashed();
     }
 }

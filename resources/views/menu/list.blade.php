@@ -82,8 +82,15 @@
                                         @endif
                                     </td>
                                 </tr>
-                                @if ($menuItem->children->count() > 0)
-                                    @foreach ($menuItem->children()->orderBy('order')->get()as $childItem)
+                                @php
+                                    $children = $menuItem
+                                        ->children()
+                                        ->orderBy('order')
+                                        ->get();
+                                @endphp
+
+                                @if ($children->count() > 0)
+                                    @foreach ($children as $childItem)
                                         <tr>
                                             <td class="ps-5">
                                                 {{ $childItem->menuname }}

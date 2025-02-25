@@ -65,6 +65,7 @@ class HomeController extends Controller
             })
             ->where('show_birthday', true)
             ->where('birthdate', 'LIKE', date('%-m-d'))
+            ->with('photo')
             ->get();
 
         $dinnerforms = Dinnerform::query()
@@ -126,12 +127,14 @@ class HomeController extends Controller
             'current' => CommitteeMembership::query()
                 ->where('committee_id', $committee->id)
                 ->groupBy('user_id')
+                ->with('user')
                 ->get(),
             'old' => CommitteeMembership::withTrashed()
                 ->where('committee_id', $committee->id)
                 ->whereNotNull('deleted_at')
                 ->orderBy('created_at', 'ASC')
                 ->groupBy('user_id')
+                ->with('user')
                 ->get(),
         ];
 
