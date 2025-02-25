@@ -3,16 +3,19 @@
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Member;
+use App\Models\User;
 
 it('shows the committee page with previous events', function () {
-    $member = Member::factory()->create();
+    $user = User::factory()->has(Member::factory())->create();
 
-    $event = Event::factory()->has(Committee::factory())->create([
-        'publication' => time() - 1000,
+    $event = Event::factory()->has(Committee::factory([
+        'public' => true,
+    ]))->create([
+        'secret' => false,
         'end' => time() - 500,
     ]);
 
-    $response = $this->actingAs($member->user)
+    $response = $this->actingAs($user)
         ->get(route('committee::show', ['id' => $event->committee->slug]));
 
     $response->assertSee($event->committee->name);
