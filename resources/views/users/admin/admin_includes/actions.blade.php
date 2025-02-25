@@ -4,7 +4,8 @@
         <strong>{{ $user->name }}</strong>
     </div>
 
-    <div class="card-body">=
+    <div class="card-body">
+        =
         @if (! $user->is_member && ! $user->hasUnpaidOrderlines())
             {{-- format-ignore-start --}}
             @include(
@@ -23,6 +24,7 @@
             )
             {{-- format-ignore-end --}}
         @endif
+
         <a
             class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
             href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}"
