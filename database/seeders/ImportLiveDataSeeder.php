@@ -39,7 +39,7 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'event_categories'],
             ['name' => 'mailinglists'],
             ['name' => 'menuitems'],
-            ['name' => 'products', 'excluded_columns' => ['image_url']],
+            ['name' => 'products', 'excluded_columns' => ['image_url', 'image']],
             ['name' => 'products_categories'],
             ['name' => 'product_categories'],
             ['name' => 'tickets'],
