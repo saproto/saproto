@@ -203,20 +203,6 @@ class Email extends Model
         return implode(', ', $events);
     }
 
-    public function getListName(): string
-    {
-        $lists = [];
-        if (! $this->to_list) {
-            return '';
-        }
-
-        foreach ($this->lists as $list) {
-            $lists[] = $list->name;
-        }
-
-        return implode(', ', $lists);
-    }
-
     public static function getListUnsubscribeFooter($user_id, $email_id): string
     {
         $footer = [];

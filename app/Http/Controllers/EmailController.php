@@ -23,13 +23,13 @@ class EmailController extends Controller
     {
         return view('emailadmin.overview', [
             'lists' => EmailList::query()->withCount('users')->get(),
-            'emails' => Email::query()->orderBy('id', 'desc')->paginate(10),
+            'emails' => Email::query()->with('lists')->orderBy('id', 'desc')->paginate(10),
         ]);
     }
 
     public function filter(Request $request): View
     {
-        $filteredEmails = Email::query()->orderBy('id', 'desc');
+        $filteredEmails = Email::query()->with('lists')->orderBy('id', 'desc');
         $description = $request->has('search_description');
         $subject = $request->has('search_subject');
         $body = $request->has('search_body');

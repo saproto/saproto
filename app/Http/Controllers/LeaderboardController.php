@@ -81,10 +81,10 @@ class LeaderboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
@@ -98,10 +98,11 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
@@ -137,10 +138,10 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
