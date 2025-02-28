@@ -100,7 +100,7 @@ class AchievementsCron extends Command
         ];
 
         // Check if the specified achievements actually exist.
-        $existing = Achievement::pluck('id')->toArray();
+        $existing = Achievement::query()->pluck('id')->toArray();
         foreach (array_keys($achievements) as $id) {
             if (! in_array($id, $existing)) {
                 unset($achievements[$id]);
