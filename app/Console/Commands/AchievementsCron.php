@@ -113,14 +113,14 @@ class AchievementsCron extends Command
             ->whereHas('member', static function ($query) {
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
-            ->with('committees')
+            ->with('committees:id', 'achievements:id')
             ->get();
 
         $totalUsers = $users->count();
 
         foreach ($users as $index => $user) {
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
-            $alreadyAchieved = $user->achievements()->pluck('achievement.id')->toArray();
+            $alreadyAchieved = $user->achievements->pluck('achievement.id')->toArray();
             foreach ($achievements as $id => $check) {
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
@@ -165,7 +165,7 @@ class AchievementsCron extends Command
      */
     private function achievementBeast(User $user): bool
     {
-        return $user->achievements()->count() >= 10;
+        return $user->achievements->count() >= 10;
     }
 
     /**
@@ -208,7 +208,7 @@ class AchievementsCron extends Command
         foreach ($user->committees as $committee) {
             $memberships = CommitteeMembership::withTrashed()
                 ->where('user_id', $user->id)
-                ->where('committee_id', $committee->comittee_id)
+                ->where('committee_id', $committee->id)
                 ->get();
 
             $days = 0;
