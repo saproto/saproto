@@ -171,13 +171,13 @@
                                                             #{{ $loop->index + 1 }}
                                                         </td>
                                                         <td>
-                                                        @if($entry->user)
-                                                            {{ $entry->user?->name}}
-                                                        @else
-                                                            <del>
-                                                                Deleted User
-                                                            </del>
-                                                        @endif
+                                                            @if ($entry->user)
+                                                                {{ $entry->user?->name }}
+                                                            @else
+                                                                <del>
+                                                                    Deleted User
+                                                                </del>
+                                                            @endif
                                                         </td>
                                                         <td style="width: 80px">
                                                             <input
