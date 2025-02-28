@@ -24,7 +24,6 @@ class OmNomController extends Controller
 {
     public function display(Request $request, ?string $store_slug = null)
     {
-
         if (empty($store_slug) && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');
         }
@@ -41,8 +40,7 @@ class OmNomController extends Controller
             abort(403);
         }
 
-        $categories = $this->getCategories($store);
-
+        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
         $minors = collect();
 
         if ($store_slug === 'tipcie') {
@@ -51,6 +49,7 @@ class OmNomController extends Controller
                 ->whereHas('member', static function ($q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
+                ->with('photo')
                 ->get();
         }
 
@@ -60,7 +59,24 @@ class OmNomController extends Controller
     /** @return View */
     public function miniSite()
     {
-        return view('omnomcom.minisite');
+        $products = Product::query()->where('is_visible', true)
+            ->where(function ($query) {
+                $query
+                    ->where('is_visible_when_no_stock', true)
+                    ->orWhere('stock', '>', 0);
+            })
+            ->whereHas('categories', function ($query) {
+                $query->whereIn(
+                    'product_categories.id',
+                    Config::array(
+                        'omnomcom.stores.protopolis.categories'
+                    )
+                );
+            })
+            ->with('image', 'categories')
+            ->get();
+
+        return view('omnomcom.minisite', ['products' => $products]);
     }
 
     /**
@@ -79,12 +95,12 @@ class OmNomController extends Controller
             abort(403);
         }
 
-        $categories = $this->getCategories($store);
+        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
 
         $products = [];
         foreach ($categories as $category) {
             /** @var Product $product */
-            foreach ($category->products as $product) {
+            foreach ($category->sortedProducts as $product) {
                 if ($product->isVisible()) {
                     $products[] = $product;
                 }
@@ -308,22 +324,5 @@ class OmNomController extends Controller
         }
 
         return view('omnomcom.products.generateorder', ['orders' => $orders]);
-    }
-
-    private function getCategories(array $store): array
-    {
-        $categories = [];
-        foreach ($store['categories'] as $category) {
-            $cat = ProductCategory::query()->find($category);
-            if ($cat) {
-                $prods = $cat->sortedProducts();
-                $categories[] = (object) [
-                    'category' => $cat,
-                    'products' => $prods,
-                ];
-            }
-        }
-
-        return $categories;
     }
 }

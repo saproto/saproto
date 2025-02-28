@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
@@ -16,7 +13,7 @@ class SmartXpScreenController extends Controller
      */
     public function show()
     {
-        return view('smartxp.screen');
+        return view('smartxp.screen', ['protube' => true]);
     }
 
     /**
@@ -24,7 +21,7 @@ class SmartXpScreenController extends Controller
      */
     public function showProtopolis()
     {
-        return view('smartxp.protopolis_screen');
+        return view('smartxp.screen');
     }
 
     public function timetable(): array
@@ -45,20 +42,6 @@ class SmartXpScreenController extends Controller
         );
     }
 
-    /**
-     * @return Response|JsonResponse
-     */
-    public function bus(Request $request)
-    {
-        try {
-            return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
-        } catch (Exception) {
-            return response()->json([
-                'message' => 'OV_API not available',
-            ], 503);
-        }
-    }
-
     /** @return object */
     public function smartxpTimetable()
     {
@@ -70,15 +53,16 @@ class SmartXpScreenController extends Controller
             'friday' => [],
             'weekend' => [],
         ];
-        $occupied = false;
+
         $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
         } catch (Exception) {
-            return (object) ['roster' => $roster, 'occupied' => $occupied];
+            return (object) ['roster' => $roster, 'occupied' => false];
         }
 
+        $occupied = false;
         foreach ($data->items as $entry) {
             $end_time = ($entry->end->date ?? $entry->end->dateTime);
             $start_time = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
@@ -114,7 +98,9 @@ class SmartXpScreenController extends Controller
     /** @return View */
     public function canWork()
     {
-        return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()->roster,
-            'occupied' => $this->smartxpTimetable()->occupied, ]);
+        $timetable = $this->smartxpTimetable();
+
+        return view('smartxp.caniwork', ['timetable' => $timetable->roster,
+            'occupied' => $timetable->occupied, ]);
     }
 }

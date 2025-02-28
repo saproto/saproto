@@ -1,5 +1,9 @@
 @extends('website.layouts.redesign.generic')
 
+@php
+    /** @var App\Models\Event $event */
+@endphp
+
 @section('page-title')
     Event Admin
 @endsection
