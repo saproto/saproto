@@ -38,7 +38,7 @@ class LeaderboardController extends Controller
     public function adminIndex()
     {
         $leaderboards = Leaderboard::query()->with('committee')->withCount('entries');
-        if (!Auth::user()->can('board')) {
+        if (! Auth::user()->can('board')) {
             $leaderboards = $leaderboards->whereRelation('committee.users', 'users.id', Auth::user()->id);
         }
 
