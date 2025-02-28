@@ -17,15 +17,16 @@ class AccountController extends Controller
     /** @return View */
     public function index()
     {
-        return view('omnomcom.accounts.index', ['accounts' => Account::query()->orderBy('account_number')->get()]);
+        $accounts=Account::query()->orderBy('account_number')->withCount('products')->get();
+        return view('omnomcom.accounts.index', ['accounts' => $accounts]);
     }
 
     public function show(int $id): View
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
-
-        return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::query()->where('account_id', $account->id)->paginate(10)]);
+        $products =  Product::query()->where('account_id', $account->id)->paginate(10);
+        return view('omnomcom.accounts.show', ['account' => $account, 'products' =>$products]);
     }
 
     public function create(): View
