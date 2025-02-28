@@ -64,7 +64,7 @@ class AchievementsCron extends Command
             ->count();
 
         $youDandy = $this->categoryProducts([9]);
-        $fourOClock = Product::whereIsAlcoholic(true)->pluck('id')->toArray();
+        $fourOClock = Product::where('is_alcoholic', true)->pluck('id')->toArray();
 
         $bigKid = $this->categoryProducts([21]);
         $goodHuman = $this->categoryProducts([28]);
@@ -100,7 +100,7 @@ class AchievementsCron extends Command
         ];
 
         // Check if the specified achievements actually exist.
-        $existing = Achievement::all()->pluck('id')->toArray();
+        $existing = Achievement::pluck('id')->toArray();
         foreach (array_keys($achievements) as $id) {
             if (! in_array($id, $existing)) {
                 unset($achievements[$id]);
@@ -112,13 +112,15 @@ class AchievementsCron extends Command
         $users = User::withoutTrashed()
             ->whereHas('member', static function ($query) {
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
-            })->get();
+            })
+            ->with('committees')
+            ->get();
 
         $totalUsers = $users->count();
 
         foreach ($users as $index => $user) {
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
-            $alreadyAchieved = $user->achievements()->get()->pluck('id')->toArray();
+            $alreadyAchieved = $user->achievements()->pluck('achievement.id')->toArray();
             foreach ($achievements as $id => $check) {
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
@@ -179,7 +181,7 @@ class AchievementsCron extends Command
      */
     private function gottaCatchEmAll(User $user): bool
     {
-        return $user->committees()->count() >= 10;
+        return $user->committees->count() >= 10;
     }
 
     /**
@@ -203,7 +205,7 @@ class AchievementsCron extends Command
      */
     private function foreverMember(User $user): bool
     {
-        foreach ($user->committees()->get() as $committee) {
+        foreach ($user->committees as $committee) {
             $memberships = CommitteeMembership::withTrashed()
                 ->where('user_id', $user->id)
                 ->where('committee_id', $committee->comittee_id)
@@ -316,6 +318,6 @@ class AchievementsCron extends Command
     {
         return Product::query()->whereHas('categories', static function ($q) use ($categories) {
             $q->whereIn('product_categories.id', $categories);
-        })->get('id')->pluck('id')->toArray();
+        })->pluck('id')->toArray();
     }
 }
