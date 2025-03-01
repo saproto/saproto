@@ -35,7 +35,7 @@
                                 {{ $leaderboard->name }}
                             </td>
                             <td>{{ $leaderboard->committee->name }}</td>
-                            <td>{{ count($leaderboard->entries) }}</td>
+                            <td>{{ $leaderboard->entries_count }}</td>
                             <td>
                                 <a
                                     href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}"
