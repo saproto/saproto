@@ -37,11 +37,12 @@ class LeaderboardController extends Controller
      */
     public function adminIndex()
     {
-        if (Auth::user()->can('board')) {
-            $leaderboards = Leaderboard::all();
-        } else {
-            $leaderboards = Leaderboard::query()->whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
-        }
+        $leaderboards = Leaderboard::query()
+            ->with('committee')
+            ->withCount('entries')
+            ->unless(Auth::user()?->can('board'), function ($q) {
+                $q->whereRelation('committee.users', 'users.id', Auth::user()->id);
+            })->get();
 
         return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
@@ -86,7 +87,7 @@ class LeaderboardController extends Controller
      */
     public function edit($id)
     {
-        $leaderboard = Leaderboard::query()->findOrFail($id);
+        $leaderboard = Leaderboard::query()->with('entries.user')->findOrFail($id);
 
         if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
