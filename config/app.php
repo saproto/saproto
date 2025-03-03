@@ -4,7 +4,6 @@ use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
-use App\Providers\SoloServiceProvider;
 use Biscolab\ReCaptcha\Facades\ReCaptcha;
 use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
 use Carbon\Carbon;
@@ -240,7 +239,6 @@ return [
         ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
-        SoloServiceProvider::class,
     ],
 
     /*
