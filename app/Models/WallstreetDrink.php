@@ -42,8 +42,8 @@ class WallstreetDrink extends Model
         $productIDs = $this->products()->pluck('id');
 
         return OrderLine::query()
-            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time))
-            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time))
+            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time, CarbonTimeZone::create(config('app.timezone'))))
+            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time), CarbonTimeZone::create(config('app.timezone')))
             ->whereHas('product', function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             });

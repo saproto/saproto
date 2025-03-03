@@ -121,7 +121,7 @@ class ApiController extends Controller
         return response()->JSON([
             'photos' => $album->items->pluck('url'),
             'album_name' => $album->name,
-            'date_taken' => Carbon::createFromTimestamp($album->date_taken)->format('d-m-Y'),
+            'date_taken' => Carbon::createFromTimestamp($album->date_taken, CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y'),
         ]);
     }
 

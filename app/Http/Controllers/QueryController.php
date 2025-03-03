@@ -146,7 +146,7 @@ class QueryController extends Controller
         $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
             /** @phpstan-ignore-next-line */
-            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
+            $event->Board = (int) Carbon::createFromTimestamp($event->start, CarbonTimeZone::create(config('app.timezone')))->diffInYears($changeGMM, true);
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);

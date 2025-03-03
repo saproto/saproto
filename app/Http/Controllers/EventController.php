@@ -242,7 +242,7 @@ class EventController extends Controller
             })->where('start', '>', strtotime($year.'-01-01 00:00:01'))
             ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
             ->get()
-            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
+            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start, CarbonTimeZone::create(config('app.timezone')))->month);
 
         $years = $this->getAvailableYears();
 
@@ -654,7 +654,7 @@ CALSCALE:GREGORIAN
     {
         $event = Event::query()->findOrFail($request->input('id'));
 
-        $oldStart = Carbon::createFromTimestamp($event->start);
+        $oldStart = Carbon::createFromTimestamp($event->start, CarbonTimeZone::create(config('app.timezone')));
 
         $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
             ->setHour($oldStart->hour)
