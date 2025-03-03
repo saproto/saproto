@@ -74,7 +74,7 @@ class ProtoPolicy extends Policy
                 'https://www.google.com/recaptcha/',
                 'https://recaptcha.google.com/recaptcha/',
                 'https://protu.be/',
-                'https://www.google.com'
+                'https://www.google.com',
             ])
             ->addDirective(Directive::FONT, [
                 Keyword::SELF,

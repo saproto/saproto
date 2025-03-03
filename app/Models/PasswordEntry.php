@@ -59,8 +59,6 @@ class PasswordEntry extends Model
     }
 
     /**
-     * @return int
-     *
      * @throws Exception
      */
     public function age(): int
