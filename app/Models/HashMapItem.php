@@ -37,21 +37,19 @@ class HashMapItem extends Model
     public $timestamps = false;
 
     /**
-     * @param  Builder  $query
-     * @param  string  $key
      * @return Builder
      */
-    public function scopeKey($query, $key)
+    /** @param Builder<HashMapItem> $query */
+    public function scopeKey(Builder $query, string $key)
     {
         return $query->where('key', '=', $key);
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string  $subkey
      * @return Builder
      */
-    public function scopeSubkey($query, $subkey)
+    /** @param Builder<HashMapItem> $query */
+    public function scopeSubkey(Builder $query, string $subkey)
     {
         return $query->where('subkey', '=', $subkey);
     }

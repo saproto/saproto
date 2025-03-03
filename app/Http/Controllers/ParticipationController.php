@@ -28,7 +28,16 @@ class ParticipationController extends Controller
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
+
         abort_unless($event->activity, 403, 'You cannot subscribe for '.$event->title.'.');
+
+        abort_if($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null, 403, 'You are helping at '.$event->title.'.');
+
+        abort_if($event->activity->getParticipation(Auth::user()) !== null, 403, 'You are already subscribed for '.$event->title.'.');
+
+        abort_if(! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup()), 403, 'You cannot subscribe for '.$event->title.' at this time.');
+
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
@@ -98,6 +107,12 @@ class ParticipationController extends Controller
         }
 
         abort_unless($event->activity, 403, 'You cannot subscribe for '.$event->title.'.');
+
+        abort_if($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null, 403, 'You are helping at '.$event->title.'.');
+
+        abort_if($event->activity->getParticipation($user) !== null, 403, 'You are already subscribed for '.$event->title.'.');
+
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 

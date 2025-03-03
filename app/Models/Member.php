@@ -111,6 +111,7 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
+    /** @param Builder<Member> $query */
     public function scopePrimary(Builder $query): Builder
     {
         /** @phpstan-ignore-next-line */
@@ -119,6 +120,7 @@ class Member extends Model
             ->whereHas('UtAccount');
     }
 
+    /** @param Builder<Member> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);

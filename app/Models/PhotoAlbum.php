@@ -88,7 +88,8 @@ class PhotoAlbum extends Model
         return $this->hasMany(Photo::class, 'album_id');
     }
 
-    public function scopeName($query, string $name): Builder
+    /** @param Builder<PhotoAlbum> $query */
+    public function scopeName(Builder $query, string $name): Builder
     {
         return $query->where('name', 'LIKE', '%'.$name.'%');
     }
