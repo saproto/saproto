@@ -46,6 +46,8 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://www.youtube.com/iframe_api',
                 'https://s.ytimg.com',
+                'https://www.gstatic.com/recaptcha/',
+                'https://www.google.com/recaptcha/api.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -69,7 +71,10 @@ class ProtoPolicy extends Policy
             ->addDirective(Directive::FRAME, [
                 Keyword::SELF,
                 'https://www.youtube.com/embed/',
+                'https://www.google.com/recaptcha/',
+                'https://recaptcha.google.com/recaptcha/',
                 'https://protu.be/',
+                'https://www.google.com'
             ])
             ->addDirective(Directive::FONT, [
                 Keyword::SELF,
@@ -91,6 +96,7 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://cdn.jsdelivr.net/npm/chart.js',
                 'https://api.fontawesome.com/',
+                'https://www.google.com/recaptcha/',
                 ...['https://websockets.saproto.nl:*', 'ws://websockets.saproto.nl:*', 'wss://websockets.saproto.nl:*'],
                 ...(App::environment('production') ? [] : ['ws://localhost:*', 'http://localhost:*', 'ws://127.0.0.1:*']),
             ]);
