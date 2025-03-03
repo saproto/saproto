@@ -83,7 +83,7 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
-    laravelsail/php82-composer:latest \
+    laravelsail/php83-composer:latest \
     composer install --ignore-platform-reqs --no-scripts
 ```
 
@@ -174,18 +174,6 @@ sail shell
 
 ```
 sail artisan migrate:fresh --seed
-```
-
-#### Run dev commands (Laravel Solo)
-
-When your sail container is running, you can use [Laravel Solo](https://github.com/aarondfrancis/solo) to run all the
-commands you would normally in different
-terminals. It will automatically start `npm run dev` and tail the logs. Use the arrow keys to switch between the
-different tabs, and press `q` to exit.
-The queue and schedule are not automatically run. To run these, switch to the tab and press 's'.
-
-```
-sail artisan solo
 ```
 
 ### Code completion, style and static analysis

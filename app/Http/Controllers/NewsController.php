@@ -170,9 +170,7 @@ class NewsController extends Controller
     public function sendWeeklyEmail(int $id)
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only the board can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only the board can do this.');
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 

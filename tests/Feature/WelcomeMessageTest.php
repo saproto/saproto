@@ -7,6 +7,7 @@ it('lists the welcomeMessages for board', function () {
     /** @var Member $member * */
     $member = Member::factory()->create();
     $member->user->givePermissionTo('board');
+
     $response = $this->actingAs($member->user)
         ->get('/welcomeMessages');
     $response->assertSee('Welcome Messages');

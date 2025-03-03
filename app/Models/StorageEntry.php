@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Http\Controllers\FileController;
 use Carbon;
-use Eloquent;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +37,7 @@ use Override;
  * @method static Builder|StorageEntry newQuery()
  * @method static Builder|StorageEntry query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class StorageEntry extends Model
 {

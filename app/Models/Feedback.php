@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,7 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|Feedback newQuery()
  * @method static Builder|Feedback query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Feedback extends Model
 {
@@ -49,16 +48,25 @@ class Feedback extends Model
 
     protected $with = ['user', 'category'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<FeedbackCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(FeedbackCategory::class, 'feedback_category_id');
     }
 
+    /**
+     * @return HasMany<FeedbackVote, $this>
+     */
     public function votes(): HasMany
     {
         return $this->hasMany(FeedbackVote::class);

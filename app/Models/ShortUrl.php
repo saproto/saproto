@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|ShortUrl newQuery()
  * @method static Builder|ShortUrl query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class ShortUrl extends Model
 {

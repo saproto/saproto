@@ -29,6 +29,9 @@ class WallstreetDrink extends Model
         return $this->start_time <= time() && $this->end_time >= time();
     }
 
+    /**
+     * @return BelongsToMany<Product, $this>
+     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
@@ -39,13 +42,16 @@ class WallstreetDrink extends Model
         $productIDs = $this->products()->pluck('id');
 
         return OrderLine::query()
-            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time))
-            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time))
+            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time, CarbonTimeZone::create(config('app.timezone'))))
+            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time), CarbonTimeZone::create(config('app.timezone')))
             ->whereHas('product', function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             });
     }
 
+    /**
+     * @return BelongsToMany<WallstreetEvent, $this>
+     */
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(WallstreetEvent::class, 'wallstreet_drink_event', 'wallstreet_drink_id', 'wallstreet_drink_events_id')->withPivot('id')->withTimestamps();

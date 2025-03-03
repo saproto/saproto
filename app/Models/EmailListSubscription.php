@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|EmailListSubscription newQuery()
  * @method static Builder|EmailListSubscription query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class EmailListSubscription extends Model
 {

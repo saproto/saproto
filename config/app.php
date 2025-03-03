@@ -4,9 +4,6 @@ use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
-use App\Providers\SoloServiceProvider;
-use Biscolab\ReCaptcha\Facades\ReCaptcha;
-use Biscolab\ReCaptcha\ReCaptchaServiceProvider;
 use Carbon\Carbon;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
@@ -233,14 +230,12 @@ return [
          * External Service Providers
          */
         MailServiceProvider::class,
-        ReCaptchaServiceProvider::class,
         BarcodeServiceProvider::class,
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
         ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
-        SoloServiceProvider::class,
     ],
 
     /*
@@ -302,8 +297,6 @@ return [
         'Carbon' => Carbon::class,
 
         'Markdown' => Markdown::class,
-
-        'ReCaptcha' => ReCaptcha::class,
 
         'Mollie' => Mollie::class,
 

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +21,7 @@ use Illuminate\Support\Collection;
  * @property bool $is_prepaid
  * @property bool $show_participants
  * @property bool $has_buy_limit
- * @property-read Event $event
+ * @property-read \Illuminate\Support\Facades\Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
  *
@@ -37,7 +36,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket newQuery()
  * @method static Builder|Ticket query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Ticket extends Model
 {
@@ -47,16 +46,25 @@ class Ticket extends Model
 
     public $timestamps = false;
 
+    /**
+     * @return BelongsTo<Product, $this>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return HasMany<TicketPurchase, $this>
+     */
     public function purchases(): HasMany
     {
         return $this->hasMany(TicketPurchase::class);

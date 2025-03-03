@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Leaderboard newQuery()
  * @method static Builder|Leaderboard query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Leaderboard extends Model
 {
@@ -46,11 +45,17 @@ class Leaderboard extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class, 'committee_id');
     }
 
+    /**
+     * @return HasMany<LeaderboardEntry, $this>
+     */
     public function entries(): HasMany
     {
         return $this->hasMany(LeaderboardEntry::class);

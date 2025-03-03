@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|TicketPurchase newQuery()
  * @method static Builder|TicketPurchase query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class TicketPurchase extends Model
 {
@@ -46,16 +45,25 @@ class TicketPurchase extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<Ticket, $this>
+     */
     public function ticket(): BelongsTo
     {
         return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
+    /**
+     * @return BelongsTo<OrderLine, $this>
+     */
     public function orderline(): BelongsTo
     {
         return $this->belongsTo(OrderLine::class, 'orderline_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id')->withTrashed();

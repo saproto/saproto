@@ -22,11 +22,17 @@ class WallstreetEvent extends Model
 {
     protected $table = 'wallstreet_drink_events';
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class);
     }
 
+    /**
+     * @return BelongsToMany<Product, $this>
+     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'wallstreet_drink_event_product', 'wallstreet_drink_event_id');
