@@ -55,11 +55,17 @@ class CommitteeMembership extends Model
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
