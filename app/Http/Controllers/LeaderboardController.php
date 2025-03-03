@@ -40,9 +40,9 @@ class LeaderboardController extends Controller
         $leaderboards = Leaderboard::query()
             ->with('committee')
             ->withCount('entries')
-            ->unless(Auth::user()?->can('board'), function($q){
-            $q->whereRelation('committee.users', 'users.id', Auth::user()->id);
-        })->get();
+            ->unless(Auth::user()?->can('board'), function ($q) {
+                $q->whereRelation('committee.users', 'users.id', Auth::user()->id);
+            })->get();
 
         return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
