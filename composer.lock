@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c965f4d44a5a13a020a38b83b29ac242",
+    "content-hash": "0c8f25c391b4b8e75312963b654ce426",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -306,78 +306,6 @@
                 "source": "https://github.com/alaouy/Youtube/tree/v2.2.5"
             },
             "time": "2020-12-14T16:14:02+00:00"
-        },
-        {
-            "name": "biscolab/laravel-recaptcha",
-            "version": "v6.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/biscolab/laravel-recaptcha.git",
-                "reference": "440fc617cba9f39aab7fda5d7697b76a55286e31"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/biscolab/laravel-recaptcha/zipball/440fc617cba9f39aab7fda5d7697b76a55286e31",
-                "reference": "440fc617cba9f39aab7fda5d7697b76a55286e31",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/routing": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "5.*|6.*|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^9.1|^10.5"
-            },
-            "suggest": {
-                "biscolab/laravel-authlog": "It allows to handle logged-in users and force log-out if needed"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Biscolab\\ReCaptcha\\ReCaptchaServiceProvider"
-                    ],
-                    "aliases": {
-                        "ReCaptcha": "Biscolab\\ReCaptcha\\Facades\\ReCaptcha"
-                    }
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Biscolab\\ReCaptcha\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Roberto Belotti",
-                    "email": "roby.belotti@gmail.com",
-                    "homepage": "https://biscolab.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Simple and painless Google reCAPTCHA package for Laravel framework",
-            "homepage": "https://biscolab.com/laravel-recaptcha",
-            "keywords": [
-                "captcha",
-                "laravel",
-                "recaptcha",
-                "validation"
-            ],
-            "support": {
-                "issues": "https://github.com/biscolab/laravel-recaptcha/issues",
-                "source": "https://github.com/biscolab/laravel-recaptcha/tree/v6.1.0"
-            },
-            "abandoned": true,
-            "time": "2024-03-27T11:06:21+00:00"
         },
         {
             "name": "brick/math",

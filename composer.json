@@ -44,7 +44,6 @@
         "aacotroneo/laravel-saml2": "^2.1.0",
         "abcaeffchen/sephpa": "^2.1.2",
         "alaouy/youtube": "2.2.5",
-        "biscolab/laravel-recaptcha": "^6",
         "ext-calendar": "*",
         "ext-curl": "*",
         "ext-json": "*",

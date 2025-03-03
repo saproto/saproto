@@ -151,7 +151,6 @@ class AuthController extends Controller
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'name' => 'required|string',
             'calling_name' => 'required|string',
-            'g-recaptcha-response' => 'required|recaptcha',
             'privacy_policy_acceptance' => 'present',
         ]);
 

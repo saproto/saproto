@@ -46,7 +46,6 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://www.youtube.com/iframe_api',
                 'https://s.ytimg.com',
-                'https://www.google.com/recaptcha/api.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -70,8 +69,6 @@ class ProtoPolicy extends Policy
             ->addDirective(Directive::FRAME, [
                 Keyword::SELF,
                 'https://www.youtube.com/embed/',
-                'https://www.google.com/recaptcha/',
-                'https://recaptcha.google.com/recaptcha/',
                 'https://protu.be/',
             ])
             ->addDirective(Directive::FONT, [
