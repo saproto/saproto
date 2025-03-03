@@ -67,9 +67,10 @@
                                             'title' => 'Confirm Close',
                                             'message' =>
                                                 'Are you sure you want to close this wallstreet drink early? The drink will close automatically at:' .
-                                                Carbon::createFromTimestamp($wallstreetDrink->end_time, CarbonTimeZone::create(config('app.timezone')))->format(
-                                                    'm-d-Y H:i',
-                                                ),
+                                                Carbon::createFromTimestamp(
+                                                    $wallstreetDrink->end_time,
+                                                    CarbonTimeZone::create(config('app.timezone')),
+                                                )->format('m-d-Y H:i'),
                                             'confirm' => 'Close',
                                         ]
                                     )

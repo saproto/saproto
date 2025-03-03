@@ -24,7 +24,7 @@
             <a href="{{ route('login::edu') }}" class="btn btn-success w-100">
             Create an account with your university account
             </a>
-
+            
             <hr>
         --}}
 
@@ -107,7 +107,7 @@
 
         <hr />
 
-            {!! NoCaptcha::display() !!}
+        {!! NoCaptcha::display() !!}
 
         <hr />
 
