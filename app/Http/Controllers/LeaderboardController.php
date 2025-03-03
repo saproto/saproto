@@ -88,9 +88,7 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
-        if (! $leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
 
         $entries = $leaderboard->entries->sortByDesc('points');
 
@@ -105,9 +103,7 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
-        if (! $leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
 
         $leaderboard->name = $request->input('name');
         $leaderboard->description = $request->input('description');

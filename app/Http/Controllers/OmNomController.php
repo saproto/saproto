@@ -36,9 +36,7 @@ class OmNomController extends Controller
 
         $store = Config::array('omnomcom.stores')[$store_slug];
 
-        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
-            abort(403);
-        }
+        abort_if(! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles'])), 403);
 
         $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
         $minors = collect();
@@ -85,15 +83,11 @@ class OmNomController extends Controller
     public function stock(Request $request)
     {
         $stores = Config::array('omnomcom.stores');
-        if (! array_key_exists($request->store, $stores)) {
-            abort(404);
-        }
+        abort_unless(array_key_exists($request->store, $stores), 404);
 
         $store = $stores[$request->store];
 
-        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
-            abort(403);
-        }
+        abort_if(! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles'])), 403);
 
         $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
 

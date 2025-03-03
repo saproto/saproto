@@ -43,9 +43,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request): void
     {
-        if ($request->secret != Config::string('protube.protube_to_laravel_secret')) {
-            abort(403);
-        }
+        abort_if($request->secret != Config::string('protube.protube_to_laravel_secret'), 403);
 
         $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);

@@ -46,6 +46,9 @@ class UtAccount extends Model
         'found',
     ];
 
+    /**
+     * @return BelongsTo<Member, $this>
+     */
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);

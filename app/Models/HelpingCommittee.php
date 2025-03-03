@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|HelpingCommittee newQuery()
  * @method static Builder|HelpingCommittee query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class HelpingCommittee extends Validatable
 {
@@ -48,16 +48,25 @@ class HelpingCommittee extends Validatable
         'amount' => 'required|integer',
     ];
 
+    /**
+     * @return BelongsTo<Activity, $this>
+     */
     public function activity(): BelongsTo
     {
         return $this->belongsTo(Activity::class);
     }
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this

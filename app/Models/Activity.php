@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ActivityParticipation[] $participation
  * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
- * @property-read Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|User[] $allUsers
  * @property-read Collection|User[] $backupUsers
  * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
@@ -73,16 +73,25 @@ class Activity extends Validatable
         'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
     ];
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return BelongsTo<Account, $this>
+     */
     public function closedAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'closed_account');
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -93,6 +102,9 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function presentUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -104,6 +116,9 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -113,6 +128,9 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function backupUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
@@ -123,11 +141,17 @@ class Activity extends Validatable
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function helpingCommittees(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
+    /**
+     * @return HasMany<HelpingCommittee, $this>
+     */
     public function helpingCommitteeInstances(): HasMany
     {
         return $this->hasMany(HelpingCommittee::class, 'activity_id');
@@ -152,11 +176,17 @@ class Activity extends Validatable
             ->first();
     }
 
+    /**
+     * @return HasMany<ActivityParticipation, $this>
+     */
     public function participation(): HasMany
     {
         return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
 
+    /**
+     * @return HasMany<ActivityParticipation, $this>
+     */
     public function helpingParticipations(): HasMany
     {
         return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');

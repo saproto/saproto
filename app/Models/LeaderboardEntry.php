@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|LeaderboardEntry newQuery()
  * @method static Builder|LeaderboardEntry query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class LeaderboardEntry extends Model
 {

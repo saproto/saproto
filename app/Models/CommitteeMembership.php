@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +42,7 @@ use Override;
  * @method static Builder|CommitteeMembership newQuery()
  * @method static Builder|CommitteeMembership query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class CommitteeMembership extends Model
 {

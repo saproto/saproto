@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,7 +26,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|EmailList newQuery()
  * @method static Builder|EmailList query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class EmailList extends Model
 {

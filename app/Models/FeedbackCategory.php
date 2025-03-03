@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Feedback newQuery()
  * @method static Builder|Feedback query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class FeedbackCategory extends Model
 {
@@ -42,11 +41,17 @@ class FeedbackCategory extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return HasMany<Feedback, $this>
+     */
     public function feedback(): HasMany
     {
         return $this->hasMany(Feedback::class, 'feedback_category_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewer_id');

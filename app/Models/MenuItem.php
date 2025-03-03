@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -39,7 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MenuItem newQuery()
  * @method static Builder|MenuItem query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class MenuItem extends Model
 {

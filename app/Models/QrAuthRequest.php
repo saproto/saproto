@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|QrAuthRequest newQuery()
  * @method static Builder|QrAuthRequest query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class QrAuthRequest extends Model
 {

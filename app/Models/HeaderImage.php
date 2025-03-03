@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|HeaderImage newQuery()
  * @method static Builder|HeaderImage query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class HeaderImage extends Model
 {
@@ -41,16 +40,25 @@ class HeaderImage extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'credit_id');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function StorageEntry(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id', 'id');

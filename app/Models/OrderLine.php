@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -57,7 +56,7 @@ use Override;
  * @method static Builder|OrderLine newQuery()
  * @method static Builder|OrderLine query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class OrderLine extends Model
 {
@@ -75,31 +74,49 @@ class OrderLine extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Product, $this>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function cashier(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Withdrawal, $this>
+     */
     public function withdrawal(): BelongsTo
     {
         return $this->belongsTo(Withdrawal::class, 'payed_with_withdrawal');
     }
 
+    /**
+     * @return BelongsTo<MollieTransaction, $this>
+     */
     public function molliePayment(): BelongsTo
     {
         return $this->belongsTo(MollieTransaction::class, 'payed_with_mollie');
     }
 
+    /**
+     * @return HasOne<TicketPurchase, $this>
+     */
     public function ticketPurchase(): HasOne
     {
         return $this->hasOne(TicketPurchase::class, 'orderline_id');

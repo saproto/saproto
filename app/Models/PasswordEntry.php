@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon;
 use DateTime;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,7 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder|PasswordEntry newQuery()
  * @method static Builder|PasswordEntry query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class PasswordEntry extends Model
 {

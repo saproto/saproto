@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -43,7 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Achievement newQuery()
  * @method static Builder|Achievement query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Achievement extends Model
 {
@@ -51,11 +50,17 @@ class Achievement extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'achievements_users');
     }
 
+    /**
+     * @return HasMany<AchievementOwnership, $this>
+     */
     public function achievementOwnership(): HasMany
     {
         return $this->hasMany(AchievementOwnership::class);

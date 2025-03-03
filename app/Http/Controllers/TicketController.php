@@ -281,13 +281,7 @@ class TicketController extends Controller
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);
-        if ($ticket->user->id != Auth::id()) {
-            abort(403, 'This is not your ticket!');
-        } elseif (! $ticket->canBeDownloaded()) {
-            Session::flash('flash_message', 'You need to pay for this ticket before you can download it.');
-
-            return Redirect::back();
-        }
+        abort_if($ticket->user->id != Auth::id(), 403, 'This is not your ticket!');
 
         $pdf = new PDF('P', 'A4', 'en');
         $pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));

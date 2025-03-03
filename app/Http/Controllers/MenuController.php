@@ -43,6 +43,7 @@ class MenuController extends Controller
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
         $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+
         $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
@@ -85,6 +86,7 @@ class MenuController extends Controller
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
         $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+
         $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
@@ -109,9 +111,7 @@ class MenuController extends Controller
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemAbove = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
-        if (! $menuItemAbove) {
-            abort(400, 'Item is already top item.');
-        }
+        abort_unless($menuItemAbove, 400, 'Item is already top item.');
 
         $this->switchMenuItems($menuItem, $menuItemAbove);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
@@ -130,9 +130,7 @@ class MenuController extends Controller
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemBelow = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
-        if (! $menuItemBelow) {
-            abort(400, 'Item is already bottom item.');
-        }
+        abort_unless($menuItemBelow, 400, 'Item is already bottom item.');
 
         $this->switchMenuItems($menuItem, $menuItemBelow);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);

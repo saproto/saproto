@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +26,7 @@ use Override;
  * @property bool $published
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Photo $thumbPhoto
  * @property-read Collection|Photo[] $items
  *
@@ -45,7 +44,7 @@ use Override;
  * @method static Builder|PhotoAlbum newQuery()
  * @method static Builder|PhotoAlbum query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class PhotoAlbum extends Model
 {
@@ -65,16 +64,25 @@ class PhotoAlbum extends Model
         static::addGlobalScope('private', fn (Builder $builder) => $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)));
     }
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
 
+    /**
+     * @return HasOne<Photo, $this>
+     */
     public function thumbPhoto(): HasOne
     {
         return $this->hasOne(Photo::class, 'id', 'thumb_id');
     }
 
+    /**
+     * @return HasMany<Photo, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(Photo::class, 'album_id');

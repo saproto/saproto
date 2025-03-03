@@ -433,7 +433,7 @@ class GoogleSync extends Command
             $pageToken = $results->getNextPageToken();
             foreach ($results->getUsers() as $googleUser) {
                 $id = $googleUser->getExternalIds()[0]['value'] ?? null;
-                $protoUser = ProtoUser::find($id);
+                $protoUser = ProtoUser::query()->find($id);
                 if ($protoUser != null) {
                     $protoUsers->push($protoUser);
                 }
@@ -453,7 +453,7 @@ class GoogleSync extends Command
     {
         $indent = '        ';
         $protoGroups = $protoUser->groups()->where('public', true)->get()->pluck('email');
-        $protoAliases = ProtoAlias::where('user_id', $protoUser->id)->get()->pluck('email');
+        $protoAliases = ProtoAlias::query()->where('user_id', $protoUser->id)->get()->pluck('email');
 
         $targetGroups = $protoGroups->merge($protoAliases);
         $googleGroups = $this->listGoogleGroups($protoUser);
