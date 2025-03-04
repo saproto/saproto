@@ -32,6 +32,15 @@ return [
             'col_override' => 3,
             'alcohol_time_constraint' => false,
         ],
+        'alfred' => [
+            'name' => "Alfred's nook",
+            'categories' => [20],
+            'addresses' => [],
+            'roles' => ['board', 'alfred'],
+            'cash_allowed' => false,
+            'bank_card_allowed' => false,
+            'alcohol_time_constraint' => false,
+        ],
     ],
 
     'cookiemonsters' => [
