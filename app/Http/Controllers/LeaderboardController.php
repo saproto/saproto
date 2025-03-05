@@ -20,11 +20,10 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::all()->reverse();
-        if (count($leaderboards) > 0) {
+        $leaderboards = Leaderboard::query()->with('entries.user')->orderBy('created_at', 'desc')->get();
+        if(!$leaderboards->isEmpty()) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
-
         Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
 
         return Redirect::back();

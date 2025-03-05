@@ -172,7 +172,7 @@
                                                         </td>
                                                         <td>
                                                             @if ($entry->user)
-                                                                {{ $entry->user?->name }}
+                                                                {{ $entry->user->name }}
                                                             @else
                                                                 <del>
                                                                     Deleted User
