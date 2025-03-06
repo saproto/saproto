@@ -143,9 +143,9 @@
                                     all active members
                                 @elseif ($email->to_list)
                                     list(s)
-                                        @foreach($email->lists as $list)
+                                    @foreach ($email->lists as $list)
                                             {{ $list->name }},
-                                        @endforeach
+                                    @endforeach
                                 @elseif ($email->to_event)
                                     event(s)
                                     {{ $email->to_backup ? 'with backup users' : '' }}:

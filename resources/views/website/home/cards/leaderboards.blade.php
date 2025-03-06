@@ -1,6 +1,10 @@
-@php($leaderboard = App\Models\Leaderboard::where('featured', true)->with('entries', function($q){
-    $q->orderBy('points', 'DESC')->limit(5);
-})->first())
+@php(
+    ($leaderboard = App\Models\Leaderboard::where('featured', true)
+        ->with('entries', function ($q) {
+            $q->orderBy('points', 'DESC')->limit(5);
+        })
+        ->first())
+)
 
 @if ($leaderboard)
     <div class="card mb-3">
@@ -30,9 +34,7 @@
                             @if ($entry->user)
                                 {{ $entry->user->name }}
                             @else
-                                <del>
-                                    Deleted User
-                                </del>
+                                <del>Deleted User</del>
                             @endif
                         </td>
                         <td class="pe-4">
