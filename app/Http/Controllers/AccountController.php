@@ -17,7 +17,8 @@ class AccountController extends Controller
     /** @return View */
     public function index()
     {
-        $accounts=Account::query()->orderBy('account_number')->withCount('products')->get();
+        $accounts = Account::query()->orderBy('account_number')->withCount('products')->get();
+
         return view('omnomcom.accounts.index', ['accounts' => $accounts]);
     }
 
@@ -25,8 +26,9 @@ class AccountController extends Controller
     {
         /** @var Account $account */
         $account = Account::query()->findOrFail($id);
-        $products =  Product::query()->where('account_id', $account->id)->paginate(10);
-        return view('omnomcom.accounts.show', ['account' => $account, 'products' =>$products]);
+        $products = Product::query()->where('account_id', $account->id)->paginate(10);
+
+        return view('omnomcom.accounts.show', ['account' => $account, 'products' => $products]);
     }
 
     public function create(): View

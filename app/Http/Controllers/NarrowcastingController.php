@@ -17,10 +17,11 @@ class NarrowcastingController extends Controller
     /** @return View */
     public function index()
     {
-        $messages=NarrowcastingItem::query()
+        $messages = NarrowcastingItem::query()
             ->with('image')
             ->orderBy('campaign_start', 'desc')
             ->paginate(10);
+
         return view('narrowcasting.list', ['messages' => $messages]);
     }
 

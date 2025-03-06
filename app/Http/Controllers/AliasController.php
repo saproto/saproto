@@ -18,7 +18,7 @@ class AliasController extends Controller
     public function index()
     {
         $aliases = Alias::query()->with('user')->orderBy('alias')->get()
-        ->groupBy('alias');
+            ->groupBy('alias');
 
         if ($aliases->count() > 0) {
             return view('aliases.index', ['aliases' => $aliases]);

@@ -485,6 +485,7 @@ class WithdrawalController extends Controller
                 $q->unpayed()->with('product');
             })
             ->get();
+
         return view('omnomcom.unwithdrawable', ['users' => $users]);
     }
 

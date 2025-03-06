@@ -21,9 +21,10 @@ class LeaderboardController extends Controller
     public function index()
     {
         $leaderboards = Leaderboard::query()->with('entries.user')->orderBy('created_at', 'desc')->get();
-        if(!$leaderboards->isEmpty()) {
+        if (! $leaderboards->isEmpty()) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
+
         Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
 
         return Redirect::back();
@@ -81,7 +82,6 @@ class LeaderboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
      * @return View
      */
     public function edit(int $id)
@@ -98,8 +98,6 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      */
     public function update(Request $request, int $id)
@@ -138,7 +136,6 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public function destroy(int $id)
