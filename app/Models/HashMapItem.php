@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static builder|hashMapItem newquery()
  * @method static builder|hashMapItem query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class HashMapItem extends Model
 {

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Dinnerform $dinnerform
  * @property-read Dinnerform $price_with_discount
  *
- * @mixin Eloquent
+ * @mixin Model
  **/
 class DinnerformOrderline extends Model
 {
@@ -34,28 +34,35 @@ class DinnerformOrderline extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Dinnerform, $this>
+     */
     public function dinnerform(): BelongsTo
     {
         return $this->belongsTo(Dinnerform::class);
     }
 
     /** @return float Price of orderline reduced by possible discounts. */
-    public function getPriceWithDiscountAttribute(): float
+    protected function priceWithDiscount(): Attribute
     {
-        $with_regular_discount = $this->price * $this->dinnerform->regular_discount;
-        $price = round($with_regular_discount, 2, PHP_ROUND_HALF_DOWN);
+        return Attribute::make(get: function (): float|int {
+            $with_regular_discount = $this->price * $this->dinnerform->regular_discount;
+            $price = round($with_regular_discount, 2, PHP_ROUND_HALF_DOWN);
+            if ($this->helper && $this->dinnerform->helper_discount) {
+                $with_helper_discount = $price - $this->dinnerform->helper_discount;
 
-        if ($this->helper && $this->dinnerform->helper_discount) {
-            $with_helper_discount = $price - $this->dinnerform->helper_discount;
+                return max(0, $with_helper_discount);
+            }
 
-            return max(0, $with_helper_discount);
-        }
-
-        return $price;
+            return $price;
+        });
     }
 }

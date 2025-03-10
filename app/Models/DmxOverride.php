@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -27,7 +27,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|DmxOverride newQuery()
  * @method static Builder|DmxOverride query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class DmxOverride extends Model
 {
@@ -106,13 +106,13 @@ class DmxOverride extends Model
         return DmxFixture::query()->whereIn('id', $this->getFixtureIds())->get();
     }
 
-    public function getIsActiveAttribute(): bool
+    protected function isActive(): Attribute
     {
-        return $this->active();
+        return Attribute::make(get: fn (): bool => $this->active());
     }
 
-    public function getWindowSizeAttribute(): int
+    protected function windowSize(): Attribute
     {
-        return (int) $this->end - (int) $this->start;
+        return Attribute::make(get: fn (): int => (int) $this->end - (int) $this->start);
     }
 }

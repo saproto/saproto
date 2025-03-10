@@ -23,11 +23,17 @@ class Codex extends Model
 
     protected $table = 'codex_codices';
 
+    /**
+     * @return BelongsToMany<CodexSong, $this>
+     */
     public function songs(): BelongsToMany
     {
         return $this->belongsToMany(CodexSong::class, 'codex_codex_song', 'codex', 'song');
     }
 
+    /**
+     * @return BelongsToMany<CodexText, $this>
+     */
     public function texts(): BelongsToMany
     {
         return $this->belongsToMany(CodexText::class, 'codex_codex_text', 'codex', 'text_id');

@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -53,34 +53,34 @@ use Override;
  * @property-read Collection|Video[] $videos
  *
  * @method static bool|null forceDelete()
- * @method static QueryBuilder|Event onlyTrashed()
- * @method static QueryBuilder|Event withTrashed()
- * @method static QueryBuilder|Event withoutTrashed()
+ * @method static QueryBuilder|\Illuminate\Support\Facades\Event onlyTrashed()
+ * @method static QueryBuilder|\Illuminate\Support\Facades\Event withTrashed()
+ * @method static QueryBuilder|\Illuminate\Support\Facades\Event withoutTrashed()
  * @method static bool|null restore()
- * @method static Builder|Event whereCommitteeId($value)
- * @method static Builder|Event whereCategoryId($value)
- * @method static Builder|Event whereCreatedAt($value)
- * @method static Builder|Event whereDeletedAt($value)
- * @method static Builder|Event whereDescription($value)
- * @method static Builder|Event whereEnd($value)
- * @method static Builder|Event whereForceCalendarSync($value)
- * @method static Builder|Event whereId($value)
- * @method static Builder|Event whereImageId($value)
- * @method static Builder|Event whereInvolvesFood($value)
- * @method static Builder|Event whereIsEducational($value)
- * @method static Builder|Event whereIsExternal($value)
- * @method static Builder|Event whereIsFeatured($value)
- * @method static Builder|Event whereLocation($value)
- * @method static Builder|Event whereSecret($value)
- * @method static Builder|Event whereStart($value)
- * @method static Builder|Event whereSummary($value)
- * @method static Builder|Event whereTitle($value)
- * @method static Builder|Event whereUpdatedAt($value)
- * @method static Builder|Event newModelQuery()
- * @method static Builder|Event newQuery()
- * @method static Builder|Event query()
+ * @method static Builder|\Illuminate\Support\Facades\Event whereCommitteeId($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereCategoryId($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereCreatedAt($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereDeletedAt($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereDescription($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereEnd($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereForceCalendarSync($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereId($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereImageId($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereInvolvesFood($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereIsEducational($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereIsExternal($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereIsFeatured($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereLocation($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereSecret($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereStart($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereSummary($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereTitle($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event whereUpdatedAt($value)
+ * @method static Builder|\Illuminate\Support\Facades\Event newModelQuery()
+ * @method static Builder|\Illuminate\Support\Facades\Event newQuery()
+ * @method static Builder|\Illuminate\Support\Facades\Event query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Event extends Model
 {
@@ -122,6 +122,9 @@ class Event extends Model
         return count($id) > 0 ? $id[0] : 0;
     }
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
@@ -176,31 +179,49 @@ class Event extends Model
         return $this->publication < Carbon::now()->timestamp;
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class);
     }
 
+    /**
+     * @return HasOne<Activity, $this>
+     */
     public function activity(): HasOne
     {
         return $this->hasOne(Activity::class);
     }
 
+    /**
+     * @return HasMany<Video, $this>
+     */
     public function videos(): HasMany
     {
         return $this->hasMany(Video::class);
     }
 
+    /**
+     * @return HasMany<PhotoAlbum, $this>
+     */
     public function albums(): HasMany
     {
         return $this->hasMany(PhotoAlbum::class, 'event_id');
     }
 
+    /**
+     * @return HasMany<Ticket, $this>
+     */
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'event_id');
     }
 
+    /**
+     * @return HasMany<Dinnerform, $this>
+     */
     public function dinnerforms(): HasMany
     {
         return $this->hasMany(Dinnerform::class, 'event_id');
@@ -357,19 +378,19 @@ class Event extends Model
         return $this->involves_food && $this->end > strtotime('-1 week');
     }
 
-    public function getIsFutureAttribute(): bool
+    protected function isFuture(): Attribute
     {
-        return date('U') < $this->start;
+        return Attribute::make(get: fn (): bool => date('U') < $this->start);
     }
 
-    public function getFormattedDateAttribute(): object
+    protected function formattedDate(): Attribute
     {
-        return (object) [
+        return Attribute::make(get: fn () => (object) [
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
             'time' => date('H:i', $this->start),
-        ];
+        ]);
     }
 
     #[Override]

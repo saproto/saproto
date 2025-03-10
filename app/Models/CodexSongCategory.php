@@ -22,6 +22,9 @@ class CodexSongCategory extends Model
 
     protected $table = 'codex_category';
 
+    /**
+     * @return HasMany<CodexSong, $this>
+     */
     public function songs(): HasMany
     {
         return $this->hasMany(CodexSong::class, 'category_id');

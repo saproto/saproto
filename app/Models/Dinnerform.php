@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +31,7 @@ use Override;
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)
@@ -46,7 +46,7 @@ use Override;
  * @method static Builder|Dinnerform newQuery()
  * @method static Builder|Dinnerform query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Dinnerform extends Model
 {
@@ -66,6 +66,9 @@ class Dinnerform extends Model
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function orderedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'ordered_by_user_id');
@@ -78,9 +81,9 @@ class Dinnerform extends Model
     }
 
     /** @return float The regular discount as a percentage out of 100. */
-    public function getRegularDiscountPercentageAttribute(): int|float
+    protected function regularDiscountPercentage(): Attribute
     {
-        return 100 - ($this->regular_discount * 100);
+        return Attribute::make(get: fn (): int|float => 100 - ($this->regular_discount * 100));
     }
 
     /** @return string A timespan string with format 'D H:i'. */

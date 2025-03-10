@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Event[]|null $events
+ * @property-read Collection|\Illuminate\Support\Facades\Event[]|null $events
  *
  * @method static Builder|EventCategory whereCreatedAt($value)
  * @method static Builder|EventCategory whereIcon($value)
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|EventCategory newQuery()
  * @method static Builder|EventCategory query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class EventCategory extends Model
 {
@@ -39,6 +38,9 @@ class EventCategory extends Model
 
     protected $fillable = ['name', 'icon'];
 
+    /**
+     * @return HasMany<Event, $this>
+     */
     public function events(): HasMany
     {
         return $this->hasMany(Event::class, 'category_id');

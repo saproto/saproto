@@ -25,6 +25,7 @@ it('shows members an empty news page', function () {
 it('lets admins create news', function ($article) {
     $member = Member::factory()->create();
     $member->user->assignRole('board');
+
     $response = $this->actingAs($member->user)
         ->get('/news/create');
 

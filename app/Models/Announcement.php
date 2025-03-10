@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -56,7 +56,7 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Announcement newQuery()
  * @method static Builder|Announcement query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Announcement extends Model
 {
@@ -64,70 +64,68 @@ class Announcement extends Model
 
     protected $guarded = ['id'];
 
-    public function getBootstrapStyleAttribute(): string
+    protected function bootstrapStyle(): Attribute
     {
-        $map = [
-            'primary',
-            'info',
-            'warning',
-            'danger',
-            'default',
-        ];
+        return Attribute::make(get: function (): string {
+            $map = [
+                'primary',
+                'info',
+                'warning',
+                'danger',
+                'default',
+            ];
 
-        return $map[$this->show_style];
+            return $map[$this->show_style];
+        });
     }
 
-    public function getIsVisibleAttribute(): string
+    protected function isVisible(): Attribute
     {
-        $flags = [];
-
-        $flags[] = $this->show_only_homepage ? 'Homepage only' : 'Entire site';
-
-        if ($this->show_guests) {
-            $flags[] = 'All guests';
-        }
-
-        if ($this->show_users) {
-            $flags[] = $this->show_only_new ? 'New users' : 'All users';
-        }
-
-        if ($this->show_members) {
-            if ($this->show_only_firstyear && $this->show_only_active) {
-                $flags[] = 'First-year and active members';
-            } elseif ($this->show_only_firstyear) {
-                $flags[] = 'First-year members';
-            } elseif ($this->show_only_active) {
-                $flags[] = 'Active members';
-            } else {
-                $flags[] = 'All members';
+        return Attribute::make(get: function (): string {
+            $flags = [];
+            $flags[] = $this->show_only_homepage ? 'Homepage only' : 'Entire site';
+            if ($this->show_guests) {
+                $flags[] = 'All guests';
             }
-        }
+            if ($this->show_users) {
+                $flags[] = $this->show_only_new ? 'New users' : 'All users';
+            }
+            if ($this->show_members) {
+                if ($this->show_only_firstyear && $this->show_only_active) {
+                    $flags[] = 'First-year and active members';
+                } elseif ($this->show_only_firstyear) {
+                    $flags[] = 'First-year members';
+                } elseif ($this->show_only_active) {
+                    $flags[] = 'Active members';
+                } else {
+                    $flags[] = 'All members';
+                }
+            }
+            if ($this->show_as_popup) {
+                $flags[] = 'Pop-up';
+            } else {
+                $flags[] = 'Banner';
+                $flags[] = $this->is_dismissable ? 'Dismissable' : 'Persistent';
+            }
+            $flags[] = sprintf('Style: %s', $this->bootstrap_style);
 
-        if ($this->show_as_popup) {
-            $flags[] = 'Pop-up';
-        } else {
-            $flags[] = 'Banner';
-            $flags[] = $this->is_dismissable ? 'Dismissable' : 'Persistent';
-        }
-
-        $flags[] = sprintf('Style: %s', $this->bootstrap_style);
-
-        return implode(', ', $flags);
+            return implode(', ', $flags);
+        });
     }
 
-    public function getHashMapIdAttribute(): string
+    protected function hashMapId(): Attribute
     {
-        return sprintf('dismiss-announcement-%s', $this->id);
+        return Attribute::make(get: fn (): string => sprintf('dismiss-announcement-%s', $this->id));
     }
 
-    public function getModalIdAttribute(): string
+    protected function modalId(): Attribute
     {
-        return sprintf('modal-announcement-%s', $this->id);
+        return Attribute::make(get: fn (): string => sprintf('modal-announcement-%s', $this->id));
     }
 
-    public function getShowByTimeAttribute(): bool
+    protected function showByTime(): Attribute
     {
-        return strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U');
+        return Attribute::make(get: fn (): bool => strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U'));
     }
 
     /**
