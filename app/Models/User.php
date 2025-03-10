@@ -375,24 +375,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->password = Hash::make($password);
         $this->save();
 
-        // Update DirectAdmin Password
-        if ($this->is_member && ! App::environment('local')) {
-            $da = new DirectAdmin;
-            $da->connect(Config::string('directadmin.da-hostname'), Config::string('directadmin.da-port'));
-            $da->set_login(Config::string('directadmin.da-username'), Config::string('directadmin.da-password'));
-            $da->set_method('POST');
-            $da->query('/CMD_API_POP', [
-                'action' => 'modify',
-                'domain' => Config::string('directadmin.da-domain'),
-                'user' => $this->member->proto_username,
-                'newuser' => $this->member->proto_username,
-                'passwd' => $password,
-                'passwd2' => $password,
-                'quota' => 0, // Unlimited
-                'limit' => 0, // Unlimited
-            ]);
-        }
-
         // Remove breach notification flag
         HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
