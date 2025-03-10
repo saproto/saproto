@@ -1,8 +1,10 @@
-@php($leaderboard = App\Models\Leaderboard::where('featured', true)
-    ->with('entries', function ($q) {
-        $q->orderBy('points', 'DESC')->limit(5);
-    })
-    ->first())
+@php
+    $leaderboard = App\Models\Leaderboard::where('featured', true)
+        ->with('entries', function ($q) {
+            $q->orderBy('points', 'DESC')->limit(5);
+        })
+        ->first();
+@endphp
 
 @if ($leaderboard)
     <div class="card mb-3">
