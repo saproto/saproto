@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
 
@@ -31,7 +31,7 @@ use Override;
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)

@@ -8,9 +8,9 @@ use App\Mail\FeeEmailForBoard;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 

@@ -9,8 +9,8 @@ use App\Models\OrderLine;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
-use Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Random\RandomException;
 
 class UpdateWallstreetPrices extends Command
@@ -50,7 +50,7 @@ class UpdateWallstreetPrices extends Command
     {
         // get the wallstreet drink that is currently active
 
-        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', \Carbon\Carbon::now()->getTimestamp())->where('end_time', '>=', \Carbon\Carbon::now()->getTimestamp())->first();
+        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
 

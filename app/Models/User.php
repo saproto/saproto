@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -21,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -573,7 +573,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
-    /** @return bool Whether user has a current membership that is not pending. */
+    /**
+     * @return Attribute Whether user has a current membership that is not pending.
+     */
     protected function isMember(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);

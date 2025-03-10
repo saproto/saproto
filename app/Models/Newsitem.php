@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * News Item Model.
@@ -21,7 +21,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string $title
  * @property string $content
  * @property bool $is_weekly
- * @property \App\Models\Event[] $events
+ * @property \Illuminate\Support\Facades\Event[] $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at

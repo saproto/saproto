@@ -34,9 +34,9 @@ use App\Console\Commands\UpdateWallstreetPrices;
 use App\Console\Commands\UserCleanup;
 use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
-use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Carbon;
 use Override;
 
 class Kernel extends ConsoleKernel

@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Http\Controllers\FileController;
-use Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -82,7 +82,7 @@ class StorageEntry extends Model
     {
         $this->hash = $this->generateHash();
 
-        $this->filename = \Carbon\Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
+        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
 
         if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
             $this->filename = $customPath.$this->hash;
@@ -99,7 +99,7 @@ class StorageEntry extends Model
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
-        $this->filename = \Carbon\Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
+        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
@@ -114,7 +114,7 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(\Carbon\Carbon::now()->format('U').mt_rand(1, 99999999999));
+        return sha1(Carbon::now()->format('U').mt_rand(1, 99999999999));
     }
 
     public function generatePath(): string

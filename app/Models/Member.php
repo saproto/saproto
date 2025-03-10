@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
@@ -133,8 +133,8 @@ class Member extends Model
 
     public static function countPendingMembers(): int
     {
-        /** @param Builder<Member> $query */
         return User::query()->whereHas('member', static function ($query) {
+            /** @var Builder<Member> $query */
             $query->type(MembershipTypeEnum::PENDING);
         })->count();
     }
@@ -148,7 +148,7 @@ class Member extends Model
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(\Carbon\Carbon::now()->format('n')) >= 9 ? intval(\Carbon\Carbon::now()->format('Y')) : intval(\Carbon\Carbon::now()->format('Y')) - 1;
+        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Illuminate\Support\Carbon::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

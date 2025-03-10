@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipTypeEnum;
 use App\Models\Member;
 use App\Models\User;
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class RegistrationHelperController extends Controller

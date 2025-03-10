@@ -2,7 +2,7 @@
 
 use App\Models\Member;
 use App\Models\Newsitem;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 it('shows members the news section on the homepage', function () {
     $member = Member::factory()->create();

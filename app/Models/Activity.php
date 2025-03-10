@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Activity Model.
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ActivityParticipation[] $participation
  * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
- * @property-read \App\Models\Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|User[] $allUsers
  * @property-read Collection|User[] $backupUsers
  * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
@@ -249,7 +249,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return \Carbon\Carbon::now()->format('U') > $this->registration_start && \Carbon\Carbon::now()->format('U') < $this->registration_end;
+        return Carbon::now()->format('U') > $this->registration_start && Carbon::now()->format('U') < $this->registration_end;
     }
 
     /**
@@ -261,7 +261,7 @@ class Activity extends Validatable
             return true;
         }
 
-        return ! ($this->closed || $this->participants == 0 || \Carbon\Carbon::now()->format('U') < $this->registration_start);
+        return ! ($this->closed || $this->participants == 0 || Carbon::now()->format('U') < $this->registration_start);
     }
 
     /**
@@ -273,7 +273,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return \Carbon\Carbon::now()->format('U') < $this->deregistration_end;
+        return Carbon::now()->format('U') < $this->deregistration_end;
     }
 
     /**
@@ -281,7 +281,7 @@ class Activity extends Validatable
      */
     public function hasStarted(): bool
     {
-        return $this->event->start < \Carbon\Carbon::now()->format('U');
+        return $this->event->start < Carbon::now()->format('U');
     }
 
     /**

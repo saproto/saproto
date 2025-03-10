@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Carbon;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider

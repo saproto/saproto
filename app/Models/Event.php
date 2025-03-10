@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -253,12 +253,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < \Carbon\Carbon::now()->format('U') && $this->end > \Carbon\Carbon::now()->format('U');
+        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
     }
 
     public function over(): bool
     {
-        return $this->end < \Carbon\Carbon::now()->format('U');
+        return $this->end < Carbon::now()->format('U');
     }
 
     /**
@@ -303,7 +303,7 @@ class Event extends Model
             return true;
         }
 
-        if (\Carbon\Carbon::now()->format('U') > $this->end) {
+        if (Carbon::now()->format('U') > $this->end) {
             return false;
         }
 
@@ -380,7 +380,7 @@ class Event extends Model
 
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => \Carbon\Carbon::now()->format('U') < $this->start);
+        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
     protected function formattedDate(): Attribute

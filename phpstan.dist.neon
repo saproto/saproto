@@ -18,3 +18,5 @@ parameters:
         - '#AbcAeffchen\\Sephpa\\SephpaInputException#'
         # Issue with incorrect type hinting on Illuminate\Support\Collection methods
         - '#Illuminate\\Support\\Collection<(.*)>::#'
+        -
+        			identifier: class.nameCase

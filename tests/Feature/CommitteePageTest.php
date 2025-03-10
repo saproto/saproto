@@ -4,7 +4,7 @@ use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Member;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 it('shows the committee page with previous events', function () {
     $user = User::factory()->has(Member::factory())->create();
