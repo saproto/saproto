@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
  * @property bool $is_prepaid
  * @property bool $show_participants
  * @property bool $has_buy_limit
- * @property-read \App\Models\Event $event
+ * @property-read \Illuminate\Support\Facades\Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
  *
