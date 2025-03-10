@@ -6,6 +6,7 @@ use App\Events\NewWallstreetEvent;
 use App\Events\NewWallstreetLossCalculation;
 use App\Events\NewWallstreetPrice;
 use App\Models\OrderLine;
+use App\Models\Product;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
