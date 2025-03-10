@@ -249,7 +249,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return date('U') > $this->registration_start && date('U') < $this->registration_end;
+        return \Carbon\Carbon::now()->format('U') > $this->registration_start && \Carbon\Carbon::now()->format('U') < $this->registration_end;
     }
 
     /**
@@ -261,7 +261,7 @@ class Activity extends Validatable
             return true;
         }
 
-        return ! ($this->closed || $this->participants == 0 || date('U') < $this->registration_start);
+        return ! ($this->closed || $this->participants == 0 || \Carbon\Carbon::now()->format('U') < $this->registration_start);
     }
 
     /**
@@ -273,7 +273,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return date('U') < $this->deregistration_end;
+        return \Carbon\Carbon::now()->format('U') < $this->deregistration_end;
     }
 
     /**
@@ -281,7 +281,7 @@ class Activity extends Validatable
      */
     public function hasStarted(): bool
     {
-        return $this->event->start < date('U');
+        return $this->event->start < \Carbon\Carbon::now()->format('U');
     }
 
     /**

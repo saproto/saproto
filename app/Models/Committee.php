@@ -108,7 +108,7 @@ class Committee extends Model
 
     public function pastEvents(): Builder
     {
-        return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
+        return $this->organizedEvents()->where('end', '<', \Carbon\Carbon::now()->getTimestamp())->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
@@ -163,10 +163,10 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+            } elseif (strtotime($membership->created_at) < \Carbon\Carbon::now()->format('U') &&
+                (! $membership->deleted_at || strtotime($membership->deleted_at) > \Carbon\Carbon::now()->format('U'))) {
                 $members['members']['current'][] = $membership;
-            } elseif (strtotime($membership->created_at) > date('U')) {
+            } elseif (strtotime($membership->created_at) > \Carbon\Carbon::now()->format('U')) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

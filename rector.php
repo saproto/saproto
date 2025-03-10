@@ -61,6 +61,7 @@ try {
             instanceOf: true,
             earlyReturn: true,
             strictBooleans: true,
+            carbon: true,
         )
         ->withSkip(
             [

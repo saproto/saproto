@@ -281,7 +281,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Member, $this>
+     * @return HasOne<Member, $this>
      */
     public function member(): HasOne
     {
@@ -289,7 +289,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\WelcomeMessage, $this>
+     * @return HasOne<WelcomeMessage, $this>
      */
     public function welcomeMessage(): HasOne
     {
@@ -297,7 +297,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\OrderLine, $this>
+     * @return HasMany<OrderLine, $this>
      */
     public function orderlines(): HasMany
     {
@@ -305,7 +305,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Tempadmin, $this>
+     * @return HasMany<Tempadmin, $this>
      */
     public function tempadmin(): HasMany
     {
@@ -313,7 +313,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Feedback, $this>
+     * @return HasMany<Feedback, $this>
      */
     public function feedback(): HasMany
     {
@@ -321,7 +321,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\RfidCard, $this>
+     * @return HasMany<RfidCard, $this>
      */
     public function rfid(): HasMany
     {
@@ -437,7 +437,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasManyThrough<\App\Models\Withdrawal, \App\Models\OrderLine, $this>
+     * @return HasManyThrough<\App\Models\Withdrawal, OrderLine, $this>
      */
     public function withdrawals(): HasManyThrough
     {

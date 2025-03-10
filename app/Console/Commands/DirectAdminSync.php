@@ -6,6 +6,7 @@ use App\Models\Alias;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Member;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -92,10 +93,10 @@ class DirectAdminSync extends Command
 
             $users = CommitteeMembership::withTrashed()
                 ->where('committee_id', $committee->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where('created_at', '<', Carbon::now()->format('Y-m-d H:i:s'))
                 ->where(static function ($q) {
                     $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                        ->orWhere('deleted_at', '>', Carbon::now()->format('Y-m-d H:i:s'));
                 })->get();
 
             foreach ($users as $user) {

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -27,7 +28,7 @@ class FeeEmailForBoard extends Mailable
     {
         return $this
             ->to('payments@proto.utwente.nl', 'S.A. Proto Payments Update')
-            ->subject('Membership Fee Cron Update for '.date('d-m-Y').'. ('.$this->charged_fees->count.' transactions)')
+            ->subject('Membership Fee Cron Update for '.Carbon::now()->format('d-m-Y').'. ('.$this->charged_fees->count.' transactions)')
             ->view('emails.fee');
     }
 }

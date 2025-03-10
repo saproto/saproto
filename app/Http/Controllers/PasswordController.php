@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PasswordEntry;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -230,7 +231,7 @@ class PasswordController extends Controller
         }
 
         $verify = $request->session()->get('passwordstore-verify');
-        if ($verify < date('U')) {
+        if ($verify < Carbon::now()->format('U')) {
             $request->session()->forget('passwordstore-verify');
 
             return false;

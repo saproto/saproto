@@ -55,6 +55,7 @@ use Override;
  * @method static Builder|Member whereIsPet($value)
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
+ * @method static Builder|Member type()
  * @method static Builder|static query()
  * @method Builder|static primary()
  * @method Builder|static type(MembershipTypeEnum $type)
@@ -132,6 +133,7 @@ class Member extends Model
 
     public static function countPendingMembers(): int
     {
+        /** @param Builder<Member> $query */
         return User::query()->whereHas('member', static function ($query) {
             $query->type(MembershipTypeEnum::PENDING);
         })->count();
@@ -146,7 +148,7 @@ class Member extends Model
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+        $year_start = intval(\Carbon\Carbon::now()->format('n')) >= 9 ? intval(\Carbon\Carbon::now()->format('Y')) : intval(\Carbon\Carbon::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

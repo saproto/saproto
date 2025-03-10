@@ -64,7 +64,7 @@ class HomeController extends Controller
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->where('show_birthday', true)
-            ->where('birthdate', 'LIKE', date('%-m-d'))
+            ->where('birthdate', 'LIKE', \Carbon\Carbon::now()->format('%-m-d'))
             ->with('photo')
             ->get();
 
@@ -86,10 +86,10 @@ class HomeController extends Controller
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
-                ['end', '>=', date('U')],
+                ['end', '>=', \Carbon\Carbon::now()->format('U')],
                 ['secret', false],
                 [static function ($query) {
-                    $query->where('publication', '<', date('U'))
+                    $query->where('publication', '<', \Carbon\Carbon::now()->format('U'))
                         ->orWhereNull('publication');
                 }],
             ])

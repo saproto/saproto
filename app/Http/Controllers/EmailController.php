@@ -7,6 +7,7 @@ use App\Models\EmailList;
 use App\Models\EmailListSubscription;
 use App\Models\StorageEntry;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -192,7 +193,7 @@ class EmailController extends Controller
             $email->save();
             Session::flash('flash_message', 'The e-mail has been put on hold.');
         } else {
-            if ($email->time - date('U') < 5 * 60) {
+            if ($email->time - Carbon::now()->format('U') < 5 * 60) {
                 Session::flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
 
                 return Redirect::route('email::index');

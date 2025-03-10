@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -40,19 +41,19 @@ class DmxOverride extends Model
     /** @return Collection|DmxOverride[] */
     public static function getActiveSorted()
     {
-        return self::query()->where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
+        return self::query()->where('start', '<', Carbon::now()->format('U'))->where('end', '>', Carbon::now()->format('U'))->get()->sortBy('window_size');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getUpcomingSorted()
     {
-        return self::query()->where('start', '>', date('U'))->get()->sortByDesc('start');
+        return self::query()->where('start', '>', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getPastSorted()
     {
-        return self::query()->where('end', '<', date('U'))->get()->sortByDesc('start');
+        return self::query()->where('end', '<', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
 
     /** @return array<int, int> */
@@ -87,12 +88,12 @@ class DmxOverride extends Model
 
     public function active(): bool
     {
-        return $this->start < date('U') && date('U') < $this->end;
+        return $this->start < Carbon::now()->format('U') && Carbon::now()->format('U') < $this->end;
     }
 
     public function justOver(): bool
     {
-        return date('U') > $this->end && date('U') < $this->end. 600;
+        return Carbon::now()->format('U') > $this->end && Carbon::now()->format('U') < $this->end. 600;
     }
 
     public function getFixtureIds(): array

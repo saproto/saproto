@@ -12,20 +12,9 @@ parameters:
     ignoreErrors:
         # Weirdly cannot be found anywhere in the codebase...
         - '#LightSaml#'
-        # Issue with methods sometimes wrongly being marked as unused
-        - '#method (.*) is unused#'
-        # Issue with the Auth facade (see https://github.com/nunomaduro/larastan/issues/506)
-        - '#Illuminate\\Contracts\\Auth\\Authenticatable#'
-        # Issue with pivot not seen as a property (see https://github.com/nunomaduro/larastan/issues/515)
-        - '#Access to an undefined property App\\Models\\(.*)::\$pivot#'
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)
-        - '#Access to an undefined property object::(.*)#'
         - '#Cannot access property (.*) on array\|object.#'
         # Issue with SephpaInputException not being a subtype of Throwable
         - '#AbcAeffchen\\Sephpa\\SephpaInputException#'
-        # Issue with overlapping Eloquent and Session methods
-        - '#Relation (.*) is not found in Illuminate\\Contracts\\Session\\Session model#'
         # Issue with incorrect type hinting on Illuminate\Support\Collection methods
         - '#Illuminate\\Support\\Collection<(.*)>::#'
-        -
-            identifier: missingType.iterableValue

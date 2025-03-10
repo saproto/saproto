@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\HashMapItem;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Override;
 
@@ -45,7 +46,7 @@ class HashMapItemFactory extends Factory
     public function date()
     {
         return $this->state(fn (array $attributes): array => [
-            'value' => date('U'),
+            'value' => Carbon::now()->format('U'),
         ]);
     }
 }

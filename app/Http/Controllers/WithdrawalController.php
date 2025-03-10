@@ -478,12 +478,13 @@ class WithdrawalController extends Controller
     /** @return View */
     public function unwithdrawable()
     {
-        $users = User::withTrashed()->whereHas('orderlines', function ($q) {
+        $users = User::query()->whereHas('orderlines', function ($q) {
             $q->unpayed();
         })->whereDoesntHave('bank')
             ->with('orderlines', function ($q) {
                 $q->unpayed()->with('product');
             })
+            ->withTrashed()
             ->get();
 
         return view('omnomcom.unwithdrawable', ['users' => $users]);

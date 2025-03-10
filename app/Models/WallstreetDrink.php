@@ -26,7 +26,7 @@ class WallstreetDrink extends Model
 
     public function isCurrent(): bool
     {
-        return $this->start_time <= time() && $this->end_time >= time();
+        return $this->start_time <= Carbon::now()->getTimestamp() && $this->end_time >= Carbon::now()->getTimestamp();
     }
 
     /**

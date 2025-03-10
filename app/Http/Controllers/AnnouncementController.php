@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -116,7 +117,7 @@ class AnnouncementController extends Controller
      */
     public function clear()
     {
-        Announcement::query()->where('display_till', '<', date('Y-m-d'))->delete();
+        Announcement::query()->where('display_till', '<', Carbon::now()->format('Y-m-d'))->delete();
 
         Session::flash('flash_message', 'Announcements cleared.');
 

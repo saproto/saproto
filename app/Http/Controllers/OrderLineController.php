@@ -47,7 +47,7 @@ class OrderLineController extends Controller
             ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
             ->get();
 
-        $selected_month = $date ?? date('Y-m');
+        $selected_month = $date ?? \Carbon\Carbon::now()->format('Y-m');
 
         $outstanding = Activity::query()
             ->whereHas('users', static function (Builder $query) {

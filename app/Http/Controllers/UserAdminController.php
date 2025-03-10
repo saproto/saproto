@@ -12,6 +12,7 @@ use App\Models\Member;
 use App\Models\StorageEntry;
 use App\Models\User;
 use Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,7 @@ class UserAdminController extends Controller
         $userQuery = User::withTrashed()->with('tempadmin');
         $users = match ($filter) {
             'pending' => $userQuery->whereHas('member', static function ($q) {
+                /** @param Builder<Member> $q */
                 $q->type(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function ($q) {

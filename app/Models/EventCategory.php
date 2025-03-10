@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\EventCategory.
+ * \App\Models\EventCategory.
  *
  * @property int $id
  * @property string $name

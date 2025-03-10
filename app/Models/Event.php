@@ -53,32 +53,32 @@ use Override;
  * @property-read Collection|Video[] $videos
  *
  * @method static bool|null forceDelete()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event onlyTrashed()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event withTrashed()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event withoutTrashed()
+ * @method static QueryBuilder|\App\Models\Event onlyTrashed()
+ * @method static QueryBuilder|\App\Models\Event withTrashed()
+ * @method static QueryBuilder|\App\Models\Event withoutTrashed()
  * @method static bool|null restore()
- * @method static Builder|\Illuminate\Support\Facades\Event whereCommitteeId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereCategoryId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereCreatedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereDeletedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereDescription($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereEnd($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereForceCalendarSync($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereImageId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereInvolvesFood($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsEducational($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsExternal($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsFeatured($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereLocation($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereSecret($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereStart($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereSummary($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereTitle($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereUpdatedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event newModelQuery()
- * @method static Builder|\Illuminate\Support\Facades\Event newQuery()
- * @method static Builder|\Illuminate\Support\Facades\Event query()
+ * @method static Builder|\App\Models\Event whereCommitteeId($value)
+ * @method static Builder|\App\Models\Event whereCategoryId($value)
+ * @method static Builder|\App\Models\Event whereCreatedAt($value)
+ * @method static Builder|\App\Models\Event whereDeletedAt($value)
+ * @method static Builder|\App\Models\Event whereDescription($value)
+ * @method static Builder|\App\Models\Event whereEnd($value)
+ * @method static Builder|\App\Models\Event whereForceCalendarSync($value)
+ * @method static Builder|\App\Models\Event whereId($value)
+ * @method static Builder|\App\Models\Event whereImageId($value)
+ * @method static Builder|\App\Models\Event whereInvolvesFood($value)
+ * @method static Builder|\App\Models\Event whereIsEducational($value)
+ * @method static Builder|\App\Models\Event whereIsExternal($value)
+ * @method static Builder|\App\Models\Event whereIsFeatured($value)
+ * @method static Builder|\App\Models\Event whereLocation($value)
+ * @method static Builder|\App\Models\Event whereSecret($value)
+ * @method static Builder|\App\Models\Event whereStart($value)
+ * @method static Builder|\App\Models\Event whereSummary($value)
+ * @method static Builder|\App\Models\Event whereTitle($value)
+ * @method static Builder|\App\Models\Event whereUpdatedAt($value)
+ * @method static Builder|\App\Models\Event newModelQuery()
+ * @method static Builder|\App\Models\Event newQuery()
+ * @method static Builder|\App\Models\Event query()
  *
  * @mixin Model
  */
@@ -253,12 +253,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < date('U') && $this->end > date('U');
+        return $this->start < \Carbon\Carbon::now()->format('U') && $this->end > \Carbon\Carbon::now()->format('U');
     }
 
     public function over(): bool
     {
-        return $this->end < date('U');
+        return $this->end < \Carbon\Carbon::now()->format('U');
     }
 
     /**
@@ -303,7 +303,7 @@ class Event extends Model
             return true;
         }
 
-        if (date('U') > $this->end) {
+        if (\Carbon\Carbon::now()->format('U') > $this->end) {
             return false;
         }
 
@@ -380,7 +380,7 @@ class Event extends Model
 
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => date('U') < $this->start);
+        return Attribute::make(get: fn (): bool => \Carbon\Carbon::now()->format('U') < $this->start);
     }
 
     protected function formattedDate(): Attribute

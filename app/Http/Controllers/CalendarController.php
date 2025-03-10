@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Config;
 
@@ -69,8 +70,8 @@ class CalendarController extends Controller
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,
-                'over' => strtotime($endTime) < time(),
-                'current' => strtotime($startTime) < time() && strtotime($endTime) > time(),
+                'over' => strtotime($endTime) < Carbon::now()->getTimestamp(),
+                'current' => strtotime($startTime) < Carbon::now()->getTimestamp() && strtotime($endTime) > Carbon::now()->getTimestamp(),
             ];
         }
 

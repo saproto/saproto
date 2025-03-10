@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
@@ -76,7 +77,7 @@ class SmartXpScreenController extends Controller
                 $type = str_replace($key, $value, $type);
             }
 
-            $current = strtotime($start_time) < time() && strtotime($end_time) > time();
+            $current = strtotime($start_time) < Carbon::now()->getTimestamp() && strtotime($end_time) > Carbon::now()->getTimestamp();
             if ($current) {
                 $occupied = true;
             }
@@ -87,7 +88,7 @@ class SmartXpScreenController extends Controller
                 'start' => strtotime($start_time),
                 'end' => strtotime($end_time),
                 'type' => $type[1] ?? 'Other',
-                'over' => strtotime($end_time) < time(),
+                'over' => strtotime($end_time) < Carbon::now()->getTimestamp(),
                 'current' => $current,
             ];
         }

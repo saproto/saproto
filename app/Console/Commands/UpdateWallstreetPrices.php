@@ -50,7 +50,7 @@ class UpdateWallstreetPrices extends Command
     {
         // get the wallstreet drink that is currently active
 
-        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
+        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', \Carbon\Carbon::now()->getTimestamp())->where('end_time', '>=', \Carbon\Carbon::now()->getTimestamp())->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
 

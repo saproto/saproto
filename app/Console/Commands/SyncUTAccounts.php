@@ -92,6 +92,7 @@ class SyncUTAccounts extends Command
         UtAccount::query()->insert($newerAccounts->toArray());
     }
 
+    /** @param Collection<User> $users */
     public function syncColumnToUTTrait(Collection $users, callable $queryStringBuilder, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection
     {
         $sns = implode('', array_map(fn ($userIdentifier): string => $queryStringBuilder($userIdentifier, $UTIdentifier), $users->pluck($userColumn)->toArray()));

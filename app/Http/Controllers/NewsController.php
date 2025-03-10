@@ -87,7 +87,7 @@ class NewsController extends Controller
     public function create(Request $request)
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        $upcomingEvents = Event::query()->where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get();
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get();
 
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
@@ -96,7 +96,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        $upcomingEvents = Event::query()->where('start', '>', date('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
         $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 
@@ -129,7 +129,7 @@ class NewsController extends Controller
             $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         } else {
             $newsitem->is_weekly = true;
-            $newsitem->title = 'Weekly update for week '.date('W').' of '.date('Y').'.';
+            $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
             $newsitem->published_at = null;
         }
 
