@@ -63,7 +63,7 @@ class Leaderboard extends Model
 
     public static function isAdminAny(User $user): bool
     {
-        return Leaderboard::query()->whereRelation('committee.users', 'users.id', $user->id)->count() > 0;
+        return Leaderboard::query()->whereRelation('committee.users', 'users.id', $user->id)->exists();
     }
 
     public function canEdit(User $user): bool

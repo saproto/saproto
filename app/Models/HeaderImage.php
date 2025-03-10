@@ -40,9 +40,11 @@ class HeaderImage extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['image'];
     /**
      * @return BelongsTo<User, $this>
      */
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'credit_id');

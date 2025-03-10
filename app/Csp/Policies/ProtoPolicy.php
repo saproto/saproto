@@ -48,6 +48,7 @@ class ProtoPolicy extends Policy
                 'https://s.ytimg.com',
                 'https://www.gstatic.com/recaptcha/',
                 'https://www.google.com/recaptcha/api.js',
+                'https://www.gstatic.com/recaptcha/',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])

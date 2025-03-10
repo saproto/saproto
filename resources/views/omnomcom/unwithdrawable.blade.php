@@ -31,16 +31,21 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($users as $key => $user)
+                        @foreach ($users as $user)
+                            @php
+                                $key = $user->id;
+                            @endphp
+
                             <tr
                                 class="cursor-pointer"
                                 data-bs-toggle="collapse"
                                 data-bs-target=".collapse-{{ $key }}"
                             >
-                                <th>{{ $key }}</th>
-                                <td>{{ $user->user->name }}</td>
+                                <th>{{ $user->id }}</th>
+                                <td>{{ $user->name }}</td>
                                 <th>
-                                    &euro; {{ number_format($user->total, 2) }}
+                                    &euro;
+                                    {{ number_format($user->orderlines->sum('total_price'), 2) }}
                                 </th>
                                 <td></td>
                             </tr>

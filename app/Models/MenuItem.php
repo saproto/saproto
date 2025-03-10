@@ -46,20 +46,22 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function page()
+    public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id', 'id');
     }
 
-    /** @return HasMany */
-    public function children()
+    public function children(): HasMany
     {
-        return $this->hasMany(\App\Models\MenuItem::class, 'parent');
+        return $this->hasMany(MenuItem::class, 'parent');
     }
 
-    /** @return string|null */
-    public function getUrl()
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(MenuItem::class, 'id', 'parent');
+    }
+
+    public function getUrl(): ?string
     {
         if (str_starts_with($this->url, '(route) ')) {
             try {

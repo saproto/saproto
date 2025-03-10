@@ -17,7 +17,7 @@ class AuthorizationController extends Controller
 {
     public function index(): view
     {
-        $roles = Role::all();
+        $roles = Role::query()->with('users')->get();
         $permissions = Permission::all();
 
         return view('authorization.overview', ['roles' => $roles, 'permissions' => $permissions]);

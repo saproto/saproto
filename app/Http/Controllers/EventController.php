@@ -82,7 +82,12 @@ class EventController extends Controller
     /** @return View */
     public function finindex()
     {
-        $activities = Activity::query()->where('closed', false)->orderBy('registration_end', 'asc')->get();
+        $activities = Activity::query()
+            ->with('event')
+            ->withCount('users')
+            ->where('closed', false)
+            ->orderBy('registration_end')
+            ->get();
 
         return view('event.notclosed', ['activities' => $activities]);
     }

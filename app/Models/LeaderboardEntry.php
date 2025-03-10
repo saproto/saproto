@@ -37,14 +37,12 @@ class LeaderboardEntry extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function leaderboard()
+    public function leaderboard(): BelongsTo
     {
         return $this->belongsTo(Leaderboard::class, 'leaderboard_id');
     }
 
-    /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
