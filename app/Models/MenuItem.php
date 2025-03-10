@@ -46,16 +46,25 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<Page, $this>
+     */
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id', 'id');
     }
 
+    /**
+     * @return HasMany<\App\Models\MenuItem, $this>
+     */
     public function children(): HasMany
     {
         return $this->hasMany(MenuItem::class, 'parent');
     }
 
+    /**
+     * @return BelongsTo<\App\Models\MenuItem, $this>
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'id', 'parent');
