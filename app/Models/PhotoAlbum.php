@@ -26,7 +26,7 @@ use Override;
  * @property bool $published
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \Illuminate\Support\Facades\Event|null $event
+ * @property-read \App\Models\Event|null $event
  * @property-read Photo $thumbPhoto
  * @property-read Collection|Photo[] $items
  *

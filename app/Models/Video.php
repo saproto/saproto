@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $youtube_user_name
  * @property string $youtube_thumb_url
  * @property string $video_date
- * @property-read \Illuminate\Support\Facades\Event|null $event
+ * @property-read \App\Models\Event|null $event
  *
  * @method static Builder|Video whereEventId($value)
  * @method static Builder|Video whereId($value)
