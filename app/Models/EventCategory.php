@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\App\Models\Event[]|null $events
+ * @property-read Collection|\Illuminate\Support\Facades\Event[]|null $events
  *
  * @method static Builder|EventCategory whereCreatedAt($value)
  * @method static Builder|EventCategory whereIcon($value)

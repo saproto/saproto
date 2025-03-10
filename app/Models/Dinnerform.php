@@ -31,7 +31,7 @@ use Override;
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \App\Models\Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)

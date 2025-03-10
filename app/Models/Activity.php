@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property ActivityParticipation[] $participation
  * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
- * @property-read \App\Models\Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  * @property-read Collection|User[] $allUsers
  * @property-read Collection|User[] $backupUsers
  * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances

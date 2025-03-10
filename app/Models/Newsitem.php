@@ -21,7 +21,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string $title
  * @property string $content
  * @property bool $is_weekly
- * @property \App\Models\Event[] $events
+ * @property \Illuminate\Support\Facades\Event[] $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at
