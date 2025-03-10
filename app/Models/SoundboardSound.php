@@ -35,8 +35,9 @@ class SoundboardSound extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
-    public function file()
+    /**
+     * @return BelongsTo<StorageEntry, $this> */
+    public function file(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'file_id');
     }

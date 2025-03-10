@@ -31,8 +31,9 @@ class PasswordReset extends Model
 
     public $timestamps = false;
 
-    /** @return HasOne */
-    public function user()
+    /**
+     * @return HasOne<User, $this> */
+    public function user(): HasOne
     {
         return $this->hasOne(User::class, 'email', 'email');
     }

@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\DB;
  * @property int $is_active
  * @property-read string $email
  * @property-read StorageEntry|null $image
- * @property-read Collection|\Illuminate\Support\Facades\Event[] $organizedEvents
+ * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  *
  * @method static Builder|Committee whereAllowAnonymousEmail($value)

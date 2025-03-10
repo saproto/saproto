@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|StorageEntry[] $attachments
- * @property-read Collection|\Illuminate\Support\Facades\Event[] $events
+ * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
  *
  * @method static Builder|Email whereBody($value)

@@ -34,8 +34,9 @@ class PhotoLikes extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function photo()
+    /**
+     * @return BelongsTo<Photo, $this> */
+    public function photo(): BelongsTo
     {
         return $this->belongsTo(Photo::class, 'photo_id');
     }

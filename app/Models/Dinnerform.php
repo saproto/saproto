@@ -31,7 +31,7 @@ use Override;
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \Illuminate\Support\Facades\Event|null $event
+ * @property-read Event|null $event
  * @property-read Collection|Orderline[]|null $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)
@@ -60,8 +60,9 @@ class Dinnerform extends Model
 
     protected $with = ['event'];
 
-    /** @return BelongsTo */
-    public function event()
+    /**
+     * @return BelongsTo<Event, $this> */
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }

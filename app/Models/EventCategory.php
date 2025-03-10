@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\Illuminate\Support\Facades\Event[]|null $events
+ * @property-read Collection|Event[]|null $events
  *
  * @method static Builder|EventCategory whereCreatedAt($value)
  * @method static Builder|EventCategory whereIcon($value)

@@ -31,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @property ActivityParticipation[] $participation
  * @property ActivityParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
- * @property-read \Illuminate\Support\Facades\Event|null $event
+ * @property-read Event|null $event
  * @property-read Collection|User[] $allUsers
  * @property-read Collection|User[] $backupUsers
  * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances

@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property string $title
  * @property string $content
  * @property bool $is_weekly
- * @property \Illuminate\Support\Facades\Event[] $events
+ * @property Event[] $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at
