@@ -144,7 +144,7 @@
                                 @elseif ($email->to_list)
                                     list(s)
                                     @foreach ($email->lists as $list)
-                                            {{ $list->name }},
+                                            {{ $list->name }}{{$loop->last?'':','}}
                                     @endforeach
                                 @elseif ($email->to_event)
                                     event(s)
