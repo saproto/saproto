@@ -43,15 +43,15 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether user is subscribed to mailing list.
      */
-    public function isSubscribed($user): bool
+    public function isSubscribed(User $user): bool
     {
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    public function scopeSubscribed($query, User $user)
+    /** @param Builder<EmailList> $query */
+    public function scopeSubscribed(Builder $query, User $user)
     {
         return $query->whereHas('users', function ($q) use ($user) {
             $q->where('user_id', $user->id);
@@ -59,10 +59,9 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
-    public function subscribe($user): bool
+    public function subscribe(User $user): bool
     {
         if (! $this->isSubscribed($user)) {
             EmailListSubscription::query()->create([

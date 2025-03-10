@@ -56,15 +56,16 @@ class Photo extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('private', function (Builder $builder) {
-            $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)
+        /** @param Builder<Photo> $query */
+        static::addGlobalScope('private', function (Builder $query) {
+            $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)
                 ->whereHas('album', function ($query) {
                     $query->where('private', false);
                 }));
         });
-
-        static::addGlobalScope('published', function (Builder $builder) {
-            $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->whereHas('album', function ($query) {
+        /** @param Builder<Photo> $query */
+        static::addGlobalScope('published', function (Builder $query) {
+            $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->whereHas('album', function ($query) {
                 $query->where('published', true);
             }));
         });

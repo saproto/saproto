@@ -87,9 +87,11 @@ class Announcement extends Model
             if ($this->show_guests) {
                 $flags[] = 'All guests';
             }
+
             if ($this->show_users) {
                 $flags[] = $this->show_only_new ? 'New users' : 'All users';
             }
+
             if ($this->show_members) {
                 if ($this->show_only_firstyear && $this->show_only_active) {
                     $flags[] = 'First-year and active members';
@@ -101,12 +103,14 @@ class Announcement extends Model
                     $flags[] = 'All members';
                 }
             }
+
             if ($this->show_as_popup) {
                 $flags[] = 'Pop-up';
             } else {
                 $flags[] = 'Banner';
                 $flags[] = $this->is_dismissable ? 'Dismissable' : 'Persistent';
             }
+
             $flags[] = sprintf('Style: %s', $this->bootstrap_style);
 
             return implode(', ', $flags);

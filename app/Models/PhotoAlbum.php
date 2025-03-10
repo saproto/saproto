@@ -59,9 +59,10 @@ class PhotoAlbum extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('published', fn (Builder $builder) => $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->where('published', true)));
-
-        static::addGlobalScope('private', fn (Builder $builder) => $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)));
+        /** @param Builder<PhotoAlbum> $query */
+        static::addGlobalScope('published', fn (Builder $query) => $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->where('published', true)));
+        /** @param Builder<PhotoAlbum> $query */
+        static::addGlobalScope('private', fn (Builder $query) => $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)));
     }
 
     /**
@@ -88,7 +89,8 @@ class PhotoAlbum extends Model
         return $this->hasMany(Photo::class, 'album_id');
     }
 
-    public function scopeName($query, string $name): Builder
+    /** @param Builder<PhotoAlbum> $query */
+    public function scopeName(Builder $query, string $name): Builder
     {
         return $query->where('name', 'LIKE', '%'.$name.'%');
     }

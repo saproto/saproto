@@ -111,14 +111,15 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
+    /** @param Builder<Member> $query */
     public function scopePrimary(Builder $query): Builder
     {
-        /** @phpstan-ignore-next-line */
         return $query->type(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');
     }
 
+    /** @param Builder<Member> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);
