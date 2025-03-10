@@ -36,7 +36,7 @@ class FinancialAccount extends Model
     protected $guarded = ['id'];
 
     /** @return HasMany */
-    public function products()
+    public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'account_id');
     }

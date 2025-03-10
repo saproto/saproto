@@ -55,7 +55,6 @@ use Override;
  * @method static Builder|Member whereIsPet($value)
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
- * @method static Builder|Member type()
  * @method static Builder|static query()
  * @method Builder|static primary()
  * @method Builder|static type(MembershipTypeEnum $type)
@@ -112,7 +111,7 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
-    /** @param Builder<Member> $query */
+    /** @param Builder<$this> $query */
     public function scopePrimary(Builder $query): Builder
     {
         return $query->type(MembershipTypeEnum::REGULAR)
@@ -120,7 +119,7 @@ class Member extends Model
             ->whereHas('UtAccount');
     }
 
-    /** @param Builder<Member> $query */
+    /** @param Builder<$this> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);
@@ -134,7 +133,6 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            /** @var Builder<Member> $query */
             $query->type(MembershipTypeEnum::PENDING);
         })->count();
     }
@@ -148,7 +146,7 @@ class Member extends Model
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Illuminate\Support\Carbon::now()->format('Y')) - 1;
+        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

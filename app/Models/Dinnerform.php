@@ -76,15 +76,17 @@ class Dinnerform extends Model
     }
 
     /** @return HasMany */
-    public function orderlines()
+    public function orderlines(): HasMany
     {
         return $this->hasMany(DinnerformOrderline::class);
     }
 
-    /** @return float The regular discount as a percentage out of 100. */
+    /**
+     * @return Attribute The regular discount as a percentage out of 100.
+     */
     protected function regularDiscountPercentage(): Attribute
     {
-        return Attribute::make(get: fn (): int|float => 100 - ($this->regular_discount * 100));
+        return Attribute::make(get: fn (): float => 100 - ($this->regular_discount * 100));
     }
 
     /** @return string A timespan string with format 'D H:i'. */
@@ -100,7 +102,7 @@ class Dinnerform extends Model
     }
 
     /** @return bool Whether the dinnerform is more than 1 hour past it's end time. */
-    public function hasExpired()
+    public function hasExpired(): bool
     {
         return $this->end->addHour()->isPast();
     }
@@ -112,7 +114,7 @@ class Dinnerform extends Model
     }
 
     /** @return float Total amount of orderlines reduced by discounts. */
-    public function totalAmountWithDiscount()
+    public function totalAmountWithDiscount(): float
     {
         return $this->orderlines()->get()
             ->sum(static fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
@@ -125,7 +127,7 @@ class Dinnerform extends Model
     }
 
     /** @return int Number of helpers. */
-    public function helperCount()
+    public function helperCount(): int
     {
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
@@ -154,7 +156,7 @@ class Dinnerform extends Model
 
     /** Delete related orders with dinnerform. */
     #[Override]
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         static::deleting(static function ($dinnerform) {

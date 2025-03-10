@@ -50,7 +50,9 @@ class DinnerformOrderline extends Model
         return $this->belongsTo(Dinnerform::class);
     }
 
-    /** @return float Price of orderline reduced by possible discounts. */
+    /**
+     * @return Attribute Price of orderline reduced by possible discounts.
+     */
     protected function priceWithDiscount(): Attribute
     {
         return Attribute::make(get: function (): float|int {

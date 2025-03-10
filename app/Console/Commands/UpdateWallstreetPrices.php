@@ -6,6 +6,7 @@ use App\Events\NewWallstreetEvent;
 use App\Events\NewWallstreetLossCalculation;
 use App\Events\NewWallstreetPrice;
 use App\Models\OrderLine;
+use App\Models\Product;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
@@ -59,7 +60,7 @@ class UpdateWallstreetPrices extends Command
 
         /** @var WallstreetDrink $currentDrink */
         foreach ($currentDrink->products()->get() as $product) {
-            /** @var $product Product */
+            /** @var Product $product */
             // search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
@@ -137,7 +138,7 @@ class UpdateWallstreetPrices extends Command
             $this->info('Random event '.$randomEvent->name.' triggered');
             $currentDrink->events()->attach($randomEvent->id);
             foreach ($randomEvent->products()->whereIn('products.id', $currentDrink->products->pluck('id'))->get() as $product) {
-                /** @var $product Product */
+                /** @var Product $product */
                 $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
                 $delta = ($randomEvent->percentage / 100) * $product->price;
                 $newPrice = max($currentDrink->minimum_price, min($delta + $latestPrice->price, $product->price * $this->maxPriceMultiplier));

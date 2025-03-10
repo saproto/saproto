@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +48,7 @@ class QueryController extends Controller
     public function membershipTotals(Request $request)
     {
         $utQuery = User::query()->whereHas('member', function ($q) {
+            /** @var Builder<Member> $q */
             $q->primary()->whereHas('UtAccount', function ($q) {
                 $q->where('department', 'like', '%CREA%')->orWhere('department', 'like', '%TECH%');
             });

@@ -50,7 +50,7 @@ class EmailList extends Model
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    /** @param Builder<EmailList> $query */
+    /** @param Builder<$this> $query */
     public function scopeSubscribed(Builder $query, User $user)
     {
         return $query->whereHas('users', function ($q) use ($user) {
