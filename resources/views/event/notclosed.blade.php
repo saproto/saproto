@@ -57,7 +57,7 @@
                                         &euro;{{ number_format($activity->price, 2) }}
                                     </td>
 
-                                    <td>{{ $activity->users->count() }}</td>
+                                    <td>{{ $activity->users_count }}</td>
 
                                     <td>
                                         <input

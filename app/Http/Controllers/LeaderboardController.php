@@ -20,8 +20,8 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::all()->reverse();
-        if (count($leaderboards) > 0) {
+        $leaderboards = Leaderboard::query()->with('entries.user')->orderBy('created_at', 'desc')->get();
+        if (! $leaderboards->isEmpty()) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
 
@@ -82,10 +82,9 @@ class LeaderboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $leaderboard = Leaderboard::query()->with('entries.user')->findOrFail($id);
 
@@ -99,10 +98,9 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
@@ -138,10 +136,9 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 

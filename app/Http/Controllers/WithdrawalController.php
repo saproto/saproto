@@ -478,32 +478,13 @@ class WithdrawalController extends Controller
     /** @return View */
     public function unwithdrawable()
     {
-        $users = [];
-
-        /** @var OrderLine $orderline */
-        foreach (OrderLine::unpayed()->get() as $orderline) {
-
-            if ($orderline->user === null) {
-                Session::flash('flash_message', 'There are unpaid anonymous orderlines. Please contact the IT committee.');
-
-                continue;
-            }
-
-            if ($orderline->user->bank) {
-                continue;
-            }
-
-            if (! in_array($orderline->user->id, array_keys($users))) {
-                $users[$orderline->user->id] = (object) [
-                    'user' => $orderline->user,
-                    'orderlines' => [],
-                    'total' => 0,
-                ];
-            }
-
-            $users[$orderline->user->id]->orderlines[] = $orderline;
-            $users[$orderline->user->id]->total += $orderline->total_price;
-        }
+        $users = User::withTrashed()->whereHas('orderlines', function ($q) {
+            $q->unpayed();
+        })->whereDoesntHave('bank')
+            ->with('orderlines', function ($q) {
+                $q->unpayed()->with('product');
+            })
+            ->get();
 
         return view('omnomcom.unwithdrawable', ['users' => $users]);
     }

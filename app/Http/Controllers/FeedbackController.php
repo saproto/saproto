@@ -274,7 +274,7 @@ class FeedbackController extends Controller
     {
         $category = FeedbackCategory::query()->find($request->id);
 
-        return view('feedbackboards.categories', ['categories' => FeedbackCategory::all(), 'cur_category' => $category]);
+        return view('feedbackboards.categories', ['categories' => FeedbackCategory::query()->with('reviewer')->get(), 'cur_category' => $category]);
     }
 
     public function categoryStore(Request $request): RedirectResponse

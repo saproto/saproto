@@ -21,7 +21,11 @@ class TempAdminController extends Controller
      */
     public function index()
     {
-        $tempadmins = Tempadmin::query()->where('end_at', '>', DB::raw('NOW()'))->orderBy('end_at', 'desc')->get();
+        $tempadmins = Tempadmin::query()
+            ->with('user', 'creator')
+            ->where('end_at', '>', DB::raw('NOW()'))
+            ->orderBy('end_at', 'desc')
+            ->get();
         $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
