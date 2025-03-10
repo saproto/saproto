@@ -117,9 +117,10 @@ class SearchController extends Controller
     public function ldapSearch(Request $request)
     {
         if (! $request->has('query')) {
-            Session::flash('flash_message', 'Please include a search query.');
-
-            return Redirect::back();
+            return view('search.ldapsearch', [
+                'term' => '',
+                'data' => null,
+            ]);
         }
 
         $query = $request->input('query');
