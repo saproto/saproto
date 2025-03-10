@@ -47,6 +47,7 @@ try {
         ->withImportNames(removeUnusedImports: true)
         ->withRules(
             [
+                RectorLaravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector::class,
                 ClassPropertyAssignToConstructorPromotionRector::class,
                 StringClassNameToClassConstantRector::class,
             ]
