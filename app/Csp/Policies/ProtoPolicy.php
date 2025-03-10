@@ -47,6 +47,7 @@ class ProtoPolicy extends Policy
                 'https://www.youtube.com/iframe_api',
                 'https://s.ytimg.com',
                 'https://www.google.com/recaptcha/api.js',
+                'https://www.gstatic.com/recaptcha/',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -94,6 +95,7 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://cdn.jsdelivr.net/npm/chart.js',
                 'https://api.fontawesome.com/',
+                'https://www.google.com/recaptcha/',
                 ...['https://websockets.saproto.nl:*', 'ws://websockets.saproto.nl:*', 'wss://websockets.saproto.nl:*'],
                 ...(App::environment('production') ? [] : ['ws://localhost:*', 'http://localhost:*', 'ws://127.0.0.1:*']),
             ]);
