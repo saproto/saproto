@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal newQuery()
  * @method static Builder|FailedWithdrawal query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class FailedWithdrawal extends Model
 {

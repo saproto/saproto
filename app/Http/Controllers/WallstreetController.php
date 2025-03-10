@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\StorageEntry;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
@@ -227,6 +226,7 @@ class WallstreetController extends Controller
         $event->name = $request->input('title');
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
+
         $image = $request->file('image');
         if ($image) {
             $file = new StorageEntry;

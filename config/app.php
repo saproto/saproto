@@ -4,7 +4,6 @@ use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
-use App\Providers\SoloServiceProvider;
 use Carbon\Carbon;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
@@ -237,7 +236,6 @@ return [
         ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
-        SoloServiceProvider::class,
     ],
 
     /*

@@ -28,17 +28,16 @@ class ParticipationController extends Controller
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
-        if (! $event->activity) {
-            abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
-            abort(403, 'You are helping at '.$event->title.'.');
-        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
-            abort(403, 'You are already subscribed for '.$event->title.'.');
-        } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
-            abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
-        } elseif ($event->activity->closed) {
-            abort(403, 'This activity is closed, you cannot change participation anymore.');
-        }
+
+        abort_unless($event->activity, 403, 'You cannot subscribe for '.$event->title.'.');
+
+        abort_if($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null, 403, 'You are helping at '.$event->title.'.');
+
+        abort_if($event->activity->getParticipation(Auth::user()) !== null, 403, 'You are already subscribed for '.$event->title.'.');
+
+        abort_if(! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup()), 403, 'You cannot subscribe for '.$event->title.' at this time.');
+
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
@@ -46,13 +45,9 @@ class ParticipationController extends Controller
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
-            if (! $helping->committee->isMember(Auth::user())) {
-                abort(403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
-            }
+            abort_unless($helping->committee->isMember(Auth::user()), 403, 'You are not a member of the '.$helping->committee.' and thus cannot help on behalf of it.');
 
-            if ($helping->users->count() >= $helping->amount) {
-                abort(403, 'There are already enough people of your committee helping, thanks though!');
-            }
+            abort_if($helping->users->count() >= $helping->amount, 403, 'There are already enough people of your committee helping, thanks though!');
 
             $data['committees_activities_id'] = $helping->id;
         } elseif ($is_web) {
@@ -106,22 +101,18 @@ class ParticipationController extends Controller
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
-            if (! $helping->committee->isMember($user)) {
-                abort(403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
-            }
+            abort_unless($helping->committee->isMember($user), 403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
 
             $data['committees_activities_id'] = $helping->id;
         }
 
-        if (! $event->activity) {
-            abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
-            abort(403, 'You are helping at '.$event->title.'.');
-        } elseif ($event->activity->getParticipation($user) !== null) {
-            abort(403, 'You are already subscribed for '.$event->title.'.');
-        } elseif ($event->activity->closed) {
-            abort(403, 'This activity is closed, you cannot change participation anymore.');
-        }
+        abort_unless($event->activity, 403, 'You cannot subscribe for '.$event->title.'.');
+
+        abort_if($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null, 403, 'You are helping at '.$event->title.'.');
+
+        abort_if($event->activity->getParticipation($user) !== null, 403, 'You are already subscribed for '.$event->title.'.');
+
+        abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
@@ -159,9 +150,7 @@ class ParticipationController extends Controller
         $notify = false;
 
         if ($participation->user->id != Auth::id()) {
-            if (! Auth::user()->can('board')) {
-                abort(403);
-            }
+            abort_unless(Auth::user()->can('board'), 403);
 
             $notify = true;
         }
@@ -169,13 +158,9 @@ class ParticipationController extends Controller
         $is_web = Auth::guard('web')->user();
 
         if ($participation->committees_activities_id === null) {
-            if ($participation->activity->closed) {
-                abort(403, 'This activity is closed, you cannot change participation anymore.');
-            }
+            abort_if($participation->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
-            if (! $participation->activity->canUnsubscribe() && ! $participation->backup && ! Auth::user()->can('board')) {
-                abort(403, 'You cannot unsubscribe for this event at this time.');
-            }
+            abort_if(! $participation->activity->canUnsubscribe() && ! $participation->backup && ! Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
 
             if ($notify) {
                 Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
@@ -224,9 +209,7 @@ class ParticipationController extends Controller
         /** @var ActivityParticipation $participation */
         $participation = ActivityParticipation::query()->findOrFail($participation_id);
 
-        if (! $participation->activity->event->isEventAdmin(Auth::user())) {
-            abort(403, 'You are not an organizer for this event.');
-        }
+        abort_unless($participation->activity->event->isEventAdmin(Auth::user()), 403, 'You are not an organizer for this event.');
 
         $participation->is_present = ! $participation->is_present;
         $participation->save();

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon;
 use DateTime;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,7 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder|PasswordEntry newQuery()
  * @method static Builder|PasswordEntry query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class PasswordEntry extends Model
 {
@@ -60,12 +59,10 @@ class PasswordEntry extends Model
     }
 
     /**
-     * @return float|int
-     *
      * @throws Exception
      */
-    public function age()
+    public function age(): int
     {
-        return Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now());
+        return (int) Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now(), true);
     }
 }

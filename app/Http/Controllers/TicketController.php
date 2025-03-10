@@ -281,9 +281,9 @@ class TicketController extends Controller
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);
-        if ($ticket->user->id != Auth::id()) {
-            abort(403, 'This is not your ticket!');
-        } elseif (! $ticket->canBeDownloaded()) {
+        abort_if($ticket->user->id != Auth::id(), 403, 'This is not your ticket!');
+
+        if (! $ticket->canBeDownloaded()) {
             Session::flash('flash_message', 'You need to pay for this ticket before you can download it.');
 
             return Redirect::back();

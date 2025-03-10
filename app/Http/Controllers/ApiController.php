@@ -43,9 +43,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request): void
     {
-        if ($request->secret != Config::string('protube.protube_to_laravel_secret')) {
-            abort(403);
-        }
+        abort_if($request->secret != Config::string('protube.protube_to_laravel_secret'), 403);
 
         $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);
@@ -123,7 +121,7 @@ class ApiController extends Controller
         return response()->JSON([
             'photos' => $album->items->pluck('url'),
             'album_name' => $album->name,
-            'date_taken' => Carbon::createFromTimestamp($album->date_taken)->format('d-m-Y'),
+            'date_taken' => Carbon::createFromTimestamp($album->date_taken, CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y'),
         ]);
     }
 

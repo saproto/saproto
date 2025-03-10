@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use DateInterval;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $youtube_user_name
  * @property string $youtube_thumb_url
  * @property string $video_date
- * @property-read Event|null $event
+ * @property-read \Illuminate\Support\Facades\Event|null $event
  *
  * @method static Builder|Video whereEventId($value)
  * @method static Builder|Video whereId($value)
@@ -38,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video newQuery()
  * @method static Builder|Video query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Video extends Model
 {

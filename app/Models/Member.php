@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,7 +59,7 @@ use Override;
  * @method Builder|static primary()
  * @method Builder|static type(MembershipTypeEnum $type)
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Member extends Model
 {
@@ -80,26 +79,39 @@ class Member extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
+    /**
+     * @return HasOne<UtAccount, $this>
+     */
     public function UtAccount(): HasOne
     {
         return $this->hasOne(UtAccount::class);
     }
 
+    /** @param Builder<Member> $query */
     public function scopePrimary(Builder $query): Builder
     {
         /** @phpstan-ignore-next-line */
@@ -108,6 +120,7 @@ class Member extends Model
             ->whereHas('UtAccount');
     }
 
+    /** @param Builder<Member> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);

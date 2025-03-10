@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Config;
@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Config;
  * @method static Builder|Alias newQuery()
  * @method static Builder|Alias query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Alias extends Model
 {
@@ -38,13 +38,16 @@ class Alias extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getEmailAttribute(): string
+    protected function email(): Attribute
     {
-        return $this->alias.'@'.Config::string('proto.emaildomain');
+        return Attribute::make(get: fn (): string => $this->alias.'@'.Config::string('proto.emaildomain'));
     }
 }

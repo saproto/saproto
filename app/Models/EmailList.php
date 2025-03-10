@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,7 +26,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|EmailList newQuery()
  * @method static Builder|EmailList query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class EmailList extends Model
 {
@@ -52,7 +51,8 @@ class EmailList extends Model
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    public function scopeSubscribed($query, User $user)
+    /** @param Builder<EmailList> $query */
+    public function scopeSubscribed(Builder $query, User $user)
     {
         return $query->whereHas('users', function ($q) use ($user) {
             $q->where('user_id', $user->id);

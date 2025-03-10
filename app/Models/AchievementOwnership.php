@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|AchievementOwnership newQuery()
  * @method static Builder|AchievementOwnership query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class AchievementOwnership extends Model
 {
@@ -48,11 +47,17 @@ class AchievementOwnership extends Model
         'achievement_id' => 'required|integer',
     ];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Achievement, $this>
+     */
     public function achievement(): BelongsTo
     {
         return $this->belongsTo(Achievement::class);

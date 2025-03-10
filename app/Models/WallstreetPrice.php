@@ -26,11 +26,17 @@ class WallstreetPrice extends Model
 
     protected $with = ['drink', 'product'];
 
+    /**
+     * @return BelongsTo<WallstreetDrink, $this>
+     */
     public function drink(): BelongsTo
     {
         return $this->belongsTo(WallstreetDrink::class, 'wallstreet_drink_id');
     }
 
+    /**
+     * @return BelongsTo<Product, $this>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
