@@ -45,7 +45,7 @@
                                 <br />
                                 {{ $event->start->format('l d F, H:i') }}
                                 -
-                                {{ $event->start->diffInDays($event->end)<1 ? $event->end->format('l d F, H:i') : $event->end->format('H:i') }}
+                                {{ $event->start->diffInDays($event->end) < 1 ? $event->end->format('l d F, H:i') : $event->end->format('H:i') }}
                             </p>
 
                             <p>

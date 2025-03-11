@@ -73,7 +73,7 @@
                                     'label' => 'Event start:',
                                     'placeholder' => request()->old('start')
                                         ? strtotime(request()->old('start'))
-                                        : $event?->start->timestamp
+                                        : $event?->start->timestamp,
                                 ]
                             )
                         </div>
