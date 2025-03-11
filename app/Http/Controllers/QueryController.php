@@ -138,7 +138,7 @@ class QueryController extends Controller
             })->sum('attendees');
         }
 
-        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
+        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as start, COUNT(*) AS Total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
@@ -148,7 +148,7 @@ class QueryController extends Controller
         $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
             /** @phpstan-ignore-next-line */
-            $event->Board = $event->start->diffInYears($changeGMM);
+            $event->Board = $event->start?->diffInYears($changeGMM);
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
