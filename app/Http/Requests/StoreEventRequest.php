@@ -14,6 +14,7 @@ class StoreEventRequest extends FormRequest
     {
         return true;
     }
+
     #[Override]
     protected function prepareForValidation(): void
     {
@@ -22,7 +23,7 @@ class StoreEventRequest extends FormRequest
             'is_external' => $this->has('is_external'),
             'involves_food' => $this->has('involves_food'),
             'force_calendar_sync' => $this->has('force_calendar_sync'),
-            'publication' => $this->has('publication')? $this->input('publication') : null,
+            'publication' => $this->has('publication') ? $this->input('publication') : null,
         ]);
     }
 
@@ -33,21 +34,21 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'summary' => ['required','string'],
-            'description' => ['required','string'],
-            'start' => ['required', 'date','gte:end'],
+            'summary' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'start' => ['required', 'date', 'gte:end'],
             'end' => ['required', 'date'],
             'location' => ['required', 'string'],
             'secret' => ['required', 'boolean'],
-            'category' => ['required','string'],
+            'category' => ['required', 'string'],
             'image' => ['image'],
             'maps_location' => ['nullable'],
             'is_featured' => ['boolean'],
             'is_external' => ['boolean'],
             'involves_food' => ['boolean'],
             'force_calendar_sync' => ['boolean'],
-            'publication'=>['nullable','date'],
-            'committee' => ['nullable','string'],
+            'publication' => ['nullable', 'date'],
+            'committee' => ['nullable', 'string'],
         ];
     }
 

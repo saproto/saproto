@@ -72,6 +72,9 @@ class Ticket extends Model
         return $this->hasMany(TicketPurchase::class);
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'ticket_purchases');
