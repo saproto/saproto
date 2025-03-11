@@ -92,7 +92,7 @@
                                     @endif
                                 </td>
 
-                                <td>{{ date('Y-m-d H:i', $event->start) }}</td>
+                                <td>{{ $event->start->format('Y-m-d H:i') }}</td>
 
                                 <td>
                                     @if ($event->committee)

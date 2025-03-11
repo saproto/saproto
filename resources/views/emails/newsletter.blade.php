@@ -43,9 +43,9 @@
                                 <strong>{{ $event->title }}</strong>
                                 @ {{ $event->location }}
                                 <br />
-                                {{ date('l d F, H:i', $event->start) }}
+                                {{ $event->start->format('l d F, H:i') }}
                                 -
-                                {{ $event->end - $event->start >= 3600 * 24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end) }}
+                                {{ $event->start->diffInDays($event->end)<1 ? $event->end->format('l d F, H:i') : $event->end->format('H:i') }}
                             </p>
 
                             <p>

@@ -50,7 +50,7 @@
                                 <br />
                                 <strong>
                                     {{ $video->event->title }}
-                                    ({{ date('d-m-Y', $video->event->start) }})
+                                    ({{ $video->event->start->format('d-m-Y') }})
                                 </strong>
                             </p>
                         @endif

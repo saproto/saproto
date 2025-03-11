@@ -207,7 +207,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsTo<\App\Models\StorageEntry, $this>
+     * @return BelongsTo<StorageEntry, $this>
      */
     public function photo(): BelongsTo
     {
@@ -215,7 +215,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Committee, $this>
+     * @return BelongsToMany<Committee, $this>
      */
     public function groups(): BelongsToMany
     {
@@ -231,7 +231,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\EmailList, $this>
+     * @return BelongsToMany<EmailList, $this>
      */
     public function lists(): BelongsToMany
     {
@@ -239,7 +239,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Achievement, $this>
+     * @return BelongsToMany<Achievement, $this>
      */
     public function achievements(): BelongsToMany
     {
@@ -247,7 +247,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Ticket, $this>
+     * @return BelongsToMany<Ticket, $this>
      */
     public function tickets(): BelongsToMany
     {
@@ -265,7 +265,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Bank, $this>
+     * @return HasOne<Bank, $this>
      */
     public function bank(): HasOne
     {
@@ -273,7 +273,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Address, $this>
+     * @return HasOne<Address, $this>
      */
     public function address(): HasOne
     {
@@ -329,7 +329,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Token, $this>
+     * @return HasMany<Token, $this>
      */
     public function tokens(): HasMany
     {
@@ -337,7 +337,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\PlayedVideo, $this>
+     * @return HasMany<PlayedVideo, $this>
      */
     public function playedVideos(): HasMany
     {
@@ -345,7 +345,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\MollieTransaction, $this>
+     * @return HasMany<MollieTransaction, $this>
      */
     public function mollieTransactions(): HasMany
     {
@@ -437,7 +437,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasManyThrough<\App\Models\Withdrawal, OrderLine, $this>
+     * @return HasManyThrough<Withdrawal, OrderLine, $this>
      */
     public function withdrawals(): HasManyThrough
     {
@@ -488,7 +488,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at)->age < 1
+            && $this->member->created_at->age < 1
             && $this->did_study_create;
     }
 

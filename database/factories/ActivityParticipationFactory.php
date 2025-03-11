@@ -35,8 +35,8 @@ class ActivityParticipationFactory extends Factory
     {
         $activity = Activity::query()->find($attributes['activity_id']);
 
-        $start = Carbon::parse($activity->registration_start);
-        $end = Carbon::parse($activity->event->start);
+        $start = $activity->registration_start;
+        $end = $activity->event->start;
 
         $date = fake()->dateTimeBetween($start, $end);
 
