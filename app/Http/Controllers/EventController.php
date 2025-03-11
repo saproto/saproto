@@ -656,7 +656,7 @@ CALSCALE:GREGORIAN
             'secret' => $event->publication ? false : $event->secret,
             'start' => $start,
             'end' => $event->end->addSeconds($diff),
-            'publication' => $event->publication ? $event->publication->addSeconds($diff) : null,
+            'publication' => $event->publication?->addSeconds($diff) ?? null,
             'unique_users_count' => 0,
             'update_sequence' => 0,
         ]);

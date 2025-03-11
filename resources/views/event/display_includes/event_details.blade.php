@@ -8,7 +8,7 @@
         This event is scheduled and not shown yet on the site. For now you can
         only access it directly via the URL. It is scheduled for
         <i>
-            {{ Carbon::createFromTimestamp($event->publication)->format('l j F Y, H:i') }}
+            {{ $event->publication->format('l j F Y, H:i') }}
         </i>
     </div>
 @endif
