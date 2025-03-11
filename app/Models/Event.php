@@ -99,14 +99,14 @@ class Event extends Model
 
     protected $dateFormat = 'U';
 
-    protected $fillable = [          'title' ,
-        'summary' ,
-        'description' ,
-        'start' ,
-        'end' ,
-        'location' ,
-        'secret' ,
-        'category' ,
+    protected $fillable = ['title',
+        'summary',
+        'description',
+        'start',
+        'end',
+        'location',
+        'secret',
+        'category',
         'image',
         'maps_location',
         'publication',
@@ -114,16 +114,17 @@ class Event extends Model
         'is_featured',
         'is_external',
         'involves_food',
-    'force_calendar_sync'
+        'force_calendar_sync',
     ];
+
     #[Override]
     protected function casts(): array
     {
         return [
             'deleted_at' => 'immutable_datetime',
-            'start'=>'immutable_datetime',
-            'end'=>'immutable_datetime',
-            'publication'=>'immutable_datetime',
+            'start' => 'immutable_datetime',
+            'end' => 'immutable_datetime',
+            'publication' => 'immutable_datetime',
             'involves_food' => 'boolean',
             'is_featured' => 'boolean',
             'is_external' => 'boolean',
@@ -297,7 +298,7 @@ class Event extends Model
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
         return $this->start->format($long_format).' '.$combiner.' '.(
-            ($this->start->diffInDays($this->end) <1)
+            ($this->start->diffInDays($this->end) < 1)
                 ?
                 $this->end->format($short_format)
                 :

@@ -133,7 +133,7 @@ class EventController extends Controller
         /** @var Event $event */
         $event = Event::query()->create($request->except(['committee', 'category', 'image']));
 
-        if($event->publication && $request->secret){
+        if ($event->publication && $request->secret) {
             $event->update(['secret' => false]);
         }
 
@@ -174,17 +174,18 @@ class EventController extends Controller
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
 
-        $changed_important_details = !$event->start->equalTo(Carbon::parse($request->start)) || !$event->end->equalTo(Carbon::parse($request->end)) || $event->location != $request->location;
+        $changed_important_details = ! $event->start->equalTo(Carbon::parse($request->start)) || ! $event->end->equalTo(Carbon::parse($request->end)) || $event->location != $request->location;
 
         $event->update($request->except(['committee', 'category', 'image']));
-        if($event->publication && $request->secret){
+        if ($event->publication && $request->secret) {
             $event->update(['secret' => false]);
         }
 
         if ($request->file('image')) {
-            if($event->image){
+            if ($event->image) {
                 $event->image->delete();
             }
+
             $file = new StorageEntry;
             $file->createFromFile($request->file('image'));
             $event->image()->associate($file);
@@ -592,7 +593,7 @@ CALSCALE:GREGORIAN
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
                 sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
                 sprintf('DTSTART:%s', $event->start->format('Ymd\THis'))."\r\n".
-                sprintf('DTEND:%s',  $event->end->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', $event->end->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -655,7 +656,7 @@ CALSCALE:GREGORIAN
             'secret' => $event->publication ? false : $event->secret,
             'start' => $start,
             'end' => $event->end->addSeconds($diff),
-            'publication' => $event->publication ? $event->publication->addSeconds($diff)  : null,
+            'publication' => $event->publication ? $event->publication->addSeconds($diff) : null,
             'unique_users_count' => 0,
             'update_sequence' => 0,
         ]);
