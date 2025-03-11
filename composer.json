@@ -62,7 +62,6 @@
         "nickurt/laravel-pwned-passwords": "^2.0",
         "pragmarx/google2fa": "^8.0",
         "sentry/sentry-laravel": "^4.4.1",
-        "solitweb/directadmin": "^3.0",
         "spatie/laravel-csp": "^2.9",
         "spatie/laravel-permission": "^6",
         "spipu/html2pdf": "^5.2",

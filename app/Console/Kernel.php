@@ -7,7 +7,6 @@ use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\DirectAdminSync;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
@@ -67,7 +66,6 @@ class Kernel extends ConsoleKernel
         MemberRenewCron::class,
         OmNomComCleanup::class,
         MakeAdmin::class,
-        DirectAdminSync::class,
         SyncWikiAccounts::class,
         MemberCleanup::class,
         AddSysadmin::class,
