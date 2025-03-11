@@ -241,11 +241,12 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
 
-                if ($product->is_alcoholic && $store['alcohol_time_constraint'] ) {
+                if ($product->is_alcoholic && $store['alcohol_time_constraint']) {
                     $alcoholStart = Carbon::today()->setTime(Config::integer('omnomcom.alcohol-start-hour'), 0);
-                    $alcoholEnd = Carbon::today()->setTime(Config::integer('omnomcom.alcohol-end-hour'), 0)->addDay(); //add a day to fix the slot going over 00:00
-                    if(!Carbon::now()->between($alcoholStart, $alcoholEnd)){
+                    $alcoholEnd = Carbon::today()->setTime(Config::integer('omnomcom.alcohol-end-hour'), 0)->addDay(); // add a day to fix the slot going over 00:00
+                    if (! Carbon::now()->between($alcoholStart, $alcoholEnd)) {
                         $result->message = "You can't buy alcohol at the moment! Come back between {$alcoholStart->format('H:i')} and {$alcoholEnd->format('H:i')}.";
+
                         return json_encode($result);
                     }
                 }
