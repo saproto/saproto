@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -145,7 +146,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -205,11 +206,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
+    /**
+     * @return BelongsTo<\App\Models\StorageEntry, $this>
+     */
     public function photo(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return BelongsToMany<\App\Models\Committee, $this>
+     */
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
@@ -223,16 +230,25 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->orderByPivot('created_at', 'desc');
     }
 
+    /**
+     * @return BelongsToMany<\App\Models\EmailList, $this>
+     */
     public function lists(): BelongsToMany
     {
         return $this->belongsToMany(EmailList::class, 'users_mailinglists', 'user_id', 'list_id');
     }
 
+    /**
+     * @return BelongsToMany<\App\Models\Achievement, $this>
+     */
     public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achievement::class, 'achievements_users')->withPivot(['id', 'description'])->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
+    /**
+     * @return BelongsToMany<\App\Models\Ticket, $this>
+     */
     public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
@@ -248,56 +264,89 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->groups()->where('is_society', true);
     }
 
+    /**
+     * @return HasOne<\App\Models\Bank, $this>
+     */
     public function bank(): HasOne
     {
         return $this->hasOne(Bank::class);
     }
 
+    /**
+     * @return HasOne<\App\Models\Address, $this>
+     */
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);
     }
 
+    /**
+     * @return HasOne<Member, $this>
+     */
     public function member(): HasOne
     {
         return $this->hasOne(Member::class);
     }
 
+    /**
+     * @return HasOne<WelcomeMessage, $this>
+     */
     public function welcomeMessage(): HasOne
     {
         return $this->hasOne(WelcomeMessage::class);
     }
 
+    /**
+     * @return HasMany<OrderLine, $this>
+     */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class);
     }
 
+    /**
+     * @return HasMany<Tempadmin, $this>
+     */
     public function tempadmin(): HasMany
     {
         return $this->hasMany(Tempadmin::class);
     }
 
+    /**
+     * @return HasMany<Feedback, $this>
+     */
     public function feedback(): HasMany
     {
         return $this->hasMany(Feedback::class);
     }
 
+    /**
+     * @return HasMany<RfidCard, $this>
+     */
     public function rfid(): HasMany
     {
         return $this->hasMany(RfidCard::class);
     }
 
+    /**
+     * @return HasMany<\App\Models\Token, $this>
+     */
     public function tokens(): HasMany
     {
         return $this->hasMany(Token::class);
     }
 
+    /**
+     * @return HasMany<\App\Models\PlayedVideo, $this>
+     */
     public function playedVideos(): HasMany
     {
         return $this->hasMany(PlayedVideo::class);
     }
 
+    /**
+     * @return HasMany<\App\Models\MollieTransaction, $this>
+     */
     public function mollieTransactions(): HasMany
     {
         return $this->hasMany(MollieTransaction::class);
@@ -387,6 +436,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->committees()->exists();
     }
 
+    /**
+     * @return HasManyThrough<\App\Models\Withdrawal, OrderLine, $this>
+     */
     public function withdrawals(): HasManyThrough
     {
         return $this->hasManyThrough(Withdrawal::class, OrderLine::class, 'user_id', 'id', 'id', 'payed_with_withdrawal')
@@ -417,9 +469,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
-    public function getProtoEmailAttribute(): ?string
+    protected function protoEmail(): Attribute
     {
-        return $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null;
+        return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
     }
 
     public function getDisplayEmail(): string
@@ -516,34 +568,38 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    public function getCompletedProfileAttribute(): bool
+    protected function completedProfile(): Attribute
     {
-        return $this->birthdate !== null && $this->phone !== null;
+        return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
-    /** @return bool Whether user has a current membership that is not pending. */
-    public function getIsMemberAttribute(): bool
+    /**
+     * @return Attribute Whether user has a current membership that is not pending.
+     */
+    protected function isMember(): Attribute
     {
-        return $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING;
+        return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);
     }
 
-    public function getSignedMembershipFormAttribute(): bool
+    protected function signedMembershipForm(): Attribute
     {
-        return $this->member?->membershipForm !== null;
+        return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
     }
 
-    public function getIsProtubeAdminAttribute(): bool
+    protected function isProtubeAdmin(): Attribute
     {
-        if ($this->can('protube')) {
-            return true;
-        }
+        return Attribute::make(get: function (): bool {
+            if ($this->can('protube')) {
+                return true;
+            }
 
-        return $this->isTempadmin();
+            return $this->isTempadmin();
+        });
     }
 
-    public function getPhotoPreviewAttribute(): string
+    protected function photoPreview(): Attribute
     {
-        return $this->generatePhotoPath();
+        return Attribute::make(get: fn (): string => $this->generatePhotoPath());
     }
 
     public function getIcalUrl(): string

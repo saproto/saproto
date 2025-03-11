@@ -4,8 +4,6 @@ use Aacotroneo\Saml2\Saml2ServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
 use App\Providers\RouteServiceProvider;
-use App\Providers\SoloServiceProvider;
-use Carbon\Carbon;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
 use Illuminate\Auth\AuthServiceProvider;
@@ -29,6 +27,7 @@ use Illuminate\Pipeline\PipelineServiceProvider;
 use Illuminate\Queue\QueueServiceProvider;
 use Illuminate\Redis\RedisServiceProvider;
 use Illuminate\Session\SessionServiceProvider;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -237,7 +236,6 @@ return [
         ServiceProvider::class,
         Saml2ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
-        SoloServiceProvider::class,
     ],
 
     /*

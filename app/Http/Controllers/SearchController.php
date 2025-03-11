@@ -82,7 +82,9 @@ class SearchController extends Controller
         $events = collect();
         if ($presearch_event_ids) {
             // load the events with all the correct data to show in the event block
+
             Event::getEventBlockQuery()->whereIn('id', $presearch_event_ids)->get()->each(static function ($event) use ($events) {
+                /** @var Event $event */
                 if ($event->mayViewEvent(Auth::user())) {
                     $events->push($event);
                 }

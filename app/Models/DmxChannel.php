@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxChannel newQuery()
  * @method static Builder|DmxChannel query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class DmxChannel extends Model
 {

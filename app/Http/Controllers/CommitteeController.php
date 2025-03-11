@@ -7,11 +7,11 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +52,7 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee?->isMember(Auth::user())) {
+        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user())) {
             abort(404);
         }
 

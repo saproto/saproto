@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * UNUSED, when implemented in the new protube we want to preserve this data so for now left unused*/
-
 /**
  * Soundboard Sound Model.
  *
@@ -27,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|SoundboardSound newQuery()
  * @method static Builder|SoundboardSound query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class SoundboardSound extends Model
 {
@@ -37,8 +35,9 @@ class SoundboardSound extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
-    public function file()
+    /**
+     * @return BelongsTo<StorageEntry, $this> */
+    public function file(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'file_id');
     }

@@ -4,6 +4,7 @@ use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Member;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 
 it('shows the committee page with previous events', function () {
     $user = User::factory()->has(Member::factory())->create();
@@ -12,7 +13,7 @@ it('shows the committee page with previous events', function () {
         'public' => true,
     ]))->create([
         'secret' => false,
-        'end' => time() - 500,
+        'end' => Carbon::now()->getTimestamp() - 500,
     ]);
 
     $response = $this->actingAs($user)

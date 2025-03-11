@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\QrAuthRequest;
-use Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;

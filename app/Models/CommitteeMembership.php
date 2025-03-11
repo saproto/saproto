@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -43,7 +42,7 @@ use Override;
  * @method static Builder|CommitteeMembership newQuery()
  * @method static Builder|CommitteeMembership query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class CommitteeMembership extends Model
 {
@@ -56,11 +55,17 @@ class CommitteeMembership extends Model
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);

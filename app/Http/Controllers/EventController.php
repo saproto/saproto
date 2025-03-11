@@ -13,11 +13,11 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -383,7 +383,6 @@ class EventController extends Controller
     }
 
     /**
-     * @param  Event  $event
      * @return RedirectResponse
      */
     public function linkAlbum(Request $request, int $event)

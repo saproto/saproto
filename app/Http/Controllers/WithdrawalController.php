@@ -13,10 +13,10 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Withdrawal;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
@@ -478,12 +478,13 @@ class WithdrawalController extends Controller
     /** @return View */
     public function unwithdrawable()
     {
-        $users = User::withTrashed()->whereHas('orderlines', function ($q) {
+        $users = User::query()->whereHas('orderlines', function ($q) {
             $q->unpayed();
         })->whereDoesntHave('bank')
             ->with('orderlines', function ($q) {
                 $q->unpayed()->with('product');
             })
+            ->withTrashed()
             ->get();
 
         return view('omnomcom.unwithdrawable', ['users' => $users]);
@@ -491,11 +492,11 @@ class WithdrawalController extends Controller
 
     public static function openOrderlinesSum(): int|float
     {
-        return OrderLine::unpayed()->sum('total_price');
+        return OrderLine::query()->unpayed()->sum('total_price');
     }
 
     public static function openOrderlinesTotal()
     {
-        return OrderLine::unpayed()->count();
+        return OrderLine::query()->unpayed()->count();
     }
 }

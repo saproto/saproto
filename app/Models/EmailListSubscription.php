@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * Email List Subscription Model.
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|EmailListSubscription newQuery()
  * @method static Builder|EmailListSubscription query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class EmailListSubscription extends Model
 {
@@ -37,14 +36,16 @@ class EmailListSubscription extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasOne */
-    public function user()
+    /**
+     * @return HasOne<User, $this> */
+    public function user(): HasOne
     {
         return $this->hasOne(User::class);
     }
 
-    /** @return BelongsTo */
-    public function emaillist()
+    /**
+     * @return BelongsTo<EmailList, $this> */
+    public function emaillist(): BelongsTo
     {
         return $this->belongsTo(EmailList::class, 'list_id');
     }

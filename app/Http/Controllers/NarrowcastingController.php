@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -152,7 +153,7 @@ class NarrowcastingController extends Controller
      */
     public function clear()
     {
-        foreach (NarrowcastingItem::query()->where('campaign_end', '<', date('U'))->get() as $item) {
+        foreach (NarrowcastingItem::query()->where('campaign_end', '<', Carbon::now()->format('U'))->get() as $item) {
             $item->delete();
         }
 
@@ -166,7 +167,7 @@ class NarrowcastingController extends Controller
     {
         $data = [];
         foreach (
-            NarrowcastingItem::query()->where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get() as $item) {
+            NarrowcastingItem::query()->where('campaign_start', '<', Carbon::now()->format('U'))->where('campaign_end', '>', Carbon::now()->format('U'))->get() as $item) {
             if ($item->youtube_id) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
