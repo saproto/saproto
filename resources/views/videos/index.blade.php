@@ -84,7 +84,7 @@
                                         <a
                                             href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
                                         >
-                                            {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
+                                            {{ sprintf('%s (%s)', $video->event->title, $video->event->start->format('d-m-Y')) }}
                                         </a>
                                     @else
                                         <i class="opacity-50">none</i>

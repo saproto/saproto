@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         $weekly = Newsitem::query()
             ->where('published_at', '<=', Carbon::now())
-            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('published_at', '>', Carbon::now()->subWeek())
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
             ->first();

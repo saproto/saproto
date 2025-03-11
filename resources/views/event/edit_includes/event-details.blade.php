@@ -73,9 +73,7 @@
                                     'label' => 'Event start:',
                                     'placeholder' => request()->old('start')
                                         ? strtotime(request()->old('start'))
-                                        : ($event
-                                            ? $event->start
-                                            : null),
+                                        : $event?->start->timestamp
                                 ]
                             )
                         </div>
@@ -89,9 +87,7 @@
                                     'label' => 'Event end:',
                                     'placeholder' => request()->old('start')
                                         ? strtotime(request()->old('end'))
-                                        : ($event
-                                            ? $event->end
-                                            : null),
+                                        : $event?->end->timestamp,
                                 ]
                             )
                         </div>
@@ -130,9 +126,7 @@
                                         'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
                                     'placeholder' => old('publication')
                                         ? strtotime(old('publication'))
-                                        : ($event
-                                            ? $event->publication
-                                            : null),
+                                        : $event?->publication->timestamp,
                                     'not_required' => true,
                                 ]
                             )
@@ -282,7 +276,7 @@
                                     $event == null
                                         ? 'A summary (used in the newsletter for example). Only a small description is required, other details will be added.'
                                         : null,
-                                'value' => old('summary', $event == null ? null : $event->summary),
+                                'value' => old('summary', $event?->summary),
                             ]
                         )
                     </div>

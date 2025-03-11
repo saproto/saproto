@@ -21,7 +21,7 @@
                     ></i>
                     <span
                         class="proto-countdown"
-                        data-countdown-start="{{ $event->start }}"
+                        data-countdown-start="{{ $event->start->timestamp }}"
                         data-countdown-text-counting="Starts in {}"
                         data-countdown-text-finished="Event is underway!"
                     >
