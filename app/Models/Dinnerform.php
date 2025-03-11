@@ -75,7 +75,8 @@ class Dinnerform extends Model
         return $this->belongsTo(User::class, 'ordered_by_user_id');
     }
 
-    /** @return HasMany */
+    /**
+     * @return HasMany<DinnerformOrderline, $this> */
     public function orderlines(): HasMany
     {
         return $this->hasMany(DinnerformOrderline::class);
