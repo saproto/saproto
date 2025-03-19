@@ -150,7 +150,7 @@
             Object.values(data).forEach((product) => {
                 let prices = []
                 product.forEach((item) => {
-                    date = new Date(item.Start * 1000)
+                    date = new Date(item.start)
                     date = date.setFullYear(
                         date.getFullYear(),
                         date.getMonth(),
