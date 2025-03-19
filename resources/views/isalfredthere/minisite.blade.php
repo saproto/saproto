@@ -47,7 +47,8 @@
                 <img
                     src="{{ asset('images/logo/inverse.png') }}"
                     alt="Proto logo"
-                    width="472px"
+                    height="130px"
+                    width="234.7px"
                 />
             </a>
         </div>
