@@ -48,6 +48,8 @@ class ProtoPolicy extends Policy
                 'https://s.ytimg.com',
                 'https://www.google.com/recaptcha/api.js',
                 'https://www.gstatic.com/recaptcha/',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+                'https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -56,6 +58,9 @@ class ProtoPolicy extends Policy
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
                 'https://fonts.googleapis.com/css2',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css',
+                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
             ->addDirective(Directive::IMG, [
