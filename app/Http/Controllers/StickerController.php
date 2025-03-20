@@ -20,7 +20,7 @@ class StickerController extends Controller
             'lng' => $item->lng,
             'user' => $item->user->calling_name,
             'image' => $item->image->generateImagePath(600, 300),
-            'is_owner' => Auth::user()->id == $item->user->id,
+            'is_owner' => Auth::user()->id === $item->user->id || Auth::user()->can('board'),
             'date' => $item->created_at->format('Y-m-d'),
         ]);
 
@@ -65,7 +65,7 @@ class StickerController extends Controller
     public function destroy($id)
     {
         $sticker = Sticker::query()->findorFail($id);
-        if(Auth::user()->id != $sticker->user->id) {
+        if(Auth::user()->id != $sticker->user->id && !Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
             return Redirect::route('stickers.index');
         }
