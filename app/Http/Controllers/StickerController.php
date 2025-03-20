@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StickerPlacedEvent;
 use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
@@ -50,6 +51,8 @@ class StickerController extends Controller
         $sticker->user()->associate(Auth::user());
         $sticker->image()->associate($file);
         $sticker->save();
+
+        StickerPlacedEvent::dispatch($sticker);
 
         Session::flash('message', 'Sticker added successfully');
 

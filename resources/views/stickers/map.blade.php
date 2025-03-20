@@ -4,6 +4,8 @@
     Proto's sticker tracker!
 @endsection
 
+@vite('resources/assets/js/echo.js')
+
 @section('container')
     <div id="map"></div>
 
@@ -156,14 +158,49 @@
         .leaflet-popup-content-wrapper {
             overflow: hidden;
         }
+
+        .cluster-icon {
+            background: linear-gradient(0, rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("images/logo/markers/light.png");
+            border-radius: 50%;
+            background-size: contain;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
     </style>
 @endpush
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        var map = L.map('map').setView(
-            [52.23888875842265, 6.85738688030243],
-            18
+
+        window.addEventListener('load', (_) => {
+            window.Echo.channel(`stickers`)
+                .listen('StickerPlacedEvent', (marker) => {
+                    addMarkerToMap(marker)
+                })
+                .error((error) => {
+                    console.error(error)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 10000)
+                })
+        })
+
+        const url = new URL(window.location.href);
+        let currentZoom = url.searchParams.get('zoom') ?? 18;
+        let currentLat = url.searchParams.get('lat') ?? 52.23888875842265;
+        let currentLng = url.searchParams.get('lng') ?? 6.85738688030243;
+        var map = L.map('map',{
+            minZoom: 3,
+            inertia: true,
+            worldCopyJump: true,
+            maxBoundsViscosity: 1
+        }).setView(
+            [currentLat,currentLng],
+            currentZoom
         )
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -193,7 +230,8 @@
                 '<button id="locateMe" class="btn btn-primary">📍 My Location</button>'
             div.style.cursor = 'pointer'
 
-            L.DomEvent.on(div, 'click', function () {
+            L.DomEvent.on(div, 'click', function (ev) {
+                L.DomEvent.stopPropagation(ev);
                 if (!navigator.geolocation) {
                     alert('Geolocation is not supported by your browser.')
                     return
@@ -204,7 +242,7 @@
                         const lat = position.coords.latitude
                         const lng = position.coords.longitude
 
-                        map.setView([lat, lng], 18) // Zoom into user's location
+                        map.flyTo([lat, lng], 18) // Zoom into user's location
                         addTempMarker(lat, lng)
                     },
                     function () {
@@ -218,7 +256,17 @@
 
         locationButton.addTo(map)
 
-        const markers = L.markerClusterGroup()
+        const markers = L.markerClusterGroup({
+            animateAddingMarkers: true,
+            iconCreateFunction: (cluster) => {
+                const childCount = cluster.getChildCount()
+                return new L.DivIcon({
+                    html: '<div><span>' + childCount + '</span></div>',
+                    className: 'cluster-icon',
+                    iconSize: [32, 32],
+                })
+            }
+        })
         map.addLayer(markers)
 
         var tempMarker
@@ -226,14 +274,18 @@
         const placedMarkers = {!! json_encode($stickers) !!}
 
         placedMarkers.forEach((marker) => {
-            var markerInstance = L.marker([marker.lat, marker.lng], {
+            addMarkerToMap(marker)
+        })
+
+        function addMarkerToMap(marker){
+            const markerInstance = L.marker([marker.lat, marker.lng], {
                 icon: markerIcons[
                     Math.floor(Math.random() * markerIcons.length)
-                ],
+                    ],
             })
             bindMarkerPopup(marker, markerInstance)
             markers.addLayer(markerInstance)
-        })
+        }
 
         function bindMarkerPopup(marker, markerInstance) {
             const popupContent = document.createElement('div')
@@ -267,20 +319,17 @@
                 removeButton.innerHTML =
                     '<i class="h5 fas mt-2 ms-2 fa-trash text-danger"></i>'
                 removeButton.addEventListener('click', function () {
-                    removeSticker(marker, markerInstance)
+                    removeSticker(marker)
                 })
                 popupContent.appendChild(removeButton)
             }
-            markerInstance.bindTooltip(marker.user, { direction: 'top' })
+            markerInstance.bindTooltip(marker.user, { direction: 'top', offset: [5,-55] })
             markerInstance.bindPopup(popupContent).openPopup()
         }
 
-        function removeSticker(marker, markerInstance) {
-            console.log('Remove sticker with id ' + marker.id)
-
+        function removeSticker(marker) {
             const deleteDate = document.getElementById('sticker-delete-date')
             deleteDate.textContent = marker.date
-            console.log(deleteDate)
 
             const deleteImage = document.getElementById('sticker-delete-image')
             deleteImage.src = marker.image
@@ -302,6 +351,19 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             map.on('click', onMapClick)
+            map.on('moveend', ()=> {
+                const center = map.getCenter();
+                const url = new URL(window.location.href);
+                url.searchParams.set('lat', center.lat);
+                url.searchParams.set('lng', center.lng);
+                window.history.replaceState(null, '', url.toString());
+            })
+            map.on('zoomend', function() {
+                const zoomLevel = map.getZoom();
+                const url = new URL(window.location.href);
+                url.searchParams.set('zoom', zoomLevel);
+                window.history.replaceState(null, '', url.toString());
+            });
         })
 
         function onMapClick(e) {
@@ -321,7 +383,7 @@
                 map.removeLayer(tempMarker)
             }
 
-            tempMarker = L.marker([lat, lng]).addTo(map)
+            tempMarker = L.marker([lat, lng], {icon: markerIcons[4]}).addTo(map)
             var popupContent = document.createElement('div')
             popupContent.className = 'm-2'
             popupContent.innerHTML = `<p>Stick sticker at: ${lat}, ${lng}</p>`
