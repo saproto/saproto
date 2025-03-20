@@ -5,6 +5,7 @@
     </div>
 
     <div class="card-body">
+        =
         @if (! $user->is_member && ! $user->hasUnpaidOrderlines())
             {{-- format-ignore-start --}}
             @include(
