@@ -65,6 +65,10 @@ class StickerController extends Controller
     public function destroy($id)
     {
         $sticker = Sticker::query()->findorFail($id);
+        if(Auth::user()->id != $sticker->user->id) {
+            Session::flash('flash_message', 'You are not allowed to delete this sticker');
+            return Redirect::route('stickers.index');
+        }
         $sticker->delete();
         $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
