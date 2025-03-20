@@ -7,6 +7,7 @@ use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class StickerController extends Controller
@@ -20,7 +21,7 @@ class StickerController extends Controller
                 'lng' => $item->lng,
                 'user' => $item->user->calling_name,
                 'image' => $item->image->generateImagePath(600, 300),
-                'is_owner'=>true,
+                'is_owner'=>Auth::user()->id == $item->user->id,
                 'date'=>$item->created_at->format('Y-m-d')
             ];
         });
@@ -72,5 +73,10 @@ class StickerController extends Controller
 
     public function destroy($id)
     {
+        $sticker = Sticker::findorFail($id);
+        $sticker->delete();
+        $sticker->image->delete();
+        Session::flash('flash_message', 'Sticker deleted successfully');
+        return Redirect::route('stickers.index');
     }
 }

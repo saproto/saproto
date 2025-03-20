@@ -6,6 +6,53 @@
 
 @section('container')
     <div id="map"></div>
+
+    <div class="modal fade" id="sticker-confirm-delete-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog model-sm" role="document">
+            <form id="sticker-delete-form" method="POST">
+                {{ csrf_field() }}
+                <input
+                    type="hidden"
+                    name="_method"
+                    value="DELETE"
+                />
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm deleting your sticker</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            You placed it on <span id="sticker-delete-date"></span>
+                            <image id="sticker-delete-image" class="mt-2" src="" style="width: 100%; display: block;"></image>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            class="confirm-button btn btn-danger"
+                        >
+                            Unstick my sticker
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal fade" id="markerModal" tabindex="-1" aria-labelledby="markerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -26,7 +73,7 @@
                             <input class="form-control" type="file" id="stickerImage" name="sticker" accept="image/*">
                         </div>
 
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="submit" class="btn btn-success">Stick this sticker</button>
                     </form>
                 </div>
             </div>
@@ -63,11 +110,29 @@
 @endpush
 
 @push('javascript') <script type="text/javascript" nonce="{{ csp_nonce() }}">
-    var map = L.map('map').setView([52.23936075842265, 6.85698688030243], 18);
+    var map = L.map('map').setView([52.23888875842265, 6.85738688030243], 18);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+
+    const markerFiles =[
+        'chip',
+        'cloud',
+        'gear',
+        'heart',
+        'light',
+        'world'
+    ];
+
+    const markerIcons = markerFiles.map((path)=>{
+        return L.icon({
+            iconUrl: `images/logo/markers/${path}.png`,
+            iconSize: [30, 60], // size of the icon
+            iconAnchor: [12, 60], // point of the icon which will correspond to marker's location
+            popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
+        })
+    })
 
     var locationButton = L.control({ position: 'topright' });
 
@@ -98,21 +163,21 @@
 
     locationButton.addTo(map);
 
-    var markers = L.markerClusterGroup();
+    const markers = L.markerClusterGroup()
     map.addLayer(markers);
 
     var tempMarker;
 
-    var placedMarkers = {!! json_encode($stickers) !!};
+    const placedMarkers = {!! json_encode($stickers) !!}
 
     placedMarkers.forEach((marker) => {
-        var markerInstance = L.marker([marker.lat, marker.lng]);
+        var markerInstance = L.marker([marker.lat, marker.lng], {icon: markerIcons[Math.floor(Math.random() * markerIcons.length)]});
         bindMarkerPopup(marker, markerInstance);
         markers.addLayer(markerInstance);
     });
 
     function bindMarkerPopup(marker, markerInstance){
-        var popupContent = document.createElement("div");
+        const popupContent = document.createElement('div')
 
         if (marker.image) {
             var img = document.createElement("img");
@@ -122,34 +187,54 @@
             popupContent.appendChild(img);
         }
 
-        var detailsDiv = document.createElement("div");
+        const detailsDiv = document.createElement('div')
         detailsDiv.className="d-flex flex-row justify-content-between ms-2 me-2";
 
-        var ownerP = document.createElement("p");
+        const ownerP = document.createElement('p')
         ownerP.innerHTML = `Stuck by: ${marker.user??'Legacy user'}`;
         detailsDiv.appendChild(ownerP);
 
-        var dateP = document.createElement("p");
-        dateP.innerHTML = `On: ${marker.date}`;
+        const dateP = document.createElement('p')
+        dateP.innerHTML = `date: ${marker.date}`;
         detailsDiv.appendChild(dateP);
 
         popupContent.appendChild(detailsDiv);
 
         if (marker.is_owner) {
-            var removeButton = document.createElement("button");
-            removeButton.className = "btn btn-sm position-absolute top-0 start-0";
-            removeButton.innerHTML = '<i class="h5 fas mt-2 ms-2 fa-trash text-danger"></i>';
-            removeButton.addEventListener("click", function() {
-                removeSticker(marker, markerInstance);
-            });
-            popupContent.appendChild(removeButton);
+                var removeButton = document.createElement("button");
+                removeButton.className = "btn btn-sm position-absolute top-0 start-0";
+                removeButton.innerHTML = '<i class="h5 fas mt-2 ms-2 fa-trash text-danger"></i>';
+                removeButton.addEventListener("click", function() {
+                    removeSticker(marker, markerInstance);
+                });
+                popupContent.appendChild(removeButton);
         }
-
+        markerInstance.bindTooltip(marker.user, {direction: 'top'})
         markerInstance.bindPopup(popupContent).openPopup();
     }
 
     function removeSticker(marker, markerInstance) {
         console.log('Remove sticker with id ' + marker.id);
+
+        const deleteDate = document.getElementById('sticker-delete-date')
+        deleteDate.textContent=marker.date;
+        console.log(deleteDate)
+
+        const deleteImage = document.getElementById('sticker-delete-image');
+        deleteImage.src = marker.image;
+
+        const deleteForm = document.getElementById('sticker-delete-form');
+        deleteForm.action = '{{ route('stickers.destroy', ['sticker' => 'id']) }}'.replace(
+            'id',
+            marker.id
+        );
+
+        window.modals['sticker-confirm-delete-modal'].action = '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
+            'id',
+            marker.id
+        )
+        window.modals['sticker-confirm-delete-modal'].show();
+
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -157,8 +242,8 @@
     });
 
     function onMapClick(e) {
-        var lat = e.latlng.lat.toFixed(6);
-        var lng = e.latlng.lng.toFixed(6);
+        const lat = e.latlng.lat.toFixed(6)
+        const lng = e.latlng.lng.toFixed(6)
         addTempMarker(lat, lng)
     }
 
@@ -173,11 +258,11 @@
         tempMarker = L.marker([lat, lng]).addTo(map);
         var popupContent = document.createElement("div");
         popupContent.className="m-2"
-        popupContent.innerHTML = `<p>Place sticker at: ${lat}, ${lng}</p>`;
+        popupContent.innerHTML = `<p>Stick sticker at: ${lat}, ${lng}</p>`;
 
         var addButton = document.createElement("button");
         addButton.className = "btn btn-primary btn-sm";
-        addButton.textContent = "Place sticker here!";
+        addButton.textContent = "Stick sticker here!";
         addButton.addEventListener("click", function() {
             confirmMarker(lat, lng);
         });
