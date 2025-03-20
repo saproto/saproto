@@ -28,20 +28,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Additional Mailboxes
-    |--------------------------------------------------------------------------
-    |
-    | A lost of additional mailboxes to be created by the DirectAdmin sync.
-    | TODO: Should be moved to a database. :)
-    |
-    */
-
-    'additional_mailboxes' => [
-        'boardarchive',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Roles that require Two-Factor Authentication
     |--------------------------------------------------------------------------
     |

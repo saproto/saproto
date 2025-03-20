@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class MembershipEndedForBoard extends Mailable
 {
@@ -27,7 +28,7 @@ class MembershipEndedForBoard extends Mailable
     {
         return $this
             ->to('board@proto.utwente.nl', 'S.A. Proto Membership Terminations')
-            ->subject('Member ship automatically ended for '.count($this->deleted_memberships).' members! '.date('d-m-Y'))
+            ->subject('Member ship automatically ended for '.count($this->deleted_memberships).' members! '.Carbon::now()->format('d-m-Y'))
             ->view('emails.membershipsendedforboard');
     }
 }

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Tempadmin;
 use App\Models\User;
 use App\Services\ProTubeApiService;
-use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -21,7 +21,11 @@ class TempAdminController extends Controller
      */
     public function index()
     {
-        $tempadmins = Tempadmin::query()->where('end_at', '>', DB::raw('NOW()'))->orderBy('end_at', 'desc')->get();
+        $tempadmins = Tempadmin::query()
+            ->with('user', 'creator')
+            ->where('end_at', '>', DB::raw('NOW()'))
+            ->orderBy('end_at', 'desc')
+            ->get();
         $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);

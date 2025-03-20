@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Menu Item Model.
@@ -39,7 +38,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MenuItem newQuery()
  * @method static Builder|MenuItem query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class MenuItem extends Model
 {
@@ -47,20 +46,31 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function page()
+    /**
+     * @return BelongsTo<Page, $this>
+     */
+    public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id', 'id');
     }
 
-    /** @return HasMany */
-    public function children()
+    /**
+     * @return HasMany<\App\Models\MenuItem, $this>
+     */
+    public function children(): HasMany
     {
-        return $this->hasMany(\App\Models\MenuItem::class, 'parent');
+        return $this->hasMany(MenuItem::class, 'parent');
     }
 
-    /** @return string|null */
-    public function getUrl()
+    /**
+     * @return BelongsTo<\App\Models\MenuItem, $this>
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(MenuItem::class, 'id', 'parent');
+    }
+
+    public function getUrl(): ?string
     {
         if (str_starts_with($this->url, '(route) ')) {
             try {

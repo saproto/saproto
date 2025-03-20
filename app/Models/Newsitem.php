@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * News Item Model.
@@ -61,16 +62,25 @@ class Newsitem extends Model
 
     protected $with = ['featuredImage'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return BelongsToMany<Event, $this>
+     */
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_newsitem');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'featured_image_id');
@@ -81,12 +91,14 @@ class Newsitem extends Model
         return Carbon::parse($this->published_at)->isPast();
     }
 
-    public function getUrlAttribute(): string
+    protected function url(): Attribute
     {
-        if ($this->is_weekly) {
-            return route('news::showWeeklyPreview', ['id' => $this->id]);
-        }
+        return Attribute::make(get: function () {
+            if ($this->is_weekly) {
+                return route('news::showWeeklyPreview', ['id' => $this->id]);
+            }
 
-        return route('news::show', ['id' => $this->id]);
+            return route('news::show', ['id' => $this->id]);
+        });
     }
 }

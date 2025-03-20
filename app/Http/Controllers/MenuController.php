@@ -43,6 +43,7 @@ class MenuController extends Controller
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
         $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+
         $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
@@ -85,6 +86,7 @@ class MenuController extends Controller
         $menuItem->is_member_only = $request->has('is_member_only');
         $menuItem->page_id = $request->input('page_id') ?: null;
         $menuItem->url = $menuItem->page_id ? Page::query()->find($menuItem->page_id)->getUrl() : $request->input('url');
+
         $maxOrder = MenuItem::query()->where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
         $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();

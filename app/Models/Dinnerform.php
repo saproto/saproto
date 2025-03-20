@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
 
@@ -46,7 +46,7 @@ use Override;
  * @method static Builder|Dinnerform newQuery()
  * @method static Builder|Dinnerform query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Dinnerform extends Model
 {
@@ -60,27 +60,34 @@ class Dinnerform extends Model
 
     protected $with = ['event'];
 
-    /** @return BelongsTo */
-    public function event()
+    /**
+     * @return BelongsTo<Event, $this> */
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function orderedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'ordered_by_user_id');
     }
 
-    /** @return HasMany */
-    public function orderlines()
+    /**
+     * @return HasMany<DinnerformOrderline, $this> */
+    public function orderlines(): HasMany
     {
         return $this->hasMany(DinnerformOrderline::class);
     }
 
-    /** @return float The regular discount as a percentage out of 100. */
-    public function getRegularDiscountPercentageAttribute(): int|float
+    /**
+     * @return Attribute The regular discount as a percentage out of 100.
+     */
+    protected function regularDiscountPercentage(): Attribute
     {
-        return 100 - ($this->regular_discount * 100);
+        return Attribute::make(get: fn (): float => 100 - ($this->regular_discount * 100));
     }
 
     /** @return string A timespan string with format 'D H:i'. */
@@ -96,7 +103,7 @@ class Dinnerform extends Model
     }
 
     /** @return bool Whether the dinnerform is more than 1 hour past it's end time. */
-    public function hasExpired()
+    public function hasExpired(): bool
     {
         return $this->end->addHour()->isPast();
     }
@@ -108,7 +115,7 @@ class Dinnerform extends Model
     }
 
     /** @return float Total amount of orderlines reduced by discounts. */
-    public function totalAmountWithDiscount()
+    public function totalAmountWithDiscount(): float
     {
         return $this->orderlines()->get()
             ->sum(static fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
@@ -121,7 +128,7 @@ class Dinnerform extends Model
     }
 
     /** @return int Number of helpers. */
-    public function helperCount()
+    public function helperCount(): int
     {
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
@@ -150,7 +157,7 @@ class Dinnerform extends Model
 
     /** Delete related orders with dinnerform. */
     #[Override]
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
         static::deleting(static function ($dinnerform) {

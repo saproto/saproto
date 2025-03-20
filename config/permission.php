@@ -105,7 +105,7 @@ return [
         ],
         'alfred' => (object) [
             'display_name' => 'Alfred',
-            'description' => 'This person is Alfred',
+            'description' => 'This person is Alfred or an imposter',
             'permissions' => ['alfred', 'omnomcom'],
         ],
         'protography-admin' => (object) [

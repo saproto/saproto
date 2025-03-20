@@ -142,7 +142,10 @@
                                 @elseif ($email->to_active)
                                     all active members
                                 @elseif ($email->to_list)
-                                    list(s) {{ $email->getListName() }}
+                                    list(s)
+                                    @foreach ($email->lists as $list)
+                                            {{ $list->name }}{{ $loop->last ? '' : ',' }}
+                                    @endforeach
                                 @elseif ($email->to_event)
                                     event(s)
                                     {{ $email->to_backup ? 'with backup users' : '' }}:

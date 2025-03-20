@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal newQuery()
  * @method static Builder|FailedWithdrawal query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class FailedWithdrawal extends Model
 {
@@ -37,20 +36,23 @@ class FailedWithdrawal extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
-    public function correctionOrderline()
+    /**
+     * @return BelongsTo<OrderLine, $this> */
+    public function correctionOrderline(): BelongsTo
     {
         return $this->belongsTo(OrderLine::class, 'correction_orderline_id');
     }
 
-    /** @return HasOne */
-    public function withdrawal()
+    /**
+     * @return HasOne<Withdrawal, $this> */
+    public function withdrawal(): HasOne
     {
         return $this->hasOne(Withdrawal::class, 'withdrawal_id');
     }
 
-    /** @return HasOne */
-    public function user()
+    /**
+     * @return HasOne<User, $this> */
+    public function user(): HasOne
     {
         return $this->hasOne(User::class, 'user_id');
     }

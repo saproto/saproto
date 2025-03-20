@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Page.
@@ -48,7 +47,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Page newQuery()
  * @method static Builder|Page query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Page extends Model
 {
@@ -61,11 +60,17 @@ class Page extends Model
 
     protected $with = ['featuredImage'];
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function featuredImage(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'featured_image_id');
     }
 
+    /**
+     * @return BelongsToMany<StorageEntry, $this>
+     */
     public function files(): BelongsToMany
     {
         return $this->belongsToMany(StorageEntry::class, 'pages_files', 'page_id', 'file_id');

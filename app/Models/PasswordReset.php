@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PasswordReset newQuery()
  * @method static Builder|PasswordReset query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class PasswordReset extends Model
 {
@@ -32,8 +31,9 @@ class PasswordReset extends Model
 
     public $timestamps = false;
 
-    /** @return HasOne */
-    public function user()
+    /**
+     * @return HasOne<User, $this> */
+    public function user(): HasOne
     {
         return $this->hasOne(User::class, 'email', 'email');
     }

@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Mollie;
 use Mollie\Api\Exceptions\ApiException;
@@ -41,7 +40,7 @@ use Mollie\Api\Resources\Payment;
  * @method static Builder|MollieTransaction newQuery()
  * @method static Builder|MollieTransaction query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class MollieTransaction extends Model
 {
@@ -49,11 +48,17 @@ class MollieTransaction extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return HasMany<OrderLine, $this>
+     */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class, 'payed_with_mollie');

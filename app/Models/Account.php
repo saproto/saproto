@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +28,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|Account newQuery()
  * @method static Builder|Account query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Account extends Model
 {
@@ -37,6 +36,9 @@ class Account extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return HasMany<Product, $this>
+     */
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

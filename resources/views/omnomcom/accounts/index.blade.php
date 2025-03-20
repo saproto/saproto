@@ -43,7 +43,7 @@
                                         {{ $account->account_number }}
                                     </td>
                                     <td>
-                                        {{ $account->products->count() }}
+                                        {{ $account->products_count }}
                                     </td>
                                     <td style="min-width: 60px">
                                         <a

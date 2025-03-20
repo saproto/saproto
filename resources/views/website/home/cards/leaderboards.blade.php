@@ -1,7 +1,12 @@
-@php($leaderboard = App\Models\Leaderboard::where('featured', true)->first())
+@php
+    $leaderboard = App\Models\Leaderboard::where('featured', true)
+        ->with('entries', function ($q) {
+            $q->orderBy('points', 'DESC')->limit(5);
+        })
+        ->first();
+@endphp
 
 @if ($leaderboard)
-    @php($entries = $leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get())
     <div class="card mb-3">
         <div
             class="card-header bg-dark"
@@ -12,9 +17,9 @@
             {{ $leaderboard->name }} Leaderboard
         </div>
 
-        @if ($entries->count() > 0)
+        @if ($leaderboard->entries->count() > 0)
             <table class="table table-sm mb-0">
-                @foreach ($entries as $entry)
+                @foreach ($leaderboard->entries as $entry)
                     <tr>
                         <td
                             class="ps-3 place-{{ $loop->index + 1 }}"
@@ -25,7 +30,13 @@
                             ></i>
                             {{ $loop->index + 1 }}
                         </td>
-                        <td>{{ $entry->user->name }}</td>
+                        <td>
+                            @if ($entry->user)
+                                {{ $entry->user->name }}
+                            @else
+                                <del>Deleted User</del>
+                            @endif
+                        </td>
                         <td class="pe-4">
                             <i class="fa {{ $leaderboard->icon }}"></i>
                             {{ $entry->points }}

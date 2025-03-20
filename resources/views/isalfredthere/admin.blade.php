@@ -6,7 +6,7 @@
 
 @php
     use App\Enums\IsAlfredThereEnum;
-    use Carbon\Carbon;
+    use Illuminate\Support\Carbon;
 @endphp
 
 @section('container')

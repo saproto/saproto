@@ -20,8 +20,8 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::all()->reverse();
-        if (count($leaderboards) > 0) {
+        $leaderboards = Leaderboard::query()->with('entries.user')->orderBy('created_at', 'desc')->get();
+        if (! $leaderboards->isEmpty()) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         }
 
@@ -37,11 +37,12 @@ class LeaderboardController extends Controller
      */
     public function adminIndex()
     {
-        if (Auth::user()->can('board')) {
-            $leaderboards = Leaderboard::all();
-        } else {
-            $leaderboards = Leaderboard::query()->whereRelation('committee.users', 'users.id', Auth::user()->id)->get();
-        }
+        $leaderboards = Leaderboard::query()
+            ->with('committee')
+            ->withCount('entries')
+            ->unless(Auth::user()?->can('board'), function ($q) {
+                $q->whereRelation('committee.users', 'users.id', Auth::user()->id);
+            })->get();
 
         return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
     }
@@ -81,12 +82,11 @@ class LeaderboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
-        $leaderboard = Leaderboard::query()->findOrFail($id);
+        $leaderboard = Leaderboard::query()->with('entries.user')->findOrFail($id);
 
         if (! $leaderboard->canEdit(Auth::user())) {
             abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
@@ -98,10 +98,9 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
@@ -137,10 +136,9 @@ class LeaderboardController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 

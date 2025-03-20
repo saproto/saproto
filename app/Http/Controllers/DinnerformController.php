@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Dinnerform;
 use App\Models\DinnerformOrderline;
 use App\Models\Product;
-use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
@@ -194,9 +194,10 @@ class DinnerformController extends Controller
         }
 
         $dinnerform = Dinnerform::query()->findOrFail($id);
+        /** @var Dinnerform $dinnerform */
         $dinnerformOrderlines = $dinnerform->orderlines()->where('closed', false)->get();
         $product = Product::query()->findOrFail(Config::integer('omnomcom.dinnerform-product'));
-
+        /** @var Product $product */
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'This dinnerform has already been processed!');
 

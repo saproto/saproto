@@ -59,7 +59,6 @@
                                                             {{ $destination->user->name }}
                                                         </span>
                                                     @else
-                                                        ne
                                                         {{ $destination->user->name }}
                                                     @endif
                                                 </a>

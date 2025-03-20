@@ -7,9 +7,9 @@ use App\Http\Controllers\LdapController;
 use App\Mail\UtwenteCleanup;
 use App\Models\User;
 use App\Models\UtAccount;
-use Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -92,6 +92,7 @@ class SyncUTAccounts extends Command
         UtAccount::query()->insert($newerAccounts->toArray());
     }
 
+    /** @param Collection<User> $users */
     public function syncColumnToUTTrait(Collection $users, callable $queryStringBuilder, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection
     {
         $sns = implode('', array_map(fn ($userIdentifier): string => $queryStringBuilder($userIdentifier, $UTIdentifier), $users->pluck($userColumn)->toArray()));

@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -34,7 +33,7 @@ use Override;
  * @method static Builder|ProductCategory newQuery()
  * @method static Builder|ProductCategory query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class ProductCategory extends Model
 {
@@ -44,6 +43,9 @@ class ProductCategory extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsToMany<Product, $this>
+     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id');
