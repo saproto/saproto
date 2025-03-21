@@ -120,7 +120,7 @@ class AchievementsCron extends Command
 
         foreach ($users as $index => $user) {
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
-            $alreadyAchieved = $user->achievements->pluck('achievement.id')->toArray();
+            $alreadyAchieved = $user->achievements->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
