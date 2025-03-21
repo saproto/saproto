@@ -8,8 +8,11 @@
 
 @section('container')
         <div class="card mb-3 mt-3">
-            <div class="card-header text-center bg-dark text-white">
-                Proto's sticker tracker!
+            <div class="card-header bg-dark text-white">
+                <div class="d-flex justify-content-between">
+                    <div>Proto's Proto sticker tracker!</div>
+                    <div>In total <span id="sticker-amount"></span> stickers placed!</div>
+                </div>
             </div>
         </div>
         <div id="map"></div>
@@ -190,6 +193,7 @@
             window.Echo.channel(`stickers`)
                 .listen('StickerPlacedEvent', (marker) => {
                     addMarkerToMap(marker)
+                    updateMarkerCount()
                 })
                 .error((error) => {
                     console.error(error)
@@ -292,6 +296,13 @@
         placedMarkers.forEach((marker) => {
             addMarkerToMap(marker)
         })
+
+
+        function updateMarkerCount(){
+            let stickerAmount = document.getElementById('sticker-amount')
+            stickerAmount.textContent = markers.getLayers().length
+        }
+        updateMarkerCount();
 
         function addMarkerToMap(marker){
             const markerInstance = L.marker([marker.lat, marker.lng], {

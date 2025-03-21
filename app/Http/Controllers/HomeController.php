@@ -17,6 +17,7 @@ use App\Models\WelcomeMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -24,7 +25,6 @@ class HomeController extends Controller
     /** Display the homepage. */
     public function show()
     {
-
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')

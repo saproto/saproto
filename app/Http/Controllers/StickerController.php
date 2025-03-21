@@ -71,7 +71,6 @@ class StickerController extends Controller
         $sticker->save();
 
         StickerPlacedEvent::dispatch($sticker);
-
         Session::flash('message', 'Sticker added successfully');
 
         return redirect()->back();
