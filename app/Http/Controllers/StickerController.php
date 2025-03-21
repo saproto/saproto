@@ -52,7 +52,7 @@ class StickerController extends Controller
         $lat = number_format((float)$validated['lat'], 4, '.', '');
         $lng = number_format((float)$validated['lng'], 4, '.', '');
         $addressInfo = Cache::rememberForever("stickers-{$lat}-{$lng}", function () use ($lat, $lng) {
-            return Http::withUserAgent('S.A. Proto')
+            return Http::timeout(10)->connectTimeout(5)->withUserAgent('S.A. Proto')
                 ->get(Config::string('proto.geoprovider')."/reverse?lat={$lat}&lon={$lng}&accept-language=en&format=json&zoom=13")->json('address');
         });
 
