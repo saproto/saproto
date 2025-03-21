@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->double('lat');
             $table->double('lng');
+            $table->string('city')->nullable();
+            $table->string('country')->nullable();
+            $table->string('country_code')->nullable();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('file_id')->constrained();
             $table->timestamps();

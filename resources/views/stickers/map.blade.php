@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.dashboard')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Proto's sticker tracker!
@@ -7,23 +7,80 @@
 @vite('resources/assets/js/echo.js')
 
 @section('container')
-    <div id="map"></div>
+        <div class="card mb-3 mt-3">
+            <div class="card-header text-center bg-dark text-white">
+                Proto's sticker tracker!
+            </div>
+        </div>
+        <div id="map"></div>
 
-    <div
-        class="modal fade"
-        id="sticker-confirm-delete-modal"
-        tabindex="-1"
-        role="dialog"
-    >
-        <div class="modal-dialog model-sm" role="document">
-            <form id="sticker-delete-form" method="POST">
-                {{ csrf_field() }}
-                <input type="hidden" name="_method" value="DELETE" />
-                @csrf
+        <div
+            class="modal fade"
+            id="sticker-confirm-delete-modal"
+            tabindex="-1"
+            role="dialog"
+        >
+            <div class="modal-dialog model-sm" role="document">
+                <form id="sticker-delete-form" method="POST">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="_method" value="DELETE" />
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                Confirm deleting your sticker
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                You placed it on
+                                <span id="sticker-delete-date"></span>
+                                <image
+                                    id="sticker-delete-image"
+                                    class="mt-2"
+                                    src=""
+                                    style="width: 100%; display: block"
+                                ></image>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-default"
+                                data-bs-dismiss="modal"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                class="confirm-button btn btn-danger"
+                            >
+                                Unstick my sticker
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="markerModal"
+            tabindex="-1"
+            aria-labelledby="markerModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">
-                            Confirm deleting your sticker
+                        <h5 class="modal-title" id="markerModalLabel">
+                            Add a Proto Sticker!
                         </h5>
                         <button
                             type="button"
@@ -33,95 +90,47 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <div>
-                            You placed it on
-                            <span id="sticker-delete-date"></span>
-                            <image
-                                id="sticker-delete-image"
-                                class="mt-2"
-                                src=""
-                                style="width: 100%; display: block"
-                            ></image>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-default"
-                            data-bs-dismiss="modal"
+                        <form
+                            id="stickerForm"
+                            method="post"
+                            action="{{ route('stickers.store') }}"
+                            enctype="multipart/form-data"
                         >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            class="confirm-button btn btn-danger"
-                        >
-                            Unstick my sticker
-                        </button>
+                            @csrf
+                            <input type="hidden" id="modal-lat" name="lat" />
+                            <input type="hidden" id="modal-lng" name="lng" />
+                            <div class="mb-3">
+                                Please keep in mind that any pictures you upload
+                                here will be publicly available.
+                            </div>
+                            <div class="mb-3">
+                                <label for="stickerImage" class="form-label">
+                                    Upload Sticker Image
+                                </label>
+                                <input
+                                    class="form-control"
+                                    type="file"
+                                    id="stickerImage"
+                                    name="sticker"
+                                    accept="image/*"
+                                />
+                            </div>
+
+                            <button type="submit" class="btn btn-success">
+                                Stick this sticker!
+                            </button>
+                        </form>
                     </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div
-        class="modal fade"
-        id="markerModal"
-        tabindex="-1"
-        aria-labelledby="markerModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="markerModalLabel">
-                        Add a Proto Sticker!
-                    </h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <form
-                        id="stickerForm"
-                        method="post"
-                        action="{{ route('stickers.store') }}"
-                        enctype="multipart/form-data"
-                    >
-                        @csrf
-                        <input type="hidden" id="modal-lat" name="lat" />
-                        <input type="hidden" id="modal-lng" name="lng" />
-                        <div class="mb-3">
-                            Please keep in mind that any pictures you upload
-                            here will be publicly available.
-                        </div>
-                        <div class="mb-3">
-                            <label for="stickerImage" class="form-label">
-                                Upload Sticker Image
-                            </label>
-                            <input
-                                class="form-control"
-                                type="file"
-                                id="stickerImage"
-                                name="sticker"
-                                accept="image/*"
-                            />
-                        </div>
-
-                        <button type="submit" class="btn btn-success">
-                            Stick this sticker
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
 @endsection
 
 @push('head')
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
+    />
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -145,15 +154,16 @@
         crossorigin=""
     ></script>
     <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
 
     <style rel="stylesheet">
         #map {
-            height: calc(100vh - 100px);
-            margin-top: 56px;
+            height: 75%;
+            /*margin-top: 56px;*/
         }
         .leaflet-popup-content {
             margin: 0;
-            width: 500px;
+            /*width: 500px;*/
         }
         .leaflet-popup-content-wrapper {
             overflow: hidden;
@@ -208,6 +218,12 @@
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map)
 
+        const search = new GeoSearch.GeoSearchControl({
+            provider: new GeoSearch.OpenStreetMapProvider(),
+        });
+
+        map.addControl(search);
+
         const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
         const markerIcons = markerFiles.map((path) => {
@@ -227,7 +243,7 @@
                 'leaflet-bar leaflet-control leaflet-control-custom'
             )
             div.innerHTML =
-                '<button id="locateMe" class="btn btn-primary">📍 My Location</button>'
+                '<button id="locateMe" class="btn btn-primary"><i class="fas fa-location-dot"></i></button>'
             div.style.cursor = 'pointer'
 
             L.DomEvent.on(div, 'click', function (ev) {
@@ -263,7 +279,7 @@
                 return new L.DivIcon({
                     html: '<div><span>' + childCount + '</span></div>',
                     className: 'cluster-icon',
-                    iconSize: [32, 32],
+                    iconSize: [40,40],
                 })
             }
         })
@@ -385,8 +401,8 @@
 
             tempMarker = L.marker([lat, lng], {icon: markerIcons[4]}).addTo(map)
             var popupContent = document.createElement('div')
-            popupContent.className = 'm-2'
-            popupContent.innerHTML = `<p>Stick sticker at: ${lat}, ${lng}</p>`
+            popupContent.className = 'm-3'
+            popupContent.innerHTML = `<p>Stick at: ${lat}, ${lng}</p>`
 
             var addButton = document.createElement('button')
             addButton.className = 'btn btn-primary btn-sm'

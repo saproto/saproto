@@ -456,7 +456,7 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    Route::resource('stickers', StickerController::class)->middleware('member')->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('stickers', StickerController::class)->middleware('member')->only(['index', 'store', 'destroy']);
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {

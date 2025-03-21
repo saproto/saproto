@@ -7,12 +7,20 @@ use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use PHPUnit\Framework\MockObject\Exception;
 
 class StickerController extends Controller
 {
+    /**
+     * @throws ConnectionException
+     */
     public function index()
     {
         $stickers = Sticker::query()->with(['user', 'image'])->get()->map(fn ($item): array => [
@@ -41,9 +49,19 @@ class StickerController extends Controller
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
+        $lat = number_format((float)$validated['lat'], 4, '.', '');
+        $lng = number_format((float)$validated['lng'], 4, '.', '');
+        $addressInfo = Cache::rememberForever("stickers-{$lat}-{$lng}", function () use ($lat, $lng) {
+            return Http::withUserAgent('S.A. Proto')
+                ->get(Config::string('proto.geoprovider')."/reverse?lat={$lat}&lon={$lng}&accept-language=en&format=json&zoom=13")->json('address');
+        });
+
         $sticker = new Sticker([
             'lat' => $validated['lat'],
             'lng' => $validated['lng'],
+            'city'=> $addressInfo['city'] ?? $addressInfo['town'] ?? $addressInfo['village']  ?? null,
+            'country'=>$addressInfo['country'] ?? null,
+            'country_code'=>$addressInfo['country_code'] ?? null,
         ]);
 
         $file = new StorageEntry;

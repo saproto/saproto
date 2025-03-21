@@ -350,6 +350,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
+     * @return HasMany<Sticker, $this>
+     */
+    public function stickers(): HasMany
+    {
+        return $this->hasMany(Sticker::class);
+    }
+
+    /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
      *
      * @return string Path to a resized version of someone's profile picture.
