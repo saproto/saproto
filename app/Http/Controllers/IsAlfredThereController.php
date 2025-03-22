@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\IsAlfredThereEnum;
-use App\Events\StickerPlacedEvent;
+use App\Events\IsAlfredThereEvent;
 use App\Models\HashMapItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ class IsAlfredThereController extends Controller
 
         $unix = HashMapItem::query()->updateOrCreate(['key' => self::$HashMapUnixKey], ['value' => $unix]);
 
-        StickerPlacedEvent::dispatch($status->value, $text->value, $unix->value);
+        IsAlfredThereEvent::dispatch($status->value, $text->value, $unix->value);
 
         return Redirect::back();
     }
