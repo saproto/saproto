@@ -27,7 +27,6 @@ class CommitteeController extends Controller
      */
     public function index(bool $showSociety = false)
     {
-
         if (Auth::user()?->can('board')) {
             $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();
 
@@ -35,9 +34,11 @@ class CommitteeController extends Controller
         }
 
         $data = Committee::query()->where(function ($q) use ($showSociety) {
-            $q->where('public', true)->orWhere(function ($q) use ($showSociety) {
-                $q->where('is_society', $showSociety)->whereHas('users', static function ($q) {
-                    $q->where('user_id', Auth::user()?->id);
+            $q->where('is_society', $showSociety)->where(function ($q) {
+                $q->where('public', true)->orWhere(function ($q) {
+                    $q->whereHas('users', static function ($q) {
+                        $q->where('user_id', Auth::user()?->id);
+                    });
                 });
             });
         })->orderBy('name')->get();
