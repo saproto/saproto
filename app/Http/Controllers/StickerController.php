@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use PHPUnit\Framework\MockObject\Exception;
 
 class StickerController extends Controller
 {
@@ -49,19 +48,17 @@ class StickerController extends Controller
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
-        $lat = number_format((float)$validated['lat'], 4, '.', '');
-        $lng = number_format((float)$validated['lng'], 4, '.', '');
-        $addressInfo = Cache::rememberForever("stickers-{$lat}-{$lng}", function () use ($lat, $lng) {
-            return Http::timeout(10)->connectTimeout(5)->withUserAgent('S.A. Proto')
-                ->get(Config::string('proto.geoprovider')."/reverse?lat={$lat}&lon={$lng}&accept-language=en&format=json&zoom=13")->json('address');
-        });
+        $lat = number_format((float) $validated['lat'], 4, '.', '');
+        $lng = number_format((float) $validated['lng'], 4, '.', '');
+        $addressInfo = Cache::rememberForever("stickers-{$lat}-{$lng}", fn () => Http::timeout(10)->connectTimeout(5)->withUserAgent('S.A. Proto')
+            ->get(Config::string('proto.geoprovider')."/reverse?lat={$lat}&lon={$lng}&accept-language=en&format=json&zoom=13")->json('address'));
 
         $sticker = new Sticker([
             'lat' => $validated['lat'],
             'lng' => $validated['lng'],
-            'city'=> $addressInfo['city'] ?? $addressInfo['town'] ?? $addressInfo['village']  ?? null,
-            'country'=>$addressInfo['country'] ?? null,
-            'country_code'=>$addressInfo['country_code'] ?? null,
+            'city' => $addressInfo['city'] ?? $addressInfo['town'] ?? $addressInfo['village'] ?? null,
+            'country' => $addressInfo['country'] ?? null,
+            'country_code' => $addressInfo['country_code'] ?? null,
         ]);
 
         $file = new StorageEntry;
@@ -85,10 +82,12 @@ class StickerController extends Controller
     public function destroy($id)
     {
         $sticker = Sticker::query()->findorFail($id);
-        if(Auth::user()->id != $sticker->user->id && !Auth::user()->can('board')) {
+        if (Auth::user()->id != $sticker->user->id && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
+
             return Redirect::route('stickers.index');
         }
+
         $sticker->delete();
         $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');

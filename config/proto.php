@@ -309,7 +309,6 @@ return [
 
     'geoprovider' => env('GEO_PROVIDER'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Website Theme configuration
