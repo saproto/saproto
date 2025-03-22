@@ -7,83 +7,35 @@
 @vite('resources/assets/js/echo.js')
 
 @section('container')
-        <div class="card mb-3 mt-3">
-            <div class="card-header bg-dark text-white">
-                <div class="d-flex justify-content-between">
-                    <div>Proto's Proto sticker tracker!</div>
-                    <div>In total <span id="sticker-amount"></span> stickers placed!</div>
+    <div class="card mb-3 mt-3">
+        <div class="card-header bg-dark text-white">
+            <div class="d-flex justify-content-between">
+                <div>Proto's Proto sticker tracker!</div>
+                <div>
+                    In total
+                    <span id="sticker-amount"></span>
+                    stickers placed!
                 </div>
             </div>
         </div>
-        <div id="map"></div>
+    </div>
+    <div id="map"></div>
 
-        <div
-            class="modal fade"
-            id="sticker-confirm-delete-modal"
-            tabindex="-1"
-            role="dialog"
-        >
-            <div class="modal-dialog model-sm" role="document">
-                <form id="sticker-delete-form" method="POST">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="_method" value="DELETE" />
-                    @csrf
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">
-                                Confirm deleting your sticker
-                            </h5>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                        <div class="modal-body">
-                            <div>
-                                You placed it on
-                                <span id="sticker-delete-date"></span>
-                                <image
-                                    id="sticker-delete-image"
-                                    class="mt-2"
-                                    src=""
-                                    style="width: 100%; display: block"
-                                ></image>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-default"
-                                data-bs-dismiss="modal"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                class="confirm-button btn btn-danger"
-                            >
-                                Unstick my sticker
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div
-            class="modal fade"
-            id="markerModal"
-            tabindex="-1"
-            aria-labelledby="markerModalLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
+    <div
+        class="modal fade"
+        id="sticker-confirm-delete-modal"
+        tabindex="-1"
+        role="dialog"
+    >
+        <div class="modal-dialog model-sm" role="document">
+            <form id="sticker-delete-form" method="POST">
+                {{ csrf_field() }}
+                <input type="hidden" name="_method" value="DELETE" />
+                @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="markerModalLabel">
-                            Add a Proto Sticker!
+                        <h5 class="modal-title">
+                            Confirm deleting your sticker
                         </h5>
                         <button
                             type="button"
@@ -93,40 +45,92 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <form
-                            id="stickerForm"
-                            method="post"
-                            action="{{ route('stickers.store') }}"
-                            enctype="multipart/form-data"
-                        >
-                            @csrf
-                            <input type="hidden" id="modal-lat" name="lat" />
-                            <input type="hidden" id="modal-lng" name="lng" />
-                            <div class="mb-3">
-                                Please keep in mind that any pictures you upload
-                                here will be publicly available.
-                            </div>
-                            <div class="mb-3">
-                                <label for="stickerImage" class="form-label">
-                                    Upload Sticker Image
-                                </label>
-                                <input
-                                    class="form-control"
-                                    type="file"
-                                    id="stickerImage"
-                                    name="sticker"
-                                    accept="image/*"
-                                />
-                            </div>
-
-                            <button type="submit" class="btn btn-success">
-                                Stick this sticker!
-                            </button>
-                        </form>
+                        <div>
+                            You placed it on
+                            <span id="sticker-delete-date"></span>
+                            <image
+                                id="sticker-delete-image"
+                                class="mt-2"
+                                src=""
+                                style="width: 100%; display: block"
+                            ></image>
+                        </div>
                     </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            class="confirm-button btn btn-danger"
+                        >
+                            Unstick my sticker
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div
+        class="modal fade"
+        id="markerModal"
+        tabindex="-1"
+        aria-labelledby="markerModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="markerModalLabel">
+                        Add a Proto Sticker!
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <form
+                        id="stickerForm"
+                        method="post"
+                        action="{{ route('stickers.store') }}"
+                        enctype="multipart/form-data"
+                    >
+                        @csrf
+                        <input type="hidden" id="modal-lat" name="lat" />
+                        <input type="hidden" id="modal-lng" name="lng" />
+                        <div class="mb-3">
+                            Please keep in mind that any pictures you upload
+                            here will be publicly available.
+                        </div>
+                        <div class="mb-3">
+                            <label for="stickerImage" class="form-label">
+                                Upload Sticker Image
+                            </label>
+                            <input
+                                class="form-control"
+                                type="file"
+                                id="stickerImage"
+                                name="sticker"
+                                accept="image/*"
+                            />
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            Stick this sticker!
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 @endsection
 
 @push('head')
@@ -173,7 +177,9 @@
         }
 
         .cluster-icon {
-            background: linear-gradient(0, rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url("images/logo/markers/light.png");
+            background:
+                linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url('images/logo/markers/light.png');
             border-radius: 50%;
             background-size: contain;
             display: flex;
@@ -188,7 +194,6 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
         window.addEventListener('load', (_) => {
             window.Echo.channel(`stickers`)
                 .listen('StickerPlacedEvent', (marker) => {
@@ -203,19 +208,16 @@
                 })
         })
 
-        const url = new URL(window.location.href);
-        let currentZoom = url.searchParams.get('zoom') ?? 18;
-        let currentLat = url.searchParams.get('lat') ?? 52.23888875842265;
-        let currentLng = url.searchParams.get('lng') ?? 6.85738688030243;
-        var map = L.map('map',{
+        const url = new URL(window.location.href)
+        let currentZoom = url.searchParams.get('zoom') ?? 18
+        let currentLat = url.searchParams.get('lat') ?? 52.23888875842265
+        let currentLng = url.searchParams.get('lng') ?? 6.85738688030243
+        var map = L.map('map', {
             minZoom: 3,
             inertia: true,
             worldCopyJump: true,
-            maxBoundsViscosity: 1
-        }).setView(
-            [currentLat,currentLng],
-            currentZoom
-        )
+            maxBoundsViscosity: 1,
+        }).setView([currentLat, currentLng], currentZoom)
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution:
@@ -224,9 +226,9 @@
 
         const search = new GeoSearch.GeoSearchControl({
             provider: new GeoSearch.OpenStreetMapProvider(),
-        });
+        })
 
-        map.addControl(search);
+        map.addControl(search)
 
         const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
@@ -251,7 +253,7 @@
             div.style.cursor = 'pointer'
 
             L.DomEvent.on(div, 'click', function (ev) {
-                L.DomEvent.stopPropagation(ev);
+                L.DomEvent.stopPropagation(ev)
                 if (!navigator.geolocation) {
                     alert('Geolocation is not supported by your browser.')
                     return
@@ -283,9 +285,9 @@
                 return new L.DivIcon({
                     html: '<div><span>' + childCount + '</span></div>',
                     className: 'cluster-icon',
-                    iconSize: [40,40],
+                    iconSize: [40, 40],
                 })
-            }
+            },
         })
         map.addLayer(markers)
 
@@ -297,18 +299,17 @@
             addMarkerToMap(marker)
         })
 
-
-        function updateMarkerCount(){
+        function updateMarkerCount() {
             let stickerAmount = document.getElementById('sticker-amount')
             stickerAmount.textContent = markers.getLayers().length
         }
-        updateMarkerCount();
+        updateMarkerCount()
 
-        function addMarkerToMap(marker){
+        function addMarkerToMap(marker) {
             const markerInstance = L.marker([marker.lat, marker.lng], {
                 icon: markerIcons[
                     Math.floor(Math.random() * markerIcons.length)
-                    ],
+                ],
             })
             bindMarkerPopup(marker, markerInstance)
             markers.addLayer(markerInstance)
@@ -350,7 +351,10 @@
                 })
                 popupContent.appendChild(removeButton)
             }
-            markerInstance.bindTooltip(marker.user, { direction: 'top', offset: [5,-55] })
+            markerInstance.bindTooltip(marker.user, {
+                direction: 'top',
+                offset: [5, -55],
+            })
             markerInstance.bindPopup(popupContent).openPopup()
         }
 
@@ -378,19 +382,19 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             map.on('click', onMapClick)
-            map.on('moveend', ()=> {
-                const center = map.getCenter();
-                const url = new URL(window.location.href);
-                url.searchParams.set('lat', center.lat);
-                url.searchParams.set('lng', center.lng);
-                window.history.replaceState(null, '', url.toString());
+            map.on('moveend', () => {
+                const center = map.getCenter()
+                const url = new URL(window.location.href)
+                url.searchParams.set('lat', center.lat)
+                url.searchParams.set('lng', center.lng)
+                window.history.replaceState(null, '', url.toString())
             })
-            map.on('zoomend', function() {
-                const zoomLevel = map.getZoom();
-                const url = new URL(window.location.href);
-                url.searchParams.set('zoom', zoomLevel);
-                window.history.replaceState(null, '', url.toString());
-            });
+            map.on('zoomend', function () {
+                const zoomLevel = map.getZoom()
+                const url = new URL(window.location.href)
+                url.searchParams.set('zoom', zoomLevel)
+                window.history.replaceState(null, '', url.toString())
+            })
         })
 
         function onMapClick(e) {
@@ -410,7 +414,9 @@
                 map.removeLayer(tempMarker)
             }
 
-            tempMarker = L.marker([lat, lng], {icon: markerIcons[4]}).addTo(map)
+            tempMarker = L.marker([lat, lng], { icon: markerIcons[4] }).addTo(
+                map
+            )
             var popupContent = document.createElement('div')
             popupContent.className = 'm-3'
             popupContent.innerHTML = `<p>Stick at: ${lat}, ${lng}</p>`
