@@ -456,6 +456,7 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
+    Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers::overviewmap')->middleware('member');
     Route::resource('stickers', StickerController::class)->middleware('member')->only(['index', 'store', 'destroy']);
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */

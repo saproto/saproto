@@ -166,11 +166,9 @@
     <style rel="stylesheet">
         #map {
             height: 75%;
-            /*margin-top: 56px;*/
         }
         .leaflet-popup-content {
             margin: 0;
-            /*width: 500px;*/
         }
         .leaflet-popup-content-wrapper {
             overflow: hidden;

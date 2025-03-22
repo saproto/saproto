@@ -35,6 +35,18 @@ class StickerController extends Controller
         return view('stickers.map', ['stickers' => $stickers]);
     }
 
+    public function overviewMap()
+    {
+        $stickers = Sticker::query()->with(['user'])->get()->map(fn ($item): array => [
+            'id' => $item->id,
+            'lat' => $item->lat,
+            'lng' => $item->lng,
+            'user' => $item->user->calling_name,
+        ]);
+
+        return view('stickers.overviewmap', ['stickers' => $stickers]);
+    }
+
     public function create() {}
 
     /**
