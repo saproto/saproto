@@ -87,6 +87,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
  * @property-read Collection|Ticket[] $tickets
+ * @property-read Collection|Sticker[] $stickers
  * @property-read Collection|PlayedVideo[] $playedVideos
  * @property-read Collection|Feedback[] $feedback
  * @property-read Collection|RfidCard[] $rfid
@@ -347,6 +348,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function mollieTransactions(): HasMany
     {
         return $this->hasMany(MollieTransaction::class);
+    }
+
+    /**
+     * @return HasMany<Sticker, $this>
+     */
+    public function stickers(): HasMany
+    {
+        return $this->hasMany(Sticker::class);
     }
 
     /**
