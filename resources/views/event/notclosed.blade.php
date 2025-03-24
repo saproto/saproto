@@ -49,7 +49,7 @@
                                                 {{ $activity->event->title }}
                                             </a>
                                             <br />
-                                            {{ date('D j F Y', $activity->event->start) }}
+                                            {{ $activity->event->start->format('D j F Y') }}
                                         @endif
                                     </td>
 

@@ -36,7 +36,7 @@
                                     class="fas fa-calendar me-2"
                                     aria-hidden="true"
                                 ></i>
-                                {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
+                                {{ sprintf('%s (%s)', $video->event->title, $video->event->start->format('d-m-Y')) }}
                             </a>
                         </p>
                     @endif
