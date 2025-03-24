@@ -10,7 +10,7 @@
     <div class="card mb-3 mt-3">
         <div class="card-header bg-dark text-white">
             <div class="d-flex justify-content-between">
-                <div>Proto's Proto sticker tracker!</div>
+                <div>The Proto Sticker Tracker!</div>
                 <div>
                     In total
                     <span id="sticker-amount"></span>
