@@ -118,7 +118,7 @@ class AchievementsCron extends Command
             ->whereHas('member', static function ($query) {
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
-            ->with('committees:id', 'achievements:id', 'stickers')
+            ->with('committees:id', 'achievements:id')
             ->withCount(['stickers as stickers_country_count' => function ($q) {
                 $q->select(DB::raw('count(distinct stickers.country_code)'));
             }])->withExists('stickers as has_stickers')
