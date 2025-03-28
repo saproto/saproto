@@ -90,3 +90,4 @@ jobs:
           password: ${{ secrets.VIMEXX_FTP_PASSWORD }}
           local-dir: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
           server-dir: "/"
+          timeout: 120000
