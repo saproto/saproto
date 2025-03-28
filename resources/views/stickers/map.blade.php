@@ -322,6 +322,7 @@
                 img.style.width = '100%'
                 img.style.display = 'block'
                 popupContent.appendChild(img)
+                img.loading='lazy'
             }
 
             const detailsDiv = document.createElement('div')
