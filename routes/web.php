@@ -456,8 +456,8 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers::overviewmap')->middleware('member');
-    Route::resource('stickers', StickerController::class)->middleware('member')->only(['index', 'store', 'destroy']);
+    Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers::overviewmap')->middleware(['auth','member']);
+    Route::resource('stickers', StickerController::class)->middleware(['auth','member'])->only(['index', 'store', 'destroy']);
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {
