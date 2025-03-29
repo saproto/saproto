@@ -27,9 +27,9 @@ class StickerController extends Controller
             'lat' => $item->lat,
             'lng' => $item->lng,
             'user' => $item->user->calling_name,
-            'image' => $item->image->generateImagePath(600, 300),
+            'image' => $item->image->generateImagePath(null, null),
             'is_owner' => Auth::user()->id === $item->user->id || Auth::user()->can('board'),
-            'date' => $item->created_at->format('Y-m-d'),
+            'date' => $item->created_at->format('d-m-Y'),
         ]);
 
         return view('stickers.map', ['stickers' => $stickers]);
@@ -82,7 +82,7 @@ class StickerController extends Controller
         StickerPlacedEvent::dispatch($sticker);
         Session::flash('message', 'Sticker added successfully');
 
-        return redirect()->back();
+        return Redirect::back();
     }
 
     public function show($id) {}
@@ -97,13 +97,13 @@ class StickerController extends Controller
         if (Auth::user()->id != $sticker->user->id && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
 
-            return Redirect::route('stickers.index');
+            return Redirect::back();
         }
 
         $sticker->delete();
         $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
 
-        return Redirect::route('stickers.index');
+        return Redirect::back();
     }
 }

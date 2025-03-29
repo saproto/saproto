@@ -48,12 +48,12 @@
                         <div>
                             You placed it on
                             <span id="sticker-delete-date"></span>
-                            <image
+                            <img
                                 id="sticker-delete-image"
                                 class="mt-2"
                                 src=""
                                 style="width: 100%; display: block"
-                            ></image>
+                            />
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -115,15 +115,21 @@
                                 Upload Sticker Image
                             </label>
                             <input
-                                class="form-control"
+                                class="form-control mb-3"
                                 type="file"
                                 id="stickerImage"
                                 name="sticker"
-                                accept="image/*"
+                                accept="image/jpg, image/jpeg"
                             />
+                            <img id="previewImg" src="" alt="Photo Preview" />
                         </div>
 
-                        <button type="submit" class="btn btn-success">
+                        <button
+                            id="stickerSubmit"
+                            type="submit"
+                            class="btn btn-success"
+                            disabled="disabled"
+                        >
                             Stick this sticker!
                         </button>
                     </form>
@@ -320,7 +326,6 @@
                 var img = document.createElement('img')
                 img.src = marker.image
                 img.style.width = '100%'
-                img.style.display = 'block'
                 popupContent.appendChild(img)
                 img.loading = 'lazy'
             }
@@ -455,5 +460,66 @@
                 tempMarker = null
             }
         }
+
+        const imgInput = document.querySelector('#stickerImage')
+        const previewImg = document.querySelector('#previewImg')
+        const stickerSubmit = document.querySelector('#stickerSubmit')
+        imgInput.addEventListener('input', (e) => {
+            stickerSubmit.disabled = true
+            const file = e.target.files[0]
+            if (!file) return
+
+            const reader = new FileReader()
+            reader.onload = function (readerEvent) {
+                const image = new Image()
+                image.onload = function () {
+                    //resize to the largest side of 1920px
+                    const maxSize = 1920
+                    const oldWidth = image.naturalWidth
+                    const oldHeight = image.naturalHeight
+                    const scale = Math.min(
+                        maxSize / oldWidth,
+                        maxSize / oldHeight,
+                        1
+                    )
+
+                    const width = oldWidth * scale
+                    const height = oldHeight * scale
+
+                    const canvas = document.createElement('canvas')
+                    canvas.width = width
+                    canvas.height = height
+                    canvas
+                        .getContext('2d')
+                        .drawImage(image, 0, 0, width, height)
+
+                    // Convert to Blob
+                    canvas.toBlob(
+                        (blob) => {
+                            const newFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now(),
+                            })
+
+                            // Replace the input file with the new resized file
+                            const dataTransfer = new DataTransfer()
+                            dataTransfer.items.add(newFile)
+                            imgInput.files = dataTransfer.files
+
+                            // Show preview
+                            previewImg.src = URL.createObjectURL(blob)
+                            previewImg.onload = () => {
+                                URL.revokeObjectURL(previewImg.src)
+                            }
+                            stickerSubmit.disabled = false
+                        },
+                        'image/jpeg',
+                        0.75
+                    )
+                }
+                image.src = readerEvent.target.result
+            }
+            reader.readAsDataURL(file)
+        })
     </script>
 @endpush
