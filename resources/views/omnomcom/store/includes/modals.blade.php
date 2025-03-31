@@ -8,12 +8,19 @@
     aria-hidden="true"
 >
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center" style="animation: alarm 1s infinite;">
+        <div
+            class="modal-content text-center"
+            style="animation: alarm 1s infinite"
+        >
             <div class="modal-body">
                 <h1 class="mb-3">You have been selected for a random check!</h1>
                 <h2 id="random-check-modal-message"></h2>
                 Please wait for a board member to check your items.
-                <img src="/images/omnomcom/cookiemonster_jail.jpg" id="jail" width="473"/>
+                <img
+                    src="/images/omnomcom/cookiemonster_jail.jpg"
+                    id="jail"
+                    width="473"
+                />
                 <audio
                     id="alarm-audio"
                     src="/sounds/alarm.mp3"
@@ -24,7 +31,6 @@
         </div>
     </div>
 </div>
-
 
 <div
     id="finished-modal"

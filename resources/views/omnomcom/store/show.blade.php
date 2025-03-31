@@ -491,9 +491,9 @@
             function finishPurchase(display_message = null, sound = null) {
                 Object.values(modals).forEach((modal) => modal.hide())
                 const aprilFools = new Date('2025-04-01')
-                aprilFools.setHours(0,0,0,0)
+                aprilFools.setHours(0, 0, 0, 0)
                 const today = new Date()
-                today.setHours(0,0,0,0)
+                today.setHours(0, 0, 0, 0)
                 let delay = 0
                 const alarm = document.getElementById('alarm-audio')
                 if (today.getTime() == aprilFools.getTime()) {
@@ -501,7 +501,7 @@
                     alarm.play()
                     delay = 8000
                 }
-                setTimeout(_ => {
+                setTimeout((_) => {
                     if (today.getTime() == aprilFools.getTime()) {
                         alarm.pause()
                         modals['random-check-modal'].hide()
@@ -512,18 +512,21 @@
                         ).innerHTML = `<span>${display_message}</span>`
                     document
                         .getElementById('finished-modal-continue')
-                        .addEventListener('click', (_) => window.location.reload())
+                        .addEventListener('click', (_) =>
+                            window.location.reload()
+                        )
                     modals['finished-modal'].show()
                     const movie = document.getElementById('purchase-movie')
                     const audio = document.getElementById('purchase-audio')
-                    movie.addEventListener('ended', (_) => window.location.reload())
+                    movie.addEventListener('ended', (_) =>
+                        window.location.reload()
+                    )
                     if (sound) {
                         audio.src = sound
                         movie.muted = true
                         audio.play()
                     }
                     movie.play()
-
                 }, delay)
             }
 
