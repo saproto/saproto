@@ -56,7 +56,7 @@ class EmailCron extends Command
         foreach ($emails as $email) {
             /** @var Email $email */
             $this->info('Sending e-mail <'.$email->subject.'>');
-            $recipients =$email->recipients();
+            $recipients = $email->recipients();
 
             $email->update([
                 'sent' => true,
