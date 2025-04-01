@@ -45,7 +45,7 @@ class EmailCron extends Command
     {
         // Send admin created e-mails.
         $emails = Email::query()
-            ->with(['recipients', 'events'])
+            ->with(['events'])
             ->where('sent', false)
             ->where('ready', true)
             ->where('time', '<', Carbon::now()->getTimestamp())
@@ -56,13 +56,15 @@ class EmailCron extends Command
         foreach ($emails as $email) {
             /** @var Email $email */
             $this->info('Sending e-mail <'.$email->subject.'>');
+            $recipients =$email->recipients();
+
             $email->update([
                 'sent' => true,
-                'sent_to' => $email->recipients->count(),
+                'sent_to' => $recipients->count(),
                 'ready' => false,
             ]);
 
-            foreach ($email->recipients as $recipient) {
+            foreach ($recipients as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
                         $email->sender_address.'@'.Config::string('proto.emaildomain'),
@@ -78,7 +80,7 @@ class EmailCron extends Command
                     )->onQueue('medium'));
             }
 
-            $this->info('Sent to '.$email->recipients->count().' people.');
+            $this->info('Sent to '.$recipients->count().' people.');
         }
 
         $this->info(($emails->count() > 0 ? 'All e-mails sent.' : 'No e-mails to be sent.'));
