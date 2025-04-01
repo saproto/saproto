@@ -490,19 +490,19 @@
 
             function finishPurchase(display_message = null, sound = null) {
                 Object.values(modals).forEach((modal) => modal.hide())
-                const aprilFools = new Date('2025-04-01')
-                aprilFools.setHours(0, 0, 0, 0)
+                const aprilFoolsDate = new Date('2025-04-01')
+                aprilFoolsDate.setHours(0,0,0,0)
                 const today = new Date()
-                today.setHours(0, 0, 0, 0)
-                let delay = 0
+                today.setHours(0,0,0,0)
+                const aprilFools = (Math.random() >= .6 && today.getTime() == aprilFoolsDate.getTime())
+                let delay = aprilFools ? 8000 : 0
                 const alarm = document.getElementById('alarm-audio')
-                if (today.getTime() == aprilFools.getTime()) {
+                if (aprilFools) {
                     modals['random-check-modal'].show()
                     alarm.play()
-                    delay = 8000
                 }
-                setTimeout((_) => {
-                    if (today.getTime() == aprilFools.getTime()) {
+                setTimeout(_ => {
+                    if (aprilFools) {
                         alarm.pause()
                         modals['random-check-modal'].hide()
                     }
