@@ -24,7 +24,6 @@ class HomeController extends Controller
     /** Display the homepage. */
     public function show()
     {
-
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')

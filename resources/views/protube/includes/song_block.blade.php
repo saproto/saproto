@@ -3,11 +3,7 @@
         <p class="card-text ellipsis">
             <strong>
                 <i class="fas fa-music fa-fw me-2"></i>
-                @if (! empty($video->spotify_id))
-                    {{ $video->spotify_name }}
-                @else
-                    {{ $video->video_title }}
-                @endif
+                {{ $video->video_title }}
             </strong>
 
             @if (! isset($hide_played))
@@ -16,7 +12,7 @@
                 <span class="text-muted">
                     <em>
                         Played
-                        {{ isset($played_count) ? $played_count : $video->played_count }}
+                        {{ $played_count ?? $video->played_count }}
                         times.
                     </em>
                 </span>
@@ -34,7 +30,7 @@
         <div class="row">
             <div class="col-6">
                 <a
-                    href="{{ App\Models\PlayedVideo::generateYoutubeUrl($video->video_id) }}"
+                    href="{{ $video->generateYoutubeUrl() }}"
                     target="_blank"
                     class="btn btn-xs btn-outline-danger btn-block btn-sm"
                 >
@@ -46,7 +42,7 @@
             <div class="col-6">
                 @if (! empty($video->spotify_id))
                     <a
-                        href="{{ App\Models\PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
+                        href="{{ $video->generateSpotifyUri() }}"
                         target="_blank"
                         class="btn btn-xs btn-outline-primary btn-block btn-sm"
                     >

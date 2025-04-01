@@ -176,7 +176,9 @@
                     <a href="https://www.proto.utwente.nl/">
                         <img
                             src="{{ asset('images/logo/inverse.png') }}"
-                            style="width: 300px; margin: 40px"
+                            style="margin: 40px"
+                            height="130px"
+                            width="234.7px"
                         />
                     </a>
                 </div>

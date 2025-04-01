@@ -21,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::query()->where('on_carreer_page', true)->inRandomOrder()->get();
+        $companies = Company::query()->with('image')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         }

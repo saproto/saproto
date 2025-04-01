@@ -54,25 +54,24 @@ class StorageEntry extends Model
      */
     public function isOrphan(): bool
     {
-        $id = $this->id;
-
         return
-            NarrowcastingItem::query()->where('image_id', $id)->count() == 0 &&
-            Page::query()->where('featured_image_id', $id)->count() == 0 &&
-            DB::table('pages_files')->where('file_id', $id)->count() == 0 &&
-            Product::query()->where('image_id', $id)->count() == 0 &&
-            Company::query()->where('image_id', $id)->count() == 0 &&
-            User::query()->where('image_id', $id)->count() == 0 &&
-            Member::withTrashed()->where('membership_form_id', $id)->count() == 0 &&
-            DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
-            Committee::query()->where('image_id', $id)->count() == 0 &&
-            Event::query()->where('image_id', $id)->count() == 0 &&
-            Newsitem::query()->where('featured_image_id', $id)->count() == 0 &&
-            SoundboardSound::query()->where('file_id', $id)->count() == 0 &&
-            HeaderImage::query()->where('image_id', $id)->count() == 0 &&
-            Photo::query()->withoutGlobalScopes()->where('file_id', $id)->count() == 0 &&
-            Member::query()->where('omnomcom_sound_id', $id)->count() == 0 &&
-            WallstreetEvent::query()->where('image_id', $id)->count() == 0;
+            NarrowcastingItem::query()->where('image_id', $this->id)->count() == 0 &&
+            Page::query()->where('featured_image_id', $this->id)->count() == 0 &&
+            DB::table('pages_files')->where('file_id', $this->id)->count() == 0 &&
+            Product::query()->where('image_id', $this->id)->count() == 0 &&
+            Company::query()->where('image_id', $this->id)->count() == 0 &&
+            User::query()->where('image_id', $this->id)->count() == 0 &&
+            Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
+            DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
+            Committee::query()->where('image_id', $this->id)->count() == 0 &&
+            Event::query()->where('image_id', $this->id)->count() == 0 &&
+            Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
+            SoundboardSound::query()->where('file_id', $this->id)->count() == 0 &&
+            HeaderImage::query()->where('image_id', $this->id)->count() == 0 &&
+            Photo::query()->withoutGlobalScopes()->where('file_id', $this->id)->count() == 0 &&
+            Member::query()->where('omnomcom_sound_id', $this->id)->count() == 0 &&
+            WallstreetEvent::query()->where('image_id', $this->id)->count() == 0 &&
+            Sticker::query()->where('file_id', $this->id)->count() == 0;
     }
 
     /**

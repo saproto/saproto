@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection|StorageEntry[] $attachments
  * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
+ * @property-read Collection|User[] $recipients
  *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)
