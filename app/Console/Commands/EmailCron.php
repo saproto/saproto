@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\ManualEmail;
 use App\Models\Email;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -37,7 +38,8 @@ class EmailCron extends Command
 
     /**
      * Execute the console command.
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     public function handle(): void
     {
