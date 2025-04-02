@@ -85,10 +85,6 @@ class DinnerformController extends Controller
         return Redirect::route('dinnerform::create');
     }
 
-    /**
-     * @param int $id
-     * @return View|RedirectResponse
-     */
     public function edit(int $id): View|RedirectResponse
     {
         $dinnerformCurrent = Dinnerform::query()->findOrFail($id);
@@ -106,11 +102,6 @@ class DinnerformController extends Controller
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function update(Request $request, int $id): RedirectResponse
     {
 
@@ -157,9 +148,6 @@ class DinnerformController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
     public function destroy(int $id): RedirectResponse
@@ -177,9 +165,6 @@ class DinnerformController extends Controller
 
     /**
      * Close the dinnerform by changing the end time to the current time.
-     *
-     * @param int $id
-     * @return RedirectResponse
      */
     public function close(int $id): RedirectResponse
     {
@@ -189,7 +174,7 @@ class DinnerformController extends Controller
             ->findOrFail($id);
 
         $dinnerform->update([
-            'end'=>Carbon::now()
+            'end' => Carbon::now(),
         ]);
 
         return Redirect::route('dinnerform::admin', ['id' => $dinnerform->id]);
