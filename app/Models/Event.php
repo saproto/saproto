@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VisibilityEnum;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,9 +26,9 @@ use Override;
  * @property int $id
  * @property string $title
  * @property string $description
- * @property int $start
- * @property int $end
- * @property int $publication
+ * @property Carbon $start
+ * @property Carbon $end
+ * @property Carbon|null $publication
  * @property int|null $image_id
  * @property int|null $committee_id
  * @property int|null $category_id
@@ -91,17 +92,45 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
+    protected $hidden = ['created_at', 'updated_at', 'visibility', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $with = ['category', 'activity'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
+    protected $dateFormat = 'U';
+
+    protected $fillable = ['title',
+        'summary',
+        'description',
+        'start',
+        'end',
+        'location',
+        'visibility',
+        'category',
+        'image',
+        'maps_location',
+        'publication',
+        'committee',
+        'is_featured',
+        'is_external',
+        'involves_food',
+        'force_calendar_sync',
+    ];
+
     #[Override]
     protected function casts(): array
     {
         return [
-            'deleted_at' => 'datetime',
+            'deleted_at' => 'immutable_datetime',
+            'start' => 'immutable_datetime',
+            'end' => 'immutable_datetime',
+            'publication' => 'immutable_datetime',
+            'involves_food' => 'boolean',
+            'is_featured' => 'boolean',
+            'is_external' => 'boolean',
+            'visibility' => VisibilityEnum::class,
+            'force_calendar_sync' => 'boolean',
         ];
     }
 
@@ -138,12 +167,12 @@ class Event extends Model
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
+        if ($this->visibility != VisibilityEnum::SECRET && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
         // show non-secret events only when published
-        return ! $this->secret && (! $this->publication || $this->isPublished());
+        return $this->visibility === VisibilityEnum::SCHEDULED && $this->isPublished();
     }
 
     public static function getEventBlockQuery(?User $user = null): Builder
@@ -176,7 +205,7 @@ class Event extends Model
 
     public function isPublished(): bool
     {
-        return $this->publication < Carbon::now()->timestamp;
+        return $this->visibility === VisibilityEnum::SCHEDULED && Carbon::now()->isAfter($this->publication);
     }
 
     /**
@@ -253,12 +282,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
+        return $this->start->isPast() && $this->end->isFuture();
     }
 
     public function over(): bool
     {
-        return $this->end < Carbon::now()->format('U');
+        return $this->end->isPast();
     }
 
     /**
@@ -269,12 +298,12 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
-            (($this->end - $this->start) < 3600 * 24)
+        return $this->start->format($long_format).' '.$combiner.' '.(
+            ($this->start->diffInDays($this->end) < 1)
                 ?
-                date($short_format, $this->end)
+                $this->end->format($short_format)
                 :
-                date($long_format, $this->end)
+                $this->end->format($long_format)
         );
     }
 
@@ -375,21 +404,21 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > strtotime('-1 week');
+        return $this->involves_food && $this->end->greaterThan(Carbon::now()->subWeek());
     }
 
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
+        return Attribute::make(get: fn (): bool => $this->start->isFuture());
     }
 
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => $this->start->format('M d, Y'),
+            'year' => $this->start->format('Y'),
+            'month' => $this->start->format('M Y'),
+            'time' => $this->start->format('H:i'),
         ]);
     }
 

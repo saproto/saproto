@@ -20,7 +20,6 @@ it('shows the search page', function () {
 it('shows an event on the search page', function () {
     Event::factory()->create([
         'title' => 'TestEvent',
-        'secret' => false,
     ]);
     $response = $this->get('/search?query=Test');
     $response->assertSee('TestEvent');
