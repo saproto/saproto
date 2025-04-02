@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\MembershipTypeEnum;
+use App\Enums\VisibilityEnum;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\Activity;
@@ -59,7 +60,7 @@ class AchievementsCron extends Command
 
         $AmountOfSignupsThisMonth = Event::query()
             ->whereHas('activity')
-            ->where('secret', false)
+            ->where('visibility', '!=', VisibilityEnum::SECRET)
             ->where('start', '>', Carbon::now()->subMonth()->timestamp)
             ->where('end', '<', Carbon::now()->timestamp)
             ->count();
@@ -287,7 +288,7 @@ class AchievementsCron extends Command
         $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
         $EventsParticipated = Event::query()
             ->whereHas('activity')
-            ->where('secret', false)
+            ->where('visibility','!=', VisibilityEnum::SECRET)
             ->where('start', '>', Carbon::now()->subMonth()->timestamp)
             ->where('end', '<', Carbon::now()->timestamp)
             ->whereIn('id', $activities)

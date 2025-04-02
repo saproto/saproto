@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VisibilityEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -111,8 +112,10 @@ class Committee extends Model
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
-                        ->orWhereNull('publication');
+                    $q->where('visibility','!=', VisibilityEnum::SECRET)
+                        ->orWhere(function($q){
+                            $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
+                        });
                 });
             })->reorder('start', 'desc');
     }
@@ -125,8 +128,10 @@ class Committee extends Model
             ->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
-                        ->orWhereNull('publication');
+                    $q->where('visibility','!=', VisibilityEnum::SECRET)
+                        ->orWhere(function($q){
+                            $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
+                        });
                 });
             });
     }
@@ -140,8 +145,10 @@ class Committee extends Model
         })
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
-                        ->orWhereNull('publication');
+                    $q->where('visibility','!=', VisibilityEnum::SECRET)
+                        ->orWhere(function($q){
+                            $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
+                        });
                 });
             })
             ->where('end', '<', Carbon::now()->timestamp)

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VisibilityEnum;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -91,7 +92,7 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
+    protected $hidden = ['created_at', 'updated_at', 'visibility', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $with = ['category', 'activity'];
 
@@ -105,7 +106,7 @@ class Event extends Model
         'start',
         'end',
         'location',
-        'secret',
+        'visibility',
         'category',
         'image',
         'maps_location',
@@ -128,7 +129,7 @@ class Event extends Model
             'involves_food' => 'boolean',
             'is_featured' => 'boolean',
             'is_external' => 'boolean',
-            'secret' => 'boolean',
+            'visibility' => VisibilityEnum::class,
             'force_calendar_sync' => 'boolean',
         ];
     }
@@ -166,12 +167,12 @@ class Event extends Model
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->secret && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
+        if ($this->visibility!=VisibilityEnum::SECRET && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
         // show non-secret events only when published
-        return ! $this->secret && (! $this->publication || $this->isPublished());
+        return $this->visibility===VisibilityEnum::SCHEDULED && $this->isPublished();
     }
 
     public static function getEventBlockQuery(?User $user = null): Builder
@@ -204,7 +205,7 @@ class Event extends Model
 
     public function isPublished(): bool
     {
-        return Carbon::now()->isAfter($this->publication);
+        return $this->visibility === VisibilityEnum::SCHEDULED && Carbon::now()->isAfter($this->publication);
     }
 
     /**

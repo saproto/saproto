@@ -1,9 +1,9 @@
-@if ($event->secret)
+@if ($event->visibility === \App\Enums\VisibilityEnum::SECRET)
     <div class="alert alert-info" role="alert">
         This event is not shown on the site, you can only access it directly via
         the URL.
     </div>
-@elseif (! $event->isPublished())
+@elseif ($event->visibility === \App\Enums\VisibilityEnum::SCHEDULED && ! $event->isPublished())
     <div class="alert alert-warning" role="alert">
         This event is scheduled and not shown yet on the site. For now you can
         only access it directly via the URL. It is scheduled for

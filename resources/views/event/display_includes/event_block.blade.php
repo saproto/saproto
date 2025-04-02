@@ -86,7 +86,7 @@
             <strong>{{ $event->title }}</strong>
 
             {{-- Secret --}}
-            @if ($event->secret)
+            @if ($event->visibility === \App\Enums\VisibilityEnum::SECRET)
                 <span
                     class="badge bg-info float-end mb-1"
                     data-bs-toggle="tooltip"
@@ -99,7 +99,7 @@
             @endif
 
             {{-- Published --}}
-            @if ($event->publication && ! $event->isPublished())
+            @if ($event->visibility === \App\Enums\VisibilityEnum::SCHEDULED && ! $event->isPublished())
                 <span
                     class="badge bg-warning float-end mb-1"
                     data-bs-toggle="tooltip"
