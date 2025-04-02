@@ -8,19 +8,20 @@ DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `accounts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `account_number` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `account_number` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `accounts_account_number_index` (`account_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `achievement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `achievement` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `desc` varchar(255) NOT NULL,
   `fa_icon` mediumtext DEFAULT NULL,
@@ -39,22 +40,24 @@ DROP TABLE IF EXISTS `achievements_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `achievements_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `achievement_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `achievement_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `alerted` tinyint(1) NOT NULL DEFAULT 0,
   `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `achievements_users_user_id_index` (`user_id`),
+  KEY `achievements_users_achievement_id_index` (`achievement_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activities` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `event_id` int(11) DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` bigint(20) unsigned DEFAULT NULL,
   `price` double DEFAULT NULL,
   `no_show_fee` float NOT NULL DEFAULT 0,
   `participants` int(11) NOT NULL DEFAULT -1,
@@ -64,7 +67,7 @@ CREATE TABLE `activities` (
   `registration_end` int(11) NOT NULL,
   `deregistration_end` int(11) NOT NULL,
   `closed` tinyint(1) NOT NULL DEFAULT 0,
-  `closed_account` int(11) DEFAULT NULL,
+  `closed_account` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `comment` varchar(255) DEFAULT NULL,
@@ -77,26 +80,27 @@ DROP TABLE IF EXISTS `activities_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `activities_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `activity_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `activity_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
   `is_present` tinyint(1) NOT NULL DEFAULT 0,
-  `committees_activities_id` int(11) DEFAULT NULL,
+  `committees_activities_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `backup` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `activities_users_user_id_index` (`user_id`),
-  KEY `activities_users_activity_id_index` (`activity_id`)
+  KEY `activities_users_activity_id_index` (`activity_id`),
+  KEY `activities_users_committees_activities_id_index` (`committees_activities_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `addresses` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `street` varchar(255) NOT NULL,
   `number` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
@@ -104,27 +108,29 @@ CREATE TABLE `addresses` (
   `country` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `addresses_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `alias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alias` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `alias` varchar(255) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
   `destination` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `alias_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `announcements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `announcements` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `content` mediumtext NOT NULL,
   `display_from` datetime NOT NULL,
@@ -148,14 +154,15 @@ DROP TABLE IF EXISTS `bankaccounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bankaccounts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `iban` varchar(255) NOT NULL,
   `bic` varchar(255) NOT NULL,
   `machtigingid` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `bankaccounts_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_category`;
@@ -174,11 +181,13 @@ DROP TABLE IF EXISTS `codex_codex_song`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_codex_song` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `codex` int(10) unsigned NOT NULL,
-  `song` int(10) unsigned NOT NULL,
+  `codex` bigint(20) unsigned NOT NULL,
+  `song` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `codex_codex_song_codex_index` (`codex`),
+  KEY `codex_codex_song_song_index` (`song`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_codex_text`;
@@ -186,11 +195,13 @@ DROP TABLE IF EXISTS `codex_codex_text`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_codex_text` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `codex` int(10) unsigned NOT NULL,
-  `text_id` int(10) unsigned NOT NULL,
+  `codex` bigint(20) unsigned NOT NULL,
+  `text_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `codex_codex_text_codex_index` (`codex`),
+  KEY `codex_codex_text_text_id_index` (`text_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `codex_codices`;
@@ -237,71 +248,77 @@ DROP TABLE IF EXISTS `codex_texts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `codex_texts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `type_id` int(10) unsigned NOT NULL,
+  `type_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `text` longtext NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `codex_texts_type_id_index` (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `description` mediumtext NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `image_id` int(11) DEFAULT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `allow_anonymous_email` tinyint(1) NOT NULL DEFAULT 0,
   `is_society` tinyint(1) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `committees_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees_activities` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `activity_id` int(11) NOT NULL,
-  `committee_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `activity_id` bigint(20) unsigned NOT NULL,
+  `committee_id` bigint(20) unsigned NOT NULL,
   `amount` int(11) NOT NULL,
   `notification_sent` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `committees_activities_activity_id_index` (`activity_id`),
+  KEY `committees_activities_committee_id_index` (`committee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `committees_users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `committee_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `committee_id` bigint(20) unsigned NOT NULL,
   `role` varchar(255) DEFAULT NULL,
   `edition` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `committees_users_user_id_index` (`user_id`),
+  KEY `committees_users_committee_id_index` (`committee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `companies` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `excerpt` mediumtext NOT NULL,
   `description` mediumtext NOT NULL,
-  `image_id` int(11) NOT NULL,
+  `image_id` bigint(20) unsigned NOT NULL,
   `on_carreer_page` tinyint(1) NOT NULL,
   `in_logo_bar` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -310,7 +327,8 @@ CREATE TABLE `companies` (
   `membercard_excerpt` mediumtext DEFAULT NULL,
   `membercard_long` mediumtext DEFAULT NULL,
   `sort` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `companies_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dinnerform_orderline`;
@@ -320,20 +338,22 @@ CREATE TABLE `dinnerform_orderline` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  `dinnerform_id` int(11) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `dinnerform_id` bigint(20) unsigned NOT NULL,
   `description` mediumtext NOT NULL,
   `price` double NOT NULL,
   `helper` tinyint(1) NOT NULL,
   `closed` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `dinnerform_orderline_user_id_index` (`user_id`),
+  KEY `dinnerform_orderline_dinnerform_id_index` (`dinnerform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dinnerforms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dinnerforms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `restaurant` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
@@ -341,29 +361,32 @@ CREATE TABLE `dinnerforms` (
   `end` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `event_id` int(11) DEFAULT NULL,
+  `event_id` bigint(20) unsigned DEFAULT NULL,
   `helper_discount` double NOT NULL,
   `regular_discount` double NOT NULL,
   `closed` tinyint(1) NOT NULL,
   `visible_home_page` tinyint(1) NOT NULL DEFAULT 1,
-  `ordered_by_user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `ordered_by_user_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `dinnerforms_event_id_index` (`event_id`),
+  KEY `dinnerforms_ordered_by_user_id_index` (`ordered_by_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dmx_channels`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_channels` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL,
   `name` mediumtext NOT NULL,
-  `special_function` char(10) NOT NULL DEFAULT 'none'
+  `special_function` char(10) NOT NULL DEFAULT 'none',
+  KEY `dmx_channels_id_index` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dmx_fixtures`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_fixtures` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` mediumtext NOT NULL,
   `channel_start` int(11) NOT NULL,
   `channel_end` int(11) NOT NULL,
@@ -375,7 +398,7 @@ DROP TABLE IF EXISTS `dmx_overrides`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dmx_overrides` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fixtures` varchar(255) NOT NULL,
   `color` varchar(255) NOT NULL,
   `start` varchar(255) NOT NULL,
@@ -387,7 +410,7 @@ DROP TABLE IF EXISTS `emails`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `sender_name` varchar(255) NOT NULL,
@@ -413,39 +436,45 @@ DROP TABLE IF EXISTS `emails_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_events` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email_id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `email_id` bigint(20) unsigned NOT NULL,
+  `event_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `emails_events_email_id_index` (`email_id`),
+  KEY `emails_events_event_id_index` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email_id` int(11) NOT NULL,
-  `file_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `email_id` bigint(20) unsigned NOT NULL,
+  `file_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `emails_files_email_id_index` (`email_id`),
+  KEY `emails_files_file_id_index` (`file_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_lists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `emails_lists` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email_id` int(11) NOT NULL,
-  `list_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `email_id` bigint(20) unsigned NOT NULL,
+  `list_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `emails_lists_email_id_index` (`email_id`),
+  KEY `emails_lists_list_id_index` (`list_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `event_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `icon` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -457,18 +486,20 @@ DROP TABLE IF EXISTS `event_newsitem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event_newsitem` (
-  `newsitem_id` int(10) unsigned NOT NULL,
-  `event_id` int(10) unsigned NOT NULL
+  `newsitem_id` bigint(20) unsigned NOT NULL,
+  `event_id` bigint(20) unsigned NOT NULL,
+  KEY `event_newsitem_event_id_index` (`event_id`),
+  KEY `event_newsitem_newsitem_id_index` (`newsitem_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `description` mediumtext NOT NULL,
-  `category_id` int(10) unsigned DEFAULT NULL,
+  `category_id` bigint(20) unsigned DEFAULT NULL,
   `is_external` tinyint(1) NOT NULL DEFAULT 0,
   `start` int(11) NOT NULL,
   `end` int(11) NOT NULL,
@@ -483,20 +514,23 @@ CREATE TABLE `events` (
   `involves_food` tinyint(1) NOT NULL DEFAULT 0,
   `secret` tinyint(1) NOT NULL DEFAULT 0,
   `force_calendar_sync` tinyint(1) NOT NULL DEFAULT 0,
-  `image_id` int(11) DEFAULT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  `committee_id` int(11) DEFAULT NULL,
+  `committee_id` bigint(20) unsigned DEFAULT NULL,
   `summary` mediumtext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `events_start_index` (`start`),
-  KEY `events_end_index` (`end`)
+  KEY `events_end_index` (`end`),
+  KEY `events_category_id_index` (`category_id`),
+  KEY `events_committee_id_index` (`committee_id`),
+  KEY `events_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `uuid` varchar(255) DEFAULT NULL,
   `connection` mediumtext NOT NULL,
   `queue` mediumtext NOT NULL,
@@ -512,7 +546,7 @@ DROP TABLE IF EXISTS `feedback`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
   `feedback_category_id` bigint(20) NOT NULL DEFAULT 1,
   `feedback` mediumtext NOT NULL,
   `reviewed` tinyint(1) NOT NULL DEFAULT 0,
@@ -521,7 +555,8 @@ CREATE TABLE `feedback` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `feedback_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_categories`;
@@ -532,12 +567,13 @@ CREATE TABLE `feedback_categories` (
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `review` tinyint(1) NOT NULL,
-  `reviewer_id` int(11) DEFAULT NULL,
+  `reviewer_id` bigint(20) unsigned DEFAULT NULL,
   `show_publisher` tinyint(1) NOT NULL DEFAULT 0,
   `can_reply` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `feedback_categories_reviewer_id_index` (`reviewer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `feedback_votes`;
@@ -545,19 +581,21 @@ DROP TABLE IF EXISTS `feedback_votes`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback_votes` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `feedback_id` int(11) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `feedback_id` bigint(20) unsigned NOT NULL,
   `vote` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `feedback_votes_user_id_index` (`user_id`),
+  KEY `feedback_votes_feedback_id_index` (`feedback_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `filename` varchar(255) NOT NULL,
   `mime` varchar(255) NOT NULL,
   `original_filename` varchar(255) NOT NULL,
@@ -571,7 +609,7 @@ DROP TABLE IF EXISTS `hashmap`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hashmap` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
   `subkey` varchar(255) DEFAULT NULL,
   `value` mediumtext NOT NULL,
@@ -582,27 +620,30 @@ DROP TABLE IF EXISTS `headerimages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `headerimages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `credit_id` int(11) DEFAULT NULL,
-  `image_id` int(11) NOT NULL,
+  `credit_id` bigint(20) unsigned DEFAULT NULL,
+  `image_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `headerimages_credit_id_index` (`credit_id`),
+  KEY `headerimages_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `joboffers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `joboffers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `company_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` bigint(20) unsigned NOT NULL,
   `title` mediumtext NOT NULL,
   `description` mediumtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `redirect_url` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `joboffers_company_id_index` (`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `jobs`;
@@ -624,8 +665,8 @@ DROP TABLE IF EXISTS `leaderboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `leaderboards` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `committee_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `committee_id` bigint(20) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `featured` tinyint(1) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -633,27 +674,30 @@ CREATE TABLE `leaderboards` (
   `points_name` varchar(255) DEFAULT 'points',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `leaderboards_committee_id_index` (`committee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `leaderboards_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `leaderboards_entries` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `leaderboard_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `leaderboard_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
   `points` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `leaderboards_entries_leaderboard_id_index` (`leaderboard_id`),
+  KEY `leaderboards_entries_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `mailinglists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mailinglists` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` mediumtext NOT NULL,
   `is_member_only` tinyint(1) NOT NULL,
@@ -664,8 +708,8 @@ DROP TABLE IF EXISTS `members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `members` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `proto_username` mediumtext NOT NULL,
   `membership_form_id` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -674,25 +718,29 @@ CREATE TABLE `members` (
   `until` bigint(20) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `card_printed_on` date DEFAULT NULL,
-  `omnomcom_sound_id` int(11) DEFAULT NULL,
+  `omnomcom_sound_id` bigint(20) unsigned DEFAULT NULL,
   `membership_type` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `members_user_id_index` (`user_id`),
+  KEY `members_omnomcom_sound_id_index` (`omnomcom_sound_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `menuitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `menuitems` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` int(11) DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `parent` bigint(20) unsigned DEFAULT NULL,
   `menuname` varchar(255) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
-  `page_id` int(11) DEFAULT NULL,
+  `page_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `order` int(11) NOT NULL,
   `is_member_only` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `menuitems_parent_index` (`parent`),
+  KEY `menuitems_page_id_index` (`page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
@@ -709,11 +757,13 @@ DROP TABLE IF EXISTS `model_has_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_has_permissions` (
-  `permission_id` int(10) unsigned NOT NULL,
+  `permission_id` bigint(20) unsigned NOT NULL,
   `model_type` varchar(255) NOT NULL,
-  `model_id` int(11) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
   KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`),
+  KEY `model_has_permissions_permission_id_index` (`permission_id`),
+  KEY `model_has_permissions_model_id_index` (`model_id`),
   CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -721,11 +771,13 @@ DROP TABLE IF EXISTS `model_has_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `model_has_roles` (
-  `role_id` int(10) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
   `model_type` varchar(255) NOT NULL,
-  `model_id` int(11) NOT NULL,
+  `model_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`role_id`,`model_id`,`model_type`),
   KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`),
+  KEY `model_has_roles_role_id_index` (`role_id`),
+  KEY `model_has_roles_model_id_index` (`model_id`),
   CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -733,7 +785,7 @@ DROP TABLE IF EXISTS `mollie_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mollie_transactions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` varchar(255) NOT NULL,
   `mollie_id` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
@@ -748,33 +800,36 @@ DROP TABLE IF EXISTS `narrowcasting`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `narrowcasting` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `image_id` int(11) DEFAULT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `campaign_start` int(11) NOT NULL,
   `campaign_end` int(11) NOT NULL,
   `slide_duration` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `youtube_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `narrowcasting_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `newsitems`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `newsitems` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
-  `featured_image_id` int(11) DEFAULT NULL,
+  `featured_image_id` bigint(20) unsigned DEFAULT NULL,
   `published_at` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `is_weekly` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `newsitems_user_id_index` (`user_id`),
+  KEY `newsitems_featured_image_id_index` (`featured_image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_access_tokens`;
@@ -791,7 +846,8 @@ CREATE TABLE `oauth_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `oauth_access_tokens_user_id_index` (`user_id`)
+  KEY `oauth_access_tokens_user_id_index` (`user_id`),
+  KEY `oauth_access_tokens_client_id_index` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_auth_codes`;
@@ -805,7 +861,8 @@ CREATE TABLE `oauth_auth_codes` (
   `revoked` tinyint(1) NOT NULL,
   `expires_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `oauth_auth_codes_user_id_index` (`user_id`)
+  KEY `oauth_auth_codes_user_id_index` (`user_id`),
+  KEY `oauth_auth_codes_client_id_index` (`client_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_clients`;
@@ -854,10 +911,10 @@ DROP TABLE IF EXISTS `orderlines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orderlines` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `cashier_id` int(11) DEFAULT NULL,
-  `product_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `cashier_id` bigint(20) unsigned DEFAULT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
   `original_unit_price` double NOT NULL,
   `units` int(11) NOT NULL,
   `total_price` double NOT NULL,
@@ -872,14 +929,16 @@ CREATE TABLE `orderlines` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `orderlines_user_id_index` (`user_id`),
-  KEY `orderlines_created_at_index` (`created_at`)
+  KEY `orderlines_created_at_index` (`created_at`),
+  KEY `orderlines_cashier_id_index` (`cashier_id`),
+  KEY `orderlines_product_id_index` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
@@ -887,23 +946,26 @@ CREATE TABLE `pages` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_member_only` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  `featured_image_id` int(11) DEFAULT NULL,
+  `featured_image_id` bigint(20) unsigned DEFAULT NULL,
   `show_attachments` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `pages_featured_image_id_index` (`featured_image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages_files`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pages_files` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `page_id` int(10) unsigned NOT NULL,
-  `file_id` int(10) unsigned NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `page_id` bigint(20) unsigned NOT NULL,
+  `file_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `pages_files_page_id_foreign` (`page_id`),
   KEY `pages_files_file_id_foreign` (`file_id`),
-  CONSTRAINT `pages_files_file_id_foreign` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`),
-  CONSTRAINT `pages_files_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `pages_files_page_id_index` (`page_id`),
+  KEY `pages_files_file_id_index` (`file_id`),
+  CONSTRAINT `pages_files_file_id_foreign` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `pages_files_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -921,8 +983,8 @@ DROP TABLE IF EXISTS `passwordstore`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `passwordstore` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `permission_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` bigint(20) unsigned NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `username` mediumtext DEFAULT NULL,
   `password` mediumtext DEFAULT NULL,
@@ -930,26 +992,29 @@ CREATE TABLE `passwordstore` (
   `note` mediumtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `passwordstore_permission_id_index` (`permission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permission_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission_role` (
-  `permission_id` int(10) unsigned NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
+  `permission_id` bigint(20) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`permission_id`,`role_id`),
   KEY `permission_role_role_id_foreign` (`role_id`),
-  CONSTRAINT `permission_role_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `permission_role_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `permission_role_permission_id_index` (`permission_id`),
+  KEY `permission_role_role_id_index` (`role_id`),
+  CONSTRAINT `permission_role_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `permission_role_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `guard_name` varchar(255) NOT NULL,
@@ -965,65 +1030,73 @@ DROP TABLE IF EXISTS `photo_albums`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photo_albums` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `name` char(255) NOT NULL,
   `date_create` int(11) NOT NULL,
   `date_taken` int(11) NOT NULL,
-  `thumb_id` int(11) NOT NULL,
-  `event_id` int(11) DEFAULT NULL,
+  `thumb_id` bigint(20) unsigned NOT NULL,
+  `event_id` bigint(20) unsigned DEFAULT NULL,
   `private` tinyint(1) NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `photo_albums_thumb_id_index` (`thumb_id`),
+  KEY `photo_albums_event_id_index` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photo_likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photo_likes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `photo_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `photo_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `photo_likes_photo_id_index` (`photo_id`),
+  KEY `photo_likes_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `photos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `file_id` int(11) NOT NULL,
-  `album_id` int(11) NOT NULL,
+  `file_id` bigint(20) unsigned NOT NULL,
+  `album_id` bigint(20) unsigned NOT NULL,
   `date_taken` int(11) NOT NULL,
   `private` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `photos_file_id_index` (`file_id`),
+  KEY `photos_album_id_index` (`album_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `playedvideos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `playedvideos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
   `video_id` varchar(255) NOT NULL,
   `video_title` varchar(255) NOT NULL,
   `spotify_id` varchar(50) DEFAULT NULL,
   `spotify_name` mediumtext DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `playedvideos_user_id_index` (`user_id`),
+  KEY `playedvideos_video_id_index` (`video_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1045,9 +1118,9 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) NOT NULL,
-  `image_id` int(11) DEFAULT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `account_id` bigint(20) unsigned NOT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `price` double NOT NULL,
   `calories` int(11) NOT NULL DEFAULT 0,
@@ -1061,66 +1134,74 @@ CREATE TABLE `products` (
   `is_visible_when_no_stock` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `products_account_id_index` (`account_id`),
+  KEY `products_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `products_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `products_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `category_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `products_categories_product_id_index` (`product_id`),
+  KEY `products_categories_category_id_index` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `qrauth_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `qrauth_requests` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `auth_token` mediumtext NOT NULL,
   `qr_token` mediumtext NOT NULL,
   `description` mediumtext NOT NULL,
   `approved_at` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `qrauth_requests_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `rfid`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rfid` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `card_id` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `rfid_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `role_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_user` (
-  `user_id` int(10) unsigned NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `role_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`),
   KEY `role_user_role_id_foreign` (`role_id`),
-  CONSTRAINT `role_user_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `role_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `role_user_user_id_index` (`user_id`),
+  KEY `role_user_role_id_index` (`role_id`),
+  CONSTRAINT `role_user_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `role_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `display_name` varchar(255) DEFAULT NULL,
   `guard_name` varchar(255) NOT NULL,
@@ -1137,19 +1218,20 @@ DROP TABLE IF EXISTS `sessions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
   `id` varchar(255) NOT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
   `ip_address` varchar(45) DEFAULT NULL,
   `user_agent` mediumtext DEFAULT NULL,
   `payload` mediumtext NOT NULL,
   `last_activity` int(11) NOT NULL,
-  UNIQUE KEY `sessions_id_unique` (`id`)
+  UNIQUE KEY `sessions_id_unique` (`id`),
+  KEY `sessions_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `short_url`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `short_url` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `target` varchar(255) NOT NULL,
@@ -1164,11 +1246,33 @@ DROP TABLE IF EXISTS `soundboard_sounds`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `soundboard_sounds` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `file_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `file_id` bigint(20) unsigned NOT NULL,
   `hidden` tinyint(1) NOT NULL,
   `name` mediumtext NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `soundboard_sounds_file_id_index` (`file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `stickers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stickers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `lat` double NOT NULL,
+  `lng` double NOT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `country` varchar(255) DEFAULT NULL,
+  `country_code` varchar(255) DEFAULT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `file_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stickers_user_id_foreign` (`user_id`),
+  KEY `stickers_file_id_foreign` (`file_id`),
+  CONSTRAINT `stickers_file_id_foreign` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`),
+  CONSTRAINT `stickers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stock_mutations`;
@@ -1178,51 +1282,58 @@ CREATE TABLE `stock_mutations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
   `before` int(11) NOT NULL,
   `after` int(11) NOT NULL,
   `is_bulk` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `stock_mutations_user_id_index` (`user_id`),
+  KEY `stock_mutations_product_id_index` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tempadmins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tempadmins` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `created_by` bigint(20) unsigned NOT NULL,
   `start_at` datetime NOT NULL,
   `end_at` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `tempadmins_created_by_index` (`created_by`),
+  KEY `tempadmins_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ticket_purchases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket_purchases` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(11) NOT NULL,
-  `orderline_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_id` bigint(20) unsigned NOT NULL,
+  `orderline_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
   `barcode` varchar(255) NOT NULL,
   `scanned` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `payment_complete` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `ticket_purchases_ticket_id_index` (`ticket_id`),
+  KEY `ticket_purchases_orderline_id_index` (`orderline_id`),
+  KEY `ticket_purchases_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tickets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tickets` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `event_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `event_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
   `members_only` tinyint(1) NOT NULL,
   `available_from` int(11) NOT NULL,
   `available_to` int(11) NOT NULL,
@@ -1230,45 +1341,49 @@ CREATE TABLE `tickets` (
   `show_participants` tinyint(1) NOT NULL DEFAULT 0,
   `has_buy_limit` tinyint(1) NOT NULL DEFAULT 0,
   `buy_limit` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `tickets_event_id_index` (`event_id`),
+  KEY `tickets_product_id_index` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tokens` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `tokens_token_unique` (`token`)
+  UNIQUE KEY `tokens_token_unique` (`token`),
+  KEY `tokens_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_welcome`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_welcome` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
   `message` mediumtext NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_welcome_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `calling_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
-  `image_id` int(11) DEFAULT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `birthdate` date DEFAULT NULL,
@@ -1300,19 +1415,22 @@ CREATE TABLE `users` (
   `personal_key` varchar(64) DEFAULT NULL,
   `discord_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`)
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users_mailinglists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users_mailinglists` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `list_id` int(11) NOT NULL,
-  `user_id` mediumtext NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `list_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `users_mailinglists_list_id_index` (`list_id`),
+  KEY `users_mailinglists_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ut_accounts`;
@@ -1336,9 +1454,9 @@ DROP TABLE IF EXISTS `videos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `videos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `event_id` int(11) DEFAULT NULL,
+  `event_id` bigint(20) unsigned DEFAULT NULL,
   `youtube_id` varchar(255) NOT NULL,
   `youtube_title` varchar(255) NOT NULL,
   `youtube_length` varchar(255) NOT NULL,
@@ -1346,7 +1464,8 @@ CREATE TABLE `videos` (
   `youtube_user_name` varchar(255) NOT NULL,
   `youtube_thumb_url` varchar(255) NOT NULL,
   `video_date` date NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `videos_event_id_index` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink`;
@@ -1370,8 +1489,8 @@ DROP TABLE IF EXISTS `wallstreet_drink_event`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_event` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `wallstreet_drink_id` int(10) unsigned NOT NULL,
-  `wallstreet_drink_events_id` int(10) unsigned NOT NULL,
+  `wallstreet_drink_id` bigint(20) unsigned NOT NULL,
+  `wallstreet_drink_events_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -1382,11 +1501,13 @@ DROP TABLE IF EXISTS `wallstreet_drink_event_product`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wallstreet_drink_event_product` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `wallstreet_drink_event_id` int(10) unsigned NOT NULL,
-  `product_id` int(10) unsigned NOT NULL,
+  `wallstreet_drink_event_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `wallstreet_drink_event_product_wallstreet_drink_event_id_index` (`wallstreet_drink_event_id`),
+  KEY `wallstreet_drink_event_product_product_id_index` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_events`;
@@ -1397,11 +1518,12 @@ CREATE TABLE `wallstreet_drink_events` (
   `name` varchar(255) NOT NULL,
   `percentage` int(11) NOT NULL,
   `description` mediumtext DEFAULT NULL,
-  `image_id` int(10) unsigned DEFAULT NULL,
+  `image_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `wallstreet_drink_events_image_id_index` (`image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_prices`;
@@ -1412,6 +1534,7 @@ CREATE TABLE `wallstreet_drink_prices` (
   `wallstreet_drink_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
   `price` double NOT NULL,
+  `diff` double NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -1421,7 +1544,7 @@ DROP TABLE IF EXISTS `withdrawals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `withdrawals` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1436,11 +1559,14 @@ DROP TABLE IF EXISTS `withdrawals_failed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `withdrawals_failed` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `withdrawal_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `correction_orderline_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `withdrawal_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `correction_orderline_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `withdrawals_failed_withdrawal_id_index` (`withdrawal_id`),
+  KEY `withdrawals_failed_user_id_index` (`user_id`),
+  KEY `withdrawals_failed_correction_orderline_id_index` (`correction_orderline_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1679,3 +1805,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (226,'2024_10_26_22
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (227,'2024_11_03_180047_add_indexes_to_orderlines',1);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (228,'2024_10_28_211723_migrate_utf8_to_utf8mb4',2);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (229,'2024_11_17_173707_cleanup_flickr_items',2);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (230,'2024_04_15_010517_add_delta_to_wallstreet_price',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (231,'2025_02_07_222231_ids_to_bigints',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (232,'2025_03_19_150803_create_stickers_table',3);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (233,'2025_04_01_154616_add_index_to_playedvideos_video_id',3);
