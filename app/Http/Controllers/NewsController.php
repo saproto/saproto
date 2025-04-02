@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VisibilityEnum;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsitem;
@@ -87,7 +88,7 @@ class NewsController extends Controller
     public function create(Request $request)
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get();
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('visibility','!=', VisibilityEnum::SECRET)->orderBy('start')->get();
 
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
@@ -96,7 +97,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('visibility','!=', VisibilityEnum::SECRET)->orderBy('start')->get()->merge($newsitem->events()->get());
         $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\VisibilityEnum;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\EventCategory;
@@ -31,7 +32,7 @@ class EventFactory extends Factory
             'is_featured' => fake()->boolean(),
             'is_external' => fake()->boolean(),
             'involves_food' => fake()->boolean(),
-            'secret' => fake()->boolean(),
+            'visibility' => VisibilityEnum::PUBLIC,
             'force_calendar_sync' => fake()->boolean(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

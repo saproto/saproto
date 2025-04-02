@@ -6,7 +6,7 @@
     <div class="card-body">
         @if (count($events) > 0)
             @foreach ($events as $counter => $event)
-                @if ($event->mayViewEvent(Auth::user()) && $event->isPublished())
+                @if ($event->mayViewEvent(Auth::user()))
                     @include('event.display_includes.event_block', ['event' => $event, 'lazyload' => $counter > 4])
                 @endif
             @endforeach
