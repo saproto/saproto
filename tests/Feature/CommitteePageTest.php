@@ -12,7 +12,7 @@ it('shows the committee page with previous events', function () {
     $event = Event::factory()->has(Committee::factory([
         'public' => true,
     ]))->create([
-        'end' => Carbon::now()->subMinutes(1)->timestamp
+        'end' => Carbon::now()->subMinutes(1)->timestamp,
     ]);
 
     $response = $this->actingAs($user)

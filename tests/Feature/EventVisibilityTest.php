@@ -13,7 +13,7 @@ dataset('users', [
 
 dataset('private events', [
     'secret' => [fn () => Event::factory()->create([
-        'visibility'=> VisibilityEnum::SECRET,
+        'visibility' => VisibilityEnum::SECRET,
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
     ]), 'This event is not shown on the site'],
@@ -21,7 +21,7 @@ dataset('private events', [
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
         'publication' => Carbon::now()->addHours(2),
-        'visibility'=> VisibilityEnum::SCHEDULED,
+        'visibility' => VisibilityEnum::SCHEDULED,
     ]), 'This event is scheduled'],
 ]);
 
@@ -33,7 +33,7 @@ dataset('public events', [
     'published' => [fn () => Event::factory()->create([
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
-        'visibility'=> VisibilityEnum::SCHEDULED,
+        'visibility' => VisibilityEnum::SCHEDULED,
         'publication' => Carbon::now()->subHours(2),
     ])],
 ]);

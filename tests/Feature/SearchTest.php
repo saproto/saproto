@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\VisibilityEnum;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Page;
