@@ -167,12 +167,12 @@ class Event extends Model
         }
 
         // only show secret events if the user is participating, helping or organising
-        if ($this->visibility!=VisibilityEnum::SECRET && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
+        if ($this->visibility != VisibilityEnum::SECRET && ($user instanceof User && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->isOrganising($user)))) {
             return true;
         }
 
         // show non-secret events only when published
-        return $this->visibility===VisibilityEnum::SCHEDULED && $this->isPublished();
+        return $this->visibility === VisibilityEnum::SCHEDULED && $this->isPublished();
     }
 
     public static function getEventBlockQuery(?User $user = null): Builder

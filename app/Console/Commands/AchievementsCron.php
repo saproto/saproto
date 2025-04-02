@@ -288,7 +288,7 @@ class AchievementsCron extends Command
         $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
         $EventsParticipated = Event::query()
             ->whereHas('activity')
-            ->where('visibility','!=', VisibilityEnum::SECRET)
+            ->where('visibility', '!=', VisibilityEnum::SECRET)
             ->where('start', '>', Carbon::now()->subMonth()->timestamp)
             ->where('end', '<', Carbon::now()->timestamp)
             ->whereIn('id', $activities)

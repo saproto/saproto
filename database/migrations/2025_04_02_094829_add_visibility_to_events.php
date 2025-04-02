@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\MembershipTypeEnum;
 use App\Enums\VisibilityEnum;
 use App\Models\Event;
 use Illuminate\Database\Migrations\Migration;
@@ -20,13 +19,13 @@ return new class extends Migration
 
         Event::query()->chunk(25, static function ($events) {
             foreach ($events as $event) {
-                if($event->secret){
+                if ($event->secret) {
                     $event->update([
-                        'visibility'=>VisibilityEnum::PUBLIC,
+                        'visibility' => VisibilityEnum::PUBLIC,
                     ]);
-                } elseif ($event->publication!=null){
+                } elseif ($event->publication != null) {
                     $event->update([
-                        'visibility'=>VisibilityEnum::SCHEDULED,
+                        'visibility' => VisibilityEnum::SCHEDULED,
                     ]);
                 }
             }

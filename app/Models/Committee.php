@@ -112,8 +112,8 @@ class Committee extends Model
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('visibility','!=', VisibilityEnum::SECRET)
-                        ->orWhere(function($q){
+                    $q->where('visibility', '!=', VisibilityEnum::SECRET)
+                        ->orWhere(function ($q) {
                             $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
                         });
                 });
@@ -128,8 +128,8 @@ class Committee extends Model
             ->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('visibility','!=', VisibilityEnum::SECRET)
-                        ->orWhere(function($q){
+                    $q->where('visibility', '!=', VisibilityEnum::SECRET)
+                        ->orWhere(function ($q) {
                             $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
                         });
                 });
@@ -145,8 +145,8 @@ class Committee extends Model
         })
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
-                    $q->where('visibility','!=', VisibilityEnum::SECRET)
-                        ->orWhere(function($q){
+                    $q->where('visibility', '!=', VisibilityEnum::SECRET)
+                        ->orWhere(function ($q) {
                             $q->where('visibility', VisibilityEnum::SCHEDULED)->were('publication', '<', Carbon::now()->timestamp);
                         });
                 });
