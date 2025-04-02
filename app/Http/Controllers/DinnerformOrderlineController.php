@@ -88,14 +88,13 @@ class DinnerformOrderlineController extends Controller
         return view('dinnerform.admin-edit-order', ['dinnerformOrderline' => $dinnerOrderline]);
     }
 
-    public function update(Request $request, int $id): View
+    public function update(Request $request, int $id): RedirectResponse
     {
         $dinnerOrderline = DinnerformOrderline::query()->findOrFail($id);
         if ($dinnerOrderline->closed) {
-            $dinnerform = $dinnerOrderline->dinnerform;
             Session::flash('flash_message', 'You cannot update an order of a closed dinnerform!');
 
-            return view('dinnerform.admin', ['dinnerform' => $dinnerform, 'orderList' => $dinnerform->orderlines()->get()]);
+            return Redirect::route('dinnerform::admin', ['id' => $dinnerOrderline->dinnerform_id]);
         }
 
         $order = $request->input('order');
@@ -109,9 +108,8 @@ class DinnerformOrderlineController extends Controller
         ]);
         $dinnerOrderline->save();
 
-        $dinnerform = Dinnerform::query()->findOrFail($dinnerOrderline->dinnerform_id);
         Session::flash('flash_message', 'Your order has been updated!');
 
-        return view('dinnerform.admin', ['dinnerform' => $dinnerform, 'orderList' => $dinnerform->orderlines()->get()]);
+        return Redirect::route('dinnerform::admin', ['id' => $dinnerOrderline->dinnerform_id]);
     }
 }
