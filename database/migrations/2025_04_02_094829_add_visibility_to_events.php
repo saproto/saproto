@@ -14,7 +14,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->integer('visibility')->index()->default(VisibilityEnum::PUBLIC)->after('end');
+            $table->integer('visibility')->default(VisibilityEnum::PUBLIC)->after('end');
+            $table->index(['visibility', 'publication']);
         });
 
         Event::query()->chunk(25, static function ($events) {

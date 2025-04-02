@@ -85,19 +85,13 @@ class HomeController extends Controller
         $message = WelcomeMessage::query()->where('user_id', Auth::user()->id)->first();
 
         $upcomingEventQuery = Event::getEventBlockQuery()
-            ->where([
-                ['end', '>=', Carbon::now()->timestamp],
-                [static function ($query) {
-                    $query->where('publication', '<', Carbon::now()->timestamp)
-                        ->orWhereNull('publication');
-                }],
-            ])
+            ->where('end', '>=', Carbon::now()->timestamp)
             ->where(function ($query) {
                 $query->where('visibility', VisibilityEnum::PUBLIC)->orWhere(
-function ($query) {
-                    $query->where('visibility', VisibilityEnum::SCHEDULED)
-                        ->where('publication', '<=', Carbon::now());
-                }
+                    function ($query) {
+                        $query->where('visibility', VisibilityEnum::SCHEDULED)
+                            ->where('publication', '<=', Carbon::now()->timestamp);
+                    }
                 );
             })
             ->orderBy('start')
