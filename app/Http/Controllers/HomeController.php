@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipTypeEnum;
+use App\Enums\VisibilityEnum;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -85,13 +86,20 @@ class HomeController extends Controller
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
-                ['end', '>=', Carbon::now()->format('U')],
-                ['secret', false],
+                ['end', '>=', Carbon::now()->timestamp],
                 [static function ($query) {
-                    $query->where('publication', '<', Carbon::now()->format('U'))
+                    $query->where('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 }],
             ])
+            ->where(function ($query) {
+                $query->where('visibility', VisibilityEnum::PUBLIC)->orWhere(
+function ($query) {
+                    $query->where('visibility', VisibilityEnum::SCHEDULED)
+                        ->where('publication', '<=', Carbon::now());
+                }
+                );
+            })
             ->orderBy('start')
             ->limit(6);
 

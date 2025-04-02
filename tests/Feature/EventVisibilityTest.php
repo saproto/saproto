@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\VisibilityEnum;
 use App\Models\Event;
 use App\Models\Member;
 use App\Models\User;
@@ -12,28 +13,27 @@ dataset('users', [
 
 dataset('private events', [
     'secret' => [fn () => Event::factory()->create([
-        'secret' => true,
+        'visibility'=> VisibilityEnum::SECRET,
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
     ]), 'This event is not shown on the site'],
     'unpublished' => [fn () => Event::factory()->create([
-        'secret' => false,
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
         'publication' => Carbon::now()->addHours(2),
+        'visibility'=> VisibilityEnum::SCHEDULED,
     ]), 'This event is scheduled'],
 ]);
 
 dataset('public events', [
     'normal' => [fn () => Event::factory()->create([
-        'secret' => false,
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
     ])],
     'published' => [fn () => Event::factory()->create([
-        'secret' => false,
         'start' => Carbon::now()->addDay(),
         'end' => Carbon::now()->addDays(2),
+        'visibility'=> VisibilityEnum::SCHEDULED,
         'publication' => Carbon::now()->subHours(2),
     ])],
 ]);
