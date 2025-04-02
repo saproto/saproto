@@ -55,29 +55,6 @@
                 background-position: center 100%;
                 background-repeat: no-repeat;
             }
-
-            @keyframes alarm {
-                0% {
-                    background-color: white;
-                    color: red;
-                }
-                49% {
-                    background-color: white;
-                    color: red;
-                }
-                50% {
-                    background-color: red;
-                    color: white;
-                }
-                99% {
-                    background-color: red;
-                    color: white;
-                }
-                100% {
-                    background-color: white;
-                    color: red;
-                }
-            }
         </style>
     </head>
 
@@ -490,46 +467,23 @@
 
             function finishPurchase(display_message = null, sound = null) {
                 Object.values(modals).forEach((modal) => modal.hide())
-                const aprilFoolsDate = new Date('2025-04-01')
-                aprilFoolsDate.setHours(0, 0, 0, 0)
-                const today = new Date()
-                today.setHours(0, 0, 0, 0)
-                const aprilFools =
-                    Math.random() >= 0.6 &&
-                    today.getTime() == aprilFoolsDate.getTime()
-                let delay = aprilFools ? 8000 : 0
-                const alarm = document.getElementById('alarm-audio')
-                if (aprilFools) {
-                    modals['random-check-modal'].show()
-                    alarm.play()
+                if (display_message)
+                    document.getElementById(
+                        'finished-modal-message'
+                    ).innerHTML = `<span>${display_message}</span>`
+                document
+                    .getElementById('finished-modal-continue')
+                    .addEventListener('click', (_) => window.location.reload())
+                modals['finished-modal'].show()
+                const movie = document.getElementById('purchase-movie')
+                const audio = document.getElementById('purchase-audio')
+                movie.addEventListener('ended', (_) => window.location.reload())
+                if (sound) {
+                    audio.src = sound
+                    movie.muted = true
+                    audio.play()
                 }
-                setTimeout((_) => {
-                    if (aprilFools) {
-                        alarm.pause()
-                        modals['random-check-modal'].hide()
-                    }
-                    if (display_message)
-                        document.getElementById(
-                            'finished-modal-message'
-                        ).innerHTML = `<span>${display_message}</span>`
-                    document
-                        .getElementById('finished-modal-continue')
-                        .addEventListener('click', (_) =>
-                            window.location.reload()
-                        )
-                    modals['finished-modal'].show()
-                    const movie = document.getElementById('purchase-movie')
-                    const audio = document.getElementById('purchase-audio')
-                    movie.addEventListener('ended', (_) =>
-                        window.location.reload()
-                    )
-                    if (sound) {
-                        audio.src = sound
-                        movie.muted = true
-                        audio.play()
-                    }
-                    movie.play()
-                }, delay)
+                movie.play()
             }
 
             function createCartElement(index, id, amount, image) {
