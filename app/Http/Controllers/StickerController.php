@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\StickerPlacedEvent;
+use App\Events\StickerRemovedEvent;
 use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
@@ -103,6 +104,8 @@ class StickerController extends Controller
             return Redirect::back();
         }
 
+        StickerRemovedEvent::dispatch($sticker);
+
         $sticker->delete();
         $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
@@ -121,7 +124,22 @@ class StickerController extends Controller
             'report_reason' => $validated['report_reason'],
         ]);
 
-        return Redirect::back()->with('flash_message', 'Sticker reported successfully, it will not be visible for other users until the board has reviewed it.');
+        StickerRemovedEvent::dispatch($sticker);
+
+        return Redirect::back()->with('flash_message', 'Sticker reported successfully. It will not be visible for other users until the board has reviewed it.');
         // todo: send an email to alert the board, and the user that the sticker is reported from
+    }
+
+    public function unreport(Request $request, Sticker $sticker)
+    {
+        $sticker->update([
+            'reporter_id' => null,
+            'report_reason' => null,
+        ]);
+
+        StickerPlacedEvent::dispatch($sticker);
+
+        return Redirect::back()->with('flash_message', 'Sticker succesfully unreported. It will be visible for other users again.');
+        // todo: send an email to alert the user the sticker is from
     }
 }
