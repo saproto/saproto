@@ -18,6 +18,14 @@ class Sticker extends Model
     }
 
     /**
+     * @return BelongsTo<User, $this>
+     */
+    public function reporter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reporter_id');
+    }
+
+    /**
      * @return BelongsTo<StorageEntry, $this>
      */
     public function image(): BelongsTo
