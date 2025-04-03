@@ -22,27 +22,31 @@ class StickerController extends Controller
      */
     public function index()
     {
-        $stickers = Sticker::query()->with(['user', 'image'])->get()->map(fn ($item): array => [
-            'id' => $item->id,
-            'lat' => $item->lat,
-            'lng' => $item->lng,
-            'user' => $item->user->calling_name,
-            'image' => $item->image->generateImagePath(null, null),
-            'is_owner' => Auth::user()->id === $item->user->id || Auth::user()->can('board'),
-            'date' => $item->created_at->format('d-m-Y'),
-        ]);
+        $stickers = Sticker::query()
+            ->whereNull('reporter_id')
+            ->with(['user', 'image'])->get()->map(fn ($item): array => [
+                'id' => $item->id,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'user' => $item->user->calling_name,
+                'image' => $item->image->generateImagePath(null, null),
+                'is_owner' => Auth::user()->id === $item->user->id || Auth::user()->can('board'),
+                'date' => $item->created_at->format('d-m-Y'),
+            ]);
 
         return view('stickers.map', ['stickers' => $stickers]);
     }
 
     public function overviewMap()
     {
-        $stickers = Sticker::query()->with(['user'])->get()->map(fn ($item): array => [
-            'id' => $item->id,
-            'lat' => $item->lat,
-            'lng' => $item->lng,
-            'user' => $item->user->calling_name,
-        ]);
+        $stickers = Sticker::query()
+            ->whereNull('reporter_id')
+            ->with(['user'])->get()->map(fn ($item): array => [
+                'id' => $item->id,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'user' => $item->user->calling_name,
+            ]);
 
         return view('stickers.overviewmap', ['stickers' => $stickers]);
     }
@@ -91,9 +95,8 @@ class StickerController extends Controller
 
     public function update(Request $request, $id) {}
 
-    public function destroy($id)
+    public function destroy(Sticker $sticker)
     {
-        $sticker = Sticker::query()->findorFail($id);
         if (Auth::user()->id != $sticker->user->id && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
 
@@ -105,5 +108,20 @@ class StickerController extends Controller
         Session::flash('flash_message', 'Sticker deleted successfully');
 
         return Redirect::back();
+    }
+
+    public function report(Request $request, Sticker $sticker)
+    {
+        $validated = $request->validate([
+            'report_reason' => ['required', 'string', 'max:255', 'min:3'],
+        ]);
+
+        $sticker->update([
+            'reporter_id' => Auth::user()->id,
+            'report_reason' => $validated['report_reason'],
+        ]);
+
+        return Redirect::back()->with('flash_message', 'Sticker reported successfully, it will not be visible for other users until the board has reviewed it.');
+        // todo: send an email to alert the board, and the user that the sticker is reported from
     }
 }

@@ -23,6 +23,70 @@
 
     <div
         class="modal fade"
+        id="sticker-report-modal"
+        tabindex="-1"
+        role="dialog"
+    >
+        <div class="modal-dialog model-sm" role="document">
+            <form id="sticker-report-form" method="POST">
+                {{ csrf_field() }}
+                <input type="hidden" name="_method" value="POST" />
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Report a sticker</h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            The sticker you want to report
+                            <img
+                                id="sticker-report-image"
+                                class="mt-2"
+                                src=""
+                                style="width: 100%; display: block"
+                            />
+                        </div>
+                        <div>
+                            The reason you want to report this sticker
+                            <input
+                                type="text"
+                                class="form-control mt-2"
+                                name="report_reason"
+                                placeholder="Please provide a reason for reporting this sticker."
+                                minlength="3"
+                                maxlength="255"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            class="confirm-button btn btn-danger"
+                        >
+                            Report this sticker
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div
+        class="modal fade"
         id="sticker-confirm-delete-modal"
         tabindex="-1"
         role="dialog"
@@ -331,15 +395,14 @@
             }
 
             const detailsDiv = document.createElement('div')
-            detailsDiv.className =
-                'd-flex flex-row justify-content-between ms-2 me-2'
+            detailsDiv.className = 'm-2'
 
-            const ownerP = document.createElement('p')
+            const ownerP = document.createElement('div')
             ownerP.innerHTML = `Stuck by: ${marker.user ?? 'Legacy user'}`
             detailsDiv.appendChild(ownerP)
 
-            const dateP = document.createElement('p')
-            dateP.innerHTML = `date: ${marker.date}`
+            const dateP = document.createElement('div')
+            dateP.innerHTML = `On: ${marker.date}`
             detailsDiv.appendChild(dateP)
 
             popupContent.appendChild(detailsDiv)
@@ -355,6 +418,16 @@
                 })
                 popupContent.appendChild(removeButton)
             }
+
+            const reportButton = document.createElement('button')
+            reportButton.className = 'btn btn-sm'
+            reportButton.innerHTML =
+                '<i class="h5 fas mt-2 ms-2 fa-triangle-exclamation text-danger"></i>'
+            reportButton.addEventListener('click', function () {
+                reportSticker(marker)
+            })
+            popupContent.appendChild(reportButton)
+
             markerInstance.bindTooltip(marker.user, {
                 direction: 'top',
                 offset: [5, -55],
@@ -376,12 +449,21 @@
                     marker.id
                 )
 
-            window.modals['sticker-confirm-delete-modal'].action =
-                '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
+            window.modals['sticker-confirm-delete-modal'].show()
+        }
+
+        function reportSticker(marker) {
+            const reportImage = document.getElementById('sticker-report-image')
+            reportImage.src = marker.image
+
+            const reportForm = document.getElementById('sticker-report-form')
+            reportForm.action =
+                '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
                     'id',
                     marker.id
                 )
-            window.modals['sticker-confirm-delete-modal'].show()
+
+            window.modals['sticker-report-modal'].show()
         }
 
         document.addEventListener('DOMContentLoaded', function () {
