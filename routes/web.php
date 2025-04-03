@@ -457,6 +457,7 @@ Route::middleware('forcedomain')->group(function () {
     });
     Route::middleware(['auth', 'member'])->group(function () {
         Route::post('stickers/report/{sticker}', [StickerController::class, 'report'])->name('stickers.report');
+        Route::post('stickers/unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport')->middleware('permission:board');
         Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers.overviewmap');
         Route::resource('stickers', StickerController::class)->only(['index', 'store', 'destroy']);
     });

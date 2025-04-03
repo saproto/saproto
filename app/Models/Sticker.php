@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sticker extends Model
 {
-    protected $fillable = ['lat', 'lng', 'city', 'country', 'country_code'];
+    protected $fillable = ['lat', 'lng', 'city', 'country', 'country_code', 'reporter_id', 'user_id'];
 
     /**
      * @return BelongsTo<User, $this>

@@ -268,6 +268,11 @@
                     addMarkerToMap(marker)
                     updateMarkerCount()
                 })
+                .listen('StickerRemovedEvent', (marker) => {
+                    console.log('StickerRemovedEvent', marker)
+                    removeMarkerFromMap(marker.id)
+                    updateMarkerCount()
+                })
                 .error((error) => {
                     console.error(error)
                     setTimeout(() => {
@@ -280,6 +285,9 @@
         let currentZoom = url.searchParams.get('zoom') ?? 18
         let currentLat = url.searchParams.get('lat') ?? 52.23888875842265
         let currentLng = url.searchParams.get('lng') ?? 6.85738688030243
+
+        const markerInstances = new Map()
+
         var map = L.map('map', {
             minZoom: 3,
             inertia: true,
@@ -380,7 +388,14 @@
                 ],
             })
             bindMarkerPopup(marker, markerInstance)
+            markerInstances.set(marker.id, markerInstance)
             markers.addLayer(markerInstance)
+        }
+
+        function removeMarkerFromMap(markerId) {
+            const markerInstance = markerInstances.get(markerId)
+            markers.removeLayer(markerInstance)
+            markerInstances.delete(markerId)
         }
 
         function bindMarkerPopup(marker, markerInstance) {
@@ -451,17 +466,18 @@
 
             window.modals['sticker-confirm-delete-modal'].show()
         }
+        const reportForm = document.getElementById('sticker-report-form')
 
         function reportSticker(marker) {
             const reportImage = document.getElementById('sticker-report-image')
             reportImage.src = marker.image
 
-            const reportForm = document.getElementById('sticker-report-form')
             reportForm.action =
                 '{{ route('stickers.report', ['sticker' => 'id']) }}'.replace(
                     'id',
                     marker.id
                 )
+            reportForm.setAttribute('data-sticker-id', marker.id)
 
             window.modals['sticker-report-modal'].show()
         }
