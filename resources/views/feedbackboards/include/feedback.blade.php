@@ -2,15 +2,15 @@
     <div class="card-header bg-dark text-reset">
         <span data-id="{{ $feedback->id }}">
             <span class="votes d-inline-block">
-                {{ $feedback->voteScore() }}
+                {{ $feedback->votes_sum_vote ?? 0 }}
             </span>
             <span
-                class="{{ $feedback->userVote(Auth::user()) == 1 ? 'text-info' : 'text-white' }}"
+                class="{{ $feedback->user_vote == 1 ? 'text-info' : 'text-white' }}"
             >
                 <i class="upvote fas fa-thumbs-up cursor-pointer"></i>
             </span>
             <span
-                class="{{ $feedback->userVote(Auth::user()) == -1 ? 'text-danger' : 'text-white' }}"
+                class="{{ $feedback->user_vote == -1 ? 'text-danger' : 'text-white' }}"
             >
                 <i class="downvote fas fa-thumbs-down cursor-pointer"></i>
             </span>
