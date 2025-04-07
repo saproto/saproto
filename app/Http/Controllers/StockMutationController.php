@@ -64,7 +64,11 @@ class StockMutationController extends Controller
      */
     public function index(Request $rq)
     {
-        return view('omnomcom.products.mutations', ['mutations' => $this->filterMutations($rq)->paginate(15)]);
+        $mutations = $this->filterMutations($rq)
+            ->with(['product', 'user'])
+            ->paginate(15);
+
+        return view('omnomcom.products.mutations', ['mutations' => $mutations]);
     }
 
     public function generateCsv(Request $rq)

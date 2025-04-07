@@ -57,7 +57,7 @@
                                 el.querySelector('.downvote').parentElement
                             votes.innerHTML = data.voteScore
                             switch (data.userVote) {
-                                case 1:
+                                case '1':
                                     upvote.classList.replace(
                                         'text-white',
                                         'text-info'
@@ -67,7 +67,7 @@
                                         'text-white'
                                     )
                                     break
-                                case -1:
+                                case '-1':
                                     upvote.classList.replace(
                                         'text-info',
                                         'text-white'
