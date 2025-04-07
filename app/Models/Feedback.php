@@ -71,33 +71,4 @@ class Feedback extends Model
     {
         return $this->hasMany(FeedbackVote::class);
     }
-
-    public function voteScore(): int
-    {
-        return $this->votes()->sum('vote');
-    }
-
-    public function mayViewFeedback($user): bool
-    {
-        if (! $this->category->review) {
-            return true;
-        }
-
-        if ($this->reviewed) {
-            return true;
-        }
-
-        return $this->category->reviewer_id === $user->id;
-    }
-
-    public function userVote(User $user): int
-    {
-        /** @var FeedbackVote $vote */
-        $vote = $this->votes()->where('user_id', $user->id)->first();
-        if ($vote != null) {
-            return $vote->vote;
-        }
-
-        return 0;
-    }
 }
