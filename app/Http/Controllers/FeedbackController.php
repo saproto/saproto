@@ -49,9 +49,7 @@ class FeedbackController extends Controller
         return $category->feedback()
             ->orderBy('created_at', 'desc')
             ->with('votes')
-        ->when($category->review, function ($query) {
-            return $query->where('reviewed', true);
-        })
+            ->when($category->review, fn ($query) => $query->where('reviewed', true))
             ->withSum(['votes as user_vote' => function ($q) {
                 $q->where('user_id', Auth::user()->id);
             }], 'vote')
