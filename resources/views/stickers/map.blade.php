@@ -410,7 +410,7 @@
             }
 
             const detailsDiv = document.createElement('div')
-            detailsDiv.className = 'm-2'
+            detailsDiv.className = 'mx-2 mt-2'
 
             const ownerP = document.createElement('div')
             ownerP.innerHTML = `Stuck by: ${marker.user ?? 'Legacy user'}`
@@ -422,26 +422,31 @@
 
             popupContent.appendChild(detailsDiv)
 
+
+            const controlsDiv = document.createElement('div')
+            controlsDiv.className = 'w-100 d-inline-flex text-center justify-content-center'
             if (marker.is_owner) {
-                var removeButton = document.createElement('button')
+                const removeButton = document.createElement('button')
                 removeButton.className =
-                    'btn btn-sm position-absolute top-0 start-0'
+                    'btn btn-sm'
                 removeButton.innerHTML =
-                    '<i class="h5 fas mt-2 ms-2 fa-trash text-danger"></i>'
+                    '<i class="h5 fas fa-trash text-danger"></i>'
                 removeButton.addEventListener('click', function () {
                     removeSticker(marker)
                 })
-                popupContent.appendChild(removeButton)
+                controlsDiv.appendChild(removeButton)
             }
 
             const reportButton = document.createElement('button')
             reportButton.className = 'btn btn-sm'
             reportButton.innerHTML =
-                '<i class="h5 fas mt-2 ms-2 fa-triangle-exclamation text-danger"></i>'
+                '<i class="h5 fas fa-triangle-exclamation text-warning"></i>'
             reportButton.addEventListener('click', function () {
                 reportSticker(marker)
             })
-            popupContent.appendChild(reportButton)
+            controlsDiv.appendChild(reportButton)
+
+            popupContent.appendChild(controlsDiv)
 
             markerInstance.bindTooltip(marker.user, {
                 direction: 'top',
@@ -543,7 +548,9 @@
             buttonDiv.appendChild(cancelButton)
             popupContent.appendChild(buttonDiv)
 
-            tempMarker.bindPopup(popupContent).openPopup()
+            tempMarker.bindPopup(popupContent, {
+                closeButton: false
+            }).openPopup()
         }
 
         function confirmMarker(lat, lng) {
