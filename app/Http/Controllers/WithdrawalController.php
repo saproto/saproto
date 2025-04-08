@@ -50,25 +50,23 @@ class WithdrawalController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+            'max' => 'required|integer|min:1',
+        ]);
+
         $max = ($request->has('max') ? $request->input('max') : null);
         if ($max < 0) {
             $max = null;
         }
 
-        $date = Carbon::parse($request->input('date'))->getTimestamp();
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
-
-            return Redirect::back();
-        }
-
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
-            'date' => Carbon::now()->format('Y-m-d'),
+            'date' => $request->get('date'),
         ]);
 
         $totalPerUser = [];
-        foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
+        foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket', 'user')->get() as $orderline) {
             /** @var OrderLine $orderline */
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
@@ -156,20 +154,17 @@ class WithdrawalController extends Controller
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+        ]);
+
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
             return Redirect::back();
         }
 
-        $date = Carbon::parse($request->input('date'))->getTimestamp();
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
-
-            return Redirect::back();
-        }
-
-        $withdrawal->date = Carbon::now()->format('Y-m-d');
+        $withdrawal->date = $request->get('date');
         $withdrawal->save();
 
         Session::flash('flash_message', 'Withdrawal updated.');
@@ -256,7 +251,7 @@ class WithdrawalController extends Controller
         }
 
         /** @var User $user */
-        $user = User::query()->findOrFail($user_id);
+        $user = User::query()->withTrashed()->findOrFail($user_id);
 
         if (FailedWithdrawal::query()->where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
             Session::flash('flash_message', 'This withdrawal has already been marked as failed.');

@@ -20,12 +20,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 
 class OrderLineController extends Controller
 {
+    /**
+     * @throws ApiException
+     */
     public function index(?string $date = null)
     {
         $user = Auth::user();
+
+        try {
+            $date = $date !== null && $date !== '' && $date !== '0' ? Carbon::parse($date) : Carbon::now();
+        } catch (Exception) {
+            Session::flash('flash_message', 'Invalid date.');
+
+            return Redirect::back();
+        }
 
         $available_months = OrderLine::query()->where('user_id', $user->id)->select(
             DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
@@ -43,11 +55,9 @@ class OrderLineController extends Controller
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->with('product:name,id', 'molliePayment:id,status')
-            ->where('created_at', '>', Carbon::parse($date)->startOfMonth())
-            ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
+            ->where('created_at', '>', $date->copy()->startOfMonth())
+            ->where('created_at', '<=', $date->copy()->endOfMonth())
             ->get();
-
-        $selected_month = $date ?? Carbon::now()->format('Y-m');
 
         $outstanding = Activity::query()
             ->whereHas('users', static function (Builder $query) {
@@ -70,7 +80,7 @@ class OrderLineController extends Controller
         return view('omnomcom.orders.myhistory', [
             'withdrawals' => $withdrawals,
             'available_months' => $available_months,
-            'selected_month' => $selected_month,
+            'selected_month' => $date->copy()->format('Y-m'),
             'orderlines' => $orderlines,
             'next_withdrawal' => $next_withdrawal,
             'total' => $orderlines->sum('total_price'),

@@ -69,11 +69,9 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::route('email::index');
-        }
+        $request->validate([
+            'time' => 'required|date_format:Y-m-d\TH:i',
+        ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
@@ -139,16 +137,14 @@ class EmailController extends Controller
         /** @var Email $email */
         $email = Email::query()->findOrFail($id);
 
+        $request->validate([
+            'time' => 'required|date_format:Y-m-d\TH:i',
+        ]);
+
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::index');
-        }
-
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::back();
         }
 
         $senderAddress = $request->input('sender_address');
