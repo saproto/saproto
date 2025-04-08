@@ -109,12 +109,12 @@ class Committee extends Model
     public function pastEvents(): Builder
     {
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
-        ->unless(Auth::user()?->can('board'), static function ($q) {
+            ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 });
-        })->reorder('start', 'desc');
+            })->reorder('start', 'desc');
     }
 
     public function upcomingEvents(): Builder
