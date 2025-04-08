@@ -57,9 +57,11 @@ class CommitteeController extends Controller
             abort(404);
         }
 
+
         $pastEvents = $committee->pastEvents()->take(6)->get();
         $upcomingEvents = $committee->upcomingEvents()->get();
         $pastHelpedEvents = $committee->pastHelpedEvents()->take(6)->get();
+
 
         return view('committee.show', [
             'committee' => $committee,
