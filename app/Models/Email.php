@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -36,8 +36,9 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|StorageEntry[] $attachments
- * @property-read Collection|\Illuminate\Support\Facades\Event[] $events
+ * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
+ * @property-read Collection|User[] $recipients
  *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)

@@ -49,6 +49,7 @@ class UserFactory extends Factory
             'theme' => fake()->randomElement(array_keys(Config::array('proto.themes'))),
             'did_study_create' => fake()->boolean(25),
             'did_study_itech' => fake()->boolean(25),
+            'pref_calendar_relevant_only' => fake()->boolean(),
         ];
     }
 }

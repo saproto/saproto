@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Achievement;
 use App\Models\AchievementOwnership;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -52,7 +52,6 @@ class AchievementController extends Controller
         $achievement = new Achievement;
         $achievement->name = $request->name;
         $achievement->desc = $request->desc;
-        $achievement->fa_icon = $request->fa_icon;
         $achievement->tier = $request->tier;
         $achievement->has_page = $request->has('has_page');
         $achievement->page_content = $request->page_content;
@@ -76,7 +75,6 @@ class AchievementController extends Controller
         $achievement = Achievement::query()->findOrFail($id);
         $achievement->name = $request->name;
         $achievement->desc = $request->desc;
-        $achievement->fa_icon = $request->fa_icon;
         $achievement->tier = $request->tier;
         $achievement->has_page = $request->has('has_page');
         $achievement->page_content = $request->page_content;
@@ -212,6 +210,9 @@ class AchievementController extends Controller
 
     public function icon(int $id, Request $request): RedirectResponse
     {
+        $request->validate([
+            'fa_icon' => ['required', 'string', 'max:255', 'starts_with:fa'],
+        ]);
         /** @var Achievement $achievement */
         $achievement = Achievement::query()->findOrFail($id);
         $achievement->fa_icon = $request->fa_icon;

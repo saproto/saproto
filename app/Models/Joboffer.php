@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Job Offer Model.
@@ -38,8 +38,9 @@ class Joboffer extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function company()
+    /**
+     * @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id');
     }

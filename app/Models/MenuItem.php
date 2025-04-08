@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Menu Item Model.
@@ -55,7 +55,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return HasMany<\App\Models\MenuItem, $this>
+     * @return HasMany<MenuItem, $this>
      */
     public function children(): HasMany
     {
@@ -63,7 +63,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return BelongsTo<\App\Models\MenuItem, $this>
+     * @return BelongsTo<MenuItem, $this>
      */
     public function parent(): BelongsTo
     {

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
@@ -46,13 +47,13 @@ class FeeCron extends Command
      */
     public function handle(): int
     {
-        if (intval(date('n')) == 8 || intval(date('n')) == 9) {
+        if (intval(Carbon::now()->format('n')) == 8 || intval(Carbon::now()->format('n')) == 9) {
             $this->info("We don't charge membership fees in August or September.");
 
             return 0;
         }
 
-        $yearstart = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+        $yearstart = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
 
         $usersToCharge = User::query()->whereHas('member', function ($q) {
             $q->whereNot('membership_type', MembershipTypeEnum::PENDING);

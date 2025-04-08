@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
@@ -111,16 +111,15 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
-    /** @param Builder<Member> $query */
+    /** @param Builder<$this> $query */
     public function scopePrimary(Builder $query): Builder
     {
-        /** @phpstan-ignore-next-line */
         return $query->type(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');
     }
 
-    /** @param Builder<Member> $query */
+    /** @param Builder<$this> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);
@@ -147,7 +146,7 @@ class Member extends Model
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -104,7 +105,7 @@ class Ticket extends Model
 
     public function isOnSale(): bool
     {
-        return date('U') > $this->available_from && date('U') < $this->available_to;
+        return Carbon::now()->format('U') > $this->available_from && Carbon::now()->format('U') < $this->available_to;
     }
 
     public function isAvailable(User $user): bool

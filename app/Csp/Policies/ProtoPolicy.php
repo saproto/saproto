@@ -49,6 +49,9 @@ class ProtoPolicy extends Policy
                 'https://www.gstatic.com/recaptcha/',
                 'https://www.google.com/recaptcha/api.js',
                 'https://www.gstatic.com/recaptcha/',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+                'https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js',
+                'https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -57,12 +60,17 @@ class ProtoPolicy extends Policy
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
                 'https://fonts.googleapis.com/css2',
+                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css',
+                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css',
+                'https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
             ->addDirective(Directive::IMG, [
                 Keyword::SELF,
                 '*',
                 'data:',
+                'blob:',
             ])
             ->addDirective(Directive::MEDIA, [
                 Keyword::SELF,
@@ -96,6 +104,7 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://cdn.jsdelivr.net/npm/chart.js',
+                'https://nominatim.openstreetmap.org/search',
                 'https://api.fontawesome.com/',
                 'https://www.google.com/recaptcha/',
                 ...['https://websockets.saproto.nl:*', 'ws://websockets.saproto.nl:*', 'wss://websockets.saproto.nl:*'],

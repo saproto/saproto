@@ -37,21 +37,20 @@ class EmailList extends Model
     protected $guarded = ['id'];
 
     /** @return BelongsToMany */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'users_mailinglists', 'list_id', 'user_id');
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether user is subscribed to mailing list.
      */
-    public function isSubscribed($user): bool
+    public function isSubscribed(User $user): bool
     {
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    /** @param Builder<EmailList> $query */
+    /** @param Builder<$this> $query */
     public function scopeSubscribed(Builder $query, User $user)
     {
         return $query->whereHas('users', function ($q) use ($user) {
@@ -60,10 +59,9 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether user is successfully subscribed to mailing list.
      */
-    public function subscribe($user): bool
+    public function subscribe(User $user): bool
     {
         if (! $this->isSubscribed($user)) {
             EmailListSubscription::query()->create([
@@ -78,12 +76,12 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
      *
      * @throws Exception
      */
-    public function unsubscribe($user): bool
+    public function unsubscribe(User $user): bool
     {
         $s = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id);
         if ($s == null) {

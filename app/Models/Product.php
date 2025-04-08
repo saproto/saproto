@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Http\Controllers\WallstreetController;
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * Product Model.
@@ -157,8 +157,8 @@ class Product extends Model
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'payed_with_cash' => ($withCash === true ? date('Y-m-d H:i:s') : null),
-            'payed_with_bank_card' => ($withBankCard === true ? date('Y-m-d H:i:s') : null),
+            'payed_with_cash' => ($withCash === true ? Carbon::now()->format('Y-m-d H:i:s') : null),
+            'payed_with_bank_card' => ($withBankCard === true ? Carbon::now()->format('Y-m-d H:i:s') : null),
             'description' => $description == '' ? null : $description,
             'authenticated_by' => $auth_method,
         ]);

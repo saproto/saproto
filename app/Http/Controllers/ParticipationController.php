@@ -116,13 +116,13 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
-        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
-            $event->updateUniqueUsersCount();
-        }
-
         $participation = new ActivityParticipation;
         $participation->fill($data);
         $participation->save();
+
+        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
+            $event->updateUniqueUsersCount();
+        }
 
         $help_committee = ($helping->committee->name ?? null);
 

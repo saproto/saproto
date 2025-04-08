@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * Feedback model.
@@ -70,34 +70,5 @@ class Feedback extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(FeedbackVote::class);
-    }
-
-    public function voteScore(): int
-    {
-        return $this->votes()->sum('vote');
-    }
-
-    public function mayViewFeedback($user): bool
-    {
-        if (! $this->category->review) {
-            return true;
-        }
-
-        if ($this->reviewed) {
-            return true;
-        }
-
-        return $this->category->reviewer_id === $user->id;
-    }
-
-    public function userVote(User $user): int
-    {
-        /** @var FeedbackVote $vote */
-        $vote = $this->votes()->where('user_id', $user->id)->first();
-        if ($vote != null) {
-            return $vote->vote;
-        }
-
-        return 0;
     }
 }

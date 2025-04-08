@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class WallstreetDrink.
@@ -26,7 +26,7 @@ class WallstreetDrink extends Model
 
     public function isCurrent(): bool
     {
-        return $this->start_time <= time() && $this->end_time >= time();
+        return $this->start_time <= Carbon::now()->getTimestamp() && $this->end_time >= Carbon::now()->getTimestamp();
     }
 
     /**

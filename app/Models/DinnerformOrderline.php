@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * DinnerformOrderline Model.
@@ -50,7 +50,9 @@ class DinnerformOrderline extends Model
         return $this->belongsTo(Dinnerform::class);
     }
 
-    /** @return float Price of orderline reduced by possible discounts. */
+    /**
+     * @return Attribute Price of orderline reduced by possible discounts.
+     */
     protected function priceWithDiscount(): Attribute
     {
         return Attribute::make(get: function (): float|int {

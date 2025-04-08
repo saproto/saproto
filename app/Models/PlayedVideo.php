@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Played Video Model.
@@ -53,15 +53,15 @@ class PlayedVideo extends Model
         return "https://img.youtube.com/vi/{$youtube_id}/mqdefault.jpg";
     }
 
-    public static function generateSpotifyUri(string $spotify_id): string
+    public function generateSpotifyUri(): string
     {
-        $spotify_id = str_replace('spotify:track:', '', $spotify_id);
+        $spotify_id = str_replace('spotify:track:', '', $this->spotify_id);
 
         return "https://open.spotify.com/track/{$spotify_id}";
     }
 
-    public static function generateYoutubeUrl(string $youtube_id): string
+    public function generateYoutubeUrl(): string
     {
-        return "https://www.youtube.com/watch?v={$youtube_id}";
+        return "https://www.youtube.com/watch?v={$this->video_id}";
     }
 }

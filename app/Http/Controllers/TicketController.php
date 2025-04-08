@@ -10,6 +10,7 @@ use App\Models\TicketPurchase;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
@@ -144,7 +145,7 @@ class TicketController extends Controller
         }
 
         if ($ticket) {
-            $ticket->scanned = date('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
             $ticket->save();
             Session::flash('flash_message', 'Ticket has been scanned!');
         } else {
@@ -223,7 +224,7 @@ class TicketController extends Controller
                 ];
             }
 
-            $ticket->scanned = date('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
             if ($unscan) {
                 $ticket->scanned = null;
             }

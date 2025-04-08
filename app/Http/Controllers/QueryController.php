@@ -9,8 +9,9 @@ use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
 use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -25,9 +26,9 @@ class QueryController extends Controller
     public function activityOverview(Request $request): View
     {
         if ($request->missing('start') || $request->missing('end')) {
-            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+            $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
             $start = strtotime("{$year_start}-09-01 00:00:01");
-            $end = date('U');
+            $end = Carbon::now()->format('U');
         } else {
             $start = strtotime($request->start);
             $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
@@ -47,6 +48,7 @@ class QueryController extends Controller
     public function membershipTotals(Request $request)
     {
         $utQuery = User::query()->whereHas('member', function ($q) {
+            /** @var Builder<Member> $q */
             $q->primary()->whereHas('UtAccount', function ($q) {
                 $q->where('department', 'like', '%CREA%')->orWhere('department', 'like', '%TECH%');
             });
@@ -57,7 +59,7 @@ class QueryController extends Controller
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
+                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', Carbon::now()->format('d_m_Y')),
             ];
 
             return Response::make(view('queries.export_subsidies', ['users' => $export_subsidies]), 200, $headers);
@@ -72,7 +74,7 @@ class QueryController extends Controller
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', date('d_m_Y')),
+                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', Carbon::now()->format('d_m_Y')),
             ];
 
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
@@ -105,9 +107,9 @@ class QueryController extends Controller
     public function activityStatistics(Request $request): View
     {
         if ($request->missing('start') || $request->missing('end')) {
-            $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+            $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
             $start = strtotime("{$year_start}-09-01 00:00:01");
-            $end = date('U');
+            $end = Carbon::now()->format('U');
         } else {
             $start = Carbon::parse($request->start)->getTimestamp();
             $end = Carbon::parse($request->end)->addDay()->getTimestamp();

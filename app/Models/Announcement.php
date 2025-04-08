@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
@@ -129,7 +129,7 @@ class Announcement extends Model
 
     protected function showByTime(): Attribute
     {
-        return Attribute::make(get: fn (): bool => strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U'));
+        return Attribute::make(get: fn (): bool => strtotime($this->display_from) < Carbon::now()->format('U') && strtotime($this->display_till) > Carbon::now()->format('U'));
     }
 
     /**

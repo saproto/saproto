@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AchievementsCron extends Command
 {
@@ -97,6 +98,10 @@ class AchievementsCron extends Command
             66 => fn ($user): bool => $this->percentageParticipation($user, 25, $AmountOfSignupsThisMonth), // 25% Participation Trophee
             67 => fn ($user): bool => $this->percentageParticipation($user, 50, $AmountOfSignupsThisMonth), // 50% Participation Trophee
             68 => fn ($user): bool => $this->percentageParticipation($user, 75, $AmountOfSignupsThisMonth), // 75% Participation Trophee
+            83 => fn ($user): bool => $this->StickyFingers($user), // Place your first sticker on the map
+            84 => fn ($user): bool => $this->stickeredCountries($user, 3), // Stick it to them! Stickers in at least 3 countries
+            85 => fn ($user): bool => $this->stickeredCountries($user, 6), // Sticker Bomb: Stickers in at least 6 countries
+            86 => fn ($user): bool => $this->stickeredCountries($user, 12), // Sticker Ambassador: Stickers in at least 12 countries
         ];
 
         // Check if the specified achievements actually exist.
@@ -114,13 +119,16 @@ class AchievementsCron extends Command
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->with('committees:id', 'achievements:id')
+            ->withCount(['stickers as stickers_country_count' => function ($q) {
+                $q->select(DB::raw('count(distinct stickers.country_code)'));
+            }])->withExists('stickers as has_stickers')
             ->get();
 
         $totalUsers = $users->count();
 
         foreach ($users as $index => $user) {
             $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
-            $alreadyAchieved = $user->achievements->pluck('achievement.id')->toArray();
+            $alreadyAchieved = $user->achievements->pluck('id')->toArray();
             foreach ($achievements as $id => $check) {
                 if (in_array($id, $alreadyAchieved)) {
                     continue;
@@ -166,6 +174,16 @@ class AchievementsCron extends Command
     private function achievementBeast(User $user): bool
     {
         return $user->achievements->count() >= 10;
+    }
+
+    private function StickyFingers(User $user): bool
+    {
+        return $user->has_stickers;
+    }
+
+    private function stickeredCountries(User $user, int $nCountries): bool
+    {
+        return $user->stickers_country_count >= $nCountries;
     }
 
     /**

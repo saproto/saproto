@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Photo Likes Model.
@@ -34,8 +34,9 @@ class PhotoLikes extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function photo()
+    /**
+     * @return BelongsTo<Photo, $this> */
+    public function photo(): BelongsTo
     {
         return $this->belongsTo(Photo::class, 'photo_id');
     }

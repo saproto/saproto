@@ -7,13 +7,13 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -24,7 +24,7 @@ use Illuminate\View\View;
 
 class FeedbackController extends Controller
 {
-    public function index(string $category): View
+    public function index(string $category)
     {
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
@@ -39,22 +39,21 @@ class FeedbackController extends Controller
         return $this->index('goodideas');
     }
 
-    public function quotes(): View
+    public function quotes()
     {
         return $this->index('quotes');
     }
 
     private function getFeedbackQuery(FeedbackCategory $category): HasMany
     {
-        $feedback = $category->feedback()
+        return $category->feedback()
             ->orderBy('created_at', 'desc')
-            ->with('votes');
-
-        if ($category->review) {
-            return $feedback->where('reviewed', true);
-        }
-
-        return $feedback;
+            ->with('votes')
+            ->when($category->review, fn ($query) => $query->where('reviewed', true))
+            ->withSum(['votes as user_vote' => function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            }], 'vote')
+            ->withSum('votes', 'vote');
     }
 
     private function getMostVoted(FeedbackCategory $category): Model|Feedback|null
@@ -249,8 +248,8 @@ class FeedbackController extends Controller
         }
 
         return response()->json([
-            'voteScore' => $feedback->voteScore(),
-            'userVote' => $feedback->userVote(Auth::user()),
+            'voteScore' => $feedback->votes()->sum('vote'),
+            'userVote' => $feedback->votes()->where('user_id', Auth::id())->sum('vote'),
         ]);
     }
 

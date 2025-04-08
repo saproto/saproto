@@ -7,11 +7,11 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\StorageEntry;
 use App\Models\User;
-use Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -27,7 +27,6 @@ class CommitteeController extends Controller
      */
     public function index(bool $showSociety = false)
     {
-
         if (Auth::user()?->can('board')) {
             $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();
 
@@ -35,9 +34,11 @@ class CommitteeController extends Controller
         }
 
         $data = Committee::query()->where(function ($q) use ($showSociety) {
-            $q->where('public', true)->orWhere(function ($q) use ($showSociety) {
-                $q->where('is_society', $showSociety)->whereHas('users', static function ($q) {
-                    $q->where('user_id', Auth::user()?->id);
+            $q->where('is_society', $showSociety)->where(function ($q) {
+                $q->where('public', true)->orWhere(function ($q) {
+                    $q->whereHas('users', static function ($q) {
+                        $q->where('user_id', Auth::user()?->id);
+                    });
                 });
             });
         })->orderBy('name')->get();
@@ -52,7 +53,9 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        abort_if(! $committee->public && ! Auth::user()?->can('board') && ! $committee?->isMember(Auth::user()), 404);
+        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user())) {
+            abort(404);
+        }
 
         $pastEvents = $committee->pastEvents()->take(6)->get();
         $upcomingEvents = $committee->upcomingEvents()->get();

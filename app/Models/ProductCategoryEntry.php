@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Product Category Entry Model.
@@ -41,14 +41,16 @@ class ProductCategoryEntry extends Model
         'rank' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
-    public function product()
+    /**
+     * @return BelongsTo<Product, $this> */
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    /** @return BelongsTo */
-    public function ProductCategory()
+    /**
+     * @return BelongsTo<ProductCategory, $this> */
+    public function ProductCategory(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class);
     }

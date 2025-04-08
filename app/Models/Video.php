@@ -47,8 +47,9 @@ class Video extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
-    public function event()
+    /**
+     * @return BelongsTo<Event, $this> */
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }

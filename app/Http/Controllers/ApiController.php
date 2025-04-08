@@ -14,9 +14,9 @@ use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Random\RandomException;
@@ -146,7 +146,7 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (ActivityParticipation::query()->where('user_id', $user->id)->get() as $activity_participation) {
+        foreach (ActivityParticipation::query()->with(['activity.event', 'help.committee'])->where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
                 'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
@@ -160,7 +160,7 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (OrderLine::query()->where('user_id', $user->id)->get() as $orderline) {
+        foreach (OrderLine::query()->with(['molliePayment', 'withdrawal', 'product'])->where('user_id', $user->id)->get() as $orderline) {
             $payment_method = null;
             if ($orderline->payed_with_cash) {
                 $payment_method = 'cash_cashier';
@@ -191,11 +191,11 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (EmailListSubscription::query()->where('user_id', $user->id)->get() as $list_subscription) {
+        foreach (EmailListSubscription::query()->with('emaillist')->where('user_id', $user->id)->get() as $list_subscription) {
             $data['list_subscription'][] = $list_subscription->emaillist ? $list_subscription->emaillist->name : null;
         }
 
-        foreach (AchievementOwnership::query()->where('user_id', $user->id)->get() as $achievement_granted) {
+        foreach (AchievementOwnership::query()->with('achievement')->where('user_id', $user->id)->get() as $achievement_granted) {
             $data['achievements'][] = [
                 'name' => $achievement_granted->achievement->name,
                 'description' => $achievement_granted->achievement->desc,
@@ -203,8 +203,18 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (PhotoLikes::query()->where('user_id', $user->id)->get() as $photo_like) {
+        foreach (PhotoLikes::query()->with('photo')->where('user_id', $user->id)->get() as $photo_like) {
             $data['liked_photos'][] = $photo_like->photo->url;
+        }
+
+        foreach ($user->stickers()->get() as $sticker) {
+            $data['stickers'][] = [
+                'lat' => $sticker->lat,
+                'lng' => $sticker->lng,
+                'city' => $sticker->city,
+                'country' => $sticker->country,
+                'country_code' => $sticker->country_code,
+            ];
         }
 
         foreach (FeedbackCategory::all() as $category) {
@@ -217,7 +227,7 @@ class ApiController extends Controller
                 ];
             }
 
-            foreach (FeedbackVote::query()->where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
+            foreach (FeedbackVote::query()->with('feedback')->where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
             })->get() as $feedbackVote) {
                 $data["liked_$category->url"][] = [

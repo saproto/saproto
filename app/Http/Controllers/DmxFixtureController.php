@@ -7,6 +7,7 @@ use App\Models\DmxFixture;
 use App\Models\DmxOverride;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -112,7 +113,7 @@ class DmxFixtureController extends Controller
         $channel_values = [];
 
         // Now we fill the preset channels.
-        $preset_colors = (date('G') > 6 && date('G') < 20 ? Config::array(Config::array('dmx.colors')[$preset], [50]) : [0, 0, 0, 0]);
+        $preset_colors = (Carbon::now()->format('G') > 6 && Carbon::now()->format('G') < 20 ? Config::array(Config::array('dmx.colors')[$preset], [50]) : [0, 0, 0, 0]);
         foreach (DmxFixture::query()->where('follow_timetable', true)->get() as $fixture) {
             $channel_values = self::setFixtureChannels($fixture, $channel_values, $preset_colors);
         }

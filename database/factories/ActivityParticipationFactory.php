@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**

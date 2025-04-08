@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
 
@@ -26,7 +26,7 @@ use Override;
  * @property bool $published
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \Illuminate\Support\Facades\Event|null $event
+ * @property-read Event|null $event
  * @property-read Photo $thumbPhoto
  * @property-read Collection|Photo[] $items
  *
@@ -59,9 +59,10 @@ class PhotoAlbum extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('published', fn (Builder $builder) => $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->where('published', true)));
-
-        static::addGlobalScope('private', fn (Builder $builder) => $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)));
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('published', fn (Builder $query) => $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->where('published', true)));
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('private', fn (Builder $query) => $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)));
     }
 
     /**
@@ -88,7 +89,7 @@ class PhotoAlbum extends Model
         return $this->hasMany(Photo::class, 'album_id');
     }
 
-    /** @param Builder<PhotoAlbum> $query */
+    /** @param Builder<$this> $query */
     public function scopeName(Builder $query, string $name): Builder
     {
         return $query->where('name', 'LIKE', '%'.$name.'%');

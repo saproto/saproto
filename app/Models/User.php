@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -21,14 +20,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Override;
-use Solitweb\DirectAdmin\DirectAdmin;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -207,7 +204,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsTo<\App\Models\StorageEntry, $this>
+     * @return BelongsTo<StorageEntry, $this>
      */
     public function photo(): BelongsTo
     {
@@ -215,7 +212,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Committee, $this>
+     * @return BelongsToMany<Committee, $this>
      */
     public function groups(): BelongsToMany
     {
@@ -231,7 +228,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\EmailList, $this>
+     * @return BelongsToMany<EmailList, $this>
      */
     public function lists(): BelongsToMany
     {
@@ -239,7 +236,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Achievement, $this>
+     * @return BelongsToMany<Achievement, $this>
      */
     public function achievements(): BelongsToMany
     {
@@ -247,7 +244,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return BelongsToMany<\App\Models\Ticket, $this>
+     * @return BelongsToMany<Ticket, $this>
      */
     public function tickets(): BelongsToMany
     {
@@ -265,7 +262,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Bank, $this>
+     * @return HasOne<Bank, $this>
      */
     public function bank(): HasOne
     {
@@ -273,7 +270,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Address, $this>
+     * @return HasOne<Address, $this>
      */
     public function address(): HasOne
     {
@@ -281,7 +278,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\Member, $this>
+     * @return HasOne<Member, $this>
      */
     public function member(): HasOne
     {
@@ -289,7 +286,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasOne<\App\Models\WelcomeMessage, $this>
+     * @return HasOne<WelcomeMessage, $this>
      */
     public function welcomeMessage(): HasOne
     {
@@ -297,7 +294,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\OrderLine, $this>
+     * @return HasMany<OrderLine, $this>
      */
     public function orderlines(): HasMany
     {
@@ -305,7 +302,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Tempadmin, $this>
+     * @return HasMany<Tempadmin, $this>
      */
     public function tempadmin(): HasMany
     {
@@ -313,7 +310,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Feedback, $this>
+     * @return HasMany<Feedback, $this>
      */
     public function feedback(): HasMany
     {
@@ -321,7 +318,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\RfidCard, $this>
+     * @return HasMany<RfidCard, $this>
      */
     public function rfid(): HasMany
     {
@@ -329,7 +326,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\Token, $this>
+     * @return HasMany<Token, $this>
      */
     public function tokens(): HasMany
     {
@@ -337,7 +334,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\PlayedVideo, $this>
+     * @return HasMany<PlayedVideo, $this>
      */
     public function playedVideos(): HasMany
     {
@@ -345,11 +342,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<\App\Models\MollieTransaction, $this>
+     * @return HasMany<MollieTransaction, $this>
      */
     public function mollieTransactions(): HasMany
     {
         return $this->hasMany(MollieTransaction::class);
+    }
+
+    /**
+     * @return HasMany<Sticker, $this>
+     */
+    public function stickers(): HasMany
+    {
+        return $this->hasMany(Sticker::class);
     }
 
     /**
@@ -374,24 +379,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         // Update Laravel Password
         $this->password = Hash::make($password);
         $this->save();
-
-        // Update DirectAdmin Password
-        if ($this->is_member && ! App::environment('local')) {
-            $da = new DirectAdmin;
-            $da->connect(Config::string('directadmin.da-hostname'), Config::string('directadmin.da-port'));
-            $da->set_login(Config::string('directadmin.da-username'), Config::string('directadmin.da-password'));
-            $da->set_method('POST');
-            $da->query('/CMD_API_POP', [
-                'action' => 'modify',
-                'domain' => Config::string('directadmin.da-domain'),
-                'user' => $this->member->proto_username,
-                'newuser' => $this->member->proto_username,
-                'passwd' => $password,
-                'passwd2' => $password,
-                'quota' => 0, // Unlimited
-                'limit' => 0, // Unlimited
-            ]);
-        }
 
         // Remove breach notification flag
         HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
@@ -437,7 +424,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasManyThrough<\App\Models\Withdrawal, \App\Models\OrderLine, $this>
+     * @return HasManyThrough<Withdrawal, OrderLine, $this>
      */
     public function withdrawals(): HasManyThrough
     {
@@ -573,7 +560,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
-    /** @return bool Whether user has a current membership that is not pending. */
+    /**
+     * @return Attribute Whether user has a current membership that is not pending.
+     */
     protected function isMember(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);

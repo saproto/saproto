@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Http\Controllers\FileController;
-use Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -54,25 +54,24 @@ class StorageEntry extends Model
      */
     public function isOrphan(): bool
     {
-        $id = $this->id;
-
         return
-            NarrowcastingItem::query()->where('image_id', $id)->count() == 0 &&
-            Page::query()->where('featured_image_id', $id)->count() == 0 &&
-            DB::table('pages_files')->where('file_id', $id)->count() == 0 &&
-            Product::query()->where('image_id', $id)->count() == 0 &&
-            Company::query()->where('image_id', $id)->count() == 0 &&
-            User::query()->where('image_id', $id)->count() == 0 &&
-            Member::withTrashed()->where('membership_form_id', $id)->count() == 0 &&
-            DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
-            Committee::query()->where('image_id', $id)->count() == 0 &&
-            Event::query()->where('image_id', $id)->count() == 0 &&
-            Newsitem::query()->where('featured_image_id', $id)->count() == 0 &&
-            SoundboardSound::query()->where('file_id', $id)->count() == 0 &&
-            HeaderImage::query()->where('image_id', $id)->count() == 0 &&
-            Photo::query()->withoutGlobalScopes()->where('file_id', $id)->count() == 0 &&
-            Member::query()->where('omnomcom_sound_id', $id)->count() == 0 &&
-            WallstreetEvent::query()->where('image_id', $id)->count() == 0;
+            NarrowcastingItem::query()->where('image_id', $this->id)->count() == 0 &&
+            Page::query()->where('featured_image_id', $this->id)->count() == 0 &&
+            DB::table('pages_files')->where('file_id', $this->id)->count() == 0 &&
+            Product::query()->where('image_id', $this->id)->count() == 0 &&
+            Company::query()->where('image_id', $this->id)->count() == 0 &&
+            User::query()->where('image_id', $this->id)->count() == 0 &&
+            Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
+            DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
+            Committee::query()->where('image_id', $this->id)->count() == 0 &&
+            Event::query()->where('image_id', $this->id)->count() == 0 &&
+            Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
+            SoundboardSound::query()->where('file_id', $this->id)->count() == 0 &&
+            HeaderImage::query()->where('image_id', $this->id)->count() == 0 &&
+            Photo::query()->withoutGlobalScopes()->where('file_id', $this->id)->count() == 0 &&
+            Member::query()->where('omnomcom_sound_id', $this->id)->count() == 0 &&
+            WallstreetEvent::query()->where('image_id', $this->id)->count() == 0 &&
+            Sticker::query()->where('file_id', $this->id)->count() == 0;
     }
 
     /**
@@ -82,7 +81,7 @@ class StorageEntry extends Model
     {
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d').'/'.$this->hash;
+        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
 
         if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
             $this->filename = $customPath.$this->hash;
@@ -99,7 +98,7 @@ class StorageEntry extends Model
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
-        $this->filename = date('Y\/F\/d').'/'.$this->hash;
+        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
@@ -114,7 +113,7 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(date('U').mt_rand(1, 99999999999));
+        return sha1(Carbon::now()->format('U').mt_rand(1, 99999999999));
     }
 
     public function generatePath(): string

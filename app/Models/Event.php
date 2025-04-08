@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -53,32 +53,32 @@ use Override;
  * @property-read Collection|Video[] $videos
  *
  * @method static bool|null forceDelete()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event onlyTrashed()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event withTrashed()
- * @method static QueryBuilder|\Illuminate\Support\Facades\Event withoutTrashed()
+ * @method static QueryBuilder|Event onlyTrashed()
+ * @method static QueryBuilder|Event withTrashed()
+ * @method static QueryBuilder|Event withoutTrashed()
  * @method static bool|null restore()
- * @method static Builder|\Illuminate\Support\Facades\Event whereCommitteeId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereCategoryId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereCreatedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereDeletedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereDescription($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereEnd($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereForceCalendarSync($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereImageId($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereInvolvesFood($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsEducational($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsExternal($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereIsFeatured($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereLocation($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereSecret($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereStart($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereSummary($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereTitle($value)
- * @method static Builder|\Illuminate\Support\Facades\Event whereUpdatedAt($value)
- * @method static Builder|\Illuminate\Support\Facades\Event newModelQuery()
- * @method static Builder|\Illuminate\Support\Facades\Event newQuery()
- * @method static Builder|\Illuminate\Support\Facades\Event query()
+ * @method static Builder|Event whereCommitteeId($value)
+ * @method static Builder|Event whereCategoryId($value)
+ * @method static Builder|Event whereCreatedAt($value)
+ * @method static Builder|Event whereDeletedAt($value)
+ * @method static Builder|Event whereDescription($value)
+ * @method static Builder|Event whereEnd($value)
+ * @method static Builder|Event whereForceCalendarSync($value)
+ * @method static Builder|Event whereId($value)
+ * @method static Builder|Event whereImageId($value)
+ * @method static Builder|Event whereInvolvesFood($value)
+ * @method static Builder|Event whereIsEducational($value)
+ * @method static Builder|Event whereIsExternal($value)
+ * @method static Builder|Event whereIsFeatured($value)
+ * @method static Builder|Event whereLocation($value)
+ * @method static Builder|Event whereSecret($value)
+ * @method static Builder|Event whereStart($value)
+ * @method static Builder|Event whereSummary($value)
+ * @method static Builder|Event whereTitle($value)
+ * @method static Builder|Event whereUpdatedAt($value)
+ * @method static Builder|Event newModelQuery()
+ * @method static Builder|Event newQuery()
+ * @method static Builder|Event query()
  *
  * @mixin Model
  */
@@ -253,12 +253,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < date('U') && $this->end > date('U');
+        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
     }
 
     public function over(): bool
     {
-        return $this->end < date('U');
+        return $this->end < Carbon::now()->format('U');
     }
 
     /**
@@ -303,7 +303,7 @@ class Event extends Model
             return true;
         }
 
-        if (date('U') > $this->end) {
+        if (Carbon::now()->format('U') > $this->end) {
             return false;
         }
 
@@ -380,7 +380,7 @@ class Event extends Model
 
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => date('U') < $this->start);
+        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
     protected function formattedDate(): Attribute

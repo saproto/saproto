@@ -55,6 +55,7 @@ use Override;
  * @method static Builder|OrderLine newModelQuery()
  * @method static Builder|OrderLine newQuery()
  * @method static Builder|OrderLine query()
+ * @method static Builder|OrderLine unpayed()
  *
  * @mixin Model
  */

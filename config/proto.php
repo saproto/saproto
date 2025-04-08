@@ -28,20 +28,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Additional Mailboxes
-    |--------------------------------------------------------------------------
-    |
-    | A lost of additional mailboxes to be created by the DirectAdmin sync.
-    | TODO: Should be moved to a database. :)
-    |
-    */
-
-    'additional_mailboxes' => [
-        'boardarchive',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Roles that require Two-Factor Authentication
     |--------------------------------------------------------------------------
     |
@@ -311,6 +297,17 @@ return [
         'bic' => env('SEPA_BIC'),
         'creditor_id' => env('SEPA_CI'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | GEO provider
+    |--------------------------------------------------------------------------
+    |
+    | the URL of the GEO provider we use to get the country of a sticker location
+    |
+    */
+
+    'geoprovider' => env('GEO_PROVIDER'),
 
     /*
     |--------------------------------------------------------------------------
