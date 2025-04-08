@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -80,7 +80,7 @@ use Override;
  * @method static Builder|Event newQuery()
  * @method static Builder|Event query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Event extends Model
 {
@@ -122,6 +122,9 @@ class Event extends Model
         return count($id) > 0 ? $id[0] : 0;
     }
 
+    /**
+     * @return BelongsTo<Committee, $this>
+     */
     public function committee(): BelongsTo
     {
         return $this->belongsTo(Committee::class);
@@ -176,31 +179,49 @@ class Event extends Model
         return $this->publication < Carbon::now()->timestamp;
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class);
     }
 
+    /**
+     * @return HasOne<Activity, $this>
+     */
     public function activity(): HasOne
     {
         return $this->hasOne(Activity::class);
     }
 
+    /**
+     * @return HasMany<Video, $this>
+     */
     public function videos(): HasMany
     {
         return $this->hasMany(Video::class);
     }
 
+    /**
+     * @return HasMany<PhotoAlbum, $this>
+     */
     public function albums(): HasMany
     {
         return $this->hasMany(PhotoAlbum::class, 'event_id');
     }
 
+    /**
+     * @return HasMany<Ticket, $this>
+     */
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'event_id');
     }
 
+    /**
+     * @return HasMany<Dinnerform, $this>
+     */
     public function dinnerforms(): HasMany
     {
         return $this->hasMany(Dinnerform::class, 'event_id');
@@ -232,12 +253,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < date('U') && $this->end > date('U');
+        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
     }
 
     public function over(): bool
     {
-        return $this->end < date('U');
+        return $this->end < Carbon::now()->format('U');
     }
 
     /**
@@ -282,7 +303,7 @@ class Event extends Model
             return true;
         }
 
-        if (date('U') > $this->end) {
+        if (Carbon::now()->format('U') > $this->end) {
             return false;
         }
 
@@ -357,19 +378,19 @@ class Event extends Model
         return $this->involves_food && $this->end > strtotime('-1 week');
     }
 
-    public function getIsFutureAttribute(): bool
+    protected function isFuture(): Attribute
     {
-        return date('U') < $this->start;
+        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
-    public function getFormattedDateAttribute(): object
+    protected function formattedDate(): Attribute
     {
-        return (object) [
+        return Attribute::make(get: fn () => (object) [
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
             'time' => date('H:i', $this->start),
-        ];
+        ]);
     }
 
     #[Override]

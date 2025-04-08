@@ -2,6 +2,7 @@
 
 use App\Models\Member;
 use App\Models\Newsitem;
+use Illuminate\Support\Carbon;
 
 it('shows members the news section on the homepage', function () {
     /** @var Member $member */
@@ -28,6 +29,7 @@ it('lets admins create news', function ($article) {
     /** @var Member $member */
     $member = Member::factory()->create();
     $member->user->assignRole('board');
+
     $response = $this->actingAs($member->user)
         ->get('/news/create');
 
@@ -38,7 +40,7 @@ it('lets admins create news', function ($article) {
         ->post('/news/store', $article);
 
     $this->assertDatabaseHas('newsitems', [
-        'title' => $article['title'] ?? 'Weekly update for week '.date('W').' of '.date('Y').'.',
+        'title' => $article['title'] ?? 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.',
         'content' => $article['content'],
         'is_weekly' => $article['is_weekly'],
     ]);

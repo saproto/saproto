@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Token Model.
@@ -27,7 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Token newQuery()
  * @method static Builder|Token query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Token extends Model
 {
@@ -35,6 +34,9 @@ class Token extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

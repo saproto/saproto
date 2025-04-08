@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
-use File;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Override;
 
 /**
@@ -41,7 +41,7 @@ use Override;
  * @method static Builder|Photo newQuery()
  * @method static Builder|Photo query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Photo extends Model
 {
@@ -56,30 +56,40 @@ class Photo extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('private', function (Builder $builder) {
-            $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('private', function (Builder $query) {
+            $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)
                 ->whereHas('album', function ($query) {
                     $query->where('private', false);
                 }));
         });
-
-        static::addGlobalScope('published', function (Builder $builder) {
-            $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->whereHas('album', function ($query) {
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('published', function (Builder $query) {
+            $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->whereHas('album', function ($query) {
                 $query->where('published', true);
             }));
         });
     }
 
+    /**
+     * @return BelongsTo<PhotoAlbum, $this>
+     */
     public function album(): BelongsTo
     {
         return $this->belongsTo(PhotoAlbum::class, 'album_id');
     }
 
+    /**
+     * @return HasMany<PhotoLikes, $this>
+     */
     public function likes(): HasMany
     {
         return $this->hasMany(PhotoLikes::class);
     }
 
+    /**
+     * @return HasOne<StorageEntry, $this>
+     */
     public function file(): HasOne
     {
         return $this->hasOne(StorageEntry::class, 'id', 'file_id');
@@ -145,9 +155,9 @@ class Photo extends Model
         return $this->file->generateImagePath(800, 300);
     }
 
-    public function getUrlAttribute(): string
+    protected function url(): Attribute
     {
-        return $this->file->generatePath();
+        return Attribute::make(get: fn () => $this->file->generatePath());
     }
 
     #[Override]

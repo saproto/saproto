@@ -9,6 +9,7 @@ use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
@@ -47,6 +48,7 @@ try {
         ->withImportNames(removeUnusedImports: true)
         ->withRules(
             [
+                RectorLaravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector::class,
                 ClassPropertyAssignToConstructorPromotionRector::class,
                 StringClassNameToClassConstantRector::class,
             ]
@@ -60,6 +62,7 @@ try {
             instanceOf: true,
             earlyReturn: true,
             strictBooleans: true,
+            carbon: true,
         )
         ->withSkip(
             [
@@ -69,6 +72,7 @@ try {
                 NullToStrictStringFuncCallArgRector::class,
                 AddClosureVoidReturnTypeWhereNoReturnRector::class,
                 RenamePropertyRector::class,
+                RenameClassRector::class,
                 __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {

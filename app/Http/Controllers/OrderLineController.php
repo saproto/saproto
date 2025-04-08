@@ -9,11 +9,11 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
-use Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +47,7 @@ class OrderLineController extends Controller
             ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
             ->get();
 
-        $selected_month = $date ?? date('Y-m');
+        $selected_month = $date ?? Carbon::now()->format('Y-m');
 
         $outstanding = Activity::query()
             ->whereHas('users', static function (Builder $query) {

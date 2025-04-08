@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
  * Class WallstreetDrink.
@@ -26,9 +26,12 @@ class WallstreetDrink extends Model
 
     public function isCurrent(): bool
     {
-        return $this->start_time <= time() && $this->end_time >= time();
+        return $this->start_time <= Carbon::now()->getTimestamp() && $this->end_time >= Carbon::now()->getTimestamp();
     }
 
+    /**
+     * @return BelongsToMany<Product, $this>
+     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
@@ -46,6 +49,9 @@ class WallstreetDrink extends Model
             });
     }
 
+    /**
+     * @return BelongsToMany<WallstreetEvent, $this>
+     */
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(WallstreetEvent::class, 'wallstreet_drink_event', 'wallstreet_drink_id', 'wallstreet_drink_events_id')->withPivot('id')->withTimestamps();

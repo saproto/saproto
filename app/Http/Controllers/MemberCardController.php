@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use PDF;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 
@@ -43,7 +44,7 @@ class MemberCardController extends Controller
         }
 
         $result = FileController::requestPrint('card', route('membercard::download', ['id' => $user->id]));
-        $user->member->card_printed_on = date('Y-m-d');
+        $user->member->card_printed_on = Carbon::now()->format('Y-m-d');
         $user->member->save();
 
         return 'The printer service responded: '.$result;

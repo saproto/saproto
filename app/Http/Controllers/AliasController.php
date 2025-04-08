@@ -17,15 +17,11 @@ class AliasController extends Controller
     /** @return View|RedirectResponse */
     public function index()
     {
-        $aliases = Alias::query()->orderBy('alias', 'asc')->get();
+        $aliases = Alias::query()->with('user')->orderBy('alias')->get()
+            ->groupBy('alias');
 
         if ($aliases->count() > 0) {
-            $data = [];
-            foreach ($aliases as $alias) {
-                $data[$alias->alias][] = $alias;
-            }
-
-            return view('aliases.index', ['aliases' => $data]);
+            return view('aliases.index', ['aliases' => $aliases]);
         }
 
         return Redirect::route('alias::create');

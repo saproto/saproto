@@ -85,6 +85,7 @@
                                 @php
                                     $children = $menuItem
                                         ->children()
+                                        ->with('page')
                                         ->orderBy('order')
                                         ->get();
                                 @endphp

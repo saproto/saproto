@@ -7,9 +7,9 @@ use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\StorageEntry;
 use App\Models\TicketPurchase;
-use Carbon\Carbon;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class WrappedController extends Controller
@@ -30,7 +30,7 @@ class WrappedController extends Controller
     }
 
     /**
-     * @return Collection|OrderLine[]
+     * @return Collection
      */
     public function getPurchases(Carbon $from, Carbon $to)
     {
