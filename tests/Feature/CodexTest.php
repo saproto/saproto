@@ -9,6 +9,7 @@ it('lists the codices for the senate', function () {
     /** @var Member $member * */
     $member = Member::factory()->create();
     $member->user->assignRole('senate');
+
     $response = $this->actingAs($member->user)
         ->get('/codex');
     $response->assertSee('Codices');
@@ -27,6 +28,7 @@ it('lets the senate create a new codex', function () {
     /** @var Member $member * */
     $member = Member::factory()->create();
     $member->user->assignRole('senate');
+
     $response = $this->actingAs($member->user)
         ->get('/codex/create');
     $response->assertSee('Codex details');

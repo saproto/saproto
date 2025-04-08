@@ -25,11 +25,17 @@ class CodexText extends Model
 
     protected $table = 'codex_texts';
 
+    /**
+     * @return BelongsTo<CodexTextType, $this>
+     */
     public function type(): BelongsTo
     {
         return $this->belongsTo(CodexTextType::class, 'type_id');
     }
 
+    /**
+     * @return BelongsToMany<Codex, $this>
+     */
     public function codices(): BelongsToMany
     {
         return $this->belongsToMany(Codex::class, 'codex_codex_text', 'text_id', 'codex');

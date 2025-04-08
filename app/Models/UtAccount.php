@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -46,6 +46,9 @@ class UtAccount extends Model
         'found',
     ];
 
+    /**
+     * @return BelongsTo<Member, $this>
+     */
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);

@@ -20,6 +20,9 @@ class CodexTextType extends Model
 
     protected $table = 'codex_text_types';
 
+    /**
+     * @return HasMany<CodexText, $this>
+     */
     public function texts(): HasMany
     {
         return $this->hasMany(CodexText::class, 'type_id');

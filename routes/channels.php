@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -11,3 +12,5 @@ Broadcast::channel('App.User.*', fn ($user, $userId): bool => (int) $user->id ==
 Broadcast::channel('wallstreet-prices.{wallstreetId}', fn ($user, $wallstreetId) => Auth::user()->can('tipcie'));
 
 Broadcast::channel('isalfredthere', fn ($user): true => true);
+
+Broadcast::channel('stickers', fn (User $user): bool => $user->is_member);

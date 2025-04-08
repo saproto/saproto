@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\StorageEntry;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
-use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -109,7 +108,7 @@ class WallstreetController extends Controller
     {
         /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
-        $drink->end_time = time();
+        $drink->end_time = Carbon::now()->getTimestamp();
         $drink->save();
         Session::flash('flash_message', 'Wallstreet drink closed.');
 
@@ -143,7 +142,7 @@ class WallstreetController extends Controller
 
     public static function active()
     {
-        return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
+        return WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->first();
     }
 
     public function getLatestPrices($drink)
@@ -227,6 +226,7 @@ class WallstreetController extends Controller
         $event->name = $request->input('title');
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
+
         $image = $request->file('image');
         if ($image) {
             $file = new StorageEntry;

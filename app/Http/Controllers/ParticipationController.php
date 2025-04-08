@@ -115,9 +115,9 @@ class ParticipationController extends Controller
 
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
+        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
             abort(403, 'You are helping at '.$event->title.'.');
-        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
+        } elseif ($event->activity->getParticipation($user) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif ($event->activity->closed) {
             abort(403, 'This activity is closed, you cannot change participation anymore.');
@@ -125,13 +125,13 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
-        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
-            $event->updateUniqueUsersCount();
-        }
-
         $participation = new ActivityParticipation;
         $participation->fill($data);
         $participation->save();
+
+        if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
+            $event->updateUniqueUsersCount();
+        }
 
         $help_committee = ($helping->committee->name ?? null);
 

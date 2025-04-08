@@ -25,7 +25,7 @@
         <tr style="margin: 0; padding: 0; border: none">
             <td style="margin: 0; padding: 10px 20px; border: none">
                 <p>
-                    <strong>Votes {{ $feedback->voteScore() }}</strong>
+                    <strong>Votes {{ $feedback->votes_sum_vote }}</strong>
                     <img
                         alt="Thumbs up"
                         style="width: 15px"

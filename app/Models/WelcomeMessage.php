@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Welcome Message Model.
@@ -28,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|WelcomeMessage newQuery()
  * @method static Builder|WelcomeMessage query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class WelcomeMessage extends Model
 {
@@ -38,8 +37,9 @@ class WelcomeMessage extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function user()
+    /**
+     * @return BelongsTo<User, $this> */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

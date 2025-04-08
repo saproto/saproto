@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxFixture newQuery()
  * @method static Builder|DmxFixture query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class DmxFixture extends Model
 {

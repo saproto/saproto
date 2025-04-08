@@ -3,14 +3,13 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 
@@ -39,6 +38,7 @@ use Illuminate\Support\Facades\DB;
  * @property-read Collection|StorageEntry[] $attachments
  * @property-read Collection|Event[] $events
  * @property-read Collection|EmailList[] $lists
+ * @property-read Collection|User[] $recipients
  *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)
@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|Email newQuery()
  * @method static Builder|Email query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Email extends Model
 {
@@ -72,16 +72,25 @@ class Email extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return BelongsToMany<EmailList, $this>
+     */
     public function lists(): BelongsToMany
     {
         return $this->belongsToMany(EmailList::class, 'emails_lists', 'email_id', 'list_id');
     }
 
+    /**
+     * @return BelongsToMany<Event, $this>
+     */
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
     }
 
+    /**
+     * @return BelongsToMany<StorageEntry, $this>
+     */
     public function attachments(): BelongsToMany
     {
         return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
@@ -201,20 +210,6 @@ class Email extends Model
         }
 
         return implode(', ', $events);
-    }
-
-    public function getListName(): string
-    {
-        $lists = [];
-        if (! $this->to_list) {
-            return '';
-        }
-
-        foreach ($this->lists as $list) {
-            $lists[] = $list->name;
-        }
-
-        return implode(', ', $lists);
     }
 
     public static function getListUnsubscribeFooter($user_id, $email_id): string

@@ -18,13 +18,13 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Models\WelcomeMessage;
 use App\Rules\NotUtwenteEmail;
-use DateTime;
 use Exception;
 use Google\Service\Directory;
 use Google\Service\Directory\User as GoogleUser;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -151,7 +151,7 @@ class AuthController extends Controller
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
             'name' => 'required|string',
             'calling_name' => 'required|string',
-            'g-recaptcha-response' => 'required|recaptcha',
+            'g-recaptcha-response' => 'required|captcha',
             'privacy_policy_acceptance' => 'present',
         ]);
 
@@ -341,7 +341,7 @@ class AuthController extends Controller
      */
     public function getPasswordReset(string $token): RedirectResponse|View
     {
-        PasswordReset::query()->where('valid_to', '<', date('U'))->delete();
+        PasswordReset::query()->where('valid_to', '<', Carbon::now()->format('U'))->delete();
         $reset = PasswordReset::query()->where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
@@ -354,7 +354,7 @@ class AuthController extends Controller
 
     public function postPasswordReset(Request $request): RedirectResponse
     {
-        PasswordReset::query()->where('valid_to', '<', date('U'))->delete();
+        PasswordReset::query()->where('valid_to', '<', Carbon::now()->format('U'))->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
@@ -639,7 +639,7 @@ class AuthController extends Controller
         if ($user != null && Hash::check($password, $user->password)) {
             if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
+                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => Carbon::now()->format('r')]);
             }
 
             return $user;
@@ -840,7 +840,7 @@ class AuthController extends Controller
         $response
             ->addAssertion($assertion = new Assertion)
             ->setID(Helper::generateID())
-            ->setIssueInstant(new DateTime)
+            ->setIssueInstant(Carbon::now())
             ->setDestination($destination)
             ->setIssuer(new Issuer($issuer))
             ->setStatus(new Status(new StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
@@ -850,7 +850,7 @@ class AuthController extends Controller
 
         $assertion
             ->setId(Helper::generateID())
-            ->setIssueInstant(new DateTime)
+            ->setIssueInstant(Carbon::now())
             ->setIssuer(new Issuer($issuer))
             ->setSubject(
                 (new Subject)
@@ -864,15 +864,15 @@ class AuthController extends Controller
                             ->setSubjectConfirmationData(
                                 (new SubjectConfirmationData)
                                     ->setInResponseTo($authnRequest->getId())
-                                    ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
+                                    ->setNotOnOrAfter(Carbon::parse('+1 MINUTE'))
                                     ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
                             )
                     )
             )
             ->setConditions(
                 (new Conditions)
-                    ->setNotBefore(new DateTime)
-                    ->setNotOnOrAfter(new DateTime('+1 MINUTE'))
+                    ->setNotBefore(Carbon::now())
+                    ->setNotOnOrAfter(Carbon::parse('+1 MINUTE'))
                     ->addItem(
                         new AudienceRestriction($audience)
                     )
@@ -902,7 +902,7 @@ class AuthController extends Controller
             )
             ->addItem(
                 (new AuthnStatement)
-                    ->setAuthnInstant(new DateTime('-10 MINUTE'))
+                    ->setAuthnInstant(Carbon::parse('-10 MINUTE'))
                     ->setSessionIndex('_some_session_index')
                     ->setAuthnContext(
                         (new AuthnContext)

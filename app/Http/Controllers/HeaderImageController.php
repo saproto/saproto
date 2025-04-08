@@ -16,7 +16,7 @@ class HeaderImageController extends Controller
     /** @return View */
     public function index()
     {
-        return view('headerimages.index', ['images' => HeaderImage::query()->paginate(5)]);
+        return view('headerimages.index', ['images' => HeaderImage::query()->with('user')->paginate(5)]);
     }
 
     /** @return View */

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
 class Newsletter extends Mailable
@@ -27,7 +28,7 @@ class Newsletter extends Mailable
     {
         return $this
             ->from('internal@'.Config::string('proto.emaildomain'), Config::string('proto.internal'))
-            ->subject('S.A. Proto Weekly Newsletter (Week '.date('W').')')
+            ->subject('S.A. Proto Weekly Newsletter (Week '.Carbon::now()->format('W').')')
             ->view('emails.newsletter');
     }
 }

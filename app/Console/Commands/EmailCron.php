@@ -4,8 +4,9 @@ namespace App\Console\Commands;
 
 use App\Mail\ManualEmail;
 use App\Models\Email;
-use Carbon;
+use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 
@@ -37,24 +38,33 @@ class EmailCron extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws Exception
      */
     public function handle(): void
     {
-
         // Send admin created e-mails.
-        $emails = Email::query()->where('sent', false)->where('ready', true)->where('time', '<', Carbon::now()->getTimestamp())->get();
+        $emails = Email::query()
+            ->with(['events'])
+            ->where('sent', false)
+            ->where('ready', true)
+            ->where('time', '<', Carbon::now()->getTimestamp())
+            ->get();
+
         $this->info('There are '.$emails->count().' queued e-mails.');
 
         foreach ($emails as $email) {
             /** @var Email $email */
             $this->info('Sending e-mail <'.$email->subject.'>');
+            $recipients = $email->recipients();
 
-            $email->ready = false;
-            $email->sent = true;
-            $email->sent_to = $email->recipients()->count();
-            $email->save();
+            $email->update([
+                'sent' => true,
+                'sent_to' => $recipients->count(),
+                'ready' => false,
+            ]);
 
-            foreach ($email->recipients() as $recipient) {
+            foreach ($recipients as $recipient) {
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
                         $email->sender_address.'@'.Config::string('proto.emaildomain'),
@@ -64,13 +74,13 @@ class EmailCron extends Command
                         $email->attachments,
                         $email->destinationForBody(),
                         $recipient->id,
-                        $email->events()->get(),
+                        $email->events,
                         $email->id
                     )
                     )->onQueue('medium'));
             }
 
-            $this->info('Sent to '.$email->recipients()->count().' people.');
+            $this->info('Sent to '.$recipients->count().' people.');
         }
 
         $this->info(($emails->count() > 0 ? 'All e-mails sent.' : 'No e-mails to be sent.'));

@@ -32,6 +32,15 @@ return [
             'col_override' => 3,
             'alcohol_time_constraint' => false,
         ],
+        'alfred' => [
+            'name' => "Alfred's nook",
+            'categories' => [20],
+            'addresses' => [],
+            'roles' => ['board', 'alfred'],
+            'cash_allowed' => false,
+            'bank_card_allowed' => false,
+            'alcohol_time_constraint' => false,
+        ],
     ],
 
     'cookiemonsters' => [
@@ -174,13 +183,15 @@ return [
     | Times for buying alcoholic beverages
     |--------------------------------------------------------------------------
     |
-    | Defines the times between which alcohol can be bought in Omnomcom.
+    | Defines the hours between which alcohol can be bought in Omnomcom.
     | The end-time needs to be a time on the next day.
+    | So alcohol-start hour 14 till alcohol-end-hour 8 means that alcohol
+    | can be bought from 14:00 till 08:00.
     |
     */
 
-    'alcohol-start' => '14:00',
-    'alcohol-end' => '08:00',
+    'alcohol-start-hour' => 14,
+    'alcohol-end-hour' => 8,
 
     /*
     |--------------------------------------------------------------------------

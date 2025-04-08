@@ -24,7 +24,6 @@ class HomeController extends Controller
     /** Display the homepage. */
     public function show()
     {
-
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')
@@ -64,7 +63,7 @@ class HomeController extends Controller
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->where('show_birthday', true)
-            ->where('birthdate', 'LIKE', date('%-m-d'))
+            ->where('birthdate', 'LIKE', Carbon::now()->format('%-m-d'))
             ->with('photo')
             ->get();
 
@@ -86,10 +85,10 @@ class HomeController extends Controller
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
-                ['end', '>=', date('U')],
+                ['end', '>=', Carbon::now()->format('U')],
                 ['secret', false],
                 [static function ($query) {
-                    $query->where('publication', '<', date('U'))
+                    $query->where('publication', '<', Carbon::now()->format('U'))
                         ->orWhereNull('publication');
                 }],
             ])

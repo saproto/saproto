@@ -8,10 +8,10 @@ use App\Models\MollieTransaction;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
-use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -33,6 +33,7 @@ class MollieController extends Controller
         $transactions = MollieTransaction::query()
             ->when($user, static fn ($query, $user) => $query->where('user_id', $user->id))
             ->latest()
+            ->with('user')
             ->paginate(15);
 
         return view('omnomcom.mollie.list', ['user' => $user, 'transactions' => $transactions]);
@@ -153,8 +154,8 @@ class MollieController extends Controller
         $accounts = Account::query()->join('products', 'accounts.id', '=', 'products.account_id')
             ->join('orderlines', 'products.id', '=', 'orderlines.product_id')
             ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
-            ->selectRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) as orderline_date')
-            ->whereRaw('DATE(DATE_ADD(orderlines.created_at, INTERVAL -6 HOUR)) BETWEEN ? AND ?', [$start, $end])
+            ->selectRaw('DATE(DATE_ADD(mollie_transactions.created_at, INTERVAL -6 HOUR)) as orderline_date')
+            ->whereRaw('DATE(DATE_ADD(mollie_transactions.created_at, INTERVAL -6 HOUR)) BETWEEN ? AND ?', [$start, $end])
             ->whereIn('mollie_transactions.status', Config::array('omnomcom.mollie.paid_statuses'))
             ->groupByRaw('orderline_date')
             ->selectRaw('accounts.account_number, accounts.name as account_name, SUM(orderlines.total_price) as total')

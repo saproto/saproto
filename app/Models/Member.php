@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
@@ -60,7 +59,7 @@ use Override;
  * @method Builder|static primary()
  * @method Builder|static type(MembershipTypeEnum $type)
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Member extends Model
 {
@@ -80,34 +79,47 @@ class Member extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function customOmnomcomSound(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
+    /**
+     * @return HasOne<UtAccount, $this>
+     */
     public function UtAccount(): HasOne
     {
         return $this->hasOne(UtAccount::class);
     }
 
+    /** @param Builder<$this> $query */
     public function scopePrimary(Builder $query): Builder
     {
-        /** @phpstan-ignore-next-line */
         return $query->type(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');
     }
 
+    /** @param Builder<$this> $query */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);
@@ -134,7 +146,7 @@ class Member extends Model
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(date('n')) >= 9 ? intval(date('Y')) : intval(date('Y')) - 1;
+        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

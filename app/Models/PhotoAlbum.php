@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
 
@@ -45,7 +44,7 @@ use Override;
  * @method static Builder|PhotoAlbum newQuery()
  * @method static Builder|PhotoAlbum query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class PhotoAlbum extends Model
 {
@@ -60,27 +59,38 @@ class PhotoAlbum extends Model
     #[Override]
     protected static function booted(): void
     {
-        static::addGlobalScope('published', fn (Builder $builder) => $builder->unless(Auth::user()?->can('protography'), fn ($builder) => $builder->where('published', true)));
-
-        static::addGlobalScope('private', fn (Builder $builder) => $builder->unless(Auth::user()?->is_member, fn ($builder) => $builder->where('private', false)));
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('published', fn (Builder $query) => $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->where('published', true)));
+        /** @param Builder<$this> $query */
+        static::addGlobalScope('private', fn (Builder $query) => $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)));
     }
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
 
+    /**
+     * @return HasOne<Photo, $this>
+     */
     public function thumbPhoto(): HasOne
     {
         return $this->hasOne(Photo::class, 'id', 'thumb_id');
     }
 
+    /**
+     * @return HasMany<Photo, $this>
+     */
     public function items(): HasMany
     {
         return $this->hasMany(Photo::class, 'album_id');
     }
 
-    public function scopeName($query, string $name): Builder
+    /** @param Builder<$this> $query */
+    public function scopeName(Builder $query, string $name): Builder
     {
         return $query->where('name', 'LIKE', '%'.$name.'%');
     }

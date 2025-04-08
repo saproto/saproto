@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Override;
 
@@ -36,7 +36,7 @@ use Override;
  * @method static Builder|Withdrawal newQuery()
  * @method static Builder|Withdrawal query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Withdrawal extends Model
 {
@@ -54,6 +54,9 @@ class Withdrawal extends Model
         ];
     }
 
+    /**
+     * @return HasMany<OrderLine, $this>
+     */
     public function orderlines(): HasMany
     {
         return $this->hasMany(OrderLine::class, 'payed_with_withdrawal');
@@ -77,11 +80,17 @@ class Withdrawal extends Model
         return FailedWithdrawal::query()->where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
     }
 
+    /**
+     * @return HasMany<FailedWithdrawal, $this>
+     */
     public function failedWithdrawals(): HasMany
     {
         return $this->hasMany(FailedWithdrawal::class, 'withdrawal_id');
     }
 
+    /**
+     * @return HasManyThrough<User, OrderLine, $this>
+     */
     public function users(): HasManyThrough
     {
         return $this->hasManyThrough(User::class, OrderLine::class, 'payed_with_withdrawal', 'id', 'id', 'user_id')->distinct();
@@ -92,9 +101,9 @@ class Withdrawal extends Model
         return OrderLine::query()->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
-    public function getWithdrawalIdAttribute(): string
+    protected function withdrawalId(): Attribute
     {
-        return 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date));
+        return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date)));
     }
 
     public function recalculateTotals(): void
