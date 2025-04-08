@@ -131,7 +131,7 @@ class MollieController extends Controller
      */
     public function monthly(string $month)
     {
-        if (strtotime($month) === false) {
+        if (Carbon::parse($month)->getTimestamp() === false) {
             Session::flash('flash_message', 'Invalid date: '.$month);
 
             return Redirect::back();

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\QrAuthRequest;
 use App\Models\Token;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ClearSessionTable extends Command
@@ -38,9 +39,9 @@ class ClearSessionTable extends Command
      */
     public function handle(): void
     {
-        DB::table('sessions')->where('last_activity', '<', strtotime('-1 week'))->delete();
-        Token::query()->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 week')))->delete();
-        QrAuthRequest::query()->where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-10 minutes')))->delete();
+        DB::table('sessions')->where('last_activity', '<', Carbon::parse('-1 week')->getTimestamp())->delete();
+        Token::query()->where('updated_at', '<', Carbon::parse('-1 week')->format('Y-m-d H:i:s'))->delete();
+        QrAuthRequest::query()->where('updated_at', '<', Carbon::parse('-10 minutes')->format('Y-m-d H:i:s'))->delete();
         $this->info('Done!');
     }
 }
