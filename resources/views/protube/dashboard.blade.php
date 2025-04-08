@@ -44,11 +44,11 @@
                     <p class="card-text">
                         ProTube is currently
                         <strong>
-                            {{ $user->keep_protube_history ? '' : 'not' }}
+                            {{ Auth::user()->keep_protube_history ? '' : 'not' }}
                         </strong>
                         keeping your history.
 
-                        @if ($user->keep_protube_history)
+                        @if (Auth::user()->keep_protube_history)
                             <a
                                 href="{{ route('protube::togglehistory') }}"
                                 class="btn btn-outline-danger btn-block"
@@ -149,7 +149,7 @@
                                 'hide_played' => true,
                                 'show_text' => sprintf(
                                     'Played on %s',
-                                    date('H:i:s', strtotime($video->played_at)),
+                                    date('H:i:s', strtotime($video->created_at)),
                                 ),
                             ]
                         )

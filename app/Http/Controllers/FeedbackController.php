@@ -46,15 +46,14 @@ class FeedbackController extends Controller
 
     private function getFeedbackQuery(FeedbackCategory $category): HasMany
     {
-        $feedback = $category->feedback()
+        return $category->feedback()
             ->orderBy('created_at', 'desc')
-            ->with('votes');
-
-        if ($category->review) {
-            return $feedback->where('reviewed', true);
-        }
-
-        return $feedback;
+            ->with('votes')
+            ->when($category->review, fn ($query) => $query->where('reviewed', true))
+            ->withSum(['votes as user_vote' => function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            }], 'vote')
+            ->withSum('votes', 'vote');
     }
 
     private function getMostVoted(FeedbackCategory $category): Model|Feedback|null
@@ -71,7 +70,12 @@ class FeedbackController extends Controller
             ->orderBy('votes', 'desc')
             ->first();
 
-        $mostVoted = Feedback::query()->where('id', $mostVotedID?->feedback_id)->first();
+        $mostVoted = Feedback::query()
+            ->withSum(['votes as user_vote' => function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            }], 'vote')
+            ->withSum('votes', 'vote')
+            ->where('id', $mostVotedID?->feedback_id)->first();
 
         return $mostVoted ?? null;
     }
@@ -103,10 +107,7 @@ class FeedbackController extends Controller
         return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category' => $category, 'unreviewed' => $unreviewed]);
     }
 
-    /**
-     * @param  FeedbackCategory  $category
-     */
-    public function archived($category): View|RedirectResponse
+    public function archived(string $category): View|RedirectResponse
     {
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         if (! Auth::user()->can('board')) {
@@ -249,8 +250,8 @@ class FeedbackController extends Controller
         }
 
         return response()->json([
-            'voteScore' => $feedback->voteScore(),
-            'userVote' => $feedback->userVote(Auth::user()),
+            'voteScore' => $feedback->votes()->sum('vote'),
+            'userVote' => $feedback->votes()->where('user_id', Auth::id())->sum('vote'),
         ]);
     }
 
