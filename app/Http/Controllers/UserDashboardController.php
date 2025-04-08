@@ -324,7 +324,7 @@ class UserDashboardController extends Controller
         }
 
         if (Session::has('flash_userdata') && $request->has('verified')) {
-            $userdata['birthdate'] = date('Y-m-d', strtotime($userdata['birthdate']));
+            $userdata['birthdate'] = \Carbon\Carbon::parse($userdata['birthdate'])->format('Y-m-d');
             $user->fill($userdata);
             $user->save();
 

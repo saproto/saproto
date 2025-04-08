@@ -36,7 +36,8 @@ class EmailList extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
+    /**
+     * @return BelongsToMany<User, $this> */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'users_mailinglists', 'list_id', 'user_id');
@@ -76,7 +77,6 @@ class EmailList extends Model
     }
 
     /**
-     * @param User $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
      *
      * @throws Exception

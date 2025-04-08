@@ -47,8 +47,8 @@ class TempAdminController extends Controller
         $tempadmin = new Tempadmin;
         $tempadmin->user()->associate($tempAdminUser);
         $tempadmin->creator()->associate(Auth::user());
-        $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
-        $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
+        $tempadmin->start_at = \Carbon\Carbon::parse($request->start_at)->format('Y-m-d H:i:s');
+        $tempadmin->end_at = \Carbon\Carbon::parse($request->end_at)->format('Y-m-d H:i:s');
         $tempadmin->save();
 
         ProTubeApiService::updateAdmin($tempAdminUser->id, $tempAdminUser->isTempadminLaterToday());
@@ -69,8 +69,8 @@ class TempAdminController extends Controller
      */
     public function update(Tempadmin $tempadmin, Request $request)
     {
-        $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
-        $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
+        $tempadmin->start_at = \Carbon\Carbon::parse($request->start_at)->format('Y-m-d H:i:s');
+        $tempadmin->end_at = \Carbon\Carbon::parse($request->end_at)->format('Y-m-d H:i:s');
         $tempadmin->save();
 
         ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());

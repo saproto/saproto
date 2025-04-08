@@ -53,9 +53,7 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user())) {
-            abort(404);
-        }
+        abort_if(! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user()), 404);
 
         $pastEvents = $committee->pastEvents()->take(6)->get();
         $upcomingEvents = $committee->upcomingEvents()->get();

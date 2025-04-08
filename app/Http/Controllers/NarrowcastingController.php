@@ -53,8 +53,8 @@ class NarrowcastingController extends Controller
 
         $narrowcasting = new NarrowcastingItem;
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = \Carbon\Carbon::parse($request->campaign_start)->getTimestamp();
+        $narrowcasting->campaign_end = \Carbon\Carbon::parse($request->campaign_end)->getTimestamp();
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
@@ -101,8 +101,8 @@ class NarrowcastingController extends Controller
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = \Carbon\Carbon::parse($request->campaign_start)->getTimestamp();
+        $narrowcasting->campaign_end = \Carbon\Carbon::parse($request->campaign_end)->getTimestamp();
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {

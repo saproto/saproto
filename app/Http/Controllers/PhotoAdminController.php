@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\StorageEntry;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -40,7 +41,7 @@ class PhotoAdminController extends Controller
     {
         $album = new PhotoAlbum;
         $album->name = $request->input('name');
-        $album->date_taken = strtotime($request->input('date'));
+        $album->date_taken = Carbon::parse($request->input('date'))->getTimestamp();
         if ($request->input('private')) {
             $album->private = true;
         }
@@ -75,7 +76,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
         $album->name = $request->input('album');
-        $album->date_taken = strtotime($request->input('date'));
+        $album->date_taken = Carbon::parse($request->input('date'))->getTimestamp();
         $album->private = (bool) $request->input('private');
         $album->save();
 

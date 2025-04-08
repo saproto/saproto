@@ -7,6 +7,7 @@ use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,8 +33,8 @@ class ActivityController extends Controller
         $newPrice = floatval(str_replace(',', '.', $request->price));
         $newNoShow = floatval(str_replace(',', '.', $request->no_show_fee));
 
-        $newRegistrationStart = strtotime($request->registration_start);
-        $newRegistrationEnd = strtotime($request->registration_end);
+        $newRegistrationStart = Carbon::parse($request->registration_start)->getTimestamp();
+        $newRegistrationEnd = Carbon::parse($request->registration_end)->getTimestamp();
 
         if ($newRegistrationEnd < $newRegistrationStart) {
             Session::flash('flash_message', 'You cannot let the event sign-up end before it starts.');
@@ -62,7 +63,7 @@ class ActivityController extends Controller
         $data = [
             'registration_start' => $newRegistrationStart,
             'registration_end' => $newRegistrationEnd,
-            'deregistration_end' => strtotime($request->deregistration_end),
+            'deregistration_end' => Carbon::parse($request->deregistration_end)->getTimestamp(),
             'participants' => $request->participants,
             'price' => $newPrice,
             'no_show_fee' => $newNoShow,

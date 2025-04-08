@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DmxFixture;
 use App\Models\DmxOverride;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -32,8 +33,8 @@ class DmxOverrrideController extends Controller
     {
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = strtotime($request->start);
-        $end = strtotime($request->end);
+        $start = Carbon::parse($request->start)->getTimestamp();
+        $end = Carbon::parse($request->end)->getTimestamp();
 
         $override = DmxOverride::query()->create([
             'fixtures' => $fixtures,
@@ -59,8 +60,8 @@ class DmxOverrrideController extends Controller
 
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = strtotime($request->start);
-        $end = strtotime($request->end);
+        $start = Carbon::parse($request->start)->getTimestamp();
+        $end = Carbon::parse($request->end)->getTimestamp();
 
         $override->update([
             'fixtures' => $fixtures,

@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 return [
 
     /*
@@ -56,8 +58,8 @@ return [
         ],
         (object) [
             'name' => 'easter',
-            'start' => date('M-d-Y', easter_date()),
-            'end' => date('M-d-Y', easter_date()).' +1 day',
+            'start' => Carbon::now()->format('M-d-Y'),
+            'end' => Carbon::now()->format('M-d-Y').' +1 day',
         ],
         (object) [
             'name' => 'dies',

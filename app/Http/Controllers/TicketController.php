@@ -50,8 +50,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = \Carbon\Carbon::parse($request->input('available_from'))->getTimestamp();
+        $ticket->available_to = \Carbon\Carbon::parse($request->input('available_to'))->getTimestamp();
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -98,8 +98,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = \Carbon\Carbon::parse($request->input('available_from'))->getTimestamp();
+        $ticket->available_to = \Carbon\Carbon::parse($request->input('available_to'))->getTimestamp();
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 

@@ -375,7 +375,7 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > strtotime('-1 week');
+        return $this->involves_food && $this->end > \Carbon\Carbon::parse('-1 week')->getTimestamp();
     }
 
     protected function isFuture(): Attribute
@@ -386,10 +386,10 @@ class Event extends Model
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => \Carbon\Carbon::now()->format('M d, Y'),
+            'year' => \Carbon\Carbon::now()->format('Y'),
+            'month' => \Carbon\Carbon::now()->format('M Y'),
+            'time' => \Carbon\Carbon::now()->format('H:i'),
         ]);
     }
 

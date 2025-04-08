@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -100,11 +101,11 @@ class Video extends Model
 
     public function getUnixTimeStamp(): string
     {
-        return date('U', strtotime($this->video_date));
+        return Carbon::parse($this->video_date)->format('U');
     }
 
     public function getFormDate(): string
     {
-        return date('d-m-Y', strtotime($this->video_date));
+        return Carbon::parse($this->video_date)->format('d-m-Y');
     }
 }

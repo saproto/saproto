@@ -34,8 +34,8 @@ class AnnouncementController extends Controller
         $announcement = Announcement::query()->create([
             'description' => $request->input('description'),
             'content' => $request->input('content'),
-            'display_from' => date('Y-m-d H:i:s', strtotime($request->input('display_from'))),
-            'display_till' => date('Y-m-d H:i:s', strtotime($request->input('display_till'))),
+            'display_from' => \Carbon\Carbon::parse($request->input('display_from'))->format('Y-m-d H:i:s'),
+            'display_till' => \Carbon\Carbon::parse($request->input('display_till'))->format('Y-m-d H:i:s'),
             'show_guests' => $request->has('show_guests'),
             'show_users' => $request->has('show_users'),
             'show_members' => $request->has('show_members'),
@@ -74,8 +74,8 @@ class AnnouncementController extends Controller
         $announcement->update([
             'description' => $request->input('description'),
             'content' => $request->input('content'),
-            'display_from' => date('Y-m-d H:i:s', strtotime($request->input('display_from'))),
-            'display_till' => date('Y-m-d H:i:s', strtotime($request->input('display_till'))),
+            'display_from' => \Carbon\Carbon::parse($request->input('display_from'))->format('Y-m-d H:i:s'),
+            'display_till' => \Carbon\Carbon::parse($request->input('display_till'))->format('Y-m-d H:i:s'),
             'show_guests' => $request->has('show_guests'),
             'show_users' => $request->has('show_users'),
             'show_members' => $request->has('show_members'),

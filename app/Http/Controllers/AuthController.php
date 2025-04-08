@@ -760,7 +760,7 @@ class AuthController extends Controller
         $reset = PasswordReset::query()->create([
             'email' => $user->email,
             'token' => Str::random(128),
-            'valid_to' => strtotime('+1 hour'),
+            'valid_to' => \Carbon\Carbon::parse('+1 hour')->getTimestamp(),
         ]);
 
         Mail::to($user)->queue((new PasswordResetEmail($user, $reset->token))->onQueue('high'));
