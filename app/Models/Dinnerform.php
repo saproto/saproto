@@ -117,7 +117,7 @@ class Dinnerform extends Model
     /** @return float Total amount of orderlines reduced by discounts. */
     public function totalAmountWithDiscount(): float
     {
-        return $this->orderlines()->get()
+        return $this->orderlines()->with('dinnerform')->get()
             ->sum(static fn (DinnerformOrderline $orderline) => $orderline->price_with_discount);
     }
 
