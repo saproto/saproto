@@ -24,7 +24,7 @@ use Illuminate\View\View;
 
 class FeedbackController extends Controller
 {
-    public function index(string $category)
+    public function index(string $category): View
     {
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
@@ -39,7 +39,7 @@ class FeedbackController extends Controller
         return $this->index('goodideas');
     }
 
-    public function quotes()
+    public function quotes(): View
     {
         return $this->index('quotes');
     }
@@ -70,7 +70,12 @@ class FeedbackController extends Controller
             ->orderBy('votes', 'desc')
             ->first();
 
-        $mostVoted = Feedback::query()->where('id', $mostVotedID?->feedback_id)->first();
+        $mostVoted = Feedback::query()
+            ->withSum(['votes as user_vote' => function ($q) {
+                $q->where('user_id', Auth::user()->id);
+            }], 'vote')
+            ->withSum('votes', 'vote')
+            ->where('id', $mostVotedID?->feedback_id)->first();
 
         return $mostVoted ?? null;
     }
@@ -102,10 +107,7 @@ class FeedbackController extends Controller
         return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category' => $category, 'unreviewed' => $unreviewed]);
     }
 
-    /**
-     * @param  FeedbackCategory  $category
-     */
-    public function archived($category): View|RedirectResponse
+    public function archived(string $category): View|RedirectResponse
     {
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         if (! Auth::user()->can('board')) {
