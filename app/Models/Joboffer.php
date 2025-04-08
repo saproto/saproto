@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Job Offer Model.
@@ -31,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Joboffer newQuery()
  * @method static Builder|Joboffer query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Joboffer extends Model
 {
@@ -39,8 +38,9 @@ class Joboffer extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
-    public function company()
+    /**
+     * @return BelongsTo<Company, $this> */
+    public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class, 'company_id');
     }

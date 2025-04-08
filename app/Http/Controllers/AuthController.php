@@ -10,6 +10,7 @@ use App\Rules\NotUtwenteEmail;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -140,7 +141,7 @@ class AuthController extends Controller
         if ($user != null && Hash::check($password, $user->password)) {
             if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
+                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => Carbon::now()->format('r')]);
             }
 
             return $user;

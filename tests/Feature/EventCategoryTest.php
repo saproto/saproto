@@ -7,6 +7,7 @@ it('lists the events categories', function () {
     /** @var Member $member */
     $member = Member::factory()->create();
     $member->user->assignRole('board');
+
     $response = $this->actingAs($member->user)
         ->get('/events/categories/create');
     $response->assertSee('new category');

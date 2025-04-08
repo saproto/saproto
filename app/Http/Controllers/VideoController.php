@@ -17,7 +17,7 @@ class VideoController extends Controller
     /** @return View */
     public static function index()
     {
-        return view('videos.index', ['videos' => Video::all()]);
+        return view('videos.index', ['videos' => Video::query()->with('event')->get()]);
     }
 
     /** @return View */

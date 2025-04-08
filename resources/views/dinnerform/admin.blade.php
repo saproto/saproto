@@ -87,7 +87,7 @@
                 </tbody>
             </table>
 
-            @if (count($orderList) > 0)
+            @if ($dinnerform->orderlines->count() > 0)
                 <table class="table table-sm">
                     <thead>
                         <tr class="bg-dark text-white">
@@ -102,7 +102,7 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($orderList as $order)
+                        @foreach ($dinnerform->orderlines as $order)
                             <tr>
                                 <td class="text-muted">
                                     #{{ $order->user->id }}

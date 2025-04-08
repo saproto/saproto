@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use DateInterval;
-use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video newQuery()
  * @method static Builder|Video query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Video extends Model
 {
@@ -48,8 +47,9 @@ class Video extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
-    public function event()
+    /**
+     * @return BelongsTo<Event, $this> */
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class, 'event_id');
     }

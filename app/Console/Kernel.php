@@ -7,7 +7,6 @@ use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\DirectAdminSync;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
@@ -36,6 +35,7 @@ use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Carbon;
 use Override;
 
 class Kernel extends ConsoleKernel
@@ -66,7 +66,6 @@ class Kernel extends ConsoleKernel
         MemberRenewCron::class,
         OmNomComCleanup::class,
         MakeAdmin::class,
-        DirectAdminSync::class,
         SyncWikiAccounts::class,
         MemberCleanup::class,
         AddSysadmin::class,
@@ -104,6 +103,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->exists());
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->exists());
     }
 }

@@ -1,7 +1,7 @@
 @extends('auth.template')
 
 @push('head')
-    {!! htmlScriptTagJsApi() !!}
+    {!! NoCaptcha::renderJs() !!}
 @endpush
 
 @section('page-title')
@@ -93,7 +93,7 @@
 
         <hr />
 
-        {!! htmlFormSnippet() !!}
+        {!! NoCaptcha::display() !!}
 
         <hr />
 

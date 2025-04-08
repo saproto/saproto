@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -22,6 +22,9 @@ class CodexSongCategory extends Model
 
     protected $table = 'codex_category';
 
+    /**
+     * @return HasMany<CodexSong, $this>
+     */
     public function songs(): HasMany
     {
         return $this->hasMany(CodexSong::class, 'category_id');

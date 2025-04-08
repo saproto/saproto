@@ -153,7 +153,7 @@
                         </div>
                         @if (method_exists($mutations, 'links'))
                             <div class="card-footer pb-0">
-                                {!! $mutations->links() !!}
+                                {!! $mutations->withQueryString()->links() !!}
                             </div>
                         @endif
                     @else

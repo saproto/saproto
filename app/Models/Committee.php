@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Carbon;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +47,7 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|Committee newQuery()
  * @method static Builder|Committee query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Committee extends Model
 {
@@ -71,6 +71,9 @@ class Committee extends Model
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
@@ -85,6 +88,9 @@ class Committee extends Model
             ->orderByPivot('created_at', 'desc');
     }
 
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id');
@@ -95,14 +101,14 @@ class Committee extends Model
         return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
-    public function getEmailAttribute(): string
+    protected function email(): Attribute
     {
-        return $this->slug.'@'.Config::string('proto.emaildomain');
+        return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));
     }
 
     public function pastEvents(): Builder
     {
-        return $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')
+        return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
@@ -157,10 +163,10 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (strtotime($membership->created_at) < date('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))) {
+            } elseif (strtotime($membership->created_at) < Carbon::now()->format('U') &&
+                (! $membership->deleted_at || strtotime($membership->deleted_at) > Carbon::now()->format('U'))) {
                 $members['members']['current'][] = $membership;
-            } elseif (strtotime($membership->created_at) > date('U')) {
+            } elseif (strtotime($membership->created_at) > Carbon::now()->format('U')) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

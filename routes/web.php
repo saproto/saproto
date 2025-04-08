@@ -56,6 +56,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
+use App\Http\Controllers\StickerController;
 use App\Http\Controllers\StockMutationController;
 use App\Http\Controllers\SurfConextController;
 use App\Http\Controllers\TempAdminController;
@@ -459,6 +460,9 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('store/{id}', 'store')->name('store');
         });
     });
+
+    Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers::overviewmap')->middleware(['auth', 'member']);
+    Route::resource('stickers', StickerController::class)->middleware(['auth', 'member'])->only(['index', 'store', 'destroy']);
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {

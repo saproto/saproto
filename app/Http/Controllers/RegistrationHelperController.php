@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipTypeEnum;
+use App\Models\Member;
 use App\Models\User;
-use Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class RegistrationHelperController extends Controller
@@ -19,6 +21,7 @@ class RegistrationHelperController extends Controller
     {
         $search = $request->input('query');
 
+        /** @param Builder<Member> $q */
         $users = User::query()->whereHas('member', static function ($q) {
             $q->type(MembershipTypeEnum::PENDING);
         });
@@ -50,6 +53,7 @@ class RegistrationHelperController extends Controller
         $user = User::query()->whereHas('member', static function ($q) {
             $q->type(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
+        /** @var User $user */
         $memberships = $user->getMemberships();
 
         return view('users.admin.registration_helper.details', ['user' => $user, 'memberships' => $memberships]);

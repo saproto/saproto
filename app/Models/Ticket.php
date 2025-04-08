@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -37,7 +37,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket newQuery()
  * @method static Builder|Ticket query()
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Ticket extends Model
 {
@@ -47,16 +47,25 @@ class Ticket extends Model
 
     public $timestamps = false;
 
+    /**
+     * @return BelongsTo<Product, $this>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsTo<Event, $this>
+     */
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
+    /**
+     * @return HasMany<TicketPurchase, $this>
+     */
     public function purchases(): HasMany
     {
         return $this->hasMany(TicketPurchase::class);
@@ -96,7 +105,7 @@ class Ticket extends Model
 
     public function isOnSale(): bool
     {
-        return date('U') > $this->available_from && date('U') < $this->available_to;
+        return Carbon::now()->format('U') > $this->available_from && Carbon::now()->format('U') < $this->available_to;
     }
 
     public function isAvailable(User $user): bool
