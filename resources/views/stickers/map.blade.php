@@ -9,16 +9,23 @@
 @section('container')
     <div class="card mb-3 mt-3">
         <div class="card-header bg-dark text-white">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-center">
                 <div>The Proto Sticker Tracker!</div>
                 <div>
                     In total
                     <span id="sticker-amount"></span>
                     stickers placed!
                 </div>
+                @can('board')
+                    <a href="{{ route('stickers.admin') }}" class="btn btn-info">
+                        <i class="fas fa-edit"></i>
+                        <span class="d-none d-sm-inline">Sticker admin</span>
+                    </a>
+                @endcan
             </div>
         </div>
     </div>
+
     <div id="map"></div>
 
     <div
@@ -413,7 +420,7 @@
             detailsDiv.className = 'mx-2 mt-2'
 
             const ownerP = document.createElement('div')
-            ownerP.innerHTML = `Stuck by: ${marker.user ?? 'Legacy user'}`
+            ownerP.innerHTML = `Stuck by: ${marker.is_owner ? 'you!' :(marker.user ?? 'Unknown')}`
             detailsDiv.appendChild(ownerP)
 
             const dateP = document.createElement('div')
@@ -425,7 +432,8 @@
 
             const controlsDiv = document.createElement('div')
             controlsDiv.className = 'w-100 d-inline-flex text-center justify-content-center'
-            if (marker.is_owner) {
+            const isBoard = "{{Auth::user()->can('board')}}";
+            if (marker.is_owner || isBoard) {
                 const removeButton = document.createElement('button')
                 removeButton.className =
                     'btn btn-sm'
@@ -437,14 +445,16 @@
                 controlsDiv.appendChild(removeButton)
             }
 
-            const reportButton = document.createElement('button')
-            reportButton.className = 'btn btn-sm'
-            reportButton.innerHTML =
-                '<i class="h5 fas fa-triangle-exclamation text-warning"></i>'
-            reportButton.addEventListener('click', function () {
-                reportSticker(marker)
-            })
-            controlsDiv.appendChild(reportButton)
+            if (!marker.is_owner || isBoard) {
+                const reportButton = document.createElement('button')
+                reportButton.className = 'btn btn-sm'
+                reportButton.innerHTML =
+                    '<i class="h5 fas fa-triangle-exclamation text-warning"></i>'
+                reportButton.addEventListener('click', function () {
+                    reportSticker(marker)
+                })
+                controlsDiv.appendChild(reportButton)
+            }
 
             popupContent.appendChild(controlsDiv)
 

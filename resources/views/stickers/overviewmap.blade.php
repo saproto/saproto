@@ -19,6 +19,7 @@
             </div>
         </div>
     </div>
+
     <div id="map" class="mb-3"></div>
 @endsection
 
