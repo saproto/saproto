@@ -260,8 +260,8 @@ class OrderLineController extends Controller
     public function showPaymentStatistics(Request $request)
     {
         if ($request->has('start') && $request->has('end')) {
-            $start = date('Y-m-d H:i:s', strtotime($request->start));
-            $end = date('Y-m-d H:i:s', strtotime($request->end));
+            $start = \Carbon\Carbon::parse($request->start)->format('Y-m-d H:i:s');
+            $end = \Carbon\Carbon::parse($request->end)->format('Y-m-d H:i:s');
             $total_cash = DB::table('orderlines')
                 ->where('created_at', '>', $start)
                 ->where('created_at', '<', $end)

@@ -46,6 +46,7 @@ class ProtoPolicy extends Policy
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 'https://www.youtube.com/iframe_api',
                 'https://s.ytimg.com',
+                'https://www.gstatic.com/recaptcha/',
                 'https://www.google.com/recaptcha/api.js',
                 'https://www.gstatic.com/recaptcha/',
                 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
@@ -82,6 +83,7 @@ class ProtoPolicy extends Policy
                 'https://www.google.com/recaptcha/',
                 'https://recaptcha.google.com/recaptcha/',
                 'https://protu.be/',
+                'https://www.google.com',
             ])
             ->addDirective(Directive::FONT, [
                 Keyword::SELF,

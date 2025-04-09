@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -90,7 +91,7 @@ class SpotifySync extends Command
             ->selectRaw('spotify_id, count(*) as count')
             ->whereNotNull('spotify_id')
             ->where('spotify_id', '!=', '')
-            ->where('created_at', '>', date('Y-m-d', strtotime('-1 year')))
+            ->where('created_at', '>', Carbon::parse('-1 year')->format('Y-m-d'))
             ->groupBy('video_title')
             ->orderBy('count', 'desc')
             ->limit($this->spotifyUpdateLimit)
@@ -104,7 +105,7 @@ class SpotifySync extends Command
             ->selectRaw('spotify_id, count(*) as count')
             ->whereNotNull('spotify_id')
             ->where('spotify_id', '!=', '')
-            ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
+            ->where('created_at', '>', Carbon::parse('-1 month')->format('Y-m-d'))
             ->groupBy('video_title')
             ->orderBy('count', 'desc')
             ->limit($this->spotifyUpdateLimit)

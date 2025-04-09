@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Mail\VerifyPersonalDetails;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 
@@ -38,7 +39,7 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = date('m', strtotime('+1 month'));
+        $month = Carbon::parse('+1 month')->format('m');
 
         $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month))->get();
 

@@ -51,6 +51,8 @@ try {
                 RectorLaravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector::class,
                 ClassPropertyAssignToConstructorPromotionRector::class,
                 StringClassNameToClassConstantRector::class,
+                RectorLaravel\Rector\If_\AbortIfRector::class,
+                RectorLaravel\Rector\PropertyFetch\ReplaceFakerInstanceWithHelperRector::class,
             ]
         )
         ->withPreparedSets(deadCode: true,

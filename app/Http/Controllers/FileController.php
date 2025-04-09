@@ -18,9 +18,7 @@ class FileController extends Controller
         /** @var StorageEntry $entry */
         $entry = StorageEntry::query()->findOrFail($id);
 
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
+        abort_if($hash != $entry->hash, 404);
 
         $file = Storage::disk('local')->get($entry->filename);
 
@@ -35,9 +33,7 @@ class FileController extends Controller
     public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
     {
         $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
-        if (Storage::disk('local')->missing($entry->filename)) {
-            abort(404, 'File not found');
-        }
+        abort_if(Storage::disk('local')->missing($entry->filename), 404, 'File not found');
 
         return Cache::remember($cacheKey, 31536000, function () use ($entry, $w, $h): string {
             $image = Image::read(Storage::disk('local')->get($entry->filename));
@@ -57,9 +53,7 @@ class FileController extends Controller
         /** @var StorageEntry $entry */
         $entry = StorageEntry::query()->findOrFail($id);
 
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
+        abort_if($hash != $entry->hash, 404);
 
         return Response(static::makeImage($entry, $request->input('w'), $request->input('h')), 200, [
             'Content-Type' => 'image/webp',

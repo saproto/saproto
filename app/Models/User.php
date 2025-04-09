@@ -87,7 +87,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
  * @property-read Collection|Ticket[] $tickets
- * @property-read Collection|Sticker[] $stickers
  * @property-read Collection|PlayedVideo[] $playedVideos
  * @property-read Collection|Feedback[] $feedback
  * @property-read Collection|RfidCard[] $rfid
@@ -190,7 +189,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return ! (
             $this->password ||
             $this->edu_username ||
-            strtotime($this->created_at) > strtotime('-1 hour') ||
+            \Carbon\Carbon::parse($this->created_at)->getTimestamp() > \Carbon\Carbon::parse('-1 hour')->getTimestamp() ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
             Bank::query()->where('user_id', $this->id)->first() ||
             Address::query()->where('user_id', $this->id)->first() ||
@@ -476,7 +475,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at)->age < 1
+            && Carbon::createFromTimestamp($this->member->created_at, CarbonTimeZone::create(config('app.timezone')))->age < 1
             && $this->did_study_create;
     }
 

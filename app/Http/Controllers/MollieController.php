@@ -112,9 +112,7 @@ class MollieController extends Controller
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);
-        if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
-            abort(403, 'You are unauthorized to view this transaction.');
-        }
+        abort_if($transaction->user->id != Auth::id() && ! Auth::user()->can('board'), 403, 'You are unauthorized to view this transaction.');
 
         $transaction = $transaction->updateFromWebhook();
 
@@ -131,7 +129,7 @@ class MollieController extends Controller
      */
     public function monthly(string $month)
     {
-        if (strtotime($month) === false) {
+        if (\Carbon\Carbon::parse($month)->getTimestamp() === false) {
             Session::flash('flash_message', 'Invalid date: '.$month);
 
             return Redirect::back();

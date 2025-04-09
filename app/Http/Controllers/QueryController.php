@@ -27,11 +27,11 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = strtotime("{$year_start}-09-01 00:00:01");
+            $start = \Carbon\Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
             $end = Carbon::now()->format('U');
         } else {
-            $start = strtotime($request->start);
-            $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
+            $start = \Carbon\Carbon::parse($request->start)->getTimestamp();
+            $end = \Carbon\Carbon::parse($request->end)->getTimestamp() + 86399; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
@@ -108,7 +108,7 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = strtotime("{$year_start}-09-01 00:00:01");
+            $start = \Carbon\Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
             $end = Carbon::now()->format('U');
         } else {
             $start = Carbon::parse($request->start)->getTimestamp();
@@ -148,7 +148,7 @@ class QueryController extends Controller
         $changeGMM = Carbon::parse('01-09-2010');
         foreach ($events as $event) {
             /** @phpstan-ignore-next-line */
-            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
+            $event->Board = (int) Carbon::createFromTimestamp($event->start, CarbonTimeZone::create(config('app.timezone')))->diffInYears($changeGMM, true);
         }
 
         return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);

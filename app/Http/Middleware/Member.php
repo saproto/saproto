@@ -13,13 +13,9 @@ class Member
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (! Auth::check()) {
-            abort(403, 'You need to be logged in to access this page.');
-        }
+        abort_unless(Auth::check(), 403, 'You need to be logged in to access this page.');
 
-        if (! Auth::user()?->is_member) {
-            abort(403, 'You need to be a member to access this page.');
-        }
+        abort_unless(Auth::user()?->is_member, 403, 'You need to be a member to access this page.');
 
         return $next($request);
     }
