@@ -16,18 +16,18 @@ use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectR
 class SurfConextController extends Controller
 {
     // Some constants to keep track of the action we're performing
-    const SESSION_FLASH_KEY = 'surfconext_action';
+    const string SESSION_FLASH_KEY = 'surfconext_action';
 
-    const SESSION_FLASH_KEY_EMAIL = 'new_account_email';
+    const string SESSION_FLASH_KEY_EMAIL = 'new_account_email';
 
-    const CREATE_ACCOUNT = 'create_account';
+    const string CREATE_ACCOUNT = 'create_account';
 
-    const LINK_ACCOUNT = 'link_account';
+    const string LINK_ACCOUNT = 'link_account';
 
-    const LOGIN = 'login';
+    const string LOGIN = 'login';
 
     /**
-     * Send the user to surfconext to login to login
+     * Send the user to surfconext to login
      */
     public function login(): HttpFoundationRedirectResponse
     {
@@ -66,7 +66,7 @@ class SurfConextController extends Controller
     }
 
     /**
-     * Send the user to surfconext to login to create a new account
+     * Send the user to surfconext to log in to create a new account
      */
     public static function createAccount(string $email): View
     {
@@ -83,6 +83,7 @@ class SurfConextController extends Controller
      */
     public function provideMetadataForSurfConext(): Response
     {
+        /** @phpstan-ignore-next-line  */
         return Socialite::driver('saml2')
             ->getServiceProviderMetadata();
     }
@@ -94,6 +95,7 @@ class SurfConextController extends Controller
     public function callback()
     {
         // Attributes: uid, email, last_name, first_name, organization
+        /** @phpstan-ignore-next-line  */
         $user = Socialite::driver('saml2')->stateless()->user();
 
         if ($user->organization !== 'utwente.nl') {

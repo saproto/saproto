@@ -43,7 +43,7 @@ class AuthController extends Controller
      * Register a new account.
      * It is possible to register an account without a UT account, the user will automatically be redirected.
      */
-    public function register(Request $request): RedirectResponse|View
+    public function register(Request $request): \Illuminate\Http\RedirectResponse|\Illuminate\View\View
     {
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
