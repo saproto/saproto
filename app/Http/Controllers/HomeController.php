@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipTypeEnum;
+use App\Enums\VisibilityEnum;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\Company;
@@ -44,7 +45,7 @@ class HomeController extends Controller
 
         $weekly = Newsitem::query()
             ->where('published_at', '<=', Carbon::now())
-            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('published_at', '>', Carbon::now()->subWeek())
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
             ->first();
@@ -84,14 +85,15 @@ class HomeController extends Controller
         $message = WelcomeMessage::query()->where('user_id', Auth::user()->id)->first();
 
         $upcomingEventQuery = Event::getEventBlockQuery()
-            ->where([
-                ['end', '>=', Carbon::now()->format('U')],
-                ['secret', false],
-                [static function ($query) {
-                    $query->where('publication', '<', Carbon::now()->format('U'))
-                        ->orWhereNull('publication');
-                }],
-            ])
+            ->where('end', '>=', Carbon::now()->timestamp)
+            ->where(function ($query) {
+                $query->where('visibility', VisibilityEnum::PUBLIC)->orWhere(
+                    function ($query) {
+                        $query->where('visibility', VisibilityEnum::SCHEDULED)
+                            ->where('publication', '<=', Carbon::now()->timestamp);
+                    }
+                );
+            })
             ->orderBy('start')
             ->limit(6);
 
