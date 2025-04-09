@@ -84,7 +84,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => $request->input('time'),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -158,7 +158,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => $request->input('time'),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
