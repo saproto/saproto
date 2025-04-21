@@ -17,10 +17,7 @@ use Illuminate\View\View;
 
 class DinnerformController extends Controller
 {
-    /**
-     * @return View|RedirectResponse
-     */
-    public function show(int $id)
+    public function show(int $id): View|RedirectResponse
     {
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
@@ -38,8 +35,7 @@ class DinnerformController extends Controller
         return view('dinnerform.show', ['dinnerform' => $dinnerform, 'order' => $order]);
     }
 
-    /** @return View */
-    public function admin($id)
+    public function admin($id): View
     {
         $dinnerform = Dinnerform::query()
             ->with(['orderlines.user', 'orderlines.dinnerform'])
@@ -48,18 +44,14 @@ class DinnerformController extends Controller
         return view('dinnerform.admin', ['dinnerform' => $dinnerform]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         if ($request->input('end') < $request->input('start')) {
             Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
@@ -104,15 +96,16 @@ class DinnerformController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
-
-        if ($request->input('end') < $request->input('start')) {
-            Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
-
-            return Redirect::back();
-        }
-
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
+
+        $request->validate([
+            'restaurant' => 'required|string',
+            'description' => 'required|string',
+            'url' => 'nullable|string',
+            'start' => 'required|date',
+            'end' => 'required|date|after:start',
+        ]);
 
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'You cannot update a closed dinnerform!');
@@ -121,8 +114,8 @@ class DinnerformController extends Controller
         }
 
         $changed_important_details =
-            $dinnerform->start->timestamp != Carbon::parse($request->input('start'))->getTimestamp() ||
-            $dinnerform->end->timestamp != Carbon::parse($request->input('end'))->getTimestamp() ||
+            $dinnerform->start->isSameMinute($request->date('start')) ||
+            $dinnerform->end->isSameMinute($request->date('end')) ||
             $dinnerform->restaurant != $request->input('restaurant');
 
         $dinnerform->update([
@@ -206,7 +199,7 @@ class DinnerformController extends Controller
                 $dinnerformOrderline->price_with_discount,
                 null,
                 null,
-                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Carbon::parse($dinnerform->end)->format('d-m-Y')),
+                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", $dinnerform->end->format('d-m-Y')),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed = true;

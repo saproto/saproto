@@ -7,68 +7,62 @@ use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\View;
 
 class ActivityController extends Controller
 {
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function store(Request $request, $id)
+    public function store(Request $request, int $id): RedirectResponse
     {
         /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
+        $event = Event::query()->with('activity')->findOrFail($id);
 
-        $new = $event->activity === null;
-        $activity = ($new ? new Activity : $event->activity);
+        $request->validate([
+            'registration_start' => 'required|date',
+            'registration_end' => 'required|date|after:registration_start',
+            'deregistration_end' => 'required|date|after:registration_end',
+            'participants' => 'required|integer',
+            'price' => 'required|numeric',
+            'no_show_fee' => 'required|numeric|min:0',
+            'hide_participants' => 'required|boolean',
+            'redirect_url' => 'nullable|url',
+        ]);
 
-        $newPrice = floatval(str_replace(',', '.', $request->price));
-        $newNoShow = floatval(str_replace(',', '.', $request->no_show_fee));
+        $newPrice = floatval(str_replace(',', '.', $request->get('price')));
+        $newNoShow = floatval(str_replace(',', '.', $request->get('no_show_fee')));
 
-        $newRegistrationStart = Carbon::parse($request->registration_start)->getTimestamp();
-        $newRegistrationEnd = Carbon::parse($request->registration_end)->getTimestamp();
+        $newRegistrationStart = $request->date('registration_start')->getTimestamp();
+        $newRegistrationEnd = $request->date('registration_end')->getTimestamp();
 
-        if ($newRegistrationEnd < $newRegistrationStart) {
-            Session::flash('flash_message', 'You cannot let the event sign-up end before it starts.');
+        $activity = $event->activity ?? new Activity;
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
-        }
+        if ($activity->users->count() > 0) {
+            if ($newNoShow > $activity->no_show_fee) {
+                Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
-        if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
-            Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
+                return Redirect::route('event::edit', ['id' => $event->id]);
+            }
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
-        }
+            if ($newPrice > floatval($activity->price)) {
+                Session::flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
 
-        if ($newNoShow < 0) {
-            Session::flash('flash_message', 'The no show fee should be a positive amount.');
-
-            return Redirect::route('event::edit', ['id' => $event->id]);
-        }
-
-        if ($newPrice > floatval($activity->price) && $activity->users->count() > 0) {
-            Session::flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
-
-            return Redirect::route('event::edit', ['id' => $event->id]);
+                return Redirect::route('event::edit', ['id' => $event->id]);
+            }
         }
 
         $data = [
             'registration_start' => $newRegistrationStart,
             'registration_end' => $newRegistrationEnd,
-            'deregistration_end' => Carbon::parse($request->deregistration_end)->getTimestamp(),
-            'participants' => $request->participants,
+            'deregistration_end' => $request->date('deregistration_end')->getTimestamp(),
+            'participants' => $request->get('participants'),
             'price' => $newPrice,
             'no_show_fee' => $newNoShow,
             'hide_participants' => $request->has('hide_participants'),
-            'redirect_url' => $request->redirect_url,
+            'redirect_url' => $request->get('redirect_url') ?? null,
         ];
 
         if (! $activity->validate($data)) {
@@ -79,7 +73,7 @@ class ActivityController extends Controller
 
         $activity->save();
 
-        if ($new) {
+        if (! $event->activity) {
             $activity->event()->associate($event);
             $activity->save();
         }
@@ -91,13 +85,7 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['id' => $event->id]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id): RedirectResponse
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -122,11 +110,7 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['id' => $event->id]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function checklist($id)
+    public function checklist(int $id): View
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -141,11 +125,7 @@ class ActivityController extends Controller
         return view('event.checklist', ['event' => $event]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function addHelp(Request $request, $id)
+    public function addHelp(Request $request, int $id): RedirectResponse
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -182,12 +162,9 @@ class ActivityController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function updateHelp(Request $request, $id)
+    public function updateHelp(Request $request, int $id): RedirectResponse
     {
+        $request->validate(['amount' => 'required|integer|min:1']);
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
         $amount = $request->input('amount');
@@ -202,13 +179,7 @@ class ActivityController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function deleteHelp(Request $request, $id)
+    public function deleteHelp(Request $request, int $id): RedirectResponse
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);

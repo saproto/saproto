@@ -9,7 +9,7 @@ use App\Models\FeedbackVote;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ class FeedbackController extends Controller
         return $this->index('quotes');
     }
 
-    private function getFeedbackQuery(FeedbackCategory $category): HasMany
+    private function getFeedbackQuery(FeedbackCategory $category): Builder
     {
         return $category->feedback()
             ->orderBy('created_at', 'desc')

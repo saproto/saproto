@@ -22,7 +22,7 @@ use Illuminate\Support\Carbon;
  * @property bool|null $helper
  * @property-read User $user
  * @property-read Dinnerform $dinnerform
- * @property-read Dinnerform $price_with_discount
+ * @property-read float|int $price_with_discount
  *
  * @mixin Model
  **/

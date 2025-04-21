@@ -70,8 +70,8 @@ class CalendarController extends Controller
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,
-                'over' => Carbon::parse($endTime)->getTimestamp() < Carbon::now()->getTimestamp(),
-                'current' => Carbon::parse($startTime)->getTimestamp() < Carbon::now()->getTimestamp() && Carbon::parse($endTime)->getTimestamp() > Carbon::now()->getTimestamp(),
+                'over' => Carbon::parse($endTime)->isPast(),
+                'current' => Carbon::now()->isBetween(Carbon::parse($startTime), Carbon::parse($endTime)),
             ];
         }
 

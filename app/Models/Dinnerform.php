@@ -93,7 +93,7 @@ class Dinnerform extends Model
     /** @return string A timespan string with format 'D H:i'. */
     public function generateTimespanText(): string
     {
-        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.$this->end->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */
@@ -161,7 +161,7 @@ class Dinnerform extends Model
     {
         parent::boot();
         static::deleting(static function ($dinnerform) {
-            foreach ($dinnerform->orderlines()->get() as $orderline) {
+            foreach ($dinnerform->orderlines as $orderline) {
                 $orderline->delete();
             }
         });

@@ -57,7 +57,6 @@ class DmxOverrrideController extends Controller
 
     public function update(Request $request, DmxOverride $override): RedirectResponse
     {
-
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
         $start = Carbon::parse($request->start)->getTimestamp();
