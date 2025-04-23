@@ -249,7 +249,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return Carbon::now()->format('U') > $this->registration_start && Carbon::now()->format('U') < $this->registration_end;
+        return Carbon::now()->format('U') >= $this->registration_start && Carbon::now()->format('U') < $this->registration_end;
     }
 
     /**
