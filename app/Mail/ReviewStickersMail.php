@@ -27,11 +27,12 @@ class ReviewStickersMail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
+        $amount = $this->reported->count();
         return $this
             ->to('board@'.Config::string('proto.emaildomain'), 'Board of S.A. Proto')
-            ->subject('There are new stickers reported!')
-            ->view('emails.stickerreviewreminder', ['reported' => $this->reported]);
+            ->subject("There are {$amount} reported stickers awaiting review!")
+            ->view('emails.stickerreviewreminder', ['reported' => $this->reported->load('reporter')]);
     }
 }

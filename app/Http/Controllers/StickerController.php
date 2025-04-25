@@ -116,11 +116,11 @@ class StickerController extends Controller
         return Redirect::back();
     }
 
-    public function admin(): ReviewStickersMail
+    public function admin(): View
     {
         $reported = Sticker::query()->with(['user', 'image', 'reporter'])->whereNotNull('reporter_id')->get();
 
-        return new ReviewStickersMail($reported);
+        return view('stickers.admin', ['reported' => $reported]);
     }
 
     public function report(Request $request, Sticker $sticker): RedirectResponse

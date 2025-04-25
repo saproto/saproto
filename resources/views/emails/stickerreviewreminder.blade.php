@@ -4,7 +4,7 @@
     <p>Hey!</p>
 
     <p>
-        There are new sticker reported.
+        There are {{$reported->count()}} reported stickers that are awaiting your review.
         <br />
         Make sure to review them
         <a href="{{ route('stickers.admin') }}">here.</a>
@@ -40,7 +40,6 @@
                 </tr>
             </table>
         @endforeach
-    </p>
 
     <p>Kind regards, The Sticker Clerk</p>
 @endsection
