@@ -5,6 +5,10 @@
 @endsection
 
 @vite('resources/assets/js/echo.js')
+@vite('resources/assets/js/leaflet.js')
+@vite('node_modules/leaflet-geosearch/dist/geosearch.css')
+@vite('node_modules/leaflet.markercluster/dist/MarkerCluster.css')
+@vite('node_modules/leaflet/dist/leaflet.css')
 
 @section('container')
     <div class="card mb-3 mt-3">
@@ -211,35 +215,10 @@
 @endsection
 
 @push('head')
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"
-    />
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossorigin=""
-    />
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
-    />
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
-    />
+
 @endpush
 
 @push('stylesheet')
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""
-    ></script>
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-    <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
-
     <style rel="stylesheet">
         #map {
             height: 75%;
@@ -264,6 +243,16 @@
             font-weight: bold;
             font-size: 1.5em;
         }
+
+        .results{
+            color: black;
+        }
+        div[data-key]{
+            cursor: pointer;
+        }
+        div[data-key]:hover{
+            background-color: var(--bs-primary);
+        }
     </style>
 @endpush
 
@@ -276,7 +265,6 @@
                     updateMarkerCount()
                 })
                 .listen('StickerRemovedEvent', (marker) => {
-                    console.log('StickerRemovedEvent', marker)
                     removeMarkerFromMap(marker.id)
                     updateMarkerCount()
                 })
@@ -286,7 +274,6 @@
                         window.location.reload()
                     }, 10000)
                 })
-        })
 
         const url = new URL(window.location.href)
         let currentZoom = url.searchParams.get('zoom') ?? 18
@@ -307,11 +294,7 @@
                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map)
 
-        const search = new GeoSearch.GeoSearchControl({
-            provider: new GeoSearch.OpenStreetMapProvider(),
-        })
-
-        map.addControl(search)
+        map.addControl(window.GeoSearch)
 
         const markerFiles = ['chip', 'cloud', 'gear', 'heart', 'light', 'world']
 
@@ -497,7 +480,6 @@
             window.modals['sticker-report-modal'].show()
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
             map.on('click', onMapClick)
             map.on('moveend', () => {
                 const center = map.getCenter()
@@ -512,7 +494,6 @@
                 url.searchParams.set('zoom', zoomLevel)
                 window.history.replaceState(null, '', url.toString())
             })
-        })
 
         function onMapClick(e) {
             const lat = e.latlng.lat.toFixed(6)
@@ -635,6 +616,8 @@
                 image.src = readerEvent.target.result
             }
             reader.readAsDataURL(file)
+        })
+
         })
     </script>
 @endpush
