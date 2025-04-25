@@ -67,7 +67,6 @@
     <script nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.confirm-modal-button').forEach((el) =>
             el.addEventListener('click', (e) => {
-                console.log(e)
                 const modal = document.querySelector(
                     el.getAttribute('data-bs-target')
                 )
