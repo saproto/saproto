@@ -1,6 +1,4 @@
-
-import 'leaflet-geosearch';
-import {GeoSearchControl, OpenStreetMapProvider} from 'leaflet-geosearch'
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 window.GeoSearch = new GeoSearchControl({
     provider: new OpenStreetMapProvider(),
     style: 'bar',
@@ -8,5 +6,5 @@ window.GeoSearch = new GeoSearchControl({
     showMarker: false,
     animateZoom: true,
 })
-import 'leaflet';
+import 'leaflet'
 import 'leaflet.markercluster'

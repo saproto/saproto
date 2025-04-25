@@ -30,6 +30,7 @@ class ReviewStickersMail extends Mailable
     public function build(): static
     {
         $amount = $this->reported->count();
+
         return $this
             ->to('board@'.Config::string('proto.emaildomain'), 'Board of S.A. Proto')
             ->subject("There are {$amount} reported stickers awaiting review!")

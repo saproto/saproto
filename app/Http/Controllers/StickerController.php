@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\StickerPlacedEvent;
 use App\Events\StickerRemovedEvent;
-use App\Mail\ReviewStickersMail;
 use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
