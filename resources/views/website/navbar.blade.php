@@ -1,3 +1,7 @@
+@php
+    use App\Models\Leaderboard;
+@endphp
+
 <header>
     <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
         <div class="container-fluid">
@@ -599,21 +603,21 @@
                                     </a>
                                 </li>
                             @endcan
-                        @endcan
 
-                        @if (\App\Models\Leaderboard::isAdminAny(Auth::user()))
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link"
-                                    href="{{ route('leaderboards::admin') }}"
-                                    role="button"
-                                    aria-haspopup="false"
-                                    aria-expanded="false"
-                                >
-                                    Leaderboards Admin
-                                </a>
-                            </li>
-                        @endif
+                            @if (Leaderboard::isAdminAny(Auth::user()))
+                                <li class="nav-item">
+                                    <a
+                                        class="nav-link"
+                                        href="{{ route('leaderboards::admin') }}"
+                                        role="button"
+                                        aria-haspopup="false"
+                                        aria-expanded="false"
+                                    >
+                                        Leaderboards Admin
+                                    </a>
+                                </li>
+                            @endif
+                        @endcannot
                     @endauth
                 </ul>
 
