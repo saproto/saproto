@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Events\StickerPlacedEvent;
+use App\Events\StickerRemovedEvent;
 use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class StickerController extends Controller
 {
@@ -22,27 +25,31 @@ class StickerController extends Controller
      */
     public function index()
     {
-        $stickers = Sticker::query()->with(['user', 'image'])->get()->map(fn ($item): array => [
-            'id' => $item->id,
-            'lat' => $item->lat,
-            'lng' => $item->lng,
-            'user' => $item->user->calling_name,
-            'image' => $item->image->generateImagePath(null, null),
-            'is_owner' => Auth::user()->id === $item->user->id || Auth::user()->can('board'),
-            'date' => $item->created_at->format('d-m-Y'),
-        ]);
+        $stickers = Sticker::query()
+            ->whereNull('reporter_id')
+            ->with(['user', 'image'])->get()->map(fn ($item): array => [
+                'id' => $item->id,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'user' => $item->user?->calling_name ?? 'Unknown',
+                'image' => $item->image->generateImagePath(null, null),
+                'is_owner' => Auth::user()->id === $item->user?->id,
+                'date' => $item->created_at->format('d-m-Y'),
+            ]);
 
         return view('stickers.map', ['stickers' => $stickers]);
     }
 
-    public function overviewMap()
+    public function overviewMap(): View
     {
-        $stickers = Sticker::query()->with(['user'])->get()->map(fn ($item): array => [
-            'id' => $item->id,
-            'lat' => $item->lat,
-            'lng' => $item->lng,
-            'user' => $item->user->calling_name,
-        ]);
+        $stickers = Sticker::query()
+            ->whereNull('reporter_id')
+            ->with(['user'])->get()->map(fn ($item): array => [
+                'id' => $item->id,
+                'lat' => $item->lat,
+                'lng' => $item->lng,
+                'user' => $item->user?->calling_name ?? 'Unknown',
+            ]);
 
         return view('stickers.overviewmap', ['stickers' => $stickers]);
     }
@@ -52,7 +59,7 @@ class StickerController extends Controller
     /**
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'lat' => ['required', 'numeric', 'min:-90', 'max:90'],
@@ -91,19 +98,55 @@ class StickerController extends Controller
 
     public function update(Request $request, $id) {}
 
-    public function destroy($id)
+    public function destroy(Sticker $sticker): RedirectResponse
     {
-        $sticker = Sticker::query()->findorFail($id);
-        if (Auth::user()->id != $sticker->user->id && ! Auth::user()->can('board')) {
+        if (Auth::user()->id != $sticker->user?->id && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
 
             return Redirect::back();
         }
+
+        StickerRemovedEvent::dispatch($sticker);
 
         $sticker->delete();
         $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
 
         return Redirect::back();
+    }
+
+    public function admin(): View
+    {
+        $reported = Sticker::query()->with(['user', 'image', 'reporter'])->whereNotNull('reporter_id')->get();
+
+        return view('stickers.admin', ['reported' => $reported]);
+    }
+
+    public function report(Request $request, Sticker $sticker): RedirectResponse
+    {
+        $validated = $request->validate([
+            'report_reason' => ['required', 'string', 'max:255', 'min:3'],
+        ]);
+
+        $sticker->update([
+            'reporter_id' => Auth::user()->id,
+            'report_reason' => $validated['report_reason'],
+        ]);
+
+        StickerRemovedEvent::dispatch($sticker);
+
+        return Redirect::back()->with('flash_message', 'Sticker reported successfully. It will not be visible for other users until the board has reviewed it.');
+    }
+
+    public function unreport(Sticker $sticker): RedirectResponse
+    {
+        $sticker->update([
+            'reporter_id' => null,
+            'report_reason' => null,
+        ]);
+
+        StickerPlacedEvent::dispatch($sticker);
+
+        return Redirect::back()->with('flash_message', 'Sticker succesfully unreported. It will be visible for other users again.');
     }
 }
