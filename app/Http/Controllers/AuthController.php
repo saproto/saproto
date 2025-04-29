@@ -50,7 +50,7 @@ class AuthController extends Controller
             'create_without_ut_account' => 'nullable',
             'name' => 'required_if:create_without_ut_account,true|string',
             'calling_name' => 'required_if:create_without_ut_account,true|string',
-            'g-recaptcha-response' => 'required|recaptcha',
+            'g-recaptcha-response' => 'required|captcha',
             'privacy_policy_acceptance' => 'required|accepted',
         ]);
 
