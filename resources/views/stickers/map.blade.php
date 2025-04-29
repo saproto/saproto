@@ -189,20 +189,21 @@
                             here will be publicly available.
                         </div>
                         <div class="mb-3">
-                            <div class="d-inline-flex w-100 justify-content-between">
+                            <div
+                                class="d-inline-flex w-100 justify-content-between"
+                            >
                                 <label for="stickerImage" class="form-label">
                                     Upload Sticker Image
                                 </label>
 
-
                                 @include(
-                                      'components.forms.checkbox',
-                                      [
-                                          'name' => 'today_checkbox',
-                                          'checked' => $cur_category->can_reply ?? true,
-                                          'label' => 'Today',
-                                      ]
-                                  )
+                                    'components.forms.checkbox',
+                                    [
+                                        'name' => 'today_checkbox',
+                                        'checked' => $cur_category->can_reply ?? true,
+                                        'label' => 'Today',
+                                    ]
+                                )
                             </div>
                             <input
                                 class="form-control"
@@ -213,16 +214,21 @@
                             />
 
                             @include(
-                               'components.forms.datetimepicker',
-                               [
-                                   'name' => 'stick_date',
-                                   'label' => 'Stuck on:',
-                                   'placeholder' => Carbon::now()->timestamp,
-                                   'form_class_name'=>"d-none",
-                                   'format'=>'date'
-                               ]
-                           )
-                            <img id="previewImg" class="mt-3" src="" alt="Photo Preview" />
+                                'components.forms.datetimepicker',
+                                [
+                                    'name' => 'stick_date',
+                                    'label' => 'Stuck on:',
+                                    'placeholder' => Carbon::now()->timestamp,
+                                    'form_class_name' => 'd-none',
+                                    'format' => 'date',
+                                ]
+                            )
+                            <img
+                                id="previewImg"
+                                class="mt-3"
+                                src=""
+                                alt="Photo Preview"
+                            />
                         </div>
 
                         <button
@@ -241,7 +247,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')
@@ -483,9 +489,13 @@
             let checkbox = document.getElementById('today_checkbox')
             checkbox?.addEventListener('change', function () {
                 if (checkbox.checked) {
-                    document.getElementById('datetimepicker-stick_date-form').classList.add('d-none')
+                    document
+                        .getElementById('datetimepicker-stick_date-form')
+                        .classList.add('d-none')
                 } else {
-                    document.getElementById('datetimepicker-stick_date-form').classList.remove('d-none')
+                    document
+                        .getElementById('datetimepicker-stick_date-form')
+                        .classList.remove('d-none')
                 }
             })
 
@@ -572,7 +582,6 @@
                 addButton.className = 'btn btn-primary btn-sm'
                 addButton.textContent = 'Stick sticker here!'
                 addButton.addEventListener('click', function () {
-
                     confirmMarker(lat, lng)
                 })
 
