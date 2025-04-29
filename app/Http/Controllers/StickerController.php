@@ -59,12 +59,13 @@ class StickerController extends Controller
     /**
      * @throws FileNotFoundException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'lat' => ['required', 'numeric', 'min:-90', 'max:90'],
             'lng' => ['required', 'numeric', 'min:-180', 'max:180'],
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'stick_date' => 'required_if:today_checkbox,on|date',
         ]);
 
         $lat = number_format((float) $validated['lat'], 4, '.', '');
@@ -78,6 +79,7 @@ class StickerController extends Controller
             'city' => $addressInfo['city'] ?? $addressInfo['town'] ?? $addressInfo['village'] ?? null,
             'country' => $addressInfo['country'] ?? null,
             'country_code' => $addressInfo['country_code'] ?? null,
+            'created_at' => $request->has('today_checkbox') ? now() : $validated['stick_date'],
         ]);
 
         $file = new StorageEntry;
