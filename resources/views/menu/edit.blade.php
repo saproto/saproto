@@ -7,7 +7,7 @@
 @section('container')
     <form
         method="post"
-        action="{{ ! isset($item) ? route('menu::create') : route('menu::update', ['id' => $item->id]) }}"
+        action="{{ ! isset($item) ? route('menu::store') : route('menu::update', ['id' => $item->id]) }}"
         enctype="multipart/form-data"
     >
         @csrf
