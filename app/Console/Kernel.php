@@ -21,6 +21,7 @@ use App\Console\Commands\PrintActiveMembers;
 use App\Console\Commands\RefreshEventUniqueUsers;
 use App\Console\Commands\ReplaceQuestionMarkWithSingleQuoteInCodex;
 use App\Console\Commands\ReviewFeedbackCron;
+use App\Console\Commands\ReviewStickersCron;
 use App\Console\Commands\SpotifySync;
 use App\Console\Commands\SpotifyUpdate;
 use App\Console\Commands\SyncRoles;
@@ -63,6 +64,7 @@ class Kernel extends ConsoleKernel
         VerifyPersonalDetailsEmailCron::class,
         PrintActiveMembers::class,
         ReviewFeedbackCron::class,
+        ReviewStickersCron::class,
         MemberRenewCron::class,
         OmNomComCleanup::class,
         MakeAdmin::class,
@@ -102,6 +104,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
+        $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
 
         $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->exists());
     }
