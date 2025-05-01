@@ -101,9 +101,12 @@ class AuthController extends Controller
     /**
      * Log out the user and redirect to the homepage.
      */
-    public function logout(): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return Redirect::route('homepage');
     }
@@ -114,6 +117,9 @@ class AuthController extends Controller
     public function logoutAndRedirect(Request $request): RedirectResponse
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return Redirect::route($request->route, $request->parameters);
     }
