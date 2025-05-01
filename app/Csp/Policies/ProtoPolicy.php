@@ -31,6 +31,7 @@ class ProtoPolicy extends Policy
         $this
             ->addDirective(Directive::BASE, Keyword::SELF)
             ->addDirective(Directive::DEFAULT, Keyword::SELF)
+            ->addDirective(Directive::FRAME_ANCESTORS, [Keyword::SELF])
             ->addDirective(Directive::FORM_ACTION, [
                 Keyword::SELF,
                 'https://www.mollie.com/checkout/',
