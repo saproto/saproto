@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PwnedPasswordNotification;
 use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;
@@ -17,7 +16,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use nickurt\PwnedPasswords\PwnedPasswords;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
@@ -145,11 +143,6 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
-                Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => Carbon::now()->format('r')]);
-            }
-
             return $user;
         }
 

@@ -64,8 +64,6 @@ use Milon\Barcode\BarcodeServiceProvider;
 use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
-use nickurt\PwnedPasswords\Facade;
-use nickurt\PwnedPasswords\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -312,8 +310,6 @@ return [
         'Mollie' => Mollie::class,
 
         'Hashids' => Hashids::class,
-
-        'PwnedPasswords' => Facade::class,
 
     ],
 

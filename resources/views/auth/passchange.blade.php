@@ -31,11 +31,29 @@
         <div class="text-start">
             Your new password needs to fullfill the following requirements:
             <ul>
-                <li>It needs to be at least <b>10</b> characters long</li>
-                <li>It needs to contain at least one <b>uppercase</b> letter</li>
-                <li>It needs to contain at least one <b>lowercase</b> letter</li>
-                <li>It needs to contain at least one <b>number</b></li>
-                <li>It needs to contain at least one <b>special character</b></li>
+                <li>
+                    It needs to be at least
+                    <b>10</b>
+                    characters long
+                </li>
+                <li>
+                    It needs to contain at least one
+                    <b>uppercase</b>
+                    letter
+                </li>
+                <li>
+                    It needs to contain at least one
+                    <b>lowercase</b>
+                    letter
+                </li>
+                <li>
+                    It needs to contain at least one
+                    <b>number</b>
+                </li>
+                <li>
+                    It needs to contain at least one
+                    <b>special character</b>
+                </li>
             </ul>
         </div>
 

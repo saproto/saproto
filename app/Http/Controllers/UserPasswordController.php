@@ -6,6 +6,9 @@ use App\Models\PasswordReset;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Google\Service\Directory;
+use Google\Service\Directory\User as GoogleUser;
+use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +16,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
-use Google\Service\Directory;
-use Google\Service\Directory\User as GoogleUser;
-use Google_Client;
 
 class UserPasswordController extends Controller
 {
@@ -60,19 +60,20 @@ class UserPasswordController extends Controller
 
     /**
      * Reset the password of the user.
+     *
      * @throws Exception
      */
     public function resetPassword(Request $request): RedirectResponse
     {
         PasswordReset::query()->where('valid_to', '<', Carbon::now()->format('U'))->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
-        if (!$reset) {
+        if (! $reset) {
             Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
             return Redirect::route('login::password::reset');
         }
 
-        $validated = $request->validate( [
+        $validated = $request->validate([
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
@@ -93,6 +94,7 @@ class UserPasswordController extends Controller
 
     /**
      * Synchronize the password of the user.
+     *
      * @throws Exception
      */
     public function syncPasswords(Request $request): View|RedirectResponse
@@ -133,7 +135,6 @@ class UserPasswordController extends Controller
         );
     }
 
-
     /**
      * Show the page to request a username via an email.
      */
@@ -152,9 +153,7 @@ class UserPasswordController extends Controller
         ]);
 
         $user = User::whereEmail($request->get('email'))->first();
-        if ($user) {
-            $user->sendForgotUsernameEmail();
-        }
+        $user?->sendForgotUsernameEmail();
 
         Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
 
@@ -171,11 +170,12 @@ class UserPasswordController extends Controller
 
     /**
      * Change the password of the user.
+     *
      * @throws Exception
      */
     public function changePassword(Request $request): View|RedirectResponse
     {
-        $validated = $request->validate( [
+        $validated = $request->validate([
             'old_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
