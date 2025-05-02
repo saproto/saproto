@@ -898,9 +898,9 @@ Route::middleware('forcedomain')->group(function () {
         // Public routes
         Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');
-            Route::get('/like/{id}', 'toggleLike')->middleware(['auth'])->name('likes');
-            Route::get('/photo/{id}', 'photo')->name('view');
-            Route::get('{id}', 'show')->name('album::list');
+            Route::get('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('likes');
+            Route::get('/photo/{photo}', 'photo')->name('view');
+            Route::get('{album}', 'show')->name('album::list');
         });
 
         /* --- Routes related to the photo admin. (Protography only) --- */
