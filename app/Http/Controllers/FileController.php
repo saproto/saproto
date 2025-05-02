@@ -15,8 +15,7 @@ class FileController extends Controller
 {
     public function get(int $id, string $hash): Response
     {
-        /** @var StorageEntry $entry */
-        $entry = StorageEntry::query()->findOrFail($id);
+        $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
 
         if ($hash != $entry->hash) {
             abort(404);
@@ -54,8 +53,8 @@ class FileController extends Controller
      */
     public function getImage(int $id, string $hash, Request $request)
     {
-        /** @var StorageEntry $entry */
-        $entry = StorageEntry::query()->findOrFail($id);
+
+        $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
 
         if ($hash != $entry->hash) {
             abort(404);

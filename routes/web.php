@@ -919,14 +919,12 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Fetching images: Public --- */
     Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
-        Route::get('{id}/{hash}', 'getImage')->name('get');
-        Route::get('{id}/{hash}/{name}', 'getImage');
+        Route::get('{id}/{hash}/{name?}', 'getImage')->name('get');
     });
 
     /* --- Fetching files: Public   --- */
     Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
-        Route::get('{id}/{hash}', 'get')->name('get');
-        Route::get('{id}/{hash}/{name}', 'get');
+        Route::get('{id}/{hash}/{name?}', 'get')->name('get');
     });
 
     /* --- Routes related to Spotify. (Board) --- */
