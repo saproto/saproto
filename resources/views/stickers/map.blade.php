@@ -314,12 +314,18 @@
 
             const markerInstances = new Map()
 
-            var map = L.map('map', {
-                minZoom: 3,
-                inertia: true,
+            const map = L.map('map', {
+                minZoom: 2,
                 worldCopyJump: true,
-                maxBoundsViscosity: 1,
+                maxBoundsViscosity: 0.9,
             }).setView([currentLat, currentLng], currentZoom)
+
+            const bounds = [
+                [-90, -180],
+                [90, 180],
+            ]
+            map.setMaxBounds(bounds)
+
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution:
