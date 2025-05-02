@@ -7,7 +7,6 @@
 @section('login-body')
     <form method="POST" action="{{ route('login::password::change') }}">
         @csrf
-
         <p>
             <input
                 id="old_password"
@@ -29,11 +28,22 @@
 
         <hr />
 
+        <div class="text-start">
+            Your new password needs to fullfill the following requirements:
+            <ul>
+                <li>It needs to be at least <b>10</b> characters long</li>
+                <li>It needs to contain at least one <b>uppercase</b> letter</li>
+                <li>It needs to contain at least one <b>lowercase</b> letter</li>
+                <li>It needs to contain at least one <b>number</b></li>
+                <li>It needs to contain at least one <b>special character</b></li>
+            </ul>
+        </div>
+
         <p>
             <input
-                id="new_password1"
+                id="password"
                 type="password"
-                name="new_password1"
+                name="password"
                 class="form-control"
                 minlength="10"
                 placeholder="New password (at least 10 characters)"
@@ -42,9 +52,9 @@
 
         <p>
             <input
-                id="new_password2"
+                id="password_confirmation"
                 type="password"
-                name="new_password2"
+                name="password_confirmation"
                 class="form-control"
                 minlength="10"
                 placeholder="New password (again)"

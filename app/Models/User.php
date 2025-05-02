@@ -385,9 +385,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         // Update Laravel Password
         $this->password = Hash::make($password);
         $this->save();
-
-        // Remove breach notification flag
-        HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
     public function hasUnpaidOrderlines(): bool
