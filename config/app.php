@@ -242,7 +242,6 @@ return [
         BarcodeServiceProvider::class,
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
-        ServiceProvider::class,
         Sentry\Laravel\ServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
     ],
