@@ -6,7 +6,7 @@
 <html lang="en">
     <head>
         <link
-            href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"
             rel="stylesheet"
             type="text/css"
         />
