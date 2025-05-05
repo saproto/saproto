@@ -53,6 +53,10 @@ class FileController extends Controller
      */
     public function getImage(int $id, string $hash, Request $request)
     {
+        $validated = $request->validate([
+            'w' => 'nullable|integer',
+            'h' => 'nullable|integer',
+        ]);
 
         $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
 
@@ -60,7 +64,7 @@ class FileController extends Controller
             abort(404);
         }
 
-        return Response(static::makeImage($entry, $request->input('w'), $request->input('h')), 200, [
+        return Response(static::makeImage($entry, $validated['w'] ?? null, $validated['h'] ?? null), 200, [
             'Content-Type' => 'image/webp',
             'Cache-Control' => 'max-age=31536000, public',
             'Content-Disposition', sprintf('filename="%s"', $entry->original_filename),
