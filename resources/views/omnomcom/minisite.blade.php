@@ -35,18 +35,18 @@
         />
 
         <style>
-            *{
+            * {
                 text-transform: uppercase;
             }
             html {
                 box-sizing: border-box;
-                font: 14px "Varela Round";
+                font: 14px 'Varela Round';
                 font-size: 1200;
             }
 
             body {
                 background-color: #0089fa;
-                font-family: "Varela Round", sans-serif;
+                font-family: 'Varela Round', sans-serif;
                 color: #fff;
                 font-weight: 400;
                 font-size: 14px;
@@ -85,7 +85,7 @@
                 font-size: 30px;
                 padding: 20px;
                 color: #0089fa;
-                font-family: "Varela Round", sans-serif;
+                font-family: 'Varela Round', sans-serif;
                 border: none;
                 margin-top: 20px;
                 width: 800px;
