@@ -31,6 +31,7 @@ class ProtoPolicy extends Policy
         $this
             ->addDirective(Directive::BASE, Keyword::SELF)
             ->addDirective(Directive::DEFAULT, Keyword::SELF)
+            ->addDirective(Directive::FRAME_ANCESTORS, [Keyword::SELF])
             ->addDirective(Directive::FORM_ACTION, [
                 Keyword::SELF,
                 'https://www.mollie.com/checkout/',
@@ -48,9 +49,6 @@ class ProtoPolicy extends Policy
                 'https://s.ytimg.com',
                 'https://www.google.com/recaptcha/api.js',
                 'https://www.gstatic.com/recaptcha/',
-                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-                'https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js',
-                'https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
@@ -59,10 +57,6 @@ class ProtoPolicy extends Policy
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
                 'https://fonts.googleapis.com/css2',
-                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css',
-                'https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css',
-                'https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
             ->addDirective(Directive::IMG, [
