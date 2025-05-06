@@ -10,7 +10,7 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-end">
                     <a
-                        href="{{ route('photo::album::list', ['id' => $photo->album_id, 'page' => $photo->getAlbumPageNumber(24)]) }}"
+                        href="{{ route('photo::album::list', ['album' => $photo->album_id, 'page' => $photo->getAlbumPageNumber(24)]) }}"
                         class="btn btn-success float-start me-3"
                     >
                         <i class="fas fa-images me-2"></i>
@@ -23,7 +23,7 @@
 
                     @if ($previous != null && $previous->id != $photo->id)
                         <a
-                            href="{{ route('photo::view', ['id' => $previous]) }}"
+                            href="{{ route('photo::view', ['photo' => $previous]) }}"
                             class="btn btn-dark me-3"
                         >
                             <i class="fas fa-arrow-left"></i>
@@ -31,7 +31,7 @@
                     @endif
 
                     <a
-                        href="{{ route('photo::likes', ['id' => $photo->id]) }}"
+                        href="{{ route('photo::likes', ['photo' => $photo->id]) }}"
                         class="btn {{ $photo->liked_by_me ? 'btn-info' : 'btn-outline-info' }} me-3"
                     >
                         <i class="fas fa-heart"></i>
@@ -52,7 +52,7 @@
 
                     @if ($next != null && $next->id != $photo->id)
                         <a
-                            href="{{ route('photo::view', ['id' => $next]) }}"
+                            href="{{ route('photo::view', ['photo' => $next]) }}"
                             class="btn btn-dark"
                         >
                             <i class="fas fa-arrow-right"></i>
@@ -92,17 +92,17 @@
             switch (e.key) {
                 @if ($previous != null)
                 case 'ArrowLeft':
-                    window.location.href = '{{ route("photo::view", ["id"=> $previous->id]) }}';
+                    window.location.href = '{{ route("photo::view", ["photo"=> $previous->id]) }}';
                     break;
                 @endif
                 @if ($next != null)
                 case 'ArrowRight':
-                    window.location.href = '{{ route("photo::view", ["id"=> $next->id]) }}';
+                    window.location.href = '{{ route("photo::view", ["photo"=> $next->id]) }}';
                     break;
                 @endif
                 @if (Auth::check())
                 case 'ArrowUp':
-                    window.location.href = '{{ route("photo::likes", ["id"=> $photo->id]) }}';
+                    window.location.href = '{{ route("photo::likes", ["photo"=> $photo->id]) }}';
                     break;
                 @endif
             }
@@ -129,7 +129,7 @@
                     setTimeout(
                         (_) =>
                             location.replace(
-                                '{{ route('photo::album::list', ['id' => $photo->album_id]) . '?page=' . $photo->albumPage }}'
+                                '{{ route('photo::album::list', ['album' => $photo->album_id]) . '?page=' . $photo->albumPage }}'
                             ),
                         10
                     )

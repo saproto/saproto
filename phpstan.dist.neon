@@ -10,8 +10,6 @@ parameters:
     level: 5 # out of 9
 
     ignoreErrors:
-        # Weirdly cannot be found anywhere in the codebase...
-        - '#LightSaml#'
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)
         - '#Cannot access property (.*) on array\|object.#'
         # Issue with SephpaInputException not being a subtype of Throwable
