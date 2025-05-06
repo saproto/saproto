@@ -183,6 +183,7 @@ class UserPasswordController extends Controller
         $user = Auth::user();
 
         $user->setPassword($validated['password']);
+        $this->syncGooglePassword($user, $validated['password']);
         Session::flash('flash_message', 'Your password has been changed.');
 
         return Redirect::route('user::dashboard::show');
