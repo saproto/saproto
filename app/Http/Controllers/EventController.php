@@ -261,7 +261,7 @@ class EventController extends Controller
 
     private function getAvailableYears(): Collection
     {
-        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
+        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
     }
 
     /**
