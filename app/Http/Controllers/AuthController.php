@@ -178,28 +178,15 @@ class AuthController extends Controller
      *
      * @throws Exception
      */
-
-    private function handleRegularLogin(Request $request): RedirectResponse
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return self::continueLogin(Auth::user());
-        }
-        Session::flash('flash_message', 'Invalid username or password provided.');
-        return Redirect::route('login::show');
-    }
     private function handleRegularLogin(Request $request)
     {
-        $username = $request->input('email');
-        $password = $request->input('password');
 
-        $user = self::verifyCredentials($username, $password);
+        $credentials = $request->validate([
+            'email' => ['required'],
+            'password' => ['required'],
+        ]);
+        
+        $user = self::verifyCredentials($credentials['email'], $credentials['password']);
 
         if ($user) {
             return self::continueLogin($user);
