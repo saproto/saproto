@@ -64,6 +64,7 @@ use Milon\Barcode\BarcodeServiceProvider;
 use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
+use Sentry\Laravel\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -242,7 +243,7 @@ return [
         BarcodeServiceProvider::class,
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
-        Sentry\Laravel\ServiceProvider::class,
+        ServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
     ],
 

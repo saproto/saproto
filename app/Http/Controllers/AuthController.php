@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -173,7 +170,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return RedirectResponse
      *
      * @throws Exception
@@ -185,7 +181,7 @@ class AuthController extends Controller
             'email' => ['required'],
             'password' => ['required'],
         ]);
-        
+
         $user = self::verifyCredentials($credentials['email'], $credentials['password']);
 
         if ($user) {

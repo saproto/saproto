@@ -25,7 +25,6 @@ class UserController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($request->id ?? Auth::id());
 
-
         if (Auth::id() == $user->id) {
             $request->validate(
                 ['password' => ['required', 'current_password']]
