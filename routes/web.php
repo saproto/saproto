@@ -554,15 +554,14 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Related to presence & participation --- */
         Route::controller(ParticipationController::class)->group(function () {
             // Public routes
-            Route::get('togglepresence/{id}', 'togglePresence')->middleware(['auth'])->name('togglepresence');
+            Route::get('togglepresence/{participation}', 'togglePresence')->middleware(['auth'])->name('togglepresence');
 
             // Manage participation
-            Route::get('participate/{id}', 'create')->middleware(['member'])->name('addparticipation');
-            Route::get('unparticipate/{participation_id}', 'destroy')->name('deleteparticipation');
+            Route::get('participate/{event}', 'create')->middleware(['member'])->name('addparticipation');
+            Route::get('unparticipate/{participation}', 'destroy')->name('deleteparticipation');
 
             // Participate for someone else (Board only)
-            Route::post('participatefor/{id}', 'createFor')->middleware(['permission:board'])->name('addparticipationfor');
-
+            Route::post('participatefor/{event}', 'createFor')->middleware(['permission:board'])->name('addparticipationfor');
         });
 
         /* --- Buy tickets for an event (Public) --- */
