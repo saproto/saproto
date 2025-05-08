@@ -29,13 +29,12 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property ActivityParticipation[] $participation
- * @property ActivityParticipation[] $helpingParticipations
+ * @property HelperParticipation[] $helpingParticipations
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
  * @property-read Collection|User[] $allUsers
  * @property-read Collection|User[] $backupUsers
- * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
- * @property-read Collection|Committee[] $helpingCommittees
+ * @property-read Collection|HelpingCommittee[] $helpingCommittees
  * @property-read Collection|User[] $presentUsers
  * @property-read Collection|User[] $users
  *
@@ -97,7 +96,6 @@ class Activity extends Validatable
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('backup', false)
             ->withTimestamps();
     }
@@ -110,7 +108,6 @@ class Activity extends Validatable
         return $this->belongsToMany(User::class, 'activities_users')
             ->withPivot('id', 'committees_activities_id', 'is_present')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('activities_users.is_present', true)
             ->where('backup', false)
             ->withTimestamps();
@@ -135,24 +132,15 @@ class Activity extends Validatable
     {
         return $this->belongsToMany(User::class, 'activities_users')
             ->whereNull('activities_users.deleted_at')
-            ->whereNull('committees_activities_id')
             ->where('backup', true)
             ->withPivot('id')
             ->withTimestamps();
     }
 
     /**
-     * @return BelongsToMany<Committee, $this>
-     */
-    public function helpingCommittees(): BelongsToMany
-    {
-        return $this->belongsToMany(Committee::class, 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
-    }
-
-    /**
      * @return HasMany<HelpingCommittee, $this>
      */
-    public function helpingCommitteeInstances(): HasMany
+    public function helpingCommittees(): HasMany
     {
         return $this->hasMany(HelpingCommittee::class, 'activity_id');
     }
@@ -172,7 +160,6 @@ class Activity extends Validatable
     {
         return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
-            ->whereNull('committees_activities_id')
             ->first();
     }
 
@@ -185,18 +172,18 @@ class Activity extends Validatable
     }
 
     /**
-     * @return HasMany<ActivityParticipation, $this>
+     * @return HasMany<HelperParticipation, $this>
      */
-    public function helpingParticipations(): HasMany
+    public function helperParticipations(): HasMany
     {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
+        return $this->hasMany(HelperParticipation::class, 'activity_id');
     }
 
     public function getHelperParticipation(User $user, ?HelpingCommittee $h = null)
     {
         return $this->helpingParticipations()
             ->where('user_id', $user->id)
-            ->where('committees_activities_id', $h->id)
+            ->where('committee_id', $h->id)
             ->first();
     }
 

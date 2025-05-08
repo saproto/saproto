@@ -80,7 +80,7 @@ class ParticipationController extends Controller
             $helping = HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'));
 
             abort_unless($event->activity->getHelperParticipation($user, $helping) === null, 403, $user->name.' is already helping at '.$event->title.'.');
-            abort_unless($helping->committee->isMember($user), 403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
+            abort_unless(!$helping->committee->isMember($user), 403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
 
             $data['committees_activities_id'] = $helping->id;
         } else {
@@ -163,7 +163,7 @@ class ParticipationController extends Controller
     public static function transferOneBackupUser(Activity $activity): void
     {
         $backup_participation = ActivityParticipation::query()->where('activity_id', $activity->id)
-            ->whereNull('committees_activities_id')->where('backup', true)
+            ->where('backup', true)
             ->with('user', 'activity.event')
             ->first();
 

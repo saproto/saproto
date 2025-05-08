@@ -102,8 +102,8 @@ class EventController extends Controller
                 ['tickets.product',
                     'activity.users.photo',
                     'activity.backupUsers.photo',
-                    'activity.helpingCommitteeInstances.committee',
-                    'activity.helpingCommitteeInstances.users.photo',
+                    'activity.helpingCommittees.committee',
+                    'activity.helpingCommittees.users.photo',
                     'videos',
                     'albums'])
             ->firstOrFail();
@@ -692,7 +692,7 @@ CALSCALE:GREGORIAN
             ]);
             $newActivity->save();
 
-            foreach ($event->activity->helpingCommitteeInstances as $helpingCommittee) {
+            foreach ($event->activity->helpingCommittees as $helpingCommittee) {
                 HelpingCommittee::query()->create([
                     'activity_id' => $newActivity->id,
                     'committee_id' => $helpingCommittee->committee_id,

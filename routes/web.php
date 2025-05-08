@@ -572,8 +572,8 @@ Route::middleware('forcedomain')->group(function () {
             // Board only admin
             Route::middleware(['permission:board'])->group(function () {
                 // Related to activities
-                Route::post('signup/{id}', 'store')->middleware(['permission:board'])->name('addsignup');
-                Route::get('signup/{id}/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
+                Route::post('signup/{event}', 'store')->middleware(['permission:board'])->name('addsignup');
+                Route::get('signup/{event}/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
 
                 // Related to helping committees
                 Route::post('addhelp/{id}', 'addHelp')->middleware(['permission:board'])->name('addhelp');

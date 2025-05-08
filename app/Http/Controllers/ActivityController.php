@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
+use App\Models\HelperParticipation;
 use App\Models\HelpingCommittee;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -21,11 +22,8 @@ class ActivityController extends Controller
      * @param  int  $id
      * @return RedirectResponse
      */
-    public function store(Request $request, $id)
+    public function store(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
-
         $new = $event->activity === null;
         $activity = ($new ? new Activity : $event->activity);
 
@@ -96,17 +94,15 @@ class ActivityController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             Session::flash('flash_message', 'There is no participation data to delete.');
 
             return Redirect::back();
         }
 
-        if (count($event->activity->users) > 0) {
+        if ($event->activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot delete participation data because there are still participants to this activity.');
 
             return Redirect::back();
@@ -202,17 +198,17 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function deleteHelp(Request $request, $id)
+    public function deleteHelp(Request $request, int $id)
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
 
-        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
+        foreach (HelperParticipation::withTrashed()->where('id', $help->id)->get() as $participation) {
             $participation->delete();
         }
 

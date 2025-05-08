@@ -47,13 +47,13 @@
             @if ($event->activity->helpingCommittees()->count() > 0)
                 <hr />
 
-                @foreach ($event->activity->helpingCommittees as $committee)
+                @foreach ($event->activity->helpingCommittees as $helpingCommittee)
                     <p>
-                        <strong>{{ $committee->name }}</strong>
+                        <strong>{{ $helpingCommittee->committee->name }}</strong>
                         <br />
                         Helps with
-                        {{ $event->activity->helpingUsers($committee->pivot->id)->count() }}
-                        people. {{ $committee->pivot->amount }} are needed.
+                        {{ $helpingCommittee->users_count }}
+                        people. {{ $committee->amount }} are needed.
                     </p>
 
                     <form

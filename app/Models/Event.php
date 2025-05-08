@@ -158,12 +158,13 @@ class Event extends Model
             ->with('activity', static function ($e) use ($user) {
                 $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
-                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
                 }, 'participation as user_has_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id)
-                        ->whereNull('committees_activities_id');
-                },
+                    $q->where('user_id', $user?->id);
+                },'helpingCommittees as user_has_helper_participation' => static function ($q) use ($user) {
+                    $q->whereHas('users', function ($q) use ($user) {
+                        $q->where('users.id', $user?->id);
+                    });
+                }
                 ])->withCount([
                     'users',
                 ]);

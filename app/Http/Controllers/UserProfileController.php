@@ -58,6 +58,6 @@ class UserProfileController extends Controller
 
     private function getTotalSignups($user): int
     {
-        return ActivityParticipation::query()->where('user_id', $user->id)->whereNull('committees_activities_id')->count();
+        return ActivityParticipation::query()->where('user_id', $user->id)->count();
     }
 }

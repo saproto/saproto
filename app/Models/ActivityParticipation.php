@@ -16,14 +16,13 @@ use Override;
  * @property int $id
  * @property int $activity_id
  * @property int $user_id
- * @property int|null $committees_activities_id
  * @property bool $is_present
  * @property bool $backup
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  * @property-read Activity|null $activity
- * @property-read HelpingCommittee|null $help
+
  * @property-read User|null $user
  *
  * @method static bool|null forceDelete()
@@ -70,15 +69,6 @@ class ActivityParticipation extends Model
     {
         return $this->belongsTo(Activity::class);
     }
-
-    /**
-     * @return BelongsTo<HelpingCommittee, $this>
-     */
-    public function help(): BelongsTo
-    {
-        return $this->belongsTo(HelpingCommittee::class, 'committees_activities_id');
-    }
-
     #[Override]
     protected function casts(): array
     {

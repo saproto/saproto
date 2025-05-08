@@ -86,8 +86,12 @@ class ImportLiveDataSeeder extends Seeder
                     unset($entry[$column]);
                 }
             }
-
-            DB::table($table['name'])->insert($entry);
+            // todo: take this out once the PR gets merged!
+            if($table['name']==='committees_activities'){
+                DB::table('helping_committees_activities')->insert($entry);
+            }else{
+                DB::table($table['name'])->insert($entry);
+            }
         }
     }
 

@@ -34,7 +34,7 @@ class QueryController extends Controller
             $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
         }
 
-        $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
+        $events = Event::with(['activity', 'activity.users', 'activity.helpingCommittees'])
             ->where('start', '>=', $start)->where('end', '<=', $end)
             ->orderBy('start')->get();
 

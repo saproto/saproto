@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  */
 class HelpingCommittee extends Validatable
 {
-    protected $table = 'committees_activities';
+    protected $table = 'helping_committees_activities';
 
     protected $guarded = ['id'];
 
@@ -69,10 +69,6 @@ class HelpingCommittee extends Validatable
      */
     public function users(): BelongsToMany
     {
-        return $this
-            ->belongsToMany(User::class, 'activities_users', 'committees_activities_id')
-            ->whereNull('activities_users.deleted_at')
-            ->withPivot('id')
-            ->withTrashed();
+        return $this->belongsToMany(User::class, 'helping_committees_users')->withTrashed();
     }
 }
