@@ -281,7 +281,7 @@ class Activity extends Validatable
      */
     public function hasStarted(): bool
     {
-        return $this->event->start < Carbon::now()->format('U');
+        return $this->event->start->isPast();
     }
 
     /**

@@ -55,7 +55,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return HasMany<\App\Models\MenuItem, $this>
+     * @return HasMany<MenuItem, $this>
      */
     public function children(): HasMany
     {
@@ -63,7 +63,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return BelongsTo<\App\Models\MenuItem, $this>
+     * @return BelongsTo<MenuItem, $this>
      */
     public function parent(): BelongsTo
     {
