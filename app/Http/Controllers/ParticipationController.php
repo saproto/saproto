@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Session;
 class ParticipationController extends Controller
 {
     /**
-     * @return RedirectResponse|JsonResponse
+     * @return RedirectResponse
      */
     public function create(int $id, Request $request)
     {
@@ -30,9 +30,11 @@ class ParticipationController extends Controller
         $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
+        }
+
+        if ($request->has('helping_committee_id') && $event->activity->getHelperParticipation(Auth::user(), HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
             abort(403, 'You are helping at '.$event->title.'.');
-        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
+        } elseif (! $request->has('helping_committee_id') && $event->activity->getParticipation(Auth::user()) !== null) {
             abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif (! $request->has('helping_committee_id') && (! $event->activity->canSubscribeBackup())) {
             abort(403, 'You cannot subscribe for '.$event->title.' at this time.');
@@ -41,8 +43,6 @@ class ParticipationController extends Controller
         }
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
-
-        $is_web = Auth::guard('web')->user();
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->helping_committee_id);
@@ -55,15 +55,11 @@ class ParticipationController extends Controller
             }
 
             $data['committees_activities_id'] = $helping->id;
-        } elseif ($is_web) {
-            if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
-                $data['backup'] = true;
-            } else {
-                Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
-            }
         } elseif ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
+            Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
             $data['backup'] = true;
+        } else {
+            Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
         }
 
         $participation = new ActivityParticipation;
@@ -71,20 +67,6 @@ class ParticipationController extends Controller
         $participation->save();
 
         $event->updateUniqueUsersCount();
-
-        if (! $is_web) {
-            if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                $message = 'You have been placed on the back-up list for '.$event->title.'.';
-            } else {
-                $message = 'You claimed a spot for '.$event->title.'.';
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => $message,
-                'participation_id' => $participation->id,
-            ]);
-        }
 
         if ($event->activity->redirect_url) {
             return Redirect::to($event->activity->redirect_url);
@@ -115,19 +97,17 @@ class ParticipationController extends Controller
 
         if (! $event->activity) {
             abort(403, 'You cannot subscribe for '.$event->title.'.');
-        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
-            abort(403, 'You are helping at '.$event->title.'.');
-        } elseif ($event->activity->getParticipation($user) !== null) {
-            abort(403, 'You are already subscribed for '.$event->title.'.');
         } elseif ($event->activity->closed) {
             abort(403, 'This activity is closed, you cannot change participation anymore.');
+        } elseif ($request->has('helping_committee_id') && $event->activity->getHelperParticipation($user, HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'))) !== null) {
+            abort(403, 'You are helping at '.$event->title.'.');
+        } elseif (! $request->has('helping_committee_id') && $event->activity->getParticipation($user) !== null) {
+            abort(403, 'You are already subscribed for '.$event->title.'.');
         }
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
-        $participation = new ActivityParticipation;
-        $participation->fill($data);
-        $participation->save();
+        $participation = ActivityParticipation::query()->create($data);
 
         if (! isset($data['committees_activities_id']) || ! $data['committees_activities_id']) {
             $event->updateUniqueUsersCount();
@@ -148,72 +128,44 @@ class ParticipationController extends Controller
     public function destroy(int $participation_id)
     {
         /** @var ActivityParticipation|null $participation */
-        $participation = ActivityParticipation::query()->where('id', $participation_id)->with('activity', 'activity.event', 'user')->first();
+        $participation = ActivityParticipation::query()->with('activity', 'activity.event', 'user')->findorFail($participation_id);
 
-        if (! $participation) {
-            Session::flash('flash_message', 'The participation is not found.');
+        abort_unless($participation->user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
+
+        if ($participation->committees_activities_id !== null) {
+
+            $message = $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.';
+            Session::flash('flash_message', $message);
+
+            $participation->delete();
+            $participation->activity->event->updateUniqueUsersCount();
 
             return Redirect::back();
         }
 
-        $notify = false;
+        if ($participation->activity->closed) {
+            abort(403, 'This activity is closed, you cannot change participation anymore.');
+        }
+
+        if (! $participation->activity->canUnsubscribe() && ! $participation->backup && ! Auth::user()->can('board')) {
+            abort(403, 'You cannot unsubscribe for this event at this time.');
+        }
 
         if ($participation->user->id != Auth::id()) {
-            if (! Auth::user()->can('board')) {
-                abort(403);
-            }
-
-            $notify = true;
+            Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
         }
 
-        $is_web = Auth::guard('web')->user();
+        Session::flash('flash_message', $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.');
 
-        if ($participation->committees_activities_id === null) {
-            if ($participation->activity->closed) {
-                abort(403, 'This activity is closed, you cannot change participation anymore.');
-            }
+        $participation->delete();
 
-            if (! $participation->activity->canUnsubscribe() && ! $participation->backup && ! Auth::user()->can('board')) {
-                abort(403, 'You cannot unsubscribe for this event at this time.');
-            }
-
-            if ($notify) {
-                Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
-            }
-
-            $message = $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.';
-            if ($is_web) {
-                Session::flash('flash_message', $message);
-            }
-
-            $participation->delete();
-
-            $participation->activity->event->updateUniqueUsersCount();
-
-            if (! $participation->backup && $participation->activity->users()->count() < $participation->activity->participants) {
-                self::transferOneBackupUser($participation->activity);
-            }
-        } else {
-            $message = $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.';
-            if ($is_web) {
-                Session::flash('flash_message', $message);
-            }
-
-            $participation->delete();
-            $participation->activity->event->updateUniqueUsersCount();
+        if (! $participation->backup && $participation->activity->users()->count() < $participation->activity->participants) {
+            self::transferOneBackupUser($participation->activity);
         }
 
-        if ($is_web) {
-            return Redirect::back();
-        }
+        $participation->activity->event->updateUniqueUsersCount();
 
-        abort(200, json_encode((object) [
-            'success' => true,
-            'message' => $message,
-        ]));
-
-        /**@phpstan-ignore-next-line */
-        return null;
+        return Redirect::back();
     }
 
     /**
