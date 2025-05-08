@@ -56,7 +56,7 @@ it('rejects participations before the signup opening', function (Carbon $time, E
     if ($time->isBefore($t0)) {
         Carbon::withTestNow($time, function () use ($user, $event) {
             $response = $this->actingAs($user)->get(
-                route('event::addparticipation', ['id' => $event->id]));
+                route('event::addparticipation', ['event' => $event]));
             $response->assertStatus(403);
             $response->assertDontSee('You claimed a spot for');
             $response->assertDontSee('You have been placed on the back-up list for');
@@ -72,7 +72,7 @@ it('allows participation when open', function (Carbon $time, Event $event, User 
     if ($time->isAfter($t0) || $time->equalTo($t0)) {
         Carbon::withTestNow($time, function () use ($user, $event) {
             $response = $this->actingAs($user)->get(
-                route('event::addparticipation', ['id' => $event->id]));
+                route('event::addparticipation', ['event' => $event]));
             $response->assertRedirect();
 
             $redirectUrl = $response->headers->get('Location');

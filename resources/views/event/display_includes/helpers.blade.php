@@ -34,7 +34,7 @@
                                 class="btn btn-outline-warning btn-block mt-1"
                                 href="{{
                                     route('event::deleteparticipation', [
-                                        'participation_id' => $instance->users
+                                        'participation' => $instance->users
                                             ->filter(function ($user) {
                                                 return $user->id === Auth::id();
                                             })
@@ -47,7 +47,7 @@
                         @elseif ($instance->users->count() < $instance->amount)
                             <a
                                 class="btn btn-outline-success btn-block mt-1"
-                                href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
+                                href="{{ route('event::addparticipation', ['event' => $event, 'helping_committee_id' => $instance->id]) }}"
                             >
                                 I'll help!
                             </a>
@@ -58,7 +58,7 @@
                         <form
                             class="form-horizontal mt-2"
                             method="post"
-                            action="{{ route('event::addparticipationfor', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
+                            action="{{ route('event::addparticipationfor', ['event' => $event, 'helping_committee_id' => $instance->id]) }}"
                         >
                             {{ csrf_field() }}
 
