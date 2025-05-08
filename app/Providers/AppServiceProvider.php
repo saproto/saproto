@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         Password::defaults(function () {
-            $rule = Password::min(10)->letters();
+            $rule = Password::min(10)->max(72)->letters();
 
             return $this->app->isProduction()
                 ? $rule->mixedCase()->numbers()->symbols()->uncompromised()
