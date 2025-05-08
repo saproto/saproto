@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PwnedPasswordNotification;
-use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use nickurt\PwnedPasswords\PwnedPasswords;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
@@ -145,11 +140,6 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
-                Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => Carbon::now()->format('r')]);
-            }
-
             return $user;
         }
 
@@ -186,10 +176,13 @@ class AuthController extends Controller
      */
     private function handleRegularLogin(Request $request)
     {
-        $username = $request->input('email');
-        $password = $request->input('password');
 
-        $user = self::verifyCredentials($username, $password);
+        $credentials = $request->validate([
+            'email' => ['required'],
+            'password' => ['required'],
+        ]);
+
+        $user = self::verifyCredentials($credentials['email'], $credentials['password']);
 
         if ($user) {
             return self::continueLogin($user);
