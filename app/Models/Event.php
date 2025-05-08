@@ -312,17 +312,12 @@ class Event extends Model
             return false;
         }
 
-        $eroHelping = HelpingCommittee::query()
+        return HelpingCommittee::query()
             ->where('activity_id', $this->activity->id)
-            ->where('committee_id', Config::integer('proto.committee.ero'))->first();
-        if ($eroHelping) {
-            return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
-        }
-
-        return false;
+            ->where('committee_id', Config::integer('proto.committee.ero'))
+            ->whereHas('users', function ($q) use($user) {
+                $q->where('user_id', $user->id);
+            })->exists();
     }
 
     /**

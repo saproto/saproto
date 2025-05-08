@@ -37,10 +37,10 @@ return new class extends Migration
             }
         });
 
-//        ActivityParticipation::query()->whereNotNull('committees_activities_id')->delete();
-//        Schema::table('activities_users', function (Blueprint $table) {
-//            $table->dropColumn('committees_activities_id');
-//        });
+        ActivityParticipation::query()->whereNotNull('committees_activities_id')->delete();
+        Schema::table('activities_users', function (Blueprint $table) {
+            $table->dropColumn('committees_activities_id');
+        });
     }
 
     /**

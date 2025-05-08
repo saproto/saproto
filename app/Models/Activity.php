@@ -94,7 +94,7 @@ class Activity extends Validatable
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
@@ -106,7 +106,7 @@ class Activity extends Validatable
     public function presentUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('activities_users.is_present', true)
             ->where('backup', false)
@@ -119,7 +119,7 @@ class Activity extends Validatable
     public function allUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'activities_users')
-            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->withPivot('id', 'is_present')
             ->whereNull('activities_users.deleted_at')
             ->where('backup', false)
             ->withTimestamps();
@@ -146,17 +146,9 @@ class Activity extends Validatable
     }
 
     /**
-     * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
-     */
-    public function helpingUsers(int $help_id): \Illuminate\Support\Collection
-    {
-        return ActivityParticipation::query()->whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
-    }
-
-    /**
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
+    public function getParticipation(User $user): ?ActivityParticipation
     {
         return ActivityParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
@@ -171,20 +163,11 @@ class Activity extends Validatable
         return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
 
-    /**
-     * @return HasMany<HelperParticipation, $this>
-     */
-    public function helperParticipations(): HasMany
-    {
-        return $this->hasMany(HelperParticipation::class, 'activity_id');
-    }
-
     public function getHelperParticipation(User $user, ?HelpingCommittee $h = null)
     {
-        return $this->helpingParticipations()
+        return HelperParticipation::query()->where('activity_id', $this->id)
             ->where('user_id', $user->id)
-            ->where('committee_id', $h->id)
-            ->first();
+            ->where('id', $h->id);
     }
 
     /**
@@ -204,7 +187,7 @@ class Activity extends Validatable
             return $this->getHelperParticipation($user, $h) instanceof ActivityParticipation;
         }
 
-        return ActivityParticipation::query()->where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
+        return ActivityParticipation::query()->where('activity_id', $this->id)->where('user_id', $user->id)->count() > 0;
     }
 
     /**

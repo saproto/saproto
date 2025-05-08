@@ -12,6 +12,7 @@
             class="btn btn-outline-primary"
         >
             <img
+                alt="{{ $u->name }}'s profile picture"
                 src="{{ $u->generatePhotoPath(25, 25) }}"
                 class="rounded-circle me-1"
                 style="width: 21px; height: 21px; margin-top: -3px"

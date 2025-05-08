@@ -69,6 +69,6 @@ class HelpingCommittee extends Validatable
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'helping_committees_users')->withTrashed();
+        return $this->belongsToMany(User::class, 'helping_committees_users')->withPivot('id')->withTrashed();
     }
 }

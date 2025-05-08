@@ -43,8 +43,7 @@
                     </div>
                 </div>
             </form>
-
-            @if ($event->activity->helpingCommittees()->count() > 0)
+            @if ($event->activity->helpingCommittees->count() > 0)
                 <hr />
 
                 @foreach ($event->activity->helpingCommittees as $helpingCommittee)
@@ -52,20 +51,20 @@
                         <strong>{{ $helpingCommittee->committee->name }}</strong>
                         <br />
                         Helps with
-                        {{ $helpingCommittee->users_count }}
-                        people. {{ $committee->amount }} are needed.
+                        {{ $helpingCommittee->users->count() }}
+                        people. {{ $helpingCommittee->amount }} are needed.
                     </p>
 
                     <form
                         method="post"
-                        action="{{ route('event::updatehelp', ['id' => $committee->pivot->id]) }}"
+                        action="{{ route('event::updatehelp', ['id' => $helpingCommittee->id]) }}"
                     >
                         @csrf
 
                         <div class="row">
                             <div class="col-md-3">
                                 <a
-                                    href="{{ route('event::deletehelp', ['id' => $committee->pivot->id]) }}"
+                                    href="{{ route('event::deletehelp', ['id' => $helpingCommittee->id]) }}"
                                     class="btn btn-danger btn-sm btn-block"
                                 >
                                     Delete
@@ -88,7 +87,7 @@
                                         name="amount"
                                         min="1"
                                         required
-                                        value="{{ $committee->pivot->amount }}"
+                                        value="{{ $helpingCommittee->amount }}"
                                     />
                                     <span
                                         class="input-group-text"
