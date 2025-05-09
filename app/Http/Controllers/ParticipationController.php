@@ -31,19 +31,6 @@ class ParticipationController extends Controller
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
-        if ($request->has('helping_committee_id')) {
-            $helpingCommittee = HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'));
-            abort_unless($event->activity->getHelperParticipation(Auth::user(), $helpingCommittee) === null, 403, 'You are already helping at '.$event->title.'.');
-
-            abort_unless($helpingCommittee->committee->isMember(Auth::user()), 403, 'You are not a member of the '.$helpingCommittee->committee.' and thus cannot help on behalf of it.');
-            abort_if($helpingCommittee->users->count() >= $helpingCommittee->amount, 403, 'There are already enough people of your committee helping, thanks though!');
-
-            $data['committees_activities_id'] = $helpingCommittee->id;
-            ActivityParticipation::query()->create($data);
-
-            return Redirect::back();
-        }
-
         abort_unless($event->activity->getParticipation(Auth::user()) === null, 403, 'You are already subscribed for '.$event->title.'.');
         abort_unless($event->activity->canSubscribeBackup(), 403, 'You cannot subscribe for '.$event->title.' at this time.');
 
@@ -110,15 +97,6 @@ class ParticipationController extends Controller
         $participation->load(['activity', 'activity.event', 'user']);
 
         abort_unless($participation->user->id == Auth::id() || Auth::user()->can('board'), 403, 'You are not allowed to unsubscribe this user from this event.');
-
-        // always allow deleting of helper participation
-        if ($participation->committees_activities_id !== null) {
-            $participation->delete();
-            Session::flash('flash_message', $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.');
-            $participation->activity->event->updateUniqueUsersCount();
-
-            return Redirect::back();
-        }
 
         abort_if($participation->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
 
