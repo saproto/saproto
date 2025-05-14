@@ -53,7 +53,7 @@ it('logs out an authenticated user and invalidates the session', function () {
 
     $sessionIdBeforeLogout = session()->getId();
 
-    //logout
+    // logout
     $response = $this->post(route('login::logout'));
 
     $response->assertRedirect('/');
