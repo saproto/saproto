@@ -20,7 +20,7 @@
                                 <th><b>Member until</b></th>
                                 <td>
                                     <span class="badge rounded-pill bg-danger">
-                                        {{ Carbon::createFromTimestamp($user->member->until, CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y') }}
+                                        {{ Carbon::createFromTimestamp($user->member->until, \Carbon\CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y') }}
                                     </span>
                                 </td>
                             </tr>
