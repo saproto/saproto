@@ -134,8 +134,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('login', 'loginIndex')->name('show');
         Route::post('login', 'login')->middleware(['throttle:5,1'])->name('post');
 
-        Route::get('logout', 'logout')->name('logout');
-        Route::get('logout/redirect', 'logoutAndRedirect')->name('logout::redirect');
+        Route::post('logout', 'logout')->name('logout');
 
         Route::prefix('password')->name('password::')->group(function () {
             Route::get('reset/{token}', [UserPasswordController::class, 'resetPasswordIndex'])->name('reset::token');

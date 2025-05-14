@@ -20,14 +20,12 @@
         @endif
 
         @if (Auth::check())
-            <a
-                id="logout-button"
-                href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}"
-                class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis"
-            >
-                Log out
-                <strong>{{ Auth::user()->calling_name }}</strong>
-            </a>
+                <form action="{{ route('login::logout') }}" method="POST">
+                    @csrf
+                    <button class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis" type="submit" >
+                        Logout <strong>{{ Auth::user()->calling_name }}</strong>
+                    </button>
+                </form>
         @endif
 
         <div id="reload-button" class="btn btn-block px-4 py-2">
@@ -38,8 +36,6 @@
 
 @push('javascript')
     <script nonce="{{ csp_nonce() }}">
-        document.getElementById('logout-button').onclick = (_) =>
-            (window.location = '{{ route('login::logout') }}')
         document.getElementById('reload-button').onclick = (_) =>
             window.location.reload()
     </script>

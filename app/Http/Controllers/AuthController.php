@@ -38,7 +38,7 @@ class AuthController extends Controller
      * Register a new account.
      * It is possible to register an account without a UT account, the user will automatically be redirected.
      */
-    public function register(Request $request): RedirectResponse|View
+    public function register(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
@@ -96,27 +96,15 @@ class AuthController extends Controller
     /**
      * Log out the user and redirect to the homepage.
      */
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request)
     {
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::route('homepage');
-    }
 
-    /**
-     * Log out the user and redirect arbitrarily.
-     */
-    public function logoutAndRedirect(Request $request): RedirectResponse
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::route($request->route, $request->parameters);
+        return Redirect::route('login::show')->with('flash_message', 'You have been logged out.');
     }
 
     /* These are the static helper functions of the AuthController for more overview and modularity. */

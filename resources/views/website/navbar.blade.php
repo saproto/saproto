@@ -645,7 +645,7 @@
                 </form>
 
                 @if (Auth::check())
-                    <form class="form-inline mt-2 mt-md-0">
+                    <div class="form-inline mt-2 mt-md-0">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item dropdown">
                                 <a
@@ -732,19 +732,19 @@
                                             Quit Impersonation
                                         </a>
                                     @else
-                                        <a
-                                            class="dropdown-item"
-                                            href="{{ route('login::logout') }}"
-                                        >
-                                            Logout
-                                        </a>
+                                        <form action="{{ route('login::logout') }}" method="POST">
+                                            @csrf
+                                            <button class="dropdown-item" type="submit" >
+                                                Logout
+                                            </button>
+                                        </form>
                                     @endif
                                 </div>
                             </li>
                         </ul>
-                    </form>
+                    </div>
                 @else
-                    <form class="form-inline mt-2 mt-md-0">
+                    <div class="form-inline mt-2 mt-md-0">
                         <a
                             class="btn btn-outline-light me-2"
                             href="{{ route('login::register::index') }}"
@@ -759,7 +759,7 @@
                             <i class="fas fa-id-card fa-fw me-2"></i>
                             Log-in
                         </a>
-                    </form>
+                    </div>
                 @endif
             </div>
         </div>
