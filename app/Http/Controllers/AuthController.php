@@ -103,7 +103,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::route('login::show')->with('flash_message', 'You have been logged out.');
+        return Redirect::route('homepage')->with('flash_message', 'You have been logged out.');
     }
 
     /* These are the static helper functions of the AuthController for more overview and modularity. */
