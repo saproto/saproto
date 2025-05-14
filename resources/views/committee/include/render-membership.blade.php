@@ -4,16 +4,16 @@
         'user' => $membership->user,
         'subtitle' => sprintf(
             '<em>%s</em><br>%s',
-            $membership->role ? $membership->role : 'General Member',
+            $membership->role ?? 'General Member',
             $membership->deleted_at
                 ? sprintf(
                     'Between %s and %s',
-                    date('M \'y', strtotime($membership->created_at)),
-                    date('M \'y', strtotime($membership->deleted_at)),
+                    $membership->created_at->format('M \'y'),
+                    $membership->deleted_at->format('M \'y'),
                 )
                 : sprintf(
                     'Since %s',
-                    date('j F Y', strtotime($membership->created_at)),
+                    $membership->created_at->format('j F Y')
                 ),
         ),
         'footer' =>

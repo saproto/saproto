@@ -139,16 +139,14 @@ class EmailController extends Controller
         /** @var Email $email */
         $email = Email::query()->findOrFail($id);
 
+        $request->validate([
+            'time' => 'date'
+        ]);
+
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::index');
-        }
-
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::back();
         }
 
         $senderAddress = $request->input('sender_address');

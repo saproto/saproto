@@ -54,6 +54,7 @@ class CommitteeMembership extends Model
     protected $guarded = ['id'];
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
+    protected $fillable = ['role', 'edition', 'user_id', 'committee_id', 'created_at', 'deleted_at'];
 
     /**
      * @return BelongsTo<User, $this>
@@ -75,7 +76,9 @@ class CommitteeMembership extends Model
     protected function casts(): array
     {
         return [
+            'created_at' => 'datetime',
             'deleted_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 }

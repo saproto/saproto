@@ -159,43 +159,40 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-        User::query()->findOrFail($request->user_id);
-        Committee::query()->findOrFail($request->committee_id);
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'committee_id' => 'required|exists:committees,id',
+            'role' => 'string',
+            'edition' => 'string',
+            'start' => 'required|date',
+            'end'=> 'nullable|date',
+        ]);
 
-        $membership = new CommitteeMembership;
-        $membership->role = $request->role;
-        $membership->edition = $request->edition;
-        $membership->user_id = $request->user_id;
-        $membership->committee_id = $request->committee_id;
 
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
+        $user = User::query()->findOrFail($request->user_id);
+        $committee = Committee::query()->findOrFail($request->committee_id);
 
-            return Redirect::back();
-        }
+        CommitteeMembership::query()->create([
+                'user_id' => $validated['user_id'],
+                'committee_id' => $validated['committee_id'],
+                'role' => $validated['role'],
+                'edition' => $validated['edition'],
+                'created_at' => $validated['start'],
+                'deleted_at'=> $validated['end'] === ''? null : $validated['end'],
+            ]
+        );
 
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
 
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
-
-        $membership->save();
-
-        Session::flash('flash_message', 'You have added '.$membership->user->name.' to '.$membership->committee->name.'.');
+        Session::flash('flash_message', 'You have added '.$user->name.' to '.$committee->name.'.');
 
         return Redirect::back();
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
-    public function editMembershipForm($id)
+    public function editMembershipForm(int $id)
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
@@ -203,53 +200,47 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      */
-    public function updateMembershipForm(Request $request, $id)
+    public function updateMembershipForm(Request $request, int $id)
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-        $membership->role = $request->role;
-        $membership->edition = $request->edition;
 
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
+        $validated = $request->validate([
+            'role' => 'string',
+            'edition' => 'string',
+            'start' => 'required|date',
+            'end'=> 'nullable|date',
+        ]);
 
-            return Redirect::back();
-        }
+        $membership->update([
+            'role' => $validated['role'],
+            'edition' => $validated['edition'],
+            'created_at' => $validated['start'],
+            'deleted_at'=> $validated['end'] === ''? null : $validated['end'],
+        ]);
 
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
-
-        $membership->save();
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function deleteMembership($id)
+    public function deleteMembership(int $id)
     {
         /** @var CommitteeMembership $membership */
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-        $committee_id = $membership->committee->id;
-
-        Session::flash('flash_message', 'You have removed '.$membership->user->name.' from '.$membership->committee->name.'.');
 
         $membership->forceDelete();
 
-        return Redirect::route('committee::edit', ['id' => $committee_id]);
+        Session::flash('flash_message', 'You have removed '.$membership->user->name.' from '.$membership->committee->name.'.');
+
+        return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
 
     public function endEdition(int $committeeID, string $edition)
@@ -267,7 +258,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function showAnonMailForm($id)
