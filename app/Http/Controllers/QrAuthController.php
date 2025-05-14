@@ -15,7 +15,6 @@ use Milon\Barcode\DNS2D;
 class QrAuthController extends Controller
 {
     /**
-     * @param string $code
      * @return Response
      */
     public function showCode(string $code)
