@@ -1,46 +1,47 @@
 <?php
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 it('allows a user to log in with valid credentials and creates a new session', function () {
-$user = User::factory()->create([
-'password' => Hash::make('password123'),
-]);
+    $user = User::factory()->create([
+        'password' => Hash::make('password123'),
+    ]);
 
-$sessionIdBeforeLogin = session()->getId();
+    $sessionIdBeforeLogin = session()->getId();
 
-$loginData = [
-'email' => $user->email,
-'password' => 'password123',
-];
+    $loginData = [
+        'email' => $user->email,
+        'password' => 'password123',
+    ];
 
-// login
-$response = $this->post(route('login::post'), $loginData);
+    // login
+    $response = $this->post(route('login::post'), $loginData);
 
-$this->assertAuthenticatedAs($user);
+    $this->assertAuthenticatedAs($user);
 
-$this->assertNotEquals($sessionIdBeforeLogin, session()->getId());
+    $this->assertNotEquals($sessionIdBeforeLogin, session()->getId());
 
-$response->assertRedirect('/');
+    $response->assertRedirect('/');
 });
 
 it('does not allow login with invalid credentials', function () {
-$user = User::factory()->create([
-'password' => Hash::make('password123'),
-]);
+    $user = User::factory()->create([
+        'password' => Hash::make('password123'),
+    ]);
 
-$invalidLoginData = [
-'email' => $user->email,
-'password' => 'wrongpassword',
-];
+    $invalidLoginData = [
+        'email' => $user->email,
+        'password' => 'wrongpassword',
+    ];
 
-// login with invalid credentials
-$response = $this->post(route('login::post'), $invalidLoginData);
+    // login with invalid credentials
+    $response = $this->post(route('login::post'), $invalidLoginData);
 
-$response->assertRedirect(route('login::show'));
-$this->assertGuest();
+    $response->assertRedirect(route('login::show'));
+    $this->assertGuest();
 
-$response->assertSessionHas('flash_message', 'Invalid username or password provided.');
+    $response->assertSessionHas('flash_message', 'Invalid username or password provided.');
 });
 
 it('logs out an authenticated user and invalidates the session', function () {

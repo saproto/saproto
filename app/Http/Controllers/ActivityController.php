@@ -18,8 +18,6 @@ use Illuminate\View\View;
 class ActivityController extends Controller
 {
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      */
     public function store(Request $request, int $id)
@@ -92,7 +90,6 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
