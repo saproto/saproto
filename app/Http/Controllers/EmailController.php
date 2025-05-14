@@ -140,7 +140,7 @@ class EmailController extends Controller
         $email = Email::query()->findOrFail($id);
 
         $request->validate([
-            'time' => 'date'
+            'time' => 'date',
         ]);
 
         if ($email->sent || $email->ready) {

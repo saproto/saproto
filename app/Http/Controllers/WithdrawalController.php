@@ -150,7 +150,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
         $validated = $request->validate([
-            'date' => 'required|date_format:Y-m-d|after_or_equal:today'
+            'date' => 'required|date_format:Y-m-d|after_or_equal:today',
         ]);
 
         if ($withdrawal->closed) {

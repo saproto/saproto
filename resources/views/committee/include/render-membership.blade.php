@@ -11,10 +11,7 @@
                     $membership->created_at->format('M \'y'),
                     $membership->deleted_at->format('M \'y'),
                 )
-                : sprintf(
-                    'Since %s',
-                    $membership->created_at->format('j F Y')
-                ),
+                : sprintf('Since %s', $membership->created_at->format('j F Y')),
         ),
         'footer' =>
             Route::current()->getName() == 'committee::edit'

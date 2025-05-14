@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -165,23 +164,21 @@ class CommitteeController extends Controller
             'role' => 'string',
             'edition' => 'string',
             'start' => 'required|date',
-            'end'=> 'nullable|date',
+            'end' => 'nullable|date',
         ]);
-
 
         $user = User::query()->findOrFail($request->user_id);
         $committee = Committee::query()->findOrFail($request->committee_id);
 
         CommitteeMembership::query()->create([
-                'user_id' => $validated['user_id'],
-                'committee_id' => $validated['committee_id'],
-                'role' => $validated['role'],
-                'edition' => $validated['edition'],
-                'created_at' => $validated['start'],
-                'deleted_at'=> $validated['end'] === ''? null : $validated['end'],
-            ]
+            'user_id' => $validated['user_id'],
+            'committee_id' => $validated['committee_id'],
+            'role' => $validated['role'],
+            'edition' => $validated['edition'],
+            'created_at' => $validated['start'],
+            'deleted_at' => $validated['end'] === '' ? null : $validated['end'],
+        ]
         );
-
 
         Session::flash('flash_message', 'You have added '.$user->name.' to '.$committee->name.'.');
 
@@ -189,7 +186,6 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param int $id
      * @return View
      */
     public function editMembershipForm(int $id)
@@ -200,7 +196,6 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      */
     public function updateMembershipForm(Request $request, int $id)
@@ -211,22 +206,20 @@ class CommitteeController extends Controller
             'role' => 'string',
             'edition' => 'string',
             'start' => 'required|date',
-            'end'=> 'nullable|date',
+            'end' => 'nullable|date',
         ]);
 
         $membership->update([
             'role' => $validated['role'],
             'edition' => $validated['edition'],
             'created_at' => $validated['start'],
-            'deleted_at'=> $validated['end'] === ''? null : $validated['end'],
+            'deleted_at' => $validated['end'] === '' ? null : $validated['end'],
         ]);
-
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
 
     /**
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
@@ -258,7 +251,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return RedirectResponse|View
      */
     public function showAnonMailForm($id)
