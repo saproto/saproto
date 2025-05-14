@@ -45,28 +45,24 @@ it('does not allow login with invalid credentials', function () {
 });
 
 it('logs out an authenticated user and invalidates the session', function () {
-    // Create a user with a password
     $user = User::factory()->create([
-        'password' => Hash::make('password123'), // Hash the password
+        'password' => Hash::make('password123'),
     ]);
 
-    // Log the user in
     $this->actingAs($user);
 
-    // Get the current session ID (before logout)
     $sessionIdBeforeLogout = session()->getId();
 
-    // Perform the logout action
+    //logout
     $response = $this->post(route('login::logout'));
 
-    $response->assertRedirect('/');  // Ensure redirection occurs to homepage or other page
+    $response->assertRedirect('/');
 
-    // Assert that the user is logged out (the session should no longer have the user)
-    $this->assertGuest();  // Ensure the user is not authenticated
+    // Assert that the user is logged out
+    $this->assertGuest();
 
     // Assert that the session ID has changed, indicating that the session was invalidated
-    $this->assertNotEquals($sessionIdBeforeLogout, session()->getId());  // Session ID should be different after logout
+    $this->assertNotEquals($sessionIdBeforeLogout, session()->getId());
 
-    // Optionally, check if a flash message is displayed indicating successful logout
     $response->assertSessionHas('flash_message', 'You have been logged out.');
 });
