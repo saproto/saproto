@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\OrderLine;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OmNomComCleanup extends Command

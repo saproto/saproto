@@ -126,7 +126,7 @@ class NewsController extends Controller
         if ($request->has('title')) {
             $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
-            $newsitem->published_at = \Carbon\Carbon::parse($request->published_at)->format('Y-m-d H:i:s');
+            $newsitem->published_at = Carbon::parse($request->published_at)->format('Y-m-d H:i:s');
         } else {
             $newsitem->is_weekly = true;
             $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
@@ -174,7 +174,7 @@ class NewsController extends Controller
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
+        $newsitem->published_at = Carbon::now()->format('Y-m-d H:i:s');
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');
@@ -195,7 +195,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = \Carbon\Carbon::parse($newsitem->published_at)->getTimestamp();
+                $returnItem->published_at = Carbon::parse($newsitem->published_at)->getTimestamp();
 
                 $return[] = $returnItem;
             }

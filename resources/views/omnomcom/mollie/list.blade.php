@@ -138,9 +138,11 @@
                         <tbody>
                             @for ($m = 0; $m <= 11 ; $m++)
                                 <?php
-                                $month = \Carbon\Carbon::parse(sprintf('-%s months', $m))->getTimestamp();
+                                $month = \Illuminate\Support\Carbon::parse(
+                                    sprintf('-%s months', $m),
+                                )->getTimestamp();
                                 $total = \App\Http\Controllers\MollieController::getTotalForMonth(
-                                    \Carbon\Carbon::now()->format('Y-m'),
+                                    \Illuminate\Support\Carbon::now()->format('Y-m'),
                                 );
                                 ?>
 

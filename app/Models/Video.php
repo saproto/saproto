@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use DateInterval;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Video Model.

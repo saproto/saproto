@@ -269,12 +269,12 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
+        return Carbon::createFromTimestamp($this->start)->format($long_format).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
-                date($short_format, $this->end)
+                Carbon::createFromTimestamp($this->end)->format($short_format)
                 :
-                date($long_format, $this->end)
+                Carbon::createFromTimestamp($this->end)->format($long_format)
         );
     }
 
@@ -375,7 +375,7 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > \Carbon\Carbon::parse('-1 week')->getTimestamp();
+        return $this->involves_food && $this->end > Carbon::parse('-1 week')->getTimestamp();
     }
 
     protected function isFuture(): Attribute
@@ -386,10 +386,10 @@ class Event extends Model
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [
-            'simple' => \Carbon\Carbon::now()->format('M d, Y'),
-            'year' => \Carbon\Carbon::now()->format('Y'),
-            'month' => \Carbon\Carbon::now()->format('M Y'),
-            'time' => \Carbon\Carbon::now()->format('H:i'),
+            'simple' => Carbon::now()->format('M d, Y'),
+            'year' => Carbon::now()->format('Y'),
+            'month' => Carbon::now()->format('M Y'),
+            'time' => Carbon::now()->format('H:i'),
         ]);
     }
 

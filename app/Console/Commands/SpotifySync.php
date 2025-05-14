@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPIException;

@@ -69,7 +69,7 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (\Carbon\Carbon::parse($request->input('time'))->getTimestamp() === false) {
+        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
             Session::flash('flash_message', 'Schedule time improperly formatted.');
 
             return Redirect::route('email::index');
@@ -86,7 +86,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => \Carbon\Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -145,7 +145,7 @@ class EmailController extends Controller
             return Redirect::route('email::index');
         }
 
-        if (\Carbon\Carbon::parse($request->input('time'))->getTimestamp() === false) {
+        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
             Session::flash('flash_message', 'Schedule time improperly formatted.');
 
             return Redirect::back();
@@ -162,7 +162,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => \Carbon\Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);

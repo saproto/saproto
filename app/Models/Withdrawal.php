@@ -103,7 +103,7 @@ class Withdrawal extends Model
 
     protected function withdrawalId(): Attribute
     {
-        return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.\Carbon\Carbon::parse($this->date)->format('dmY'));
+        return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.Carbon::parse($this->date)->format('dmY'));
     }
 
     public function recalculateTotals(): void

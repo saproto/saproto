@@ -27,11 +27,11 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = \Carbon\Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
+            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
             $end = Carbon::now()->format('U');
         } else {
-            $start = \Carbon\Carbon::parse($request->start)->getTimestamp();
-            $end = \Carbon\Carbon::parse($request->end)->getTimestamp() + 86399; // Add one day to make it inclusive.
+            $start = Carbon::parse($request->start)->getTimestamp();
+            $end = Carbon::parse($request->end)->getTimestamp() + 86399; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
@@ -108,7 +108,7 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = \Carbon\Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
+            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
             $end = Carbon::now()->format('U');
         } else {
             $start = Carbon::parse($request->start)->getTimestamp();

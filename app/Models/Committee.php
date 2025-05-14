@@ -163,10 +163,10 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (\Carbon\Carbon::parse($membership->created_at)->getTimestamp() < Carbon::now()->format('U') &&
-                (! $membership->deleted_at || \Carbon\Carbon::parse($membership->deleted_at)->getTimestamp() > Carbon::now()->format('U'))) {
+            } elseif (Carbon::parse($membership->created_at)->getTimestamp() < Carbon::now()->format('U') &&
+                (! $membership->deleted_at || Carbon::parse($membership->deleted_at)->getTimestamp() > Carbon::now()->format('U'))) {
                 $members['members']['current'][] = $membership;
-            } elseif (\Carbon\Carbon::parse($membership->created_at)->getTimestamp() > Carbon::now()->format('U')) {
+            } elseif (Carbon::parse($membership->created_at)->getTimestamp() > Carbon::now()->format('U')) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

@@ -46,7 +46,7 @@ class PasswordEntry extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return BelongsTo<Permission, $this> */
+     * @return BelongsTo<\Spatie\Permission\Models\Permission, $this> */
     public function permission(): BelongsTo
     {
         return $this->belongsTo(Permission::class, 'permission_id');

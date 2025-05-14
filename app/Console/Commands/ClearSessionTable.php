@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\QrAuthRequest;
 use App\Models\Token;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ClearSessionTable extends Command

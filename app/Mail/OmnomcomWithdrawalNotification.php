@@ -4,10 +4,10 @@ namespace App\Mail;
 
 use App\Models\User;
 use App\Models\Withdrawal;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
 class OmnomcomWithdrawalNotification extends Mailable
