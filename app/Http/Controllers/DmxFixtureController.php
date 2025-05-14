@@ -113,7 +113,7 @@ class DmxFixtureController extends Controller
         $channel_values = [];
 
         // Now we fill the preset channels.
-        $preset_colors = (Carbon::now()->format('G') > 6 && Carbon::now()->format('G') < 20 ? Config::array(Config::array('dmx.colors')[$preset], [50]) : [0, 0, 0, 0]);
+        $preset_colors = (Carbon::now()->format('G') > 6 && Carbon::now()->format('G') < 20 ? [...Config::array('dmx.colors')[$preset], 50] : [0, 0, 0, 0]);
         foreach (DmxFixture::query()->where('follow_timetable', true)->get() as $fixture) {
             $channel_values = self::setFixtureChannels($fixture, $channel_values, $preset_colors);
         }

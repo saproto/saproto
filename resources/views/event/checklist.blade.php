@@ -130,7 +130,7 @@
         document.querySelectorAll('.is_present').forEach((el) => {
             el.onclick = (_) => {
                 get(
-                    '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
+                    '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
                         'id',
                         el.getAttribute('data-id')
                     )

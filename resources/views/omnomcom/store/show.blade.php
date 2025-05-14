@@ -6,6 +6,12 @@
             Store
         </title>
 
+        <link
+            href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"
+            rel="stylesheet"
+            type="text/css"
+        />
+
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta
@@ -23,11 +29,16 @@
         <style>
             * {
                 box-sizing: border-box;
+                /* font-weight:800; */
             }
 
             html, body {
                 position: absolute;
-                font-family: Lato, sans-serif;
+
+                font-family: "Varela Round", sans-serif;
+                font-weight: 400;
+                font-style: normal;
+
                 top: 0;
                 left: 0;
                 right: 0;

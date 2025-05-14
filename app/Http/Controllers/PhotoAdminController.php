@@ -23,8 +23,8 @@ class PhotoAdminController extends Controller
     public function index(Request $request)
     {
         $name = $request->input('query');
-        $published = PhotoAlbum::query()->where('published', true);
-        $unpublished = PhotoAlbum::query()->where('published', false);
+        $published = PhotoAlbum::query()->where('published', true)->orderBy('date_taken', 'desc');
+        $unpublished = PhotoAlbum::query()->where('published', false)->orderBy('date_taken', 'desc');
 
         if ($name) {
             $published = $published->name($name);

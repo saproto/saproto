@@ -41,13 +41,15 @@ class FileCleanup extends Command
 
         $count = 0;
 
-        foreach (StorageEntry::all() as $file) {
-            if ($file->isOrphan()) {
-                $count++;
-                Storage::delete($file->filename);
-                $file->delete();
+        StorageEntry::query()->chunkById(500, function ($files) use (&$count) {
+            foreach ($files as $file) {
+                if ($file->isOrphan()) {
+                    $count++;
+                    Storage::delete($file->filename);
+                    $file->delete();
+                }
             }
-        }
+        });
 
         $this->info("Found and deleted {$count} orphaned files.");
     }
