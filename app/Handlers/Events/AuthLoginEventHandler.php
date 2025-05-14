@@ -22,9 +22,9 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param  Login  $event
+     * @param Login $event
      */
-    public function handle($event): void
+    public function handle(Login $event): void
     {
         /** @var User $user */
         $user = $event->user;
@@ -41,7 +41,7 @@ class AuthLoginEventHandler
         ];
 
         foreach ($committees as $committee) {
-            if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] || $user->signed_nda)) {
+            if ($committee['committee']!=null && $user->isInCommittee($committee['committee']) && (! $committee['nda'] || $user->signed_nda)) {
                 if (! $user->hasRole($committee['role'])) {
                     $user->assignRole($committee['role']);
                 }
