@@ -732,9 +732,15 @@
                                             Quit Impersonation
                                         </a>
                                     @else
-                                        <form action="{{ route('login::logout') }}" method="POST">
+                                        <form
+                                            action="{{ route('login::logout') }}"
+                                            method="POST"
+                                        >
                                             @csrf
-                                            <button class="dropdown-item" type="submit" >
+                                            <button
+                                                class="dropdown-item"
+                                                type="submit"
+                                            >
                                                 Logout
                                             </button>
                                         </form>

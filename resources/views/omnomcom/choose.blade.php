@@ -33,11 +33,12 @@
                         Logged in as
                         <strong>{{ Auth::user()->name }}</strong>
                         .
-                        <form action="{{ route('login::logout') }}" method="POST">
+                        <form
+                            action="{{ route('login::logout') }}"
+                            method="POST"
+                        >
                             @csrf
-                            <button type="submit" >
-                                Logout
-                            </button>
+                            <button type="submit">Logout</button>
                         </form>
                     @else
                         Nog logged in.

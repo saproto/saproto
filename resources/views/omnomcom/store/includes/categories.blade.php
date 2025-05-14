@@ -20,12 +20,16 @@
         @endif
 
         @if (Auth::check())
-                <form action="{{ route('login::logout') }}" method="POST">
-                    @csrf
-                    <button class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis" type="submit" >
-                        Logout <strong>{{ Auth::user()->calling_name }}</strong>
-                    </button>
-                </form>
+            <form action="{{ route('login::logout') }}" method="POST">
+                @csrf
+                <button
+                    class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis"
+                    type="submit"
+                >
+                    Logout
+                    <strong>{{ Auth::user()->calling_name }}</strong>
+                </button>
+            </form>
         @endif
 
         <div id="reload-button" class="btn btn-block px-4 py-2">
