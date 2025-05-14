@@ -15,10 +15,10 @@ use Milon\Barcode\DNS2D;
 class QrAuthController extends Controller
 {
     /**
-     * @param  string  $code
+     * @param string $code
      * @return Response
      */
-    public function showCode($code)
+    public function showCode(string $code)
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
@@ -48,7 +48,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        abort_unless($qrAuthRequest, 404);
+        abort_if($qrAuthRequest === null, 404);
 
         return view('auth.qr.dialog', ['description' => $qrAuthRequest->description, 'code' => $qrAuthRequest->qr_token]);
     }
@@ -61,7 +61,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        abort_unless($qrAuthRequest, 404);
+        abort_if($qrAuthRequest === null, 404);
 
         $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
@@ -79,7 +79,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        abort_unless($qrAuthRequest, 403);
+        abort_if($qrAuthRequest === null, 404);
 
         $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
@@ -97,7 +97,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        abort_unless($qrAuthRequest, 404);
+        abort_if($qrAuthRequest === null, 404);
 
         return response()->json(['description' => $qrAuthRequest->description], 200);
     }
@@ -106,7 +106,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('auth_token', '=', $request->code)->first();
 
-        abort_unless($qrAuthRequest, 404);
+        abort_if($qrAuthRequest === null, 404);
 
         if ($qrAuthRequest->isApproved()) {
             return 'true';
