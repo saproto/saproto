@@ -18,10 +18,9 @@ use Illuminate\View\View;
 class ActivityController extends Controller
 {
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function store(Request $request, $id)
+    public function store(Request $request, int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
@@ -41,7 +40,7 @@ class ActivityController extends Controller
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
-        if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
+        if ($newNoShow > $activity->no_show_fee && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
             return Redirect::route('event::edit', ['id' => $event->id]);
@@ -91,12 +90,11 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
