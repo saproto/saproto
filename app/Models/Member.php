@@ -74,6 +74,7 @@ class Member extends Model
     protected function casts(): array
     {
         return [
+            'created_at'=> 'datetime',
             'deleted_at' => 'datetime',
             'membership_type' => MembershipTypeEnum::class,
         ];

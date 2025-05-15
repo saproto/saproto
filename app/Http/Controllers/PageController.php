@@ -9,6 +9,7 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -174,12 +175,13 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function addFile(Request $request, $id)
+    public function addFile(Request $request, int $id)
     {
         if (! $request->file('files')) {
             Session::flash('flash_message', 'You forgot to add any files.');
@@ -188,8 +190,12 @@ class PageController extends Controller
         }
 
         $page = Page::query()->find($id);
-
-        foreach ($request->file('files') as $file) {
+        $files = $request->file('files');
+        /* @phpstan-ignore-next-line */
+        if($files instanceof UploadedFile) {
+            $files = [$files];
+        };
+        foreach ($files as $file) {
             $newFile = new StorageEntry;
             $newFile->createFromFile($file);
 
