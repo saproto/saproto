@@ -8,8 +8,8 @@
                         <tr>
                             <th>Member since</th>
                             <td>
-                                @if ($user->member->created_at!==null)
-                                    {{  $user->member->created_at->format('F j, Y') }}
+                                @if ($user->member->created_at !== null)
+                                    {{ $user->member->created_at->format('F j, Y') }}
                                 @else
                                         Before we kept track
                                 @endif
@@ -132,7 +132,7 @@
                             @if ($user->member->membershipForm)
                                 <td>
                                     Since
-                                    {{ $user->member->created_at!==null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
+                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
                                     <br />
                                     <a
                                         href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
@@ -145,7 +145,7 @@
                             @else
                                 <td>
                                     Since
-                                    {{ $user->member->created_at!==null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
+                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
                                     <br />
                                     <span class="badge rounded-pill bg-warning">
                                         No digital membership form

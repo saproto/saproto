@@ -94,8 +94,8 @@
                 <i class="fas fa-user-friends fa-fw me-3"></i>
                 Member
 
-                @if ($user->member->created_at->format('U')) > 0)
-                    as of
+                @if ($user->member->created_at->format('U'))
+                    > 0) as of
                     {{ $user->member->created_at->format('F j, Y') }}.
                 @else
                     since
