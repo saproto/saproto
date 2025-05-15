@@ -66,6 +66,7 @@ class Member extends Model
 {
     /** @use HasFactory<MemberFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'members';
@@ -115,7 +116,7 @@ class Member extends Model
     }
 
     /** @param Builder<$this> $query
-     *  @return Builder<$this>
+     * @return Builder<$this>
      */
     public function scopePrimary(Builder $query): Builder
     {

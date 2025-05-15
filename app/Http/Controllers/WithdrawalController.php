@@ -27,9 +27,6 @@ use Illuminate\View\View;
 
 class WithdrawalController extends Controller
 {
-    /**
-     * @return View
-     */
     public function index(): View
     {
         $withdrawals = Withdrawal::query()
@@ -39,15 +36,11 @@ class WithdrawalController extends Controller
         return view('omnomcom.withdrawals.index', ['withdrawals' => $withdrawals]);
     }
 
-    /** @return View */
     public function create(): View
     {
         return view('omnomcom.withdrawals.create');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function store(Request $request): RedirectResponse
     {
         $max = ($request->has('max') ? $request->input('max') : null);
@@ -148,9 +141,6 @@ class WithdrawalController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -178,8 +168,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
     public function destroy(int $id): RedirectResponse
@@ -211,9 +199,6 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public static function deleteFrom(int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -241,12 +226,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @param int $user_id
-     * @return RedirectResponse
-     */
     public static function markFailed(Request $request, int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -328,11 +307,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     *
-     */
     public static function export(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -420,10 +394,6 @@ class WithdrawalController extends Controller
         return Response::make($response['data'], 200, $headers);
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public static function close(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
@@ -443,10 +413,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return View
-     */
     public function showForUser(int $id): View
     {
         /** @var Withdrawal $withdrawal */
@@ -457,9 +423,6 @@ class WithdrawalController extends Controller
 
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
-     *
-     * @param int $id
-     * @return RedirectResponse
      */
     public function email(int $id): RedirectResponse
     {
@@ -481,7 +444,6 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /** @return View */
     public function unwithdrawable(): View
     {
         $users = User::query()->whereHas('orderlines', function ($q) {

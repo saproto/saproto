@@ -113,6 +113,7 @@ class Committee extends Model
     {
         return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));
     }
+
     /**
      * @return Builder<Event>
      */
@@ -126,6 +127,7 @@ class Committee extends Model
                 });
             })->reorder('start', 'desc');
     }
+
     /**
      * @return Builder<Event>
      */
@@ -142,6 +144,7 @@ class Committee extends Model
                 });
             });
     }
+
     /**
      * @return Builder<Event>
      */

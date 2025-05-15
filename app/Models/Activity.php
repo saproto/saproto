@@ -66,7 +66,8 @@ class Activity extends Validatable
     protected $table = 'activities';
 
     protected $guarded = ['id'];
-    /** @var array|string[]  */
+
+    /** @var array|string[] */
     protected array $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',

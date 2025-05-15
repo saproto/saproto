@@ -43,6 +43,7 @@ class WrappedController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
     }
+
     /** @return Collection<int, OrderLine> */
     public function orderTotals(): Collection
     {
@@ -57,6 +58,7 @@ class WrappedController extends Controller
 
         return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
+
     /** @return Collection<int, array{
      *     title: string,
      *     start: int,
@@ -119,6 +121,7 @@ class WrappedController extends Controller
                 ]);
                 $array['price'] = $activity_price + $ticket_price;
                 $array['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+
                 return $array;
             });
 

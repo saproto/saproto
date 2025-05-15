@@ -16,7 +16,8 @@ class ReviewFeedbackMail extends Mailable
 
     /**
      * Create a new message instance.
-     * @param Collection<int, Feedback> $feedback
+     *
+     * @param  Collection<int, Feedback>  $feedback
      * @return void
      */
     public function __construct(public FeedbackCategory $category, public Collection $feedback) {}

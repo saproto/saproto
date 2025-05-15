@@ -67,7 +67,7 @@ class SyncWikiAccounts extends Command
     }
 
     /**
-     * @param Collection<int, Committee> $committees
+     * @param  Collection<int, Committee>  $committees
      * @return array<string>
      */
     private function convertCommitteesToGroups(Collection $committees): array

@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -159,6 +158,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
+
     use HasRoles;
     use SoftDeletes;
 
@@ -259,6 +259,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
+
     /**
      * @return BelongsToMany<Committee, $this>
      */
@@ -266,6 +267,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         return $this->groups()->where('is_society', false);
     }
+
     /**
      * @return BelongsToMany<Committee, $this>
      */

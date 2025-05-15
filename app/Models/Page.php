@@ -54,6 +54,7 @@ class Page extends Model
 {
     /** @use HasFactory<PageFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'pages';

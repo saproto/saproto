@@ -61,6 +61,7 @@ class Withdrawal extends Model
     {
         return $this->hasMany(OrderLine::class, 'payed_with_withdrawal');
     }
+
     /**
      * @return HasMany<OrderLine, $this>
      */

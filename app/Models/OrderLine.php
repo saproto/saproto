@@ -126,7 +126,7 @@ class OrderLine extends Model
     }
 
     /** @param Builder<OrderLine> $query
-     *  @return Builder<OrderLine>
+     * @return Builder<OrderLine>
      */
     public function scopeUnpayed(Builder $query): Builder
     {

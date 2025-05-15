@@ -95,11 +95,6 @@ class EmailList extends Model
         return true;
     }
 
-    /**
-     * @param int $user_id
-     * @param int $list_id
-     * @return string
-     */
     public static function generateUnsubscribeHash(int $user_id, int $list_id): string
     {
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));

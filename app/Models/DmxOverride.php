@@ -62,25 +62,21 @@ class DmxOverride extends Model
         return array_map(intval(...), explode(',', $this->color));
     }
 
-    /** @return int */
     public function red(): int
     {
         return $this->colorArray()[0];
     }
 
-    /** @return int */
     public function green(): int
     {
         return $this->colorArray()[1];
     }
 
-    /** @return int */
     public function blue(): int
     {
         return $this->colorArray()[2];
     }
 
-    /** @return int */
     public function brightness(): int
     {
         return $this->colorArray()[3];
