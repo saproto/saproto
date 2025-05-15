@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PhotoAlbumFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,6 +49,7 @@ use Override;
  */
 class PhotoAlbum extends Model
 {
+    /** @use HasFactory<PhotoAlbumFactory>*/
     use HasFactory;
 
     protected $table = 'photo_albums';

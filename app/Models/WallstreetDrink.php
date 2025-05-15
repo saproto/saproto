@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -37,7 +37,10 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function orders()
+    /**
+     * @return Builder<OrderLine>
+     */
+    public function orders(): Builder
     {
         $productIDs = $this->products()->pluck('id');
 
@@ -57,7 +60,7 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(WallstreetEvent::class, 'wallstreet_drink_event', 'wallstreet_drink_id', 'wallstreet_drink_events_id')->withPivot('id')->withTimestamps();
     }
 
-    public function loss()
+    public function loss(): mixed
     {
         return $this->orders()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')

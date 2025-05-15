@@ -8,7 +8,7 @@ parameters:
     paths:
         - app
 
-    level: 5 # out of 9
+    level: 6 # out of 9
 
     ignoreErrors:
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)

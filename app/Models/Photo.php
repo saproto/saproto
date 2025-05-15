@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -45,6 +46,7 @@ use Override;
  */
 class Photo extends Model
 {
+    /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
 
     protected $table = 'photos';
@@ -57,6 +59,7 @@ class Photo extends Model
     protected static function booted(): void
     {
         /** @param Builder<$this> $query */
+        /** @param Builder<Photo> $query */
         static::addGlobalScope('private', function (Builder $query) {
             $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)
                 ->whereHas('album', function ($query) {
@@ -155,6 +158,9 @@ class Photo extends Model
         return $this->file->generateImagePath(800, 300);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function url(): Attribute
     {
         return Attribute::make(get: fn () => $this->file->generatePath());

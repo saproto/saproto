@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\HashMapItemFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class HashMapItem extends Model
 {
+    /** @use HasFactory<HashMapItemFactory>*/
     use HasFactory;
 
     protected $table = 'hashmap';

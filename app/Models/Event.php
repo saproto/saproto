@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventFactory;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -84,6 +85,7 @@ use Override;
  */
 class Event extends Model
 {
+    /** @use HasFactory<EventFactory>*/
     use HasFactory;
     use SoftDeletes;
 
@@ -378,11 +380,17 @@ class Event extends Model
         return $this->involves_food && $this->end > strtotime('-1 week');
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isFuture(): Attribute
     {
         return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [

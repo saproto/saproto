@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\AddressFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,7 @@ use Illuminate\Support\Carbon;
  */
 class Address extends Validatable
 {
+    /** @use HasFactory<AddressFactory>*/
     use HasFactory;
 
     protected $table = 'addresses';

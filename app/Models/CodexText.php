@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CodexTextFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ use Override;
  */
 class CodexText extends Model
 {
+    /** @use HasFactory<CodexTextFactory>*/
     use HasFactory;
 
     protected $table = 'codex_texts';
@@ -43,6 +45,7 @@ class CodexText extends Model
 
     #[Override]
     protected static function booted()
+    protected static function booted(): void
     {
         static::deleting(static function ($text) {
             $text->codices()->detach();

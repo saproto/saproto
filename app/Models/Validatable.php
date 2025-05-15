@@ -16,11 +16,13 @@ use Illuminate\Support\MessageBag;
  */
 class Validatable extends Model
 {
+    /** @var array<string> */
     protected array $rules = [];
 
     protected MessageBag $errors;
 
-    public function validate($data): bool
+    /** @param array $data */
+    public function validate(array $data): bool
     {
         $v = Validator::make($data, $this->rules);
         if ($v->fails()) {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
+use Database\Factories\MemberFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -63,6 +64,7 @@ use Override;
  */
 class Member extends Model
 {
+    /** @use HasFactory<MemberFactory>*/
     use HasFactory;
     use SoftDeletes;
 

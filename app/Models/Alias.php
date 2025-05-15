@@ -46,6 +46,9 @@ class Alias extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function email(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->alias.'@'.Config::string('proto.emaildomain'));

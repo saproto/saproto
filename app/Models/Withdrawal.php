@@ -22,9 +22,9 @@ use Override;
  * @property float $sum_associated_orderlines
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Orderline[] $orderlines
- * @property-read Collection|FailedWithdrawal[] $failedWithdrawals
- * @property-read Collection|User[] $users
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read Collection<int, FailedWithdrawal> $failedWithdrawals
+ * @property-read Collection<int, User> $users
  * @property-read string $withdrawalId
  *
  * @method static Builder|Withdrawal whereClosed($value)
@@ -67,10 +67,7 @@ class Withdrawal extends Model
         return $this->orderlines()->where('user_id', $user->id);
     }
 
-    /**
-     * @return int
-     */
-    public function totalForUser(User $user): mixed
+    public function totalForUser(User $user): int
     {
         return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
@@ -101,6 +98,9 @@ class Withdrawal extends Model
         return OrderLine::query()->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function withdrawalId(): Attribute
     {
         return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date)));

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Database\Factories\NewsitemFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,6 +54,7 @@ use Illuminate\Support\Carbon;
  */
 class Newsitem extends Model
 {
+    /** @use HasFactory<NewsitemFactory>*/
     use HasFactory;
     use SoftDeletes;
 
@@ -91,6 +93,9 @@ class Newsitem extends Model
         return Carbon::parse($this->published_at)->isPast();
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function url(): Attribute
     {
         return Attribute::make(get: function () {

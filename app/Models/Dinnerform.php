@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\DinnerformFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -50,6 +51,7 @@ use Override;
  */
 class Dinnerform extends Model
 {
+    /** @use HasFactory<DinnerformFactory>*/
     use HasFactory;
 
     protected $table = 'dinnerforms';
@@ -84,6 +86,7 @@ class Dinnerform extends Model
 
     /**
      * @return Attribute The regular discount as a percentage out of 100.
+     * @return Attribute<float, never> The regular discount as a percentage out of 100.
      */
     protected function regularDiscountPercentage(): Attribute
     {

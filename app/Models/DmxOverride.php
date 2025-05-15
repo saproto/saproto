@@ -107,11 +107,17 @@ class DmxOverride extends Model
         return DmxFixture::query()->whereIn('id', $this->getFixtureIds())->get();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isActive(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->active());
     }
 
+    /**
+     * @return Attribute<int, never>
+     */
     protected function windowSize(): Attribute
     {
         return Attribute::make(get: fn (): int => (int) $this->end - (int) $this->start);

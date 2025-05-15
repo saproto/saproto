@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CodexSongFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,7 @@ use Override;
  **/
 class CodexSong extends Model
 {
+    /** @use HasFactory<CodexSongFactory>*/
     use HasFactory;
 
     protected $table = 'codex_songs';
@@ -45,6 +47,7 @@ class CodexSong extends Model
 
     #[Override]
     protected static function booted()
+    protected static function booted(): void
     {
         static::deleting(function ($song) {
             $song->codices()->detach();
