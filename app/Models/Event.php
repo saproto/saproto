@@ -87,6 +87,7 @@ class Event extends Model
 {
     /** @use HasFactory<EventFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'events';
@@ -149,7 +150,6 @@ class Event extends Model
     }
 
     /**
-     * @param User|null $user
      * @return Builder<$this>
      */
     public static function getEventBlockQuery(?User $user = null): Builder
@@ -232,6 +232,7 @@ class Event extends Model
     {
         return $this->hasMany(Dinnerform::class, 'event_id');
     }
+
     /**
      * @return BelongsTo<EventCategory, $this>
      */

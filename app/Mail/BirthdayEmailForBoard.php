@@ -13,8 +13,9 @@ class BirthdayEmailForBoard extends Mailable
 
     /**
      * Create a new message instance.
-     * @param $users array<int, array{id: string|int, name: string, age: int}>
- * @return void
+     *
+     * @param  $users  array<int, array{id: string|int, name: string, age: int}>
+     * @return void
      */
     public function __construct(public array $users) {}
 

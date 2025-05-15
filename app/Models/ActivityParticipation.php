@@ -51,6 +51,7 @@ class ActivityParticipation extends Model
 {
     /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'activities_users';

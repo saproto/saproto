@@ -12,14 +12,13 @@ class ProductBulkUpdateNotification extends Mailable
 {
     use Queueable;
     use SerializesModels;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(public User $user, public string $log)
-    {
-    }
+    public function __construct(public User $user, public string $log) {}
 
     /**
      * Build the message.

@@ -61,6 +61,7 @@ class WallstreetDrink extends Model
     {
         return $this->belongsToMany(WallstreetEvent::class, 'wallstreet_drink_event', 'wallstreet_drink_id', 'wallstreet_drink_events_id')->withPivot('id')->withTimestamps();
     }
+
     public function loss(): mixed
     {
         return $this->orders()

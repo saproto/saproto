@@ -133,6 +133,7 @@ class Email extends Model
 
         throw new Exception('Email has no destination');
     }
+
     /** @return Collection<int, User> */
     public function recipients(): SupportCollection
     {

@@ -56,6 +56,7 @@ class Newsitem extends Model
 {
     /** @use HasFactory<NewsitemFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'newsitems';

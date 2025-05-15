@@ -18,18 +18,13 @@ class Newsletter extends Mailable
     use SerializesModels;
 
     /**
-     * @param User $user
-     * @param EmailList $list
-     * @param string $text
-     * @param Collection<int, Event> $events
-     * @param string $image_url
+     * @param  Collection<int, Event>  $events
      */
     public function __construct(public User $user, public EmailList $list, public string $text, public Collection $events, public string $image_url)
     {
         //
     }
 
-    /** @return Newsletter */
     public function build(): Newsletter
     {
         return $this

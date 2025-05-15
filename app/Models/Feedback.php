@@ -42,6 +42,7 @@ class Feedback extends Model
 {
     /** @use HasFactory<FeedbackFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'feedback';

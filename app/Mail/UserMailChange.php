@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
-use phpseclib3\File\ASN1\Maps\HoldInstructionCode;
 
 class UserMailChange extends Mailable
 {
@@ -16,15 +15,14 @@ class UserMailChange extends Mailable
 
     /**
      * Create a new message instance.
+     *
      * @param object{
      * name: string,
      * ip: int
      * } $changer
      * @return void
      */
-    public function __construct(public User $user, public object $changer, public $email)
-    {
-    }
+    public function __construct(public User $user, public object $changer, public $email) {}
 
     /**
      * Build the message.

@@ -30,6 +30,7 @@ class NewWorkspaceAccount extends Mailable implements ShouldQueue
             view: 'emails.newworkspaceaccount',
         );
     }
+
     /**
      * @return array<never>
      */
