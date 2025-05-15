@@ -175,8 +175,6 @@ class PageController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
@@ -192,9 +190,10 @@ class PageController extends Controller
         $page = Page::query()->find($id);
         $files = $request->file('files');
         /* @phpstan-ignore-next-line */
-        if($files instanceof UploadedFile) {
+        if ($files instanceof UploadedFile) {
             $files = [$files];
-        };
+        }
+
         foreach ($files as $file) {
             $newFile = new StorageEntry;
             $newFile->createFromFile($file);
