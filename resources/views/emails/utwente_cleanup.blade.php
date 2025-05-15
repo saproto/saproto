@@ -21,6 +21,7 @@
                 seem to be active.
             </p>
         @endif
+    </p>
 
     <p>Kind regards, The System</p>
 @endsection
