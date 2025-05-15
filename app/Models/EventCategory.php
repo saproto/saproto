@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventCategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  */
 class EventCategory extends Model
 {
+    /** @use HasFactory<EventCategoryFactory>*/
     use HasFactory;
 
     protected $table = 'event_categories';

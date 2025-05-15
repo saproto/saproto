@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CodexSongCategoryFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,6 +19,7 @@ use Override;
  */
 class CodexSongCategory extends Model
 {
+    /** @use HasFactory<CodexSongCategoryFactory>*/
     use HasFactory;
 
     protected $table = 'codex_category';

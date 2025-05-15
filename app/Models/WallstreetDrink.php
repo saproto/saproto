@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\CarbonTimeZone;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -38,7 +39,10 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function orders()
+    /**
+     * @return Builder<OrderLine>
+     */
+    public function orders(): Builder
     {
         $productIDs = $this->products()->pluck('id');
 
@@ -59,6 +63,7 @@ class WallstreetDrink extends Model
     }
 
     public function loss()
+    public function loss(): mixed
     {
         return $this->orders()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')

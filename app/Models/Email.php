@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
+use Database\Factories\EmailFactory;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -66,6 +67,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Email extends Model
 {
+    /** @use HasFactory<EmailFactory>*/
     use HasFactory;
 
     protected $table = 'emails';

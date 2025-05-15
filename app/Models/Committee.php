@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -51,6 +52,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Committee extends Model
 {
+    /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
 
     protected $table = 'committees';
@@ -101,6 +103,9 @@ class Committee extends Model
         return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function email(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));

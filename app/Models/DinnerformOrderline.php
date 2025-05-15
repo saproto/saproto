@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\DinnerformOrderlineFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,7 @@ use Illuminate\Support\Carbon;
  **/
 class DinnerformOrderline extends Model
 {
+    /** @use HasFactory<DinnerformOrderlineFactory>*/
     use HasFactory;
 
     protected $table = 'dinnerform_orderline';
@@ -52,6 +54,7 @@ class DinnerformOrderline extends Model
 
     /**
      * @return Attribute Price of orderline reduced by possible discounts.
+     * @return Attribute<float|int, never> Price of orderline reduced by possible discounts.
      */
     protected function priceWithDiscount(): Attribute
     {

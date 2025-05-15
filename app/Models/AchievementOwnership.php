@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\AchievementOwnershipFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,7 @@ use Illuminate\Support\Carbon;
  */
 class AchievementOwnership extends Model
 {
+    /** @use HasFactory<AchievementOwnershipFactory>*/
     use HasFactory;
 
     protected $table = 'achievements_users';

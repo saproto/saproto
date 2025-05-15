@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Config;
 
 class LdapController extends Controller
 {
+    /**
+     * @return object{
+     *     error: string,
+     *     result?: never
+     * }|object{
+     *     result: array<array{cn: string}>,
+     *     error?: never
+     * }
+     */
     public static function searchUtwente(string $query): object
     {
         $cacheKey = md5($query);

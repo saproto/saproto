@@ -64,6 +64,9 @@ class Announcement extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function bootstrapStyle(): Attribute
     {
         return Attribute::make(get: function (): string {
@@ -79,6 +82,9 @@ class Announcement extends Model
         });
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function isVisible(): Attribute
     {
         return Attribute::make(get: function (): string {
@@ -117,16 +123,25 @@ class Announcement extends Model
         });
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function hashMapId(): Attribute
     {
         return Attribute::make(get: fn (): string => sprintf('dismiss-announcement-%s', $this->id));
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function modalId(): Attribute
     {
         return Attribute::make(get: fn (): string => sprintf('modal-announcement-%s', $this->id));
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function showByTime(): Attribute
     {
         return Attribute::make(get: fn (): bool => Carbon::parse($this->display_from)->getTimestamp() < Carbon::now()->format('U') && Carbon::parse($this->display_till)->getTimestamp() > Carbon::now()->format('U'));

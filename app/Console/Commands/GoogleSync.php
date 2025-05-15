@@ -330,7 +330,7 @@ class GoogleSync extends Command
         }
     }
 
-    public function createGoogleUser($protoUser): void
+    public function createGoogleUser(ProtoUser $protoUser): void
     {
         try {
             $name = explode(' ', $protoUser->name);
@@ -368,7 +368,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace groups. Pass in user to get only their groups.
      *
-     * @return Collection<GoogleGroup>
+     * @returns Collection<GoogleGroup>
      *
      * @throws Exception
      */
@@ -396,7 +396,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace group members of a specific group
      *
-     * @return Collection<GoogleGroup>
+     * @returns Collection<GoogleGroup>
      *
      * @throws Exception
      */
@@ -419,6 +419,8 @@ class GoogleSync extends Command
 
     /**
      * List current Google Workspace users.
+     *
+     * @returns Collection<ProtoUser>
      *
      * @throws Exception
      */

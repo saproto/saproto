@@ -7,6 +7,7 @@ use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
 use App\Mail\UsernameReminderEmail;
+use Database\Factories\UserFactory;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -154,6 +155,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 {
     use CanResetPassword;
     use HasApiTokens;
+
+    /** @use HasFactory<UserFactory>*/
     use HasFactory;
     use HasRoles;
     use SoftDeletes;
@@ -461,6 +464,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
+    /**
+     * @return Attribute<string|null, never>
+     */
     protected function protoEmail(): Attribute
     {
         return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
@@ -560,24 +566,33 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function completedProfile(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
     /**
-     * @return Attribute Whether user has a current membership that is not pending.
+     * @return Attribute<bool, never> Whether user has a current membership that is not pending.
      */
     protected function isMember(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function signedMembershipForm(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isProtubeAdmin(): Attribute
     {
         return Attribute::make(get: function (): bool {
@@ -589,6 +604,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         });
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function photoPreview(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->generatePhotoPath());

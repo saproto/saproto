@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CodexFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,6 +20,7 @@ use Illuminate\Support\Carbon;
  */
 class Codex extends Model
 {
+    /** @use HasFactory<CodexFactory>*/
     use HasFactory;
 
     protected $table = 'codex_codices';

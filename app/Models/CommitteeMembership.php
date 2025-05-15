@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CommitteeMembershipFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,9 @@ use Override;
  */
 class CommitteeMembership extends Model
 {
+    /** @use HasFactory<CommitteeMembershipFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'committees_users';
