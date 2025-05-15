@@ -87,21 +87,21 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Address|null $address
  * @property-read Bank|null $bank
  * @property-read Member|null $member
- * @property-read Collection|Achievement[] $achievements
- * @property-read Collection|Client[] $clients
- * @property-read Collection|EmailList[] $lists
- * @property-read Collection|MollieTransaction[] $mollieTransactions
- * @property-read Collection|OrderLine[] $orderlines
- * @property-read Collection|Ticket[] $tickets
- * @property-read Collection|PlayedVideo[] $playedVideos
- * @property-read Collection|Feedback[] $feedback
- * @property-read Collection|RfidCard[] $rfid
- * @property-read Collection|Tempadmin[] $tempadmin
- * @property-read Collection|Token[] $tokens
- * @property-read Collection|Committee[] $committees
- * @property-read Collection|Role[] $roles
- * @property-read Collection|Permission[] $permissions
- * @property-read Collection|Committee[] $societies
+ * @property-read Collection<int, Achievement> $achievements
+ * @property-read Collection<int, Client> $clients
+ * @property-read Collection<int, EmailList> $lists
+ * @property-read Collection<int, MollieTransaction> $mollieTransactions
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read Collection<int, Ticket> $tickets
+ * @property-read Collection<int, PlayedVideo> $playedVideos
+ * @property-read Collection<int, Feedback> $feedback
+ * @property-read Collection<int, RfidCard> $rfid
+ * @property-read Collection<int, Tempadmin> $tempadmin
+ * @property-read Collection<int, Token> $tokens
+ * @property-read Collection<int, Committee> $committees
+ * @property-read Collection<int, Role> $roles
+ * @property-read Collection<int, Permission> $permissions
+ * @property-read Collection<int, Committee> $societies
  *
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|User onlyTrashed()
@@ -148,9 +148,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User newQuery()
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
- *
- * @mixin Model
- */
+*/
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
     use CanResetPassword;
@@ -258,12 +256,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     {
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
-
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function committees(): BelongsToMany
     {
         return $this->groups()->where('is_society', false);
     }
-
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
@@ -534,7 +536,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return array<string, Collection<Member>> */
+    /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
         $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();

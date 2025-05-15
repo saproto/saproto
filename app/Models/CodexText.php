@@ -44,7 +44,6 @@ class CodexText extends Model
     }
 
     #[Override]
-    protected static function booted()
     protected static function booted(): void
     {
         static::deleting(static function ($text) {

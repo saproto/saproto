@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Activity|null $activity
  * @property-read Committee|null $committee
- * @property-read Collection|User[]|null $users
+ * @property-read Collection<int, User> $users
  *
  * @method static Builder|HelpingCommittee whereActivityId($value)
  * @method static Builder|HelpingCommittee whereAmount($value)
@@ -41,7 +41,7 @@ class HelpingCommittee extends Validatable
     protected $table = 'committees_activities';
 
     protected $guarded = ['id'];
-
+    /** @var array|string[]  */
     protected array $rules = [
         'activity_id' => 'required|integer',
         'committee_id' => 'required|integer',

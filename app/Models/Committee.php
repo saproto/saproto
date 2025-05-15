@@ -68,7 +68,7 @@ class Committee extends Model
         return $this->slug;
     }
 
-    public static function fromPublicId($public_id): Committee
+    public static function fromPublicId(string $public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
@@ -98,6 +98,9 @@ class Committee extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function organizedEvents(): Builder
     {
         return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
@@ -110,7 +113,9 @@ class Committee extends Model
     {
         return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));
     }
-
+    /**
+     * @return Builder<Event>
+     */
     public function pastEvents(): Builder
     {
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
@@ -121,7 +126,9 @@ class Committee extends Model
                 });
             })->reorder('start', 'desc');
     }
-
+    /**
+     * @return Builder<Event>
+     */
     public function upcomingEvents(): Builder
     {
         return $this
@@ -135,7 +142,9 @@ class Committee extends Model
                 });
             });
     }
-
+    /**
+     * @return Builder<Event>
+     */
     public function pastHelpedEvents(): Builder
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');

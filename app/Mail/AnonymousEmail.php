@@ -13,18 +13,12 @@ class AnonymousEmail extends Mailable
     use SerializesModels;
 
     /**
-     * @var Committee
-     */
-    public $committee;
-
-    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Committee $committee, public $message_content, public $hash)
+    public function __construct(public Committee $committee, public string $message_content, public string $hash)
     {
-        $this->committee = $committee;
     }
 
     /**

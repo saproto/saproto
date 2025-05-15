@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
+use phpseclib3\File\ASN1\Maps\HoldInstructionCode;
 
 class UserMailChange extends Mailable
 {
@@ -14,18 +15,15 @@ class UserMailChange extends Mailable
     use SerializesModels;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * Create a new message instance.
-     *
+     * @param object{
+     * name: string,
+     * ip: int
+     * } $changer
      * @return void
      */
-    public function __construct(User $user, public $changer, public $email)
+    public function __construct(public User $user, public object $changer, public $email)
     {
-        $this->user = $user;
     }
 
     /**
@@ -33,7 +31,7 @@ class UserMailChange extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->from('security@'.Config::string('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')

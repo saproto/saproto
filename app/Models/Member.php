@@ -56,9 +56,9 @@ use Override;
  * @method static Builder|Member whereIsPet($value)
  * @method static Builder|Member newModelQuery()
  * @method static Builder|Member newQuery()
- * @method static Builder|static query()
- * @method Builder|static primary()
- * @method Builder|static type(MembershipTypeEnum $type)
+ * @method static Builder<$this>|static query()
+ * @method Builder<$this>|static primary()
+ * @method Builder<$this>|static type(MembershipTypeEnum $type)
  *
  * @mixin Model
  */
@@ -114,7 +114,9 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
-    /** @param Builder<$this> $query */
+    /** @param Builder<$this> $query
+     *  @return Builder<$this>
+     */
     public function scopePrimary(Builder $query): Builder
     {
         return $query->type(MembershipTypeEnum::REGULAR)
@@ -122,7 +124,9 @@ class Member extends Model
             ->whereHas('UtAccount');
     }
 
-    /** @param Builder<$this> $query */
+    /** @param Builder<$this> $query
+     * @return Builder<$this>
+     */
     public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
     {
         return $query->where('membership_type', $type);

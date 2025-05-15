@@ -36,10 +36,10 @@ use Illuminate\Support\Facades\DB;
  * @property int $time
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|StorageEntry[] $attachments
- * @property-read Collection|Event[] $events
- * @property-read Collection|EmailList[] $lists
- * @property-read Collection|User[] $recipients
+ * @property-read Collection<int, StorageEntry> $attachments
+ * @property-read Collection<int, Event> $events
+ * @property-read Collection<int, EmailList> $lists
+ * @property-read Collection<int, User> $recipients
  *
  * @method static Builder|Email whereBody($value)
  * @method static Builder|Email whereCreatedAt($value)
@@ -133,7 +133,7 @@ class Email extends Model
 
         throw new Exception('Email has no destination');
     }
-
+    /** @return Collection<int, User> */
     public function recipients(): SupportCollection
     {
         if ($this->to_user) {
@@ -214,7 +214,7 @@ class Email extends Model
         return implode(', ', $events);
     }
 
-    public static function getListUnsubscribeFooter($user_id, $email_id): string
+    public static function getListUnsubscribeFooter(int $user_id, int $email_id): string
     {
         $footer = [];
         $lists = self::whereId($email_id)->firstOrFail()->lists;

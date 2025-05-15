@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MP3Request extends FormRequest
@@ -15,6 +16,7 @@ class MP3Request extends FormRequest
     }
 
     /**
+     * @return array<string, ValidationRule|array|string>
      * Get the validation rules that apply to the request.
      */
     public function rules(): array

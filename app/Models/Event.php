@@ -117,7 +117,7 @@ class Event extends Model
         return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
 
-    public static function getIdFromPublicId($public_id)
+    public static function getIdFromPublicId(string $public_id): int
     {
         $id = Hashids::connection('event')->decode($public_id);
 
@@ -148,6 +148,10 @@ class Event extends Model
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
+    /**
+     * @param User|null $user
+     * @return Builder<$this>
+     */
     public static function getEventBlockQuery(?User $user = null): Builder
     {
         if (! $user instanceof User) {
@@ -228,7 +232,9 @@ class Event extends Model
     {
         return $this->hasMany(Dinnerform::class, 'event_id');
     }
-
+    /**
+     * @return BelongsTo<EventCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->BelongsTo(EventCategory::class);
@@ -242,8 +248,8 @@ class Event extends Model
         return $this->committee?->isMember($user) ?? false;
     }
 
-    /** @return Collection|TicketPurchase[] */
-    public function getTicketPurchasesFor(User $user): Collection|array
+    /** @return Collection<int, TicketPurchase> */
+    public function getTicketPurchasesFor(User $user): Collection
     {
         return TicketPurchase::query()
             ->where('user_id', $user->id)
@@ -334,6 +340,7 @@ class Event extends Model
         return $this->getTicketPurchasesFor($user)->count() > 0;
     }
 
+    /** @return Collection<int, User> */
     public function allUsers(): SupportCollection
     {
         $users = collect();

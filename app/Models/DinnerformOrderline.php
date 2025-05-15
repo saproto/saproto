@@ -53,7 +53,6 @@ class DinnerformOrderline extends Model
     }
 
     /**
-     * @return Attribute Price of orderline reduced by possible discounts.
      * @return Attribute<float|int, never> Price of orderline reduced by possible discounts.
      */
     protected function priceWithDiscount(): Attribute

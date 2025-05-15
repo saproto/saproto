@@ -14,17 +14,17 @@ class FeeEmailForBoard extends Mailable
 
     /**
      * Create a new message instance.
-     *
      * @return void
-     */
-    public function __construct(public $charged_fees) {}
+     * @param $charged_fees object{count: int, regular: string[], reduced: string[], remitted: string[]}
+    */
+    public function __construct(public object $charged_fees) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->to('payments@proto.utwente.nl', 'S.A. Proto Payments Update')

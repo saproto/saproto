@@ -15,16 +15,17 @@ class UtwenteCleanup extends Mailable
     /**
      * Create a new message instance.
      *
+     * @param array<string> $unlinked
      * @return void
      */
-    public function __construct(public $unlinked) {}
+    public function __construct(public array $unlinked) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->to('secretary@'.Config::string('proto.emaildomain'), 'S.A. Proto Secretary')

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Committee;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class SyncWikiAccounts extends Command
@@ -60,15 +61,16 @@ class SyncWikiAccounts extends Command
         echo implode("\n", $configlines);
     }
 
-    private function convertCommitteeNameToGroup($name): string
+    private function convertCommitteeNameToGroup(string $name): string
     {
         return strtolower(str_replace(' ', '_', $name));
     }
 
     /**
-     * @return mixed[]
+     * @param Collection<int, Committee> $committees
+     * @return array<string>
      */
-    private function convertCommitteesToGroups($committees): array
+    private function convertCommitteesToGroups(Collection $committees): array
     {
         $groups = [];
         foreach ($committees as $committee) {
@@ -78,7 +80,7 @@ class SyncWikiAccounts extends Command
         return $groups;
     }
 
-    private function constructWikiGroups($user): string
+    private function constructWikiGroups(User $user): string
     {
         $rootCommittee = $this->convertCommitteeNameToGroup(
             Committee::whereSlug(Config::string('proto.rootcommittee'))->firstOrFail()->name

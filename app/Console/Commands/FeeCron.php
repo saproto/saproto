@@ -61,6 +61,7 @@ class FeeCron extends Command
             $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
         })->with('member.UtAccount');
 
+        /** @var $charged object{count: int, regular: string[], reduced: string[], remitted: string[]} $charged */
         $charged = (object) [
             'count' => 0,
             'regular' => [],
