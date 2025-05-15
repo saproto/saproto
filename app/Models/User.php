@@ -7,6 +7,7 @@ use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
 use App\Mail\UsernameReminderEmail;
+use Carbon\CarbonTimeZone;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -480,7 +481,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at, CarbonTimeZone::create(config('app.timezone')))->age < 1
+            && $this->member->created_at->age < 1
             && $this->did_study_create;
     }
 

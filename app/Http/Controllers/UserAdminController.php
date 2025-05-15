@@ -73,13 +73,19 @@ class UserAdminController extends Controller
         return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, int $id)
     {
+        $validated = $request->validate([
+            'birthdate'=>'required|date:format=Y-m-d',
+            'name' => 'required|string|max:255',
+            'calling_name' => 'required|string|max:255',
+        ]);
+
         /** @var User $user */
         $user = User::query()->findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        $user->birthdate = Carbon::parse($request->birthdate)->getTimestamp() !== false ? Carbon::parse($request->birthdate)->format('Y-m-d') : null;
+        $user->birthdate = $validated['birthdate'];
 
         $user->save();
 
@@ -398,7 +404,7 @@ class UserAdminController extends Controller
 
         $member->forceDelete();
 
-        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at->format('Y-m-d').'has been deleted!');
 
         return Redirect::back();
     }

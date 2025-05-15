@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PwnedPasswordNotification;
 use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;

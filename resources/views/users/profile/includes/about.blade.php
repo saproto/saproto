@@ -94,9 +94,9 @@
                 <i class="fas fa-user-friends fa-fw me-3"></i>
                 Member
 
-                @if (date('U', strtotime($user->member->created_at)) > 0)
+                @if ($user->member->created_at->format('U')) > 0)
                     as of
-                    {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                    {{ $user->member->created_at->format('F j, Y') }}.
                 @else
                     since
                     <strong>before we kept track</strong>

@@ -69,11 +69,10 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
 
-            return Redirect::route('email::index');
-        }
+        $request->validate([
+            'time' => 'date',
+        ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
