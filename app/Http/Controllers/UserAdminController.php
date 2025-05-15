@@ -76,7 +76,7 @@ class UserAdminController extends Controller
     public function update(Request $request, int $id)
     {
         $validated = $request->validate([
-            'birthdate'=>'required|date:format=Y-m-d',
+            'birthdate' => 'required|date:format=Y-m-d',
             'name' => 'required|string|max:255',
             'calling_name' => 'required|string|max:255',
         ]);
