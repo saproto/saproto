@@ -33,7 +33,7 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
- * @property-read Collection|Orderline[]|null $orderlines
+ * @property-read Collection<int, DinnerformOrderline>|DinnerformOrderline[] $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
@@ -85,7 +85,6 @@ class Dinnerform extends Model
     }
 
     /**
-     * @return Attribute The regular discount as a percentage out of 100.
      * @return Attribute<float, never> The regular discount as a percentage out of 100.
      */
     protected function regularDiscountPercentage(): Attribute

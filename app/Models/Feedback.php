@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\FeedbackFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,7 @@ use Illuminate\Support\Carbon;
  */
 class Feedback extends Model
 {
+    /** @use HasFactory<FeedbackFactory>*/
     use HasFactory;
     use SoftDeletes;
 

@@ -38,20 +38,20 @@ class DmxOverride extends Model
 
     public $timestamps = false;
 
-    /** @return Collection|DmxOverride[] */
-    public static function getActiveSorted()
+    /** @return Collection<int, DmxOverride>|DmxOverride[] */
+    public static function getActiveSorted(): array|Collection
     {
         return self::query()->where('start', '<', Carbon::now()->format('U'))->where('end', '>', Carbon::now()->format('U'))->get()->sortBy('window_size');
     }
 
-    /** @return Collection|DmxOverride[] */
-    public static function getUpcomingSorted()
+    /** @return Collection<int, DmxOverride>|DmxOverride[] */
+    public static function getUpcomingSorted(): array|Collection
     {
         return self::query()->where('start', '>', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
 
-    /** @return Collection|DmxOverride[] */
-    public static function getPastSorted()
+    /** @return Collection<int, DmxOverride>|DmxOverride[] */
+    public static function getPastSorted(): array|Collection
     {
         return self::query()->where('end', '<', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
@@ -63,25 +63,25 @@ class DmxOverride extends Model
     }
 
     /** @return int */
-    public function red()
+    public function red(): int
     {
         return $this->colorArray()[0];
     }
 
     /** @return int */
-    public function green()
+    public function green(): int
     {
         return $this->colorArray()[1];
     }
 
     /** @return int */
-    public function blue()
+    public function blue(): int
     {
         return $this->colorArray()[2];
     }
 
     /** @return int */
-    public function brightness()
+    public function brightness(): int
     {
         return $this->colorArray()[3];
     }
@@ -101,8 +101,8 @@ class DmxOverride extends Model
         return explode(',', $this->fixtures);
     }
 
-    /** @return Collection */
-    public function getFixtures()
+    /** @return Collection<int, DmxFixture> */
+    public function getFixtures(): Collection
     {
         return DmxFixture::query()->whereIn('id', $this->getFixtureIds())->get();
     }

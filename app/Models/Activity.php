@@ -66,7 +66,7 @@ class Activity extends Validatable
     protected $table = 'activities';
 
     protected $guarded = ['id'];
-
+    /** @var array|string[]  */
     protected array $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',
@@ -160,7 +160,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
+     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
      */
     public function helpingUsers(int $help_id): \Illuminate\Support\Collection
     {
@@ -194,7 +194,7 @@ class Activity extends Validatable
         return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
     }
 
-    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null)
+    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
         return $this->helpingParticipations()
             ->where('user_id', $user->id)

@@ -48,7 +48,7 @@ class Address extends Validatable
     protected $guarded = ['id'];
 
     protected $hidden = ['id'];
-
+    /** @var array|string[]  */
     protected array $rules = [
         'user_id' => 'required|integer',
         'street' => 'required|string',

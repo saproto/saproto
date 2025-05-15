@@ -125,7 +125,9 @@ class OrderLine extends Model
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
-    /** @param Builder<OrderLine> $query */
+    /** @param Builder<OrderLine> $query
+     *  @return Builder<OrderLine>
+     */
     public function scopeUnpayed(Builder $query): Builder
     {
         return $query->whereNull('payed_with_cash')

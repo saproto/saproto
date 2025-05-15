@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 /**
  * Account Model.
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Product[] $products
+ * @property-read Collection<int, Product> $products
  *
  * @method static Builder|Account whereAccountNumber($value)
  * @method static Builder|Account whereCreatedAt($value)
@@ -44,6 +45,11 @@ class Account extends Model
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * @param int $start
+     * @param int $end
+     * @return Collection<int, stdClass>
+     */
     public function generatePeriodAggregation(int $start, int $end): Collection
     {
         return DB::table('orderlines')

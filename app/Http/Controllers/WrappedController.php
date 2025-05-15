@@ -9,12 +9,14 @@ use App\Models\StorageEntry;
 use App\Models\TicketPurchase;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $from = Carbon::now()->startOfYear();
         $to = Carbon::now()->endOfYear();
@@ -30,7 +32,7 @@ class WrappedController extends Controller
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, OrderLine>
      */
     public function getPurchases(Carbon $from, Carbon $to)
     {
@@ -41,8 +43,8 @@ class WrappedController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
     }
-
-    public function orderTotals()
+    /** @return Collection<int, OrderLine> */
+    public function orderTotals(): Collection
     {
         $totals = OrderLine::query()
             ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
@@ -55,7 +57,14 @@ class WrappedController extends Controller
 
         return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
-
+    /** @return Collection<int, array{
+     *     title: string,
+     *     start: int,
+     *     location: string,
+     *     formatted_date: string,
+     *     image_url: string,
+     *     price: float
+    }> */
     public function eventList()
     {
         $events = Event::query()
@@ -102,19 +111,15 @@ class WrappedController extends Controller
             ->map(static function (Event $event) use ($activity_prices, $ticket_prices, $images) {
                 $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
                 $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
-                /** @phpstan-ignore-next-line */
-                $event->price = $activity_price + $ticket_price;
-                /** @phpstan-ignore-next-line */
-                $event->image_url = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
-
-                return $event->only([
+                $array = $event->only([
                     'title',
                     'start',
                     'location',
                     'formatted_date',
-                    'image_url',
-                    'price',
                 ]);
+                $array['price'] = $activity_price + $ticket_price;
+                $array['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+                return $array;
             });
 
     }

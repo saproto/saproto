@@ -46,7 +46,6 @@ class CodexSong extends Model
     }
 
     #[Override]
-    protected static function booted()
     protected static function booted(): void
     {
         static::deleting(function ($song) {

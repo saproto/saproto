@@ -24,7 +24,7 @@ use Illuminate\Support\Collection;
  * @property bool $has_buy_limit
  * @property-read Event $event
  * @property-read Product $product
- * @property-read Collection|TicketPurchase[] $purchases
+ * @property-read Collection<int, TicketPurchase> $purchases
  *
  * @method static Builder|Ticket whereAvailableFrom($value)
  * @method static Builder|Ticket whereAvailableTo($value)
@@ -71,6 +71,7 @@ class Ticket extends Model
         return $this->hasMany(TicketPurchase::class);
     }
 
+    /** @return Collection<int, User> */
     public function getUsers(): Collection
     {
         return User::query()->whereHas('tickets', function ($query) {

@@ -12,20 +12,13 @@ class ProductBulkUpdateNotification extends Mailable
 {
     use Queueable;
     use SerializesModels;
-
-    /**
-     * @var User
-     */
-    public $user;
-
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, public $log)
+    public function __construct(public User $user, public string $log)
     {
-        $this->user = $user;
     }
 
     /**
@@ -33,7 +26,7 @@ class ProductBulkUpdateNotification extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->to('omnomcom@'.Config::string('proto.emaildomain'), 'OmNomCom Committee')

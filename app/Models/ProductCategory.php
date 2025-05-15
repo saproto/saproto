@@ -50,7 +50,9 @@ class ProductCategory extends Model
     {
         return $this->belongsToMany(Product::class, 'products_categories', 'category_id', 'product_id');
     }
-
+    /**
+     * @return BelongsToMany<Product, $this>
+     */
     public function sortedProducts(): BelongsToMany
     {
         return $this->products()->orderBy('name');

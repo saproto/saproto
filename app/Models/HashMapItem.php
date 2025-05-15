@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|HashMapItem whereKey($value)
  * @method static Builder|HashMapItem whereSubkey($value)
  * @method static Builder|HashMapItem whereValue($value)
- * @method static builder|hashMapItem newmodelquery()
- * @method static builder|hashMapItem newquery()
- * @method static builder|hashMapItem query()
+ * @method static builder|HashMapItem newmodelquery()
+ * @method static builder|HashMapItem newquery()
+ * @method static builder|HashMapItem query()
  *
  * @mixin Model
  */
@@ -40,6 +40,7 @@ class HashMapItem extends Model
 
     /**
      * @param  Builder<HashMapItem>  $query
+     * @return Builder<HashMapItem>
      */
     public function scopeKey(Builder $query, string $key): Builder
     {
@@ -48,6 +49,7 @@ class HashMapItem extends Model
 
     /**
      * @param  Builder<HashMapItem>  $query
+     * @return Builder<HashMapItem>
      */
     public function scopeSubkey(Builder $query, string $subkey): Builder
     {

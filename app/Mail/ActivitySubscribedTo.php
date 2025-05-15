@@ -15,7 +15,7 @@ class ActivitySubscribedTo extends Mailable
     /**
      * @var array<'help'|'id'|'name'|'title', mixed>
      */
-    public $activity;
+    public array $activity;
 
     /**
      * Create a new message instance.

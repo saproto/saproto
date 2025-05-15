@@ -30,7 +30,7 @@ class WithdrawalController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         $withdrawals = Withdrawal::query()
             ->orderBy('id', 'desc')
@@ -40,7 +40,7 @@ class WithdrawalController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('omnomcom.withdrawals.create');
     }
@@ -48,7 +48,7 @@ class WithdrawalController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $max = ($request->has('max') ? $request->input('max') : null);
         if ($max < 0) {
@@ -106,7 +106,7 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
-    public function show(int $id)
+    public function show(int $id): View
     {
         $withdrawal = Withdrawal::query()
             ->withCount(['orderlines', 'users'])
@@ -125,7 +125,7 @@ class WithdrawalController extends Controller
         return view('omnomcom.withdrawals.show', ['withdrawal' => $withdrawal, 'userLines' => $userLines]);
     }
 
-    public function showAccounts(int $id)
+    public function showAccounts(int $id): View
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -151,7 +151,7 @@ class WithdrawalController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -182,7 +182,7 @@ class WithdrawalController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -214,7 +214,7 @@ class WithdrawalController extends Controller
     /**
      * @return RedirectResponse
      */
-    public static function deleteFrom(int $id, int $user_id)
+    public static function deleteFrom(int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -242,9 +242,12 @@ class WithdrawalController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param int $id
+     * @param int $user_id
      * @return RedirectResponse
      */
-    public static function markFailed(Request $request, int $id, int $user_id)
+    public static function markFailed(Request $request, int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -326,11 +329,11 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @return RedirectResponse|\Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      *
-     * @throws SephpaInputException
      */
-    public static function export(int $id)
+    public static function export(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -418,9 +421,10 @@ class WithdrawalController extends Controller
     }
 
     /**
+     * @param int $id
      * @return RedirectResponse
      */
-    public static function close(int $id)
+    public static function close(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -440,9 +444,10 @@ class WithdrawalController extends Controller
     }
 
     /**
+     * @param int $id
      * @return View
      */
-    public function showForUser(int $id)
+    public function showForUser(int $id): View
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -453,9 +458,10 @@ class WithdrawalController extends Controller
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
      *
+     * @param int $id
      * @return RedirectResponse
      */
-    public function email(int $id)
+    public function email(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -476,7 +482,7 @@ class WithdrawalController extends Controller
     }
 
     /** @return View */
-    public function unwithdrawable()
+    public function unwithdrawable(): View
     {
         $users = User::query()->whereHas('orderlines', function ($q) {
             $q->unpayed();
@@ -495,7 +501,7 @@ class WithdrawalController extends Controller
         return OrderLine::query()->unpayed()->sum('total_price');
     }
 
-    public static function openOrderlinesTotal()
+    public static function openOrderlinesTotal(): int
     {
         return OrderLine::query()->unpayed()->count();
     }

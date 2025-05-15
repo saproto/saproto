@@ -368,7 +368,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace groups. Pass in user to get only their groups.
      *
-     * @returns Collection<GoogleGroup>
+     * @returns Collection<int, GoogleGroup>
      *
      * @throws Exception
      */
@@ -396,7 +396,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace group members of a specific group
      *
-     * @returns Collection<GoogleGroup>
+     * @returns Collection<int, GoogleGroup>
      *
      * @throws Exception
      */
@@ -420,7 +420,7 @@ class GoogleSync extends Command
     /**
      * List current Google Workspace users.
      *
-     * @returns Collection<ProtoUser>
+     * @returns Collection<int, ProtoUser>
      *
      * @throws Exception
      */

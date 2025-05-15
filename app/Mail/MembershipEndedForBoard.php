@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -14,10 +15,10 @@ class MembershipEndedForBoard extends Mailable
 
     /**
      * Create a new message instance.
-     *
+     * @param Member[] $deleted_memberships
      * @return void
      */
-    public function __construct(public $deleted_memberships) {}
+    public function __construct(public array $deleted_memberships) {}
 
     /**
      * Build the message.
