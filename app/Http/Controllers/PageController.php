@@ -188,18 +188,12 @@ class PageController extends Controller
         }
 
         $page = Page::query()->find($id);
-        $files = $request->file('files');
-        if ($files instanceof UploadedFile) {
-            $files = [$files];
-        }
+        $file = $request->file('files');
+        $newFile = new StorageEntry;
+        $newFile->createFromFile($file);
 
-        foreach ($files as $file) {
-            $newFile = new StorageEntry;
-            $newFile->createFromFile($file);
-
-            $page->files()->attach($newFile);
-            $page->save();
-        }
+        $page->files()->attach($newFile);
+        $page->save();
 
         return Redirect::route('page::edit', ['id' => $id]);
     }
