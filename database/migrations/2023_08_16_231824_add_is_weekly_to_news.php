@@ -25,7 +25,7 @@ return new class extends Migration
                 'title' => 'Weekly newsletter of week '.Carbon::now()->weekOfYear.' of '.Carbon::now()->year,
                 'content' => $text->value,
                 'is_weekly' => true,
-                'publication' => Carbon::createFromTimestamp($lastSent->value)->format('Y-m-d H:i:s'),
+                'publication' => Carbon::createFromTimestamp($lastSent->value)->toDateTimeString(),
             ]);
 
             $newsItem->save();

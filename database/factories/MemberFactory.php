@@ -21,7 +21,7 @@ class MemberFactory extends Factory
     #[Override]
     public function definition(): array
     {
-        $created_at = fake()->dateTimeBetween('2011-04-20')->format('Y-m-d H:i:s');
+        $created_at = fake()->dateTimeBetween('2011-04-20')->toDateTimeString();
 
         return [
             'created_at' => $created_at,

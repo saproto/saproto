@@ -6,7 +6,6 @@ use App\Models\DmxFixture;
 use App\Models\DmxOverride;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -31,8 +30,8 @@ class DmxOverrrideController extends Controller
     {
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = Carbon::parse($request->start)->getTimestamp();
-        $end = Carbon::parse($request->end)->getTimestamp();
+        $start = $request->date('start')->getTimestamp();
+        $end = $request->date('end')->getTimestamp();
 
         $override = DmxOverride::query()->create([
             'fixtures' => $fixtures,
@@ -58,8 +57,8 @@ class DmxOverrrideController extends Controller
 
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = Carbon::parse($request->start)->getTimestamp();
-        $end = Carbon::parse($request->end)->getTimestamp();
+        $start = $request->date('start')->getTimestamp();
+        $end = $request->date('end')->getTimestamp();
 
         $override->update([
             'fixtures' => $fixtures,

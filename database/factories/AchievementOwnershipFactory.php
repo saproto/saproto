@@ -20,7 +20,7 @@ class AchievementOwnershipFactory extends Factory
     #[Override]
     public function definition(): array
     {
-        $date = fake()->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
+        $date = fake()->dateTimeBetween('-1 year')->toDateTimeString();
 
         return [
             'achievement_id' => Achievement::query()->inRandomOrder()->first()->id,

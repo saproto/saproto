@@ -16,8 +16,8 @@ class TIPCieController extends Controller
     {
         $date = $request->has('date') ? $request->date : null;
 
-        $startDate = ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s'));
-        $endDate = ($date ? Carbon::parse($date)->addHours(30)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s'));
+        $startDate = ($date ? Carbon::parse($date)->addHours(6)->toDateTimeString() : Carbon::today()->toDateTimeString());
+        $endDate = ($date ? Carbon::parse($date)->addHours(30)->toDateTimeString() : Carbon::today()->toDateTimeString());
 
         /** @var Account $tipcieAccount */
         $tipcieAccount = Account::query()->findOrFail(Config::integer('omnomcom.tipcie-account'));

@@ -122,7 +122,7 @@ class NewsController extends Controller
         if ($request->has('title')) {
             $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
-            $newsitem->published_at = Carbon::parse($request->published_at)->format('Y-m-d H:i:s');
+            $newsitem->published_at = Carbon::parse($request->published_at)->toDateTimeString();
         } else {
             $newsitem->is_weekly = true;
             $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
@@ -170,7 +170,7 @@ class NewsController extends Controller
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = Carbon::now()->format('Y-m-d H:i:s');
+        $newsitem->published_at = Carbon::now()->toDateTimeString();
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');

@@ -165,8 +165,8 @@ class Product extends Model
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'payed_with_cash' => ($withCash === true ? Carbon::now()->format('Y-m-d H:i:s') : null),
-            'payed_with_bank_card' => ($withBankCard === true ? Carbon::now()->format('Y-m-d H:i:s') : null),
+            'payed_with_cash' => ($withCash === true ? Carbon::now()->toDateTimeString() : null),
+            'payed_with_bank_card' => ($withBankCard === true ? Carbon::now()->toDateTimeString() : null),
             'description' => $description == '' ? null : $description,
             'authenticated_by' => $auth_method,
         ]);

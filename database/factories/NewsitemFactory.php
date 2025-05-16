@@ -20,7 +20,7 @@ class NewsitemFactory extends Factory
     #[Override]
     public function definition(): array
     {
-        $published_at = fake()->dateTimeBetween('-1 year', '+1 year')->format('Y-m-d H:i:s');
+        $published_at = fake()->dateTimeBetween('-1 year', '+1 year')->toDateTimeString();
 
         return [
             'user_id' => User::factory()->create()->id,

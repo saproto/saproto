@@ -144,7 +144,7 @@ class TicketController extends Controller
         }
 
         if ($ticket) {
-            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->toDateTimeString();
             $ticket->save();
             Session::flash('flash_message', 'Ticket has been scanned!');
         } else {
@@ -227,7 +227,7 @@ class TicketController extends Controller
                 ];
             }
 
-            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->toDateTimeString();
             if ($unscan) {
                 $ticket->scanned = null;
             }

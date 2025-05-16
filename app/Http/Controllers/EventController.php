@@ -131,8 +131,8 @@ class EventController extends Controller
     {
         $event = Event::query()->create([
             'title' => $request->title,
-            'start' => Carbon::parse($request->start)->getTimestamp(),
-            'end' => Carbon::parse($request->end)->getTimestamp(),
+            'start' => $request->date('start')->getTimestamp(),
+            'end' => $request->date('end')->getTimestamp(),
             'location' => $request->location,
             'maps_location' => $request->maps_location,
             'secret' => $request->publication ? false : $request->secret,
@@ -141,7 +141,7 @@ class EventController extends Controller
             'is_featured' => $request->has('is_featured'),
             'is_external' => $request->has('is_external'),
             'force_calendar_sync' => $request->has('force_calendar_sync'),
-            'publication' => $request->publication ? Carbon::parse($request->publication)->getTimestamp() : null,
+            'publication' => $request->publication ? $request->date('publication')->getTimestamp() : null,
         ]);
 
         if ($request->file('image')) {
@@ -181,8 +181,8 @@ class EventController extends Controller
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
         $event->title = $request->title;
-        $event->start = Carbon::parse($request->start)->getTimestamp();
-        $event->end = Carbon::parse($request->end)->getTimestamp();
+        $event->start = $request->date('start')->getTimestamp();
+        $event->end = $request->date('end')->getTimestamp();
         $event->location = $request->location;
         $event->maps_location = $request->maps_location;
         $event->secret = $request->publication ? false : $request->secret;
