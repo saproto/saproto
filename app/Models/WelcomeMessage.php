@@ -29,6 +29,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|WelcomeMessage query()
  *
  * @mixin Model
+ *
+ * @method static WelcomeMessageFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class WelcomeMessage extends Model
 {

@@ -64,6 +64,15 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|Email query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $attachments_count
+ * @property-read int|null $events_count
+ * @property-read int|null $lists_count
+ *
+ * @method static EmailFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Email whereToBackup($value)
+ *
+ * @mixin \Eloquent
  */
 class Email extends Model
 {

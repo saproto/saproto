@@ -28,6 +28,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|FinancialAccount query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $products_count
+ *
+ * @mixin \Eloquent
  */
 class FinancialAccount extends Model
 {

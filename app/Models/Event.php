@@ -81,13 +81,29 @@ use Override;
  * @method static Builder|Event newQuery()
  * @method static Builder|Event query()
  *
- * @property-read  bool|null $user_has_participation
- * @property-read  bool|null $user_has_helper_participation
- * @property-read  bool|null $user_has_backup_participation
- * @property-read  bool|null $user_has_tickets
- * @property-read  int|null $users_count
+ * @property-read bool|null $user_has_participation
+ * @property-read bool|null $user_has_helper_participation
+ * @property-read bool|null $user_has_backup_participation
+ * @property-read bool|null $user_has_tickets
+ * @property-read int|null $users_count
  *
  * @mixin Model
+ *
+ * @property int $update_sequence
+ * @property string|null $maps_location
+ * @property-read int|null $albums_count
+ * @property-read Collection<int, Dinnerform> $dinnerforms
+ * @property-read int|null $dinnerforms_count
+ * @property-read int|null $tickets_count
+ * @property-read int|null $videos_count
+ *
+ * @method static EventFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Event whereMapsLocation($value)
+ * @method static Builder<static>|Event wherePublication($value)
+ * @method static Builder<static>|Event whereUniqueUsersCount($value)
+ * @method static Builder<static>|Event whereUpdateSequence($value)
+ *
+ * @mixin \Eloquent
  */
 class Event extends Model
 {

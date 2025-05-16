@@ -41,6 +41,10 @@ use Mollie\Api\Resources\Payment;
  * @method static Builder|MollieTransaction query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $orderlines_count
+ *
+ * @mixin \Eloquent
  */
 class MollieTransaction extends Model
 {

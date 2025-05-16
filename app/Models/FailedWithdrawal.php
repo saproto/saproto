@@ -27,6 +27,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal query()
  *
  * @mixin Model
+ *
+ * @property-read OrderLine|null $correctionOrderline
+ *
+ * @mixin \Eloquent
  */
 class FailedWithdrawal extends Model
 {

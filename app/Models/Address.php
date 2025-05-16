@@ -37,6 +37,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Address query()
  *
  * @mixin Model
+ *
+ * @method static AddressFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class Address extends Validatable
 {

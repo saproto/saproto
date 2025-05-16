@@ -32,6 +32,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HeaderImage query()
  *
  * @mixin Model
+ *
+ * @property-read StorageEntry|null $StorageEntry
+ *
+ * @method static HeaderImageFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class HeaderImage extends Model
 {

@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|SoundboardSound query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class SoundboardSound extends Model
 {

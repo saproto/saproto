@@ -38,6 +38,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Leaderboard query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $entries_count
+ *
+ * @mixin \Eloquent
  */
 class Leaderboard extends Model
 {

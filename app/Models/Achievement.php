@@ -43,6 +43,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Achievement query()
  *
  * @mixin Model
+ *
+ * @property-read Collection<int, AchievementOwnership> $achievementOwnership
+ * @property-read int|null $achievement_ownership_count
+ * @property-read int|null $users_count
+ *
+ * @mixin \Eloquent
  */
 class Achievement extends Model
 {

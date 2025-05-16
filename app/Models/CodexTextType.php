@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Database\Factories\CodexTextTypeFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -14,6 +16,20 @@ use Override;
  * @property int $id
  * @property string $type
  * @property CodexText[] $texts
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read int|null $texts_count
+ *
+ * @method static CodexTextTypeFactory factory($count = null, $state = [])
+ * @method static Builder<static>|CodexTextType newModelQuery()
+ * @method static Builder<static>|CodexTextType newQuery()
+ * @method static Builder<static>|CodexTextType query()
+ * @method static Builder<static>|CodexTextType whereCreatedAt($value)
+ * @method static Builder<static>|CodexTextType whereId($value)
+ * @method static Builder<static>|CodexTextType whereType($value)
+ * @method static Builder<static>|CodexTextType whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class CodexTextType extends Model
 {

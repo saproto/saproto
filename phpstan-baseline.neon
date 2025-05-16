@@ -37,8 +37,8 @@ parameters:
 			path: app/Console/Commands/UpdateWallstreetPrices.php
 
 		-
-			message: '#^Using nullsafe property access "\?\-\>calling_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
-			identifier: nullsafe.neverNull
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
 			count: 1
 			path: app/Events/StickerPlacedEvent.php
 
@@ -67,13 +67,19 @@ parameters:
 			path: app/Http/Controllers/StickerController.php
 
 		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 2
+			path: app/Http/Controllers/StickerController.php
+
+		-
 			message: '#^Parameter \#1 \$model of method Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User,App\\Models\\Sticker\>\:\:associate\(\) expects App\\Models\\User\|int\|string\|null, Illuminate\\Contracts\\Auth\\Authenticatable\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: app/Http/Controllers/StickerController.php
 
 		-
-			message: '#^Using nullsafe property access "\?\-\>calling_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			message: '#^Using nullsafe property access on non\-nullable type App\\Models\\User\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
 			count: 2
 			path: app/Http/Controllers/StickerController.php

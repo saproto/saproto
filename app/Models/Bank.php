@@ -35,6 +35,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Bank query()
  *
  * @mixin Model
+ *
+ * @method static BankFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class Bank extends Model
 {

@@ -39,6 +39,10 @@ use Override;
  * @method static Builder|StorageEntry query()
  *
  * @mixin Model
+ *
+ * @method static StorageEntryFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class StorageEntry extends Model
 {

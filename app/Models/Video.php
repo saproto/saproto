@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class Video extends Model
 {

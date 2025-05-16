@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|EmailListSubscription query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class EmailListSubscription extends Model
 {

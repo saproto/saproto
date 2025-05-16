@@ -34,6 +34,18 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Feedback query()
  *
  * @mixin Model
+ *
+ * @property-read Collection<int, Feedback> $feedback
+ * @property-read int|null $feedback_count
+ *
+ * @method static Builder<static>|FeedbackCategory whereCanReply($value)
+ * @method static Builder<static>|FeedbackCategory whereReview($value)
+ * @method static Builder<static>|FeedbackCategory whereReviewerId($value)
+ * @method static Builder<static>|FeedbackCategory whereShowPublisher($value)
+ * @method static Builder<static>|FeedbackCategory whereTitle($value)
+ * @method static Builder<static>|FeedbackCategory whereUrl($value)
+ *
+ * @mixin \Eloquent
  */
 class FeedbackCategory extends Model
 {

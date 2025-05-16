@@ -43,6 +43,12 @@ use Override;
  * @method static Builder|Photo query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $likes_count
+ *
+ * @method static PhotoFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class Photo extends Model
 {

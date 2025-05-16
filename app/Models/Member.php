@@ -61,6 +61,16 @@ use Override;
  * @method Builder<$this>|static type(MembershipTypeEnum $type)
  *
  * @mixin Model
+ *
+ * @property int|null $omnomcom_sound_id
+ *
+ * @method static MemberFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Member whereIsPrimaryAtAnotherAssociation($value)
+ * @method static Builder<static>|Member whereMembershipType($value)
+ * @method static Builder<static>|Member whereOmnomcomSoundId($value)
+ * @method static Builder<static>|Member whereUntil($value)
+ *
+ * @mixin \Eloquent
  */
 class Member extends Model
 {

@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|NarrowcastingItem query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class NarrowcastingItem extends Model
 {

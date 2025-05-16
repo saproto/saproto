@@ -38,6 +38,14 @@ use Illuminate\Support\Collection;
  * @method static Builder|Ticket query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $purchases_count
+ *
+ * @method static Builder<static>|Ticket whereBuyLimit($value)
+ * @method static Builder<static>|Ticket whereHasBuyLimit($value)
+ * @method static Builder<static>|Ticket whereShowParticipants($value)
+ *
+ * @mixin \Eloquent
  */
 class Ticket extends Model
 {

@@ -35,6 +35,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|HelpingCommittee query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $users_count
+ *
+ * @mixin \Eloquent
  */
 class HelpingCommittee extends Validatable
 {

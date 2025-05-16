@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -17,7 +19,28 @@ use Illuminate\Support\Carbon;
  * @property float $price_decrease
  * @property float $price_increase
  * @property int $random_events_chance
- **/
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, WallstreetEvent> $events
+ * @property-read int|null $events_count
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
+ *
+ * @method static Builder<static>|WallstreetDrink newModelQuery()
+ * @method static Builder<static>|WallstreetDrink newQuery()
+ * @method static Builder<static>|WallstreetDrink query()
+ * @method static Builder<static>|WallstreetDrink whereCreatedAt($value)
+ * @method static Builder<static>|WallstreetDrink whereEndTime($value)
+ * @method static Builder<static>|WallstreetDrink whereId($value)
+ * @method static Builder<static>|WallstreetDrink whereMinimumPrice($value)
+ * @method static Builder<static>|WallstreetDrink wherePriceDecrease($value)
+ * @method static Builder<static>|WallstreetDrink wherePriceIncrease($value)
+ * @method static Builder<static>|WallstreetDrink whereRandomEventsChance($value)
+ * @method static Builder<static>|WallstreetDrink whereStartTime($value)
+ * @method static Builder<static>|WallstreetDrink whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 class WallstreetDrink extends Model
 {
     protected $table = 'wallstreet_drink';

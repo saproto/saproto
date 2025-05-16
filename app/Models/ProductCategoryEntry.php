@@ -28,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ProductCategoryEntry query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class ProductCategoryEntry extends Model
 {

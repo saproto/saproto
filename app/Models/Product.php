@@ -59,6 +59,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Product query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $categories_count
+ * @property-read mixed $image_url
+ * @property-read int|null $orderlines_count
+ * @property-read Collection<int, WallstreetPrice> $wallstreetPrices
+ * @property-read int|null $wallstreet_prices_count
+ *
+ * @mixin \Eloquent
  */
 class Product extends Model
 {

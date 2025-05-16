@@ -48,6 +48,19 @@ use Override;
  * @method static Builder|Dinnerform query()
  *
  * @mixin Model
+ *
+ * @property int|null $event_id
+ * @property-read int|null $orderlines_count
+ *
+ * @method static DinnerformFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Dinnerform whereClosed($value)
+ * @method static Builder<static>|Dinnerform whereEventId($value)
+ * @method static Builder<static>|Dinnerform whereHelperDiscount($value)
+ * @method static Builder<static>|Dinnerform whereOrderedByUserId($value)
+ * @method static Builder<static>|Dinnerform whereRegularDiscount($value)
+ * @method static Builder<static>|Dinnerform whereVisibleHomePage($value)
+ *
+ * @mixin \Eloquent
  */
 class Dinnerform extends Model
 {

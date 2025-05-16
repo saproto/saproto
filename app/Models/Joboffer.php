@@ -31,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Joboffer query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class Joboffer extends Model
 {

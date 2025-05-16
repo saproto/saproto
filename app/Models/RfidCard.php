@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|RfidCard query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class RfidCard extends Model
 {

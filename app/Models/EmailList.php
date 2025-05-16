@@ -27,6 +27,12 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder|EmailList query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $users_count
+ *
+ * @method static Builder<static>|EmailList subscribed(User $user)
+ *
+ * @mixin \Eloquent
  */
 class EmailList extends Model
 {
@@ -80,7 +86,6 @@ class EmailList extends Model
     }
 
     /**
-     * @param User $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
      *
      * @throws Exception

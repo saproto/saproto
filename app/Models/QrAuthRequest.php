@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|QrAuthRequest query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class QrAuthRequest extends Model
 {

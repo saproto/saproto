@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\DinnerformOrderlineFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,7 +27,23 @@ use Illuminate\Support\Carbon;
  * @property-read float|int $price_with_discount
  *
  * @mixin Model
- **/
+ *
+ * @method static DinnerformOrderlineFactory factory($count = null, $state = [])
+ * @method static Builder<static>|DinnerformOrderline newModelQuery()
+ * @method static Builder<static>|DinnerformOrderline newQuery()
+ * @method static Builder<static>|DinnerformOrderline query()
+ * @method static Builder<static>|DinnerformOrderline whereClosed($value)
+ * @method static Builder<static>|DinnerformOrderline whereCreatedAt($value)
+ * @method static Builder<static>|DinnerformOrderline whereDescription($value)
+ * @method static Builder<static>|DinnerformOrderline whereDinnerformId($value)
+ * @method static Builder<static>|DinnerformOrderline whereHelper($value)
+ * @method static Builder<static>|DinnerformOrderline whereId($value)
+ * @method static Builder<static>|DinnerformOrderline wherePrice($value)
+ * @method static Builder<static>|DinnerformOrderline whereUpdatedAt($value)
+ * @method static Builder<static>|DinnerformOrderline whereUserId($value)
+ *
+ * @mixin \Eloquent
+ */
 class DinnerformOrderline extends Model
 {
     /** @use HasFactory<DinnerformOrderlineFactory>*/

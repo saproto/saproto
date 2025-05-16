@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxChannel query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class DmxChannel extends Model
 {

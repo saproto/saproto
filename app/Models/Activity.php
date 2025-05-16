@@ -39,12 +39,11 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|Committee[] $helpingCommittees
  * @property-read Collection|User[] $presentUsers
  * @property-read Collection|User[] $users
- *
- * @property-read  bool|null $user_has_participation
- * @property-read  bool|null $user_has_helper_participation
- * @property-read  bool|null $user_has_backup_participation
- * @property-read  bool|null $user_has_tickets
- * @property-read  int|null $users_count
+ * @property-read bool|null $user_has_participation
+ * @property-read bool|null $user_has_helper_participation
+ * @property-read bool|null $user_has_backup_participation
+ * @property-read bool|null $user_has_tickets
+ * @property-read int|null $users_count
  *
  * @method static Builder|Activity whereClosed($value)
  * @method static Builder|Activity whereClosedAccount($value)
@@ -63,6 +62,21 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Activity newModelQuery()
  * @method static Builder|Activity newQuery()
  * @method static Builder|Activity query()
+ *
+ * @property int|null $closed_account
+ * @property-read int|null $all_users_count
+ * @property-read int|null $backup_users_count
+ * @property-read int|null $helping_committee_instances_count
+ * @property-read int|null $helping_committees_count
+ * @property-read int|null $helping_participations_count
+ * @property-read int|null $participation_count
+ * @property-read int|null $present_users_count
+ *
+ * @method static ActivityFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Activity whereAttendees($value)
+ * @method static Builder<static>|Activity whereRedirectUrl($value)
+ *
+ * @mixin \Eloquent
  */
 class Activity extends Validatable
 {

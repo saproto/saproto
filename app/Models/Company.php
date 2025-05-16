@@ -48,6 +48,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Company query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $joboffers_count
+ *
+ * @mixin \Eloquent
  */
 class Company extends Model
 {

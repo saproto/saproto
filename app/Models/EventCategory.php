@@ -30,6 +30,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|EventCategory query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $events_count
+ *
+ * @method static EventCategoryFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class EventCategory extends Model
 {

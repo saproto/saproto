@@ -13,6 +13,8 @@ use Illuminate\Support\MessageBag;
  * @method static Builder|Validatable newModelQuery()
  * @method static Builder|Validatable newQuery()
  * @method static Builder|Validatable query()
+ *
+ * @mixin \Eloquent
  */
 class Validatable extends Model
 {

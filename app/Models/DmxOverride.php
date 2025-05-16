@@ -29,6 +29,7 @@ use Illuminate\Support\Collection;
  * @method static Builder|DmxOverride query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class DmxOverride extends Model
 {

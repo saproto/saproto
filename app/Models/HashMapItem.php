@@ -26,6 +26,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static builder|HashMapItem query()
  *
  * @mixin Model
+ *
+ * @method static HashMapItemFactory factory($count = null, $state = [])
+ * @method static Builder<static>|HashMapItem newModelQuery()
+ * @method static Builder<static>|HashMapItem newQuery()
+ *
+ * @mixin \Eloquent
  */
 class HashMapItem extends Model
 {

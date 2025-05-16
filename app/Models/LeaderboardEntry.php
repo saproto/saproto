@@ -30,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|LeaderboardEntry query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class LeaderboardEntry extends Model
 {

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,6 +35,13 @@ use Override;
  * @method static Builder|ProductCategory query()
  *
  * @mixin Model
+ *
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
+ * @property-read Collection<int, Product> $sortedProducts
+ * @property-read int|null $sorted_products_count
+ *
+ * @mixin \Eloquent
  */
 class ProductCategory extends Model
 {

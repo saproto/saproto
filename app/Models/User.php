@@ -149,6 +149,34 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
  *
+ * @property-read int|null $achievements_count
+ * @property-read int|null $clients_count
+ * @property-read int|null $committees_count
+ * @property-read int|null $feedback_count
+ * @property-read Collection<int, Committee> $groups
+ * @property-read int|null $groups_count
+ * @property-read int|null $lists_count
+ * @property-read int|null $mollie_transactions_count
+ * @property-read int|null $orderlines_count
+ * @property-read int|null $permissions_count
+ * @property-read int|null $played_videos_count
+ * @property-read int|null $rfid_count
+ * @property-read int|null $roles_count
+ * @property-read int|null $societies_count
+ * @property-read int|null $stickers_count
+ * @property-read int|null $tempadmin_count
+ * @property-read int|null $tickets_count
+ * @property-read int|null $tokens_count
+ * @property-read WelcomeMessage|null $welcomeMessage
+ * @property-read Collection<int, Withdrawal> $withdrawals
+ * @property-read int|null $withdrawals_count
+ *
+ * @method static UserFactory factory($count = null, $state = [])
+ * @method static Builder<static>|User whereDiscordId($value)
+ * @method static Builder<static>|User withoutPermission($permissions)
+ * @method static Builder<static>|User withoutRole($roles, $guard = null)
+ *
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {

@@ -29,6 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|ShortUrl query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class ShortUrl extends Model
 {

@@ -38,6 +38,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TicketPurchase query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class TicketPurchase extends Model
 {

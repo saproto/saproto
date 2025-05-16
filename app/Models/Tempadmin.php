@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Tempadmin query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class Tempadmin extends Model
 {

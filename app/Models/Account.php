@@ -30,6 +30,10 @@ use stdClass;
  * @method static Builder|Account query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $products_count
+ *
+ * @mixin \Eloquent
  */
 class Account extends Model
 {

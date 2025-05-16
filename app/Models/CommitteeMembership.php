@@ -44,6 +44,10 @@ use Override;
  * @method static Builder|CommitteeMembership query()
  *
  * @mixin Model
+ *
+ * @method static CommitteeMembershipFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class CommitteeMembership extends Model
 {

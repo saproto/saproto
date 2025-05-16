@@ -37,6 +37,22 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Feedback query()
  *
  * @mixin Model
+ *
+ * @property int $feedback_category_id
+ * @property Carbon|null $deleted_at
+ * @property-read int|null $votes_count
+ *
+ * @method static FeedbackFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Feedback onlyTrashed()
+ * @method static Builder<static>|Feedback whereAccepted($value)
+ * @method static Builder<static>|Feedback whereDeletedAt($value)
+ * @method static Builder<static>|Feedback whereFeedbackCategoryId($value)
+ * @method static Builder<static>|Feedback whereReply($value)
+ * @method static Builder<static>|Feedback whereReviewed($value)
+ * @method static Builder<static>|Feedback withTrashed()
+ * @method static Builder<static>|Feedback withoutTrashed()
+ *
+ * @mixin \Eloquent
  */
 class Feedback extends Model
 {

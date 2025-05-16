@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PhotoLikes query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class PhotoLikes extends Model
 {

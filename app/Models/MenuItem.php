@@ -39,6 +39,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MenuItem query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $children_count
+ *
+ * @mixin \Eloquent
  */
 class MenuItem extends Model
 {

@@ -49,6 +49,12 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Page query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $files_count
+ *
+ * @method static PageFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class Page extends Model
 {

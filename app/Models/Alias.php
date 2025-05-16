@@ -31,6 +31,10 @@ use Illuminate\Support\Facades\Config;
  * @method static Builder|Alias query()
  *
  * @mixin Model
+ *
+ * @property-read string $email
+ *
+ * @mixin \Eloquent
  */
 class Alias extends Model
 {

@@ -46,6 +46,10 @@ use Override;
  * @method static Builder|ActivityParticipation query()
  *
  * @mixin Model
+ *
+ * @method static ActivityParticipationFactory factory($count = null, $state = [])
+ *
+ * @mixin \Eloquent
  */
 class ActivityParticipation extends Model
 {

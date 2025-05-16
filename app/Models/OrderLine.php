@@ -59,6 +59,11 @@ use Override;
  * @method static Builder|OrderLine unpayed()
  *
  * @mixin Model
+ *
+ * @method static OrderLineFactory factory($count = null, $state = [])
+ * @method static Builder<static>|OrderLine wherePayedWithLoss($value)
+ *
+ * @mixin \Eloquent
  */
 class OrderLine extends Model
 {

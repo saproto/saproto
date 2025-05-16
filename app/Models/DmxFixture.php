@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxFixture query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class DmxFixture extends Model
 {

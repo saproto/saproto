@@ -49,6 +49,13 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|Committee query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $users_count
+ *
+ * @method static CommitteeFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Committee whereIsActive($value)
+ *
+ * @mixin \Eloquent
  */
 class Committee extends Model
 {

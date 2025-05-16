@@ -57,6 +57,7 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Announcement query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class Announcement extends Model
 {

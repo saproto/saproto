@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Token query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class Token extends Model
 {

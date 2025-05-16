@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PlayedVideo query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class PlayedVideo extends Model
 {

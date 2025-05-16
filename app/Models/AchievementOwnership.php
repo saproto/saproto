@@ -32,6 +32,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|AchievementOwnership query()
  *
  * @mixin Model
+ *
+ * @property string|null $description
+ *
+ * @method static AchievementOwnershipFactory factory($count = null, $state = [])
+ * @method static Builder<static>|AchievementOwnership whereDescription($value)
+ *
+ * @mixin \Eloquent
  */
 class AchievementOwnership extends Model
 {

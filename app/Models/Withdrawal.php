@@ -37,6 +37,17 @@ use Override;
  * @method static Builder|Withdrawal query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $failed_withdrawals_count
+ * @property-read int|null $orderlines_count
+ * @property-read int|null $users_count
+ * @property-read string $withdrawal_id
+ *
+ * @method static Builder<static>|Withdrawal whereSumAssociatedOrderlines($value)
+ * @method static Builder<static>|Withdrawal whereTotalOrderlinesAssociated($value)
+ * @method static Builder<static>|Withdrawal whereTotalUsersAssociated($value)
+ *
+ * @mixin \Eloquent
  */
 class Withdrawal extends Model
 {

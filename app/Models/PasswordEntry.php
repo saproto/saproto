@@ -38,6 +38,7 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder|PasswordEntry query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class PasswordEntry extends Model
 {

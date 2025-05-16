@@ -30,6 +30,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|FeedbackVote query()
  *
  * @mixin Model
+ *
+ * @property-read User|null $user
+ *
+ * @mixin \Eloquent
  */
 class FeedbackVote extends Model
 {

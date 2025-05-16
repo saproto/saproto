@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PasswordReset query()
  *
  * @mixin Model
+ * @mixin \Eloquent
  */
 class PasswordReset extends Model
 {

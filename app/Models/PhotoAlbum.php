@@ -46,6 +46,13 @@ use Override;
  * @method static Builder|PhotoAlbum query()
  *
  * @mixin Model
+ *
+ * @property-read int|null $items_count
+ *
+ * @method static PhotoAlbumFactory factory($count = null, $state = [])
+ * @method static Builder<static>|PhotoAlbum name(string $name)
+ *
+ * @mixin \Eloquent
  */
 class PhotoAlbum extends Model
 {

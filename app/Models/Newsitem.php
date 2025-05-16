@@ -52,6 +52,13 @@ use Illuminate\Support\Collection;
  * @method static Builder|Newsitem query()
  *
  * @mixin Eloquent
+ *
+ * @property-read int|null $events_count
+ *
+ * @method static NewsitemFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Newsitem whereIsWeekly($value)
+ *
+ * @mixin \Eloquent
  */
 class Newsitem extends Model
 {
