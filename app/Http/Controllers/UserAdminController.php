@@ -61,10 +61,7 @@ class UserAdminController extends Controller
         return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
     }
 
-    /**
-     * @return View
-     */
-    public function details(int $id)
+    public function details(int $id): View
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -73,7 +70,7 @@ class UserAdminController extends Controller
         return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'birthdate' => 'required|date:format=Y-m-d',

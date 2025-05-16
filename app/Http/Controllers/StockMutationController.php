@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\StockMutation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StockMutationController extends Controller
 {
     /**
      *  Filters mutations using the filter form
+     *
+     * @param  string[] | null  $selection
+     * @return Builder<StockMutation>
      */
-    public function filterMutations(Request $rq, ?array $selection = null)
+    public function filterMutations(Request $rq, ?array $selection = null): Builder
     {
         $mutations = StockMutation::query()->orderBy('stock_mutations.created_at', 'desc')->orderBy('stock_mutations.id', 'desc');
 
-        // Find mutations by Pwoduct
+        // Find mutations by Product
         if ($rq->has('product_name') && strlen($rq->get('product_name')) > 2) {
             $search = $rq->get('product_name');
             $mutations = $mutations
@@ -62,7 +68,7 @@ class StockMutationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $rq)
+    public function index(Request $rq): View
     {
         $mutations = $this->filterMutations($rq)
             ->with(['product', 'user'])
@@ -71,7 +77,7 @@ class StockMutationController extends Controller
         return view('omnomcom.products.mutations', ['mutations' => $mutations]);
     }
 
-    public function generateCsv(Request $rq)
+    public function generateCsv(Request $rq): StreamedResponse
     {
         // Exclude the userid, which we don't need for reports
         $selection = ['stock_mutations.product_id', 'stock_mutations.before', 'stock_mutations.after', 'stock_mutations.created_at'];

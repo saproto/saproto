@@ -132,10 +132,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  string  $barcode
      * @return RedirectResponse
      */
-    public function scan($barcode)
+    public function scan(string $barcode)
     {
         $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
@@ -156,9 +155,13 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $event
+     * @return array{
+     *     code: int,
+     *     message: string|null,
+     *     data: TicketPurchase|null
+     * }
      */
-    public function scanApi($event, Request $request): array
+    public function scanApi(int $event, Request $request): array
     {
         if (! $request->has('barcode')) {
             return [

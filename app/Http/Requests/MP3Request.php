@@ -16,8 +16,8 @@ class MP3Request extends FormRequest
     }
 
     /**
-     * @return array<string, ValidationRule|array|string>
-     *                                                    Get the validation rules that apply to the request.
+     * @return array<string, string[]|string|ValidationRule>
+     *                                                       Get the validation rules that apply to the request.
      */
     public function rules(): array
     {

@@ -126,7 +126,7 @@ class Product extends Model
     public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
-        if (! $active) {
+        if (! $active instanceof WallstreetDrink) {
             return $this->price;
         }
 

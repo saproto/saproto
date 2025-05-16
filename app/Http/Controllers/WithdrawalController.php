@@ -297,7 +297,7 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    public static function export(int $id): RedirectResponse
+    public static function export(int $id): RedirectResponse|\Illuminate\Http\Response
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);

@@ -19,7 +19,7 @@ class StoreEventRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array|string>
+     * @return array<string, string[]|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -34,6 +34,7 @@ class StoreEventRequest extends FormRequest
         ];
     }
 
+    /** @return string[] */
     #[Override]
     public function messages(): array
     {

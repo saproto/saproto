@@ -23,6 +23,8 @@ class TrustProxies extends Middleware
     /**
      * Override the laravel's trustproxies function to return the trusted proxies
      * in order to load the proxies from the config file.
+     *
+     * @return string[]|string|null
      */
     #[Override]
     protected function proxies(): array|string|null

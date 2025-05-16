@@ -145,18 +145,6 @@ parameters:
 			path: app/Http/Controllers/UserAdminController.php
 
 		-
-			message: '#^Access to property \$id on an unknown class App\\Http\\Controllers\\Product\.$#'
-			identifier: class.notFound
-			count: 1
-			path: app/Http/Controllers/WallstreetController.php
-
-		-
-			message: '#^Access to property \$price on an unknown class App\\Http\\Controllers\\Product\.$#'
-			identifier: class.notFound
-			count: 6
-			path: app/Http/Controllers/WallstreetController.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:unpayed\(\)\.$#'
 			identifier: method.notFound
 			count: 1
