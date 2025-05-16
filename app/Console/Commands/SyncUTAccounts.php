@@ -96,7 +96,7 @@ class SyncUTAccounts extends Command
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Collection<int, User> $users
+     * @param  \Illuminate\Database\Eloquent\Collection<int, User>  $users
      * @return Collection<int, array<string, mixed>>
      * */
     public function syncColumnToUTTrait(Collection $users, callable $queryStringBuilder, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection

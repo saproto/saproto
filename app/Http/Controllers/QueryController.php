@@ -85,7 +85,7 @@ class QueryController extends Controller
             ->get()
             ->keyBy(fn ($item) => $item->membership_type->value)
             /** @phpstan-ignore-next-line */
-            ->map(fn ($item) => (int) $item->count);
+            ->map(fn ($item): int => (int) $item->count);
 
         $count_total = $count_per_type->reject(static fn ($value, $key): bool => in_array($key, [MembershipTypeEnum::PENDING->value, MembershipTypeEnum::PET->value]))->sum();
 

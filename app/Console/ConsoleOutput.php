@@ -18,8 +18,9 @@ class ConsoleOutput
     /**
      * Dynamically handle calls into the console output instance.
      *
+     * @param  array<string>  $parameters
      * @return mixed
-     * @param array<string> $parameters
+     *
      * @throws InvalidArgumentException|Throwable
      */
     public function __call(string $method, array $parameters)

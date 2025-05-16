@@ -89,7 +89,7 @@ class CodexController extends Controller
         $codex->texts()->sync($validated['textids'] ?? []);
     }
 
-    public function show(Codex $codex): null|RedirectResponse
+    public function show(Codex $codex): ?RedirectResponse
     {
         $categories = CodexSongCategory::query()->whereHas('songs', function ($q) use ($codex) {
             $q->whereHas('codices', function ($q) use ($codex) {

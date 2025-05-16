@@ -26,6 +26,7 @@ class NewWallstreetEvent implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
+     *
      * @return array<int, PrivateChannel>
      */
     #[Override]
