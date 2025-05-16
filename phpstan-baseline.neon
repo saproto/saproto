@@ -20,12 +20,6 @@ parameters:
 			path: app/Console/Commands/GoogleSync.php
 
 		-
-			message: '#^Variable \$currentDrink in PHPDoc tag @var does not match any variable in the foreach loop\: \$product$#'
-			identifier: varTag.differentVariable
-			count: 1
-			path: app/Console/Commands/UpdateWallstreetPrices.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 1
@@ -72,9 +66,3 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: app/Http/Controllers/WithdrawalController.php
-
-		-
-			message: '#^Property ''welcome_message'' does not exist in model\.$#'
-			identifier: rules.modelAppends
-			count: 1
-			path: app/Models/User.php

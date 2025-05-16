@@ -194,7 +194,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $with = ['member'];
 
-    protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
+    protected $appends = ['is_member', 'photo_preview', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
@@ -663,19 +663,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function getIcalUrl(): string
     {
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
-    }
-
-    public function getWelcomeMessageAttribute(): ?string
-    {
-        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 
     /**
