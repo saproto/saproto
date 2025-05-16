@@ -50,8 +50,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = Carbon::parse($request->input('available_from'))->getTimestamp();
+        $ticket->available_to = Carbon::parse($request->input('available_to'))->getTimestamp();
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -98,8 +98,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = Carbon::parse($request->input('available_from'))->getTimestamp();
+        $ticket->available_to = Carbon::parse($request->input('available_to'))->getTimestamp();
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -132,10 +132,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  string  $barcode
      * @return RedirectResponse
      */
-    public function scan($barcode)
+    public function scan(string $barcode)
     {
         $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
@@ -156,9 +155,13 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $event
+     * @return array{
+     *     code: int,
+     *     message: string|null,
+     *     data: TicketPurchase|null
+     * }
      */
-    public function scanApi($event, Request $request): array
+    public function scanApi(int $event, Request $request): array
     {
         if (! $request->has('barcode')) {
             return [
@@ -282,9 +285,9 @@ class TicketController extends Controller
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);
-        if ($ticket->user->id != Auth::id()) {
-            abort(403, 'This is not your ticket!');
-        } elseif (! $ticket->canBeDownloaded()) {
+        abort_if($ticket->user->id != Auth::id(), 403, 'This is not your ticket!');
+
+        if (! $ticket->canBeDownloaded()) {
             Session::flash('flash_message', 'You need to pay for this ticket before you can download it.');
 
             return Redirect::back();

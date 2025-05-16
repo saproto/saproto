@@ -8,6 +8,7 @@ use App\Models\Newsitem;
 use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -21,27 +22,21 @@ use stdClass;
 
 class NewsController extends Controller
 {
-    /** @return View */
-    public function admin()
+    public function admin(): View
     {
         $newsitems = Newsitem::query()->orderBy('published_at', 'desc')->paginate(20);
 
         return view('news.admin', ['newsitems' => $newsitems]);
     }
 
-    /** @return View */
-    public function index()
+    public function index(): View
     {
         $newsitems = Newsitem::all()->whereNotNull('published_at')->where('published_at', '<=', Carbon::now())->sortByDesc('published_at');
 
         return view('news.list', ['newsitems' => $newsitems]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function show($id)
+    public function show(int $id): View
     {
         $preview = false;
 
@@ -64,7 +59,7 @@ class NewsController extends Controller
         ]);
     }
 
-    public function showWeeklyPreview(int $id)
+    public function showWeeklyPreview(int $id): RedirectResponse|View
     {
         $newsitem = Newsitem::query()->findOrFail($id);
 
@@ -83,8 +78,7 @@ class NewsController extends Controller
         ]);
     }
 
-    /** @return View */
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
         $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get();
@@ -92,8 +86,7 @@ class NewsController extends Controller
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
 
-    /** @return View */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $newsitem = Newsitem::query()->findOrFail($id);
         $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
@@ -118,6 +111,9 @@ class NewsController extends Controller
         return $this->storeNews($newsitem, $request);
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     public function storeNews(Newsitem $newsitem, Request $request): RedirectResponse
     {
         $newsitem->user_id = Auth::user()->id;
@@ -126,7 +122,7 @@ class NewsController extends Controller
         if ($request->has('title')) {
             $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
-            $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
+            $newsitem->published_at = Carbon::parse($request->published_at)->format('Y-m-d H:i:s');
         } else {
             $newsitem->is_weekly = true;
             $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
@@ -151,11 +147,9 @@ class NewsController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         /** @var Newsitem $newsitem */
         $newsitem = Newsitem::query()->findOrFail($id);
@@ -167,16 +161,14 @@ class NewsController extends Controller
         return Redirect::route('news::admin');
     }
 
-    public function sendWeeklyEmail(int $id)
+    public function sendWeeklyEmail(int $id): RedirectResponse
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only the board can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only the board can do this.');
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);
+        $newsitem->published_at = Carbon::now()->format('Y-m-d H:i:s');
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');
@@ -184,6 +176,15 @@ class NewsController extends Controller
         return Redirect::route('news::admin');
     }
 
+    /**
+     * @return array<int, object{
+     *     id: int|string,
+     *     title: string,
+     *     featured_image_url: string|null,
+     *     content: string,
+     *     published_at: int
+     * }>
+     */
     public function apiIndex(): array
     {
         $newsitems = Newsitem::all()->sortByDesc('published_at');
@@ -197,7 +198,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = strtotime($newsitem->published_at);
+                $returnItem->published_at = Carbon::parse($newsitem->published_at)->getTimestamp();
 
                 $return[] = $returnItem;
             }

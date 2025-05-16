@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventCategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Event[]|null $events
+ * @property-read Collection<int, Event> $events
  *
  * @method static Builder|EventCategory whereCreatedAt($value)
  * @method static Builder|EventCategory whereIcon($value)
@@ -32,6 +33,7 @@ use Illuminate\Support\Carbon;
  */
 class EventCategory extends Model
 {
+    /** @use HasFactory<EventCategoryFactory>*/
     use HasFactory;
 
     protected $table = 'event_categories';

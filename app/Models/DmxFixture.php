@@ -35,7 +35,7 @@ class DmxFixture extends Model
     public $timestamps = false;
 
     /**
-     * @return Collection|DmxChannel[]
+     * @return Collection<int, DmxChannel>|DmxChannel[]
      */
     public function getChannels(?string $special_func = null): Collection|array
     {

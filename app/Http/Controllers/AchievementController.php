@@ -234,7 +234,7 @@ class AchievementController extends Controller
         }
     }
 
-    private function giveAchievement($achievement, $user, $description, $achievedOn): bool
+    private function giveAchievement(Achievement $achievement, User $user, ?string $description, ?string $achievedOn): bool
     {
         $achieved = $user->achievements()->where('achievement_id', $achievement->id)->first();
         if (! $achieved) {
@@ -243,7 +243,7 @@ class AchievementController extends Controller
                 'achievement_id' => $achievement->id,
                 'description' => $description,
             ]);
-            if ($achievedOn) {
+            if ($achievedOn !== null && $achievedOn !== '' && $achievedOn !== '0') {
                 $relation->created_at = Carbon::parse($achievedOn);
             }
 
@@ -252,8 +252,8 @@ class AchievementController extends Controller
             return true;
         }
 
-        if ($description) {
-            $achieved->pivot->description = $description;
+        if ($description !== null && $description !== '' && $description !== '0') {
+            $achieved->getRelationValue('pivot')->description = $description;
             $achievement->save();
 
             return false;

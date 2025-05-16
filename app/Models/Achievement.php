@@ -80,9 +80,9 @@ class Achievement extends Model
     }
 
     /**
-     * @return BelongsToMany|Builder|User[]
+     * @return BelongsToMany<User, $this>
      */
-    public function currentOwners(bool $is_member = true): array|Builder|BelongsToMany
+    public function currentOwners(bool $is_member = true): BelongsToMany
     {
         if ($is_member) {
             return $this->users()->whereHas('member', static function ($query) {

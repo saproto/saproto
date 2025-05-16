@@ -33,6 +33,9 @@ class IsAlfredThereEvent implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function broadcastWith(): array
     {
         return [

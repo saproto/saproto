@@ -27,10 +27,7 @@ use Illuminate\View\View;
 
 class WithdrawalController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function index()
+    public function index(): View
     {
         $withdrawals = Withdrawal::query()
             ->orderBy('id', 'desc')
@@ -39,42 +36,31 @@ class WithdrawalController extends Controller
         return view('omnomcom.withdrawals.index', ['withdrawals' => $withdrawals]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('omnomcom.withdrawals.create');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $max = ($request->has('max') ? $request->input('max') : null);
-        if ($max < 0) {
-            $max = null;
-        }
-
-        $date = strtotime($request->input('date'));
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
-
-            return Redirect::back();
-        }
+        $validated = $request->validate([
+            'date' => 'required|date_format:Y-m-d|after_or_equal:today',
+            'max' => 'numeric|min:0',
+        ]);
 
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
-            'date' => date('Y-m-d', $date),
+            'date' => $validated['date'],
         ]);
 
         $totalPerUser = [];
-        foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
+        foreach (OrderLine::unpayed()->whereHas('user')->with('user', 'product', 'product.ticket')->get() as $orderline) {
             /** @var OrderLine $orderline */
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
 
-            if ($max != null && $max < $totalPerUser[$orderline->user->id] + $orderline->total_price) {
+            if ($validated['max'] < $totalPerUser[$orderline->user->id] + $orderline->total_price) {
                 continue;
             }
 
@@ -106,7 +92,7 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
-    public function show(int $id)
+    public function show(int $id): View
     {
         $withdrawal = Withdrawal::query()
             ->withCount(['orderlines', 'users'])
@@ -125,7 +111,7 @@ class WithdrawalController extends Controller
         return view('omnomcom.withdrawals.show', ['withdrawal' => $withdrawal, 'userLines' => $userLines]);
     }
 
-    public function showAccounts(int $id)
+    public function showAccounts(int $id): View
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -143,18 +129,19 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => $accounts,
-            'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
+            'title' => 'Accounts of withdrawal of '.Carbon::parse($withdrawal->date)->format('d-m-Y'),
             'total' => $withdrawal->total(),
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
+
+        $validated = $request->validate([
+            'date' => 'required|date_format:Y-m-d|after_or_equal:today',
+        ]);
 
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
@@ -162,14 +149,7 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
-        $date = strtotime($request->input('date'));
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
-
-            return Redirect::back();
-        }
-
-        $withdrawal->date = date('Y-m-d', $date);
+        $withdrawal->date = $validated['date'];
         $withdrawal->save();
 
         Session::flash('flash_message', 'Withdrawal updated.');
@@ -178,11 +158,9 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -211,10 +189,7 @@ class WithdrawalController extends Controller
         return Redirect::route('omnomcom::withdrawal::index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public static function deleteFrom(int $id, int $user_id)
+    public static function deleteFrom(int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -241,10 +216,7 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public static function markFailed(Request $request, int $id, int $user_id)
+    public static function markFailed(Request $request, int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -275,7 +247,7 @@ class WithdrawalController extends Controller
             $total,
             null,
             null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
+            sprintf('Overdue payment due to the failed withdrawal from %s.', Carbon::parse($withdrawal->date)->format('d-m-Y')),
             sprintf('failed_withdrawal_by_%u', Auth::user()->id)
         ));
 
@@ -325,12 +297,7 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @return RedirectResponse|\Illuminate\Http\Response
-     *
-     * @throws SephpaInputException
-     */
-    public static function export(int $id)
+    public static function export(int $id): RedirectResponse|\Illuminate\Http\Response
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -383,7 +350,7 @@ class WithdrawalController extends Controller
                     /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'dtOfSgntr' => Carbon::parse($user->bank->created_at)->format('Y-m-d'),
                     'bic' => $user->bank->bic,
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,
@@ -417,10 +384,7 @@ class WithdrawalController extends Controller
         return Response::make($response['data'], 200, $headers);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public static function close(int $id)
+    public static function close(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -439,10 +403,7 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @return View
-     */
-    public function showForUser(int $id)
+    public function showForUser(int $id): View
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -452,10 +413,8 @@ class WithdrawalController extends Controller
 
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
-     *
-     * @return RedirectResponse
      */
-    public function email(int $id)
+    public function email(int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -475,8 +434,7 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
-    /** @return View */
-    public function unwithdrawable()
+    public function unwithdrawable(): View
     {
         $users = User::query()->whereHas('orderlines', function ($q) {
             $q->unpayed();
@@ -495,7 +453,7 @@ class WithdrawalController extends Controller
         return OrderLine::query()->unpayed()->sum('total_price');
     }
 
-    public static function openOrderlinesTotal()
+    public static function openOrderlinesTotal(): int
     {
         return OrderLine::query()->unpayed()->count();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventFactory;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -84,7 +85,9 @@ use Override;
  */
 class Event extends Model
 {
+    /** @use HasFactory<EventFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'events';
@@ -115,7 +118,7 @@ class Event extends Model
         return self::query()->findOrFail(self::getIdFromPublicId($public_id));
     }
 
-    public static function getIdFromPublicId($public_id)
+    public static function getIdFromPublicId(string $public_id): int
     {
         $id = Hashids::connection('event')->decode($public_id);
 
@@ -146,6 +149,9 @@ class Event extends Model
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
+    /**
+     * @return Builder<$this>
+     */
     public static function getEventBlockQuery(?User $user = null): Builder
     {
         if (! $user instanceof User) {
@@ -227,6 +233,9 @@ class Event extends Model
         return $this->hasMany(Dinnerform::class, 'event_id');
     }
 
+    /**
+     * @return BelongsTo<EventCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->BelongsTo(EventCategory::class);
@@ -240,8 +249,8 @@ class Event extends Model
         return $this->committee?->isMember($user) ?? false;
     }
 
-    /** @return Collection|TicketPurchase[] */
-    public function getTicketPurchasesFor(User $user): Collection|array
+    /** @return Collection<int, TicketPurchase> */
+    public function getTicketPurchasesFor(User $user): Collection
     {
         return TicketPurchase::query()
             ->where('user_id', $user->id)
@@ -269,12 +278,12 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
+        return Carbon::createFromTimestamp($this->start)->format($long_format).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
-                date($short_format, $this->end)
+                Carbon::createFromTimestamp($this->end)->format($short_format)
                 :
-                date($long_format, $this->end)
+                Carbon::createFromTimestamp($this->end)->format($long_format)
         );
     }
 
@@ -332,6 +341,7 @@ class Event extends Model
         return $this->getTicketPurchasesFor($user)->count() > 0;
     }
 
+    /** @return Collection<int, User> */
     public function allUsers(): SupportCollection
     {
         $users = collect();
@@ -375,21 +385,27 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > strtotime('-1 week');
+        return $this->involves_food && $this->end > Carbon::parse('-1 week')->getTimestamp();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isFuture(): Attribute
     {
         return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => Carbon::now()->format('M d, Y'),
+            'year' => Carbon::now()->format('Y'),
+            'month' => Carbon::now()->format('M Y'),
+            'time' => Carbon::now()->format('H:i'),
         ]);
     }
 

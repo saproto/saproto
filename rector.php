@@ -51,6 +51,7 @@ try {
                 RectorLaravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector::class,
                 ClassPropertyAssignToConstructorPromotionRector::class,
                 StringClassNameToClassConstantRector::class,
+                RectorLaravel\Rector\If_\AbortIfRector::class,
             ]
         )
         ->withPreparedSets(deadCode: true,

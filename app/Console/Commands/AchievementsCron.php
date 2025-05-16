@@ -191,7 +191,7 @@ class AchievementsCron extends Command
      */
     private function oldFart(User $user): bool
     {
-        return $user->is_member && $user->member->created_at < Carbon::now()->subYears(5);
+        return $user->is_member && $user->member->created_at->isBefore(Carbon::now()->subYears(5));
     }
 
     /**

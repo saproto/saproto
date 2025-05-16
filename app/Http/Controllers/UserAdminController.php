@@ -61,10 +61,7 @@ class UserAdminController extends Controller
         return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
     }
 
-    /**
-     * @return View
-     */
-    public function details(int $id)
+    public function details(int $id): View
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -75,11 +72,17 @@ class UserAdminController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        $validated = $request->validate([
+            'birthdate' => 'required|date:format=Y-m-d',
+            'name' => 'required|string|max:255',
+            'calling_name' => 'required|string|max:255',
+        ]);
+
         /** @var User $user */
         $user = User::query()->findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        $user->birthdate = strtotime($request->birthdate) !== false ? date('Y-m-d', strtotime($request->birthdate)) : null;
+        $user->birthdate = $validated['birthdate'];
 
         $user->save();
 
@@ -97,9 +100,7 @@ class UserAdminController extends Controller
             foreach ($user->roles as $role) {
                 /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
-                    if (! Auth::user()->can($permission->name)) {
-                        abort(403, 'You may not impersonate this person.');
-                    }
+                    abort_unless(Auth::user()->can($permission->name), 403, 'You may not impersonate this person.');
                 }
             }
         }
@@ -228,9 +229,7 @@ class UserAdminController extends Controller
 
     public function setMembershipType(Request $request, int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only board members can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only board members can do this.');
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -254,9 +253,7 @@ class UserAdminController extends Controller
 
     public function toggleNda(int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only board members can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only board members can do this.');
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -361,9 +358,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
-            abort(403);
-        }
+        abort_if($user->id != $member->user_id && ! $user->can('registermembers'), 403);
 
         $form = $member->membershipForm;
 
@@ -399,16 +394,14 @@ class UserAdminController extends Controller
 
     public function destroyMemberForm(int $id): RedirectResponse
     {
-        if ((! Auth::check() || ! Auth::user()->can('board'))) {
-            abort(403);
-        }
+        abort_if(! Auth::check() || ! Auth::user()->can('board'), 403);
 
         $member = Member::query()->where('membership_form_id', '=', $id)->first();
         $user = $member->user;
 
         $member->forceDelete();
 
-        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at.'has been deleted!');
+        Session::flash('flash_message', 'The digital membership form of '.$user->name.' signed on '.$member->created_at->format('Y-m-d').'has been deleted!');
 
         return Redirect::back();
     }

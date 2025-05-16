@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\CodexSong;
 use App\Models\CodexSongCategory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class CodexSongController extends Controller
 {
-    public function index() {}
+    public function index(): void {}
 
-    public function create()
+    public function create(): View|RedirectResponse
     {
         if (! CodexSongCategory::query()->count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
@@ -25,7 +27,7 @@ class CodexSongController extends Controller
         return view('codex.song-edit', ['song' => null, 'textType' => null, 'categories' => $categories, 'myCategories' => []]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $song = new CodexSong;
         $this->saveSong($song, $request);
@@ -33,9 +35,9 @@ class CodexSongController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function show(CodexSong $codexSong) {}
+    public function show(CodexSong $codexSong): void {}
 
-    public function edit(CodexSong $codexSong)
+    public function edit(CodexSong $codexSong): View
     {
         $categories = CodexSongCategory::query()->orderBy('name')->get();
 
@@ -44,14 +46,14 @@ class CodexSongController extends Controller
         return view('codex.song-edit', ['song' => $codexSong, 'categories' => $categories, 'myCategories' => $myCategories]);
     }
 
-    public function update(Request $request, CodexSong $codexSong)
+    public function update(Request $request, CodexSong $codexSong): RedirectResponse
     {
         $this->saveSong($codexSong, $request);
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy(CodexSong $codexSong)
+    public function destroy(CodexSong $codexSong): RedirectResponse
     {
         $codexSong->delete();
 

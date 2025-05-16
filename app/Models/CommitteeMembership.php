@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CommitteeMembershipFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,9 @@ use Override;
  */
 class CommitteeMembership extends Model
 {
+    /** @use HasFactory<CommitteeMembershipFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'committees_users';
@@ -54,6 +57,8 @@ class CommitteeMembership extends Model
     protected $guarded = ['id'];
 
     protected $hidden = ['id', 'committee_id', 'user_id'];
+
+    protected $fillable = ['role', 'edition', 'user_id', 'committee_id', 'created_at', 'deleted_at'];
 
     /**
      * @return BelongsTo<User, $this>
@@ -75,7 +80,9 @@ class CommitteeMembership extends Model
     protected function casts(): array
     {
         return [
+            'created_at' => 'datetime',
             'deleted_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 }

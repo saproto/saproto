@@ -126,7 +126,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
                                 </td>
                                 <td>
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)
@@ -170,7 +170,7 @@
                                     <td>
                                         <b>Until:</b>
                                         <i>
-                                            {{ Carbon::createFromTimestamp($user->member->until)->format('d M Y') }}
+                                            {{ Carbon::createFromTimestamp($user->member->until, \Carbon\CarbonTimeZone::create(config('app.timezone')))->format('d M Y') }}
                                         </i>
                                     </td>
                                 </tr>

@@ -9,6 +9,7 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -75,13 +76,9 @@ class PageController extends Controller
     {
         $page = Page::query()->where('slug', '=', $slug)->first();
 
-        if ($page == null) {
-            abort(404, 'Page not found.');
-        }
+        abort_if($page == null, 404, 'Page not found.');
 
-        if ($page->is_member_only && ! Auth::user()?->is_member) {
-            abort(403, 'You need to be a member of S.A. Proto to see this page.');
-        }
+        abort_if($page->is_member_only && ! Auth::user()?->is_member, 403, 'You need to be a member of S.A. Proto to see this page.');
 
         return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convert($page->content)]);
     }
@@ -174,12 +171,11 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function addFile(Request $request, $id)
+    public function addFile(Request $request, int $id)
     {
         if (! $request->file('files')) {
             Session::flash('flash_message', 'You forgot to add any files.');
@@ -188,8 +184,13 @@ class PageController extends Controller
         }
 
         $page = Page::query()->find($id);
+        $files = $request->file('files');
+        /* @phpstan-ignore-next-line */
+        if ($files instanceof UploadedFile) {
+            $files = [$files];
+        }
 
-        foreach ($request->file('files') as $file) {
+        foreach ($files as $file) {
             $newFile = new StorageEntry;
             $newFile->createFromFile($file);
 

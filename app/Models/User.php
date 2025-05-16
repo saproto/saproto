@@ -7,6 +7,7 @@ use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
 use App\Mail\UsernameReminderEmail;
+use Database\Factories\UserFactory;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -15,7 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -86,22 +86,21 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Address|null $address
  * @property-read Bank|null $bank
  * @property-read Member|null $member
- * @property-read Collection|Achievement[] $achievements
- * @property-read Collection|Client[] $clients
- * @property-read Collection|EmailList[] $lists
- * @property-read Collection|MollieTransaction[] $mollieTransactions
- * @property-read Collection|OrderLine[] $orderlines
- * @property-read Collection|Ticket[] $tickets
- * @property-read Collection|Sticker[] $stickers
- * @property-read Collection|PlayedVideo[] $playedVideos
- * @property-read Collection|Feedback[] $feedback
- * @property-read Collection|RfidCard[] $rfid
- * @property-read Collection|Tempadmin[] $tempadmin
- * @property-read Collection|Token[] $tokens
- * @property-read Collection|Committee[] $committees
- * @property-read Collection|Role[] $roles
- * @property-read Collection|Permission[] $permissions
- * @property-read Collection|Committee[] $societies
+ * @property-read Collection<int, Achievement> $achievements
+ * @property-read Collection<int, Client> $clients
+ * @property-read Collection<int, EmailList> $lists
+ * @property-read Collection<int, MollieTransaction> $mollieTransactions
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read Collection<int, Ticket> $tickets
+ * @property-read Collection<int, PlayedVideo> $playedVideos
+ * @property-read Collection<int, Feedback> $feedback
+ * @property-read Collection<int, RfidCard> $rfid
+ * @property-read Collection<int, Tempadmin> $tempadmin
+ * @property-read Collection<int, Token> $tokens
+ * @property-read Collection<int, Committee> $committees
+ * @property-read Collection<int, Role> $roles
+ * @property-read Collection<int, Permission> $permissions
+ * @property-read Collection<int, Committee> $societies
  *
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|User onlyTrashed()
@@ -148,14 +147,15 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User newQuery()
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
- *
- * @mixin Model
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
     use CanResetPassword;
     use HasApiTokens;
+
+    /** @use HasFactory<UserFactory>*/
     use HasFactory;
+
     use HasRoles;
     use SoftDeletes;
 
@@ -195,7 +195,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return ! (
             $this->password ||
             $this->edu_username ||
-            strtotime($this->created_at) > strtotime('-1 hour') ||
+            Carbon::parse($this->created_at)->getTimestamp() > Carbon::parse('-1 hour')->getTimestamp() ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
             Bank::query()->where('user_id', $this->id)->first() ||
             Address::query()->where('user_id', $this->id)->first() ||
@@ -257,11 +257,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function committees(): BelongsToMany
     {
         return $this->groups()->where('is_society', false);
     }
 
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
@@ -462,6 +468,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
+    /**
+     * @return Attribute<string|null, never>
+     */
     protected function protoEmail(): Attribute
     {
         return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
@@ -481,7 +490,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at)->age < 1
+            && $this->member->created_at->age < 1
             && $this->did_study_create;
     }
 
@@ -529,7 +538,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return array<string, Collection<Member>> */
+    /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
         $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
@@ -561,24 +570,33 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function completedProfile(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
     /**
-     * @return Attribute Whether user has a current membership that is not pending.
+     * @return Attribute<bool, never> Whether user has a current membership that is not pending.
      */
     protected function isMember(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function signedMembershipForm(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isProtubeAdmin(): Attribute
     {
         return Attribute::make(get: function (): bool {
@@ -590,6 +608,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         });
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function photoPreview(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->generatePhotoPath());
@@ -646,7 +667,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $reset = PasswordReset::query()->create([
             'email' => $this->email,
             'token' => Str::random(128),
-            'valid_to' => strtotime('+1 hour'),
+            'valid_to' => Carbon::parse('+1 hour')->getTimestamp(),
         ]);
 
         Mail::to($this)->queue((new PasswordResetEmail($this, $reset->token))->onQueue('high'));

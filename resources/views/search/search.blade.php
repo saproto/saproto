@@ -61,8 +61,8 @@
                                         'user' => $user,
                                         'subtitle' => sprintf(
                                             '<em>Member since %s</em>',
-                                            date('U', strtotime($user->member->created_at)) > 0
-                                                ? date('F Y', strtotime($user->member->created_at))
+                                            $user->member->created_at->format('U') > 0
+                                                ? $user->member->created_at->format('F Y')
                                                 : 'forever!',
                                         ),
                                     ]

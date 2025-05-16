@@ -46,7 +46,7 @@ class PasswordEntry extends Model
     protected $guarded = ['id'];
 
     /**
-     * @return BelongsTo<Permission, $this> */
+     * @return BelongsTo<\Spatie\Permission\Models\Permission, $this> */
     public function permission(): BelongsTo
     {
         return $this->belongsTo(Permission::class, 'permission_id');
@@ -60,12 +60,10 @@ class PasswordEntry extends Model
     }
 
     /**
-     * @return float|int
-     *
      * @throws Exception
      */
-    public function age()
+    public function age(): int
     {
-        return Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now());
+        return (int) Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now(), true);
     }
 }

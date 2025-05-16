@@ -17,10 +17,7 @@ use Illuminate\View\View;
 
 class DinnerformController extends Controller
 {
-    /**
-     * @return View|RedirectResponse
-     */
-    public function show(int $id)
+    public function show(int $id): View|RedirectResponse
     {
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
@@ -38,8 +35,7 @@ class DinnerformController extends Controller
         return view('dinnerform.show', ['dinnerform' => $dinnerform, 'order' => $order]);
     }
 
-    /** @return View */
-    public function admin($id)
+    public function admin(int $id): View
     {
         $dinnerform = Dinnerform::query()
             ->with(['orderlines.user', 'orderlines.dinnerform'])
@@ -48,18 +44,14 @@ class DinnerformController extends Controller
         return view('dinnerform.admin', ['dinnerform' => $dinnerform]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         if ($request->input('end') < $request->input('start')) {
             Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
@@ -71,8 +63,8 @@ class DinnerformController extends Controller
             'restaurant' => $request->input('restaurant'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
-            'start' => strtotime($request->input('start')),
-            'end' => strtotime($request->input('end')),
+            'start' => Carbon::parse($request->input('start'))->getTimestamp(),
+            'end' => Carbon::parse($request->input('end'))->getTimestamp(),
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -121,16 +113,16 @@ class DinnerformController extends Controller
         }
 
         $changed_important_details =
-            $dinnerform->start->timestamp != strtotime($request->input('start')) ||
-            $dinnerform->end->timestamp != strtotime($request->input('end')) ||
+            $dinnerform->start->timestamp != Carbon::parse($request->input('start'))->getTimestamp() ||
+            $dinnerform->end->timestamp != Carbon::parse($request->input('end'))->getTimestamp() ||
             $dinnerform->restaurant != $request->input('restaurant');
 
         $dinnerform->update([
             'restaurant' => $request->input('restaurant'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
-            'start' => strtotime($request->input('start')),
-            'end' => strtotime($request->input('end')),
+            'start' => Carbon::parse($request->input('start'))->getTimestamp(),
+            'end' => Carbon::parse($request->input('end'))->getTimestamp(),
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -206,7 +198,7 @@ class DinnerformController extends Controller
                 $dinnerformOrderline->price_with_discount,
                 null,
                 null,
-                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", date('d-m-Y', strtotime($dinnerform->end))),
+                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Carbon::parse($dinnerform->end)->format('d-m-Y')),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed = true;

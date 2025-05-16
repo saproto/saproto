@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\ActivityParticipationFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,7 +49,9 @@ use Override;
  */
 class ActivityParticipation extends Model
 {
+    /** @use HasFactory<ActivityParticipationFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'activities_users';

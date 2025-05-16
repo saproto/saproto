@@ -20,10 +20,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 
 class OrderLineController extends Controller
 {
-    public function index(?string $date = null)
+    /**
+     * @throws ApiException
+     */
+    public function index(?string $date = null): View
     {
         $user = Auth::user();
 
@@ -104,7 +108,7 @@ class OrderLineController extends Controller
         ]);
     }
 
-    public function orderlineWizard()
+    public function orderlineWizard(): View
     {
         $members = User::query()->whereHas('member', static function ($query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
@@ -260,8 +264,8 @@ class OrderLineController extends Controller
     public function showPaymentStatistics(Request $request)
     {
         if ($request->has('start') && $request->has('end')) {
-            $start = date('Y-m-d H:i:s', strtotime($request->start));
-            $end = date('Y-m-d H:i:s', strtotime($request->end));
+            $start = Carbon::parse($request->start)->format('Y-m-d H:i:s');
+            $end = Carbon::parse($request->end)->format('Y-m-d H:i:s');
             $total_cash = DB::table('orderlines')
                 ->where('created_at', '>', $start)
                 ->where('created_at', '<', $end)

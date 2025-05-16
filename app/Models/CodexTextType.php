@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CodexTextTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ use Override;
  */
 class CodexTextType extends Model
 {
+    /** @use HasFactory<CodexTextTypeFactory>*/
     use HasFactory;
 
     protected $table = 'codex_text_types';

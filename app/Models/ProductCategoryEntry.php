@@ -35,7 +35,8 @@ class ProductCategoryEntry extends Model
 
     protected $guarded = ['id'];
 
-    protected $rules = [
+    /** @var array|string[] */
+    protected array $rules = [
         'user_id' => 'required|integer',
         'achievement_id' => 'required|integer',
         'rank' => 'required|integer',

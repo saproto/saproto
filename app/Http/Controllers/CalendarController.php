@@ -9,10 +9,20 @@ use Illuminate\Support\Facades\Config;
 class CalendarController extends Controller
 {
     /**
-     * @param  string  $start
-     * @param  string  $end
+     * @return array<int, array{
+     * title: string,
+     * place: string,
+     * start: int,
+     * end: int,
+     * type: string|null,
+     * year: mixed,
+     * study: mixed,
+     * studyShort: mixed,
+     * over: bool,
+     * current: bool
+     * }>
      */
-    public static function returnGoogleCalendarEvents(string $google_calendar_id, $start, $end): array
+    public static function returnGoogleCalendarEvents(string $google_calendar_id, string $start, string $end): array
     {
         try {
             $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';
@@ -64,14 +74,14 @@ class CalendarController extends Controller
             $results[] = [
                 'title' => trim($name),
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',
-                'start' => strtotime($startTime),
-                'end' => strtotime($endTime),
+                'start' => Carbon::parse($startTime)->getTimestamp(),
+                'end' => Carbon::parse($endTime)->getTimestamp(),
                 'type' => empty($type) ? null : $type[1],
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,
-                'over' => strtotime($endTime) < Carbon::now()->getTimestamp(),
-                'current' => strtotime($startTime) < Carbon::now()->getTimestamp() && strtotime($endTime) > Carbon::now()->getTimestamp(),
+                'over' => Carbon::parse($endTime)->getTimestamp() < Carbon::now()->getTimestamp(),
+                'current' => Carbon::parse($startTime)->getTimestamp() < Carbon::now()->getTimestamp() && Carbon::parse($endTime)->getTimestamp() > Carbon::now()->getTimestamp(),
             ];
         }
 

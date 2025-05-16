@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\OrderLineFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +62,7 @@ use Override;
  */
 class OrderLine extends Model
 {
+    /** @use HasFactory<OrderLineFactory>*/
     use HasFactory;
 
     protected $table = 'orderlines';
@@ -123,7 +125,9 @@ class OrderLine extends Model
         return $this->hasOne(TicketPurchase::class, 'orderline_id');
     }
 
-    /** @param Builder<OrderLine> $query */
+    /** @param Builder<OrderLine> $query
+     * @return Builder<OrderLine>
+     */
     public function scopeUnpayed(Builder $query): Builder
     {
         return $query->whereNull('payed_with_cash')

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\DinnerformFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,7 +33,7 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
- * @property-read Collection|Orderline[]|null $orderlines
+ * @property-read Collection<int, DinnerformOrderline>|DinnerformOrderline[] $orderlines
  *
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
@@ -50,6 +51,7 @@ use Override;
  */
 class Dinnerform extends Model
 {
+    /** @use HasFactory<DinnerformFactory>*/
     use HasFactory;
 
     protected $table = 'dinnerforms';
@@ -83,7 +85,7 @@ class Dinnerform extends Model
     }
 
     /**
-     * @return Attribute The regular discount as a percentage out of 100.
+     * @return Attribute<float, never> The regular discount as a percentage out of 100.
      */
     protected function regularDiscountPercentage(): Attribute
     {

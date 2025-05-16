@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -51,6 +52,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Committee extends Model
 {
+    /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
 
     protected $table = 'committees';
@@ -66,7 +68,7 @@ class Committee extends Model
         return $this->slug;
     }
 
-    public static function fromPublicId($public_id): Committee
+    public static function fromPublicId(string $public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
@@ -96,16 +98,25 @@ class Committee extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function organizedEvents(): Builder
     {
         return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function email(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function pastEvents(): Builder
     {
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
@@ -117,6 +128,9 @@ class Committee extends Model
             })->reorder('start', 'desc');
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function upcomingEvents(): Builder
     {
         return $this
@@ -131,6 +145,9 @@ class Committee extends Model
             });
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function pastHelpedEvents(): Builder
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
@@ -163,10 +180,10 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (strtotime($membership->created_at) < Carbon::now()->format('U') &&
-                (! $membership->deleted_at || strtotime($membership->deleted_at) > Carbon::now()->format('U'))) {
+            } elseif (Carbon::parse($membership->created_at)->getTimestamp() < Carbon::now()->format('U') &&
+                (! $membership->deleted_at || Carbon::parse($membership->deleted_at)->getTimestamp() > Carbon::now()->format('U'))) {
                 $members['members']['current'][] = $membership;
-            } elseif (strtotime($membership->created_at) > Carbon::now()->format('U')) {
+            } elseif (Carbon::parse($membership->created_at)->getTimestamp() > Carbon::now()->format('U')) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

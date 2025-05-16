@@ -91,10 +91,13 @@ class DmxFixtureController extends Controller
         return Redirect::route('dmx.fixtures.index');
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function valueApi(): array
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
+        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), Carbon::parse('last week')->format('c'), Carbon::parse('next week')->format('c'));
 
         // Determine if any event is currently going on.
         $current_event = null;

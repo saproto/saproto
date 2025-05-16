@@ -69,11 +69,10 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (strtotime($request->input('time')) === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
 
-            return Redirect::route('email::index');
-        }
+        $request->validate([
+            'time' => 'date',
+        ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
@@ -86,7 +85,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => strtotime($request->input('time')),
+            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -139,16 +138,14 @@ class EmailController extends Controller
         /** @var Email $email */
         $email = Email::query()->findOrFail($id);
 
+        $request->validate([
+            'time' => 'date',
+        ]);
+
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::index');
-        }
-
-        if (strtotime($request->input('time')) === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::back();
         }
 
         $senderAddress = $request->input('sender_address');
@@ -162,7 +159,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => strtotime($request->input('time')),
+            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -307,9 +304,11 @@ class EmailController extends Controller
         return Redirect::route('email::index');
     }
 
+    /** @param array<int> $lists
+     * @param  array<int>  $events
+     */
     private function updateEmailDestination(Email $email, string $type, ?array $lists = [], ?array $events = [], bool $toBackup = false): void
     {
-
         $email->to_user = false;
         switch ($type) {
 

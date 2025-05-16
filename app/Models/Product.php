@@ -86,6 +86,9 @@ class Product extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function imageUrl(): Attribute
     {
         return Attribute::make(get: fn () => $this->image?->generateImagePath(null, null));
@@ -123,7 +126,7 @@ class Product extends Model
     public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
-        if (! $active) {
+        if (! $active instanceof WallstreetDrink) {
             return $this->price;
         }
 

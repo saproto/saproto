@@ -15,7 +15,10 @@ use Illuminate\View\View;
 class RfidCardController extends Controller
 {
     /**
-     * @return array This method returns raw HTML and is intended to be used via AJAX!
+     * @return array{
+     *     ok: bool,
+     *     text: string
+     * } This method returns raw HTML and is intended to be used via AJAX!
      *
      * @throws Exception
      */
@@ -74,9 +77,7 @@ class RfidCardController extends Controller
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if (($rfid->user->id != Auth::id()) && (! Auth::user()->can('board'))) {
-            abort(403);
-        }
+        abort_if(($rfid->user->id != Auth::id()) && (! Auth::user()->can('board')), 403);
 
         return view('users.rfid.edit', ['card' => $rfid]);
     }
@@ -89,9 +90,7 @@ class RfidCardController extends Controller
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if ($rfid->user->id != Auth::id()) {
-            abort(403);
-        }
+        abort_if($rfid->user->id != Auth::id(), 403);
 
         $rfid->name = $request->input('name');
         $rfid->save();
@@ -111,9 +110,7 @@ class RfidCardController extends Controller
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if ($rfid->user->id != Auth::id()) {
-            abort(403);
-        }
+        abort_if($rfid->user->id != Auth::id(), 403);
 
         $rfid->delete();
 

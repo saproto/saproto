@@ -37,6 +37,7 @@
         "leaflet.markercluster": "^1.5.3",
         "moment": "^2.29.2",
         "quagga": "^0.6.16",
+        "sass-migrator": "^2.3.2",
         "signature_pad": "^3.0.0-beta.4",
         "swiper": "^8.0.7",
         "util.promisify": "^1.0.1"
@@ -44,15 +45,14 @@
     "devDependencies": {
         "glob": "^11.0.0",
         "laravel-echo": "^1.17.1",
-        "laravel-vite-plugin": "^0.7.8",
+        "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.2.7",
         "postcss-discard-comments": "^7.0.3",
         "prettier-plugin-blade": "^2.1.19",
         "pusher-js": "^8.4.0-rc2",
         "resolve-url-loader": "^5.0.0",
-        "sass": "1.38.2",
-        "sass-loader": "^12.1.0",
-        "vite": "^4.3.9"
+        "sass": "^1.88.0",
+        "sass-loader": "^12.1.0"
     },
     "type": "module"
 }

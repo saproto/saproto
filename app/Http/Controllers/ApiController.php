@@ -14,6 +14,7 @@ use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
+use Carbon\CarbonTimeZone;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -43,9 +44,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request): void
     {
-        if ($request->secret != Config::string('protube.protube_to_laravel_secret')) {
-            abort(403);
-        }
+        abort_if($request->secret != Config::string('protube.protube_to_laravel_secret'), 403);
 
         $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);
@@ -123,10 +122,11 @@ class ApiController extends Controller
         return response()->JSON([
             'photos' => $album->items->pluck('url'),
             'album_name' => $album->name,
-            'date_taken' => Carbon::createFromTimestamp($album->date_taken)->format('d-m-Y'),
+            'date_taken' => Carbon::createFromTimestamp($album->date_taken, CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y'),
         ]);
     }
 
+    /** @return array<string, mixed> */
     public function gdprExport(): array
     {
         $user = Auth::user();
@@ -151,7 +151,7 @@ class ApiController extends Controller
         foreach (ActivityParticipation::query()->with(['activity.event', 'help.committee'])->where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
-                'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'date' => $activity_participation->activity?->event ? Carbon::now()->format('Y-m-d') : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,
@@ -242,7 +242,7 @@ class ApiController extends Controller
         return $data;
     }
 
-    public function discordVerifyMember($userId): JsonResponse
+    public function discordVerifyMember(string $userId): JsonResponse
     {
         $user = User::query()->firstWhere('discord_id', $userId);
 

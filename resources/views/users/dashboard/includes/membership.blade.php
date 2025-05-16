@@ -8,8 +8,8 @@
                         <tr>
                             <th>Member since</th>
                             <td>
-                                @if (date('U', strtotime($user->member->created_at)) > 0)
-                                    {{ date('F j, Y', strtotime($user->member->created_at)) }}
+                                @if ($user->member->created_at !== null)
+                                    {{ $user->member->created_at->format('F j, Y') }}
                                 @else
                                         Before we kept track
                                 @endif
@@ -20,7 +20,7 @@
                                 <th><b>Member until</b></th>
                                 <td>
                                     <span class="badge rounded-pill bg-danger">
-                                        {{ Carbon::createFromTimestamp($user->member->until)->format('d-m-Y') }}
+                                        {{ Carbon::createFromTimestamp($user->member->until, \Carbon\CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y') }}
                                     </span>
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
                             @if ($user->member->membershipForm)
                                 <td>
                                     Since
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
                                     <br />
                                     <a
                                         href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}"
@@ -145,7 +145,7 @@
                             @else
                                 <td>
                                     Since
-                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
                                     <br />
                                     <span class="badge rounded-pill bg-warning">
                                         No digital membership form

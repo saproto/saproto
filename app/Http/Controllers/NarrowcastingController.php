@@ -53,8 +53,8 @@ class NarrowcastingController extends Controller
 
         $narrowcasting = new NarrowcastingItem;
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = Carbon::parse($request->campaign_start)->getTimestamp();
+        $narrowcasting->campaign_end = Carbon::parse($request->campaign_end)->getTimestamp();
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
@@ -101,8 +101,8 @@ class NarrowcastingController extends Controller
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = Carbon::parse($request->campaign_start)->getTimestamp();
+        $narrowcasting->campaign_end = Carbon::parse($request->campaign_end)->getTimestamp();
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
@@ -162,7 +162,7 @@ class NarrowcastingController extends Controller
         return Redirect::route('narrowcasting::index');
     }
 
-    /** @return array Return a JSON object of all currently active campaigns. */
+    /** @return list<array{slide_duration: int, image:string}|array{slide_duration: int, video: non-falsy-string}> Return a JSON object of all currently active campaigns. */
     public function indexApi(): array
     {
         $data = [];

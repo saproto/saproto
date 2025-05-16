@@ -15,16 +15,14 @@ use Illuminate\View\View;
 
 class MenuController extends Controller
 {
-    /** @return View */
-    public function index()
+    public function index(): View
     {
         $menuItems = MenuItem::query()->whereNull('parent')->with('children', 'page')->orderBy('order')->get();
 
         return view('menu.list', ['menuItems' => $menuItems]);
     }
 
-    /** @return View */
-    public function create(Router $router)
+    public function create(Router $router): View
     {
         $pages = Page::all();
         $topMenuItems = MenuItem::query()->where('parent')->orderBy('order')->get();
@@ -32,10 +30,7 @@ class MenuController extends Controller
         return view('menu.edit', ['item' => null, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $menuItem = new MenuItem;
         $menuItem->menuname = $request->input('name');
@@ -55,11 +50,7 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function edit(Router $router, $id)
+    public function edit(Router $router, int $id): View
     {
         $menuItem = MenuItem::query()->findOrFail($id);
         $pages = Page::all();
@@ -68,11 +59,7 @@ class MenuController extends Controller
         return view('menu.edit', ['item' => $menuItem, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::query()->findOrFail($id);
@@ -101,19 +88,13 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function orderUp($id)
+    public function orderUp(int $id): RedirectResponse
     {
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemAbove = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
-        if (! $menuItemAbove) {
-            abort(400, 'Item is already top item.');
-        }
+        abort_if($menuItemAbove === null, 400, 'Item is already top item.');
 
         $this->switchMenuItems($menuItem, $menuItemAbove);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
@@ -122,19 +103,13 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function orderDown($id)
+    public function orderDown(int $id): RedirectResponse
     {
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemBelow = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
-        if (! $menuItemBelow) {
-            abort(400, 'Item is already bottom item.');
-        }
+        abort_if($menuItemBelow === null, 400, 'Item is already bottom item.');
 
         $this->switchMenuItems($menuItem, $menuItemBelow);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
@@ -167,11 +142,9 @@ class MenuController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(int $id): RedirectResponse
     {
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::query()->findOrfail($id);
@@ -198,6 +171,7 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
+    /** @return array<string>|null */
     private function getAllRoutes(Router $router): ?array
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];

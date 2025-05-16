@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\WelcomeMessageFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  */
 class WelcomeMessage extends Model
 {
+    /** @use HasFactory<WelcomeMessageFactory>*/
     use HasFactory;
 
     protected $table = 'user_welcome';
