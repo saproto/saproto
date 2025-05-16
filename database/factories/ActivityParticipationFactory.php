@@ -40,7 +40,7 @@ class ActivityParticipationFactory extends Factory
 
         $date = fake()->dateTimeBetween($start, $end);
 
-        return $date->toDateTimeString();
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**
@@ -55,7 +55,7 @@ class ActivityParticipationFactory extends Factory
 
         $date = fake()->dateTimeBetween($start, $end);
 
-        return $date->toDateTimeString();
+        return $date->format('Y-m-d H:i:s');
     }
 
     /**

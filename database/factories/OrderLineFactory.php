@@ -24,7 +24,7 @@ class OrderLineFactory extends Factory
     {
         /** @var Product $product */
         $product = Product::query()->inRandomOrder()->first();
-        $date = fake()->dateTimeBetween('-1 year')->toDateTimeString();
+        $date = fake()->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
         $nbUnits = fake()->randomDigitNotNull();
         $paidCash = fake()->boolean(5);
         if ($paidCash) {

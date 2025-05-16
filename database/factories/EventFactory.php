@@ -23,8 +23,8 @@ class EventFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->text(),
-            'start' => fake()->dateTimeBetween('-1 week', 'now')->timestamp,
-            'end' => fake()->dateTimeBetween('now', '+1 week')->timestamp,
+            'start' => fake()->dateTimeBetween('-1 week', 'now'),
+            'end' => fake()->dateTimeBetween('now', '+1 week')->getTimestamp(),
             'publication' => null,
             'summary' => fake()->text(),
             'location' => fake()->word(),
