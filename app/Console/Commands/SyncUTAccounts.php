@@ -40,7 +40,7 @@ class SyncUTAccounts extends Command
 
         // get all regular members who do not have an account yet or have not been verified in this cron yet
         $query = User::query()->whereHas('member', function ($member) {
-            $member->type(MembershipTypeEnum::REGULAR)
+            $member->whereMembershipType(MembershipTypeEnum::REGULAR)
                 ->whereHas('UtAccount', function ($q) {
                     $q->where('found', false);
                 })->orDoesntHave('UtAccount');

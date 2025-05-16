@@ -66,7 +66,7 @@ class QueryController extends Controller
         }
 
         $activeUserQuery = User::query()->whereHas('member', function ($query) {
-            $query->type(MembershipTypeEnum::REGULAR);
+            $query->whereMembershipType(MembershipTypeEnum::REGULAR);
         })->whereHas('committees');
 
         if ($request->has('export_active')) {

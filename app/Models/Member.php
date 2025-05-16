@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Database\Factories\MemberFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,7 +42,6 @@ use Override;
  * @method static Builder<static>|Member onlyTrashed()
  * @method static Builder<static>|Member primary()
  * @method static Builder<static>|Member query()
- * @method static Builder<static>|Member type(MembershipTypeEnum $type)
  * @method static Builder<static>|Member whereCardPrintedOn($value)
  * @method static Builder<static>|Member whereCreatedAt($value)
  * @method static Builder<static>|Member whereDeletedAt($value)
@@ -57,7 +57,7 @@ use Override;
  * @method static Builder<static>|Member withTrashed()
  * @method static Builder<static>|Member withoutTrashed()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Member extends Model
 {
@@ -118,17 +118,9 @@ class Member extends Model
      */
     public function scopePrimary(Builder $query): Builder
     {
-        return $query->type(MembershipTypeEnum::REGULAR)
+        return $query->whereMembershipType(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');
-    }
-
-    /** @param Builder<$this> $query
-     * @return Builder<$this>
-     */
-    public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
-    {
-        return $query->where('membership_type', $type);
     }
 
     public static function countActiveMembers(): int
@@ -139,7 +131,7 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->type(MembershipTypeEnum::PENDING);
+            $query->whereMembershipType(MembershipTypeEnum::PENDING);
         })->count();
     }
 

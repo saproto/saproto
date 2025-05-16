@@ -1,10 +1,5 @@
 parameters:
 	ignoreErrors:
-		-
-			message: '#^Access to an undefined property App\\Models\\User\:\:\$has_stickers\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Console/Commands/AchievementsCron.php
 
 		-
 			message: '#^Call to an undefined method App\\Console\\ConsoleOutput\:\:info\(\)\.$#'
@@ -25,12 +20,6 @@ parameters:
 			path: app/Console/Commands/GoogleSync.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Console/Commands/SyncUTAccounts.php
-
-		-
 			message: '#^Variable \$currentDrink in PHPDoc tag @var does not match any variable in the foreach loop\: \$product$#'
 			identifier: varTag.differentVariable
 			count: 1
@@ -43,22 +32,10 @@ parameters:
 			path: app/Events/StickerPlacedEvent.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/QueryController.php
-
-		-
 			message: '#^PHPDoc tag @var with type Illuminate\\Database\\Eloquent\\Builder\<App\\Models\\Member\> is not subtype of native type Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
 			identifier: varTag.nativeType
 			count: 1
 			path: app/Http/Controllers/QueryController.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 2
-			path: app/Http/Controllers/RegistrationHelperController.php
 
 		-
 			message: '#^Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable\:\:\$id\.$#'
@@ -85,12 +62,6 @@ parameters:
 			path: app/Http/Controllers/StickerController.php
 
 		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/UserAdminController.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:unpayed\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -101,18 +72,6 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: app/Http/Controllers/WithdrawalController.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Models/Email.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Models/Member.php
 
 		-
 			message: '#^Property ''welcome_message'' does not exist in model\.$#'

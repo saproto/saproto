@@ -8,6 +8,7 @@ use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
 use App\Mail\UsernameReminderEmail;
 use Database\Factories\UserFactory;
+use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -122,6 +123,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read WelcomeMessage|null $welcomeMessage
  * @property-read Collection<int, Withdrawal> $withdrawals
  * @property-read int|null $withdrawals_count
+ * @property-read int|null $stickers_country_count
+ * @property-read bool|null $has_stickers
  *
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder<static>|User newModelQuery()
@@ -172,7 +175,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  * @method static Builder<static>|User withoutTrashed()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -582,7 +585,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
 
         return $memberships;
