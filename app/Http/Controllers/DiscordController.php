@@ -6,6 +6,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Session;
 
 class DiscordController extends Controller
 {
-    public function discordLinkRedirect()
+    public function discordLinkRedirect(): RedirectResponse
     {
         $authoriseURL = 'https://discord.com/api/oauth2/authorize?';
         $params = [
@@ -28,7 +29,7 @@ class DiscordController extends Controller
         return Redirect::away($authoriseURL.http_build_query($params));
     }
 
-    public function discordLinkCallback(Request $request)
+    public function discordLinkCallback(Request $request): RedirectResponse
     {
         $tokenURL = 'https://discord.com/api/oauth2/token';
         $apiURLBase = 'https://discord.com/api/users/@me';
@@ -69,7 +70,7 @@ class DiscordController extends Controller
         return Redirect::route('user::dashboard::show');
     }
 
-    public function discordUnlink()
+    public function discordUnlink(): RedirectResponse
     {
         $user = Auth::user();
         $user->discord_id = null;

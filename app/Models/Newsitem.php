@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * News Item Model.
@@ -22,7 +23,7 @@ use Illuminate\Support\Carbon;
  * @property string $title
  * @property string $content
  * @property bool $is_weekly
- * @property Event[] $events
+ * @property Collection<int, Event> $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at

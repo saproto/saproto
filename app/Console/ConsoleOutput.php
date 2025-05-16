@@ -18,13 +18,11 @@ class ConsoleOutput
     /**
      * Dynamically handle calls into the console output instance.
      *
-     * @param  string  $method
-     * @param  array  $parameters
      * @return mixed
-     *
+     * @param array<string> $parameters
      * @throws InvalidArgumentException|Throwable
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters)
     {
         $component = '\Illuminate\Console\View\Components\\'.ucfirst($method);
 

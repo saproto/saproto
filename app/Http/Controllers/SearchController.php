@@ -244,6 +244,7 @@ class SearchController extends Controller
         }
 
         $terms = explode(' ', str_replace('*', '%', $query));
+        /** @var Builder<TModel> $query */
         $query = $model::query();
 
         $check_at_least_one_valid_term = false;

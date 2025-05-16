@@ -260,6 +260,9 @@ class EventController extends Controller
         ]);
     }
 
+    /**
+     * @return Collection<int, string>
+     */
     private function getAvailableYears(): Collection
     {
         return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
@@ -416,11 +419,14 @@ class EventController extends Controller
         return Redirect::back();
     }
 
+    /**
+     * @return array<int, object>
+     */
     public function apiUpcomingEvents(int $limit, Request $request): array
     {
         $user = Auth::user() ?? null;
         $noFutureLimit = $request->boolean('no_future_limit');
-        /** @var Collection<Event> $events */
+        /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
             ->where('end', '>', strtotime('today'))
             ->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))
@@ -489,10 +495,7 @@ class EventController extends Controller
         return $data;
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function setReminder(Request $request)
+    public function setReminder(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $hours = floatval($request->get('hours'));
@@ -508,8 +511,7 @@ class EventController extends Controller
         return Redirect::back();
     }
 
-    /** @return RedirectResponse */
-    public function toggleRelevantOnly()
+    public function toggleRelevantOnly(): RedirectResponse
     {
         $user = Auth::user();
         $user->toggleCalendarRelevantSetting();
@@ -522,10 +524,7 @@ class EventController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @return \Illuminate\Http\Response
-     */
-    public function icalCalendar(?string $personal_key = null)
+    public function icalCalendar(?string $personal_key = null): \Illuminate\Http\Response
     {
         $user = User::query()->where('personal_key', $personal_key)->whereNotNull('personal_key')->first();
 
@@ -655,7 +654,7 @@ CALSCALE:GREGORIAN
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
     }
 
-    public function copyEvent(Request $request)
+    public function copyEvent(Request $request): RedirectResponse
     {
         $event = Event::query()->findOrFail($request->input('id'));
 

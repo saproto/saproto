@@ -18,24 +18,19 @@ class IsAlfredThereController extends Controller
 
     public static string $HashMapTextKey = 'is_alfred_there_text';
 
-    /** @return View */
-    public function index()
+    public function index(): View
     {
         return view('isalfredthere.minisite', $this->getStatus());
     }
 
-    /** @return View */
-    public function edit()
+    public function edit(): View
     {
         return view('isalfredthere.admin',
             $this->getStatus()
         );
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $text = $request->input('is_alfred_there_text');
         $status = $request->input('where_is_alfred');
@@ -63,6 +58,11 @@ class IsAlfredThereController extends Controller
         return Redirect::back();
     }
 
+    /** @return array{
+     *     text: string,
+     *     status: string,
+     *     unix: string
+    } */
     private function getStatus(): array
     {
         return [
