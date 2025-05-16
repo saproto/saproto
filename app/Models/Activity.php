@@ -48,6 +48,10 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $present_users_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
+ * @property-read bool|null $user_has_participation
+ * @property-read bool|null $user_has_helper_participation
+ * @property-read bool|null $user_has_backup_participation
+ * @property-read bool|null $user_has_tickets
  *
  * @method static ActivityFactory factory($count = null, $state = [])
  * @method static Builder<static>|Activity newModelQuery()

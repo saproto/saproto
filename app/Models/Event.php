@@ -58,6 +58,10 @@ use Override;
  * @property-read int|null $tickets_count
  * @property-read Collection<int, Video> $videos
  * @property-read int|null $videos_count
+ * @property-read bool|null $user_has_participation
+ * @property-read bool|null $user_has_helper_participation
+ * @property-read bool|null $user_has_backup_participation
+ * @property-read bool|null $user_has_tickets
  *
  * @method static EventFactory factory($count = null, $state = [])
  * @method static Builder<static>|Event newModelQuery()
