@@ -403,7 +403,7 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > Carbon::now()->subWeek()->getTimestamp();
+        return $this->involves_food && $this->end > Carbon::now()->subWeek()->timestamp;
     }
 
     /**

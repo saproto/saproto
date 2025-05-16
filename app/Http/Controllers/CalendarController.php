@@ -71,9 +71,9 @@ class CalendarController extends Controller
                 }
             }
 
-            $end = Carbon::parse($endTime)->getTimestamp();
-            $start = Carbon::parse($startTime)->getTimestamp();
-            $now = Carbon::now()->getTimestamp();
+            $end = Carbon::parse($endTime)->timestamp;
+            $start = Carbon::parse($startTime)->timestamp;
+            $now = Carbon::now()->timestamp;
             $results[] = [
                 'title' => trim($name),
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',

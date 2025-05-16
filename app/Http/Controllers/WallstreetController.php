@@ -112,7 +112,7 @@ class WallstreetController extends Controller
     {
         /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
-        $drink->end_time = Carbon::now()->getTimestamp();
+        $drink->end_time = Carbon::now()->timestamp;
         $drink->save();
         Session::flash('flash_message', 'Wallstreet drink closed.');
 
@@ -146,7 +146,7 @@ class WallstreetController extends Controller
 
     public static function active(): ?WallstreetDrink
     {
-        return WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->first();
+        return WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->timestamp)->where('end_time', '>=', Carbon::now()->timestamp)->first();
     }
 
     /**

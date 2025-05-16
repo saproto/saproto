@@ -96,7 +96,7 @@ class VideoController extends Controller
     {
         /** @var Video $video */
         $video = Video::query()->findOrFail($request->id);
-        $video->video_date = Carbon::parse($request->video_date)->format('Y-m-d');
+        $video->video_date = $request->date('video_date')->format('Y-m-d');
         $video->save();
 
         if ($request->has('event')) {

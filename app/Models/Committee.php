@@ -121,7 +121,7 @@ class Committee extends Model
      */
     public function pastEvents(): Builder
     {
-        return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
+        return $this->organizedEvents()->where('end', '<', Carbon::now()->timestamp)
             ->unless(Auth::user()?->can('board'), static function ($q) {
                 $q->where(function ($q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
@@ -182,10 +182,10 @@ class Committee extends Model
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (Carbon::parse($membership->created_at)->getTimestamp() < Carbon::now()->timestamp &&
-                (! $membership->deleted_at || Carbon::parse($membership->deleted_at)->getTimestamp() > Carbon::now()->timestamp)) {
+            } elseif (Carbon::parse($membership->created_at)->timestamp < Carbon::now()->timestamp &&
+                (! $membership->deleted_at || Carbon::parse($membership->deleted_at)->timestamp > Carbon::now()->timestamp)) {
                 $members['members']['current'][] = $membership;
-            } elseif (Carbon::parse($membership->created_at)->getTimestamp() > Carbon::now()->timestamp) {
+            } elseif (Carbon::parse($membership->created_at)->timestamp > Carbon::now()->timestamp) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

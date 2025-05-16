@@ -84,7 +84,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => $request->date('time')->getTimestamp(),
+            'time' => $request->date('time')->timestamp,
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -158,7 +158,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => $request->date('time')->getTimestamp(),
+            'time' => $request->date('time')->timestamp,
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);

@@ -50,8 +50,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = $request->date('available_from')->getTimestamp();
-        $ticket->available_to = $request->date('available_to')->getTimestamp();
+        $ticket->available_from = $request->date('available_from')->timestamp;
+        $ticket->available_to = $request->date('available_to')->timestamp;
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -98,8 +98,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = $request->date('available_from')->getTimestamp();
-        $ticket->available_to = $request->date('available_to')->getTimestamp();
+        $ticket->available_from = $request->date('available_from')->timestamp;
+        $ticket->available_to = $request->date('available_to')->timestamp;
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 

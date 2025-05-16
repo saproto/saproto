@@ -30,7 +30,7 @@ class PasswordController extends Controller
     public function postAuth(Request $request)
     {
         if (AuthController::verifyCredentials(Auth::user()->email, $request->password)) {
-            $request->session()->put('passwordstore-verify', Carbon::now()->addMinutes(10)->getTimestamp());
+            $request->session()->put('passwordstore-verify', Carbon::now()->addMinutes(10)->timestamp);
             Session::flash('flash_message', 'You can access this tool for 10 minutes.');
 
             return Redirect::route('passwordstore::index');

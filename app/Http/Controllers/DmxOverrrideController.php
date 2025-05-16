@@ -30,8 +30,8 @@ class DmxOverrrideController extends Controller
     {
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = $request->date('start')->getTimestamp();
-        $end = $request->date('end')->getTimestamp();
+        $start = $request->date('start')->timestamp;
+        $end = $request->date('end')->timestamp;
 
         $override = DmxOverride::query()->create([
             'fixtures' => $fixtures,
@@ -57,8 +57,8 @@ class DmxOverrrideController extends Controller
 
         $fixtures = implode(',', $request->fixtures);
         $color = sprintf('%d,%d,%d,%d', $request->red, $request->green, $request->blue, $request->brightness);
-        $start = $request->date('start')->getTimestamp();
-        $end = $request->date('end')->getTimestamp();
+        $start = $request->date('start')->timestamp;
+        $end = $request->date('end')->timestamp;
 
         $override->update([
             'fixtures' => $fixtures,

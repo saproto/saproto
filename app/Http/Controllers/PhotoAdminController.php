@@ -40,7 +40,7 @@ class PhotoAdminController extends Controller
     {
         $album = new PhotoAlbum;
         $album->name = $request->input('name');
-        $album->date_taken = $request->date('date')->getTimestamp();
+        $album->date_taken = $request->date('date')->timestamp;
         if ($request->input('private')) {
             $album->private = true;
         }
@@ -75,7 +75,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
         $album->name = $request->input('album');
-        $album->date_taken = $request->date('date')->getTimestamp();
+        $album->date_taken = $request->date('date')->timestamp;
         $album->private = (bool) $request->input('private');
         $album->save();
 

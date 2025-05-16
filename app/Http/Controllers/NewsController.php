@@ -122,7 +122,7 @@ class NewsController extends Controller
         if ($request->has('title')) {
             $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
-            $newsitem->published_at = Carbon::parse($request->published_at)->toDateTimeString();
+            $newsitem->published_at = $request->date('published_at')->toDateTimeString();
         } else {
             $newsitem->is_weekly = true;
             $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
@@ -200,7 +200,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = Carbon::parse($newsitem->published_at)->getTimestamp();
+                $returnItem->published_at = Carbon::parse($newsitem->published_at)->timestamp;
 
                 $return[] = $returnItem;
             }

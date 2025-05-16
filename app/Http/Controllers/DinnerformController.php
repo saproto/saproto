@@ -64,8 +64,8 @@ class DinnerformController extends Controller
             'restaurant' => $request->input('restaurant'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
-            'start' => $request->date('start')->getTimestamp(),
-            'end' => $request->date('end')->getTimestamp(),
+            'start' => $request->date('start')->timestamp,
+            'end' => $request->date('end')->timestamp,
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -111,8 +111,8 @@ class DinnerformController extends Controller
             return Redirect::back();
         }
 
-        $start = CarbonImmutable::parse($request->input('start'))->getTimestamp();
-        $end = CarbonImmutable::parse($request->input('end'))->getTimestamp();
+        $start = CarbonImmutable::parse($request->input('start'))->timestamp;
+        $end = CarbonImmutable::parse($request->input('end'))->timestamp;
         $restaurant = $request->string('restaurant');
         $changed_important_details =
             $dinnerform->start->timestamp != $start ||

@@ -27,11 +27,11 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
+            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->timestamp;
             $end = Carbon::now()->timestamp;
         } else {
-            $start = Carbon::parse($request->start)->getTimestamp();
-            $end = Carbon::parse($request->end)->getTimestamp() + 86399; // Add one day to make it inclusive.
+            $start = $request->date('start')->timestamp;
+            $end = $request->date('end')->addDay()->timestamp; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
@@ -108,12 +108,13 @@ class QueryController extends Controller
     public function activityStatistics(Request $request): View
     {
         if ($request->missing('start') || $request->missing('end')) {
-            $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->getTimestamp();
+            $now = Carbon::now();
+            $year_start = $now->month >= 9 ? $now->year : $now->year - 1;
+            $start = Carbon::create($year_start, 9, 1, 0, 0, 1)->timestamp;
             $end = Carbon::now()->timestamp;
         } else {
-            $start = Carbon::parse($request->start)->getTimestamp();
-            $end = Carbon::parse($request->end)->addDay()->getTimestamp();
+            $start = $request->date('start')->timestamp;
+            $end = $request->date('end')->addDay()->timestamp;
         }
 
         $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {

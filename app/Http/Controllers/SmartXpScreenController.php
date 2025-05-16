@@ -117,7 +117,7 @@ class SmartXpScreenController extends Controller
                 $type = str_replace($key, $value, $type);
             }
 
-            $current = Carbon::parse($start_time)->getTimestamp() < Carbon::now()->getTimestamp() && Carbon::parse($end_time)->getTimestamp() > Carbon::now()->getTimestamp();
+            $current = Carbon::parse($start_time)->timestamp < Carbon::now()->timestamp && Carbon::parse($end_time)->timestamp > Carbon::now()->timestamp;
             if ($current) {
                 $occupied = true;
             }
@@ -125,10 +125,10 @@ class SmartXpScreenController extends Controller
             $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], Carbon::parse($start_time)->format('l')));
             $roster[$day][] = (object) [
                 'title' => $name,
-                'start' => Carbon::parse($start_time)->getTimestamp(),
-                'end' => Carbon::parse($end_time)->getTimestamp(),
+                'start' => Carbon::parse($start_time)->timestamp,
+                'end' => Carbon::parse($end_time)->timestamp,
                 'type' => $type[1] ?? 'Other',
-                'over' => Carbon::parse($end_time)->getTimestamp() < Carbon::now()->getTimestamp(),
+                'over' => Carbon::parse($end_time)->timestamp < Carbon::now()->timestamp,
                 'current' => $current,
             ];
         }

@@ -144,7 +144,7 @@ class Announcement extends Model
      */
     protected function showByTime(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::parse($this->display_from)->getTimestamp() < Carbon::now()->timestamp && Carbon::parse($this->display_till)->getTimestamp() > Carbon::now()->timestamp);
+        return Attribute::make(get: fn (): bool => Carbon::parse($this->display_from)->timestamp < Carbon::now()->timestamp && Carbon::parse($this->display_till)->timestamp > Carbon::now()->timestamp);
     }
 
     public function showForUser(?User $user = null): bool
