@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
-use Override;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -197,25 +196,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected $appends = ['is_member', 'photo_preview', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
-
-    protected $casts = [
-        'deleted_at' => 'datetime',
-        'phone_visible' => 'boolean',
-        'address_visible' => 'boolean',
-        'pref_calendar_relevant_only' => 'boolean',
-        'profile_in_almanac' => 'boolean',
-        'receive_sms' => 'boolean',
-        'disable_omnomcom' => 'boolean',
-        'keep_omnomcom_history' => 'boolean',
-        'keep_protube_history' => 'boolean',
-        'show_achievements' => 'boolean',
-        'show_birthday' => 'boolean',
-        'show_omnomcom_calories' => 'boolean',
-        'show_omnomcom_total' => 'boolean',
-        'signed_nda' => 'boolean',
-        'did_study_create' => 'boolean',
-        'did_study_itech' => 'boolean',
-    ];
 
     public function getPublicId(): ?string
     {
@@ -710,5 +690,27 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function sendForgotUsernameEmail(): void
     {
         Mail::to($this)->queue((new UsernameReminderEmail($this))->onQueue('high'));
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'phone_visible' => 'boolean',
+            'address_visible' => 'boolean',
+            'pref_calendar_relevant_only' => 'boolean',
+            'profile_in_almanac' => 'boolean',
+            'receive_sms' => 'boolean',
+            'disable_omnomcom' => 'boolean',
+            'keep_omnomcom_history' => 'boolean',
+            'keep_protube_history' => 'boolean',
+            'show_achievements' => 'boolean',
+            'show_birthday' => 'boolean',
+            'show_omnomcom_calories' => 'boolean',
+            'show_omnomcom_total' => 'boolean',
+            'signed_nda' => 'boolean',
+            'did_study_create' => 'boolean',
+            'did_study_itech' => 'boolean',
+        ];
     }
 }
