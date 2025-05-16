@@ -61,13 +61,15 @@ class WrappedController extends Controller
 
     /** @return Collection<int, array{
      *     title: string,
-     *     start: int,
-     *     location: string,
-     *     formatted_date: string,
-     *     image_url: string,
-     *     price: float
-    }> */
-    public function eventList()
+     *      start: int,
+     *      location: string,
+     *      formatted_date: string,
+     *      price: (array|float|int),
+     *      image_url: string|null,
+     * }
+     *>
+     * */
+    public function eventList(): Collection
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])

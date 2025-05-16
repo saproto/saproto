@@ -43,8 +43,19 @@ class SmartXpScreenController extends Controller
         );
     }
 
-    /** @return object */
-    public function smartxpTimetable()
+    /** @return object{
+     *     roster: array<'monday'|'tuesday'|'wednesday'|'thursday'|'friday'|'weekend', array<object{
+     *      title: string,
+     *      start: int,
+     *      end: int,
+     *      type: string,
+     *      over: bool,
+     *      current: bool
+     *  }>
+     *     >
+     * }
+     */
+    public function smartxpTimetable(): object
     {
         $roster = [
             'monday' => [],

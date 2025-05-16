@@ -38,20 +38,20 @@ class DmxOverride extends Model
 
     public $timestamps = false;
 
-    /** @return Collection<int, DmxOverride>|DmxOverride[] */
-    public static function getActiveSorted(): array|Collection
+    /** @return Collection<int, $this> */
+    public static function getActiveSorted(): Collection
     {
         return self::query()->where('start', '<', Carbon::now()->format('U'))->where('end', '>', Carbon::now()->format('U'))->get()->sortBy('window_size');
     }
 
-    /** @return Collection<int, DmxOverride>|DmxOverride[] */
-    public static function getUpcomingSorted(): array|Collection
+    /** @return Collection<int, $this> */
+    public static function getUpcomingSorted(): Collection
     {
         return self::query()->where('start', '>', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
 
-    /** @return Collection<int, DmxOverride>|DmxOverride[] */
-    public static function getPastSorted(): array|Collection
+    /** @return Collection<int, $this> */
+    public static function getPastSorted(): Collection
     {
         return self::query()->where('end', '<', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
@@ -92,6 +92,7 @@ class DmxOverride extends Model
         return Carbon::now()->format('U') > $this->end && Carbon::now()->format('U') < $this->end. 600;
     }
 
+    /** @return string[] */
     public function getFixtureIds(): array
     {
         return explode(',', $this->fixtures);

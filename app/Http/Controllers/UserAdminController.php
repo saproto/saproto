@@ -61,10 +61,7 @@ class UserAdminController extends Controller
         return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
     }
 
-    /**
-     * @return View
-     */
-    public function details(int $id)
+    public function details(int $id): View
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);

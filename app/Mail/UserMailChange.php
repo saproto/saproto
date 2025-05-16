@@ -16,13 +16,14 @@ class UserMailChange extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param object{
+     * @param array{
      * name: string,
-     * ip: int
+     * ip: string|null
      * } $changer
+     * @param  array<string, mixed>  $email
      * @return void
      */
-    public function __construct(public User $user, public object $changer, public $email) {}
+    public function __construct(public User $user, public array $changer, public array $email) {}
 
     /**
      * Build the message.
