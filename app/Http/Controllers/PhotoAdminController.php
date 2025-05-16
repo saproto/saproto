@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -40,7 +41,7 @@ class PhotoAdminController extends Controller
     {
         $album = new PhotoAlbum;
         $album->name = $request->input('name');
-        $album->date_taken = strtotime($request->input('date'));
+        $album->date_taken = Carbon::parse($request->input('date'))->getTimestamp();
         if ($request->input('private')) {
             $album->private = true;
         }
@@ -75,7 +76,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::query()->findOrFail($id);
         $album->name = $request->input('album');
-        $album->date_taken = strtotime($request->input('date'));
+        $album->date_taken = Carbon::parse($request->input('date'))->getTimestamp();
         $album->private = (bool) $request->input('private');
         $album->save();
 

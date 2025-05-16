@@ -9,7 +9,9 @@
 
             @foreach ($orderlines as $orderline)
                 @if (date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
-                    <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
+                    <?php $current_date = \Illuminate\Support\Carbon::parse(
+                        $orderline->created_at,
+                    )->format('d-m-Y'); ?>
 
                     <tr class="bg-dark text-white mt-3">
                         <td class="text-end">

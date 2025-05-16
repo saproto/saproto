@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use Rector\Carbon\Rector\FuncCall\DateFuncCallToCarbonRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
@@ -74,7 +73,6 @@ try {
                 AddClosureVoidReturnTypeWhereNoReturnRector::class,
                 RenamePropertyRector::class,
                 RenameClassRector::class,
-                DateFuncCallToCarbonRector::class,
                 __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {

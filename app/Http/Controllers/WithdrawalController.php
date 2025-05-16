@@ -48,7 +48,7 @@ class WithdrawalController extends Controller
             $max = null;
         }
 
-        $date = strtotime($request->input('date'));
+        $date = Carbon::parse($request->input('date'))->getTimestamp();
         if ($date === false) {
             Session::flash('flash_message', 'Invalid date.');
 
@@ -57,7 +57,7 @@ class WithdrawalController extends Controller
 
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
-            'date' => date('Y-m-d', $date),
+            'date' => Carbon::createFromTimestamp($date)->format('Y-m-d'),
         ]);
 
         $totalPerUser = [];
@@ -136,7 +136,7 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => $accounts,
-            'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
+            'title' => 'Accounts of withdrawal of '.Carbon::parse($withdrawal->date)->format('d-m-Y'),
             'total' => $withdrawal->total(),
         ]);
     }
@@ -152,14 +152,14 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
-        $date = strtotime($request->input('date'));
+        $date = Carbon::parse($request->input('date'))->getTimestamp();
         if ($date === false) {
             Session::flash('flash_message', 'Invalid date.');
 
             return Redirect::back();
         }
 
-        $withdrawal->date = date('Y-m-d', $date);
+        $withdrawal->date = Carbon::createFromTimestamp($date)->format('Y-m-d');
         $withdrawal->save();
 
         Session::flash('flash_message', 'Withdrawal updated.');
@@ -257,7 +257,7 @@ class WithdrawalController extends Controller
             $total,
             null,
             null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
+            sprintf('Overdue payment due to the failed withdrawal from %s.', Carbon::parse($withdrawal->date)->format('d-m-Y')),
             sprintf('failed_withdrawal_by_%u', Auth::user()->id)
         ));
 
@@ -360,7 +360,7 @@ class WithdrawalController extends Controller
                     /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'dtOfSgntr' => Carbon::parse($user->bank->created_at)->format('Y-m-d'),
                     'bic' => $user->bank->bic,
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,

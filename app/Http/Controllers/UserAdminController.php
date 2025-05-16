@@ -76,7 +76,7 @@ class UserAdminController extends Controller
         $user = User::query()->findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        $user->birthdate = strtotime($request->birthdate) !== false ? date('Y-m-d', strtotime($request->birthdate)) : null;
+        $user->birthdate = Carbon::parse($request->birthdate)->getTimestamp() !== false ? Carbon::parse($request->birthdate)->format('Y-m-d') : null;
 
         $user->save();
 

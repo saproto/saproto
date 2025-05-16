@@ -47,21 +47,21 @@ class EventController extends Controller
 
         // Get the events for the next week
         $data[0] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '<=', strtotime('+1 week'))
+            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
+            ->where('start', '<=', Carbon::parse('+1 week')->getTimestamp())
             ->get();
 
         // Get the events for the next month
         $data[1] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 week'))
-            ->where('start', '<=', strtotime('+1 month'))
+            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
+            ->where('start', '>', Carbon::parse('+1 week')->getTimestamp())
+            ->where('start', '<=', Carbon::parse('+1 month')->getTimestamp())
             ->get();
 
         // Get the events for the next year
         $data[2] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 month'))
+            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
+            ->where('start', '>', Carbon::parse('+1 month')->getTimestamp())
             ->get();
 
         $years = $this->getAvailableYears();
@@ -131,8 +131,8 @@ class EventController extends Controller
     {
         $event = Event::query()->create([
             'title' => $request->title,
-            'start' => strtotime($request->start),
-            'end' => strtotime($request->end),
+            'start' => Carbon::parse($request->start)->getTimestamp(),
+            'end' => Carbon::parse($request->end)->getTimestamp(),
             'location' => $request->location,
             'maps_location' => $request->maps_location,
             'secret' => $request->publication ? false : $request->secret,
@@ -141,7 +141,7 @@ class EventController extends Controller
             'is_featured' => $request->has('is_featured'),
             'is_external' => $request->has('is_external'),
             'force_calendar_sync' => $request->has('force_calendar_sync'),
-            'publication' => $request->publication ? strtotime($request->publication) : null,
+            'publication' => $request->publication ? Carbon::parse($request->publication)->getTimestamp() : null,
         ]);
 
         if ($request->file('image')) {
@@ -181,8 +181,8 @@ class EventController extends Controller
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);
         $event->title = $request->title;
-        $event->start = strtotime($request->start);
-        $event->end = strtotime($request->end);
+        $event->start = Carbon::parse($request->start)->getTimestamp();
+        $event->end = Carbon::parse($request->end)->getTimestamp();
         $event->location = $request->location;
         $event->maps_location = $request->maps_location;
         $event->secret = $request->publication ? false : $request->secret;
@@ -192,7 +192,7 @@ class EventController extends Controller
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
-        $event->publication = $request->publication ? strtotime($request->publication) : null;
+        $event->publication = $request->publication ? Carbon::parse($request->publication)->getTimestamp() : null;
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
@@ -219,7 +219,7 @@ class EventController extends Controller
 
         $event->save();
 
-        $changed_important_details = $event->start !== strtotime($request->start) || $event->end !== strtotime($request->end) || $event->location != $request->location;
+        $changed_important_details = $event->start !== Carbon::parse($request->start)->getTimestamp() || $event->end !== Carbon::parse($request->end)->getTimestamp() || $event->location != $request->location;
 
         if ($changed_important_details) {
             Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
@@ -244,8 +244,8 @@ class EventController extends Controller
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', strtotime($year.'-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
+            })->where('start', '>', Carbon::parse($year.'-01-01 00:00:01')->getTimestamp())
+            ->where('start', '<', Carbon::parse($year.'-12-31 23:59:59')->getTimestamp())
             ->get()
             ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
 
@@ -427,8 +427,8 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
-            ->where('end', '>', strtotime('today'))
-            ->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))
+            ->where('end', '>', Carbon::parse('today')->getTimestamp())
+            ->where('start', '<', Carbon::parse($noFutureLimit ? '+10 years' : '+1 month')->getTimestamp())
             ->whereNull('publication')
             ->orderBy('start')
             ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
@@ -558,7 +558,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
-            ->where('start', '>', strtotime('-6 months'))
+            ->where('start', '>', Carbon::parse('-6 months')->getTimestamp())
             ->with('committee.users')
             ->withCount('tickets')
             ->get();
@@ -608,9 +608,9 @@ CALSCALE:GREGORIAN
             $calendar .= 'BEGIN:VEVENT
 '.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
-                sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
-                sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->created_at)->getTimestamp()))."\r\n".
+                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start)->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end)->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -619,7 +619,7 @@ CALSCALE:GREGORIAN
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->updated_at)->getTimestamp()))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
@@ -627,7 +627,7 @@ CALSCALE:GREGORIAN
 '.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start)->format('l F j, H:i:s'))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
