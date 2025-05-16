@@ -244,8 +244,8 @@ class EventController extends Controller
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', Carbon::parse($year.'-01-01 00:00:01')->getTimestamp())
-            ->where('start', '<', Carbon::parse($year.'-12-31 23:59:59')->getTimestamp())
+            })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->getTimestamp())
+            ->where('start', '<', Carbon::create($year, 12, 31, 23, 59, 59)->getTimestamp())
             ->get()
             ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
 
@@ -428,7 +428,9 @@ class EventController extends Controller
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
             ->where('end', '>', Carbon::today()->getTimestamp())
-            ->where('start', '<', Carbon::parse($noFutureLimit ? '+10 years' : '+1 month')->getTimestamp())
+            ->unless($noFutureLimit, static function ($query) {
+                $query->where('start', '<', Carbon::now()->addMonth()->timestamp);
+            })
             ->whereNull('publication')
             ->orderBy('start')
             ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')

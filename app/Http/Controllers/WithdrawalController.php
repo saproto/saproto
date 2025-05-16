@@ -50,7 +50,7 @@ class WithdrawalController extends Controller
 
         $max = $request->integer('max');
 
-        $date = Carbon::parse($request->input('date'))->format('Y-m-d');
+        $date = $request->date('date')->format('Y-m-d');
 
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([

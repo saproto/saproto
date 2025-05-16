@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dinnerform;
 use App\Models\DinnerformOrderline;
 use App\Models\Product;
+use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,8 +64,8 @@ class DinnerformController extends Controller
             'restaurant' => $request->input('restaurant'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
-            'start' => Carbon::parse($request->input('start'))->getTimestamp(),
-            'end' => Carbon::parse($request->input('end'))->getTimestamp(),
+            'start' => $request->date('start')->getTimestamp(),
+            'end' => $request->date('end')->getTimestamp(),
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -96,15 +97,13 @@ class DinnerformController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
-
-        if ($request->input('end') < $request->input('start')) {
-            Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
-
-            return Redirect::back();
-        }
-
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
+
+        $request->validate([
+            'start' => 'required|date_format:Y-m-d H:i',
+            'end' => 'required|date_format:Y-m-d H:i|after:start',
+        ]);
 
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'You cannot update a closed dinnerform!');
@@ -112,17 +111,20 @@ class DinnerformController extends Controller
             return Redirect::back();
         }
 
+        $start = CarbonImmutable::parse($request->input('start'))->getTimestamp();
+        $end = CarbonImmutable::parse($request->input('end'))->getTimestamp();
+        $restaurant = $request->string('restaurant');
         $changed_important_details =
-            $dinnerform->start->timestamp != Carbon::parse($request->input('start'))->getTimestamp() ||
-            $dinnerform->end->timestamp != Carbon::parse($request->input('end'))->getTimestamp() ||
+            $dinnerform->start->timestamp != $start ||
+            $dinnerform->end->timestamp != $end ||
             $dinnerform->restaurant != $request->input('restaurant');
 
         $dinnerform->update([
-            'restaurant' => $request->input('restaurant'),
-            'description' => $request->input('description'),
+            'restaurant' => $restaurant,
+            'description' => $request->string('description'),
             'url' => $request->input('url'),
-            'start' => Carbon::parse($request->input('start'))->getTimestamp(),
-            'end' => Carbon::parse($request->input('end'))->getTimestamp(),
+            'start' => $start,
+            'end' => $end,
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,

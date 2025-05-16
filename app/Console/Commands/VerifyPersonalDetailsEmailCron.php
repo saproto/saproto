@@ -39,9 +39,9 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = Carbon::now()->addMonth()->format('m');
+        $month = Carbon::now()->addMonth()->month;
 
-        $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month))->get();
+        $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month < 10 ? '0'.$month : $month))->get();
 
         foreach ($users as $user) {
             Mail::to($user)->queue((new VerifyPersonalDetails($user))->onQueue('low'));

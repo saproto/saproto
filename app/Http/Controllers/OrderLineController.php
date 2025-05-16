@@ -127,7 +127,7 @@ class OrderLineController extends Controller
      */
     public function filterByDate(Request $request)
     {
-        $date = Carbon::parse($request->input('date'))->format('d-m-Y');
+        $date = $request->date('date')->format('d-m-Y');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {

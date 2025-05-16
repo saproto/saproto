@@ -59,8 +59,8 @@ class WallstreetController extends Controller
     public function store(Request $request): View
     {
         $drink = new WallstreetDrink;
-        $drink->start_time = Carbon::parse($request->input('start_time'))->timestamp;
-        $drink->end_time = Carbon::parse($request->input('end_time'))->timestamp;
+        $drink->start_time = $request->date('start_time')->timestamp;
+        $drink->end_time = $request->date('end_time')->timestamp;
         $drink->minimum_price = $request->input('minimum_price');
         $drink->price_increase = $request->input('price_increase');
         $drink->price_decrease = $request->input('price_decrease');
@@ -76,8 +76,8 @@ class WallstreetController extends Controller
     public function update(Request $request, int $id): View
     {
         $drink = WallstreetDrink::query()->findOrFail($id);
-        $drink->start_time = Carbon::parse($request->input('start_time'))->timestamp;
-        $drink->end_time = Carbon::parse($request->input('end_time'))->timestamp;
+        $drink->start_time = $request->date('start_time')->timestamp;
+        $drink->end_time = $request->date('end_time')->timestamp;
         $drink->minimum_price = $request->input('minimum_price');
         $drink->price_increase = $request->input('price_increase');
         $drink->price_decrease = $request->input('price_decrease');
