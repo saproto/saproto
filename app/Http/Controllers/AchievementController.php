@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use phpDocumentor\Reflection\DocBlock\Description;
+use stdClass;
 
 class AchievementController extends Controller
 {
@@ -234,7 +236,7 @@ class AchievementController extends Controller
         }
     }
 
-    private function giveAchievement($achievement, $user, $description, $achievedOn): bool
+    private function giveAchievement(Achievement $achievement,User $user, ?string $description, ?string $achievedOn): bool
     {
         $achieved = $user->achievements()->where('achievement_id', $achievement->id)->first();
         if (! $achieved) {
@@ -253,7 +255,7 @@ class AchievementController extends Controller
         }
 
         if ($description) {
-            $achieved->pivot->description = $description;
+            $achieved->getRelationValue("pivot")->description = $description;
             $achievement->save();
 
             return false;

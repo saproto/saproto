@@ -18,6 +18,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductCategoryEntry;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Permission;
 use Role;
@@ -25,11 +26,9 @@ use Role;
 class ExportController extends Controller
 {
     /**
-     * @param  array  $table
-     * @param  string  $personal_key
-     * @return mixed
+     * @return Collection<int, mixed>
      */
-    public function export($table, $personal_key)
+    public function export(string $table, string $personal_key)
     {
         $user = User::query()->where('personal_key', $personal_key)->first();
         abort_if(! $user || ! $user->is_member || ! $user->signed_nda, 403, 'You do not have access to this data. You need a membership of a relevant committee to access it.');

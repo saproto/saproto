@@ -25,6 +25,7 @@ class NewWallstreetLossCalculation implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
+     * @return array<int, PrivateChannel>
      */
     #[Override]
     public function broadcastOn(): array
@@ -34,6 +35,9 @@ class NewWallstreetLossCalculation implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     * @return array<string, float>
+     */
     public function broadcastWith(): array
     {
         return [

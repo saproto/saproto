@@ -15,16 +15,12 @@ use Illuminate\View\View;
 
 class EmailListController extends Controller
 {
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('emailadmin.editlist', ['list' => null]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         EmailList::query()->create([
             'name' => $request->input('name'),
@@ -37,17 +33,12 @@ class EmailListController extends Controller
         return Redirect::route('email::index');
     }
 
-    /** @return View */
-    public function edit($id)
+    public function edit(int $id): View
     {
         return view('emailadmin.editlist', ['list' => EmailList::query()->findOrFail($id)]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         $list = EmailList::query()->findOrFail($id);
         $list->fill([
@@ -62,13 +53,7 @@ class EmailListController extends Controller
         return Redirect::route('email::index');
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
-     * @throws Exception
-     */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id): RedirectResponse
     {
         $list = EmailList::query()->findOrFail($id);
         $list->delete();
@@ -78,10 +63,7 @@ class EmailListController extends Controller
         return Redirect::route('email::index');
     }
 
-    /**
-     * @param  User  $user
-     */
-    public static function autoSubscribeToLists(string $type, $user): void
+    public static function autoSubscribeToLists(string $type, User $user): void
     {
         $lists = Config::array('proto.'.$type);
         foreach ($lists as $list) {
@@ -93,12 +75,11 @@ class EmailListController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function toggleSubscription(Request $request, $id)
+    public function toggleSubscription(Request $request, int $id)
     {
         $user = Auth::user();
         /** @var EmailList $list */

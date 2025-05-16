@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\PlayedVideo;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -42,6 +42,9 @@ class ProtubeController extends Controller
         ]);
     }
 
+    /**
+     * @return Collection<int, PlayedVideo>
+     */
     private function getTopVideos(int $limit = 10, ?string $since = null, ?User $user = null): Collection
     {
         return PlayedVideo::query()

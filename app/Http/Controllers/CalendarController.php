@@ -9,7 +9,18 @@ use Illuminate\Support\Facades\Config;
 class CalendarController extends Controller
 {
     /**
-     * @return array<array<string, mixed>>
+     * @return array<int, array{
+     * title: string,
+     * place: string,
+     * start: int,
+     * end: int,
+     * type: string|null,
+     * year: mixed,
+     * study: mixed,
+     * studyShort: mixed,
+     * over: bool,
+     * current: bool
+     * }>
      */
     public static function returnGoogleCalendarEvents(string $google_calendar_id, string $start, string $end): array
     {

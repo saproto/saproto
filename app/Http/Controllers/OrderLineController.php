@@ -20,10 +20,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 
 class OrderLineController extends Controller
 {
-    public function index(?string $date = null)
+    /**
+     * @throws ApiException
+     */
+    public function index(?string $date = null): View
     {
         $user = Auth::user();
 
@@ -104,7 +108,7 @@ class OrderLineController extends Controller
         ]);
     }
 
-    public function orderlineWizard()
+    public function orderlineWizard(): View
     {
         $members = User::query()->whereHas('member', static function ($query) {
             $query->whereNot('membership_type', MembershipTypeEnum::PENDING);

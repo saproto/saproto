@@ -304,9 +304,11 @@ class EmailController extends Controller
         return Redirect::route('email::index');
     }
 
+    /** @param array<int> $lists
+     * @param  array<int>  $events
+     */
     private function updateEmailDestination(Email $email, string $type, ?array $lists = [], ?array $events = [], bool $toBackup = false): void
     {
-
         $email->to_user = false;
         switch ($type) {
 

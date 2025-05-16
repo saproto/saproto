@@ -26,6 +26,7 @@ class NewWallstreetEvent implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
+     * @return array<int, PrivateChannel>
      */
     #[Override]
     public function broadcastOn(): array
@@ -35,6 +36,9 @@ class NewWallstreetEvent implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     * @return array<string, WallstreetEvent>
+     */
     public function broadcastWith(): array
     {
         return [

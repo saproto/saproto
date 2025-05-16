@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class UtwenteCleanup extends Mailable
@@ -15,10 +16,10 @@ class UtwenteCleanup extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param  array<string>  $unlinked
+     * @param  string[]|Collection<(int|string), non-falsy-string>  $unlinked
      * @return void
      */
-    public function __construct(public array $unlinked) {}
+    public function __construct(public Collection|array $unlinked) {}
 
     /**
      * Build the message.

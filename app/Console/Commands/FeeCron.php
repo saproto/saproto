@@ -13,6 +13,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use stdClass;
 
 class FeeCron extends Command
 {
@@ -61,7 +62,6 @@ class FeeCron extends Command
             $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
         })->with('member.UtAccount');
 
-        /** @var $charged object{count: int, regular: string[], reduced: string[], remitted: string[]} $charged */
         $charged = (object) [
             'count' => 0,
             'regular' => [],
@@ -119,7 +119,7 @@ class FeeCron extends Command
                 $charged->count++;
 
                 $product = $feeProducts[$fee_type];
-                /**@phpstan-ignore-next-line */
+                /** @phpstan-ignore-next-line  */
                 if (! $product) {
                     $this->error('No product found for user '.$user->id);
 

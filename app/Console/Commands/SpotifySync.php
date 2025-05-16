@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use SpotifyWebAPI\SpotifyWebAPI;
 use SpotifyWebAPI\SpotifyWebAPIException;
 
 class SpotifySync extends Command
@@ -117,7 +118,8 @@ class SpotifySync extends Command
         $this->info('Done!');
     }
 
-    public function updatePlaylist($spotify, string $playlistId, $spotifyUris): void
+    /** @param string[] $spotifyUris */
+    public function updatePlaylist(SpotifyWebAPI $spotify, string $playlistId, array $spotifyUris): void
     {
         $this->info('---');
 

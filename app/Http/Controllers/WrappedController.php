@@ -59,17 +59,17 @@ class WrappedController extends Controller
         return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
 
-    /** @return Collection<int, array{
+    /**
+     * @return \Illuminate\Support\Collection<int, array{
      *     title: string,
-     *      start: int,
-     *      location: string,
-     *      formatted_date: string,
-     *      price: (array|float|int),
-     *      image_url: string|null,
-     * }
-     *>
-     * */
-    public function eventList(): Collection
+     *     start: int,
+     *     location: string,
+     *     formatted_date: string,
+     *     price: float|int,
+     *     image_url: string|null
+     * }>
+     */
+    public function eventList(): \Illuminate\Support\Collection
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
@@ -111,21 +111,22 @@ class WrappedController extends Controller
             ->select(['files.*', 'events.id as event_id'])
             ->get();
 
-        return $events
-            ->map(static function (Event $event) use ($activity_prices, $ticket_prices, $images) {
-                $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
-                $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
-                $array = $event->only([
-                    'title',
-                    'start',
-                    'location',
-                    'formatted_date',
-                ]);
-                $array['price'] = $activity_price + $ticket_price;
-                $array['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+        $return = collect();
 
-                return $array;
-            });
+        foreach ($events as $event) {
+            $returnEvent = [];
+            $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
+            $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
 
+            $returnEvent['title'] = $event->title;
+            $returnEvent['start'] = $event->start;
+            $returnEvent['location'] = $event->location;
+            $returnEvent['formatted_date'] = $event->start;
+            $returnEvent['price'] = $activity_price + $ticket_price;
+            $returnEvent['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+            $return[] = $returnEvent;
+        }
+
+        return $return;
     }
 }

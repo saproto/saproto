@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
+use App\Models\Product;
 use App\Models\WallstreetPrice;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -25,6 +27,7 @@ class NewWallstreetPrice implements ShouldBroadcastNow
 
     /**
      * Get the channels the event should broadcast on.
+     * @return array<int, PrivateChannel>
      */
     #[Override]
     public function broadcastOn(): array
@@ -34,6 +37,12 @@ class NewWallstreetPrice implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     *@return array{
+     *     data: WallstreetPrice,
+     *     product: Product
+     *}
+     */
     public function broadcastWith(): array
     {
         return [
