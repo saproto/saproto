@@ -22,7 +22,7 @@ class PageController extends Controller
      *
      * @var string[]
      */
-    protected $reservedSlugs = ['add', 'edit', 'delete'];
+    protected array $reservedSlugs = ['add', 'edit', 'delete'];
 
     /** @return View */
     public function index()
@@ -189,7 +189,6 @@ class PageController extends Controller
 
         $page = Page::query()->find($id);
         $files = $request->file('files');
-        /* @phpstan-ignore-next-line */
         if ($files instanceof UploadedFile) {
             $files = [$files];
         }

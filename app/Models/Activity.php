@@ -40,6 +40,12 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|User[] $presentUsers
  * @property-read Collection|User[] $users
  *
+ * @property-read  bool|null $user_has_participation
+ * @property-read  bool|null $user_has_helper_participation
+ * @property-read  bool|null $user_has_backup_participation
+ * @property-read  bool|null $user_has_tickets
+ * @property-read  int|null $users_count
+ *
  * @method static Builder|Activity whereClosed($value)
  * @method static Builder|Activity whereClosedAccount($value)
  * @method static Builder|Activity whereComment($value)

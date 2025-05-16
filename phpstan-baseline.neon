@@ -43,54 +43,6 @@ parameters:
 			path: app/Events/StickerPlacedEvent.php
 
 		-
-			message: '#^Access to an undefined property App\\Models\\Activity\:\:\$user_has_backup_participation\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Activity\:\:\$user_has_helper_participation\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Activity\:\:\$user_has_participation\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Activity\:\:\$user_has_tickets\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Event\:\:\$user_has_backup_participation\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Event\:\:\$user_has_helper_participation\.$#'
-			identifier: property.notFound
-			count: 2
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Event\:\:\$user_has_participation\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Http/Controllers/EventController.php
-
-		-
-			message: '#^Access to an undefined property App\\Models\\Event\:\:\$user_has_tickets\.$#'
-			identifier: property.notFound
-			count: 1
-			path: app/Http/Controllers/EventController.php
-
-		-
 			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\:\:type\(\)\.$#'
 			identifier: method.notFound
 			count: 1

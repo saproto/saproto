@@ -149,7 +149,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User permission($permissions)
  * @method static Builder|User query()
  *
- * @mixin Model
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {

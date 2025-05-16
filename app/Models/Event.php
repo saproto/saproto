@@ -81,6 +81,12 @@ use Override;
  * @method static Builder|Event newQuery()
  * @method static Builder|Event query()
  *
+ * @property-read  bool|null $user_has_participation
+ * @property-read  bool|null $user_has_helper_participation
+ * @property-read  bool|null $user_has_backup_participation
+ * @property-read  bool|null $user_has_tickets
+ * @property-read  int|null $users_count
+ *
  * @mixin Model
  */
 class Event extends Model
