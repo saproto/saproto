@@ -42,7 +42,7 @@ class DmxFixture extends Model
         $channels = DmxChannel::query()->where('id', '>=', $this->channel_start)
             ->where('id', '<=', $this->channel_end);
 
-        if ($special_func !== null && $special_func !== '' && $special_func !== '0') {
+        if (! empty($special_func)) {
             $channels = $channels->where('special_function', $special_func);
         }
 

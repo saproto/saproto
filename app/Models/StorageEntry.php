@@ -86,7 +86,7 @@ class StorageEntry extends Model
 
         $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
 
-        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
+        if (! empty($customPath)) {
             $this->filename = $customPath.$this->hash;
         }
 
@@ -105,7 +105,7 @@ class StorageEntry extends Model
         $this->mime = $mime;
         $this->original_filename = $name;
 
-        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
+        if (! empty($customPath)) {
             $this->filename = $customPath.$this->hash;
         }
 
