@@ -23,21 +23,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $video_date
  * @property-read Event|null $event
  *
- * @method static Builder|Video whereEventId($value)
- * @method static Builder|Video whereId($value)
- * @method static Builder|Video whereTitle($value)
- * @method static Builder|Video whereVideoDate($value)
- * @method static Builder|Video whereYoutubeId($value)
- * @method static Builder|Video whereYoutubeLength($value)
- * @method static Builder|Video whereYoutubeThumbUrl($value)
- * @method static Builder|Video whereYoutubeTitle($value)
- * @method static Builder|Video whereYoutubeUserId($value)
- * @method static Builder|Video whereYoutubeUserName($value)
- * @method static Builder|Video newModelQuery()
- * @method static Builder|Video newQuery()
- * @method static Builder|Video query()
+ * @method static Builder<static>|Video newModelQuery()
+ * @method static Builder<static>|Video newQuery()
+ * @method static Builder<static>|Video query()
+ * @method static Builder<static>|Video whereEventId($value)
+ * @method static Builder<static>|Video whereId($value)
+ * @method static Builder<static>|Video whereTitle($value)
+ * @method static Builder<static>|Video whereVideoDate($value)
+ * @method static Builder<static>|Video whereYoutubeId($value)
+ * @method static Builder<static>|Video whereYoutubeLength($value)
+ * @method static Builder<static>|Video whereYoutubeThumbUrl($value)
+ * @method static Builder<static>|Video whereYoutubeTitle($value)
+ * @method static Builder<static>|Video whereYoutubeUserId($value)
+ * @method static Builder<static>|Video whereYoutubeUserName($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class Video extends Model

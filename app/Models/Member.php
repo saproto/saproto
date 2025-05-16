@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -21,54 +20,42 @@ use Override;
  *
  * @property int $id
  * @property int $user_id
- * @property User $user
- * @property string|null $proto_username
+ * @property string $proto_username
  * @property string|null $membership_form_id
- * @property string|null $card_printed_on
- * @property MembershipTypeEnum $membership_type
- * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool $is_primary_at_another_association
+ * @property int|null $until
  * @property Carbon|null $deleted_at
- * @property Carbon|null $until
- * @property-read StorageEntry|null $membershipForm
- * @property StorageEntry|null $customOmnomcomSound
- * @property UtAccount|null $UtAccount
- *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static QueryBuilder|Member onlyTrashed()
- * @method static QueryBuilder|Member withTrashed()
- * @method static QueryBuilder|Member withoutTrashed()
- * @method static Builder|Member whereCardPrintedOn($value)
- * @method static Builder|Member whereCreatedAt($value)
- * @method static Builder|Member whereDeletedAt($value)
- * @method static Builder|Member whereId($value)
- * @method static Builder|Member whereIsDonor($value)
- * @method static Builder|Member whereIsHonorary($value)
- * @method static Builder|Member whereIsLifelong($value)
- * @method static Builder|Member whereMembershipFormId($value)
- * @method static Builder|Member wherePending($value)
- * @method static Builder|Member whereProtoUsername($value)
- * @method static Builder|Member whereUpdatedAt($value)
- * @method static Builder|Member whereUserId($value)
- * @method static Builder|Member whereIsPending($value)
- * @method static Builder|Member whereIsPet($value)
- * @method static Builder|Member newModelQuery()
- * @method static Builder|Member newQuery()
- * @method static Builder<$this>|static query()
- * @method Builder<$this>|static primary()
- * @method Builder<$this>|static type(MembershipTypeEnum $type)
- *
- * @mixin Model
- *
+ * @property string|null $card_printed_on
  * @property int|null $omnomcom_sound_id
+ * @property MembershipTypeEnum $membership_type
+ * @property-read UtAccount|null $UtAccount
+ * @property-read StorageEntry|null $customOmnomcomSound
+ * @property-read StorageEntry|null $membershipForm
+ * @property-read User|null $user
  *
  * @method static MemberFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Member newModelQuery()
+ * @method static Builder<static>|Member newQuery()
+ * @method static Builder<static>|Member onlyTrashed()
+ * @method static Builder<static>|Member primary()
+ * @method static Builder<static>|Member query()
+ * @method static Builder<static>|Member type(MembershipTypeEnum $type)
+ * @method static Builder<static>|Member whereCardPrintedOn($value)
+ * @method static Builder<static>|Member whereCreatedAt($value)
+ * @method static Builder<static>|Member whereDeletedAt($value)
+ * @method static Builder<static>|Member whereId($value)
  * @method static Builder<static>|Member whereIsPrimaryAtAnotherAssociation($value)
+ * @method static Builder<static>|Member whereMembershipFormId($value)
  * @method static Builder<static>|Member whereMembershipType($value)
  * @method static Builder<static>|Member whereOmnomcomSoundId($value)
+ * @method static Builder<static>|Member whereProtoUsername($value)
  * @method static Builder<static>|Member whereUntil($value)
+ * @method static Builder<static>|Member whereUpdatedAt($value)
+ * @method static Builder<static>|Member whereUserId($value)
+ * @method static Builder<static>|Member withTrashed()
+ * @method static Builder<static>|Member withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -90,6 +77,7 @@ class Member extends Model
             'created_at' => 'datetime',
             'deleted_at' => 'datetime',
             'membership_type' => MembershipTypeEnum::class,
+            'is_primary_at_another_association' => 'boolean',
         ];
     }
 

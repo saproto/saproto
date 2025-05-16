@@ -27,20 +27,17 @@ use Override;
  * @property Carbon|null $updated_at
  * @property string $hash
  *
- * @method static Builder|StorageEntry whereCreatedAt($value)
- * @method static Builder|StorageEntry whereFilename($value)
- * @method static Builder|StorageEntry whereHash($value)
- * @method static Builder|StorageEntry whereId($value)
- * @method static Builder|StorageEntry whereMime($value)
- * @method static Builder|StorageEntry whereOriginalFilename($value)
- * @method static Builder|StorageEntry whereUpdatedAt($value)
- * @method static Builder|StorageEntry newModelQuery()
- * @method static Builder|StorageEntry newQuery()
- * @method static Builder|StorageEntry query()
- *
- * @mixin Model
- *
  * @method static StorageEntryFactory factory($count = null, $state = [])
+ * @method static Builder<static>|StorageEntry newModelQuery()
+ * @method static Builder<static>|StorageEntry newQuery()
+ * @method static Builder<static>|StorageEntry query()
+ * @method static Builder<static>|StorageEntry whereCreatedAt($value)
+ * @method static Builder<static>|StorageEntry whereFilename($value)
+ * @method static Builder<static>|StorageEntry whereHash($value)
+ * @method static Builder<static>|StorageEntry whereId($value)
+ * @method static Builder<static>|StorageEntry whereMime($value)
+ * @method static Builder<static>|StorageEntry whereOriginalFilename($value)
+ * @method static Builder<static>|StorageEntry whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

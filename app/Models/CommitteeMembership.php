@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Override;
 
@@ -23,29 +22,24 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Committee $committee
- * @property-read User $user
- *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static QueryBuilder|CommitteeMembership onlyTrashed()
- * @method static QueryBuilder|CommitteeMembership withTrashed()
- * @method static QueryBuilder|CommitteeMembership withoutTrashed()
- * @method static Builder|CommitteeMembership whereCommitteeId($value)
- * @method static Builder|CommitteeMembership whereCreatedAt($value)
- * @method static Builder|CommitteeMembership whereDeletedAt($value)
- * @method static Builder|CommitteeMembership whereEdition($value)
- * @method static Builder|CommitteeMembership whereId($value)
- * @method static Builder|CommitteeMembership whereRole($value)
- * @method static Builder|CommitteeMembership whereUpdatedAt($value)
- * @method static Builder|CommitteeMembership whereUserId($value)
- * @method static Builder|CommitteeMembership newModelQuery()
- * @method static Builder|CommitteeMembership newQuery()
- * @method static Builder|CommitteeMembership query()
- *
- * @mixin Model
+ * @property-read Committee|null $committee
+ * @property-read User|null $user
  *
  * @method static CommitteeMembershipFactory factory($count = null, $state = [])
+ * @method static Builder<static>|CommitteeMembership newModelQuery()
+ * @method static Builder<static>|CommitteeMembership newQuery()
+ * @method static Builder<static>|CommitteeMembership onlyTrashed()
+ * @method static Builder<static>|CommitteeMembership query()
+ * @method static Builder<static>|CommitteeMembership whereCommitteeId($value)
+ * @method static Builder<static>|CommitteeMembership whereCreatedAt($value)
+ * @method static Builder<static>|CommitteeMembership whereDeletedAt($value)
+ * @method static Builder<static>|CommitteeMembership whereEdition($value)
+ * @method static Builder<static>|CommitteeMembership whereId($value)
+ * @method static Builder<static>|CommitteeMembership whereRole($value)
+ * @method static Builder<static>|CommitteeMembership whereUpdatedAt($value)
+ * @method static Builder<static>|CommitteeMembership whereUserId($value)
+ * @method static Builder<static>|CommitteeMembership withTrashed()
+ * @method static Builder<static>|CommitteeMembership withoutTrashed()
  *
  * @mixin \Eloquent
  */

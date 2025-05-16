@@ -16,20 +16,19 @@ use Illuminate\Support\Carbon;
  * @property int $points
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Leaderboard $leaderboard
- * @property-read User $user
+ * @property-read Leaderboard|null $leaderboard
+ * @property-read User|null $user
  *
- * @method static Builder|LeaderboardEntry whereCreatedAt($value)
- * @method static Builder|LeaderboardEntry whereId($value)
- * @method static Builder|LeaderboardEntry whereLeaderboardId($value)
- * @method static Builder|LeaderboardEntry wherePoints($value)
- * @method static Builder|LeaderboardEntry whereUpdatedAt($value)
- * @method static Builder|LeaderboardEntry whereUserId($value)
- * @method static Builder|LeaderboardEntry newModelQuery()
- * @method static Builder|LeaderboardEntry newQuery()
- * @method static Builder|LeaderboardEntry query()
+ * @method static Builder<static>|LeaderboardEntry newModelQuery()
+ * @method static Builder<static>|LeaderboardEntry newQuery()
+ * @method static Builder<static>|LeaderboardEntry query()
+ * @method static Builder<static>|LeaderboardEntry whereCreatedAt($value)
+ * @method static Builder<static>|LeaderboardEntry whereId($value)
+ * @method static Builder<static>|LeaderboardEntry whereLeaderboardId($value)
+ * @method static Builder<static>|LeaderboardEntry wherePoints($value)
+ * @method static Builder<static>|LeaderboardEntry whereUpdatedAt($value)
+ * @method static Builder<static>|LeaderboardEntry whereUserId($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class LeaderboardEntry extends Model

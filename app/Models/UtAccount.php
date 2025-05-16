@@ -9,18 +9,17 @@ use Illuminate\Support\Carbon;
 use Override;
 
 /**
- * @property string $department
+ * @property int $id
  * @property int $member_id
- * @property string $mail
  * @property string $number
+ * @property string $mail
+ * @property string|null $department
  * @property string $givenname
  * @property string $surname
  * @property bool $found
- * @property Member $member
- * @property int $id
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Member|null $member
  *
  * @method static Builder<static>|UtAccount newModelQuery()
  * @method static Builder<static>|UtAccount newQuery()

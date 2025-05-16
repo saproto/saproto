@@ -18,35 +18,31 @@ use Illuminate\Support\Carbon;
  * @property string $desc
  * @property string|null $fa_icon
  * @property string $tier
+ * @property bool $has_page
  * @property string|null $page_name
  * @property string|null $page_content
- * @property bool $has_page
  * @property bool $is_archived
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|User[] $users
- * @property-read Collection|AchievementOwnership[] $achievement_ownership
- *
- * @method static Builder|Achievement whereCreatedAt($value)
- * @method static Builder|Achievement whereDesc($value)
- * @method static Builder|Achievement whereFaIcon($value)
- * @method static Builder|Achievement whereHasPage($value)
- * @method static Builder|Achievement whereId($value)
- * @method static Builder|Achievement whereIsArchived($value)
- * @method static Builder|Achievement whereName($value)
- * @method static Builder|Achievement wherePageContent($value)
- * @method static Builder|Achievement wherePageName($value)
- * @method static Builder|Achievement whereTier($value)
- * @method static Builder|Achievement whereUpdatedAt($value)
- * @method static Builder|Achievement newModelQuery()
- * @method static Builder|Achievement newQuery()
- * @method static Builder|Achievement query()
- *
- * @mixin Model
- *
  * @property-read Collection<int, AchievementOwnership> $achievementOwnership
  * @property-read int|null $achievement_ownership_count
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
+ *
+ * @method static Builder<static>|Achievement newModelQuery()
+ * @method static Builder<static>|Achievement newQuery()
+ * @method static Builder<static>|Achievement query()
+ * @method static Builder<static>|Achievement whereCreatedAt($value)
+ * @method static Builder<static>|Achievement whereDesc($value)
+ * @method static Builder<static>|Achievement whereFaIcon($value)
+ * @method static Builder<static>|Achievement whereHasPage($value)
+ * @method static Builder<static>|Achievement whereId($value)
+ * @method static Builder<static>|Achievement whereIsArchived($value)
+ * @method static Builder<static>|Achievement whereName($value)
+ * @method static Builder<static>|Achievement wherePageContent($value)
+ * @method static Builder<static>|Achievement wherePageName($value)
+ * @method static Builder<static>|Achievement whereTier($value)
+ * @method static Builder<static>|Achievement whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -97,5 +93,13 @@ class Achievement extends Model
         }
 
         return $this->users();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'has_page' => 'boolean',
+            'is_archived' => 'boolean',
+        ];
     }
 }

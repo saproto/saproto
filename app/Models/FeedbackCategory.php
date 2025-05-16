@@ -15,34 +15,27 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property string $title
  * @property string $url
+ * @property bool $review
+ * @property int|null $reviewer_id
+ * @property bool $show_publisher
+ * @property bool $can_reply
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property bool $review
- * @property int $reviewer_id
- * @property bool $can_reply
- * @property bool $show_publisher
- * @property-read User|null $reviewer
- * @property-read Collection|FeedbackVote[] $votes
- *
- * @method static Builder|Feedback whereCreatedAt($value)
- * @method static Builder|Feedback whereId($value)
- * @method static Builder|Feedback whereFeedback($value)
- * @method static Builder|Feedback whereUpdatedAt($value)
- * @method static Builder|Feedback whereUserId($value)
- * @method static Builder|Feedback newModelQuery()
- * @method static Builder|Feedback newQuery()
- * @method static Builder|Feedback query()
- *
- * @mixin Model
- *
  * @property-read Collection<int, Feedback> $feedback
  * @property-read int|null $feedback_count
+ * @property-read User|null $reviewer
  *
+ * @method static Builder<static>|FeedbackCategory newModelQuery()
+ * @method static Builder<static>|FeedbackCategory newQuery()
+ * @method static Builder<static>|FeedbackCategory query()
  * @method static Builder<static>|FeedbackCategory whereCanReply($value)
+ * @method static Builder<static>|FeedbackCategory whereCreatedAt($value)
+ * @method static Builder<static>|FeedbackCategory whereId($value)
  * @method static Builder<static>|FeedbackCategory whereReview($value)
  * @method static Builder<static>|FeedbackCategory whereReviewerId($value)
  * @method static Builder<static>|FeedbackCategory whereShowPublisher($value)
  * @method static Builder<static>|FeedbackCategory whereTitle($value)
+ * @method static Builder<static>|FeedbackCategory whereUpdatedAt($value)
  * @method static Builder<static>|FeedbackCategory whereUrl($value)
  *
  * @mixin \Eloquent
@@ -67,5 +60,14 @@ class FeedbackCategory extends Model
     public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewer_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'review' => 'boolean',
+            'show_publisher' => 'boolean',
+            'can_reply' => 'boolean',
+        ];
     }
 }

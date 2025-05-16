@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\CodexTextTypeFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,9 +16,9 @@ use Override;
  *
  * @property int $id
  * @property string $type
- * @property CodexText[] $texts
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, CodexText> $texts
  * @property-read int|null $texts_count
  *
  * @method static CodexTextTypeFactory factory($count = null, $state = [])

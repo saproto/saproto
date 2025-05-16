@@ -14,33 +14,30 @@ use Illuminate\Support\Carbon;
  * Menu Item Model.
  *
  * @property int $id
- * @property int|null $parent
+ * @property MenuItem|null $parent
  * @property string $menuname
  * @property string|null $url
  * @property int|null $page_id
- * @property int $order
- * @property bool $is_member_only
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Page|null $page
- * @property-read Collection|MenuItem[] $children
- *
- * @method static Builder|MenuItem whereCreatedAt($value)
- * @method static Builder|MenuItem whereId($value)
- * @method static Builder|MenuItem whereIsMemberOnly($value)
- * @method static Builder|MenuItem whereMenuname($value)
- * @method static Builder|MenuItem whereOrder($value)
- * @method static Builder|MenuItem wherePageId($value)
- * @method static Builder|MenuItem whereParent($value)
- * @method static Builder|MenuItem whereUpdatedAt($value)
- * @method static Builder|MenuItem whereUrl($value)
- * @method static Builder|MenuItem newModelQuery()
- * @method static Builder|MenuItem newQuery()
- * @method static Builder|MenuItem query()
- *
- * @mixin Model
- *
+ * @property int $order
+ * @property bool $is_member_only
+ * @property-read Collection<int, MenuItem> $children
  * @property-read int|null $children_count
+ * @property-read Page|null $page
+ *
+ * @method static Builder<static>|MenuItem newModelQuery()
+ * @method static Builder<static>|MenuItem newQuery()
+ * @method static Builder<static>|MenuItem query()
+ * @method static Builder<static>|MenuItem whereCreatedAt($value)
+ * @method static Builder<static>|MenuItem whereId($value)
+ * @method static Builder<static>|MenuItem whereIsMemberOnly($value)
+ * @method static Builder<static>|MenuItem whereMenuname($value)
+ * @method static Builder<static>|MenuItem whereOrder($value)
+ * @method static Builder<static>|MenuItem wherePageId($value)
+ * @method static Builder<static>|MenuItem whereParent($value)
+ * @method static Builder<static>|MenuItem whereUpdatedAt($value)
+ * @method static Builder<static>|MenuItem whereUrl($value)
  *
  * @mixin \Eloquent
  */
@@ -59,7 +56,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return HasMany<\App\Models\MenuItem, $this>
+     * @return HasMany<MenuItem, $this>
      */
     public function children(): HasMany
     {
@@ -67,7 +64,7 @@ class MenuItem extends Model
     }
 
     /**
-     * @return BelongsTo<\App\Models\MenuItem, $this>
+     * @return BelongsTo<MenuItem, $this>
      */
     public function parent(): BelongsTo
     {
@@ -99,5 +96,12 @@ class MenuItem extends Model
         $highest = self::query()->where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
 
         return $this->id == $highest->id;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_member_only' => 'boolean',
+        ];
     }
 }

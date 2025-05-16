@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,14 +14,14 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $name
- * @property string $description
  * @property int $percentage
- * @property int $image_id
- * @property bool $active
- * @property StorageEntry $image
- * @property Product[] $products
+ * @property string|null $description
+ * @property int|null $image_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool $active
+ * @property-read StorageEntry|null $image
+ * @property-read Collection<int, Product> $products
  * @property-read int|null $products_count
  *
  * @method static Builder<static>|WallstreetEvent newModelQuery()
@@ -55,5 +56,12 @@ class WallstreetEvent extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'wallstreet_drink_event_product', 'wallstreet_drink_event_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'active' => 'boolean',
+        ];
     }
 }

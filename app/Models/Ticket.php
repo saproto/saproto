@@ -15,34 +15,30 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $event_id
  * @property int $product_id
+ * @property bool $members_only
  * @property int $available_from
  * @property int $available_to
- * @property int $buy_limit
- * @property bool $members_only
  * @property bool $is_prepaid
  * @property bool $show_participants
  * @property bool $has_buy_limit
- * @property-read Event $event
- * @property-read Product $product
- * @property-read Collection<int, TicketPurchase> $purchases
- *
- * @method static Builder|Ticket whereAvailableFrom($value)
- * @method static Builder|Ticket whereAvailableTo($value)
- * @method static Builder|Ticket whereEventId($value)
- * @method static Builder|Ticket whereId($value)
- * @method static Builder|Ticket whereIsPrepaid($value)
- * @method static Builder|Ticket whereMembersOnly($value)
- * @method static Builder|Ticket whereProductId($value)
- * @method static Builder|Ticket newModelQuery()
- * @method static Builder|Ticket newQuery()
- * @method static Builder|Ticket query()
- *
- * @mixin Model
- *
+ * @property int $buy_limit
+ * @property-read Event|null $event
+ * @property-read Product|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TicketPurchase> $purchases
  * @property-read int|null $purchases_count
  *
+ * @method static Builder<static>|Ticket newModelQuery()
+ * @method static Builder<static>|Ticket newQuery()
+ * @method static Builder<static>|Ticket query()
+ * @method static Builder<static>|Ticket whereAvailableFrom($value)
+ * @method static Builder<static>|Ticket whereAvailableTo($value)
  * @method static Builder<static>|Ticket whereBuyLimit($value)
+ * @method static Builder<static>|Ticket whereEventId($value)
  * @method static Builder<static>|Ticket whereHasBuyLimit($value)
+ * @method static Builder<static>|Ticket whereId($value)
+ * @method static Builder<static>|Ticket whereIsPrepaid($value)
+ * @method static Builder<static>|Ticket whereMembersOnly($value)
+ * @method static Builder<static>|Ticket whereProductId($value)
  * @method static Builder<static>|Ticket whereShowParticipants($value)
  *
  * @mixin \Eloquent
@@ -127,5 +123,15 @@ class Ticket extends Model
         return OrderLine::query()->whereHas('ticketPurchase', function ($query) {
             $query->where('ticket_id', $this->id);
         })->sum('total_price');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'members_only' => 'boolean',
+            'is_prepaid' => 'boolean',
+            'show_participants' => 'boolean',
+            'has_buy_limit' => 'boolean',
+        ];
     }
 }

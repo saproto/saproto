@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Barryvdh\LaravelIdeHelper\Eloquent;
 use Database\Factories\NewsitemFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 /**
  * News Item Model.
@@ -22,41 +20,35 @@ use Illuminate\Support\Collection;
  * @property int $user_id
  * @property string $title
  * @property string $content
- * @property bool $is_weekly
- * @property Collection<int, Event> $events
  * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property-read User $user
- * @property-read string $url
- * @property-read StorageEntry|null $featuredImage
- *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static QueryBuilder|Newsitem onlyTrashed()
- * @method static QueryBuilder|Newsitem withTrashed()
- * @method static QueryBuilder|Newsitem withoutTrashed()
- * @method static Builder|Newsitem whereContent($value)
- * @method static Builder|Newsitem whereCreatedAt($value)
- * @method static Builder|Newsitem whereDeletedAt($value)
- * @method static Builder|Newsitem whereFeaturedImageId($value)
- * @method static Builder|Newsitem whereId($value)
- * @method static Builder|Newsitem wherePublishedAt($value)
- * @method static Builder|Newsitem whereTitle($value)
- * @method static Builder|Newsitem whereUpdatedAt($value)
- * @method static Builder|Newsitem whereUserId($value)
- * @method static Builder|Newsitem newModelQuery()
- * @method static Builder|Newsitem newQuery()
- * @method static Builder|Newsitem query()
- *
- * @mixin Eloquent
- *
+ * @property Carbon|null $deleted_at
+ * @property bool $is_weekly
+ * @property-read Collection<int, Event> $events
  * @property-read int|null $events_count
+ * @property-read StorageEntry|null $featuredImage
+ * @property-read mixed $url
+ * @property-read User|null $user
  *
  * @method static NewsitemFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Newsitem newModelQuery()
+ * @method static Builder<static>|Newsitem newQuery()
+ * @method static Builder<static>|Newsitem onlyTrashed()
+ * @method static Builder<static>|Newsitem query()
+ * @method static Builder<static>|Newsitem whereContent($value)
+ * @method static Builder<static>|Newsitem whereCreatedAt($value)
+ * @method static Builder<static>|Newsitem whereDeletedAt($value)
+ * @method static Builder<static>|Newsitem whereFeaturedImageId($value)
+ * @method static Builder<static>|Newsitem whereId($value)
  * @method static Builder<static>|Newsitem whereIsWeekly($value)
+ * @method static Builder<static>|Newsitem wherePublishedAt($value)
+ * @method static Builder<static>|Newsitem whereTitle($value)
+ * @method static Builder<static>|Newsitem whereUpdatedAt($value)
+ * @method static Builder<static>|Newsitem whereUserId($value)
+ * @method static Builder<static>|Newsitem withTrashed()
+ * @method static Builder<static>|Newsitem withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -114,5 +106,12 @@ class Newsitem extends Model
 
             return route('news::show', ['id' => $this->id]);
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_weekly' => 'boolean',
+        ];
     }
 }

@@ -10,9 +10,9 @@ use Illuminate\Support\MessageBag;
 /**
  * Validatable Model.
  *
- * @method static Builder|Validatable newModelQuery()
- * @method static Builder|Validatable newQuery()
- * @method static Builder|Validatable query()
+ * @method static Builder<static>|Validatable newModelQuery()
+ * @method static Builder<static>|Validatable newQuery()
+ * @method static Builder<static>|Validatable query()
  *
  * @mixin \Eloquent
  */

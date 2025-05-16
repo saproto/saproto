@@ -12,14 +12,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $special_function
  *
- * @method static Builder|DmxChannel whereId($value)
- * @method static Builder|DmxChannel whereName($value)
- * @method static Builder|DmxChannel whereSpecialFunction($value)
- * @method static Builder|DmxChannel newModelQuery()
- * @method static Builder|DmxChannel newQuery()
- * @method static Builder|DmxChannel query()
+ * @method static Builder<static>|DmxChannel newModelQuery()
+ * @method static Builder<static>|DmxChannel newQuery()
+ * @method static Builder<static>|DmxChannel query()
+ * @method static Builder<static>|DmxChannel whereId($value)
+ * @method static Builder<static>|DmxChannel whereName($value)
+ * @method static Builder<static>|DmxChannel whereSpecialFunction($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class DmxChannel extends Model

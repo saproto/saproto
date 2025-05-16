@@ -15,17 +15,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $file_id
  * @property bool $hidden
  * @property string $name
- * @property-read StorageEntry $file
+ * @property-read StorageEntry|null $file
  *
- * @method static Builder|SoundboardSound whereFileId($value)
- * @method static Builder|SoundboardSound whereHidden($value)
- * @method static Builder|SoundboardSound whereId($value)
- * @method static Builder|SoundboardSound whereName($value)
- * @method static Builder|SoundboardSound newModelQuery()
- * @method static Builder|SoundboardSound newQuery()
- * @method static Builder|SoundboardSound query()
+ * @method static Builder<static>|SoundboardSound newModelQuery()
+ * @method static Builder<static>|SoundboardSound newQuery()
+ * @method static Builder<static>|SoundboardSound query()
+ * @method static Builder<static>|SoundboardSound whereFileId($value)
+ * @method static Builder<static>|SoundboardSound whereHidden($value)
+ * @method static Builder<static>|SoundboardSound whereId($value)
+ * @method static Builder<static>|SoundboardSound whereName($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class SoundboardSound extends Model
@@ -41,5 +40,12 @@ class SoundboardSound extends Model
     public function file(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'file_id');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'hidden' => 'boolean',
+        ];
     }
 }

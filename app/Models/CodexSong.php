@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\CodexSongFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,15 +16,15 @@ use Override;
  * Codex song model.
  *
  * @property int $id
- * @property string $artist
- * @property string $title
- * @property string $lyrics
- * @property string $youtube
  * @property int $category_id
- * @property CodexSongCategory $category
- * @property Codex[] $codices
+ * @property string $title
+ * @property string|null $artist
+ * @property string $lyrics
+ * @property string|null $youtube
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read CodexSongCategory|null $category
+ * @property-read Collection<int, Codex> $codices
  * @property-read int|null $codices_count
  *
  * @method static CodexSongFactory factory($count = null, $state = [])

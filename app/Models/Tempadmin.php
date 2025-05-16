@@ -17,21 +17,20 @@ use Illuminate\Support\Carbon;
  * @property string $end_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $creator
- * @property-read User $user
+ * @property-read User|null $creator
+ * @property-read User|null $user
  *
- * @method static Builder|Tempadmin whereCreatedAt($value)
- * @method static Builder|Tempadmin whereCreatedBy($value)
- * @method static Builder|Tempadmin whereEndAt($value)
- * @method static Builder|Tempadmin whereId($value)
- * @method static Builder|Tempadmin whereStartAt($value)
- * @method static Builder|Tempadmin whereUpdatedAt($value)
- * @method static Builder|Tempadmin whereUserId($value)
- * @method static Builder|Tempadmin newModelQuery()
- * @method static Builder|Tempadmin newQuery()
- * @method static Builder|Tempadmin query()
+ * @method static Builder<static>|Tempadmin newModelQuery()
+ * @method static Builder<static>|Tempadmin newQuery()
+ * @method static Builder<static>|Tempadmin query()
+ * @method static Builder<static>|Tempadmin whereCreatedAt($value)
+ * @method static Builder<static>|Tempadmin whereCreatedBy($value)
+ * @method static Builder<static>|Tempadmin whereEndAt($value)
+ * @method static Builder<static>|Tempadmin whereId($value)
+ * @method static Builder<static>|Tempadmin whereStartAt($value)
+ * @method static Builder<static>|Tempadmin whereUpdatedAt($value)
+ * @method static Builder<static>|Tempadmin whereUserId($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class Tempadmin extends Model

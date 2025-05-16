@@ -12,16 +12,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $email
  * @property string $token
  * @property int $valid_to
- * @property-read User $user
+ * @property-read User|null $user
  *
- * @method static Builder|PasswordReset whereEmail($value)
- * @method static Builder|PasswordReset whereToken($value)
- * @method static Builder|PasswordReset whereValidTo($value)
- * @method static Builder|PasswordReset newModelQuery()
- * @method static Builder|PasswordReset newQuery()
- * @method static Builder|PasswordReset query()
+ * @method static Builder<static>|PasswordReset newModelQuery()
+ * @method static Builder<static>|PasswordReset newQuery()
+ * @method static Builder<static>|PasswordReset query()
+ * @method static Builder<static>|PasswordReset whereEmail($value)
+ * @method static Builder<static>|PasswordReset whereToken($value)
+ * @method static Builder<static>|PasswordReset whereValidTo($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class PasswordReset extends Model

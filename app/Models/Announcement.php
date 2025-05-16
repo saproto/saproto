@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
  * @property string $content
  * @property string $display_from
  * @property string $display_till
- * @property int $show_style
  * @property bool $show_guests
  * @property bool $show_users
  * @property bool $show_members
@@ -25,38 +24,38 @@ use Illuminate\Support\Facades\Route;
  * @property bool $show_only_new
  * @property bool $show_only_firstyear
  * @property bool $show_only_active
- * @property bool $show_as_popup
- * @property bool $show_by_time
- * @property bool $is_dismissable
+ * @property int $show_as_popup
+ * @property int $show_style
+ * @property int $is_dismissable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $bootstrap_style
- * @property-read bool $is_visible
  * @property-read string $hash_map_id
+ * @property-read string $is_visible
  * @property-read string $modal_id
+ * @property-read bool $show_by_time
  *
- * @method static Builder|Announcement whereContent($value)
- * @method static Builder|Announcement whereCreatedAt($value)
- * @method static Builder|Announcement whereDescription($value)
- * @method static Builder|Announcement whereDisplayFrom($value)
- * @method static Builder|Announcement whereDisplayTill($value)
- * @method static Builder|Announcement whereId($value)
- * @method static Builder|Announcement whereIsDismissable($value)
- * @method static Builder|Announcement whereShowAsPopup($value)
- * @method static Builder|Announcement whereShowGuests($value)
- * @method static Builder|Announcement whereShowMembers($value)
- * @method static Builder|Announcement whereShowOnlyActive($value)
- * @method static Builder|Announcement whereShowOnlyFirstyear($value)
- * @method static Builder|Announcement whereShowOnlyHomepage($value)
- * @method static Builder|Announcement whereShowOnlyNew($value)
- * @method static Builder|Announcement whereShowStyle($value)
- * @method static Builder|Announcement whereShowUsers($value)
- * @method static Builder|Announcement whereUpdatedAt($value)
- * @method static Builder|Announcement newModelQuery()
- * @method static Builder|Announcement newQuery()
- * @method static Builder|Announcement query()
+ * @method static Builder<static>|Announcement newModelQuery()
+ * @method static Builder<static>|Announcement newQuery()
+ * @method static Builder<static>|Announcement query()
+ * @method static Builder<static>|Announcement whereContent($value)
+ * @method static Builder<static>|Announcement whereCreatedAt($value)
+ * @method static Builder<static>|Announcement whereDescription($value)
+ * @method static Builder<static>|Announcement whereDisplayFrom($value)
+ * @method static Builder<static>|Announcement whereDisplayTill($value)
+ * @method static Builder<static>|Announcement whereId($value)
+ * @method static Builder<static>|Announcement whereIsDismissable($value)
+ * @method static Builder<static>|Announcement whereShowAsPopup($value)
+ * @method static Builder<static>|Announcement whereShowGuests($value)
+ * @method static Builder<static>|Announcement whereShowMembers($value)
+ * @method static Builder<static>|Announcement whereShowOnlyActive($value)
+ * @method static Builder<static>|Announcement whereShowOnlyFirstyear($value)
+ * @method static Builder<static>|Announcement whereShowOnlyHomepage($value)
+ * @method static Builder<static>|Announcement whereShowOnlyNew($value)
+ * @method static Builder<static>|Announcement whereShowStyle($value)
+ * @method static Builder<static>|Announcement whereShowUsers($value)
+ * @method static Builder<static>|Announcement whereUpdatedAt($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class Announcement extends Model
@@ -148,10 +147,7 @@ class Announcement extends Model
         return Attribute::make(get: fn (): bool => strtotime($this->display_from) < Carbon::now()->format('U') && strtotime($this->display_till) > Carbon::now()->format('U'));
     }
 
-    /**
-     * @param  null|User  $user
-     */
-    public function showForUser($user = null): bool
+    public function showForUser(?User $user = null): bool
     {
         // Check for homepage.
         if ($this->show_only_homepage && Route::current()->getName() != 'homepage') {
@@ -203,13 +199,25 @@ class Announcement extends Model
         return HashMapItem::query()->where('key', $this->hash_map_id)->where('subkey', $user->id)->count() <= 0;
     }
 
-    /** @param  User|null  $user */
-    public function dismissForUser($user = null): void
+    public function dismissForUser(?User $user = null): void
     {
-        if ($user) {
+        if ($user instanceof User) {
             HashMapItem::query()->create(['key' => $this->hash_map_id, 'subkey' => $user->id]);
         } else {
             Cookie::queue($this->hash_map_id, true, 525600);
         }
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'show_guests' => 'boolean',
+            'show_users' => 'boolean',
+            'show_members' => 'boolean',
+            'show_only_homepage' => 'boolean',
+            'show_only_new' => 'boolean',
+            'show_only_firstyear' => 'boolean',
+            'show_only_active' => 'boolean',
+        ];
     }
 }

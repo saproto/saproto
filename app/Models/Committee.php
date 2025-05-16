@@ -31,29 +31,24 @@ use Illuminate\Support\Facades\DB;
  * @property int $is_active
  * @property-read string $email
  * @property-read StorageEntry|null $image
- * @property-read Collection|Event[] $organizedEvents
- * @property-read Collection|User[] $users
- *
- * @method static Builder|Committee whereAllowAnonymousEmail($value)
- * @method static Builder|Committee whereCreatedAt($value)
- * @method static Builder|Committee whereDescription($value)
- * @method static Builder|Committee whereId($value)
- * @method static Builder|Committee whereImageId($value)
- * @method static Builder|Committee whereIsSociety($value)
- * @method static Builder|Committee whereName($value)
- * @method static Builder|Committee wherePublic($value)
- * @method static Builder|Committee whereSlug($value)
- * @method static Builder|Committee whereUpdatedAt($value)
- * @method static Builder|Committee newModelQuery()
- * @method static Builder|Committee newQuery()
- * @method static Builder|Committee query()
- *
- * @mixin Model
- *
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
  * @method static CommitteeFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Committee newModelQuery()
+ * @method static Builder<static>|Committee newQuery()
+ * @method static Builder<static>|Committee query()
+ * @method static Builder<static>|Committee whereAllowAnonymousEmail($value)
+ * @method static Builder<static>|Committee whereCreatedAt($value)
+ * @method static Builder<static>|Committee whereDescription($value)
+ * @method static Builder<static>|Committee whereId($value)
+ * @method static Builder<static>|Committee whereImageId($value)
  * @method static Builder<static>|Committee whereIsActive($value)
+ * @method static Builder<static>|Committee whereIsSociety($value)
+ * @method static Builder<static>|Committee whereName($value)
+ * @method static Builder<static>|Committee wherePublic($value)
+ * @method static Builder<static>|Committee whereSlug($value)
+ * @method static Builder<static>|Committee whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

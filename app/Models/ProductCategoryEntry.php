@@ -15,19 +15,18 @@ use Illuminate\Support\Carbon;
  * @property int $category_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read ProductCategory $ProductCategory
- * @property-read Product $product
+ * @property-read ProductCategory|null $ProductCategory
+ * @property-read Product|null $product
  *
- * @method static Builder|ProductCategoryEntry whereCategoryId($value)
- * @method static Builder|ProductCategoryEntry whereCreatedAt($value)
- * @method static Builder|ProductCategoryEntry whereId($value)
- * @method static Builder|ProductCategoryEntry whereProductId($value)
- * @method static Builder|ProductCategoryEntry whereUpdatedAt($value)
- * @method static Builder|ProductCategoryEntry newModelQuery()
- * @method static Builder|ProductCategoryEntry newQuery()
- * @method static Builder|ProductCategoryEntry query()
+ * @method static Builder<static>|ProductCategoryEntry newModelQuery()
+ * @method static Builder<static>|ProductCategoryEntry newQuery()
+ * @method static Builder<static>|ProductCategoryEntry query()
+ * @method static Builder<static>|ProductCategoryEntry whereCategoryId($value)
+ * @method static Builder<static>|ProductCategoryEntry whereCreatedAt($value)
+ * @method static Builder<static>|ProductCategoryEntry whereId($value)
+ * @method static Builder<static>|ProductCategoryEntry whereProductId($value)
+ * @method static Builder<static>|ProductCategoryEntry whereUpdatedAt($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class ProductCategoryEntry extends Model

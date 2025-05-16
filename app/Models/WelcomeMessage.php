@@ -17,20 +17,17 @@ use Illuminate\Support\Carbon;
  * @property string $message
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
- *
- * @method static Builder|WelcomeMessage whereCreatedAt($value)
- * @method static Builder|WelcomeMessage whereId($value)
- * @method static Builder|WelcomeMessage whereMessage($value)
- * @method static Builder|WelcomeMessage whereUpdatedAt($value)
- * @method static Builder|WelcomeMessage whereUserId($value)
- * @method static Builder|WelcomeMessage newModelQuery()
- * @method static Builder|WelcomeMessage newQuery()
- * @method static Builder|WelcomeMessage query()
- *
- * @mixin Model
+ * @property-read User|null $user
  *
  * @method static WelcomeMessageFactory factory($count = null, $state = [])
+ * @method static Builder<static>|WelcomeMessage newModelQuery()
+ * @method static Builder<static>|WelcomeMessage newQuery()
+ * @method static Builder<static>|WelcomeMessage query()
+ * @method static Builder<static>|WelcomeMessage whereCreatedAt($value)
+ * @method static Builder<static>|WelcomeMessage whereId($value)
+ * @method static Builder<static>|WelcomeMessage whereMessage($value)
+ * @method static Builder<static>|WelcomeMessage whereUpdatedAt($value)
+ * @method static Builder<static>|WelcomeMessage whereUserId($value)
  *
  * @mixin \Eloquent
  */

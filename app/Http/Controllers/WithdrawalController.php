@@ -188,7 +188,7 @@ class WithdrawalController extends Controller
 
         foreach (FailedWithdrawal::query()->where('withdrawal_id', $withdrawal->id)->get() as $failed_withdrawal) {
             /** @var FailedWithdrawal $failed_withdrawal */
-            $failed_withdrawal->correction_orderline->delete();
+            $failed_withdrawal->correctionOrderline->delete();
             $failed_withdrawal->delete();
         }
 

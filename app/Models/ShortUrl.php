@@ -17,18 +17,17 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|ShortUrl whereClicks($value)
- * @method static Builder|ShortUrl whereCreatedAt($value)
- * @method static Builder|ShortUrl whereDescription($value)
- * @method static Builder|ShortUrl whereId($value)
- * @method static Builder|ShortUrl whereTarget($value)
- * @method static Builder|ShortUrl whereUpdatedAt($value)
- * @method static Builder|ShortUrl whereUrl($value)
- * @method static Builder|ShortUrl newModelQuery()
- * @method static Builder|ShortUrl newQuery()
- * @method static Builder|ShortUrl query()
+ * @method static Builder<static>|ShortUrl newModelQuery()
+ * @method static Builder<static>|ShortUrl newQuery()
+ * @method static Builder<static>|ShortUrl query()
+ * @method static Builder<static>|ShortUrl whereClicks($value)
+ * @method static Builder<static>|ShortUrl whereCreatedAt($value)
+ * @method static Builder<static>|ShortUrl whereDescription($value)
+ * @method static Builder<static>|ShortUrl whereId($value)
+ * @method static Builder<static>|ShortUrl whereTarget($value)
+ * @method static Builder<static>|ShortUrl whereUpdatedAt($value)
+ * @method static Builder<static>|ShortUrl whereUrl($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class ShortUrl extends Model

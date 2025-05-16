@@ -11,16 +11,15 @@ use Illuminate\Support\Carbon;
 /**
  * Class WallstreetDrink.
  *
+ * @property int $id
  * @property int $end_time
  * @property int $start_time
- * @property string $name
- * @property int $id
- * @property float $minimum_price
- * @property float $price_decrease
  * @property float $price_increase
- * @property int $random_events_chance
+ * @property float $price_decrease
+ * @property float $minimum_price
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int $random_events_chance
  * @property-read Collection<int, WallstreetEvent> $events
  * @property-read int|null $events_count
  * @property-read Collection<int, Product> $products

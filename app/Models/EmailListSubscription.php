@@ -13,22 +13,21 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $list_id
- * @property string $user_id
+ * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read EmailList|null $emaillist
  * @property-read User|null $user
  *
- * @method static Builder|EmailListSubscription whereCreatedAt($value)
- * @method static Builder|EmailListSubscription whereId($value)
- * @method static Builder|EmailListSubscription whereListId($value)
- * @method static Builder|EmailListSubscription whereUpdatedAt($value)
- * @method static Builder|EmailListSubscription whereUserId($value)
- * @method static Builder|EmailListSubscription newModelQuery()
- * @method static Builder|EmailListSubscription newQuery()
- * @method static Builder|EmailListSubscription query()
+ * @method static Builder<static>|EmailListSubscription newModelQuery()
+ * @method static Builder<static>|EmailListSubscription newQuery()
+ * @method static Builder<static>|EmailListSubscription query()
+ * @method static Builder<static>|EmailListSubscription whereCreatedAt($value)
+ * @method static Builder<static>|EmailListSubscription whereId($value)
+ * @method static Builder<static>|EmailListSubscription whereListId($value)
+ * @method static Builder<static>|EmailListSubscription whereUpdatedAt($value)
+ * @method static Builder<static>|EmailListSubscription whereUserId($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class EmailListSubscription extends Model

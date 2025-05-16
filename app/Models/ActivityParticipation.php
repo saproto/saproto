@@ -17,37 +17,32 @@ use Override;
  * @property int $id
  * @property int $activity_id
  * @property int $user_id
- * @property int|null $committees_activities_id
  * @property bool $is_present
- * @property bool $backup
+ * @property int|null $committees_activities_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool $backup
  * @property Carbon|null $deleted_at
  * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User|null $user
  *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static Builder|ActivityParticipation onlyTrashed()
- * @method static Builder|ActivityParticipation whereActivityId($value)
- * @method static Builder|ActivityParticipation whereBackup($value)
- * @method static Builder|ActivityParticipation whereCommitteesActivitiesId($value)
- * @method static Builder|ActivityParticipation whereCreatedAt($value)
- * @method static Builder|ActivityParticipation whereDeletedAt($value)
- * @method static Builder|ActivityParticipation whereId($value)
- * @method static Builder|ActivityParticipation whereIsPresent($value)
- * @method static Builder|ActivityParticipation whereUpdatedAt($value)
- * @method static Builder|ActivityParticipation whereUserId($value)
- * @method static Builder|ActivityParticipation withTrashed()
- * @method static Builder|ActivityParticipation withoutTrashed()
- * @method static Builder|ActivityParticipation newModelQuery()
- * @method static Builder|ActivityParticipation newQuery()
- * @method static Builder|ActivityParticipation query()
- *
- * @mixin Model
- *
  * @method static ActivityParticipationFactory factory($count = null, $state = [])
+ * @method static Builder<static>|ActivityParticipation newModelQuery()
+ * @method static Builder<static>|ActivityParticipation newQuery()
+ * @method static Builder<static>|ActivityParticipation onlyTrashed()
+ * @method static Builder<static>|ActivityParticipation query()
+ * @method static Builder<static>|ActivityParticipation whereActivityId($value)
+ * @method static Builder<static>|ActivityParticipation whereBackup($value)
+ * @method static Builder<static>|ActivityParticipation whereCommitteesActivitiesId($value)
+ * @method static Builder<static>|ActivityParticipation whereCreatedAt($value)
+ * @method static Builder<static>|ActivityParticipation whereDeletedAt($value)
+ * @method static Builder<static>|ActivityParticipation whereId($value)
+ * @method static Builder<static>|ActivityParticipation whereIsPresent($value)
+ * @method static Builder<static>|ActivityParticipation whereUpdatedAt($value)
+ * @method static Builder<static>|ActivityParticipation whereUserId($value)
+ * @method static Builder<static>|ActivityParticipation withTrashed()
+ * @method static Builder<static>|ActivityParticipation withoutTrashed()
  *
  * @mixin \Eloquent
  */
@@ -61,6 +56,11 @@ class ActivityParticipation extends Model
     protected $table = 'activities_users';
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'backup' => 'boolean',
+        'is_present' => 'boolean',
+    ];
 
     /**
      * @return BelongsTo<User, $this>

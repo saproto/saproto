@@ -19,19 +19,18 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @method static Builder|QrAuthRequest whereApprovedAt($value)
- * @method static Builder|QrAuthRequest whereAuthToken($value)
- * @method static Builder|QrAuthRequest whereCreatedAt($value)
- * @method static Builder|QrAuthRequest whereDescription($value)
- * @method static Builder|QrAuthRequest whereId($value)
- * @method static Builder|QrAuthRequest whereQrToken($value)
- * @method static Builder|QrAuthRequest whereUpdatedAt($value)
- * @method static Builder|QrAuthRequest whereUserId($value)
- * @method static Builder|QrAuthRequest newModelQuery()
- * @method static Builder|QrAuthRequest newQuery()
- * @method static Builder|QrAuthRequest query()
+ * @method static Builder<static>|QrAuthRequest newModelQuery()
+ * @method static Builder<static>|QrAuthRequest newQuery()
+ * @method static Builder<static>|QrAuthRequest query()
+ * @method static Builder<static>|QrAuthRequest whereApprovedAt($value)
+ * @method static Builder<static>|QrAuthRequest whereAuthToken($value)
+ * @method static Builder<static>|QrAuthRequest whereCreatedAt($value)
+ * @method static Builder<static>|QrAuthRequest whereDescription($value)
+ * @method static Builder<static>|QrAuthRequest whereId($value)
+ * @method static Builder<static>|QrAuthRequest whereQrToken($value)
+ * @method static Builder<static>|QrAuthRequest whereUpdatedAt($value)
+ * @method static Builder<static>|QrAuthRequest whereUserId($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class QrAuthRequest extends Model

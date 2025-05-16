@@ -18,17 +18,16 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read User|null $user
  *
- * @method static Builder|RfidCard whereCardId($value)
- * @method static Builder|RfidCard whereCreatedAt($value)
- * @method static Builder|RfidCard whereId($value)
- * @method static Builder|RfidCard whereName($value)
- * @method static Builder|RfidCard whereUpdatedAt($value)
- * @method static Builder|RfidCard whereUserId($value)
- * @method static Builder|RfidCard newModelQuery()
- * @method static Builder|RfidCard newQuery()
- * @method static Builder|RfidCard query()
+ * @method static Builder<static>|RfidCard newModelQuery()
+ * @method static Builder<static>|RfidCard newQuery()
+ * @method static Builder<static>|RfidCard query()
+ * @method static Builder<static>|RfidCard whereCardId($value)
+ * @method static Builder<static>|RfidCard whereCreatedAt($value)
+ * @method static Builder<static>|RfidCard whereId($value)
+ * @method static Builder<static>|RfidCard whereName($value)
+ * @method static Builder<static>|RfidCard whereUpdatedAt($value)
+ * @method static Builder<static>|RfidCard whereUserId($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class RfidCard extends Model

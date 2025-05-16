@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\CodexTextFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,14 +16,14 @@ use Override;
  * Codex text model.
  *
  * @property int $id
- * @property string $text
- * @property CodexTextType $type
- * @property Codex[] $codices
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  * @property int $type_id
  * @property string $name
+ * @property string $text
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Codex> $codices
  * @property-read int|null $codices_count
+ * @property-read CodexTextType|null $type
  *
  * @method static CodexTextFactory factory($count = null, $state = [])
  * @method static Builder<static>|CodexText newModelQuery()

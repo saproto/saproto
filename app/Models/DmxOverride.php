@@ -17,18 +17,17 @@ use Illuminate\Support\Collection;
  * @property string $start
  * @property string $end
  * @property-read bool $is_active
- * @property-read string $window_size
+ * @property-read int $window_size
  *
- * @method static Builder|DmxOverride whereColor($value)
- * @method static Builder|DmxOverride whereEnd($value)
- * @method static Builder|DmxOverride whereFixtures($value)
- * @method static Builder|DmxOverride whereId($value)
- * @method static Builder|DmxOverride whereStart($value)
- * @method static Builder|DmxOverride newModelQuery()
- * @method static Builder|DmxOverride newQuery()
- * @method static Builder|DmxOverride query()
+ * @method static Builder<static>|DmxOverride newModelQuery()
+ * @method static Builder<static>|DmxOverride newQuery()
+ * @method static Builder<static>|DmxOverride query()
+ * @method static Builder<static>|DmxOverride whereColor($value)
+ * @method static Builder<static>|DmxOverride whereEnd($value)
+ * @method static Builder<static>|DmxOverride whereFixtures($value)
+ * @method static Builder<static>|DmxOverride whereId($value)
+ * @method static Builder<static>|DmxOverride whereStart($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class DmxOverride extends Model

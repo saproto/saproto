@@ -14,19 +14,17 @@ use Illuminate\Support\Carbon;
  * DinnerformOrderline Model.
  *
  * @property int $id
- * @property int|null $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $user_id
  * @property int $dinnerform_id
  * @property string $description
  * @property float $price
+ * @property bool $helper
  * @property bool $closed
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property bool|null $helper
- * @property-read User $user
- * @property-read Dinnerform $dinnerform
- * @property-read float|int $price_with_discount
- *
- * @mixin Model
+ * @property-read Dinnerform|null $dinnerform
+ * @property-read int|float $price_with_discount
+ * @property-read User|null $user
  *
  * @method static DinnerformOrderlineFactory factory($count = null, $state = [])
  * @method static Builder<static>|DinnerformOrderline newModelQuery()
@@ -85,5 +83,13 @@ class DinnerformOrderline extends Model
 
             return $price;
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'boolean',
+            'helper' => 'boolean',
+        ];
     }
 }

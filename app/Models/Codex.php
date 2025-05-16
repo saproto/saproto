@@ -15,8 +15,8 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property string $name
- * @property string $export
- * @property string $description
+ * @property string|null $export
+ * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, CodexSong> $songs

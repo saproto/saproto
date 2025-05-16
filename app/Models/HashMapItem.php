@@ -15,21 +15,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $subkey
  * @property string $value
  *
- * @method static Builder|HashMapItem key($key)
- * @method static Builder|HashMapItem subkey($subkey)
- * @method static Builder|HashMapItem whereId($value)
- * @method static Builder|HashMapItem whereKey($value)
- * @method static Builder|HashMapItem whereSubkey($value)
- * @method static Builder|HashMapItem whereValue($value)
- * @method static builder|HashMapItem newmodelquery()
- * @method static builder|HashMapItem newquery()
- * @method static builder|HashMapItem query()
- *
- * @mixin Model
- *
  * @method static HashMapItemFactory factory($count = null, $state = [])
+ * @method static Builder<static>|HashMapItem key(string $key)
  * @method static Builder<static>|HashMapItem newModelQuery()
  * @method static Builder<static>|HashMapItem newQuery()
+ * @method static Builder<static>|HashMapItem query()
+ * @method static Builder<static>|HashMapItem subkey(string $subkey)
+ * @method static Builder<static>|HashMapItem whereId($value)
+ * @method static Builder<static>|HashMapItem whereKey($value)
+ * @method static Builder<static>|HashMapItem whereSubkey($value)
+ * @method static Builder<static>|HashMapItem whereValue($value)
  *
  * @mixin \Eloquent
  */

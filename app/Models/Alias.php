@@ -18,21 +18,18 @@ use Illuminate\Support\Facades\Config;
  * @property string|null $destination
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read string $email
  * @property-read User|null $user
  *
- * @method static Builder|Alias whereAlias($value)
- * @method static Builder|Alias whereCreatedAt($value)
- * @method static Builder|Alias whereDestination($value)
- * @method static Builder|Alias whereId($value)
- * @method static Builder|Alias whereUpdatedAt($value)
- * @method static Builder|Alias whereUserId($value)
- * @method static Builder|Alias newModelQuery()
- * @method static Builder|Alias newQuery()
- * @method static Builder|Alias query()
- *
- * @mixin Model
- *
- * @property-read string $email
+ * @method static Builder<static>|Alias newModelQuery()
+ * @method static Builder<static>|Alias newQuery()
+ * @method static Builder<static>|Alias query()
+ * @method static Builder<static>|Alias whereAlias($value)
+ * @method static Builder<static>|Alias whereCreatedAt($value)
+ * @method static Builder<static>|Alias whereDestination($value)
+ * @method static Builder<static>|Alias whereId($value)
+ * @method static Builder<static>|Alias whereUpdatedAt($value)
+ * @method static Builder<static>|Alias whereUserId($value)
  *
  * @mixin \Eloquent
  */

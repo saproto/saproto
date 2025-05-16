@@ -16,21 +16,17 @@ use Illuminate\Support\Facades\Crypt;
  * @property string $name
  * @property string $description
  * @property int $is_member_only
- * @property-read Collection|User[] $users
- *
- * @method static Builder|EmailList whereDescription($value)
- * @method static Builder|EmailList whereId($value)
- * @method static Builder|EmailList whereIsMemberOnly($value)
- * @method static Builder|EmailList whereName($value)
- * @method static Builder|EmailList newModelQuery()
- * @method static Builder|EmailList newQuery()
- * @method static Builder|EmailList query()
- *
- * @mixin Model
- *
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
+ * @method static Builder<static>|EmailList newModelQuery()
+ * @method static Builder<static>|EmailList newQuery()
+ * @method static Builder<static>|EmailList query()
  * @method static Builder<static>|EmailList subscribed(User $user)
+ * @method static Builder<static>|EmailList whereDescription($value)
+ * @method static Builder<static>|EmailList whereId($value)
+ * @method static Builder<static>|EmailList whereIsMemberOnly($value)
+ * @method static Builder<static>|EmailList whereName($value)
  *
  * @mixin \Eloquent
  */

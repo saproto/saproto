@@ -5,7 +5,6 @@ namespace App\Models;
 use Database\Factories\AddressFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
@@ -21,24 +20,21 @@ use Illuminate\Support\Carbon;
  * @property string $country
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
- *
- * @method static Builder|Address whereCity($value)
- * @method static Builder|Address whereCountry($value)
- * @method static Builder|Address whereCreatedAt($value)
- * @method static Builder|Address whereId($value)
- * @method static Builder|Address whereNumber($value)
- * @method static Builder|Address whereStreet($value)
- * @method static Builder|Address whereUpdatedAt($value)
- * @method static Builder|Address whereUserId($value)
- * @method static Builder|Address whereZipcode($value)
- * @method static Builder|Address newModelQuery()
- * @method static Builder|Address newQuery()
- * @method static Builder|Address query()
- *
- * @mixin Model
+ * @property-read User|null $user
  *
  * @method static AddressFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Address newModelQuery()
+ * @method static Builder<static>|Address newQuery()
+ * @method static Builder<static>|Address query()
+ * @method static Builder<static>|Address whereCity($value)
+ * @method static Builder<static>|Address whereCountry($value)
+ * @method static Builder<static>|Address whereCreatedAt($value)
+ * @method static Builder<static>|Address whereId($value)
+ * @method static Builder<static>|Address whereNumber($value)
+ * @method static Builder<static>|Address whereStreet($value)
+ * @method static Builder<static>|Address whereUpdatedAt($value)
+ * @method static Builder<static>|Address whereUserId($value)
+ * @method static Builder<static>|Address whereZipcode($value)
  *
  * @mixin \Eloquent
  */

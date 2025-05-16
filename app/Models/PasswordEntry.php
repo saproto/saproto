@@ -24,20 +24,19 @@ use Spatie\Permission\Models\Permission;
  * @property Carbon|null $updated_at
  * @property-read Permission|null $permission
  *
- * @method static Builder|PasswordEntry whereCreatedAt($value)
- * @method static Builder|PasswordEntry whereDescription($value)
- * @method static Builder|PasswordEntry whereId($value)
- * @method static Builder|PasswordEntry whereNote($value)
- * @method static Builder|PasswordEntry wherePassword($value)
- * @method static Builder|PasswordEntry wherePermissionId($value)
- * @method static Builder|PasswordEntry whereUpdatedAt($value)
- * @method static Builder|PasswordEntry whereUrl($value)
- * @method static Builder|PasswordEntry whereUsername($value)
- * @method static Builder|PasswordEntry newModelQuery()
- * @method static Builder|PasswordEntry newQuery()
- * @method static Builder|PasswordEntry query()
+ * @method static Builder<static>|PasswordEntry newModelQuery()
+ * @method static Builder<static>|PasswordEntry newQuery()
+ * @method static Builder<static>|PasswordEntry query()
+ * @method static Builder<static>|PasswordEntry whereCreatedAt($value)
+ * @method static Builder<static>|PasswordEntry whereDescription($value)
+ * @method static Builder<static>|PasswordEntry whereId($value)
+ * @method static Builder<static>|PasswordEntry whereNote($value)
+ * @method static Builder<static>|PasswordEntry wherePassword($value)
+ * @method static Builder<static>|PasswordEntry wherePermissionId($value)
+ * @method static Builder<static>|PasswordEntry whereUpdatedAt($value)
+ * @method static Builder<static>|PasswordEntry whereUrl($value)
+ * @method static Builder<static>|PasswordEntry whereUsername($value)
  *
- * @mixin Model
  * @mixin \Eloquent
  */
 class PasswordEntry extends Model

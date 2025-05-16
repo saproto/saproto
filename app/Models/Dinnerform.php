@@ -21,43 +21,39 @@ use Override;
  * @property string $restaurant
  * @property string $description
  * @property string $url
- * @property bool $closed
- * @property bool $visible_home_page
- * @property float $helper_discount
- * @property float $regular_discount
- * @property float $regular_discount_percentage
- * @property int $ordered_by_user_id
- * @property User $orderedBy
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event|null $event
- * @property-read Collection<int, DinnerformOrderline>|DinnerformOrderline[] $orderlines
- *
- * @method static Builder|Dinnerform whereCreatedAt($value)
- * @method static Builder|Dinnerform whereDescription($value)
- * @method static Builder|Dinnerform whereEnd($value)
- * @method static Builder|Dinnerform whereId($value)
- * @method static Builder|Dinnerform whereRestaurant($value)
- * @method static Builder|Dinnerform whereStart($value)
- * @method static Builder|Dinnerform whereUpdatedAt($value)
- * @method static Builder|Dinnerform whereUrl($value)
- * @method static Builder|Dinnerform newModelQuery()
- * @method static Builder|Dinnerform newQuery()
- * @method static Builder|Dinnerform query()
- *
- * @mixin Model
- *
  * @property int|null $event_id
+ * @property float $helper_discount
+ * @property float $regular_discount
+ * @property bool $closed
+ * @property bool $visible_home_page
+ * @property int $ordered_by_user_id
+ * @property-read Event|null $event
+ * @property-read User|null $orderedBy
+ * @property-read Collection<int, DinnerformOrderline> $orderlines
  * @property-read int|null $orderlines_count
+ * @property-read float $regular_discount_percentage
  *
  * @method static DinnerformFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Dinnerform newModelQuery()
+ * @method static Builder<static>|Dinnerform newQuery()
+ * @method static Builder<static>|Dinnerform query()
  * @method static Builder<static>|Dinnerform whereClosed($value)
+ * @method static Builder<static>|Dinnerform whereCreatedAt($value)
+ * @method static Builder<static>|Dinnerform whereDescription($value)
+ * @method static Builder<static>|Dinnerform whereEnd($value)
  * @method static Builder<static>|Dinnerform whereEventId($value)
  * @method static Builder<static>|Dinnerform whereHelperDiscount($value)
+ * @method static Builder<static>|Dinnerform whereId($value)
  * @method static Builder<static>|Dinnerform whereOrderedByUserId($value)
  * @method static Builder<static>|Dinnerform whereRegularDiscount($value)
+ * @method static Builder<static>|Dinnerform whereRestaurant($value)
+ * @method static Builder<static>|Dinnerform whereStart($value)
+ * @method static Builder<static>|Dinnerform whereUpdatedAt($value)
+ * @method static Builder<static>|Dinnerform whereUrl($value)
  * @method static Builder<static>|Dinnerform whereVisibleHomePage($value)
  *
  * @mixin \Eloquent
@@ -74,6 +70,11 @@ class Dinnerform extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $with = ['event'];
+
+    protected $casts = [
+        'closed' => 'boolean',
+        'visible_home_page' => 'boolean',
+    ];
 
     /**
      * @return BelongsTo<Event, $this> */

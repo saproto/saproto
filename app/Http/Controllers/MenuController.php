@@ -134,9 +134,9 @@ class MenuController extends Controller
         $item2->save();
     }
 
-    private function fixDuplicateMenuItemsOrder(int $parent): void
+    private function fixDuplicateMenuItemsOrder(MenuItem $parent): void
     {
-        $menuItems = MenuItem::query()->where('parent', $parent)->orderBy('order')->get();
+        $menuItems = MenuItem::query()->where('parent', $parent->id)->orderBy('order')->get();
         $i = 0;
         foreach ($menuItems as $menuItem) {
             $menuItem->order = $i;

@@ -18,20 +18,17 @@ use stdClass;
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, Product> $products
- *
- * @method static Builder|Account whereAccountNumber($value)
- * @method static Builder|Account whereCreatedAt($value)
- * @method static Builder|Account whereId($value)
- * @method static Builder|Account whereName($value)
- * @method static Builder|Account whereUpdatedAt($value)
- * @method static Builder|Account newModelQuery()
- * @method static Builder|Account newQuery()
- * @method static Builder|Account query()
- *
- * @mixin Model
- *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Product> $products
  * @property-read int|null $products_count
+ *
+ * @method static Builder<static>|Account newModelQuery()
+ * @method static Builder<static>|Account newQuery()
+ * @method static Builder<static>|Account query()
+ * @method static Builder<static>|Account whereAccountNumber($value)
+ * @method static Builder<static>|Account whereCreatedAt($value)
+ * @method static Builder<static>|Account whereId($value)
+ * @method static Builder<static>|Account whereName($value)
+ * @method static Builder<static>|Account whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */

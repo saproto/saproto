@@ -15,28 +15,24 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $user_id
  * @property int $achievement_id
- * @property int $alerted
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Achievement $achievement
- * @property-read User $user
- *
- * @method static Builder|AchievementOwnership whereAchievementId($value)
- * @method static Builder|AchievementOwnership whereCreatedAt($value)
- * @method static Builder|AchievementOwnership whereId($value)
- * @method static Builder|AchievementOwnership whereUpdatedAt($value)
- * @method static Builder|AchievementOwnership whereUserId($value)
- * @method static Builder|AchievementOwnership whereAlerted($value)
- * @method static Builder|AchievementOwnership newModelQuery()
- * @method static Builder|AchievementOwnership newQuery()
- * @method static Builder|AchievementOwnership query()
- *
- * @mixin Model
- *
+ * @property bool $alerted
  * @property string|null $description
+ * @property-read Achievement|null $achievement
+ * @property-read User|null $user
  *
  * @method static AchievementOwnershipFactory factory($count = null, $state = [])
+ * @method static Builder<static>|AchievementOwnership newModelQuery()
+ * @method static Builder<static>|AchievementOwnership newQuery()
+ * @method static Builder<static>|AchievementOwnership query()
+ * @method static Builder<static>|AchievementOwnership whereAchievementId($value)
+ * @method static Builder<static>|AchievementOwnership whereAlerted($value)
+ * @method static Builder<static>|AchievementOwnership whereCreatedAt($value)
  * @method static Builder<static>|AchievementOwnership whereDescription($value)
+ * @method static Builder<static>|AchievementOwnership whereId($value)
+ * @method static Builder<static>|AchievementOwnership whereUpdatedAt($value)
+ * @method static Builder<static>|AchievementOwnership whereUserId($value)
  *
  * @mixin \Eloquent
  */
@@ -71,5 +67,12 @@ class AchievementOwnership extends Model
     public function achievement(): BelongsTo
     {
         return $this->belongsTo(Achievement::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'alerted' => 'boolean',
+        ];
     }
 }

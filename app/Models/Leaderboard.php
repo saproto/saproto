@@ -15,31 +15,28 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $committee_id
  * @property string $name
- * @property string $description
- * @property string $points_name
- * @property string|null $icon
  * @property bool $featured
+ * @property string $description
+ * @property string|null $icon
+ * @property string|null $points_name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Committee $committee
- * @property-read Collection|LeaderboardEntry[] $entries
- *
- * @method static Builder|Leaderboard whereCommitteeId($value)
- * @method static Builder|Leaderboard whereCreatedAt($value)
- * @method static Builder|Leaderboard whereDescription($value)
- * @method static Builder|Leaderboard whereFeatured($value)
- * @method static Builder|Leaderboard whereIcon($value)
- * @method static Builder|Leaderboard whereId($value)
- * @method static Builder|Leaderboard whereName($value)
- * @method static Builder|Leaderboard wherePointsName($value)
- * @method static Builder|Leaderboard whereUpdatedAt($value)
- * @method static Builder|Leaderboard newModelQuery()
- * @method static Builder|Leaderboard newQuery()
- * @method static Builder|Leaderboard query()
- *
- * @mixin Model
- *
+ * @property-read Committee|null $committee
+ * @property-read Collection<int, LeaderboardEntry> $entries
  * @property-read int|null $entries_count
+ *
+ * @method static Builder<static>|Leaderboard newModelQuery()
+ * @method static Builder<static>|Leaderboard newQuery()
+ * @method static Builder<static>|Leaderboard query()
+ * @method static Builder<static>|Leaderboard whereCommitteeId($value)
+ * @method static Builder<static>|Leaderboard whereCreatedAt($value)
+ * @method static Builder<static>|Leaderboard whereDescription($value)
+ * @method static Builder<static>|Leaderboard whereFeatured($value)
+ * @method static Builder<static>|Leaderboard whereIcon($value)
+ * @method static Builder<static>|Leaderboard whereId($value)
+ * @method static Builder<static>|Leaderboard whereName($value)
+ * @method static Builder<static>|Leaderboard wherePointsName($value)
+ * @method static Builder<static>|Leaderboard whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -77,5 +74,12 @@ class Leaderboard extends Model
         }
 
         return $this->committee->users->contains($user);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'featured' => 'boolean',
+        ];
     }
 }

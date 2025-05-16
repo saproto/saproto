@@ -18,6 +18,8 @@ use Override;
  * App\Models\PhotoAlbum.
  *
  * @property int $id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string $name
  * @property int $date_create
  * @property int $date_taken
@@ -25,32 +27,26 @@ use Override;
  * @property int|null $event_id
  * @property bool $private
  * @property bool $published
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  * @property-read Event|null $event
- * @property-read Photo $thumbPhoto
- * @property-read Collection|Photo[] $items
- *
- * @method static Builder|PhotoAlbum whereCreatedAt($value)
- * @method static Builder|PhotoAlbum whereDateCreate($value)
- * @method static Builder|PhotoAlbum whereDateTaken($value)
- * @method static Builder|PhotoAlbum whereEventId($value)
- * @method static Builder|PhotoAlbum whereId($value)
- * @method static Builder|PhotoAlbum whereName($value)
- * @method static Builder|PhotoAlbum wherePrivate($value)
- * @method static Builder|PhotoAlbum wherePublished($value)
- * @method static Builder|PhotoAlbum whereThumbId($value)
- * @method static Builder|PhotoAlbum whereUpdatedAt($value)
- * @method static Builder|PhotoAlbum newModelQuery()
- * @method static Builder|PhotoAlbum newQuery()
- * @method static Builder|PhotoAlbum query()
- *
- * @mixin Model
- *
+ * @property-read Collection<int, Photo> $items
  * @property-read int|null $items_count
+ * @property-read Photo|null $thumbPhoto
  *
  * @method static PhotoAlbumFactory factory($count = null, $state = [])
  * @method static Builder<static>|PhotoAlbum name(string $name)
+ * @method static Builder<static>|PhotoAlbum newModelQuery()
+ * @method static Builder<static>|PhotoAlbum newQuery()
+ * @method static Builder<static>|PhotoAlbum query()
+ * @method static Builder<static>|PhotoAlbum whereCreatedAt($value)
+ * @method static Builder<static>|PhotoAlbum whereDateCreate($value)
+ * @method static Builder<static>|PhotoAlbum whereDateTaken($value)
+ * @method static Builder<static>|PhotoAlbum whereEventId($value)
+ * @method static Builder<static>|PhotoAlbum whereId($value)
+ * @method static Builder<static>|PhotoAlbum whereName($value)
+ * @method static Builder<static>|PhotoAlbum wherePrivate($value)
+ * @method static Builder<static>|PhotoAlbum wherePublished($value)
+ * @method static Builder<static>|PhotoAlbum whereThumbId($value)
+ * @method static Builder<static>|PhotoAlbum whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
@@ -113,5 +109,13 @@ class PhotoAlbum extends Model
         }
 
         return null;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'published' => 'boolean',
+            'private' => 'boolean',
+        ];
     }
 }

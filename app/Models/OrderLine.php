@@ -32,36 +32,33 @@ use Override;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $cashier
- * @property-read Product|null $product
  * @property-read MollieTransaction|null $molliePayment
+ * @property-read Product|null $product
  * @property-read TicketPurchase|null $ticketPurchase
  * @property-read User|null $user
  * @property-read Withdrawal|null $withdrawal
  *
- * @method static Builder|OrderLine whereAuthenticatedBy($value)
- * @method static Builder|OrderLine whereCashierId($value)
- * @method static Builder|OrderLine whereCreatedAt($value)
- * @method static Builder|OrderLine whereDescription($value)
- * @method static Builder|OrderLine whereId($value)
- * @method static Builder|OrderLine whereOriginalUnitPrice($value)
- * @method static Builder|OrderLine wherePayedWithBankCard($value)
- * @method static Builder|OrderLine wherePayedWithCash($value)
- * @method static Builder|OrderLine wherePayedWithMollie($value)
- * @method static Builder|OrderLine wherePayedWithWithdrawal($value)
- * @method static Builder|OrderLine whereProductId($value)
- * @method static Builder|OrderLine whereTotalPrice($value)
- * @method static Builder|OrderLine whereUnits($value)
- * @method static Builder|OrderLine whereUpdatedAt($value)
- * @method static Builder|OrderLine whereUserId($value)
- * @method static Builder|OrderLine newModelQuery()
- * @method static Builder|OrderLine newQuery()
- * @method static Builder|OrderLine query()
- * @method static Builder|OrderLine unpayed()
- *
- * @mixin Model
- *
  * @method static OrderLineFactory factory($count = null, $state = [])
+ * @method static Builder<static>|OrderLine newModelQuery()
+ * @method static Builder<static>|OrderLine newQuery()
+ * @method static Builder<static>|OrderLine query()
+ * @method static Builder<static>|OrderLine unpayed()
+ * @method static Builder<static>|OrderLine whereAuthenticatedBy($value)
+ * @method static Builder<static>|OrderLine whereCashierId($value)
+ * @method static Builder<static>|OrderLine whereCreatedAt($value)
+ * @method static Builder<static>|OrderLine whereDescription($value)
+ * @method static Builder<static>|OrderLine whereId($value)
+ * @method static Builder<static>|OrderLine whereOriginalUnitPrice($value)
+ * @method static Builder<static>|OrderLine wherePayedWithBankCard($value)
+ * @method static Builder<static>|OrderLine wherePayedWithCash($value)
  * @method static Builder<static>|OrderLine wherePayedWithLoss($value)
+ * @method static Builder<static>|OrderLine wherePayedWithMollie($value)
+ * @method static Builder<static>|OrderLine wherePayedWithWithdrawal($value)
+ * @method static Builder<static>|OrderLine whereProductId($value)
+ * @method static Builder<static>|OrderLine whereTotalPrice($value)
+ * @method static Builder<static>|OrderLine whereUnits($value)
+ * @method static Builder<static>|OrderLine whereUpdatedAt($value)
+ * @method static Builder<static>|OrderLine whereUserId($value)
  *
  * @mixin \Eloquent
  */
