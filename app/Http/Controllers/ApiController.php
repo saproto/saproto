@@ -125,6 +125,7 @@ class ApiController extends Controller
             'date_taken' => Carbon::createFromTimestamp($album->date_taken, CarbonTimeZone::create(config('app.timezone')))->format('d-m-Y'),
         ]);
     }
+
     /** @return array<string, mixed> */
     public function gdprExport(): array
     {
