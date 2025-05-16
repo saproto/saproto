@@ -72,12 +72,17 @@ class UserAdminController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'calling_name' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+        ]);
+
         /** @var User $user */
         $user = User::query()->findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        $user->birthdate = Carbon::parse($request->birthdate)->getTimestamp() !== false ? Carbon::parse($request->birthdate)->format('Y-m-d') : null;
-
+        $user->birthdate = $request->date('birthdate');
         $user->save();
 
         Session::flash('flash_message', 'User updated!');

@@ -69,11 +69,9 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::route('email::index');
-        }
+        $request->validate([
+            'time'=> 'required|date'
+        ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
@@ -86,7 +84,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => $request->date('time')->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -136,6 +134,10 @@ class EmailController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $request->validate([
+            'time'=> 'required|date'
+        ]);
+
         /** @var Email $email */
         $email = Email::query()->findOrFail($id);
 
@@ -143,12 +145,6 @@ class EmailController extends Controller
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::index');
-        }
-
-        if (Carbon::parse($request->input('time'))->getTimestamp() === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::back();
         }
 
         $senderAddress = $request->input('sender_address');
@@ -162,7 +158,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => Carbon::parse($request->input('time'))->getTimestamp(),
+            'time' => $request->date('time')->getTimestamp(),
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
