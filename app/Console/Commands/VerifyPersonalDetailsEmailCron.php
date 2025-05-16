@@ -39,7 +39,7 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = Carbon::parse('+1 month')->format('m');
+        $month = Carbon::now()->addMonth()->format('m');
 
         $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month))->get();
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\EventFactory;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
@@ -279,12 +280,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
+        return $this->start < Carbon::now()->timestamp && $this->end > Carbon::now()->timestamp;
     }
 
     public function over(): bool
     {
-        return $this->end < Carbon::now()->format('U');
+        return $this->end < Carbon::now()->timestamp;
     }
 
     /**
@@ -329,7 +330,7 @@ class Event extends Model
             return true;
         }
 
-        if (Carbon::now()->format('U') > $this->end) {
+        if (Carbon::now()->timestamp > $this->end) {
             return false;
         }
 
@@ -402,7 +403,7 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > Carbon::parse('-1 week')->getTimestamp();
+        return $this->involves_food && $this->end > Carbon::now()->subWeek()->getTimestamp();
     }
 
     /**
@@ -410,7 +411,7 @@ class Event extends Model
      */
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
+        return Attribute::make(get: fn (): bool => Carbon::now()->timestamp < $this->start);
     }
 
     /**
@@ -418,11 +419,13 @@ class Event extends Model
      */
     protected function formattedDate(): Attribute
     {
+        $start = CarbonImmutable::createFromTimestamp($this->start);
+
         return Attribute::make(get: fn () => (object) [
-            'simple' => Carbon::createFromTimestamp($this->start)->format('M d, Y'),
-            'year' => Carbon::createFromTimestamp($this->start)->format('Y'),
-            'month' => Carbon::createFromTimestamp($this->start)->format('M Y'),
-            'time' => Carbon::createFromTimestamp($this->start)->format('H:i'),
+            'simple' => $start->format('M d, Y'),
+            'year' => $start->format('Y'),
+            'month' => $start->format('M Y'),
+            'time' => $start->format('H:i'),
         ]);
     }
 

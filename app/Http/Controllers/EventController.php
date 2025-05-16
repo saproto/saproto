@@ -47,21 +47,21 @@ class EventController extends Controller
 
         // Get the events for the next week
         $data[0] = (clone $eventQuery)
-            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
-            ->where('start', '<=', Carbon::parse('+1 week')->getTimestamp())
+            ->where('start', '>=', Carbon::now()->getTimestamp())
+            ->where('start', '<=', Carbon::now()->addWeek()->getTimestamp())
             ->get();
 
         // Get the events for the next month
         $data[1] = (clone $eventQuery)
-            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
-            ->where('start', '>', Carbon::parse('+1 week')->getTimestamp())
-            ->where('start', '<=', Carbon::parse('+1 month')->getTimestamp())
+            ->where('start', '>=', Carbon::now()->getTimestamp())
+            ->where('start', '>', Carbon::now()->addWeek()->getTimestamp())
+            ->where('start', '<=', Carbon::now()->addMonth()->getTimestamp())
             ->get();
 
         // Get the events for the next year
         $data[2] = (clone $eventQuery)
-            ->where('start', '>=', Carbon::parse('now')->getTimestamp())
-            ->where('start', '>', Carbon::parse('+1 month')->getTimestamp())
+            ->where('start', '>=', Carbon::now()->getTimestamp())
+            ->where('start', '>', Carbon::now()->addMonth()->getTimestamp())
             ->get();
 
         $years = $this->getAvailableYears();
@@ -427,7 +427,7 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
-            ->where('end', '>', Carbon::parse('today')->getTimestamp())
+            ->where('end', '>', Carbon::today()->getTimestamp())
             ->where('start', '<', Carbon::parse($noFutureLimit ? '+10 years' : '+1 month')->getTimestamp())
             ->whereNull('publication')
             ->orderBy('start')
@@ -558,7 +558,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
-            ->where('start', '>', Carbon::parse('-6 months')->getTimestamp())
+            ->where('start', '>', Carbon::now()->subMonths(6)->getTimestamp())
             ->with('committee.users')
             ->withCount('tickets')
             ->get();

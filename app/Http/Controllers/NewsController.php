@@ -81,7 +81,7 @@ class NewsController extends Controller
     public function create(Request $request): View
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get();
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get();
 
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
@@ -89,7 +89,7 @@ class NewsController extends Controller
     public function edit(int $id): View
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
         $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 
@@ -170,7 +170,7 @@ class NewsController extends Controller
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = Carbon::createFromTimestamp(Carbon::now()->timestamp)->format('Y-m-d H:i:s');
+        $newsitem->published_at = Carbon::now()->format('Y-m-d H:i:s');
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');

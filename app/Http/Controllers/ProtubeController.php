@@ -30,7 +30,7 @@ class ProtubeController extends Controller
     {
         $user_count = PlayedVideo::query()->where('user_id', Auth::user()->id)->count();
         $history = PlayedVideo::query()
-            ->where('created_at', '>', Carbon::parse('-1 week')->format('Y-m-d'))
+            ->where('created_at', '>', Carbon::now()->subWeek()->format('Y-m-d'))
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();

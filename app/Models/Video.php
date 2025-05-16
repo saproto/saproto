@@ -101,7 +101,7 @@ class Video extends Model
 
     public function getUnixTimeStamp(): string
     {
-        return Carbon::parse($this->video_date)->format('U');
+        return Carbon::parse($this->video_date)->timestamp;
     }
 
     public function getFormDate(): string

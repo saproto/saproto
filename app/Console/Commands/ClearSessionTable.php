@@ -39,9 +39,9 @@ class ClearSessionTable extends Command
      */
     public function handle(): void
     {
-        DB::table('sessions')->where('last_activity', '<', Carbon::parse('-1 week')->getTimestamp())->delete();
-        Token::query()->where('updated_at', '<', Carbon::parse('-1 week')->format('Y-m-d H:i:s'))->delete();
-        QrAuthRequest::query()->where('updated_at', '<', Carbon::parse('-10 minutes')->format('Y-m-d H:i:s'))->delete();
+        DB::table('sessions')->where('last_activity', '<', Carbon::now()->subWeek()->getTimestamp())->delete();
+        Token::query()->where('updated_at', '<', Carbon::now()->subWeek()->format('Y-m-d H:i:s'))->delete();
+        QrAuthRequest::query()->where('updated_at', '<', Carbon::now()->subMinutes(10)->format('Y-m-d H:i:s'))->delete();
         $this->info('Done!');
     }
 }

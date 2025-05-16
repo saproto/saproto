@@ -135,10 +135,12 @@ class MollieController extends Controller
     {
         try {
             $month = Carbon::parse($month);
-        }catch (InvalidFormatException){
+        } catch (InvalidFormatException) {
             Session::flash('flash_message', 'Invalid date: '.$month);
+
             return Redirect::back();
         }
+
         $start = $month->copy()->startOfMonth();
         if ($start->isWeekend()) {
             $start->nextWeekday();

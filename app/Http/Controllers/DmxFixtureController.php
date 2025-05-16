@@ -97,7 +97,7 @@ class DmxFixtureController extends Controller
     public function valueApi(): array
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), Carbon::parse('last week')->format('c'), Carbon::parse('next week')->format('c'));
+        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), Carbon::now()->subWeek()->startOfWeek()->toDateTimeString(), Carbon::now()->addWeek()->startOfWeek()->toDateTimeString());
 
         // Determine if any event is currently going on.
         $current_event = null;

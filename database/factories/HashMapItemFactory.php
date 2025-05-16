@@ -46,7 +46,7 @@ class HashMapItemFactory extends Factory
     public function date()
     {
         return $this->state(fn (array $attributes): array => [
-            'value' => Carbon::now()->format('U'),
+            'value' => Carbon::now()->timestamp,
         ]);
     }
 }

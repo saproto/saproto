@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\CarbonInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -43,8 +44,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.timetable-id'),
-            Carbon::parse('today')->format('c'),
-            Carbon::parse('tomorrow')->format('c')
+            Carbon::today()->toDateTimeString(),
+            Carbon::tomorrow()->toDateTimeString()
         );
     }
 
@@ -66,8 +67,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.protopeners-id'),
-            Carbon::parse('today')->format('c'),
-            Carbon::parse('tomorrow')->format('c')
+            Carbon::today()->toDateTimeString(),
+            Carbon::tomorrow()->toDateTimeString()
         );
     }
 
@@ -94,7 +95,7 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
 
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::parse('last monday')->format('c')).'&timeMax='.urlencode(Carbon::parse('next monday')->format('c'));
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::now()->previous(CarbonInterface::MONDAY)->toDateTimeString()).'&timeMax='.urlencode(Carbon::now()->next(CarbonInterface::MONDAY)->toDateTimeString());
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));

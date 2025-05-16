@@ -46,7 +46,7 @@ class OmNomComCleanup extends Command
 
         $affected = DB::table($orderlinesTable)
             ->whereIn('user_id', $users)
-            ->where('created_at', '<', Carbon::parse('-7 years')->format('Y-m-d'))
+            ->where('created_at', '<', Carbon::now()->subYears(7)->format('Y-m-d'))
             ->update(['user_id' => null]);
 
         $this->info("Found and anonymised {$affected} orderlines.");
