@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\DmxFixture;
 use App\Models\DmxOverride;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class DmxOverrrideController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('dmx.override.index', [
             'overrides' => DmxOverride::getActiveSorted(),
@@ -23,7 +21,7 @@ class DmxOverrrideController extends Controller
         ]);
     }
 
-    public function create(): Factory|View|Application|\Illuminate\View\View
+    public function create(): View
     {
         return view('dmx.override.edit', ['override' => null, 'fixtures' => DmxFixture::query()->orderBy('name')->get()]);
     }
@@ -48,7 +46,7 @@ class DmxOverrrideController extends Controller
         return Redirect::route('dmx.overrides.edit', ['override' => $override]);
     }
 
-    public function edit(DmxOverride $override): Factory|View|Application|\Illuminate\View\View
+    public function edit(DmxOverride $override): View
     {
         return view('dmx.override.edit', ['override' => $override,
             'fixtures' => DmxFixture::query()->orderBy('name')->get(), ]);

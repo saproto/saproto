@@ -162,7 +162,7 @@ class NarrowcastingController extends Controller
         return Redirect::route('narrowcasting::index');
     }
 
-    /** @return array Return a JSON object of all currently active campaigns. */
+    /** @return list<array{slide_duration: int, image:string}|array{slide_duration: int, video: non-falsy-string}> Return a JSON object of all currently active campaigns. */
     public function indexApi(): array
     {
         $data = [];

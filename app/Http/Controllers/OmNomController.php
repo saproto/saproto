@@ -11,6 +11,7 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Services\ProTubeApiService;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ use stdClass;
 
 class OmNomController extends Controller
 {
-    public function display(Request $request, ?string $store_slug = null)
+    public function display(Request $request, ?string $store_slug = null): View|RedirectResponse
     {
         if (empty($store_slug) && Auth::user()?->canAny(collect(Config::array('omnomcom.stores'))->pluck('roles')->flatten())) {
             return view('omnomcom.choose');

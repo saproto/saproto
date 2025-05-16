@@ -25,6 +25,20 @@ class SmartXpScreenController extends Controller
         return view('smartxp.screen');
     }
 
+    /**
+     * @return array<int, array{
+     * title: string,
+     * place: string,
+     * start: int,
+     * end: int,
+     * type: string|null,
+     * year: mixed,
+     * study: mixed,
+     * studyShort: mixed,
+     * over: bool,
+     * current: bool
+     * }>
+     */
     public function timetable(): array
     {
         return CalendarController::returnGoogleCalendarEvents(
@@ -34,6 +48,20 @@ class SmartXpScreenController extends Controller
         );
     }
 
+    /**
+     * @return array<int, array{
+     * title: string,
+     * place: string,
+     * start: int,
+     * end: int,
+     * type: string|null,
+     * year: mixed,
+     * study: mixed,
+     * studyShort: mixed,
+     * over: bool,
+     * current: bool
+     * }>
+     */
     public function protopenersTimetable(): array
     {
         return CalendarController::returnGoogleCalendarEvents(
@@ -43,8 +71,19 @@ class SmartXpScreenController extends Controller
         );
     }
 
-    /** @return object */
-    public function smartxpTimetable()
+    /** @return object{
+     *     roster: array<'monday'|'tuesday'|'wednesday'|'thursday'|'friday'|'weekend', array<object{
+     *      title: string,
+     *      start: int,
+     *      end: int,
+     *      type: string,
+     *      over: bool,
+     *      current: bool
+     *  }>
+     *     >
+     * }
+     */
+    public function smartxpTimetable(): object
     {
         $roster = [
             'monday' => [],

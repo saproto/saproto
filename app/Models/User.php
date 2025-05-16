@@ -7,6 +7,8 @@ use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
 use App\Mail\RegistrationConfirmation;
 use App\Mail\UsernameReminderEmail;
+use Database\Factories\UserFactory;
+use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -15,14 +17,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +30,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
-use Override;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -45,15 +44,17 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $password
  * @property string|null $remember_token
  * @property int|null $image_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $birthdate
  * @property string|null $phone
  * @property string|null $diet
  * @property string|null $website
- * @property string $theme
  * @property bool $phone_visible
  * @property bool $address_visible
  * @property bool $receive_sms
  * @property bool $keep_protube_history
+ * @property float|null $pref_calendar_alarm
  * @property bool $show_birthday
  * @property bool $show_achievements
  * @property bool $profile_in_almanac
@@ -61,101 +62,128 @@ use Spatie\Permission\Traits\HasRoles;
  * @property bool $show_omnomcom_calories
  * @property bool $keep_omnomcom_history
  * @property bool $disable_omnomcom
- * @property bool $did_study_create
- * @property bool $did_study_itech
- * @property bool $signed_nda
+ * @property int $theme
  * @property bool $pref_calendar_relevant_only
- * @property float|null $pref_calendar_alarm
  * @property string|null $utwente_username
  * @property string|null $edu_username
  * @property string|null $utwente_department
+ * @property bool $did_study_create
+ * @property bool $did_study_itech
  * @property string|null $tfa_totp_key
- * @property string|null $personal_key
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property bool $signed_nda
  * @property Carbon|null $deleted_at
+ * @property string|null $personal_key
  * @property string|null $discord_id
- * @property-read string|null $proto_email
- * @property-read bool $completed_profile
- * @property-read bool $is_member
- * @property-read bool $is_protube_admin
- * @property-read bool $photo_preview
- * @property-read bool $signed_membership_form
- * @property-read string|null $welcome_message
- * @property-read StorageEntry|null $photo
+ * @property-read Collection<int, Achievement> $achievements
+ * @property-read int|null $achievements_count
  * @property-read Address|null $address
  * @property-read Bank|null $bank
+ * @property-read Collection<int, Client> $clients
+ * @property-read int|null $clients_count
+ * @property-read Collection<int, Committee> $committees
+ * @property-read int|null $committees_count
+ * @property-read bool $completed_profile
+ * @property-read Collection<int, Feedback> $feedback
+ * @property-read int|null $feedback_count
+ * @property-read string|null $welcome_message
+ * @property-read Collection<int, Committee> $groups
+ * @property-read int|null $groups_count
+ * @property-read bool $is_member
+ * @property-read bool $is_protube_admin
+ * @property-read Collection<int, EmailList> $lists
+ * @property-read int|null $lists_count
  * @property-read Member|null $member
- * @property-read Collection|Achievement[] $achievements
- * @property-read Collection|Client[] $clients
- * @property-read Collection|EmailList[] $lists
- * @property-read Collection|MollieTransaction[] $mollieTransactions
- * @property-read Collection|OrderLine[] $orderlines
- * @property-read Collection|Ticket[] $tickets
- * @property-read Collection|Sticker[] $stickers
- * @property-read Collection|PlayedVideo[] $playedVideos
- * @property-read Collection|Feedback[] $feedback
- * @property-read Collection|RfidCard[] $rfid
- * @property-read Collection|Tempadmin[] $tempadmin
- * @property-read Collection|Token[] $tokens
- * @property-read Collection|Committee[] $committees
- * @property-read Collection|Role[] $roles
- * @property-read Collection|Permission[] $permissions
- * @property-read Collection|Committee[] $societies
+ * @property-read Collection<int, MollieTransaction> $mollieTransactions
+ * @property-read int|null $mollie_transactions_count
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read int|null $orderlines_count
+ * @property-read Collection<int, Permission> $permissions
+ * @property-read int|null $permissions_count
+ * @property-read StorageEntry|null $photo
+ * @property-read string $photo_preview
+ * @property-read Collection<int, PlayedVideo> $playedVideos
+ * @property-read int|null $played_videos_count
+ * @property-read mixed $proto_email
+ * @property-read Collection<int, RfidCard> $rfid
+ * @property-read int|null $rfid_count
+ * @property-read Collection<int, Role> $roles
+ * @property-read int|null $roles_count
+ * @property-read bool $signed_membership_form
+ * @property-read Collection<int, Committee> $societies
+ * @property-read int|null $societies_count
+ * @property-read Collection<int, Sticker> $stickers
+ * @property-read int|null $stickers_count
+ * @property-read Collection<int, Tempadmin> $tempadmin
+ * @property-read int|null $tempadmin_count
+ * @property-read Collection<int, Ticket> $tickets
+ * @property-read int|null $tickets_count
+ * @property-read Collection<int, Token> $tokens
+ * @property-read int|null $tokens_count
+ * @property-read WelcomeMessage|null $welcomeMessage
+ * @property-read Collection<int, Withdrawal> $withdrawals
+ * @property-read int|null $withdrawals_count
+ * @property-read int|null $stickers_country_count
+ * @property-read bool|null $has_stickers
  *
- * @method static bool|null forceDelete()
- * @method static QueryBuilder|User onlyTrashed()
- * @method static QueryBuilder|User withTrashed()
- * @method static QueryBuilder|User withoutTrashed()
- * @method static Builder|User role($roles, $guard = null)
- * @method static Builder|User whereAddressVisible($value)
- * @method static Builder|User whereBirthdate($value)
- * @method static Builder|User whereCallingName($value)
- * @method static Builder|User whereCreatedAt($value)
- * @method static Builder|User whereDeletedAt($value)
- * @method static Builder|User whereDidStudyCreate($value)
- * @method static Builder|User whereDidStudyItech($value)
- * @method static Builder|User whereDiet($value)
- * @method static Builder|User whereDisableOmnomcom($value)
- * @method static Builder|User whereEduUsername($value)
- * @method static Builder|User whereEmail($value)
- * @method static Builder|User whereId($value)
- * @method static Builder|User whereImageId($value)
- * @method static Builder|User whereKeepOmnomcomHistory($value)
- * @method static Builder|User whereKeepProtubeHistory($value)
- * @method static Builder|User whereName($value)
- * @method static Builder|User wherePassword($value)
- * @method static Builder|User wherePersonalKey($value)
- * @method static Builder|User wherePhone($value)
- * @method static Builder|User wherePhoneVisible($value)
- * @method static Builder|User wherePrefCalendarAlarm($value)
- * @method static Builder|User wherePrefCalendarRelevantOnly($value)
- * @method static Builder|User whereProfileInAlmanac($value)
- * @method static Builder|User whereReceiveSms($value)
- * @method static Builder|User whereRememberToken($value)
- * @method static Builder|User whereShowAchievements($value)
- * @method static Builder|User whereShowBirthday($value)
- * @method static Builder|User whereShowOmnomcomCalories($value)
- * @method static Builder|User whereShowOmnomcomTotal($value)
- * @method static Builder|User whereSignedNda($value)
- * @method static Builder|User whereTfaTotpKey($value)
- * @method static Builder|User whereTheme($value)
- * @method static Builder|User whereUpdatedAt($value)
- * @method static Builder|User whereUtwenteDepartment($value)
- * @method static Builder|User whereUtwenteUsername($value)
- * @method static Builder|User whereWebsite($value)
- * @method static Builder|User newModelQuery()
- * @method static Builder|User newQuery()
- * @method static Builder|User permission($permissions)
- * @method static Builder|User query()
+ * @method static UserFactory factory($count = null, $state = [])
+ * @method static Builder<static>|User newModelQuery()
+ * @method static Builder<static>|User newQuery()
+ * @method static Builder<static>|User onlyTrashed()
+ * @method static Builder<static>|User permission($permissions, $without = false)
+ * @method static Builder<static>|User query()
+ * @method static Builder<static>|User role($roles, $guard = null, $without = false)
+ * @method static Builder<static>|User whereAddressVisible($value)
+ * @method static Builder<static>|User whereBirthdate($value)
+ * @method static Builder<static>|User whereCallingName($value)
+ * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereDeletedAt($value)
+ * @method static Builder<static>|User whereDidStudyCreate($value)
+ * @method static Builder<static>|User whereDidStudyItech($value)
+ * @method static Builder<static>|User whereDiet($value)
+ * @method static Builder<static>|User whereDisableOmnomcom($value)
+ * @method static Builder<static>|User whereDiscordId($value)
+ * @method static Builder<static>|User whereEduUsername($value)
+ * @method static Builder<static>|User whereEmail($value)
+ * @method static Builder<static>|User whereId($value)
+ * @method static Builder<static>|User whereImageId($value)
+ * @method static Builder<static>|User whereKeepOmnomcomHistory($value)
+ * @method static Builder<static>|User whereKeepProtubeHistory($value)
+ * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User wherePersonalKey($value)
+ * @method static Builder<static>|User wherePhone($value)
+ * @method static Builder<static>|User wherePhoneVisible($value)
+ * @method static Builder<static>|User wherePrefCalendarAlarm($value)
+ * @method static Builder<static>|User wherePrefCalendarRelevantOnly($value)
+ * @method static Builder<static>|User whereProfileInAlmanac($value)
+ * @method static Builder<static>|User whereReceiveSms($value)
+ * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereShowAchievements($value)
+ * @method static Builder<static>|User whereShowBirthday($value)
+ * @method static Builder<static>|User whereShowOmnomcomCalories($value)
+ * @method static Builder<static>|User whereShowOmnomcomTotal($value)
+ * @method static Builder<static>|User whereSignedNda($value)
+ * @method static Builder<static>|User whereTfaTotpKey($value)
+ * @method static Builder<static>|User whereTheme($value)
+ * @method static Builder<static>|User whereUpdatedAt($value)
+ * @method static Builder<static>|User whereUtwenteDepartment($value)
+ * @method static Builder<static>|User whereUtwenteUsername($value)
+ * @method static Builder<static>|User whereWebsite($value)
+ * @method static Builder<static>|User withTrashed()
+ * @method static Builder<static>|User withoutPermission($permissions)
+ * @method static Builder<static>|User withoutRole($roles, $guard = null)
+ * @method static Builder<static>|User withoutTrashed()
  *
- * @mixin Model
+ * @mixin Eloquent
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
     use CanResetPassword;
     use HasApiTokens;
+
+    /** @use HasFactory<UserFactory>*/
     use HasFactory;
+
     use HasRoles;
     use SoftDeletes;
 
@@ -165,13 +193,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $with = ['member'];
 
-    protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
+    protected $appends = ['is_member', 'photo_preview', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
-
-    protected $casts = [
-        'deleted_at' => 'datetime',
-    ];
 
     public function getPublicId(): ?string
     {
@@ -257,11 +281,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->belongsToMany(Ticket::class, 'ticket_purchases')->withPivot('id', 'created_at')->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function committees(): BelongsToMany
     {
         return $this->groups()->where('is_society', false);
     }
 
+    /**
+     * @return BelongsToMany<Committee, $this>
+     */
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
@@ -462,6 +492,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
+    /**
+     * @return Attribute<string|null, never>
+     */
     protected function protoEmail(): Attribute
     {
         return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
@@ -529,10 +562,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return array<string, Collection<Member>> */
+    /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->type(MembershipTypeEnum::PENDING)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
 
         return $memberships;
@@ -561,24 +594,33 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function completedProfile(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->birthdate !== null && $this->phone !== null);
     }
 
     /**
-     * @return Attribute Whether user has a current membership that is not pending.
+     * @return Attribute<bool, never> Whether user has a current membership that is not pending.
      */
     protected function isMember(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member && $this->member->membership_type !== MembershipTypeEnum::PENDING);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function signedMembershipForm(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isProtubeAdmin(): Attribute
     {
         return Attribute::make(get: function (): bool {
@@ -590,6 +632,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         });
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function photoPreview(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->generatePhotoPath());
@@ -598,19 +643,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function getIcalUrl(): string
     {
         return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
-    }
-
-    public function getWelcomeMessageAttribute(): ?string
-    {
-        return WelcomeMessage::query()->where('user_id', $this->id)->first()?->message;
-    }
-
-    #[Override]
-    protected function casts(): array
-    {
-        return [
-            'deleted_at' => 'datetime',
-        ];
     }
 
     /**
@@ -658,5 +690,27 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function sendForgotUsernameEmail(): void
     {
         Mail::to($this)->queue((new UsernameReminderEmail($this))->onQueue('high'));
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'phone_visible' => 'boolean',
+            'address_visible' => 'boolean',
+            'pref_calendar_relevant_only' => 'boolean',
+            'profile_in_almanac' => 'boolean',
+            'receive_sms' => 'boolean',
+            'disable_omnomcom' => 'boolean',
+            'keep_omnomcom_history' => 'boolean',
+            'keep_protube_history' => 'boolean',
+            'show_achievements' => 'boolean',
+            'show_birthday' => 'boolean',
+            'show_omnomcom_calories' => 'boolean',
+            'show_omnomcom_total' => 'boolean',
+            'signed_nda' => 'boolean',
+            'did_study_create' => 'boolean',
+            'did_study_itech' => 'boolean',
+        ];
     }
 }

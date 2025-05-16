@@ -182,7 +182,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            @if (substr($file->mime, 0, 5) == 'image')
+                                            @if (str_starts_with($file->mime, 'image'))
                                                 <a
                                                     class="pageEdit_insertImage"
                                                     href="#"

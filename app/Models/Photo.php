@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,39 +13,41 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Override;
 
 /**
  * Photo model.
  *
  * @property int $id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $file_id
  * @property int $album_id
  * @property int $date_taken
- * @property int $private
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read PhotoAlbum $album
- * @property-read StorageEntry $file
- * @property-read File $url
- * @property-read Collection|PhotoLikes[] $likes
+ * @property bool $private
+ * @property-read PhotoAlbum|null $album
+ * @property-read StorageEntry|null $file
+ * @property-read Collection<int, PhotoLikes> $likes
+ * @property-read int|null $likes_count
+ * @property-read mixed $url
  *
- * @method static Builder|Photo whereAlbumId($value)
- * @method static Builder|Photo whereCreatedAt($value)
- * @method static Builder|Photo whereDateTaken($value)
- * @method static Builder|Photo whereFileId($value)
- * @method static Builder|Photo whereId($value)
- * @method static Builder|Photo wherePrivate($value)
- * @method static Builder|Photo whereUpdatedAt($value)
- * @method static Builder|Photo newModelQuery()
- * @method static Builder|Photo newQuery()
- * @method static Builder|Photo query()
+ * @method static PhotoFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Photo newModelQuery()
+ * @method static Builder<static>|Photo newQuery()
+ * @method static Builder<static>|Photo query()
+ * @method static Builder<static>|Photo whereAlbumId($value)
+ * @method static Builder<static>|Photo whereCreatedAt($value)
+ * @method static Builder<static>|Photo whereDateTaken($value)
+ * @method static Builder<static>|Photo whereFileId($value)
+ * @method static Builder<static>|Photo whereId($value)
+ * @method static Builder<static>|Photo wherePrivate($value)
+ * @method static Builder<static>|Photo whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Photo extends Model
 {
+    /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
 
     protected $table = 'photos';
@@ -155,6 +158,9 @@ class Photo extends Model
         return $this->file->generateImagePath(800, 300);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function url(): Attribute
     {
         return Attribute::make(get: fn () => $this->file->generatePath());
@@ -174,5 +180,12 @@ class Photo extends Model
                 $album->save();
             }
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'private' => 'boolean',
+        ];
     }
 }

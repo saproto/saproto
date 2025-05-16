@@ -19,7 +19,7 @@ class ReviewStickersMail extends Mailable
      *
      * @return void
      */
-    /** @param Collection<Sticker> $reported */
+    /** @param \Illuminate\Database\Eloquent\Collection<int, Sticker> $reported */
     public function __construct(public Collection $reported) {}
 
     /**

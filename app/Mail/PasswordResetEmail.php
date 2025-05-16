@@ -12,14 +12,14 @@ class PasswordResetEmail extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $name;
+    public string $name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, public $token)
+    public function __construct(User $user, public string $token)
     {
         $this->name = $user->calling_name;
     }
@@ -29,7 +29,7 @@ class PasswordResetEmail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->subject('Your password reset request for S.A. Proto.')

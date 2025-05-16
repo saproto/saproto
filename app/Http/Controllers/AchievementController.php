@@ -168,7 +168,7 @@ class AchievementController extends Controller
             $awarded = $awarded.' '.$user->name.',';
         }
 
-        if ($awarded !== '' && $awarded !== '0') {
+        if (! empty($awarded)) {
             Session::flash('flash_message', "Achievement $achievement->name has been newly given to:".$awarded);
         } else {
             Session::flash('flash_message', "Achievement $achievement->name had already been achieved by all users!");
@@ -234,7 +234,7 @@ class AchievementController extends Controller
         }
     }
 
-    private function giveAchievement($achievement, $user, $description, $achievedOn): bool
+    private function giveAchievement(Achievement $achievement, User $user, ?string $description, ?string $achievedOn): bool
     {
         $achieved = $user->achievements()->where('achievement_id', $achievement->id)->first();
         if (! $achieved) {
@@ -243,7 +243,7 @@ class AchievementController extends Controller
                 'achievement_id' => $achievement->id,
                 'description' => $description,
             ]);
-            if ($achievedOn) {
+            if (! empty($achievedOn)) {
                 $relation->created_at = Carbon::parse($achievedOn);
             }
 
@@ -252,9 +252,9 @@ class AchievementController extends Controller
             return true;
         }
 
-        if ($description) {
-            $achieved->pivot->description = $description;
-            $achievement->save();
+        if (! empty($description)) {
+            $achieved->getRelationValue('pivot')->description = $description;
+            $achievement->getRelationValue('pivot')->save();
 
             return false;
         }

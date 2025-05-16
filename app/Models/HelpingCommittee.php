@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -21,20 +20,21 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read Activity|null $activity
  * @property-read Committee|null $committee
- * @property-read Collection|User[]|null $users
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
  *
- * @method static Builder|HelpingCommittee whereActivityId($value)
- * @method static Builder|HelpingCommittee whereAmount($value)
- * @method static Builder|HelpingCommittee whereCommitteeId($value)
- * @method static Builder|HelpingCommittee whereCreatedAt($value)
- * @method static Builder|HelpingCommittee whereId($value)
- * @method static Builder|HelpingCommittee whereNotificationSent($value)
- * @method static Builder|HelpingCommittee whereUpdatedAt($value)
- * @method static Builder|HelpingCommittee newModelQuery()
- * @method static Builder|HelpingCommittee newQuery()
- * @method static Builder|HelpingCommittee query()
+ * @method static Builder<static>|HelpingCommittee newModelQuery()
+ * @method static Builder<static>|HelpingCommittee newQuery()
+ * @method static Builder<static>|HelpingCommittee query()
+ * @method static Builder<static>|HelpingCommittee whereActivityId($value)
+ * @method static Builder<static>|HelpingCommittee whereAmount($value)
+ * @method static Builder<static>|HelpingCommittee whereCommitteeId($value)
+ * @method static Builder<static>|HelpingCommittee whereCreatedAt($value)
+ * @method static Builder<static>|HelpingCommittee whereId($value)
+ * @method static Builder<static>|HelpingCommittee whereNotificationSent($value)
+ * @method static Builder<static>|HelpingCommittee whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class HelpingCommittee extends Validatable
 {
@@ -42,6 +42,7 @@ class HelpingCommittee extends Validatable
 
     protected $guarded = ['id'];
 
+    /** @var array|string[] */
     protected array $rules = [
         'activity_id' => 'required|integer',
         'committee_id' => 'required|integer',
@@ -74,5 +75,12 @@ class HelpingCommittee extends Validatable
             ->whereNull('activities_users.deleted_at')
             ->withPivot('id')
             ->withTrashed();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'notification_sent' => 'boolean',
+        ];
     }
 }

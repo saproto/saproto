@@ -22,7 +22,7 @@ use Illuminate\View\View;
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show()
+    public function show(): View
     {
         $companies = Company::query()
             ->where('in_logo_bar', true)
@@ -119,7 +119,7 @@ class HomeController extends Controller
     }
 
     /** @return View Display the most important page of the whole site. */
-    public function developers()
+    public function developers(): View
     {
         $committee = Committee::query()->where('slug', '=', Config::string('proto.rootcommittee'))->first();
         $developers = [
@@ -141,7 +141,7 @@ class HomeController extends Controller
     }
 
     /** @return View Display FishCam. */
-    public function fishcam()
+    public function fishcam(): View
     {
         return view('misc.fishcam');
     }

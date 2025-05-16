@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -40,9 +41,9 @@ class MollieController extends Controller
     }
 
     /**
-     * @return RedirectResponse
+     * @throws ApiException
      */
-    public function pay(Request $request)
+    public function pay(Request $request): RedirectResponse
     {
         $cap = intval($request->input('cap'));
         $total = 0;
@@ -235,11 +236,12 @@ class MollieController extends Controller
 
     /**
      * @param  int[]  $orderlines
+     * @param  object{status: string, resource: string, id: string, description?: string, pricing?: mixed}  $selected_method
      * @return MollieTransaction
      *
      * @throws ApiException
      */
-    public static function createPaymentForOrderlines(array $orderlines, $selected_method)
+    public static function createPaymentForOrderlines(array $orderlines, object $selected_method)
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
 
@@ -326,11 +328,11 @@ class MollieController extends Controller
     }
 
     /**
-     * @return null|object
+     * @return null|Collection<int, object{status: string, resource: string, id: string, description?: string, pricing?: mixed}>
      *
      * @throws ApiException
      */
-    public static function getPaymentMethods()
+    public static function getPaymentMethods(): ?Collection
     {
         if (App::environment('local')) {
             return null;

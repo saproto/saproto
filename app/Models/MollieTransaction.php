@@ -25,22 +25,23 @@ use Mollie\Api\Resources\Payment;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $payment_url
- * @property-read User $user
- * @property-read Collection|OrderLine[] $orderlines
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read int|null $orderlines_count
+ * @property-read User|null $user
  *
- * @method static Builder|MollieTransaction whereAmount($value)
- * @method static Builder|MollieTransaction whereCreatedAt($value)
- * @method static Builder|MollieTransaction whereId($value)
- * @method static Builder|MollieTransaction whereMollieId($value)
- * @method static Builder|MollieTransaction wherePaymentUrl($value)
- * @method static Builder|MollieTransaction whereStatus($value)
- * @method static Builder|MollieTransaction whereUpdatedAt($value)
- * @method static Builder|MollieTransaction whereUserId($value)
- * @method static Builder|MollieTransaction newModelQuery()
- * @method static Builder|MollieTransaction newQuery()
- * @method static Builder|MollieTransaction query()
+ * @method static Builder<static>|MollieTransaction newModelQuery()
+ * @method static Builder<static>|MollieTransaction newQuery()
+ * @method static Builder<static>|MollieTransaction query()
+ * @method static Builder<static>|MollieTransaction whereAmount($value)
+ * @method static Builder<static>|MollieTransaction whereCreatedAt($value)
+ * @method static Builder<static>|MollieTransaction whereId($value)
+ * @method static Builder<static>|MollieTransaction whereMollieId($value)
+ * @method static Builder<static>|MollieTransaction wherePaymentUrl($value)
+ * @method static Builder<static>|MollieTransaction whereStatus($value)
+ * @method static Builder<static>|MollieTransaction whereUpdatedAt($value)
+ * @method static Builder<static>|MollieTransaction whereUserId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class MollieTransaction extends Model
 {

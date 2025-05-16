@@ -14,19 +14,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $withdrawal_id
  * @property int $user_id
  * @property int $correction_orderline_id
- * @property-read OrderLine $correction_orderline
- * @property-read User $user
- * @property-read Withdrawal $withdrawal
+ * @property-read OrderLine|null $correctionOrderline
+ * @property-read User|null $user
+ * @property-read Withdrawal|null $withdrawal
  *
- * @method static Builder|FailedWithdrawal whereCorrectionOrderlineId($value)
- * @method static Builder|FailedWithdrawal whereId($value)
- * @method static Builder|FailedWithdrawal whereUserId($value)
- * @method static Builder|FailedWithdrawal whereWithdrawalId($value)
- * @method static Builder|FailedWithdrawal newModelQuery()
- * @method static Builder|FailedWithdrawal newQuery()
- * @method static Builder|FailedWithdrawal query()
+ * @method static Builder<static>|FailedWithdrawal newModelQuery()
+ * @method static Builder<static>|FailedWithdrawal newQuery()
+ * @method static Builder<static>|FailedWithdrawal query()
+ * @method static Builder<static>|FailedWithdrawal whereCorrectionOrderlineId($value)
+ * @method static Builder<static>|FailedWithdrawal whereId($value)
+ * @method static Builder<static>|FailedWithdrawal whereUserId($value)
+ * @method static Builder<static>|FailedWithdrawal whereWithdrawalId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class FailedWithdrawal extends Model
 {

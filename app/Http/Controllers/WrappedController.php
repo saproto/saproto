@@ -9,12 +9,14 @@ use App\Models\StorageEntry;
 use App\Models\TicketPurchase;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $from = Carbon::now()->startOfYear();
         $to = Carbon::now()->endOfYear();
@@ -30,7 +32,7 @@ class WrappedController extends Controller
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, OrderLine>
      */
     public function getPurchases(Carbon $from, Carbon $to)
     {
@@ -42,7 +44,8 @@ class WrappedController extends Controller
             ->get();
     }
 
-    public function orderTotals()
+    /** @return Collection<int, OrderLine> */
+    public function orderTotals(): Collection
     {
         $totals = OrderLine::query()
             ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
@@ -56,7 +59,17 @@ class WrappedController extends Controller
         return $totals->groupBy('product_id')->map(static fn ($product) => $product->pluck('total'));
     }
 
-    public function eventList()
+    /**
+     * @return \Illuminate\Support\Collection<int, array{
+     *     title: string,
+     *     start: int,
+     *     location: string,
+     *     formatted_date: string,
+     *     price: float|int,
+     *     image_url: string|null
+     * }>
+     */
+    public function eventList(): \Illuminate\Support\Collection
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
@@ -98,24 +111,22 @@ class WrappedController extends Controller
             ->select(['files.*', 'events.id as event_id'])
             ->get();
 
-        return $events
-            ->map(static function (Event $event) use ($activity_prices, $ticket_prices, $images) {
-                $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
-                $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
-                /** @phpstan-ignore-next-line */
-                $event->price = $activity_price + $ticket_price;
-                /** @phpstan-ignore-next-line */
-                $event->image_url = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+        $return = collect();
 
-                return $event->only([
-                    'title',
-                    'start',
-                    'location',
-                    'formatted_date',
-                    'image_url',
-                    'price',
-                ]);
-            });
+        foreach ($events as $event) {
+            $returnEvent = [];
+            $activity_price = $activity_prices->where('event_id', $event->id)->sum('price');
+            $ticket_price = $ticket_prices->where('event_id', $event->id)->sum('total');
 
+            $returnEvent['title'] = $event->title;
+            $returnEvent['start'] = $event->start;
+            $returnEvent['location'] = $event->location;
+            $returnEvent['formatted_date'] = $event->start;
+            $returnEvent['price'] = $activity_price + $ticket_price;
+            $returnEvent['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+            $return[] = $returnEvent;
+        }
+
+        return $return;
     }
 }

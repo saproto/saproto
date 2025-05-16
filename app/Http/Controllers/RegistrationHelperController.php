@@ -23,7 +23,7 @@ class RegistrationHelperController extends Controller
 
         /** @param Builder<Member> $q */
         $users = User::query()->whereHas('member', static function ($q) {
-            $q->type(MembershipTypeEnum::PENDING);
+            $q->whereMembershipType(MembershipTypeEnum::PENDING);
         });
 
         if ($search) {
@@ -51,7 +51,7 @@ class RegistrationHelperController extends Controller
     public function details(int $id)
     {
         $user = User::query()->whereHas('member', static function ($q) {
-            $q->type(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
+            $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
         /** @var User $user */
         $memberships = $user->getMemberships();

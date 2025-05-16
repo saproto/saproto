@@ -17,20 +17,20 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $redirect_url
- * @property-read Company $company
+ * @property-read Company|null $company
  *
- * @method static Builder|Joboffer whereCompanyId($value)
- * @method static Builder|Joboffer whereCreatedAt($value)
- * @method static Builder|Joboffer whereDescription($value)
- * @method static Builder|Joboffer whereId($value)
- * @method static Builder|Joboffer whereRedirectUrl($value)
- * @method static Builder|Joboffer whereTitle($value)
- * @method static Builder|Joboffer whereUpdatedAt($value)
- * @method static Builder|Joboffer newModelQuery()
- * @method static Builder|Joboffer newQuery()
- * @method static Builder|Joboffer query()
+ * @method static Builder<static>|Joboffer newModelQuery()
+ * @method static Builder<static>|Joboffer newQuery()
+ * @method static Builder<static>|Joboffer query()
+ * @method static Builder<static>|Joboffer whereCompanyId($value)
+ * @method static Builder<static>|Joboffer whereCreatedAt($value)
+ * @method static Builder<static>|Joboffer whereDescription($value)
+ * @method static Builder<static>|Joboffer whereId($value)
+ * @method static Builder<static>|Joboffer whereRedirectUrl($value)
+ * @method static Builder<static>|Joboffer whereTitle($value)
+ * @method static Builder<static>|Joboffer whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Joboffer extends Model
 {

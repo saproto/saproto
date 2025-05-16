@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ShortUrl;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -12,22 +13,19 @@ use Milon\Barcode\DNS2D;
 
 class ShortUrlController extends Controller
 {
-    /**
-     * @return View
-     */
-    public function index()
+    public function index(): View
     {
         $urls = ShortUrl::query()->orderBy('url')->paginate(25);
 
         return view('short_url.index', ['urls' => $urls]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('short_url.edit', ['url' => null]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         ShortUrl::query()->create($request->all());
         Session::flash('flash_message', 'New URL created!');
@@ -35,18 +33,12 @@ class ShortUrlController extends Controller
         return Redirect::route('short_urls.index');
     }
 
-    /**
-     * @return View
-     */
-    public function edit(ShortUrl $short_url)
+    public function edit(ShortUrl $short_url): View
     {
         return view('short_url.edit', ['url' => $short_url]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request, ShortUrl $short_url)
+    public function update(Request $request, ShortUrl $short_url): RedirectResponse
     {
         $short_url->update($request->all());
         Session::flash('flash_message', 'Short URL updated!');
@@ -54,10 +46,7 @@ class ShortUrlController extends Controller
         return Redirect::route('short_urls.index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function destroy(ShortUrl $short_url)
+    public function destroy(ShortUrl $short_url): RedirectResponse
     {
         $short_url->delete();
 
@@ -66,17 +55,14 @@ class ShortUrlController extends Controller
         return Redirect::route('short_urls.index');
     }
 
-    public function qrCode(int $id)
+    public function qrCode(int $id): Response
     {
         $url = ShortUrl::query()->findOrFail($id);
 
         return response((new DNS2D)->getBarcodeSVG(sprintf('https://%s', $url->target), 'QRCODE,M'))->header('Content-Type', 'image/svg+xml');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function go(string $short)
+    public function go(string $short): RedirectResponse
     {
         $url = ShortUrl::query()->where('url', $short)->firstOrFail();
         $url->clicks++;

@@ -21,20 +21,20 @@ use Illuminate\Support\Carbon;
  * @property string|null $youtube_id
  * @property-read StorageEntry|null $image
  *
- * @method static Builder|NarrowcastingItem whereCampaignEnd($value)
- * @method static Builder|NarrowcastingItem whereCampaignStart($value)
- * @method static Builder|NarrowcastingItem whereCreatedAt($value)
- * @method static Builder|NarrowcastingItem whereId($value)
- * @method static Builder|NarrowcastingItem whereImageId($value)
- * @method static Builder|NarrowcastingItem whereName($value)
- * @method static Builder|NarrowcastingItem whereSlideDuration($value)
- * @method static Builder|NarrowcastingItem whereUpdatedAt($value)
- * @method static Builder|NarrowcastingItem whereYoutubeId($value)
- * @method static Builder|NarrowcastingItem newModelQuery()
- * @method static Builder|NarrowcastingItem newQuery()
- * @method static Builder|NarrowcastingItem query()
+ * @method static Builder<static>|NarrowcastingItem newModelQuery()
+ * @method static Builder<static>|NarrowcastingItem newQuery()
+ * @method static Builder<static>|NarrowcastingItem query()
+ * @method static Builder<static>|NarrowcastingItem whereCampaignEnd($value)
+ * @method static Builder<static>|NarrowcastingItem whereCampaignStart($value)
+ * @method static Builder<static>|NarrowcastingItem whereCreatedAt($value)
+ * @method static Builder<static>|NarrowcastingItem whereId($value)
+ * @method static Builder<static>|NarrowcastingItem whereImageId($value)
+ * @method static Builder<static>|NarrowcastingItem whereName($value)
+ * @method static Builder<static>|NarrowcastingItem whereSlideDuration($value)
+ * @method static Builder<static>|NarrowcastingItem whereUpdatedAt($value)
+ * @method static Builder<static>|NarrowcastingItem whereYoutubeId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class NarrowcastingItem extends Model
 {

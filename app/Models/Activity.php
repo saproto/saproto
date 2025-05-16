@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,53 +19,73 @@ use Illuminate\Support\Carbon;
  * @property float|null $price
  * @property float $no_show_fee
  * @property int $participants
+ * @property bool $hide_participants
  * @property int|null $attendees
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
- * @property string|null $comment
- * @property string|null $redirect_url
  * @property bool $closed
- * @property bool $hide_participants
+ * @property int|null $closed_account
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property ActivityParticipation[] $participation
- * @property ActivityParticipation[] $helpingParticipations
+ * @property string|null $comment
+ * @property string|null $redirect_url
+ * @property-read Collection<int, User> $allUsers
+ * @property-read int|null $all_users_count
+ * @property-read Collection<int, User> $backupUsers
+ * @property-read int|null $backup_users_count
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
- * @property-read Collection|User[] $allUsers
- * @property-read Collection|User[] $backupUsers
- * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
- * @property-read Collection|Committee[] $helpingCommittees
- * @property-read Collection|User[] $presentUsers
- * @property-read Collection|User[] $users
+ * @property-read Collection<int, HelpingCommittee> $helpingCommitteeInstances
+ * @property-read int|null $helping_committee_instances_count
+ * @property-read Collection<int, Committee> $helpingCommittees
+ * @property-read int|null $helping_committees_count
+ * @property-read Collection<int, ActivityParticipation> $helpingParticipations
+ * @property-read int|null $helping_participations_count
+ * @property-read Collection<int, ActivityParticipation> $participation
+ * @property-read int|null $participation_count
+ * @property-read Collection<int, User> $presentUsers
+ * @property-read int|null $present_users_count
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
+ * @property-read bool|null $user_has_participation
+ * @property-read bool|null $user_has_helper_participation
+ * @property-read bool|null $user_has_backup_participation
+ * @property-read bool|null $user_has_tickets
  *
- * @method static Builder|Activity whereClosed($value)
- * @method static Builder|Activity whereClosedAccount($value)
- * @method static Builder|Activity whereComment($value)
- * @method static Builder|Activity whereCreatedAt($value)
- * @method static Builder|Activity whereDeregistrationEnd($value)
- * @method static Builder|Activity whereEventId($value)
- * @method static Builder|Activity whereId($value)
- * @method static Builder|Activity whereNoShowFee($value)
- * @method static Builder|Activity whereParticipants($value)
- * @method static Builder|Activity wherePrice($value)
- * @method static Builder|Activity whereRegistrationEnd($value)
- * @method static Builder|Activity whereRegistrationStart($value)
- * @method static Builder|Activity whereUpdatedAt($value)
- * @method static Builder|Activity whereHideParticipants($value)
- * @method static Builder|Activity newModelQuery()
- * @method static Builder|Activity newQuery()
- * @method static Builder|Activity query()
+ * @method static ActivityFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Activity newModelQuery()
+ * @method static Builder<static>|Activity newQuery()
+ * @method static Builder<static>|Activity query()
+ * @method static Builder<static>|Activity whereAttendees($value)
+ * @method static Builder<static>|Activity whereClosed($value)
+ * @method static Builder<static>|Activity whereClosedAccount($value)
+ * @method static Builder<static>|Activity whereComment($value)
+ * @method static Builder<static>|Activity whereCreatedAt($value)
+ * @method static Builder<static>|Activity whereDeregistrationEnd($value)
+ * @method static Builder<static>|Activity whereEventId($value)
+ * @method static Builder<static>|Activity whereHideParticipants($value)
+ * @method static Builder<static>|Activity whereId($value)
+ * @method static Builder<static>|Activity whereNoShowFee($value)
+ * @method static Builder<static>|Activity whereParticipants($value)
+ * @method static Builder<static>|Activity wherePrice($value)
+ * @method static Builder<static>|Activity whereRedirectUrl($value)
+ * @method static Builder<static>|Activity whereRegistrationEnd($value)
+ * @method static Builder<static>|Activity whereRegistrationStart($value)
+ * @method static Builder<static>|Activity whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Activity extends Validatable
 {
+    /** @use HasFactory<ActivityFactory>*/
     use HasFactory;
 
     protected $table = 'activities';
 
     protected $guarded = ['id'];
 
+    /** @var array|string[] */
     protected array $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',
@@ -158,7 +179,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return \Illuminate\Support\Collection The ActivityParticipations for the helping users.
+     * @return \Illuminate\Support\Collection<int, ActivityParticipation> The ActivityParticipations for the helping users.
      */
     public function helpingUsers(int $help_id): \Illuminate\Support\Collection
     {
@@ -192,7 +213,7 @@ class Activity extends Validatable
         return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
     }
 
-    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null)
+    public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
         return $this->helpingParticipations()
             ->where('user_id', $user->id)
@@ -309,5 +330,13 @@ class Activity extends Validatable
             ->where('backup', false)
             ->whereNull('deleted_at')
             ->count();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'boolean',
+            'hide_participants' => 'boolean',
+        ];
     }
 }

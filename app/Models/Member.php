@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
+use Database\Factories\MemberFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -20,50 +21,49 @@ use Override;
  *
  * @property int $id
  * @property int $user_id
- * @property User $user
- * @property string|null $proto_username
+ * @property string $proto_username
  * @property string|null $membership_form_id
- * @property string|null $card_printed_on
- * @property MembershipTypeEnum $membership_type
- * @property bool $is_primary_at_another_association
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool $is_primary_at_another_association
+ * @property int|null $until
  * @property Carbon|null $deleted_at
- * @property Carbon|null $until
+ * @property string|null $card_printed_on
+ * @property int|null $omnomcom_sound_id
+ * @property MembershipTypeEnum $membership_type
+ * @property-read UtAccount|null $UtAccount
+ * @property-read StorageEntry|null $customOmnomcomSound
  * @property-read StorageEntry|null $membershipForm
- * @property StorageEntry|null $customOmnomcomSound
- * @property UtAccount|null $UtAccount
+ * @property-read User|null $user
  *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static QueryBuilder|Member onlyTrashed()
- * @method static QueryBuilder|Member withTrashed()
- * @method static QueryBuilder|Member withoutTrashed()
- * @method static Builder|Member whereCardPrintedOn($value)
- * @method static Builder|Member whereCreatedAt($value)
- * @method static Builder|Member whereDeletedAt($value)
- * @method static Builder|Member whereId($value)
- * @method static Builder|Member whereIsDonor($value)
- * @method static Builder|Member whereIsHonorary($value)
- * @method static Builder|Member whereIsLifelong($value)
- * @method static Builder|Member whereMembershipFormId($value)
- * @method static Builder|Member wherePending($value)
- * @method static Builder|Member whereProtoUsername($value)
- * @method static Builder|Member whereUpdatedAt($value)
- * @method static Builder|Member whereUserId($value)
- * @method static Builder|Member whereIsPending($value)
- * @method static Builder|Member whereIsPet($value)
- * @method static Builder|Member newModelQuery()
- * @method static Builder|Member newQuery()
- * @method static Builder|static query()
- * @method Builder|static primary()
- * @method Builder|static type(MembershipTypeEnum $type)
+ * @method static MemberFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Member newModelQuery()
+ * @method static Builder<static>|Member newQuery()
+ * @method static Builder<static>|Member onlyTrashed()
+ * @method static Builder<static>|Member primary()
+ * @method static Builder<static>|Member query()
+ * @method static Builder<static>|Member whereCardPrintedOn($value)
+ * @method static Builder<static>|Member whereCreatedAt($value)
+ * @method static Builder<static>|Member whereDeletedAt($value)
+ * @method static Builder<static>|Member whereId($value)
+ * @method static Builder<static>|Member whereIsPrimaryAtAnotherAssociation($value)
+ * @method static Builder<static>|Member whereMembershipFormId($value)
+ * @method static Builder<static>|Member whereMembershipType($value)
+ * @method static Builder<static>|Member whereOmnomcomSoundId($value)
+ * @method static Builder<static>|Member whereProtoUsername($value)
+ * @method static Builder<static>|Member whereUntil($value)
+ * @method static Builder<static>|Member whereUpdatedAt($value)
+ * @method static Builder<static>|Member whereUserId($value)
+ * @method static Builder<static>|Member withTrashed()
+ * @method static Builder<static>|Member withoutTrashed()
  *
- * @mixin Model
+ * @mixin Eloquent
  */
 class Member extends Model
 {
+    /** @use HasFactory<MemberFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'members';
@@ -74,8 +74,10 @@ class Member extends Model
     protected function casts(): array
     {
         return [
+            'created_at' => 'datetime',
             'deleted_at' => 'datetime',
             'membership_type' => MembershipTypeEnum::class,
+            'is_primary_at_another_association' => 'boolean',
         ];
     }
 
@@ -111,18 +113,14 @@ class Member extends Model
         return $this->hasOne(UtAccount::class);
     }
 
-    /** @param Builder<$this> $query */
+    /** @param Builder<$this> $query
+     * @return Builder<$this>
+     */
     public function scopePrimary(Builder $query): Builder
     {
-        return $query->type(MembershipTypeEnum::REGULAR)
+        return $query->whereMembershipType(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)
             ->whereHas('UtAccount');
-    }
-
-    /** @param Builder<$this> $query */
-    public function scopeType(Builder $query, MembershipTypeEnum $type): Builder
-    {
-        return $query->where('membership_type', $type);
     }
 
     public static function countActiveMembers(): int
@@ -133,7 +131,7 @@ class Member extends Model
     public static function countPendingMembers(): int
     {
         return User::query()->whereHas('member', static function ($query) {
-            $query->type(MembershipTypeEnum::PENDING);
+            $query->whereMembershipType(MembershipTypeEnum::PENDING);
         })->count();
     }
 

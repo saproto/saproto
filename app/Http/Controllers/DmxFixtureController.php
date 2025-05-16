@@ -91,6 +91,9 @@ class DmxFixtureController extends Controller
         return Redirect::route('dmx.fixtures.index');
     }
 
+    /**
+     * @return array<int, int>
+     */
     public function valueApi(): array
     {
         // Get the events.

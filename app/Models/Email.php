@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
+use Database\Factories\EmailFactory;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,50 +23,55 @@ use Illuminate\Support\Facades\DB;
  * @property string $sender_name
  * @property string $sender_address
  * @property string $body
- * @property int|null $sent_to
  * @property bool $to_user
  * @property bool $to_member
+ * @property bool $to_pending
  * @property bool $to_list
  * @property bool $to_event
- * @property bool $to_active
- * @property bool $to_pending
  * @property bool $to_backup
+ * @property bool $to_active
+ * @property int|null $sent_to
+ * @property int $sent
  * @property bool $ready
- * @property bool $sent
  * @property int $time
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|StorageEntry[] $attachments
- * @property-read Collection|Event[] $events
- * @property-read Collection|EmailList[] $lists
- * @property-read Collection|User[] $recipients
+ * @property-read Collection<int, StorageEntry> $attachments
+ * @property-read int|null $attachments_count
+ * @property-read Collection<int, Event> $events
+ * @property-read int|null $events_count
+ * @property-read Collection<int, EmailList> $lists
+ * @property-read int|null $lists_count
  *
- * @method static Builder|Email whereBody($value)
- * @method static Builder|Email whereCreatedAt($value)
- * @method static Builder|Email whereDescription($value)
- * @method static Builder|Email whereId($value)
- * @method static Builder|Email whereReady($value)
- * @method static Builder|Email whereSenderAddress($value)
- * @method static Builder|Email whereSenderName($value)
- * @method static Builder|Email whereSent($value)
- * @method static Builder|Email whereSentTo($value)
- * @method static Builder|Email whereSubject($value)
- * @method static Builder|Email whereTime($value)
- * @method static Builder|Email whereToActive($value)
- * @method static Builder|Email whereToEvent($value)
- * @method static Builder|Email whereToList($value)
- * @method static Builder|Email whereToMember($value)
- * @method static Builder|Email whereToUser($value)
- * @method static Builder|Email whereUpdatedAt($value)
- * @method static Builder|Email whereToPending($value)
- * @method static Builder|Email newModelQuery()
- * @method static Builder|Email newQuery()
- * @method static Builder|Email query()
+ * @method static EmailFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Email newModelQuery()
+ * @method static Builder<static>|Email newQuery()
+ * @method static Builder<static>|Email query()
+ * @method static Builder<static>|Email whereBody($value)
+ * @method static Builder<static>|Email whereCreatedAt($value)
+ * @method static Builder<static>|Email whereDescription($value)
+ * @method static Builder<static>|Email whereId($value)
+ * @method static Builder<static>|Email whereReady($value)
+ * @method static Builder<static>|Email whereSenderAddress($value)
+ * @method static Builder<static>|Email whereSenderName($value)
+ * @method static Builder<static>|Email whereSent($value)
+ * @method static Builder<static>|Email whereSentTo($value)
+ * @method static Builder<static>|Email whereSubject($value)
+ * @method static Builder<static>|Email whereTime($value)
+ * @method static Builder<static>|Email whereToActive($value)
+ * @method static Builder<static>|Email whereToBackup($value)
+ * @method static Builder<static>|Email whereToEvent($value)
+ * @method static Builder<static>|Email whereToList($value)
+ * @method static Builder<static>|Email whereToMember($value)
+ * @method static Builder<static>|Email whereToPending($value)
+ * @method static Builder<static>|Email whereToUser($value)
+ * @method static Builder<static>|Email whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Email extends Model
 {
+    /** @use HasFactory<EmailFactory>*/
     use HasFactory;
 
     protected $table = 'emails';
@@ -132,6 +138,7 @@ class Email extends Model
         throw new Exception('Email has no destination');
     }
 
+    /** @return Collection<int, User> */
     public function recipients(): SupportCollection
     {
         if ($this->to_user) {
@@ -146,7 +153,7 @@ class Email extends Model
 
         if ($this->to_pending) {
             return User::query()->whereHas('member', static function ($q) {
-                $q->type(MembershipTypeEnum::PENDING);
+                $q->whereMembershipType(MembershipTypeEnum::PENDING);
             })->orderBy('name')->get();
         }
 
@@ -212,7 +219,7 @@ class Email extends Model
         return implode(', ', $events);
     }
 
-    public static function getListUnsubscribeFooter($user_id, $email_id): string
+    public static function getListUnsubscribeFooter(int $user_id, int $email_id): string
     {
         $footer = [];
         $lists = self::whereId($email_id)->firstOrFail()->lists;
@@ -221,5 +228,19 @@ class Email extends Model
         }
 
         return implode(', ', $footer);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'to_user' => 'boolean',
+            'to_member' => 'boolean',
+            'to_pending' => 'boolean',
+            'to_list' => 'boolean',
+            'to_event' => 'boolean',
+            'to_backup' => 'boolean',
+            'to_active' => 'boolean',
+            'ready' => 'boolean',
+        ];
     }
 }

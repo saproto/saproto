@@ -2,11 +2,14 @@
 
 namespace App\Mail;
 
+use App\Models\EmailList;
+use App\Models\Event;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 
 class Newsletter extends Mailable
@@ -15,16 +18,14 @@ class Newsletter extends Mailable
     use SerializesModels;
 
     /**
-     * @param  string  $list
-     * @param  string  $text
+     * @param  Collection<int, Event>  $events
      */
-    public function __construct(public User $user, public $list, public $text, public $events, public $image_url)
+    public function __construct(public User $user, public EmailList $list, public string $text, public Collection $events, public string $image_url)
     {
         //
     }
 
-    /** @return Newsletter */
-    public function build()
+    public function build(): Newsletter
     {
         return $this
             ->from('internal@'.Config::string('proto.emaildomain'), Config::string('proto.internal'))

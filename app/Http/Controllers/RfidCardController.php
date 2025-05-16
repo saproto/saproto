@@ -15,7 +15,10 @@ use Illuminate\View\View;
 class RfidCardController extends Controller
 {
     /**
-     * @return array This method returns raw HTML and is intended to be used via AJAX!
+     * @return array{
+     *     ok: bool,
+     *     text: string
+     * } This method returns raw HTML and is intended to be used via AJAX!
      *
      * @throws Exception
      */

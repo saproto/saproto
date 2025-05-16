@@ -131,12 +131,11 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function image($id, Request $request)
+    public function image(int $id, Request $request)
     {
         $committee = Committee::query()->find($id);
 
@@ -155,11 +154,7 @@ class CommitteeController extends Controller
     }
 
     /* Committee membership tools below. */
-
-    /**
-     * @return RedirectResponse
-     */
-    public function addMembership(Request $request)
+    public function addMembership(Request $request): RedirectResponse
     {
         User::query()->findOrFail($request->user_id);
         Committee::query()->findOrFail($request->committee_id);
@@ -193,22 +188,14 @@ class CommitteeController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function editMembershipForm($id)
+    public function editMembershipForm(int $id): View
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         return view('committee.membership-edit', ['membership' => $membership]);
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse
-     */
-    public function updateMembershipForm(Request $request, $id)
+    public function updateMembershipForm(Request $request, int $id): RedirectResponse
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $membership->role = $request->role;
@@ -236,12 +223,9 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function deleteMembership($id)
+    public function deleteMembership(int $id): RedirectResponse
     {
         /** @var CommitteeMembership $membership */
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
@@ -254,7 +238,7 @@ class CommitteeController extends Controller
         return Redirect::route('committee::edit', ['id' => $committee_id]);
     }
 
-    public function endEdition(int $committeeID, string $edition)
+    public function endEdition(int $committeeID, string $edition): RedirectResponse
     {
         $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function ($q) use ($committeeID) {
             $q->where('id', $committeeID);
@@ -268,11 +252,7 @@ class CommitteeController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param  int  $id
-     * @return RedirectResponse|View
-     */
-    public function showAnonMailForm($id)
+    public function showAnonMailForm(string $id): View|RedirectResponse
     {
         $committee = Committee::fromPublicId($id);
 
@@ -286,10 +266,9 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function sendAnonMailForm(Request $request, $id)
+    public function sendAnonMailForm(Request $request, string $id)
     {
         $committee = Committee::fromPublicId($id);
 

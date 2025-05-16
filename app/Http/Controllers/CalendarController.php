@@ -9,10 +9,20 @@ use Illuminate\Support\Facades\Config;
 class CalendarController extends Controller
 {
     /**
-     * @param  string  $start
-     * @param  string  $end
+     * @return array<int, array{
+     * title: string,
+     * place: string,
+     * start: int,
+     * end: int,
+     * type: string|null,
+     * year: mixed,
+     * study: mixed,
+     * studyShort: mixed,
+     * over: bool,
+     * current: bool
+     * }>
      */
-    public static function returnGoogleCalendarEvents(string $google_calendar_id, $start, $end): array
+    public static function returnGoogleCalendarEvents(string $google_calendar_id, string $start, string $end): array
     {
         try {
             $url = 'https://www.googleapis.com/calendar/v3/calendars/'.$google_calendar_id.'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode($start).'&timeMax='.urlencode($end).'';

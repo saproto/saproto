@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\FileController;
+use Database\Factories\StorageEntryFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,21 +27,23 @@ use Override;
  * @property Carbon|null $updated_at
  * @property string $hash
  *
- * @method static Builder|StorageEntry whereCreatedAt($value)
- * @method static Builder|StorageEntry whereFilename($value)
- * @method static Builder|StorageEntry whereHash($value)
- * @method static Builder|StorageEntry whereId($value)
- * @method static Builder|StorageEntry whereMime($value)
- * @method static Builder|StorageEntry whereOriginalFilename($value)
- * @method static Builder|StorageEntry whereUpdatedAt($value)
- * @method static Builder|StorageEntry newModelQuery()
- * @method static Builder|StorageEntry newQuery()
- * @method static Builder|StorageEntry query()
+ * @method static StorageEntryFactory factory($count = null, $state = [])
+ * @method static Builder<static>|StorageEntry newModelQuery()
+ * @method static Builder<static>|StorageEntry newQuery()
+ * @method static Builder<static>|StorageEntry query()
+ * @method static Builder<static>|StorageEntry whereCreatedAt($value)
+ * @method static Builder<static>|StorageEntry whereFilename($value)
+ * @method static Builder<static>|StorageEntry whereHash($value)
+ * @method static Builder<static>|StorageEntry whereId($value)
+ * @method static Builder<static>|StorageEntry whereMime($value)
+ * @method static Builder<static>|StorageEntry whereOriginalFilename($value)
+ * @method static Builder<static>|StorageEntry whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class StorageEntry extends Model
 {
+    /** @use HasFactory<StorageEntryFactory>*/
     use HasFactory;
 
     protected $table = 'files';
@@ -83,7 +86,7 @@ class StorageEntry extends Model
 
         $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
 
-        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
+        if (! empty($customPath)) {
             $this->filename = $customPath.$this->hash;
         }
 
@@ -102,7 +105,7 @@ class StorageEntry extends Model
         $this->mime = $mime;
         $this->original_filename = $name;
 
-        if ($customPath !== null && $customPath !== '' && $customPath !== '0') {
+        if (! empty($customPath)) {
             $this->filename = $customPath.$this->hash;
         }
 

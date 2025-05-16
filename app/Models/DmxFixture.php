@@ -15,16 +15,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $channel_end
  * @property int $follow_timetable
  *
- * @method static Builder|DmxFixture whereChannelEnd($value)
- * @method static Builder|DmxFixture whereChannelStart($value)
- * @method static Builder|DmxFixture whereFollowTimetable($value)
- * @method static Builder|DmxFixture whereId($value)
- * @method static Builder|DmxFixture whereName($value)
- * @method static Builder|DmxFixture newModelQuery()
- * @method static Builder|DmxFixture newQuery()
- * @method static Builder|DmxFixture query()
+ * @method static Builder<static>|DmxFixture newModelQuery()
+ * @method static Builder<static>|DmxFixture newQuery()
+ * @method static Builder<static>|DmxFixture query()
+ * @method static Builder<static>|DmxFixture whereChannelEnd($value)
+ * @method static Builder<static>|DmxFixture whereChannelStart($value)
+ * @method static Builder<static>|DmxFixture whereFollowTimetable($value)
+ * @method static Builder<static>|DmxFixture whereId($value)
+ * @method static Builder<static>|DmxFixture whereName($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class DmxFixture extends Model
 {
@@ -35,14 +35,14 @@ class DmxFixture extends Model
     public $timestamps = false;
 
     /**
-     * @return Collection|DmxChannel[]
+     * @return Collection<int, DmxChannel>|DmxChannel[]
      */
     public function getChannels(?string $special_func = null): Collection|array
     {
         $channels = DmxChannel::query()->where('id', '>=', $this->channel_start)
             ->where('id', '<=', $this->channel_end);
 
-        if ($special_func !== null && $special_func !== '' && $special_func !== '0') {
+        if (! empty($special_func)) {
             $channels = $channels->where('special_function', $special_func);
         }
 

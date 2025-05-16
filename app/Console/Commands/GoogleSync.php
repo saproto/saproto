@@ -95,6 +95,8 @@ class GoogleSync extends Command
     /**
      * Create Google Client for subject with given scopes.
      *
+     * @param  string[]  $scopes
+     *
      * @throws \Google\Exception
      */
     public function createClient(string $subject, array $scopes): Google_Client
@@ -330,7 +332,7 @@ class GoogleSync extends Command
         }
     }
 
-    public function createGoogleUser($protoUser): void
+    public function createGoogleUser(ProtoUser $protoUser): void
     {
         try {
             $name = explode(' ', $protoUser->name);
@@ -368,7 +370,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace groups. Pass in user to get only their groups.
      *
-     * @return Collection<GoogleGroup>
+     * @return Collection<int, GoogleGroup>
      *
      * @throws Exception
      */
@@ -396,7 +398,7 @@ class GoogleSync extends Command
     /**
      * List Google Workspace group members of a specific group
      *
-     * @return Collection<GoogleGroup>
+     * @return Collection<int, GoogleGroup>
      *
      * @throws Exception
      */
@@ -419,6 +421,8 @@ class GoogleSync extends Command
 
     /**
      * List current Google Workspace users.
+     *
+     * @return Collection<int, ProtoUser>
      *
      * @throws Exception
      */
