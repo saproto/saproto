@@ -65,7 +65,6 @@ class Photo extends Model
     protected static function booted(): void
     {
         /** @param Builder<$this> $query */
-        /** @param Builder<Photo> $query */
         static::addGlobalScope('private', function (Builder $query) {
             $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)
                 ->whereHas('album', function ($query) {

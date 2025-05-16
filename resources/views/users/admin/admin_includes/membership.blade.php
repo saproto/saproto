@@ -126,7 +126,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    {{ $user->member->created_at !== null ? $user->member->created_at->format('d-m-Y') : 'forever' }}
+                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                                 </td>
                                 <td>
                                     @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::LIFELONG)

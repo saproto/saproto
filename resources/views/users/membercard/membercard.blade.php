@@ -55,7 +55,7 @@
                 <div id="name">{{ $user->name }}</div>
                 <div class="heading">Member since</div>
                 <div>
-                    {{ $user->member->created_at->timestamp < 0 ? 'Before we kept track!' : $user->member->created_at->format('F j, Y') }}
+                    {{ $user->member->created_at->timestamp < 0 ? 'Before we kept track!' : date('F j, Y', strtotime($user->member->created_at)) }}
                 </div>
                 <div class="heading">Card validity</div>
                 <div>
