@@ -13,10 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -105,18 +107,32 @@ class Event extends Model
         ];
     }
 
+    public function getRouteKey(): string
+    {
+        return Str::slug($this->title).'-'.self::getPublicId();
+    }
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        $id = last(explode('-', $value));
+        $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
+        if(!$model || $model->getRouteKey() === $value){
+            return $model;
+        }
+
+            throw new HttpResponseException(
+            redirect()->route('event::show', $model->getRouteKey())
+        );
+    }
+
     public function getPublicId(): string
     {
         return Hashids::connection('event')->encode($this->id);
     }
 
-    public static function fromPublicId(string $public_id): Event
-    {
-        return self::query()->findOrFail(self::getIdFromPublicId($public_id));
-    }
-
     public static function getIdFromPublicId($public_id)
     {
+        if(is_int($public_id))
+            return $public_id;
         $id = Hashids::connection('event')->decode($public_id);
 
         return count($id) > 0 ? $id[0] : 0;
@@ -397,6 +413,13 @@ class Event extends Model
     protected static function boot(): void
     {
         parent::boot();
+
+
+        static::creating(function (Event $event) {
+            $event->slug = Str::slug($event->title);
+            $event->hash_id = $event::getPublicId();
+        });
+
 
         self::updating(static function ($event) {
             $event->update_sequence++;

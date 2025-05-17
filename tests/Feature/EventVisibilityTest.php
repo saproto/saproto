@@ -41,7 +41,7 @@ dataset('public events', [
 it('lets everyone see non secret events', function (User $user, bool $unimportant, Event $event) {
 
     $response = $this->actingAs($user)
-        ->get(route('event::show', ['id' => $event->getPublicId()]));
+        ->get(route('event::show', ['event' => $event]));
 
     $response->assertSee($event->title);
     $response->assertSee($event->location);
@@ -59,7 +59,7 @@ it('lets everyone see non secret events', function (User $user, bool $unimportan
 
 it('lets everyone see the right events', function (User $user, bool $canSeeEventInOverview, Event $event, string $message) {
     $response = $this->actingAs($user)
-        ->get(route('event::show', ['id' => $event->getPublicId()]));
+        ->get(route('event::show', ['event' => $event]));
 
     $response->assertStatus(200);
     $response->assertSee($event->title);

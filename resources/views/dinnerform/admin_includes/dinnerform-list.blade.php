@@ -33,7 +33,7 @@
                             <td>
                                 @isset($dinnerform->event)
                                     <a
-                                        href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}"
+                                        href="{{ route('event::show', ['event' => $dinnerform->event]) }}"
                                     >
                                         {{ $dinnerform->event->title }}
                                     </a>

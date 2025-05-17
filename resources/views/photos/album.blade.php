@@ -14,7 +14,7 @@
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
-            href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
+            href="{{ route('event::show', ['event' => $album->event]) }}"
         >
             These photos were taken at the event {{ $album->event->title }},
             click here for more info.

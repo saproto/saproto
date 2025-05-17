@@ -20,7 +20,7 @@
                 @foreach ($events as $event)
                     <br />
                     <a
-                        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+                        href="{{ route('event::show', ['event' => $event]) }}"
                     >
                         {{ $event->title }}
                     </a>

@@ -87,7 +87,7 @@
 
                             <p>
                                 <a
-                                    href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+                                    href="{{ route('event::show', ['event' => $event]) }}"
                                 >
                                     Learn more! >>
                                 </a>

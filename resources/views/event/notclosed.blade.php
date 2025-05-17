@@ -44,7 +44,7 @@
                                     <td>
                                         @if ($activity->event)
                                             <a
-                                                href="{{ route('event::show', ['id' => $activity->event->getPublicId()]) }}"
+                                                href="{{ route('event::show', ['event' => $activity->event]) }}"
                                             >
                                                 {{ $activity->event->title }}
                                             </a>

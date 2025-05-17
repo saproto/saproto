@@ -12,7 +12,7 @@
         ]
     )
     <a
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['event' => $event]) }}"
         class="btn btn-default float-end"
     >
         Back to event
