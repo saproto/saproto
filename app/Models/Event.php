@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -125,17 +126,29 @@ class Event extends Model
         ];
     }
 
+    public function getRouteKey(): string
+    {
+        return Str::slug($this->title).'-'.self::getPublicId();
+    }
+    public function resolveRouteBinding($value, $field = null): ?Model
+    {
+        $id = last(explode('-', $value));
+        $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
+        if(!$model || $model->getRouteKey() === $value){
+            return $model;
+        }
+
+            throw new HttpResponseException(
+            redirect()->route('event::show', $model->getRouteKey())
+        );
+    }
+
     public function getPublicId(): string
     {
         return Hashids::connection('event')->encode($this->id);
     }
 
-    public static function fromPublicId(string $public_id): Event
-    {
-        return self::query()->findOrFail(self::getIdFromPublicId($public_id));
-    }
-
-    public static function getIdFromPublicId(string $public_id): int
+    public static function getIdFromPublicId($public_id)
     {
         $id = Hashids::connection('event')->decode($public_id);
 

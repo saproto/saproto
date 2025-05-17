@@ -5,7 +5,7 @@
 @if ($event->mayViewEvent(Auth::user()))
     <a
         class="card mb-3 leftborder leftborder-info text-decoration-none"
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['event' => $event]) }}"
     >
         <div
             class="card-body event text-start {{ $event->image ? 'bg-img' : 'no-img' }}"

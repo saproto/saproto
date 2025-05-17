@@ -37,7 +37,7 @@
 
 <div class="card mb-3">
     <a
-        href="{{ route('event::index', ['id' => $event->id]) }}"
+        href="{{ route('event::index') }}"
         class="btn btn-default"
     >
         Back to calendar
@@ -141,7 +141,7 @@
 
         @if (! Auth::check() && ! isset($event->activity))
             <a
-                href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                href="{{ route('event::login', ['id' => $event]) }}"
                 class="list-group-item bg-info text-white text-center"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>

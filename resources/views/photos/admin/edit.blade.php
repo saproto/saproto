@@ -8,7 +8,7 @@
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
-            href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
+            href="{{ route('event::show', ['event' => $album->event]) }}"
         >
             This album is linked to the event {{ $album->event->title }}, click
             here to go to the event.

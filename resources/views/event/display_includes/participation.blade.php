@@ -234,7 +234,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                            href="{{ route('event::login', ['id' => $event]) }}"
                         >
                             log-in
                         </a>

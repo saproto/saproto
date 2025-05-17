@@ -95,9 +95,9 @@ class EventController extends Controller
     /**
      * @throws ApiException
      */
-    public function show(string $id): View
+    public function show(Event $event)
     {
-        $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
+        $event = Event::getEventBlockQuery()->where('id', $event->id)
             ->with(
                 ['tickets.product',
                     'activity.users.photo',
@@ -158,7 +158,7 @@ class EventController extends Controller
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
 
-        return Redirect::route('event::show', ['id' => $event->getPublicId()]);
+        return Redirect::route('event::show', ['event' => $event]);
     }
 
     /**
@@ -295,7 +295,7 @@ class EventController extends Controller
      */
     public function forceLogin(int $id)
     {
-        return Redirect::route('event::show', ['id' => $id]);
+        return Redirect::route('event::show', ['event' => Event::query()->findOrFail($id)]);
     }
 
     /**
@@ -612,7 +612,7 @@ CALSCALE:GREGORIAN
                 sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
                 sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
-                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
+                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',

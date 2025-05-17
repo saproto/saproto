@@ -543,7 +543,7 @@ Route::middleware('forcedomain')->group(function () {
             // Force login for event
             Route::get('{id}/login', 'forceLogin')->middleware(['auth'])->name('login');
             // Show event
-            Route::get('{id}', 'show')->name('show');
+            Route::get('{event}', 'show')->name('show');
         });
 
         // Event categories (Board only)

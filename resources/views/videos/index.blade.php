@@ -82,7 +82,7 @@
                                 <td>
                                     @if ($video->event)
                                         <a
-                                            href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
+                                            href="{{ route('event::show', ['event' => $video->event]) }}"
                                         >
                                             {{ sprintf('%s (%s)', $video->event->title, date('d-m-Y', $video->event->start)) }}
                                         </a>
