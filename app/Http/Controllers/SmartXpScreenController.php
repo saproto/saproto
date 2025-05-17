@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\CarbonInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -43,8 +44,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.timetable-id'),
-            date('c', strtotime('today')),
-            date('c', strtotime('tomorrow'))
+            Carbon::today()->toDateTimeString(),
+            Carbon::tomorrow()->toDateTimeString()
         );
     }
 
@@ -66,8 +67,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.protopeners-id'),
-            date('c', strtotime('today')),
-            date('c', strtotime('tomorrow'))
+            Carbon::today()->toDateTimeString(),
+            Carbon::tomorrow()->toDateTimeString()
         );
     }
 
@@ -94,7 +95,7 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
 
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::now()->previous(CarbonInterface::MONDAY)->toDateTimeString()).'&timeMax='.urlencode(Carbon::now()->next(CarbonInterface::MONDAY)->toDateTimeString());
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
@@ -116,18 +117,18 @@ class SmartXpScreenController extends Controller
                 $type = str_replace($key, $value, $type);
             }
 
-            $current = strtotime($start_time) < Carbon::now()->getTimestamp() && strtotime($end_time) > Carbon::now()->getTimestamp();
+            $current = Carbon::parse($start_time)->timestamp < Carbon::now()->timestamp && Carbon::parse($end_time)->timestamp > Carbon::now()->timestamp;
             if ($current) {
                 $occupied = true;
             }
 
-            $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))));
+            $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], Carbon::parse($start_time)->format('l')));
             $roster[$day][] = (object) [
                 'title' => $name,
-                'start' => strtotime($start_time),
-                'end' => strtotime($end_time),
+                'start' => Carbon::parse($start_time)->timestamp,
+                'end' => Carbon::parse($end_time)->timestamp,
                 'type' => $type[1] ?? 'Other',
-                'over' => strtotime($end_time) < Carbon::now()->getTimestamp(),
+                'over' => Carbon::parse($end_time)->timestamp < Carbon::now()->timestamp,
                 'current' => $current,
             ];
         }

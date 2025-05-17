@@ -8,6 +8,7 @@ use App\Models\MollieTransaction;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -132,13 +133,14 @@ class MollieController extends Controller
      */
     public function monthly(string $month)
     {
-        if (strtotime($month) === false) {
+        try {
+            $month = Carbon::parse($month);
+        } catch (InvalidFormatException) {
             Session::flash('flash_message', 'Invalid date: '.$month);
 
             return Redirect::back();
         }
 
-        $month = Carbon::parse($month);
         $start = $month->copy()->startOfMonth();
         if ($start->isWeekend()) {
             $start->nextWeekday();

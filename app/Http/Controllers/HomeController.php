@@ -85,10 +85,10 @@ class HomeController extends Controller
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([
-                ['end', '>=', Carbon::now()->format('U')],
+                ['end', '>=', Carbon::now()->timestamp],
                 ['secret', false],
                 [static function ($query) {
-                    $query->where('publication', '<', Carbon::now()->format('U'))
+                    $query->where('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 }],
             ])

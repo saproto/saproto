@@ -41,19 +41,19 @@ class DmxOverride extends Model
     /** @return Collection<int, $this> */
     public static function getActiveSorted(): Collection
     {
-        return self::query()->where('start', '<', Carbon::now()->format('U'))->where('end', '>', Carbon::now()->format('U'))->get()->sortBy('window_size');
+        return self::query()->where('start', '<', Carbon::now()->timestamp)->where('end', '>', Carbon::now()->timestamp)->get()->sortBy('window_size');
     }
 
     /** @return Collection<int, $this> */
     public static function getUpcomingSorted(): Collection
     {
-        return self::query()->where('start', '>', Carbon::now()->format('U'))->get()->sortByDesc('start');
+        return self::query()->where('start', '>', Carbon::now()->timestamp)->get()->sortByDesc('start');
     }
 
     /** @return Collection<int, $this> */
     public static function getPastSorted(): Collection
     {
-        return self::query()->where('end', '<', Carbon::now()->format('U'))->get()->sortByDesc('start');
+        return self::query()->where('end', '<', Carbon::now()->timestamp)->get()->sortByDesc('start');
     }
 
     /** @return array<int, int> */
@@ -84,12 +84,12 @@ class DmxOverride extends Model
 
     public function active(): bool
     {
-        return $this->start < Carbon::now()->format('U') && Carbon::now()->format('U') < $this->end;
+        return $this->start < Carbon::now()->timestamp && Carbon::now()->timestamp < $this->end;
     }
 
     public function justOver(): bool
     {
-        return Carbon::now()->format('U') > $this->end && Carbon::now()->format('U') < $this->end. 600;
+        return Carbon::now()->timestamp > $this->end && Carbon::now()->timestamp < $this->end. 600;
     }
 
     /** @return string[] */

@@ -110,7 +110,7 @@ class Ticket extends Model
 
     public function isOnSale(): bool
     {
-        return Carbon::now()->format('U') > $this->available_from && Carbon::now()->format('U') < $this->available_to;
+        return Carbon::now()->timestamp > $this->available_from && Carbon::now()->timestamp < $this->available_to;
     }
 
     public function isAvailable(User $user): bool

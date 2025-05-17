@@ -106,6 +106,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->getTimestamp())->where('end_time', '>=', Carbon::now()->getTimestamp())->exists());
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->timestamp)->where('end_time', '>=', Carbon::now()->timestamp)->exists());
     }
 }

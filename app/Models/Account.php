@@ -62,8 +62,8 @@ class Account extends Model
             )
             ->groupby('orderlines.product_id')
             ->where('accounts.id', '=', $this->id)
-            ->where('orderlines.created_at', '>=', Carbon::parse(strval($start))->format('Y-m-d H:i:s'))
-            ->where('orderlines.created_at', '<', Carbon::parse(strval($end))->format('Y-m-d H:i:s'))
+            ->where('orderlines.created_at', '>=', Carbon::parse(strval($start))->toDateTimeString())
+            ->where('orderlines.created_at', '<', Carbon::parse(strval($end))->toDateTimeString())
             ->get();
     }
 }
