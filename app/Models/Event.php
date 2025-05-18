@@ -109,8 +109,7 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
-    protected $with = ['category', 'activity'];
-
+    protected $with = ['category'];
     protected $appends = ['is_future', 'formatted_date'];
 
     #[Override]
@@ -126,19 +125,22 @@ class Event extends Model
         ];
     }
 
+    #[Override]
     public function getRouteKey(): string
     {
         return Str::slug($this->title).'-'.self::getPublicId();
     }
+
+    #[Override]
     public function resolveRouteBinding($value, $field = null): ?Model
     {
         $id = last(explode('-', $value));
         $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
-        if(!$model || $model->getRouteKey() === $value){
+        if (! $model || $model->getRouteKey() === $value) {
             return $model;
         }
 
-            throw new HttpResponseException(
+        throw new HttpResponseException(
             redirect()->route('event::show', $model->getRouteKey())
         );
     }
@@ -192,22 +194,27 @@ class Event extends Model
             ->orderBy('start')
             ->with('image')
             ->with('activity', static function ($e) use ($user) {
-                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) use ($user) {
+                $e->with('helpingParticipations', function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
-                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) use ($user) {
+                })
+                    ->with('participation', function ($q) use ($user) {
+                        $q->where('user_id', $user?->id)
+                            ->whereNull('committees_activities_id');
+                    })
+                    ->withCount([
+                            'users',
+                        ]);
+            })
+            ->with('committee', static function ($q) use ($user) {
+                $q->with('users', function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
-                }, 'participation as user_has_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id)
-                        ->whereNull('committees_activities_id');
-                },
-                ])->withCount([
-                    'users',
-                ]);
-            })->withExists(['tickets as user_has_tickets' => static function ($q) use ($user) {
+                });
+            })
+            ->with('tickets', function ($q) use ($user) {
                 $q->whereHas('purchases', static function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 });
-            }]);
+            });
     }
 
     public function isPublished(): bool
@@ -282,12 +289,9 @@ class Event extends Model
     /** @return Collection<int, TicketPurchase> */
     public function getTicketPurchasesFor(User $user): Collection
     {
-        return TicketPurchase::query()
-            ->where('user_id', $user->id)
-            ->whereHas('ticket', function ($q) {
-                $q->where('event_id', $this->id);
-            })
-            ->get();
+        return $this->tickets->filter(static function ($ticket) use ($user) {
+            $ticket->user_id === $user->id;
+        });
     }
 
     public function current(): bool
@@ -314,7 +318,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-        );
+            );
     }
 
     /**
@@ -350,17 +354,7 @@ class Event extends Model
             return false;
         }
 
-        $eroHelping = HelpingCommittee::query()
-            ->where('activity_id', $this->activity->id)
-            ->where('committee_id', Config::integer('proto.committee.ero'))->first();
-        if ($eroHelping) {
-            return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
-        }
-
-        return false;
+        return $this->activity?->isEro($user);
     }
 
     /**
@@ -368,7 +362,9 @@ class Event extends Model
      */
     public function hasBoughtTickets(User $user): bool
     {
-        return $this->getTicketPurchasesFor($user)->count() > 0;
+        return $this->tickets?->first(static function ($ticket) use ($user) {
+            $ticket->user_id === $user->id;
+        }) !== null;
     }
 
     /** @return Collection<int, User> */

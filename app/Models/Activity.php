@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Config;
 
 /**
  * Activity Model.
@@ -189,12 +190,11 @@ class Activity extends Validatable
     /**
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
+    public function getParticipation(User $user): ?ActivityParticipation
     {
-        return ActivityParticipation::query()->where('activity_id', $this->id)
-            ->where('user_id', $user->id)
-            ->whereNull('committees_activities_id')
-            ->first();
+        return $this->participation->filter(static function ($p) use ($user) {
+            $p->user_id === $user->id;
+        })->first();
     }
 
     /**
@@ -215,7 +215,7 @@ class Activity extends Validatable
 
     public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
-        return $this->helpingParticipations()
+        return $this->helpingParticipations
             ->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)
             ->first();
@@ -226,7 +226,7 @@ class Activity extends Validatable
      */
     public function isParticipating(User $user): bool
     {
-        return $this->getParticipation($user) instanceof ActivityParticipation;
+        return $this->participation->first(fn ($p) => $p->user_id === $user->id)!==null;
     }
 
     /**
@@ -235,10 +235,13 @@ class Activity extends Validatable
     public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
         if ($h instanceof HelpingCommittee) {
-            return $this->getHelperParticipation($user, $h) instanceof ActivityParticipation;
+            return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id && $h->id === $p->committees_activities_id)!==null;
         }
+        return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id)!==null;
+    }
 
-        return ActivityParticipation::query()->where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
+    public function isEro(User $user) : bool {
+        return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero'))!==null;
     }
 
     /**

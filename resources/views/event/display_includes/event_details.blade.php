@@ -36,10 +36,7 @@
 @endif
 
 <div class="card mb-3">
-    <a
-        href="{{ route('event::index') }}"
-        class="btn btn-default"
-    >
+    <a href="{{ route('event::index') }}" class="btn btn-default">
         Back to calendar
     </a>
 </div>

@@ -97,16 +97,16 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        $event = Event::getEventBlockQuery()->where('id', $event->id)
-            ->with(
-                ['tickets.product',
-                    'activity.users.photo',
-                    'activity.backupUsers.photo',
-                    'activity.helpingCommitteeInstances.committee',
-                    'activity.helpingCommitteeInstances.users.photo',
-                    'videos',
-                    'albums'])
-            ->firstOrFail();
+        $event->loadMissing([
+            'committee',
+            'tickets.product',
+            'activity.users.photo',
+            'activity.backupUsers.photo',
+            'activity.helpingCommitteeInstances.committee',
+            'activity.helpingCommitteeInstances.users.photo',
+            'videos',
+            'albums',
+        ]);
 
         $methods = [];
         if (Config::boolean('omnomcom.mollie.use_fees')) {
@@ -439,12 +439,14 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->user_has_participation &&
-                ! $event->user_has_helper_participation &&
+                ! $event->activity->isParticipating($user) &&
+                ! $event->activity->isHelping($user) &&
                 ! $event->isOrganising($user)
             ))) {
                 continue;
             }
+
+            $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
 
             $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
@@ -477,15 +479,15 @@ class EventController extends Controller
                 'has_signup' => $event->activity !== null,
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && $event->user_has_participation,
-                'user_signedup_backup' => $user && $event->user_has_backup_participation,
-                'user_signedup_id' => ($user && $event->user_has_participation ? $event->activity?->getParticipation($user)->id : null),
+                'user_signedup' => $user && $userParticipation !== null,
+                'user_signedup_backup' => $user && $userParticipation->backup,
+                'user_signedup_id' => $userParticipation->id,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
                 'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
                 'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->user_has_helper_participation : null),
+                'is_helping' => ($user && $event->activity ? $event->activity?->isHelping($user) : null),
                 'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
                 'backupParticipants' => $backupParticipants,
             ];
@@ -569,7 +571,8 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->activity?->user_has_tickets || $event->activity?->user_has_helper_participation || $event->activity?->user_has_participation)) {
+            $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user) || $userParticipation !== null)) {
                 continue;
             }
 
@@ -588,6 +591,7 @@ CALSCALE:GREGORIAN
             $status = null;
 
             if ($user) {
+                $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
@@ -595,10 +599,10 @@ CALSCALE:GREGORIAN
                     if ($event->activity->user_has_helper_participation) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->user_has_backup_participation) {
+                    } elseif ($userParticipation?->backup) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($event->activity->user_has_participation || $event->user_has_tickets) {
+                    } elseif ($userParticipation !== null || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }
