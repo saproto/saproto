@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 use Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse as HttpFoundationRedirectResponse;
 
@@ -51,7 +51,7 @@ class SurfConextController extends Controller
     /**
      * Unlink the surfconext account from the user
      */
-    public function unlinkAccount()
+    public function unlinkAccount(): RedirectResponse
     {
         $user = Auth::user();
 
@@ -91,8 +91,10 @@ class SurfConextController extends Controller
     /**
      * Handle the callback from surfconext
      * This route must be excluded from CSRF protection
+     *
+     * @throws Exception
      */
-    public function callback()
+    public function callback(): RedirectResponse
     {
         // Attributes: uid, email, last_name, first_name, organization
         /** @phpstan-ignore-next-line  */

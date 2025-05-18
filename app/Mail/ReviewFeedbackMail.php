@@ -2,10 +2,12 @@
 
 namespace App\Mail;
 
+use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
 class ReviewFeedbackMail extends Mailable
 {
@@ -15,16 +17,17 @@ class ReviewFeedbackMail extends Mailable
     /**
      * Create a new message instance.
      *
+     * @param  Collection<int, Feedback>  $feedback
      * @return void
      */
-    public function __construct(public FeedbackCategory $category, public $feedback) {}
+    public function __construct(public FeedbackCategory $category, public Collection $feedback) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->to($this->category->reviewer->email)

@@ -15,14 +15,14 @@ class ActivitySubscribedTo extends Mailable
     /**
      * @var array<'help'|'id'|'name'|'title', mixed>
      */
-    public $activity;
+    public array $activity;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(ActivityParticipation $participation, $help)
+    public function __construct(ActivityParticipation $participation, ?string $help)
     {
         $this->activity = [
             'id' => $participation->activity->event->getPublicId(),
@@ -37,7 +37,7 @@ class ActivitySubscribedTo extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')

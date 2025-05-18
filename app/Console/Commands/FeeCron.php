@@ -118,7 +118,7 @@ class FeeCron extends Command
                 $charged->count++;
 
                 $product = $feeProducts[$fee_type];
-                /**@phpstan-ignore-next-line */
+                /** @phpstan-ignore-next-line  */
                 if (! $product) {
                     $this->error('No product found for user '.$user->id);
 

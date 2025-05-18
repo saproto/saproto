@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
@@ -9,15 +11,35 @@ use Illuminate\Support\Carbon;
 /**
  * Class WallstreetDrink.
  *
+ * @property int $id
  * @property int $end_time
  * @property int $start_time
- * @property string $name
- * @property int $id
- * @property float $minimum_price
- * @property float $price_decrease
  * @property float $price_increase
+ * @property float $price_decrease
+ * @property float $minimum_price
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $random_events_chance
- **/
+ * @property-read Collection<int, WallstreetEvent> $events
+ * @property-read int|null $events_count
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
+ *
+ * @method static Builder<static>|WallstreetDrink newModelQuery()
+ * @method static Builder<static>|WallstreetDrink newQuery()
+ * @method static Builder<static>|WallstreetDrink query()
+ * @method static Builder<static>|WallstreetDrink whereCreatedAt($value)
+ * @method static Builder<static>|WallstreetDrink whereEndTime($value)
+ * @method static Builder<static>|WallstreetDrink whereId($value)
+ * @method static Builder<static>|WallstreetDrink whereMinimumPrice($value)
+ * @method static Builder<static>|WallstreetDrink wherePriceDecrease($value)
+ * @method static Builder<static>|WallstreetDrink wherePriceIncrease($value)
+ * @method static Builder<static>|WallstreetDrink whereRandomEventsChance($value)
+ * @method static Builder<static>|WallstreetDrink whereStartTime($value)
+ * @method static Builder<static>|WallstreetDrink whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
 class WallstreetDrink extends Model
 {
     protected $table = 'wallstreet_drink';
@@ -37,7 +59,10 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function orders()
+    /**
+     * @return Builder<OrderLine>
+     */
+    public function orders(): Builder
     {
         $productIDs = $this->products()->pluck('id');
 
@@ -57,7 +82,7 @@ class WallstreetDrink extends Model
         return $this->belongsToMany(WallstreetEvent::class, 'wallstreet_drink_event', 'wallstreet_drink_id', 'wallstreet_drink_events_id')->withPivot('id')->withTimestamps();
     }
 
-    public function loss()
+    public function loss(): mixed
     {
         return $this->orders()
             ->selectRaw('(original_unit_price*units)-total_price AS loss')

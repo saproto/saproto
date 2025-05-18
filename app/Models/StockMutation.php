@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -22,22 +21,22 @@ use Illuminate\Support\Carbon;
  * @property-read Product|null $product
  * @property-read User|null $user
  *
- * @method static Builder|StockMutation newModelQuery()
- * @method static Builder|StockMutation newQuery()
- * @method static Builder|StockMutation query()
- * @method static Builder|StockMutation whereAfter($value)
- * @method static Builder|StockMutation whereBefore($value)
- * @method static Builder|StockMutation whereCreatedAt($value)
- * @method static Builder|StockMutation whereId($value)
- * @method static Builder|StockMutation whereIsBulk($value)
- * @method static Builder|StockMutation whereProductId($value)
- * @method static Builder|StockMutation whereUpdatedAt($value)
- * @method static Builder|StockMutation whereUserId($value)
+ * @method static Builder<static>|StockMutation newModelQuery()
+ * @method static Builder<static>|StockMutation newQuery()
+ * @method static Builder<static>|StockMutation query()
+ * @method static Builder<static>|StockMutation whereAfter($value)
+ * @method static Builder<static>|StockMutation whereBefore($value)
+ * @method static Builder<static>|StockMutation whereCreatedAt($value)
+ * @method static Builder<static>|StockMutation whereId($value)
+ * @method static Builder<static>|StockMutation whereIsBulk($value)
+ * @method static Builder<static>|StockMutation whereProductId($value)
+ * @method static Builder<static>|StockMutation whereUpdatedAt($value)
+ * @method static Builder<static>|StockMutation whereUserId($value)
+ *
+ * @mixin \Eloquent
  */
 class StockMutation extends Model
 {
-    use HasFactory;
-
     protected $table = 'stock_mutations';
 
     protected $fillable = ['before', 'after', 'is_bulk'];

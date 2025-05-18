@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
-use Illuminate\Http\Request;
 use Override;
+use Symfony\Component\HttpFoundation\Request as RequestAlias;
 
 class TrustProxies extends Middleware
 {
@@ -13,16 +13,18 @@ class TrustProxies extends Middleware
      *
      * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_FOR |
-        Request::HEADER_X_FORWARDED_HOST |
-        Request::HEADER_X_FORWARDED_PORT |
-        Request::HEADER_X_FORWARDED_PROTO |
-        Request::HEADER_X_FORWARDED_PREFIX |
-        Request::HEADER_X_FORWARDED_AWS_ELB;
+    protected $headers = RequestAlias::HEADER_X_FORWARDED_FOR |
+        RequestAlias::HEADER_X_FORWARDED_HOST |
+        RequestAlias::HEADER_X_FORWARDED_PORT |
+        RequestAlias::HEADER_X_FORWARDED_PROTO |
+        RequestAlias::HEADER_X_FORWARDED_PREFIX |
+        RequestAlias::HEADER_X_FORWARDED_AWS_ELB;
 
     /**
      * Override the laravel's trustproxies function to return the trusted proxies
      * in order to load the proxies from the config file.
+     *
+     * @return string[]|string|null
      */
     #[Override]
     protected function proxies(): array|string|null

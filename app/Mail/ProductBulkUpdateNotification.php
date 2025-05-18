@@ -14,26 +14,18 @@ class ProductBulkUpdateNotification extends Mailable
     use SerializesModels;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, public $log)
-    {
-        $this->user = $user;
-    }
+    public function __construct(public User $user, public string $log) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->to('omnomcom@'.Config::string('proto.emaildomain'), 'OmNomCom Committee')

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -19,39 +19,41 @@ use Illuminate\Support\Carbon;
  * @property string $title
  * @property string $slug
  * @property string $content
- * @property int|null $featured_image_id
- * @property bool $is_member_only
- * @property bool $show_attachments
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $deleted_at
+ * @property bool $is_member_only
+ * @property Carbon|null $deleted_at
+ * @property int|null $featured_image_id
+ * @property bool $show_attachments
  * @property-read StorageEntry|null $featuredImage
- * @property-read Collection|StorageEntry[] $files
+ * @property-read Collection<int, StorageEntry> $files
+ * @property-read int|null $files_count
  *
- * @method static bool|null forceDelete()
- * @method static bool|null restore()
- * @method static QueryBuilder|Page onlyTrashed()
- * @method static QueryBuilder|Page withTrashed()
- * @method static QueryBuilder|Page withoutTrashed()
- * @method static Builder|Page whereContent($value)
- * @method static Builder|Page whereCreatedAt($value)
- * @method static Builder|Page whereDeletedAt($value)
- * @method static Builder|Page whereFeaturedImageId($value)
- * @method static Builder|Page whereId($value)
- * @method static Builder|Page whereIsMemberOnly($value)
- * @method static Builder|Page whereShowAttachments($value)
- * @method static Builder|Page whereSlug($value)
- * @method static Builder|Page whereTitle($value)
- * @method static Builder|Page whereUpdatedAt($value)
- * @method static Builder|Page newModelQuery()
- * @method static Builder|Page newQuery()
- * @method static Builder|Page query()
+ * @method static PageFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Page newModelQuery()
+ * @method static Builder<static>|Page newQuery()
+ * @method static Builder<static>|Page onlyTrashed()
+ * @method static Builder<static>|Page query()
+ * @method static Builder<static>|Page whereContent($value)
+ * @method static Builder<static>|Page whereCreatedAt($value)
+ * @method static Builder<static>|Page whereDeletedAt($value)
+ * @method static Builder<static>|Page whereFeaturedImageId($value)
+ * @method static Builder<static>|Page whereId($value)
+ * @method static Builder<static>|Page whereIsMemberOnly($value)
+ * @method static Builder<static>|Page whereShowAttachments($value)
+ * @method static Builder<static>|Page whereSlug($value)
+ * @method static Builder<static>|Page whereTitle($value)
+ * @method static Builder<static>|Page whereUpdatedAt($value)
+ * @method static Builder<static>|Page withTrashed()
+ * @method static Builder<static>|Page withoutTrashed()
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Page extends Model
 {
+    /** @use HasFactory<PageFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'pages';
@@ -79,5 +81,13 @@ class Page extends Model
     public function getUrl(): string
     {
         return route('page::show', $this->slug);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_member_only' => 'boolean',
+            'show_attachments' => 'boolean',
+        ];
     }
 }

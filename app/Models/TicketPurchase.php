@@ -15,29 +15,28 @@ use Illuminate\Support\Carbon;
  * @property int $orderline_id
  * @property int $user_id
  * @property string $barcode
- * @property bool $payment_complete
  * @property string|null $scanned
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read mixed $api_attributes
- * @property-read OrderLine $orderline
- * @property-read Ticket $ticket
- * @property-read User $user
+ * @property bool $payment_complete
+ * @property-read OrderLine|null $orderline
+ * @property-read Ticket|null $ticket
+ * @property-read User|null $user
  *
- * @method static Builder|TicketPurchase whereBarcode($value)
- * @method static Builder|TicketPurchase whereCreatedAt($value)
- * @method static Builder|TicketPurchase whereId($value)
- * @method static Builder|TicketPurchase whereOrderlineId($value)
- * @method static Builder|TicketPurchase wherePaymentComplete($value)
- * @method static Builder|TicketPurchase whereScanned($value)
- * @method static Builder|TicketPurchase whereTicketId($value)
- * @method static Builder|TicketPurchase whereUpdatedAt($value)
- * @method static Builder|TicketPurchase whereUserId($value)
- * @method static Builder|TicketPurchase newModelQuery()
- * @method static Builder|TicketPurchase newQuery()
- * @method static Builder|TicketPurchase query()
+ * @method static Builder<static>|TicketPurchase newModelQuery()
+ * @method static Builder<static>|TicketPurchase newQuery()
+ * @method static Builder<static>|TicketPurchase query()
+ * @method static Builder<static>|TicketPurchase whereBarcode($value)
+ * @method static Builder<static>|TicketPurchase whereCreatedAt($value)
+ * @method static Builder<static>|TicketPurchase whereId($value)
+ * @method static Builder<static>|TicketPurchase whereOrderlineId($value)
+ * @method static Builder<static>|TicketPurchase wherePaymentComplete($value)
+ * @method static Builder<static>|TicketPurchase whereScanned($value)
+ * @method static Builder<static>|TicketPurchase whereTicketId($value)
+ * @method static Builder<static>|TicketPurchase whereUpdatedAt($value)
+ * @method static Builder<static>|TicketPurchase whereUserId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class TicketPurchase extends Model
 {
@@ -75,5 +74,12 @@ class TicketPurchase extends Model
             (! $this->ticket->is_prepaid) ||
             ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
             ($this->orderline->molliePayment?->translatedStatus() == 'paid');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'payment_complete' => 'boolean',
+        ];
     }
 }
