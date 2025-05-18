@@ -192,9 +192,7 @@ class Activity extends Validatable
      */
     public function getParticipation(User $user): ?ActivityParticipation
     {
-        return $this->participation->filter(static function ($p) use ($user) {
-            $p->user_id === $user->id;
-        })->first();
+        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
     }
 
     /**
@@ -226,7 +224,7 @@ class Activity extends Validatable
      */
     public function isParticipating(User $user): bool
     {
-        return $this->participation->first(fn ($p) => $p->user_id === $user->id)!==null;
+        return $this->participation->first(fn ($p): bool => $p->user_id === $user->id) !== null;
     }
 
     /**
@@ -235,13 +233,15 @@ class Activity extends Validatable
     public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
         if ($h instanceof HelpingCommittee) {
-            return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id && $h->id === $p->committees_activities_id)!==null;
+            return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id && $h->id === $p->committees_activities_id) !== null;
         }
-        return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id)!==null;
+
+        return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id) !== null;
     }
 
-    public function isEro(User $user) : bool {
-        return $this->helpingParticipations->first(fn ($p)=> $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero'))!==null;
+    public function isEro(User $user): bool
+    {
+        return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
     }
 
     /**

@@ -217,7 +217,7 @@ class MollieController extends Controller
 
             Session::flash('flash_message', $flash_message);
 
-            return Redirect::route('event::show', ['event' => Event::query()->findOrFail($event_id)]);
+            return Redirect::route('event::show', ['event' => Event::getPublicId($event_id)]);
         }
 
         return Redirect::route('omnomcom::orders::index');

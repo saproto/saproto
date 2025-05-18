@@ -164,10 +164,8 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(Event $event)
     {
-        $event = Event::query()->findOrFail($id);
-
         return view('event.edit', ['event' => $event]);
     }
 
@@ -176,10 +174,8 @@ class EventController extends Controller
      *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, int $id)
+    public function update(StoreEventRequest $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -272,11 +268,8 @@ class EventController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
-
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
 
@@ -293,18 +286,17 @@ class EventController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function forceLogin(int $id)
+    public function forceLogin(Event $event)
     {
-        return Redirect::route('event::show', ['event' => Event::query()->findOrFail($id)]);
+        return Redirect::route('event::show', ['event' => $event]);
     }
 
     /**
      * @return RedirectResponse|View
      */
-    public function admin(int $id)
+    public function admin(Event $event)
     {
-        $event = Event::query()
-            ->with('tickets.purchases.user', 'tickets.purchases.orderline')->findOrFail($id);
+        $event->load('tickets.purchases.user', 'tickets.purchases.orderline');
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -318,9 +310,8 @@ class EventController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function scan(int $id)
+    public function scan(Event $event)
     {
-        $event = Event::query()->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -388,10 +379,8 @@ class EventController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function linkAlbum(Request $request, int $event)
+    public function linkAlbum(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($event);
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($request->album_id);
 

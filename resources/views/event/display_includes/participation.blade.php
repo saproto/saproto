@@ -234,7 +234,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route('event::login', ['id' => $event]) }}"
+                            href="{{ route('event::login', ['event' => $event]) }}"
                         >
                             log-in
                         </a>

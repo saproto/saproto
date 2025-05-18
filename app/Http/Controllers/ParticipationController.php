@@ -44,7 +44,7 @@ class ParticipationController extends Controller
             return Redirect::back();
         }
 
-        abort_unless($event->activity->getParticipation(Auth::user()) === null, 403, 'You are already subscribed for '.$event->title.'.');
+        abort_if($event->activity->getParticipation(Auth::user()) !== null, 403, 'You are already subscribed for '.$event->title.'.');
         abort_unless($event->activity->canSubscribeBackup(), 403, 'You cannot subscribe for '.$event->title.' at this time.');
 
         if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {

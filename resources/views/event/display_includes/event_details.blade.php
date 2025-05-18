@@ -17,7 +17,7 @@
     <div class="row align-content-center mb-3">
         @if ($event->isEventAdmin(Auth::user()))
             <a
-                href="{{ route('event::admin', ['id' => $event->id]) }}"
+                href="{{ route('event::admin', ['event' => $event]) }}"
                 class="btn btn-primary float-start col mx-3"
             >
                 Admin
@@ -26,7 +26,7 @@
 
         @can('board')
             <a
-                href="{{ route('event::edit', ['id' => $event->id]) }}"
+                href="{{ route('event::edit', ['event' => $event]) }}"
                 class="btn btn-info float-end col mx-3"
             >
                 Edit
@@ -138,7 +138,7 @@
 
         @if (! Auth::check() && ! isset($event->activity))
             <a
-                href="{{ route('event::login', ['id' => $event]) }}"
+                href="{{ route('event::login', ['event' => $event]) }}"
                 class="list-group-item bg-info text-white text-center"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>

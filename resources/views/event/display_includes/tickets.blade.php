@@ -66,7 +66,7 @@
 
     <form
         method="post"
-        action="{{ route('event::buytickets', ['id' => $event->id]) }}"
+        action="{{ route('event::buytickets', ['event' => $event]) }}"
     >
         @csrf
 
@@ -86,7 +86,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route('event::login', ['id' => $event]) }}"
+                            href="{{ route('event::login', ['event' => $event]) }}"
                         >
                             log-in
                         </a>

@@ -202,6 +202,7 @@ class Committee extends Model
         if (! $user instanceof User) {
             return false;
         }
+
         return $this->users->contains($user);
     }
 }

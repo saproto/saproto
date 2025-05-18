@@ -519,9 +519,9 @@ Route::middleware('forcedomain')->group(function () {
                 // Events admin
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('update/{id}', 'update')->name('update');
-                Route::get('delete/{id}', 'destroy')->name('delete');
+                Route::get('{event}/edit', 'edit')->name('edit');
+                Route::post('{event}/update', 'update')->name('update');
+                Route::get('{event}/delete', 'destroy')->name('delete');
 
                 // Albums
                 Route::post('album/{event}/link', 'linkAlbum')->name('linkalbum');
@@ -534,14 +534,14 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('copy', 'copyEvent')->name('copy');
 
             // Catch-alls
-            Route::get('admin/{id}', 'admin')->middleware(['auth'])->name('admin');
-            Route::get('scan/{id}', 'scan')->middleware(['auth'])->name('scan');
+            Route::get('{event}/admin', 'admin')->middleware(['auth'])->name('admin');
+            Route::get('{event}/scan', 'scan')->middleware(['auth'])->name('scan');
 
             Route::post('set_reminder', 'setReminder')->middleware(['auth'])->name('set_reminder');
             Route::get('toggle_relevant_only', 'toggleRelevantOnly')->middleware(['auth'])->name('toggle_relevant_only');
 
             // Force login for event
-            Route::get('{id}/login', 'forceLogin')->middleware(['auth'])->name('login');
+            Route::get('{event}/login', 'forceLogin')->middleware(['auth'])->name('login');
             // Show event
             Route::get('{event}', 'show')->name('show');
         });
@@ -565,23 +565,23 @@ Route::middleware('forcedomain')->group(function () {
         });
 
         /* --- Buy tickets for an event (Public) --- */
-        Route::post('buytickets/{id}', [TicketController::class, 'buyForEvent'])->middleware(['auth'])->name('buytickets');
+        Route::post('{event}/buytickets', [TicketController::class, 'buyForEvent'])->middleware(['auth'])->name('buytickets');
 
         Route::controller(ActivityController::class)->group(function () {
 
             // Board only admin
             Route::middleware(['permission:board'])->group(function () {
                 // Related to activities
-                Route::post('signup/{id}', 'store')->middleware(['permission:board'])->name('addsignup');
-                Route::get('signup/{id}/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
+                Route::post('{event}/signup', 'store')->middleware(['permission:board'])->name('addsignup');
+                Route::get('{event}/signup/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
 
                 // Related to helping committees
-                Route::post('addhelp/{id}', 'addHelp')->middleware(['permission:board'])->name('addhelp');
+                Route::post('{event}/addhelp', 'addHelp')->middleware(['permission:board'])->name('addhelp');
                 Route::post('updatehelp/{id}', 'updateHelp')->middleware(['permission:board'])->name('updatehelp');
                 Route::get('deletehelp/{id}', 'deleteHelp')->middleware(['permission:board'])->name('deletehelp');
             });
             // Public routes
-            Route::get('checklist/{id}', 'checklist')->name('checklist');
+            Route::get('{event}/checklist', 'checklist')->name('checklist');
         });
 
     });

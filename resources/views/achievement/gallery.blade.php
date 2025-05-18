@@ -42,11 +42,9 @@
                                         'achievement.includes.achievement_include',
                                         [
                                             'achievement' => $achievement,
-                                            'obtained' => $obtained
-                                                ?->filter(function ($item) use ($achievement) {
-                                                    return $item->id == $achievement->id;
-                                                })
-                                                ->first()?->pivot,
+                                            'obtained' => $obtained?->first(function ($item) use ($achievement) {
+                                                return $item->id == $achievement->id;
+                                            })?->pivot,
                                         ]
                                     )
                                 </div>

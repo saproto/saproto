@@ -5,7 +5,7 @@
     @include(
         'components.modals.confirm-modal',
         [
-            'action' => route('event::delete', ['id' => $event->id]),
+            'action' => route('event::delete', ['event' => $event]),
             'classes' => 'btn btn-danger float-end ms-2',
             'text' => 'Delete',
             'message' => 'Are you sure you want to delete this event?',

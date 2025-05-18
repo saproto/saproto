@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
 
@@ -110,6 +109,7 @@ class Event extends Model
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $with = ['category'];
+
     protected $appends = ['is_future', 'formatted_date'];
 
     #[Override]
@@ -128,7 +128,7 @@ class Event extends Model
     #[Override]
     public function getRouteKey(): string
     {
-        return Str::slug($this->title).'-'.self::getPublicId();
+        return Str::slug($this->title).'-'.self::getPublicId($this->id);
     }
 
     #[Override]
@@ -145,13 +145,17 @@ class Event extends Model
         );
     }
 
-    public function getPublicId(): string
+    public static function getPublicId(int $id): string
     {
-        return Hashids::connection('event')->encode($this->id);
+        return Hashids::connection('event')->encode($id);
     }
 
     public static function getIdFromPublicId($public_id)
     {
+        if (is_numeric($public_id)) {
+            return $public_id;
+        }
+
         $id = Hashids::connection('event')->decode($public_id);
 
         return count($id) > 0 ? $id[0] : 0;
@@ -202,8 +206,8 @@ class Event extends Model
                             ->whereNull('committees_activities_id');
                     })
                     ->withCount([
-                            'users',
-                        ]);
+                        'users',
+                    ]);
             })
             ->with('committee', static function ($q) use ($user) {
                 $q->with('users', function ($q) use ($user) {
@@ -289,9 +293,7 @@ class Event extends Model
     /** @return Collection<int, TicketPurchase> */
     public function getTicketPurchasesFor(User $user): Collection
     {
-        return $this->tickets->filter(static function ($ticket) use ($user) {
-            $ticket->user_id === $user->id;
-        });
+        return $this->tickets->filter(static fn ($ticket): bool => $ticket->user_id === $user->id);
     }
 
     public function current(): bool
@@ -318,7 +320,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-            );
+        );
     }
 
     /**
@@ -362,9 +364,7 @@ class Event extends Model
      */
     public function hasBoughtTickets(User $user): bool
     {
-        return $this->tickets?->first(static function ($ticket) use ($user) {
-            $ticket->user_id === $user->id;
-        }) !== null;
+        return $this->tickets?->first(static function ($ticket) {}) !== null;
     }
 
     /** @return Collection<int, User> */

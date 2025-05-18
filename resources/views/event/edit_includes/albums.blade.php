@@ -4,7 +4,7 @@
 
         <form
             method="post"
-            action="{{ route('event::linkalbum', ['event' => $event->id]) }}"
+            action="{{ route('event::linkalbum', ['event' => $event]) }}"
         >
             @csrf
 
