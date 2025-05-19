@@ -49,7 +49,8 @@ class FeedbackController extends Controller
      */
     private function getFeedbackQuery(FeedbackCategory $category): Builder
     {
-        return $category->feedback()
+        return Feedback::query()
+            ->where('feedback_category_id', $category->id)
             ->orderBy('created_at', 'desc')
             ->with('votes')
             ->when($category->review, fn ($query) => $query->where('reviewed', true))
