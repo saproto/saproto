@@ -32,11 +32,15 @@ class ParticipationController extends Controller
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
         if ($request->has('helping_committee_id')) {
-            $helpingCommittee = HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'));
+            $helpingCommittee = HelpingCommittee::query()
+                ->withCount('users')
+                ->with([
+                    'committee.users',
+                ])->findOrFail($request->input('helping_committee_id'));
             abort_unless($event->activity->getHelperParticipation(Auth::user(), $helpingCommittee) === null, 403, 'You are already helping at '.$event->title.'.');
 
             abort_unless($helpingCommittee->committee->isMember(Auth::user()), 403, 'You are not a member of the '.$helpingCommittee->committee.' and thus cannot help on behalf of it.');
-            abort_if($helpingCommittee->users->count() >= $helpingCommittee->amount, 403, 'There are already enough people of your committee helping, thanks though!');
+            abort_if($helpingCommittee->users_count >= $helpingCommittee->amount, 403, 'There are already enough people of your committee helping, thanks though!');
 
             $data['committees_activities_id'] = $helpingCommittee->id;
             ActivityParticipation::query()->create($data);

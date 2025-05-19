@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
