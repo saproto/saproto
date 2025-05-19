@@ -35,7 +35,7 @@ class UserAdminController extends Controller
         $users = match ($filter) {
             'pending' => $userQuery->whereHas('member', static function ($q) {
                 /** @param Builder<Member> $q */
-                $q->type(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
+                $q->whereMembershipType(MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
             }),
             'members' => $userQuery->whereHas('member', static function ($q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->where('deleted_at', '=', null);
@@ -61,10 +61,7 @@ class UserAdminController extends Controller
         return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
     }
 
-    /**
-     * @return View
-     */
-    public function details(int $id)
+    public function details(int $id): View
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);

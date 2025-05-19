@@ -16,18 +16,19 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Product[] $products
+ * @property-read Collection<int, Product> $products
+ * @property-read int|null $products_count
  *
- * @method static Builder|FinancialAccount whereAccountNumber($value)
- * @method static Builder|FinancialAccount whereCreatedAt($value)
- * @method static Builder|FinancialAccount whereId($value)
- * @method static Builder|FinancialAccount whereName($value)
- * @method static Builder|FinancialAccount whereUpdatedAt($value)
- * @method static Builder|FinancialAccount newModelQuery()
- * @method static Builder|FinancialAccount newQuery()
- * @method static Builder|FinancialAccount query()
+ * @method static Builder<static>|FinancialAccount newModelQuery()
+ * @method static Builder<static>|FinancialAccount newQuery()
+ * @method static Builder<static>|FinancialAccount query()
+ * @method static Builder<static>|FinancialAccount whereAccountNumber($value)
+ * @method static Builder<static>|FinancialAccount whereCreatedAt($value)
+ * @method static Builder<static>|FinancialAccount whereId($value)
+ * @method static Builder<static>|FinancialAccount whereName($value)
+ * @method static Builder<static>|FinancialAccount whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class FinancialAccount extends Model
 {

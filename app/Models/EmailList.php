@@ -16,17 +16,19 @@ use Illuminate\Support\Facades\Crypt;
  * @property string $name
  * @property string $description
  * @property int $is_member_only
- * @property-read Collection|User[] $users
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
  *
- * @method static Builder|EmailList whereDescription($value)
- * @method static Builder|EmailList whereId($value)
- * @method static Builder|EmailList whereIsMemberOnly($value)
- * @method static Builder|EmailList whereName($value)
- * @method static Builder|EmailList newModelQuery()
- * @method static Builder|EmailList newQuery()
- * @method static Builder|EmailList query()
+ * @method static Builder<static>|EmailList newModelQuery()
+ * @method static Builder<static>|EmailList newQuery()
+ * @method static Builder<static>|EmailList query()
+ * @method static Builder<static>|EmailList subscribed(User $user)
+ * @method static Builder<static>|EmailList whereDescription($value)
+ * @method static Builder<static>|EmailList whereId($value)
+ * @method static Builder<static>|EmailList whereIsMemberOnly($value)
+ * @method static Builder<static>|EmailList whereName($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class EmailList extends Model
 {
@@ -36,22 +38,26 @@ class EmailList extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
-    public function users()
+    /**
+     * @return BelongsToMany<User, $this>
+     */
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'users_mailinglists', 'list_id', 'user_id');
     }
 
     /**
-     * @return bool Whether user is subscribed to mailing list.
+     * @return bool Whether a user is subscribed to the mailing list.
      */
     public function isSubscribed(User $user): bool
     {
         return EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id)->count() > 0;
     }
 
-    /** @param Builder<$this> $query */
-    public function scopeSubscribed(Builder $query, User $user)
+    /** @param Builder<$this> $query
+     * @return Builder<$this>
+     */
+    public function scopeSubscribed(Builder $query, User $user): Builder
     {
         return $query->whereHas('users', function ($q) use ($user) {
             $q->where('user_id', $user->id);
@@ -76,12 +82,11 @@ class EmailList extends Model
     }
 
     /**
-     * @param  User  $user
      * @return bool Whether user is successfully unsubscribed from mailing list.
      *
      * @throws Exception
      */
-    public function unsubscribe($user): bool
+    public function unsubscribe(User $user): bool
     {
         $s = EmailListSubscription::query()->where('user_id', $user->id)->where('list_id', $this->id);
         if ($s == null) {
@@ -93,15 +98,17 @@ class EmailList extends Model
         return true;
     }
 
-    /**
-     * @param  int  $user_id
-     * @param  int  $list_id
-     */
-    public static function generateUnsubscribeHash($user_id, $list_id): string
+    public static function generateUnsubscribeHash(int $user_id, int $list_id): string
     {
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));
     }
 
+    /**
+     * @return object{
+     *     user: int,
+     *     list: int
+     * }
+     */
     public static function parseUnsubscribeHash(string $hash): mixed
     {
         return json_decode(Crypt::decrypt(base64_decode($hash)));

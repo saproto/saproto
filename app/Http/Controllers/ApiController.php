@@ -127,6 +127,7 @@ class ApiController extends Controller
         ]);
     }
 
+    /** @return array<string, mixed> */
     public function gdprExport(): array
     {
         $user = Auth::user();
@@ -242,7 +243,7 @@ class ApiController extends Controller
         return $data;
     }
 
-    public function discordVerifyMember($userId): JsonResponse
+    public function discordVerifyMember(string $userId): JsonResponse
     {
         $user = User::query()->firstWhere('discord_id', $userId);
 

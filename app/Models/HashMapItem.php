@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\HashMapItemFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,20 +15,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $subkey
  * @property string $value
  *
- * @method static Builder|HashMapItem key($key)
- * @method static Builder|HashMapItem subkey($subkey)
- * @method static Builder|HashMapItem whereId($value)
- * @method static Builder|HashMapItem whereKey($value)
- * @method static Builder|HashMapItem whereSubkey($value)
- * @method static Builder|HashMapItem whereValue($value)
- * @method static builder|hashMapItem newmodelquery()
- * @method static builder|hashMapItem newquery()
- * @method static builder|hashMapItem query()
+ * @method static HashMapItemFactory factory($count = null, $state = [])
+ * @method static Builder<static>|HashMapItem key(string $key)
+ * @method static Builder<static>|HashMapItem newModelQuery()
+ * @method static Builder<static>|HashMapItem newQuery()
+ * @method static Builder<static>|HashMapItem query()
+ * @method static Builder<static>|HashMapItem subkey(string $subkey)
+ * @method static Builder<static>|HashMapItem whereId($value)
+ * @method static Builder<static>|HashMapItem whereKey($value)
+ * @method static Builder<static>|HashMapItem whereSubkey($value)
+ * @method static Builder<static>|HashMapItem whereValue($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class HashMapItem extends Model
 {
+    /** @use HasFactory<HashMapItemFactory>*/
     use HasFactory;
 
     protected $table = 'hashmap';
@@ -38,6 +41,7 @@ class HashMapItem extends Model
 
     /**
      * @param  Builder<HashMapItem>  $query
+     * @return Builder<HashMapItem>
      */
     public function scopeKey(Builder $query, string $key): Builder
     {
@@ -46,6 +50,7 @@ class HashMapItem extends Model
 
     /**
      * @param  Builder<HashMapItem>  $query
+     * @return Builder<HashMapItem>
      */
     public function scopeSubkey(Builder $query, string $subkey): Builder
     {

@@ -31,6 +31,9 @@ class NewWorkspaceAccount extends Mailable implements ShouldQueue
         );
     }
 
+    /**
+     * @return array<never>
+     */
     public function attachments(): array
     {
         return [];

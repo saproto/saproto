@@ -13,14 +13,12 @@ use Illuminate\View\View;
 
 class HeaderImageController extends Controller
 {
-    /** @return View */
-    public function index()
+    public function index(): View
     {
         return view('headerimages.index', ['images' => HeaderImage::query()->with('user')->paginate(5)]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('headerimages.add');
     }
@@ -50,7 +48,7 @@ class HeaderImageController extends Controller
         return Redirect::route('headerimages.index');
     }
 
-    public function destroy(HeaderImage $headerimage)
+    public function destroy(HeaderImage $headerimage): RedirectResponse
     {
         $headerimage->image->delete();
         $headerimage->delete();

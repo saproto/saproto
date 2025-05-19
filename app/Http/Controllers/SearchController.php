@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -116,7 +117,7 @@ class SearchController extends Controller
         ]);
     }
 
-    public function ldapSearch(Request $request)
+    public function ldapSearch(Request $request): View|RedirectResponse
     {
         if (! $request->has('query')) {
             return view('search.ldapsearch', [
@@ -173,6 +174,13 @@ class SearchController extends Controller
         return response()->view('search.opensearch')->header('Content-Type', 'text/xml');
     }
 
+    /**
+     * @return array<object{
+     *     id: int,
+     *     name: string,
+     *     is_member: bool
+     * }>
+     */
     public function getUserSearch(Request $request): array
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
@@ -190,6 +198,7 @@ class SearchController extends Controller
         return $result;
     }
 
+    /** @return Collection<int, Event>|null */
     public function getEventSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'title'];
@@ -197,6 +206,7 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Event::class, $request->get('q'), $search_attributes)?->get();
     }
 
+    /** @return Collection<int, Committee>|null */
     public function getCommitteeSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name', 'slug'];
@@ -204,6 +214,7 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Committee::class, $request->get('q'), $search_attributes)?->get();
     }
 
+    /** @return Collection<int, Product>|null */
     public function getProductSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name'];
@@ -211,6 +222,7 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Product::class, $request->get('q'), $search_attributes)?->get();
     }
 
+    /** @return Collection<int, Achievement>|null */
     public function getAchievementSearch(Request $request): ?Collection
     {
         $search_attributes = ['id', 'name'];
@@ -218,13 +230,21 @@ class SearchController extends Controller
         return $this->getGenericSearchQuery(Achievement::class, $request->get('q'), $search_attributes)?->get();
     }
 
-    private function getGenericSearchQuery(Model|string $model, ?string $query, array $attributes): ?Builder
+    /**
+     * @template TModel of Model
+     *
+     * @param  class-string<TModel>  $model
+     * @param  array<int, string>  $attributes
+     * @return Builder<TModel>|null
+     */
+    private function getGenericSearchQuery(string $model, ?string $query, array $attributes): ?Builder
     {
         if (empty($query)) {
             return null;
         }
 
         $terms = explode(' ', str_replace('*', '%', $query));
+        /** @var Builder<TModel> $query */
         $query = $model::query();
 
         $check_at_least_one_valid_term = false;

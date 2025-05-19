@@ -8,7 +8,6 @@ use App\Models\Sticker;
 use App\Models\StorageEntry;
 use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -20,10 +19,7 @@ use Illuminate\View\View;
 
 class StickerController extends Controller
 {
-    /**
-     * @throws ConnectionException
-     */
-    public function index()
+    public function index(): View
     {
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
@@ -54,12 +50,12 @@ class StickerController extends Controller
         return view('stickers.overviewmap', ['stickers' => $stickers]);
     }
 
-    public function create() {}
+    public function create(): void {}
 
     /**
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'lat' => ['required', 'numeric', 'min:-90', 'max:90'],
@@ -94,11 +90,11 @@ class StickerController extends Controller
         return Redirect::back();
     }
 
-    public function show($id) {}
+    public function show(Sticker $sticker): void {}
 
-    public function edit($id) {}
+    public function edit(Sticker $sticker): void {}
 
-    public function update(Request $request, $id) {}
+    public function update(Request $request, Sticker $sticker): void {}
 
     public function destroy(Sticker $sticker): RedirectResponse
     {

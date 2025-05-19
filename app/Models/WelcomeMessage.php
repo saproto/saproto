@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\WelcomeMessageFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,21 +17,23 @@ use Illuminate\Support\Carbon;
  * @property string $message
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
+ * @property-read User|null $user
  *
- * @method static Builder|WelcomeMessage whereCreatedAt($value)
- * @method static Builder|WelcomeMessage whereId($value)
- * @method static Builder|WelcomeMessage whereMessage($value)
- * @method static Builder|WelcomeMessage whereUpdatedAt($value)
- * @method static Builder|WelcomeMessage whereUserId($value)
- * @method static Builder|WelcomeMessage newModelQuery()
- * @method static Builder|WelcomeMessage newQuery()
- * @method static Builder|WelcomeMessage query()
+ * @method static WelcomeMessageFactory factory($count = null, $state = [])
+ * @method static Builder<static>|WelcomeMessage newModelQuery()
+ * @method static Builder<static>|WelcomeMessage newQuery()
+ * @method static Builder<static>|WelcomeMessage query()
+ * @method static Builder<static>|WelcomeMessage whereCreatedAt($value)
+ * @method static Builder<static>|WelcomeMessage whereId($value)
+ * @method static Builder<static>|WelcomeMessage whereMessage($value)
+ * @method static Builder<static>|WelcomeMessage whereUpdatedAt($value)
+ * @method static Builder<static>|WelcomeMessage whereUserId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class WelcomeMessage extends Model
 {
+    /** @use HasFactory<WelcomeMessageFactory>*/
     use HasFactory;
 
     protected $table = 'user_welcome';

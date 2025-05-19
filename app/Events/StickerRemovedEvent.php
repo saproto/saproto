@@ -34,6 +34,11 @@ class StickerRemovedEvent implements ShouldBroadcastNow
         ];
     }
 
+    /**
+     *@return array{
+     *     id: int
+     *}
+     */
     public function broadcastWith(): array
     {
         return [

@@ -10,6 +10,7 @@ use App\Models\EmailListSubscription;
 use App\Models\RfidCard;
 use App\Models\User;
 use App\Models\WelcomeMessage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -20,7 +21,7 @@ class UserController extends Controller
     /**
      * Delete a user account.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($request->id ?? Auth::id());

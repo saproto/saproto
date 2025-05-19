@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
         Model::preventLazyLoading(! app()->isProduction());
         view()->composer('*', function ($view) {
-            view()->share('viewName', Str::replace('.', '-', $view->getName()));
+            view()->share('viewName', Str::replace('.', '-', (string) $view->getName()));
         });
 
         view()->composer('website.navbar', static function ($view) {

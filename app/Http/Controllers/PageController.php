@@ -21,7 +21,7 @@ class PageController extends Controller
      *
      * @var string[]
      */
-    protected $reservedSlugs = ['add', 'edit', 'delete'];
+    protected array $reservedSlugs = ['add', 'edit', 'delete'];
 
     /** @return View */
     public function index()
@@ -174,12 +174,11 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function addFile(Request $request, $id)
+    public function addFile(Request $request, int $id)
     {
         if (! $request->file('files')) {
             Session::flash('flash_message', 'You forgot to add any files.');
@@ -188,14 +187,12 @@ class PageController extends Controller
         }
 
         $page = Page::query()->find($id);
+        $file = $request->file('files');
+        $newFile = new StorageEntry;
+        $newFile->createFromFile($file);
 
-        foreach ($request->file('files') as $file) {
-            $newFile = new StorageEntry;
-            $newFile->createFromFile($file);
-
-            $page->files()->attach($newFile);
-            $page->save();
-        }
+        $page->files()->attach($newFile);
+        $page->save();
 
         return Redirect::route('page::edit', ['id' => $id]);
     }

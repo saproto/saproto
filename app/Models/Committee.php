@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,27 +31,30 @@ use Illuminate\Support\Facades\DB;
  * @property int $is_active
  * @property-read string $email
  * @property-read StorageEntry|null $image
- * @property-read Collection|Event[] $organizedEvents
- * @property-read Collection|User[] $users
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
  *
- * @method static Builder|Committee whereAllowAnonymousEmail($value)
- * @method static Builder|Committee whereCreatedAt($value)
- * @method static Builder|Committee whereDescription($value)
- * @method static Builder|Committee whereId($value)
- * @method static Builder|Committee whereImageId($value)
- * @method static Builder|Committee whereIsSociety($value)
- * @method static Builder|Committee whereName($value)
- * @method static Builder|Committee wherePublic($value)
- * @method static Builder|Committee whereSlug($value)
- * @method static Builder|Committee whereUpdatedAt($value)
- * @method static Builder|Committee newModelQuery()
- * @method static Builder|Committee newQuery()
- * @method static Builder|Committee query()
+ * @method static CommitteeFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Committee newModelQuery()
+ * @method static Builder<static>|Committee newQuery()
+ * @method static Builder<static>|Committee query()
+ * @method static Builder<static>|Committee whereAllowAnonymousEmail($value)
+ * @method static Builder<static>|Committee whereCreatedAt($value)
+ * @method static Builder<static>|Committee whereDescription($value)
+ * @method static Builder<static>|Committee whereId($value)
+ * @method static Builder<static>|Committee whereImageId($value)
+ * @method static Builder<static>|Committee whereIsActive($value)
+ * @method static Builder<static>|Committee whereIsSociety($value)
+ * @method static Builder<static>|Committee whereName($value)
+ * @method static Builder<static>|Committee wherePublic($value)
+ * @method static Builder<static>|Committee whereSlug($value)
+ * @method static Builder<static>|Committee whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Committee extends Model
 {
+    /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
 
     protected $table = 'committees';
@@ -66,7 +70,7 @@ class Committee extends Model
         return $this->slug;
     }
 
-    public static function fromPublicId($public_id): Committee
+    public static function fromPublicId(string $public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
     }
@@ -96,16 +100,25 @@ class Committee extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function organizedEvents(): Builder
     {
         return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function email(): Attribute
     {
         return Attribute::make(get: fn (): string => $this->slug.'@'.Config::string('proto.emaildomain'));
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function pastEvents(): Builder
     {
         return $this->organizedEvents()->where('end', '<', Carbon::now()->getTimestamp())
@@ -117,6 +130,9 @@ class Committee extends Model
             })->reorder('start', 'desc');
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function upcomingEvents(): Builder
     {
         return $this
@@ -131,6 +147,9 @@ class Committee extends Model
             });
     }
 
+    /**
+     * @return Builder<Event>
+     */
     public function pastHelpedEvents(): Builder
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
