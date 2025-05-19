@@ -77,7 +77,6 @@
 
             {{-- Ticket --}}
             @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
-                )
                 <i
                     class="fas fa-ticket-alt fa-fw text-info"
                     aria-hidden="true"

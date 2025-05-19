@@ -88,7 +88,7 @@ class ParticipationController extends Controller
 
             $data['committees_activities_id'] = $helping->id;
         } else {
-            abort_if($event->activity->getParticipation($user) !== null, 403, $user->name.'is already subscribed for '.$event->title.'.');
+            abort_if($event->activity->getParticipation($user) !== null, 403, $user->name.' is already subscribed for '.$event->title.'.');
         }
 
         $participation = ActivityParticipation::query()->create($data);

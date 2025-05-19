@@ -95,11 +95,14 @@ class EventController extends Controller
     /**
      * @throws ApiException
      */
-    public function show(Event $event)
+    public function show(Event $event): View
     {
         $event->loadMissing([
             'committee',
             'tickets.product',
+            'tickets.purchases.user.photo',
+            'tickets.purchases.orderline',
+            'tickets.purchases.ticket',
             'activity.users.photo',
             'activity.backupUsers.photo',
             'activity.helpingCommitteeInstances.committee',
@@ -474,9 +477,9 @@ class EventController extends Controller
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === Auth::id())->pluck('api_attributes') : null),
                 'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->activity?->isHelping($user) : null),
+                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
                 'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
                 'backupParticipants' => $backupParticipants,
             ];

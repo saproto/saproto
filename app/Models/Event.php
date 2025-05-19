@@ -151,12 +151,8 @@ class Event extends Model
         return Hashids::connection('event')->encode($id);
     }
 
-    public static function getIdFromPublicId($public_id)
+    public static function getIdFromPublicId(string $public_id): int
     {
-        if (is_numeric($public_id)) {
-            return $public_id;
-        }
-
         $id = Hashids::connection('event')->decode($public_id);
 
         return count($id) > 0 ? $id[0] : 0;
@@ -291,12 +287,6 @@ class Event extends Model
         return $this->committee?->isMember($user) ?? false;
     }
 
-    /** @return Collection<int, TicketPurchase> */
-    public function getTicketPurchasesFor(User $user): Collection
-    {
-        return $this->tickets->filter(static fn ($ticket): bool => $ticket->user_id === $user->id);
-    }
-
     public function current(): bool
     {
         return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
@@ -357,7 +347,7 @@ class Event extends Model
             return false;
         }
 
-        return $this->activity?->isEro($user);
+        return $this->activity->isEro($user);
     }
 
     /**
@@ -365,7 +355,7 @@ class Event extends Model
      */
     public function hasBoughtTickets(User $user): bool
     {
-        return $this->tickets?->first(static function ($ticket) {}) !== null;
+        return $this->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === $user->id)->isNotEmpty();
     }
 
     /** @return Collection<int, User> */

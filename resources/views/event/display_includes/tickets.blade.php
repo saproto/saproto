@@ -12,40 +12,42 @@
             </div>
 
             <div class="card-body">
-                @foreach ($event->getTicketPurchasesFor(Auth::user()) as $i => $purchase)
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <p class="card-title">
-                                <span
-                                    class="badge bg-dark text-white float-end"
-                                >
-                                    #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
-                                </span>
-                                <strong>
-                                    {{ $purchase->ticket->product->name }}
-                                </strong>
-                                (&euro;{{ number_format($purchase->orderline->total_price, 2) }})
-
-                                @if ($purchase->canBeDownloaded())
-                                    <a
-                                        href="{{ route('tickets::download', ['id' => $purchase->id]) }}"
-                                        class="card-link text-info"
+                @foreach ($event->tickets as $ticket)
+                    @foreach ($ticket->purchases->filter(fn ($purchase) => $purchase->user_id === Auth::id()) as $purchase)
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <p class="card-title">
+                                    <span
+                                        class="badge bg-dark text-white float-end"
                                     >
-                                        Download PDF
-                                    </a>
-                                @else
-                                    <?php $has_unpaid_tickets = true; ?>
+                                        #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
+                                    </span>
+                                    <strong>
+                                        {{ $ticket->product->name }}
+                                    </strong>
+                                    (&euro;{{ number_format($purchase->orderline->total_price, 2) }})
 
-                                    <a
-                                        class="card-link text-danger"
-                                        href="{{ $purchase->orderline->molliePayment->payment_url ?? route('omnomcom::orders::index') }}"
-                                    >
-                                        Payment Required
-                                    </a>
-                                @endif
-                            </p>
+                                    @if ($purchase->canBeDownloaded())
+                                        <a
+                                            href="{{ route('tickets::download', ['id' => $purchase->id]) }}"
+                                            class="card-link text-info"
+                                        >
+                                            Download PDF
+                                        </a>
+                                    @else
+                                        <?php $has_unpaid_tickets = true; ?>
+
+                                        <a
+                                            class="card-link text-danger"
+                                            href="{{ $purchase->orderline->molliePayment->payment_url ?? route('omnomcom::orders::index') }}"
+                                        >
+                                            Payment Required
+                                        </a>
+                                    @endif
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 @endforeach
             </div>
 
@@ -279,7 +281,7 @@
                     @include(
                         'event.display_includes.render_participant_list',
                         [
-                            'participants' => $ticket->getUsers(),
+                            'participants' => $ticket->purchases->pluck('user'),
                             'event' => null,
                         ]
                     )
