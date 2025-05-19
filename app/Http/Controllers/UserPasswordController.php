@@ -113,7 +113,7 @@ class UserPasswordController extends Controller
      * @throws \Google\Service\Exception
      * @throws \Google\Exception
      */
-    private function syncGooglePassword(User $protoUser, $password): void
+    private function syncGooglePassword(User $protoUser, string $password): void
     {
         $client = new Google_Client;
         $client->setAuthConfig(config('proto.google_application_credentials'));
