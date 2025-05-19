@@ -102,7 +102,6 @@ class EventController extends Controller
             'tickets.product',
             'tickets.purchases.user.photo',
             'tickets.purchases.orderline',
-            'tickets.purchases.ticket',
             'activity.users.photo',
             'activity.backupUsers.photo',
             'activity.helpingCommitteeInstances.committee',
