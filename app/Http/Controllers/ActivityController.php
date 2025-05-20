@@ -114,7 +114,6 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param Event $event
      * @return View
      */
     public function checklist(Event $event)

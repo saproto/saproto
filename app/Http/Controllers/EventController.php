@@ -42,8 +42,8 @@ class EventController extends Controller
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
             })
-        ->where('start', '>', Carbon::now()->timestamp)
-        ->get();
+            ->where('start', '>', Carbon::now()->timestamp)
+            ->get();
 
         $data = [[], [], []];
 
@@ -52,7 +52,7 @@ class EventController extends Controller
 
         $data[1] = $events
             ->where('start', '>', Carbon::now()->addWeek()->timestamp)
-        ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
+            ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
 
         $data[2] = $events->where('start', '>', Carbon::now()->addMonth()->timestamp);
 
@@ -103,7 +103,7 @@ class EventController extends Controller
             'activity.helpingCommitteeInstances.users.photo',
             'videos',
             'albums',
-            'dinnerforms'
+            'dinnerforms',
         ]);
 
         $methods = [];

@@ -195,7 +195,7 @@ class Activity extends Validatable
     {
         return $this->participation->whereNotNull('committees_activities_id')
             ->where('user_id', $user->id)
-            ->unless($h===null, function($q) use($h){
+            ->when($h instanceof HelpingCommittee, function ($q) use ($h) {
                 $q->where('committees_activities_id', $h->id);
             })
             ->first();
@@ -214,7 +214,7 @@ class Activity extends Validatable
      */
     public function isParticipating(User $user): bool
     {
-        return $this->getParticipation($user) !== null;
+        return $this->getParticipation($user) instanceof ActivityParticipation;
     }
 
     /**
@@ -222,7 +222,7 @@ class Activity extends Validatable
      */
     public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
-        return $this->getHelperParticipation($user, $h) !==null;
+        return $this->getHelperParticipation($user, $h) instanceof ActivityParticipation;
     }
 
     public function isEro(User $user): bool
