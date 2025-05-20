@@ -496,7 +496,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     protected function protoEmail(): Attribute
     {
-        return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
+        return Attribute::make(get: fn () => $this->is_member && $this->groups->isNotEmpty() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
     }
 
     public function getDisplayEmail(): string
