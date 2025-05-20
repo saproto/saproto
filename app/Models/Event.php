@@ -205,7 +205,9 @@ class Event extends Model
                 });
             })
             ->with('tickets', function ($q) use ($user) {
-                $q->whereHas('purchases', static function ($q) use ($user) {
+                $q->with('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                })->whereHas('purchases', static function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 });
             });
