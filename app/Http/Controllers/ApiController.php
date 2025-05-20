@@ -152,7 +152,7 @@ class ApiController extends Controller
         foreach (ActivityParticipation::query()->with(['activity.event', 'help.committee'])->where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
-                'date' => $activity_participation->activity?->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'date' => $activity_participation->activity?->event ? Carbon::createFromTimestamp($activity_participation->activity->event->start)->format('Y-m-d') : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,

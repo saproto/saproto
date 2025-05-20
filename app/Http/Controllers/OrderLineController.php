@@ -127,7 +127,7 @@ class OrderLineController extends Controller
      */
     public function filterByDate(Request $request)
     {
-        $date = Carbon::parse($request->input('date'))->format('d-m-Y');
+        $date = $request->date('date')->format('d-m-Y');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
@@ -264,8 +264,8 @@ class OrderLineController extends Controller
     public function showPaymentStatistics(Request $request)
     {
         if ($request->has('start') && $request->has('end')) {
-            $start = date('Y-m-d H:i:s', strtotime($request->start));
-            $end = date('Y-m-d H:i:s', strtotime($request->end));
+            $start = $request->date('start')->toDateTimeString();
+            $end = $request->date('end')->toDateTimeString();
             $total_cash = DB::table('orderlines')
                 ->where('created_at', '>', $start)
                 ->where('created_at', '<', $end)
