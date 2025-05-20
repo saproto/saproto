@@ -440,7 +440,7 @@ class EventController extends Controller
                 continue;
             }
 
-            $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
+            $userParticipation = $event->activity?->getParticipation($user);
 
             $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
@@ -565,8 +565,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user) || $userParticipation !== null)) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
                 continue;
             }
 
@@ -585,12 +584,12 @@ CALSCALE:GREGORIAN
             $status = null;
 
             if ($user) {
-                $userParticipation = $event->activity?->participation->first(fn ($participation): bool => $participation->user_id === Auth::id());
+                $userParticipation = $event->activity?->getParticipation($user);
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
                 } elseif ($event->activity) {
-                    if ($event->activity->user_has_helper_participation) {
+                    if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
                     } elseif ($userParticipation?->backup) {

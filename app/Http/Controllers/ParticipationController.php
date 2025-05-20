@@ -48,7 +48,7 @@ class ParticipationController extends Controller
             return Redirect::back();
         }
 
-        abort_if($event->activity->getParticipation(Auth::user()) !== null, 403, 'You are already subscribed for '.$event->title.'.');
+        abort_if($event->activity->isParticipating(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
         abort_unless($event->activity->canSubscribeBackup(), 403, 'You cannot subscribe for '.$event->title.' at this time.');
 
         if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -88,7 +88,7 @@ class ParticipationController extends Controller
 
             $data['committees_activities_id'] = $helping->id;
         } else {
-            abort_if($event->activity->getParticipation($user) !== null, 403, $user->name.' is already subscribed for '.$event->title.'.');
+            abort_if($event->activity->isParticipating($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
         }
 
         $participation = ActivityParticipation::query()->create($data);

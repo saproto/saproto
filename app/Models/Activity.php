@@ -49,10 +49,6 @@ use Illuminate\Support\Facades\Config;
  * @property-read int|null $present_users_count
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
- * @property-read bool|null $user_has_participation
- * @property-read bool|null $user_has_helper_participation
- * @property-read bool|null $user_has_backup_participation
- * @property-read bool|null $user_has_tickets
  *
  * @method static ActivityFactory factory($count = null, $state = [])
  * @method static Builder<static>|Activity newModelQuery()
@@ -188,19 +184,11 @@ class Activity extends Validatable
     }
 
     /**
-     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
-     */
-    public function getParticipation(User $user): ?ActivityParticipation
-    {
-        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
-    }
-
-    /**
      * @return HasMany<ActivityParticipation, $this>
      */
     public function participation(): HasMany
     {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id');
+        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNull('committees_activities_id');
     }
 
     /**
@@ -215,8 +203,18 @@ class Activity extends Validatable
     {
         return $this->helpingParticipations
             ->where('user_id', $user->id)
-            ->where('committees_activities_id', $h->id)
+            ->unless($h===null, function($q) use($h){
+                $q->where('committees_activities_id', $h->id);
+            })
             ->first();
+    }
+
+    /**
+     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
+     */
+    public function getParticipation(?User $user): ?ActivityParticipation
+    {
+        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
     }
 
     /**
@@ -224,7 +222,7 @@ class Activity extends Validatable
      */
     public function isParticipating(User $user): bool
     {
-        return $this->participation->first(fn ($p): bool => $p->user_id === $user->id) !== null;
+        return $this->getParticipation($user) !== null;
     }
 
     /**
@@ -232,11 +230,7 @@ class Activity extends Validatable
      */
     public function isHelping(User $user, ?HelpingCommittee $h = null): bool
     {
-        if ($h instanceof HelpingCommittee) {
-            return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id && $h->id === $p->committees_activities_id) !== null;
-        }
-
-        return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id) !== null;
+        return $this->getHelperParticipation($user, $h) !==null;
     }
 
     public function isEro(User $user): bool
