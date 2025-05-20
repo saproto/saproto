@@ -36,33 +36,25 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $eventQuery = Event::getEventBlockQuery()
+        $events = Event::getEventBlockQuery()
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            });
+            })
+        ->where('start', '>', Carbon::now()->timestamp)
+        ->get();
 
         $data = [[], [], []];
 
-        // Get the events for the next week
-        $data[0] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '<=', strtotime('+1 week'))
-            ->get();
+        $data[0] = $events->where('start', '>', Carbon::now()->timestamp)
+            ->where('start', '<=', Carbon::now()->addWeek()->timestamp);
 
-        // Get the events for the next month
-        $data[1] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 week'))
-            ->where('start', '<=', strtotime('+1 month'))
-            ->get();
+        $data[1] = $events
+            ->where('start', '>', Carbon::now()->addWeek()->timestamp)
+        ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
 
-        // Get the events for the next year
-        $data[2] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 month'))
-            ->get();
+        $data[2] = $events->where('start', '>', Carbon::now()->addMonth()->timestamp);
 
         $years = $this->getAvailableYears();
 
