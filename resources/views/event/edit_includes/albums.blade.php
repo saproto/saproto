@@ -24,13 +24,14 @@
                     </span>
                 @endforeach
 
-                @if (count($event->albums) > 0)
+                @if ($event->albums->count() > 0)
                     <hr />
                 @endif
 
                 @php
                     $albums = \App\Models\PhotoAlbum::whereNull('event_id')
                         ->orderBy('date_taken', 'desc')
+                        ->withoutEagerLoads()
                         ->get();
                 @endphp
 
@@ -50,7 +51,7 @@
                 @endif
             </div>
 
-            @if (\App\Models\PhotoAlbum::whereNull('event_id')->count() > 0)
+            @if ($albums->count() > 0)
                 <div class="card-footer">
                     <input
                         type="submit"

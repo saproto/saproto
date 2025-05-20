@@ -69,8 +69,6 @@ class Dinnerform extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $with = ['event'];
-
     protected $casts = [
         'closed' => 'boolean',
         'visible_home_page' => 'boolean',

@@ -188,20 +188,12 @@ class Activity extends Validatable
      */
     public function participation(): HasMany
     {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNull('committees_activities_id');
-    }
-
-    /**
-     * @return HasMany<ActivityParticipation, $this>
-     */
-    public function helpingParticipations(): HasMany
-    {
-        return $this->hasMany(ActivityParticipation::class, 'activity_id')->whereNotNull('committees_activities_id');
+        return $this->hasMany(ActivityParticipation::class, 'activity_id');
     }
 
     public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
-        return $this->helpingParticipations
+        return $this->participation->whereNotNull('committees_activities_id')
             ->where('user_id', $user->id)
             ->unless($h===null, function($q) use($h){
                 $q->where('committees_activities_id', $h->id);
@@ -214,7 +206,7 @@ class Activity extends Validatable
      */
     public function getParticipation(?User $user): ?ActivityParticipation
     {
-        return $this->participation->first(static fn ($p): bool => $p->user_id === $user->id);
+        return $this->participation->whereNull('committees_activities_id')->first(static fn ($p): bool => $p->user_id === $user->id);
     }
 
     /**

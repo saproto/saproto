@@ -191,12 +191,9 @@ class Event extends Model
             ->orderBy('start')
             ->with('image')
             ->with('activity', static function ($e) use ($user) {
-                $e->with('helpingParticipations', function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                })
+                $e
                     ->with('participation', function ($q) use ($user) {
-                        $q->where('user_id', $user?->id)
-                            ->whereNull('committees_activities_id');
+                        $q->where('user_id', $user?->id);
                     })
                     ->withCount([
                         'users',

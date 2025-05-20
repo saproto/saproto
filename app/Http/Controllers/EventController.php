@@ -111,6 +111,7 @@ class EventController extends Controller
             'activity.helpingCommitteeInstances.users.photo',
             'videos',
             'albums',
+            'dinnerforms'
         ]);
 
         $methods = [];
