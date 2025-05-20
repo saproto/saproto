@@ -103,7 +103,7 @@ class EventController extends Controller
             'tickets.purchases.user.photo',
             'tickets.purchases.orderline',
             'activity.users.photo',
-            'activity.participation'=>function ($query) {
+            'activity.participation' => function ($query) {
                 $query->where('user_id', Auth::id());
             },
             'activity.backupUsers.photo',
