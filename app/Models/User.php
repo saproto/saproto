@@ -219,7 +219,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return ! (
             $this->password ||
             $this->edu_username ||
-            Carbon::parse($this->created_at)->timestamp > Carbon::now()->addHour()->timestamp ||
+            Carbon::parse($this->created_at)->timestamp > Carbon::now()->subHour()->timestamp ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
             Bank::query()->where('user_id', $this->id)->first() ||
             Address::query()->where('user_id', $this->id)->first() ||
