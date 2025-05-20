@@ -114,13 +114,11 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param Event $event
      * @return View
      */
-    public function checklist($id)
+    public function checklist(Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');
         }
