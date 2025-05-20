@@ -43,7 +43,7 @@
 
             {{-- Participating --}}
             @php
-                $participation = $event->activity?->getParticipation(Auth::user())
+                $participation = $event->activity?->getParticipation(Auth::user());
             @endphp
 
             @if (Auth::check() && ! empty($participation))
