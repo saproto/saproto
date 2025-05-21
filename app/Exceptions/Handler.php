@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
+use Laravel\Passport\Exceptions\OAuthServerException;
 use Override;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -36,6 +37,7 @@ class Handler extends ExceptionHandler
         HttpExceptionInterface::class,
         ValidationException::class,
         AuthorizationException::class,
+        OAuthServerException::class,
     ];
 
     /**

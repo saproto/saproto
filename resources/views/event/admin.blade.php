@@ -12,7 +12,7 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <a
-                href="{{ route('event::checklist', ['id' => $event->id]) }}"
+                href="{{ route('event::checklist', ['event' => $event]) }}"
                 class="btn btn-success btn-block mb-3"
             >
                 Participant Checklist
@@ -54,7 +54,7 @@
                     <div class="card-body">
                         <a
                             class="btn btn-success btn-block disabled"
-                            href="{{ route('event::scan', ['id' => $event->id]) }}"
+                            href="{{ route('event::scan', ['event' => $event]) }}"
                         >
                             Start Scanner Application for Event
                         </a>

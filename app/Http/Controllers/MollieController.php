@@ -217,7 +217,7 @@ class MollieController extends Controller
 
             Session::flash('flash_message', $flash_message);
 
-            return Redirect::route('event::show', ['id' => Event::query()->findOrFail($event_id)->getPublicId()]);
+            return Redirect::route('event::show', ['event' => Event::getPublicId($event_id)]);
         }
 
         return Redirect::route('omnomcom::orders::index');
@@ -236,16 +236,16 @@ class MollieController extends Controller
 
     /**
      * @param  int[]  $orderlines
-     * @param  object{status: string, resource: string, id: string, description?: string, pricing?: mixed}  $selected_method
      * @return MollieTransaction
      *
      * @throws ApiException
      */
-    public static function createPaymentForOrderlines(array $orderlines, object $selected_method)
+    public static function createPaymentForOrderlines(array $orderlines, object|string $selected_method)
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
 
-        if (Config::boolean('omnomcom.mollie.use_fees')) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method)) {
+            /** @var object $selected_method */
             $fee = round(
                 $selected_method->pricing[0]->fixed->value +
                 $total * (floatval($selected_method->pricing[0]->variable) / 100),
@@ -281,7 +281,7 @@ class MollieController extends Controller
                 'currency' => 'EUR',
                 'value' => $total,
             ],
-            'method' => Config::boolean('omnomcom.mollie.use_fees') ? $selected_method->id : null,
+            'method' => Config::boolean('omnomcom.mollie.use_fees') && ! is_string($selected_method) ? $selected_method->id : null,
             'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];

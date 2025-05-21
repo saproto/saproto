@@ -105,7 +105,7 @@ class Committee extends Model
      */
     public function organizedEvents(): Builder
     {
-        return Event::getEventBlockQuery()->with('committee')->where('committee_id', $this->id);
+        return Event::getEventBlockQuery()->where('committee_id', $this->id);
     }
 
     /**
@@ -164,7 +164,6 @@ class Committee extends Model
                 });
             })
             ->where('end', '<', Carbon::now()->timestamp)
-            ->with('committee')
             ->reorder('start', 'desc');
     }
 
@@ -204,6 +203,6 @@ class Committee extends Model
             return false;
         }
 
-        return $user->committees->contains($this);
+        return $this->users->contains($user);
     }
 }

@@ -18,7 +18,7 @@ it('does not lists the event categories for someone without permission', functio
     /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
-        ->get('/events/categories/create');
+        ->get(route('event::categories.create'));
     $response->assertSee('You are not allowed to access this page');
 });
 
@@ -30,7 +30,7 @@ it('lets the board create a new event category', function () {
     $event = EventCategory::factory()->raw();
 
     $response = $this->actingAs($member->user)
-        ->post('/events/categories', $event);
+        ->post(route('event::categories.store'), $event);
     $response->assertStatus(302);
 
     $this->assertDatabaseHas('event_categories', [
@@ -48,8 +48,8 @@ it('lets the board delete an event category', function () {
     $event = EventCategory::factory()->create();
 
     $response = $this->actingAs($member->user)
-        ->delete('/events/categories/'.$event->id);
-    $response->assertRedirect('/events/categories/create');
+        ->delete(route('event::categories.destroy', ['category' => $event->id]));
+    $response->assertRedirect(route('event::categories.create'));
     $response->assertStatus(302);
     $this->assertDatabaseMissing('event_categories',
         ['id' => $event->id]

@@ -20,10 +20,8 @@ class ActivityController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function store(Request $request, int $id)
+    public function store(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
 
         $new = $event->activity === null;
         $activity = ($new ? new Activity : $event->activity);
@@ -37,25 +35,25 @@ class ActivityController extends Controller
         if ($newRegistrationEnd < $newRegistrationStart) {
             Session::flash('flash_message', 'You cannot let the event sign-up end before it starts.');
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return Redirect::route('event::edit', ['event' => $event]);
         }
 
         if ($newNoShow > $activity->no_show_fee && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return Redirect::route('event::edit', ['event' => $event]);
         }
 
         if ($newNoShow < 0) {
             Session::flash('flash_message', 'The no show fee should be a positive amount.');
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return Redirect::route('event::edit', ['event' => $event]);
         }
 
         if ($newPrice > floatval($activity->price) && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
 
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return Redirect::route('event::edit', ['event' => $event]);
         }
 
         $data = [
@@ -70,7 +68,7 @@ class ActivityController extends Controller
         ];
 
         if (! $activity->validate($data)) {
-            return Redirect::route('event::edit', ['id' => $event->id])->withErrors($activity->errors());
+            return Redirect::route('event::edit', ['event' => $event])->withErrors($activity->errors());
         }
 
         $activity->fill($data);
@@ -86,18 +84,14 @@ class ActivityController extends Controller
 
         Session::flash('flash_message', 'Your changes have been saved.');
 
-        return Redirect::route('event::edit', ['id' => $event->id]);
+        return Redirect::route('event::edit', ['event' => $event]);
     }
 
     /**
      * @return RedirectResponse
-     *
-     * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             Session::flash('flash_message', 'There is no participation data to delete.');
 
@@ -116,17 +110,14 @@ class ActivityController extends Controller
 
         Session::flash('flash_message', 'Participation data deleted.');
 
-        return Redirect::route('event::edit', ['id' => $event->id]);
+        return Redirect::route('event::edit', ['event' => $event]);
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function checklist($id)
+    public function checklist(Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');
         }
@@ -139,13 +130,10 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function addHelp(Request $request, $id)
+    public function addHelp(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         if (! $event->activity) {
             Session::flash('flash_message', 'This event has no activity data.');
 
@@ -180,10 +168,11 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return RedirectResponse
      */
-    public function updateHelp(Request $request, $id)
+    public function updateHelp(Request $request, int $id)
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
@@ -200,12 +189,12 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return RedirectResponse
      *
-     * @throws Exception
      */
-    public function deleteHelp(Request $request, $id)
+    public function deleteHelp(Request $request, int $id)
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);

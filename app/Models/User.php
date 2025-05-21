@@ -100,7 +100,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection<int, Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read StorageEntry|null $photo
- * @property-read string $photo_preview
  * @property-read Collection<int, PlayedVideo> $playedVideos
  * @property-read int|null $played_videos_count
  * @property-read mixed $proto_email
@@ -193,7 +192,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $with = ['member'];
 
-    protected $appends = ['is_member', 'photo_preview', 'is_protube_admin'];
+    protected $appends = ['is_member', 'is_protube_admin'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
 
@@ -492,7 +491,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     protected function protoEmail(): Attribute
     {
-        return Attribute::make(get: fn () => $this->is_member && $this->groups()->exists() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
+        return Attribute::make(get: fn () => $this->is_member && $this->groups->isNotEmpty() ? $this->member->proto_username.'@'.config('proto.emaildomain') : null);
     }
 
     public function getDisplayEmail(): string
