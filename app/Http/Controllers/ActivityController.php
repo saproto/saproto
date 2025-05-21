@@ -7,7 +7,6 @@ use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -168,8 +167,6 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
      */
     public function updateHelp(Request $request, int $id)
@@ -189,10 +186,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
      * @return RedirectResponse
-     *
      */
     public function deleteHelp(Request $request, int $id)
     {
