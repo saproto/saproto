@@ -41,8 +41,6 @@ use Illuminate\Support\Facades\Config;
  * @property-read int|null $helping_committee_instances_count
  * @property-read Collection<int, Committee> $helpingCommittees
  * @property-read int|null $helping_committees_count
- * @property-read Collection<int, ActivityParticipation> $helpingParticipations
- * @property-read int|null $helping_participations_count
  * @property-read Collection<int, ActivityParticipation> $participation
  * @property-read int|null $participation_count
  * @property-read Collection<int, User> $presentUsers
@@ -206,6 +204,10 @@ class Activity extends Validatable
      */
     public function getParticipation(?User $user): ?ActivityParticipation
     {
+        if (! $user instanceof User) {
+            return null;
+        }
+
         return $this->participation->whereNull('committees_activities_id')->first(static fn ($p): bool => $p->user_id === $user->id);
     }
 
@@ -227,7 +229,7 @@ class Activity extends Validatable
 
     public function isEro(User $user): bool
     {
-        return $this->helpingParticipations->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
+        return $this->participation->whereNotNull('committees_activities_id')->first(fn ($p): bool => $p->user_id === $user->id && $p->committees_activities_id === Config::integer('proto.committee.ero')) !== null;
     }
 
     /**

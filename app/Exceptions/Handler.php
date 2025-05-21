@@ -37,7 +37,7 @@ class Handler extends ExceptionHandler
         HttpExceptionInterface::class,
         ValidationException::class,
         AuthorizationException::class,
-        OAuthServerException:: class
+        OAuthServerException::class,
     ];
 
     /**

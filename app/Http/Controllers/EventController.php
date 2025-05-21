@@ -294,7 +294,7 @@ class EventController extends Controller
      */
     public function admin(Event $event)
     {
-        $event->load('tickets.purchases.user', 'tickets.purchases.orderline');
+        $event->load(['tickets.purchases.user', 'tickets.purchases.orderline.molliePayment', 'tickets.product']);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -468,7 +468,7 @@ class EventController extends Controller
                 'no_show_fee' => $event->activity?->no_show_fee,
                 'user_signedup' => $user && $userParticipation !== null,
                 'user_signedup_backup' => $user && $userParticipation->backup,
-                'user_signedup_id' => $userParticipation->id,
+                'user_signedup_id' => $userParticipation?->id ?? null,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
@@ -692,6 +692,6 @@ CALSCALE:GREGORIAN
 
         Session::flash('flash_message', 'Copied the event!');
 
-        return Redirect::to(route('event::edit', ['id' => $newEvent->id]));
+        return Redirect::to(route('event::edit', ['event' => $newEvent]));
     }
 }

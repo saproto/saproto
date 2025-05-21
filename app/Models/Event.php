@@ -312,8 +312,12 @@ class Event extends Model
     /**
      * @return bool Whether the user is an admin of the event.
      */
-    public function isEventAdmin(User $user): bool
+    public function isEventAdmin(?User $user): bool
     {
+        if (! $user instanceof User) {
+            return false;
+        }
+
         if ($user->can('board')) {
             return true;
         }

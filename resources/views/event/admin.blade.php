@@ -54,7 +54,7 @@
                     <div class="card-body">
                         <a
                             class="btn btn-success btn-block disabled"
-                            href="{{ route('event::scan', ['id' => $event->id]) }}"
+                            href="{{ route('event::scan', ['event' => $event]) }}"
                         >
                             Start Scanner Application for Event
                         </a>
