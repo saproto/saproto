@@ -89,7 +89,7 @@ class EventController extends Controller
      */
     public function show(Event $event): View
     {
-        $event->loadMissing([
+        $event->load([
             'committee',
             'tickets.product',
             'tickets.purchases.user.photo',
