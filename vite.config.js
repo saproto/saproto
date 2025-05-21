@@ -19,6 +19,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                //The sass files for our themes
                 '/resources/js/app.ts',
                 '/resources/css/app.css',
 
