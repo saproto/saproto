@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 use PDF;
 
 class TicketController extends Controller
@@ -300,10 +301,11 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
+     *
+     * @throws ApiException
      */
-    public function buyForEvent(Request $request, $id)
+    public function buyForEvent(Request $request, int $id)
     {
         /** @var Event $event */
         $event = Event::query()->findOrFail($id);

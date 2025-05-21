@@ -105,6 +105,7 @@ class EventController extends Controller
                     'activity.helpingCommitteeInstances.committee',
                     'activity.helpingCommitteeInstances.users.photo',
                     'videos',
+                    'tickets.purchases.user',
                     'albums'])
             ->firstOrFail();
 
