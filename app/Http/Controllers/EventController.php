@@ -36,33 +36,25 @@ class EventController extends Controller
         $category = EventCategory::query()->find($request->input('category'));
 
         // if there is a category, get only the events that are in that category
-        $eventQuery = Event::getEventBlockQuery()
+        $events = Event::getEventBlockQuery()
             ->when($category, static function ($query) use ($category) {
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            });
+            })
+            ->where('start', '>', Carbon::now()->timestamp)
+            ->get();
 
         $data = [[], [], []];
 
-        // Get the events for the next week
-        $data[0] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '<=', strtotime('+1 week'))
-            ->get();
+        $data[0] = $events->where('start', '>', Carbon::now()->timestamp)
+            ->where('start', '<=', Carbon::now()->addWeek()->timestamp);
 
-        // Get the events for the next month
-        $data[1] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 week'))
-            ->where('start', '<=', strtotime('+1 month'))
-            ->get();
+        $data[1] = $events
+            ->where('start', '>', Carbon::now()->addWeek()->timestamp)
+            ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
 
-        // Get the events for the next year
-        $data[2] = (clone $eventQuery)
-            ->where('start', '>=', strtotime('now'))
-            ->where('start', '>', strtotime('+1 month'))
-            ->get();
+        $data[2] = $events->where('start', '>', Carbon::now()->addMonth()->timestamp);
 
         $years = $this->getAvailableYears();
 
@@ -95,19 +87,24 @@ class EventController extends Controller
     /**
      * @throws ApiException
      */
-    public function show(string $id): View
+    public function show(Event $event): View
     {
-        $event = Event::getEventBlockQuery()->where('id', Event::getIdFromPublicId($id))
-            ->with(
-                ['tickets.product',
-                    'activity.users.photo',
-                    'activity.backupUsers.photo',
-                    'activity.helpingCommitteeInstances.committee',
-                    'activity.helpingCommitteeInstances.users.photo',
-                    'videos',
-                    'tickets.purchases.user',
-                    'albums'])
-            ->firstOrFail();
+        $event->load([
+            'committee',
+            'tickets.product',
+            'tickets.purchases.user.photo',
+            'tickets.purchases.orderline.molliePayment',
+            'activity.users.photo',
+            'activity.participation' => function ($query) {
+                $query->where('user_id', Auth::id());
+            },
+            'activity.backupUsers.photo',
+            'activity.helpingCommitteeInstances.committee',
+            'activity.helpingCommitteeInstances.users.photo',
+            'videos',
+            'albums',
+            'dinnerforms',
+        ]);
 
         $methods = [];
         if (Config::boolean('omnomcom.mollie.use_fees')) {
@@ -159,16 +156,14 @@ class EventController extends Controller
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
 
-        return Redirect::route('event::show', ['id' => $event->getPublicId()]);
+        return Redirect::route('event::show', ['event' => $event]);
     }
 
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(Event $event)
     {
-        $event = Event::query()->findOrFail($id);
-
         return view('event.edit', ['event' => $event]);
     }
 
@@ -177,10 +172,8 @@ class EventController extends Controller
      *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, int $id)
+    public function update(StoreEventRequest $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -273,11 +266,8 @@ class EventController extends Controller
      *
      * @throws Exception
      */
-    public function destroy(int $id)
+    public function destroy(Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
-
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
 
@@ -294,18 +284,17 @@ class EventController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function forceLogin(int $id)
+    public function forceLogin(Event $event)
     {
-        return Redirect::route('event::show', ['id' => $id]);
+        return Redirect::route('event::show', ['event' => $event]);
     }
 
     /**
      * @return RedirectResponse|View
      */
-    public function admin(int $id)
+    public function admin(Event $event)
     {
-        $event = Event::query()
-            ->with('tickets.purchases.user', 'tickets.purchases.orderline')->findOrFail($id);
+        $event->load('tickets.purchases.user', 'tickets.purchases.orderline');
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -319,9 +308,8 @@ class EventController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function scan(int $id)
+    public function scan(Event $event)
     {
-        $event = Event::query()->findOrFail($id);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
@@ -389,10 +377,8 @@ class EventController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function linkAlbum(Request $request, int $event)
+    public function linkAlbum(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($event);
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($request->album_id);
 
@@ -440,12 +426,14 @@ class EventController extends Controller
 
         foreach ($events as $event) {
             if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->user_has_participation &&
-                ! $event->user_has_helper_participation &&
+                ! $event->activity->isParticipating($user) &&
+                ! $event->activity->isHelping($user) &&
                 ! $event->isOrganising($user)
             ))) {
                 continue;
             }
+
+            $userParticipation = $event->activity?->getParticipation($user);
 
             $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
@@ -478,15 +466,15 @@ class EventController extends Controller
                 'has_signup' => $event->activity !== null,
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
-                'user_signedup' => $user && $event->user_has_participation,
-                'user_signedup_backup' => $user && $event->user_has_backup_participation,
-                'user_signedup_id' => ($user && $event->user_has_participation ? $event->activity?->getParticipation($user)->id : null),
+                'user_signedup' => $user && $userParticipation !== null,
+                'user_signedup_backup' => $user && $userParticipation->backup,
+                'user_signedup_id' => $userParticipation->id,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
                 'can_signout' => ($user && $event->activity?->canUnsubscribe()),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === Auth::id())->pluck('api_attributes') : null),
                 'participants' => $participants,
-                'is_helping' => ($user && $event->activity ? $event->user_has_helper_participation : null),
+                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
                 'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
                 'backupParticipants' => $backupParticipants,
             ];
@@ -570,7 +558,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->activity?->user_has_tickets || $event->activity?->user_has_helper_participation || $event->activity?->user_has_participation)) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
                 continue;
             }
 
@@ -589,17 +577,18 @@ CALSCALE:GREGORIAN
             $status = null;
 
             if ($user) {
+                $userParticipation = $event->activity?->getParticipation($user);
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $info_text .= ' You are organizing this activity.';
                 } elseif ($event->activity) {
-                    if ($event->activity->user_has_helper_participation) {
+                    if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->user_has_backup_participation) {
+                    } elseif ($userParticipation?->backup) {
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
-                    } elseif ($event->activity->user_has_participation || $event->user_has_tickets) {
+                    } elseif ($userParticipation !== null || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $info_text .= ' You are participating in this activity.';
                     }
@@ -613,7 +602,7 @@ CALSCALE:GREGORIAN
                 sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
                 sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
-                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['id' => $event->getPublicId()]))."\r\n".
+                sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
                 sprintf(
                     'ORGANIZER;CN=%s:MAILTO:%s',

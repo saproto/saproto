@@ -9,7 +9,7 @@
                 You receive this e-mail because the board signed you up to help
                 with
                 <a
-                    href="{{ route('event::show', ['id' => $activity['id']]) }}"
+                    href="{{ route('event::show', ['event' => $activity['id']]) }}"
                 >
                     {{ $activity['title'] }}
                 </a>
@@ -21,7 +21,7 @@
             <p>
                 You receive this e-mail because the board signed you up for
                 <a
-                    href="{{ route('event::show', ['id' => $activity['id']]) }}"
+                    href="{{ route('event::show', ['event' => $activity['id']]) }}"
                 >
                     {{ $activity['title'] }}
                 </a>

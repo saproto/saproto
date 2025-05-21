@@ -305,11 +305,8 @@ class TicketController extends Controller
      *
      * @throws ApiException
      */
-    public function buyForEvent(Request $request, int $id)
+    public function buyForEvent(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
-
         if ($event->tickets->count() < 1) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
 

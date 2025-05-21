@@ -5,7 +5,7 @@
         <div class="card-body">
             <form
                 method="post"
-                action="{{ route('event::addhelp', ['id' => $event->id]) }}"
+                action="{{ route('event::addhelp', ['event' => $event]) }}"
             >
                 @csrf
 
