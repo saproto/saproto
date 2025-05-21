@@ -15,7 +15,7 @@ class ActivityUnsubscribedFrom extends Mailable
     /**
      * @var array<'id'|'name'|'title', mixed>
      */
-    public $activity;
+    public array $activity;
 
     /**
      * Create a new message instance.
@@ -25,7 +25,7 @@ class ActivityUnsubscribedFrom extends Mailable
     public function __construct(ActivityParticipation $participation)
     {
         $this->activity = [
-            'id' => $participation->activity->event->getPublicId(),
+            'id' => $participation->activity->event->getRouteKey(),
             'title' => $participation->activity->event->title,
             'name' => $participation->user->calling_name,
         ];

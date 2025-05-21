@@ -40,7 +40,7 @@ class SyncUTAccounts extends Command
 
         // get all regular members who do not have an account yet or have not been verified in this cron yet
         $query = User::query()->whereHas('member', function ($member) {
-            $member->type(MembershipTypeEnum::REGULAR)
+            $member->whereMembershipType(MembershipTypeEnum::REGULAR)
                 ->whereHas('UtAccount', function ($q) {
                     $q->where('found', false);
                 })->orDoesntHave('UtAccount');
@@ -71,7 +71,10 @@ class SyncUTAccounts extends Command
         }
     }
 
-    public function syncStudents($query, string $constraints = ''): void
+    /**
+     * @param  Builder<User>  $query
+     */
+    public function syncStudents(Builder $query, string $constraints = ''): void
     {
         // try to find the users by their student number
         $usersById = (clone $query)->whereNotNull('utwente_username')->get();
@@ -92,7 +95,10 @@ class SyncUTAccounts extends Command
         UtAccount::query()->insert($newerAccounts->toArray());
     }
 
-    /** @param Collection<User> $users */
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, User>  $users
+     * @return Collection<int, array<string, mixed>>
+     * */
     public function syncColumnToUTTrait(Collection $users, callable $queryStringBuilder, callable $compareFilter, string $userColumn, string $UTIdentifier, string $constraints = ''): Collection
     {
         $sns = implode('', array_map(fn ($userIdentifier): string => $queryStringBuilder($userIdentifier, $UTIdentifier), $users->pluck($userColumn)->toArray()));
@@ -155,6 +161,7 @@ class SyncUTAccounts extends Command
         return "(&({$UtIdentifier}=$names[0])(sn=".$names[count($names) - 1].'))';
     }
 
+    /** @param array<string, mixed> $student */
     public function nameCompare(string $userValue, array $student, string $UTIdentifier): bool
     {
         // transliterate the names to ascii and compare them in lowercase because we can get cyrillic characters from the API
@@ -169,12 +176,17 @@ class SyncUTAccounts extends Command
         return "({$UtIdentifier}={$userIdentifier})";
     }
 
+    /** @param array<string, mixed> $student */
     public function standardCompare(string $userValue, array $student, string $UTIdentifier): bool
     {
         return strtolower($userValue) === strtolower($student[$UTIdentifier]);
     }
 
-    private function formatUserInfo(User $user, $student): array
+    /**
+     * @param  array<string, mixed>  $student
+     * @return array<string, mixed>
+     */
+    private function formatUserInfo(User $user, array $student): array
     {
         return [
             'member_id' => $user->member->id,
@@ -189,7 +201,8 @@ class SyncUTAccounts extends Command
         ];
     }
 
-    private function getUtwenteResults(string $sns, string $constraints = '')
+    /** @return array<array<string, mixed>> */
+    private function getUtwenteResults(string $sns, string $constraints = ''): array
     {
         // get the results from the LDAP server
         $result = LdapController::searchUtwente("(&{$constraints}(description=Student *)(extensionattribute6=actief)(|{$sns}))");

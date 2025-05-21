@@ -20,19 +20,19 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property-read User|null $user
  *
- * @method static Builder|PlayedVideo whereCreatedAt($value)
- * @method static Builder|PlayedVideo whereId($value)
- * @method static Builder|PlayedVideo whereSpotifyId($value)
- * @method static Builder|PlayedVideo whereSpotifyName($value)
- * @method static Builder|PlayedVideo whereUpdatedAt($value)
- * @method static Builder|PlayedVideo whereUserId($value)
- * @method static Builder|PlayedVideo whereVideoId($value)
- * @method static Builder|PlayedVideo whereVideoTitle($value)
- * @method static Builder|PlayedVideo newModelQuery()
- * @method static Builder|PlayedVideo newQuery()
- * @method static Builder|PlayedVideo query()
+ * @method static Builder<static>|PlayedVideo newModelQuery()
+ * @method static Builder<static>|PlayedVideo newQuery()
+ * @method static Builder<static>|PlayedVideo query()
+ * @method static Builder<static>|PlayedVideo whereCreatedAt($value)
+ * @method static Builder<static>|PlayedVideo whereId($value)
+ * @method static Builder<static>|PlayedVideo whereSpotifyId($value)
+ * @method static Builder<static>|PlayedVideo whereSpotifyName($value)
+ * @method static Builder<static>|PlayedVideo whereUpdatedAt($value)
+ * @method static Builder<static>|PlayedVideo whereUserId($value)
+ * @method static Builder<static>|PlayedVideo whereVideoId($value)
+ * @method static Builder<static>|PlayedVideo whereVideoTitle($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class PlayedVideo extends Model
 {

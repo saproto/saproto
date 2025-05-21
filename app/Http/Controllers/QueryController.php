@@ -45,7 +45,7 @@ class QueryController extends Controller
         ]);
     }
 
-    public function membershipTotals(Request $request)
+    public function membershipTotals(Request $request): Response|View|\Illuminate\Http\Response
     {
         $utQuery = User::query()->whereHas('member', function ($q) {
             /** @var Builder<Member> $q */
@@ -66,7 +66,7 @@ class QueryController extends Controller
         }
 
         $activeUserQuery = User::query()->whereHas('member', function ($query) {
-            $query->type(MembershipTypeEnum::REGULAR);
+            $query->whereMembershipType(MembershipTypeEnum::REGULAR);
         })->whereHas('committees');
 
         if ($request->has('export_active')) {
@@ -83,8 +83,9 @@ class QueryController extends Controller
         $count_per_type = Member::query()->selectRaw('membership_type, COUNT(*) as count')
             ->groupBy('membership_type')
             ->get()
+            ->keyBy(fn ($item) => $item->membership_type->value)
             /** @phpstan-ignore-next-line */
-            ->keyBy(fn ($item) => $item->membership_type->value)->map(fn ($item) => $item->count);
+            ->map(fn ($item): int => (int) $item->count);
 
         $count_total = $count_per_type->reject(static fn ($value, $key): bool => in_array($key, [MembershipTypeEnum::PENDING->value, MembershipTypeEnum::PET->value]))->sum();
 

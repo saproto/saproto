@@ -22,25 +22,32 @@ class PhotoController extends Controller
         return view('photos.list', ['albums' => $albums]);
     }
 
-    public function show(int $id): View|RedirectResponse
+    public function show(PhotoAlbum $album): View|RedirectResponse
     {
-        $album = PhotoAlbum::query()->findOrFail($id);
+        $photos = $album->items()
+            ->orderBy('date_taken', 'desc')
+            ->paginate(24);
 
-        $photos = $album->items()->orderBy('date_taken', 'desc')->paginate(24);
-
-        return view('photos.album', ['album' => $album, 'photos' => $photos]);
+        return view('photos.album', [
+            'album' => $album,
+            'photos' => $photos,
+        ]);
     }
 
     /**
      * @return View
      */
-    public function photo(int $id)
+    public function photo(Photo $photo)
     {
-        $photo = Photo::with('album')
-            ->withCount('likes')
-            ->withExists(['likes as liked_by_me' => static function ($q) {
-                $q->where('user_id', Auth::id());
-            }])->findOrFail($id);
+        $photo->load([
+            'album',
+        ])->loadCount([
+            'likes',
+        ])->loadExists([
+            'likes as liked_by_me' => function ($query) {
+                $query->where('user_id', Auth::id());
+            },
+        ]);
 
         return view('photos.photopage', ['photo' => $photo]);
     }
@@ -48,21 +55,26 @@ class PhotoController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function toggleLike(int $photo_id)
+    public function toggleLike(Photo $photo)
     {
-        $like = PhotoLikes::query()->where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->first();
+        $user = Auth::user();
+
+        $like = PhotoLikes::query()
+            ->where('user_id', $user->id)
+            ->where('photo_id', $photo->id)
+            ->first();
 
         if ($like) {
             $like->delete();
 
-            return Redirect::route('photo::view', ['id' => $photo_id]);
+            return Redirect::route('photo::view', ['photo' => $photo->id]);
         }
 
         PhotoLikes::query()->create([
-            'photo_id' => $photo_id,
-            'user_id' => Auth::user()->id,
+            'photo_id' => $photo->id,
+            'user_id' => $user->id,
         ]);
 
-        return Redirect::route('photo::view', ['id' => $photo_id]);
+        return Redirect::route('photo::view', ['photo' => $photo->id]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Factories\DinnerformOrderlineFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,22 +14,37 @@ use Illuminate\Support\Carbon;
  * DinnerformOrderline Model.
  *
  * @property int $id
- * @property int|null $user_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $user_id
  * @property int $dinnerform_id
  * @property string $description
  * @property float $price
+ * @property bool $helper
  * @property bool $closed
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property bool|null $helper
- * @property-read User $user
- * @property-read Dinnerform $dinnerform
- * @property-read Dinnerform $price_with_discount
+ * @property-read Dinnerform|null $dinnerform
+ * @property-read int|float $price_with_discount
+ * @property-read User|null $user
  *
- * @mixin Model
- **/
+ * @method static DinnerformOrderlineFactory factory($count = null, $state = [])
+ * @method static Builder<static>|DinnerformOrderline newModelQuery()
+ * @method static Builder<static>|DinnerformOrderline newQuery()
+ * @method static Builder<static>|DinnerformOrderline query()
+ * @method static Builder<static>|DinnerformOrderline whereClosed($value)
+ * @method static Builder<static>|DinnerformOrderline whereCreatedAt($value)
+ * @method static Builder<static>|DinnerformOrderline whereDescription($value)
+ * @method static Builder<static>|DinnerformOrderline whereDinnerformId($value)
+ * @method static Builder<static>|DinnerformOrderline whereHelper($value)
+ * @method static Builder<static>|DinnerformOrderline whereId($value)
+ * @method static Builder<static>|DinnerformOrderline wherePrice($value)
+ * @method static Builder<static>|DinnerformOrderline whereUpdatedAt($value)
+ * @method static Builder<static>|DinnerformOrderline whereUserId($value)
+ *
+ * @mixin \Eloquent
+ */
 class DinnerformOrderline extends Model
 {
+    /** @use HasFactory<DinnerformOrderlineFactory>*/
     use HasFactory;
 
     protected $table = 'dinnerform_orderline';
@@ -51,7 +68,7 @@ class DinnerformOrderline extends Model
     }
 
     /**
-     * @return Attribute Price of orderline reduced by possible discounts.
+     * @return Attribute<float|int, never> Price of orderline reduced by possible discounts.
      */
     protected function priceWithDiscount(): Attribute
     {
@@ -66,5 +83,13 @@ class DinnerformOrderline extends Model
 
             return $price;
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'closed' => 'boolean',
+            'helper' => 'boolean',
+        ];
     }
 }

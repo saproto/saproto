@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventFactory;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -12,11 +13,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -25,66 +26,77 @@ use Override;
  * @property int $id
  * @property string $title
  * @property string $description
+ * @property int|null $category_id
+ * @property bool $is_external
  * @property int $start
  * @property int $end
  * @property int|null $publication
- * @property int|null $image_id
- * @property int|null $committee_id
- * @property int|null $category_id
- * @property string|null $summary
+ * @property int $unique_users_count
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $update_sequence
  * @property string $location
+ * @property string|null $maps_location
  * @property bool $is_featured
- * @property bool $is_external
  * @property bool $involves_food
  * @property bool $secret
  * @property bool $force_calendar_sync
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int|null $image_id
  * @property Carbon|null $deleted_at
- * @property int $unique_users_count
- * @property-read object $formatted_date
- * @property-read bool $is_future
+ * @property int|null $committee_id
+ * @property string|null $summary
  * @property-read Activity|null $activity
- * @property-read StorageEntry|null $image
- * @property-read Committee|null $committee
+ * @property-read Collection<int, PhotoAlbum> $albums
+ * @property-read int|null $albums_count
  * @property-read EventCategory|null $category
- * @property-read Collection|PhotoAlbum[] $albums
- * @property-read Collection|Ticket[] $tickets
- * @property-read Collection|Video[] $videos
+ * @property-read Committee|null $committee
+ * @property-read Collection<int, Dinnerform> $dinnerforms
+ * @property-read int|null $dinnerforms_count
+ * @property-read mixed $formatted_date
+ * @property-read StorageEntry|null $image
+ * @property-read bool $is_future
+ * @property-read Collection<int, Ticket> $tickets
+ * @property-read int|null $tickets_count
+ * @property-read Collection<int, Video> $videos
+ * @property-read int|null $videos_count
  *
- * @method static bool|null forceDelete()
- * @method static QueryBuilder|Event onlyTrashed()
- * @method static QueryBuilder|Event withTrashed()
- * @method static QueryBuilder|Event withoutTrashed()
- * @method static bool|null restore()
- * @method static Builder|Event whereCommitteeId($value)
- * @method static Builder|Event whereCategoryId($value)
- * @method static Builder|Event whereCreatedAt($value)
- * @method static Builder|Event whereDeletedAt($value)
- * @method static Builder|Event whereDescription($value)
- * @method static Builder|Event whereEnd($value)
- * @method static Builder|Event whereForceCalendarSync($value)
- * @method static Builder|Event whereId($value)
- * @method static Builder|Event whereImageId($value)
- * @method static Builder|Event whereInvolvesFood($value)
- * @method static Builder|Event whereIsEducational($value)
- * @method static Builder|Event whereIsExternal($value)
- * @method static Builder|Event whereIsFeatured($value)
- * @method static Builder|Event whereLocation($value)
- * @method static Builder|Event whereSecret($value)
- * @method static Builder|Event whereStart($value)
- * @method static Builder|Event whereSummary($value)
- * @method static Builder|Event whereTitle($value)
- * @method static Builder|Event whereUpdatedAt($value)
- * @method static Builder|Event newModelQuery()
- * @method static Builder|Event newQuery()
- * @method static Builder|Event query()
+ * @method static EventFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Event newModelQuery()
+ * @method static Builder<static>|Event newQuery()
+ * @method static Builder<static>|Event onlyTrashed()
+ * @method static Builder<static>|Event query()
+ * @method static Builder<static>|Event whereCategoryId($value)
+ * @method static Builder<static>|Event whereCommitteeId($value)
+ * @method static Builder<static>|Event whereCreatedAt($value)
+ * @method static Builder<static>|Event whereDeletedAt($value)
+ * @method static Builder<static>|Event whereDescription($value)
+ * @method static Builder<static>|Event whereEnd($value)
+ * @method static Builder<static>|Event whereForceCalendarSync($value)
+ * @method static Builder<static>|Event whereId($value)
+ * @method static Builder<static>|Event whereImageId($value)
+ * @method static Builder<static>|Event whereInvolvesFood($value)
+ * @method static Builder<static>|Event whereIsExternal($value)
+ * @method static Builder<static>|Event whereIsFeatured($value)
+ * @method static Builder<static>|Event whereLocation($value)
+ * @method static Builder<static>|Event whereMapsLocation($value)
+ * @method static Builder<static>|Event wherePublication($value)
+ * @method static Builder<static>|Event whereSecret($value)
+ * @method static Builder<static>|Event whereStart($value)
+ * @method static Builder<static>|Event whereSummary($value)
+ * @method static Builder<static>|Event whereTitle($value)
+ * @method static Builder<static>|Event whereUniqueUsersCount($value)
+ * @method static Builder<static>|Event whereUpdateSequence($value)
+ * @method static Builder<static>|Event whereUpdatedAt($value)
+ * @method static Builder<static>|Event withTrashed()
+ * @method static Builder<static>|Event withoutTrashed()
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Event extends Model
 {
+    /** @use HasFactory<EventFactory>*/
     use HasFactory;
+
     use SoftDeletes;
 
     protected $table = 'events';
@@ -93,7 +105,7 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
-    protected $with = ['category', 'activity'];
+    protected $with = ['category'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -102,20 +114,40 @@ class Event extends Model
     {
         return [
             'deleted_at' => 'datetime',
+            'is_external' => 'boolean',
+            'is_featured' => 'boolean',
+            'involves_food' => 'boolean',
+            'secret' => 'boolean',
+            'force_calendar_sync' => 'boolean',
         ];
     }
 
-    public function getPublicId(): string
+    #[Override]
+    public function getRouteKey(): string
     {
-        return Hashids::connection('event')->encode($this->id);
+        return Str::slug($this->title).'-'.self::getPublicId($this->id);
     }
 
-    public static function fromPublicId(string $public_id): Event
+    #[Override]
+    public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return self::query()->findOrFail(self::getIdFromPublicId($public_id));
+        $id = Str::afterLast($value, '-');
+        $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
+        if (! $model || $model->getRouteKey() === $value) {
+            return $model;
+        }
+
+        throw new HttpResponseException(
+            redirect()->route('event::show', $model->getRouteKey())
+        );
     }
 
-    public static function getIdFromPublicId($public_id)
+    public static function getPublicId(int $id): string
+    {
+        return Hashids::connection('event')->encode($id);
+    }
+
+    public static function getIdFromPublicId(string $public_id): int
     {
         $id = Hashids::connection('event')->decode($public_id);
 
@@ -146,6 +178,9 @@ class Event extends Model
         return ! $this->secret && (! $this->publication || $this->isPublished());
     }
 
+    /**
+     * @return Builder<$this>
+     */
     public static function getEventBlockQuery(?User $user = null): Builder
     {
         if (! $user instanceof User) {
@@ -156,22 +191,26 @@ class Event extends Model
             ->orderBy('start')
             ->with('image')
             ->with('activity', static function ($e) use ($user) {
-                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }, 'participation as user_has_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id)
-                        ->whereNull('committees_activities_id');
-                },
-                ])->withCount([
-                    'users',
-                ]);
-            })->withExists(['tickets as user_has_tickets' => static function ($q) use ($user) {
-                $q->whereHas('purchases', static function ($q) use ($user) {
+                $e
+                    ->with('participation', function ($q) use ($user) {
+                        $q->where('user_id', $user?->id);
+                    })
+                    ->withCount([
+                        'users',
+                    ]);
+            })
+            ->with('committee', static function ($q) use ($user) {
+                $q->with('users', function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 });
-            }]);
+            })
+            ->with('tickets', function ($q) use ($user) {
+                $q->with('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                })->whereHas('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                });
+            });
     }
 
     public function isPublished(): bool
@@ -227,6 +266,9 @@ class Event extends Model
         return $this->hasMany(Dinnerform::class, 'event_id');
     }
 
+    /**
+     * @return BelongsTo<EventCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->BelongsTo(EventCategory::class);
@@ -238,17 +280,6 @@ class Event extends Model
     public function isOrganising(User $user): bool
     {
         return $this->committee?->isMember($user) ?? false;
-    }
-
-    /** @return Collection|TicketPurchase[] */
-    public function getTicketPurchasesFor(User $user): Collection|array
-    {
-        return TicketPurchase::query()
-            ->where('user_id', $user->id)
-            ->whereHas('ticket', function ($q) {
-                $q->where('event_id', $this->id);
-            })
-            ->get();
     }
 
     public function current(): bool
@@ -281,8 +312,12 @@ class Event extends Model
     /**
      * @return bool Whether the user is an admin of the event.
      */
-    public function isEventAdmin(User $user): bool
+    public function isEventAdmin(?User $user): bool
     {
+        if (! $user instanceof User) {
+            return false;
+        }
+
         if ($user->can('board')) {
             return true;
         }
@@ -311,17 +346,7 @@ class Event extends Model
             return false;
         }
 
-        $eroHelping = HelpingCommittee::query()
-            ->where('activity_id', $this->activity->id)
-            ->where('committee_id', Config::integer('proto.committee.ero'))->first();
-        if ($eroHelping) {
-            return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
-        }
-
-        return false;
+        return $this->activity->isEro($user);
     }
 
     /**
@@ -329,9 +354,10 @@ class Event extends Model
      */
     public function hasBoughtTickets(User $user): bool
     {
-        return $this->getTicketPurchasesFor($user)->count() > 0;
+        return $this->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === $user->id)->isNotEmpty();
     }
 
+    /** @return Collection<int, User> */
     public function allUsers(): SupportCollection
     {
         $users = collect();
@@ -378,11 +404,17 @@ class Event extends Model
         return $this->involves_food && $this->end > strtotime('-1 week');
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isFuture(): Attribute
     {
         return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function formattedDate(): Attribute
     {
         return Attribute::make(get: fn () => (object) [

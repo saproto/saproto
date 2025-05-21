@@ -1,6 +1,6 @@
 <form
     method="post"
-    action="{{ $event == null ? route('event::store') : route('event::update', ['id' => $event->id]) }}"
+    action="{{ $event == null ? route('event::store') : route('event::update', ['event' => $event]) }}"
     enctype="multipart/form-data"
 >
     @csrf

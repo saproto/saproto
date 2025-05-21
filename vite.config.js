@@ -21,9 +21,20 @@ export default defineConfig({
             input: [
                 '/resources/js/app.ts',
                 '/resources/css/app.css',
+
+                //The sass files for our themes
+                '/resources/assets/sass/light.scss',
+                ...glob.sync('resources/assets/sass/!(*.example).scss'),
+
+                //js files that get included individually
                 '/resources/assets/js/application.js',
                 '/resources/assets/js/echo.js',
-                ...glob.sync('resources/assets/sass/!(*.example).scss'),
+
+                //resources for the sticker functionality
+                '/resources/assets/js/leaflet.js',
+                '/node_modules/leaflet-geosearch/dist/geosearch.css',
+                '/node_modules/leaflet.markercluster/dist/MarkerCluster.css',
+                '/node_modules/leaflet/dist/leaflet.css'
             ],
             refresh: true,
         }),

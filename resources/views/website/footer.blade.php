@@ -27,10 +27,10 @@
             <div class="col-lg-3 col-md-4 col-sm-6 col-7">
                 <br />
                 <span class="fas fa-clock fa-fw"></span>
-                &nbsp;&nbsp;Monday & Friday 08:30-16:00
+                &nbsp;&nbsp;Monday 08:30-16:00
                 <br />
                 <span class="fas fa-clock fa-fw"></span>
-                &nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30
+                &nbsp;&nbsp;Tuesday-Friday, 08:30-17:30
                 <br />
                 <span class="fas fa-phone fa-fw"></span>
                 &nbsp;&nbsp;

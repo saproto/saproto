@@ -37,7 +37,7 @@
                                 <td style="max-width: 200px">
                                     @if ($ticket->event)
                                         <a
-                                            href="{{ route('event::show', ['id' => $ticket->event->getPublicId()]) }}"
+                                            href="{{ route('event::show', ['event' => $ticket->event]) }}"
                                         >
                                             {{ $ticket->event->title }}
                                         </a>

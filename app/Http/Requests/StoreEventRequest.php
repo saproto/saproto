@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Override;
 
@@ -17,6 +18,8 @@ class StoreEventRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, string[]|string|ValidationRule>
      */
     public function rules(): array
     {
@@ -31,6 +34,7 @@ class StoreEventRequest extends FormRequest
         ];
     }
 
+    /** @return string[] */
     #[Override]
     public function messages(): array
     {

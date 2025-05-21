@@ -8,8 +8,8 @@ use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,9 +44,13 @@ class FeedbackController extends Controller
         return $this->index('quotes');
     }
 
-    private function getFeedbackQuery(FeedbackCategory $category): HasMany
+    /**
+     * @return Builder<Feedback>
+     */
+    private function getFeedbackQuery(FeedbackCategory $category): Builder
     {
-        return $category->feedback()
+        return Feedback::query()
+            ->where('feedback_category_id', $category->id)
             ->orderBy('created_at', 'desc')
             ->with('votes')
             ->when($category->review, fn ($query) => $query->where('reviewed', true))
@@ -80,7 +84,8 @@ class FeedbackController extends Controller
         return $mostVoted ?? null;
     }
 
-    private function getUnreviewed(FeedbackCategory $category): array|Collection
+    /** @return Collection<int, Feedback> */
+    private function getUnreviewed(FeedbackCategory $category): Collection
     {
         if ($category->review) {
             $unreviewed = Feedback::query()->where('reviewed', false)->where('feedback_category_id', $category->id);
@@ -93,7 +98,7 @@ class FeedbackController extends Controller
             return $unreviewed->where('user_id', Auth::user()->id)->limit(20)->get();
         }
 
-        return [];
+        return collect();
     }
 
     public function search(Request $request, string $category): View
@@ -121,7 +126,7 @@ class FeedbackController extends Controller
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
     }
 
-    public function store(Request $request, $category): RedirectResponse
+    public function store(Request $request, int $category): RedirectResponse
     {
         $category = FeedbackCategory::query()->findOrFail($category);
         $feedback = new Feedback(['feedback' => trim($request->input('feedback')), 'user_id' => Auth::id(), 'feedback_category_id' => $category->id]);
@@ -308,7 +313,7 @@ class FeedbackController extends Controller
         return Redirect::back();
     }
 
-    public function categoryUpdate(Request $request, int $id)
+    public function categoryUpdate(Request $request, int $id): RedirectResponse
     {
         // regex to remove all non-alphanumeric characters
         $newUrl = strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $request->input('name')));

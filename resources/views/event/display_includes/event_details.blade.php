@@ -17,7 +17,7 @@
     <div class="row align-content-center mb-3">
         @if ($event->isEventAdmin(Auth::user()))
             <a
-                href="{{ route('event::admin', ['id' => $event->id]) }}"
+                href="{{ route('event::admin', ['event' => $event]) }}"
                 class="btn btn-primary float-start col mx-3"
             >
                 Admin
@@ -26,7 +26,7 @@
 
         @can('board')
             <a
-                href="{{ route('event::edit', ['id' => $event->id]) }}"
+                href="{{ route('event::edit', ['event' => $event]) }}"
                 class="btn btn-info float-end col mx-3"
             >
                 Edit
@@ -36,10 +36,7 @@
 @endif
 
 <div class="card mb-3">
-    <a
-        href="{{ route('event::index', ['id' => $event->id]) }}"
-        class="btn btn-default"
-    >
+    <a href="{{ route('event::index') }}" class="btn btn-default">
         Back to calendar
     </a>
 </div>
@@ -141,7 +138,7 @@
 
         @if (! Auth::check() && ! isset($event->activity))
             <a
-                href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                href="{{ route('event::login', ['event' => $event]) }}"
                 class="list-group-item bg-info text-white text-center"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
@@ -187,7 +184,7 @@
                     @include(
                         'website.home.cards.card-bg-image',
                         [
-                            'url' => route('photo::album::list', ['id' => $album->id]),
+                            'url' => route('photo::album::list', ['album' => $album->id]),
                             'img' => $album->thumb(),
                             'html' => sprintf(
                                 '<em>%s</em><br><strong><i class="fas fa-fw fa-images" aria-hidden="true"></i> %s</strong>',

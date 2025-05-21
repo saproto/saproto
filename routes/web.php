@@ -53,8 +53,6 @@ use App\Http\Controllers\QueryController;
 use App\Http\Controllers\RegistrationHelperController;
 use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\SearchController;
-/* --- use App\Http\Controllers\RadioController; --- */
-
 use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
@@ -66,7 +64,9 @@ use App\Http\Controllers\TFAController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TIPCieController;
 use App\Http\Controllers\UserAdminController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UserPasswordController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
@@ -127,43 +127,48 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Routes related to authentication. All public --- */
     Route::controller(AuthController::class)->name('login::')->group(function () {
-        Route::get('login', 'getLogin')->name('show');
-        Route::post('login', 'postLogin')->middleware(['throttle:5,1'])->name('post');
-        Route::get('logout', 'getLogout')->name('logout');
-        Route::get('logout/redirect', 'getLogoutRedirect')->name('logout::redirect');
+        Route::get('register', 'registerIndex')->name('register::index');
+        Route::post('register', 'register')->middleware(['throttle:5,1'])->name('register');
+
+        Route::get('login', 'loginIndex')->name('show');
+        Route::post('login', 'login')->middleware(['throttle:5,1'])->name('post');
+
+        Route::get('logout', 'logout')->name('logout');
+        Route::get('logout/redirect', 'logoutAndRedirect')->name('logout::redirect');
 
         Route::prefix('password')->name('password::')->group(function () {
-            Route::get('reset/{token}', 'getPasswordReset')->name('reset::token');
-            Route::post('reset', 'postPasswordReset')->middleware(['throttle:5,1'])->name('reset::submit');
+            Route::get('reset/{token}', [UserPasswordController::class, 'resetPasswordIndex'])->name('reset::token');
+            Route::post('reset', [UserPasswordController::class, 'resetPassword'])->middleware(['throttle:5,1'])->name('reset::submit');
 
-            Route::get('email', 'getPasswordResetEmail')->name('reset');
-            Route::post('email', 'postPasswordResetEmail')->middleware(['throttle:5,1'])->name('reset::send');
-
-            Route::get('sync', 'getPasswordSync')->middleware(['auth'])->name('sync::index');
-            Route::post('sync', 'postPasswordSync')->middleware(['throttle:5,1', 'auth'])->name('sync');
-
-            Route::get('change', 'getPasswordChange')->middleware(['auth'])->name('change::index');
-            Route::post('change', 'postPasswordChange')->middleware(['throttle:5,1', 'auth'])->name('change');
+            Route::get('email', [UserPasswordController::class, 'requestPasswordResetIndex'])->name('reset');
+            Route::post('email', [UserPasswordController::class, 'requestPasswordReset'])->middleware(['throttle:5,1'])->name('reset::send');
         });
 
-        Route::get('register', 'getRegister')->name('register::index');
-        Route::post('register', 'postRegister')->middleware(['throttle:5,1'])->name('register');
-        Route::post('register/surfconext', 'postRegisterSurfConext')->middleware(['throttle:5,1'])->name('register::surfconext');
+        Route::prefix('surf')->name('surf::')->group(function () {
+            Route::get('login', [SurfConextController::class, 'login'])->name('login');
+            Route::post('callback', [SurfConextController::class, 'callback'])->name('callback');
+            Route::get('meta', [SurfConextController::class, 'provideMetadataForSurfConext'])->name('meta');
+        });
 
-        Route::get('surfconext', 'startSurfConextAuth')->name('edu');
-        Route::get('surfconext/post', 'postSurfConextAuth')->name('edupost');
+        Route::get('username', [UserPasswordController::class, 'forgotUsernameIndex'])->name('requestusername::index');
+        Route::post('username', [UserPasswordController::class, 'forgotUsername'])->middleware(['throttle:5,1'])->name('requestusername');
+    });
 
-        Route::get('username', 'requestUsername')->name('requestusername::index');
-        Route::post('username', 'requestUsername')->middleware(['throttle:5,1'])->name('requestusername');
+    /* --- Authenticated routed related to password modifications --- */
+    Route::prefix('password')->name('login::password::')->middleware(['auth'])->group(function () {
+        Route::get('sync', [UserPasswordController::class, 'syncPasswordsIndex'])->name('sync::index');
+        Route::post('sync', [UserPasswordController::class, 'syncPasswords'])->middleware(['throttle:5,1'])->name('sync');
+
+        Route::get('change', [UserPasswordController::class, 'changePasswordIndex'])->name('change::index');
+        Route::post('change', [UserPasswordController::class, 'changePassword'])->middleware(['throttle:5,1'])->name('change');
     });
 
     /* --- Routes related to user profiles --- */
     Route::prefix('user')->name('user::')->middleware(['auth'])->group(function () {
 
         /* --- Public routes ---- */
-        Route::controller(AuthController::class)->group(function () {
-            Route::post('delete', 'deleteUser')->name('delete');
-            Route::post('password', 'updatePassword')->name('changepassword');
+        Route::controller(UserController::class)->group(function () {
+            Route::post('delete', 'destroy')->name('delete');
         });
 
         Route::get('personal_key', [UserDashboardController::class, 'generateKey'])->name('personal_key::generate');
@@ -219,9 +224,9 @@ Route::middleware('forcedomain')->group(function () {
         });
 
         /* --- Routes related to UT accounts --- */
-        Route::controller(SurfConextController::class)->prefix('edu')->name('edu::')->group(function () {
-            Route::get('delete', 'destroy')->name('delete');
-            Route::get('create', 'create')->name('create');
+        Route::controller(SurfConextController::class)->prefix('surf')->name('surf::')->group(function () {
+            Route::get('unlink', 'unlinkAccount')->name('unlink');
+            Route::get('link', 'linkAccount')->name('link');
         });
 
         /* --- Routes related to 2FA --- */
@@ -454,9 +459,17 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('store/{id}', 'store')->name('store');
         });
     });
+    Route::middleware(['auth', 'member'])->group(function () {
 
-    Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers::overviewmap')->middleware(['auth', 'member']);
-    Route::resource('stickers', StickerController::class)->middleware(['auth', 'member'])->only(['index', 'store', 'destroy']);
+        Route::middleware('permission:board')->group(function () {
+            Route::post('stickers/unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport')->middleware('permission:board');
+            Route::get('stickers/admin', [StickerController::class, 'admin'])->name('stickers.admin')->middleware('permission:board');
+        });
+
+        Route::post('stickers/report/{sticker}', [StickerController::class, 'report'])->name('stickers.report');
+        Route::get('stickers/overview', [StickerController::class, 'overviewMap'])->name('stickers.overviewmap');
+        Route::resource('stickers', StickerController::class)->only(['index', 'store', 'destroy']);
+    });
 
     /* --- Routes related to the wallstreet drink system (TIPCie only) --- */
     Route::controller(WallstreetController::class)->prefix('wallstreet')->name('wallstreet::')->middleware(['permission:tipcie'])->group(function () {
@@ -504,9 +517,9 @@ Route::middleware('forcedomain')->group(function () {
                 // Events admin
                 Route::get('create', 'create')->name('create');
                 Route::post('store', 'store')->name('store');
-                Route::get('edit/{id}', 'edit')->name('edit');
-                Route::post('update/{id}', 'update')->name('update');
-                Route::get('delete/{id}', 'destroy')->name('delete');
+                Route::get('{event}/edit', 'edit')->name('edit');
+                Route::post('{event}/update', 'update')->name('update');
+                Route::get('{event}/delete', 'destroy')->name('delete');
 
                 // Albums
                 Route::post('album/{event}/link', 'linkAlbum')->name('linkalbum');
@@ -519,16 +532,16 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('copy', 'copyEvent')->name('copy');
 
             // Catch-alls
-            Route::get('admin/{id}', 'admin')->middleware(['auth'])->name('admin');
-            Route::get('scan/{id}', 'scan')->middleware(['auth'])->name('scan');
+            Route::get('{event}/admin', 'admin')->middleware(['auth'])->name('admin');
+            Route::get('{event}/scan', 'scan')->middleware(['auth'])->name('scan');
 
             Route::post('set_reminder', 'setReminder')->middleware(['auth'])->name('set_reminder');
             Route::get('toggle_relevant_only', 'toggleRelevantOnly')->middleware(['auth'])->name('toggle_relevant_only');
 
             // Force login for event
-            Route::get('{id}/login', 'forceLogin')->middleware(['auth'])->name('login');
+            Route::get('{event}/login', 'forceLogin')->middleware(['auth'])->name('login');
             // Show event
-            Route::get('{id}', 'show')->name('show');
+            Route::get('{event}', 'show')->name('show');
         });
 
         // Event categories (Board only)
@@ -539,35 +552,34 @@ Route::middleware('forcedomain')->group(function () {
         /* --- Related to presence & participation --- */
         Route::controller(ParticipationController::class)->group(function () {
             // Public routes
-            Route::get('togglepresence/{id}', 'togglePresence')->middleware(['auth'])->name('togglepresence');
+            Route::get('togglepresence/{participation}', 'togglePresence')->middleware(['auth'])->name('togglepresence');
 
             // Manage participation
-            Route::get('participate/{id}', 'create')->middleware(['member'])->name('addparticipation');
-            Route::get('unparticipate/{participation_id}', 'destroy')->name('deleteparticipation');
+            Route::get('{event}/participate', 'create')->middleware(['member'])->name('addparticipation');
+            Route::get('unparticipate/{participation}', 'destroy')->name('deleteparticipation');
 
             // Participate for someone else (Board only)
-            Route::post('participatefor/{id}', 'createFor')->middleware(['permission:board'])->name('addparticipationfor');
-
+            Route::post('{event}/participatefor', 'createFor')->middleware(['permission:board'])->name('addparticipationfor');
         });
 
         /* --- Buy tickets for an event (Public) --- */
-        Route::post('buytickets/{id}', [TicketController::class, 'buyForEvent'])->middleware(['auth'])->name('buytickets');
+        Route::post('{event}/buytickets', [TicketController::class, 'buyForEvent'])->middleware(['auth'])->name('buytickets');
 
         Route::controller(ActivityController::class)->group(function () {
 
             // Board only admin
             Route::middleware(['permission:board'])->group(function () {
                 // Related to activities
-                Route::post('signup/{id}', 'store')->middleware(['permission:board'])->name('addsignup');
-                Route::get('signup/{id}/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
+                Route::post('{event}/signup', 'store')->middleware(['permission:board'])->name('addsignup');
+                Route::get('{event}/signup/delete', 'destroy')->middleware(['permission:board'])->name('deletesignup');
 
                 // Related to helping committees
-                Route::post('addhelp/{id}', 'addHelp')->middleware(['permission:board'])->name('addhelp');
+                Route::post('{event}/addhelp', 'addHelp')->middleware(['permission:board'])->name('addhelp');
                 Route::post('updatehelp/{id}', 'updateHelp')->middleware(['permission:board'])->name('updatehelp');
                 Route::get('deletehelp/{id}', 'deleteHelp')->middleware(['permission:board'])->name('deletehelp');
             });
             // Public routes
-            Route::get('checklist/{id}', 'checklist')->name('checklist');
+            Route::get('{event}/checklist', 'checklist')->name('checklist');
         });
 
     });
@@ -883,9 +895,9 @@ Route::middleware('forcedomain')->group(function () {
         // Public routes
         Route::controller(PhotoController::class)->group(function () {
             Route::get('', 'index')->name('albums');
-            Route::get('/like/{id}', 'toggleLike')->middleware(['auth'])->name('likes');
-            Route::get('/photo/{id}', 'photo')->name('view');
-            Route::get('{id}', 'show')->name('album::list');
+            Route::get('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('likes');
+            Route::get('/photo/{photo}', 'photo')->name('view');
+            Route::get('{album}', 'show')->name('album::list');
         });
 
         /* --- Routes related to the photo admin. (Protography only) --- */
@@ -904,14 +916,12 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Fetching images: Public --- */
     Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
-        Route::get('{id}/{hash}', 'getImage')->name('get');
-        Route::get('{id}/{hash}/{name}', 'getImage');
+        Route::get('{id}/{hash}/{name?}', 'getImage')->name('get');
     });
 
     /* --- Fetching files: Public   --- */
     Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
-        Route::get('{id}/{hash}', 'get')->name('get');
-        Route::get('{id}/{hash}/{name}', 'get');
+        Route::get('{id}/{hash}/{name?}', 'get')->name('get');
     });
 
     /* --- Routes related to Spotify. (Board) --- */

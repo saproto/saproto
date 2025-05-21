@@ -8,7 +8,7 @@
 
         <form
             method="post"
-            action="{{ route('event::addsignup', ['id' => $event->id]) }}"
+            action="{{ route('event::addsignup', ['event' => $event]) }}"
         >
             @csrf
 
@@ -198,7 +198,7 @@
                     @if ($event->activity)
                         <div class="col-6">
                             <a
-                                href="{{ route('event::deletesignup', ['id' => $event->id]) }}"
+                                href="{{ route('event::deletesignup', ['event' => $event]) }}"
                                 class="btn btn-danger btn-block"
                             >
                                 Remove sign-up

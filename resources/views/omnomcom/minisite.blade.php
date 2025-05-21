@@ -6,7 +6,7 @@
 <html lang="en">
     <head>
         <link
-            href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,700"
+            href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap"
             rel="stylesheet"
             type="text/css"
         />
@@ -35,17 +35,22 @@
         />
 
         <style>
+            * {
+                text-transform: uppercase;
+            }
             html {
                 box-sizing: border-box;
-                font: 14px sans-serif;
+                font: 14px 'Varela Round';
+                font-size: 1200;
             }
 
             body {
                 background-color: #0089fa;
-                font-family: 'Roboto Slab', 'Arial', sans-serif;
+                font-family: 'Varela Round', sans-serif;
                 color: #fff;
                 font-weight: 400;
                 font-size: 14px;
+                text-transform: uppercase;
             }
 
             .d-none {
@@ -80,7 +85,7 @@
                 font-size: 30px;
                 padding: 20px;
                 color: #0089fa;
-                font-family: 'Roboto Slab', 'Arial', sans-serif;
+                font-family: 'Varela Round', sans-serif;
                 border: none;
                 margin-top: 20px;
                 width: 800px;

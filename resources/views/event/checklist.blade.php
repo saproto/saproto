@@ -3,7 +3,7 @@
 @section('page-title')
     Participant checklist for {{ $event->title }}
     <a
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['event' => $event]) }}"
         class="btn btn-default float-end"
     >
         Back to event
@@ -130,7 +130,7 @@
         document.querySelectorAll('.is_present').forEach((el) => {
             el.onclick = (_) => {
                 get(
-                    '{{ route('event::togglepresence', ['id' => 'id']) }}'.replace(
+                    '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
                         'id',
                         el.getAttribute('data-id')
                     )

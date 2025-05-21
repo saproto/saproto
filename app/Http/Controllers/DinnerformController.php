@@ -17,13 +17,11 @@ use Illuminate\View\View;
 
 class DinnerformController extends Controller
 {
-    /**
-     * @return View|RedirectResponse
-     */
-    public function show(int $id)
+    public function show(int $id): View|RedirectResponse
     {
         /** @var Dinnerform $dinnerform */
-        $dinnerform = Dinnerform::query()->findOrFail($id);
+        $dinnerform = Dinnerform::query()
+            ->with(['event'])->findOrFail($id);
         $order = DinnerformOrderline::query()
             ->where('user_id', Auth::user()->id)
             ->where('dinnerform_id', $dinnerform->id)
@@ -38,28 +36,24 @@ class DinnerformController extends Controller
         return view('dinnerform.show', ['dinnerform' => $dinnerform, 'order' => $order]);
     }
 
-    /** @return View */
-    public function admin($id)
+    public function admin(int $id): View
     {
         $dinnerform = Dinnerform::query()
-            ->with(['orderlines.user', 'orderlines.dinnerform'])
+            ->with(['orderlines.user', 'orderlines.dinnerform', 'event'])
             ->findOrFail($id);
 
         return view('dinnerform.admin', ['dinnerform' => $dinnerform]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
-        $dinnerformList = Dinnerform::query()->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
+        $dinnerformList = Dinnerform::query()
+            ->with('event')->orderBy('end', 'desc')->with('orderedBy')->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         if ($request->input('end') < $request->input('start')) {
             Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');

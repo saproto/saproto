@@ -58,6 +58,11 @@ class IsAlfredThereController extends Controller
         return Redirect::back();
     }
 
+    /** @return array{
+     *     text: string,
+     *     status: string,
+     *     unix: string
+    } */
     private function getStatus(): array
     {
         return [

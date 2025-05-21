@@ -66,7 +66,7 @@
                 @if ($event->activity->canUnsubscribe() || $authParticipation->backup)
                     <a
                         class="list-group-item bg-danger text-white"
-                        href="{{ route('event::deleteparticipation', ['participation_id' => $authParticipation->id]) }}"
+                        href="{{ route('event::deleteparticipation', ['participation' => $authParticipation->id]) }}"
                     >
                         @if ($authParticipation->backup)
                             Sign me out of the back-up list.
@@ -80,7 +80,7 @@
                 @if ($event->activity->canSubscribeBackup())
                     <a
                         class="list-group-item text-white bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }}"
-                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}"
+                        href="{{ route('event::addparticipation', ['event' => $event]) }}"
                     >
                         <strong>
                             @if ($event->activity->isFull() || ! $event->activity->canSubscribe())
@@ -172,7 +172,7 @@
                 @if (Auth::user()->can('board') && ! $event->activity->closed)
                     <form
                         class="form-horizontal"
-                        action="{{ route('event::addparticipationfor', ['id' => $event->id]) }}"
+                        action="{{ route('event::addparticipationfor', ['event' => $event]) }}"
                         method="post"
                     >
                         {{ csrf_field() }}
@@ -234,7 +234,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                            href="{{ route('event::login', ['event' => $event]) }}"
                         >
                             log-in
                         </a>

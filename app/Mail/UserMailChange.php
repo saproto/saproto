@@ -14,26 +14,23 @@ class UserMailChange extends Mailable
     use SerializesModels;
 
     /**
-     * @var User
-     */
-    public $user;
-
-    /**
      * Create a new message instance.
      *
+     * @param array{
+     * name: string,
+     * ip: string|null
+     * } $changer
+     * @param  array<string, mixed>  $email
      * @return void
      */
-    public function __construct(User $user, public $changer, public $email)
-    {
-        $this->user = $user;
-    }
+    public function __construct(public User $user, public array $changer, public array $email) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->from('security@'.Config::string('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')

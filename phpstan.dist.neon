@@ -1,22 +1,20 @@
 includes:
+    - phpstan-baseline.neon
     - ./vendor/larastan/larastan/extension.neon
     - ./vendor/nesbot/carbon/extension.neon
 
 parameters:
 
+    excludePaths:
+        - app/Libraries
+
     paths:
         - app
 
-    level: 5 # out of 9
+    level: 6 # out of 9
 
     ignoreErrors:
-        # Weirdly cannot be found anywhere in the codebase...
-        - '#LightSaml#'
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)
         - '#Cannot access property (.*) on array\|object.#'
         # Issue with SephpaInputException not being a subtype of Throwable
         - '#AbcAeffchen\\Sephpa\\SephpaInputException#'
-        # Issue with incorrect type hinting on Illuminate\Support\Collection methods
-        - '#Illuminate\\Support\\Collection<(.*)>::#'
-        -
-        			identifier: class.nameCase

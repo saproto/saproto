@@ -17,19 +17,20 @@ use Illuminate\Support\Carbon;
  * @property int $vote
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Feedback $feedback
+ * @property-read Feedback|null $feedback
+ * @property-read User|null $user
  *
- * @method static Builder|FeedbackVote whereCreatedAt($value)
- * @method static Builder|FeedbackVote whereFeedbackId($value)
- * @method static Builder|FeedbackVote whereId($value)
- * @method static Builder|FeedbackVote whereUpdatedAt($value)
- * @method static Builder|FeedbackVote whereUserId($value)
- * @method static Builder|FeedbackVote whereVote($value)
- * @method static Builder|FeedbackVote newModelQuery()
- * @method static Builder|FeedbackVote newQuery()
- * @method static Builder|FeedbackVote query()
+ * @method static Builder<static>|FeedbackVote newModelQuery()
+ * @method static Builder<static>|FeedbackVote newQuery()
+ * @method static Builder<static>|FeedbackVote query()
+ * @method static Builder<static>|FeedbackVote whereCreatedAt($value)
+ * @method static Builder<static>|FeedbackVote whereFeedbackId($value)
+ * @method static Builder<static>|FeedbackVote whereId($value)
+ * @method static Builder<static>|FeedbackVote whereUpdatedAt($value)
+ * @method static Builder<static>|FeedbackVote whereUserId($value)
+ * @method static Builder<static>|FeedbackVote whereVote($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class FeedbackVote extends Model
 {

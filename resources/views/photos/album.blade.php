@@ -14,7 +14,7 @@
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
-            href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
+            href="{{ route('event::show', ['event' => $album->event]) }}"
         >
             These photos were taken at the event {{ $album->event->title }},
             click here for more info.
@@ -53,7 +53,7 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => route('photo::view', ['id' => $photo->id]),
+                                'url' => route('photo::view', ['photo' => $photo]),
                                 'img' => $photo->thumbnail(),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',

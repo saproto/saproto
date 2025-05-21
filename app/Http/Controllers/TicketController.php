@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Mollie\Api\Exceptions\ApiException;
 use PDF;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 
@@ -153,7 +154,14 @@ class TicketController extends Controller
         return Redirect::back();
     }
 
-    public function scanApi($event, Request $request): array
+    /**
+     * @return array{
+     *     code: int,
+     *     message: string|null,
+     *     data: TicketPurchase|null
+     * }
+     */
+    public function scanApi(int $event, Request $request): array
     {
         if (! $request->has('barcode')) {
             return [
@@ -292,14 +300,12 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
+     *
+     * @throws ApiException
      */
-    public function buyForEvent(Request $request, $id)
+    public function buyForEvent(Request $request, Event $event)
     {
-        /** @var Event $event */
-        $event = Event::query()->findOrFail($id);
-
         if ($event->tickets->count() < 1) {
             Session::flash('flash_message', 'There are no tickets available for this event.');
 

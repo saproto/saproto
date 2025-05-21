@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\CodexText;
 use App\Models\CodexTextType;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
 
 class CodexTextController extends Controller
 {
-    public function index() {}
+    public function index(): void {}
 
-    public function create()
+    public function create(): View|RedirectResponse
     {
         if (! CodexTextType::query()->count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
@@ -25,7 +27,7 @@ class CodexTextController extends Controller
         return view('codex.text-edit', ['text' => null, 'textTypes' => $textTypes, 'selectedTextType' => null]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $text = new CodexText;
         $this->saveText($text, $request);
@@ -33,9 +35,9 @@ class CodexTextController extends Controller
         return Redirect::route('codex.index');
     }
 
-    public function show(CodexText $codexText) {}
+    public function show(CodexText $codexText): void {}
 
-    public function edit(CodexText $codexText)
+    public function edit(CodexText $codexText): View
     {
         $textTypes = CodexTextType::query()->orderBy('type')->get();
         $selectedTextType = $codexText->type;
@@ -43,14 +45,14 @@ class CodexTextController extends Controller
         return view('codex.text-edit', ['text' => $codexText, 'textTypes' => $textTypes, 'selectedTextType' => $selectedTextType]);
     }
 
-    public function update(Request $request, CodexText $codexText)
+    public function update(Request $request, CodexText $codexText): RedirectResponse
     {
         $this->saveText($codexText, $request);
 
         return Redirect::route('codex.index');
     }
 
-    public function destroy(CodexText $codexText)
+    public function destroy(CodexText $codexText): RedirectResponse
     {
         $codexText->codices()->detach();
         $codexText->delete();

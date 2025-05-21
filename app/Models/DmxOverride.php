@@ -17,18 +17,18 @@ use Illuminate\Support\Collection;
  * @property string $start
  * @property string $end
  * @property-read bool $is_active
- * @property-read string $window_size
+ * @property-read int $window_size
  *
- * @method static Builder|DmxOverride whereColor($value)
- * @method static Builder|DmxOverride whereEnd($value)
- * @method static Builder|DmxOverride whereFixtures($value)
- * @method static Builder|DmxOverride whereId($value)
- * @method static Builder|DmxOverride whereStart($value)
- * @method static Builder|DmxOverride newModelQuery()
- * @method static Builder|DmxOverride newQuery()
- * @method static Builder|DmxOverride query()
+ * @method static Builder<static>|DmxOverride newModelQuery()
+ * @method static Builder<static>|DmxOverride newQuery()
+ * @method static Builder<static>|DmxOverride query()
+ * @method static Builder<static>|DmxOverride whereColor($value)
+ * @method static Builder<static>|DmxOverride whereEnd($value)
+ * @method static Builder<static>|DmxOverride whereFixtures($value)
+ * @method static Builder<static>|DmxOverride whereId($value)
+ * @method static Builder<static>|DmxOverride whereStart($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class DmxOverride extends Model
 {
@@ -38,20 +38,20 @@ class DmxOverride extends Model
 
     public $timestamps = false;
 
-    /** @return Collection|DmxOverride[] */
-    public static function getActiveSorted()
+    /** @return Collection<int, $this> */
+    public static function getActiveSorted(): Collection
     {
         return self::query()->where('start', '<', Carbon::now()->format('U'))->where('end', '>', Carbon::now()->format('U'))->get()->sortBy('window_size');
     }
 
-    /** @return Collection|DmxOverride[] */
-    public static function getUpcomingSorted()
+    /** @return Collection<int, $this> */
+    public static function getUpcomingSorted(): Collection
     {
         return self::query()->where('start', '>', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
 
-    /** @return Collection|DmxOverride[] */
-    public static function getPastSorted()
+    /** @return Collection<int, $this> */
+    public static function getPastSorted(): Collection
     {
         return self::query()->where('end', '<', Carbon::now()->format('U'))->get()->sortByDesc('start');
     }
@@ -62,26 +62,22 @@ class DmxOverride extends Model
         return array_map(intval(...), explode(',', $this->color));
     }
 
-    /** @return int */
-    public function red()
+    public function red(): int
     {
         return $this->colorArray()[0];
     }
 
-    /** @return int */
-    public function green()
+    public function green(): int
     {
         return $this->colorArray()[1];
     }
 
-    /** @return int */
-    public function blue()
+    public function blue(): int
     {
         return $this->colorArray()[2];
     }
 
-    /** @return int */
-    public function brightness()
+    public function brightness(): int
     {
         return $this->colorArray()[3];
     }
@@ -96,22 +92,29 @@ class DmxOverride extends Model
         return Carbon::now()->format('U') > $this->end && Carbon::now()->format('U') < $this->end. 600;
     }
 
+    /** @return string[] */
     public function getFixtureIds(): array
     {
         return explode(',', $this->fixtures);
     }
 
-    /** @return Collection */
-    public function getFixtures()
+    /** @return Collection<int, DmxFixture> */
+    public function getFixtures(): Collection
     {
         return DmxFixture::query()->whereIn('id', $this->getFixtureIds())->get();
     }
 
+    /**
+     * @return Attribute<bool, never>
+     */
     protected function isActive(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->active());
     }
 
+    /**
+     * @return Attribute<int, never>
+     */
     protected function windowSize(): Attribute
     {
         return Attribute::make(get: fn (): int => (int) $this->end - (int) $this->start);

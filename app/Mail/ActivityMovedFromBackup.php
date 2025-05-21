@@ -13,11 +13,11 @@ class ActivityMovedFromBackup extends Mailable
     use Queueable;
     use SerializesModels;
 
-    public $calling_name;
+    public string $calling_name;
 
-    public $event_id;
+    public string $event_id;
 
-    public $event_title;
+    public string $event_title;
 
     /**
      * Create a new message instance.
@@ -27,7 +27,7 @@ class ActivityMovedFromBackup extends Mailable
     public function __construct(ActivityParticipation $participation)
     {
         $this->calling_name = $participation->user->calling_name;
-        $this->event_id = $participation->activity->event->getPublicId();
+        $this->event_id = $participation->activity->event->getRouteKey();
         $this->event_title = $participation->activity->event->title;
     }
 

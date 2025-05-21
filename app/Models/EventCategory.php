@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\EventCategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,21 +18,24 @@ use Illuminate\Support\Carbon;
  * @property string $icon
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Event[]|null $events
+ * @property-read Collection<int, Event> $events
+ * @property-read int|null $events_count
  *
- * @method static Builder|EventCategory whereCreatedAt($value)
- * @method static Builder|EventCategory whereIcon($value)
- * @method static Builder|EventCategory whereId($value)
- * @method static Builder|EventCategory whereName($value)
- * @method static Builder|EventCategory whereUpdatedAt($value)
- * @method static Builder|EventCategory newModelQuery()
- * @method static Builder|EventCategory newQuery()
- * @method static Builder|EventCategory query()
+ * @method static EventCategoryFactory factory($count = null, $state = [])
+ * @method static Builder<static>|EventCategory newModelQuery()
+ * @method static Builder<static>|EventCategory newQuery()
+ * @method static Builder<static>|EventCategory query()
+ * @method static Builder<static>|EventCategory whereCreatedAt($value)
+ * @method static Builder<static>|EventCategory whereIcon($value)
+ * @method static Builder<static>|EventCategory whereId($value)
+ * @method static Builder<static>|EventCategory whereName($value)
+ * @method static Builder<static>|EventCategory whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class EventCategory extends Model
 {
+    /** @use HasFactory<EventCategoryFactory>*/
     use HasFactory;
 
     protected $table = 'event_categories';

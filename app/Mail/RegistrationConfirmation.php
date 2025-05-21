@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -16,14 +17,14 @@ class RegistrationConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct(public $user) {}
+    public function __construct(public User $user) {}
 
     /**
      * Build the message.
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this
             ->from('board@proto.utwente.nl', 'Study Association Proto')

@@ -33,32 +33,37 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read FinancialAccount|null $account
+ * @property-read Collection<int, ProductCategory> $categories
+ * @property-read int|null $categories_count
  * @property-read StorageEntry|null $image
+ * @property-read mixed $image_url
+ * @property-read Collection<int, OrderLine> $orderlines
+ * @property-read int|null $orderlines_count
  * @property-read Ticket|null $ticket
- * @property-read Collection|ProductCategory[] $categories
- * @property-read Collection|OrderLine[] $orderlines
+ * @property-read Collection<int, WallstreetPrice> $wallstreetPrices
+ * @property-read int|null $wallstreet_prices_count
  *
- * @method static Builder|Product whereAccountId($value)
- * @method static Builder|Product whereCalories($value)
- * @method static Builder|Product whereCreatedAt($value)
- * @method static Builder|Product whereId($value)
- * @method static Builder|Product whereImageId($value)
- * @method static Builder|Product whereIsAlcoholic($value)
- * @method static Builder|Product whereIsVisible($value)
- * @method static Builder|Product whereIsVisibleWhenNoStock($value)
- * @method static Builder|Product whereMaxStock($value)
- * @method static Builder|Product whereName($value)
- * @method static Builder|Product wherePreferredStock($value)
- * @method static Builder|Product wherePrice($value)
- * @method static Builder|Product whereStock($value)
- * @method static Builder|Product whereSupplierCollo($value)
- * @method static Builder|Product whereSupplierId($value)
- * @method static Builder|Product whereUpdatedAt($value)
- * @method static Builder|Product newModelQuery()
- * @method static Builder|Product newQuery()
- * @method static Builder|Product query()
+ * @method static Builder<static>|Product newModelQuery()
+ * @method static Builder<static>|Product newQuery()
+ * @method static Builder<static>|Product query()
+ * @method static Builder<static>|Product whereAccountId($value)
+ * @method static Builder<static>|Product whereCalories($value)
+ * @method static Builder<static>|Product whereCreatedAt($value)
+ * @method static Builder<static>|Product whereId($value)
+ * @method static Builder<static>|Product whereImageId($value)
+ * @method static Builder<static>|Product whereIsAlcoholic($value)
+ * @method static Builder<static>|Product whereIsVisible($value)
+ * @method static Builder<static>|Product whereIsVisibleWhenNoStock($value)
+ * @method static Builder<static>|Product whereMaxStock($value)
+ * @method static Builder<static>|Product whereName($value)
+ * @method static Builder<static>|Product wherePreferredStock($value)
+ * @method static Builder<static>|Product wherePrice($value)
+ * @method static Builder<static>|Product whereStock($value)
+ * @method static Builder<static>|Product whereSupplierCollo($value)
+ * @method static Builder<static>|Product whereSupplierId($value)
+ * @method static Builder<static>|Product whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Product extends Model
 {
@@ -69,6 +74,8 @@ class Product extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $appends = ['image_url'];
+
+    protected $with = ['image:id,hash'];
 
     /**
      * @return BelongsTo<FinancialAccount, $this>
@@ -86,6 +93,9 @@ class Product extends Model
         return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function imageUrl(): Attribute
     {
         return Attribute::make(get: fn () => $this->image?->generateImagePath(null, null));
@@ -123,7 +133,7 @@ class Product extends Model
     public function omnomcomPrice(): float
     {
         $active = WallstreetController::active();
-        if (! $active) {
+        if (! $active instanceof WallstreetDrink) {
             return $this->price;
         }
 
@@ -166,5 +176,14 @@ class Product extends Model
         $orderline->save();
 
         return $orderline->id;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_alcoholic' => 'boolean',
+            'is_visible' => 'boolean',
+            'is_visible_when_no_stock' => 'boolean',
+        ];
     }
 }

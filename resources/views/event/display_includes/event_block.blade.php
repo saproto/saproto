@@ -5,7 +5,7 @@
 @if ($event->mayViewEvent(Auth::user()))
     <a
         class="card mb-3 leftborder leftborder-info text-decoration-none"
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['event' => $event]) }}"
     >
         <div
             class="card-body event text-start {{ $event->image ? 'bg-img' : 'no-img' }}"
@@ -42,8 +42,12 @@
             @endif
 
             {{-- Participating --}}
-            @if (Auth::check() && $event->activity?->user_has_participation)
-                @if ($event->activity->user_has_backup_participation)
+            @php
+                $participation = $event->activity?->getParticipation(Auth::user());
+            @endphp
+
+            @if (Auth::check() && ! empty($participation))
+                @if ($participation->backup)
                     <i
                         class="fas fa-check text-warning fa-fw"
                         aria-hidden="true"
@@ -60,7 +64,7 @@
                         title="You are participating!"
                     ></i>
                 @endif
-                @if ($event->activity->user_has_helper_participation)
+                @if (Auth::check() && $event->activity->isHelping(Auth::user()))
                     <i
                         class="fas fa-life-ring fa-fw text-danger"
                         aria-hidden="true"
@@ -72,7 +76,7 @@
             @endif
 
             {{-- Ticket --}}
-            @if (Auth::check() && $event->user_has_tickets)
+            @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
                 <i
                     class="fas fa-ticket-alt fa-fw text-info"
                     aria-hidden="true"
