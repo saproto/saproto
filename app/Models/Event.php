@@ -131,7 +131,7 @@ class Event extends Model
     #[Override]
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        $id = last(explode('-', $value));
+        $id= Str::afterLast($value, '-');
         $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
         if (! $model || $model->getRouteKey() === $value) {
             return $model;
