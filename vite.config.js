@@ -11,10 +11,11 @@ import path from 'path';
  */
 export default defineConfig({
     resolve: {
-        alias: [
-            { find: '@', replacement: path.resolve(__dirname, './resources/js') },
-            { find: 'ziggy-js', replacement: path.resolve(__dirname, 'vendor/tightenco/ziggy') },
-        ],
+        alias:
+            {
+                'ziggy-js': path.resolve('vendor/tightenco/ziggy'),
+                '@': path.resolve('./resources/js'),
+            }
     },
     plugins: [
         laravel({
@@ -49,7 +50,7 @@ export default defineConfig({
         }),
         eslintPlugin({
             fix: true,
-            ignores: ['resources/js/*.js', 'vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
+            ignores: ['vendor/**/*.js', '/virtual:/**', 'node_modules/**', 'resources/assets/js/**'],
         }),
     ],
     build: {
