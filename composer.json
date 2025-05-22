@@ -69,7 +69,7 @@
         "setasign/tfpdf": "^1.33",
         "inertiajs/inertia-laravel": "^2.0",
         "tightenco/ziggy": "^2.4",
-        "spatie/laravel-data": "^4.11",
+        "spatie/laravel-data": "^4.15",
         "spatie/laravel-typescript-transformer": "^2.5",
         "spatie/enum": "^3.13",
         "pusher/pusher-php-server": "^7.2",
