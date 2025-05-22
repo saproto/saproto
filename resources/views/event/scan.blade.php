@@ -295,7 +295,7 @@
                 )
             }
 
-            window.addEventListener('load', (_) => {
+            window.addEventListener('load', () => {
                 initializeCamera()
             })
         </script>

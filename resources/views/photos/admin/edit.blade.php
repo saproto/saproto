@@ -380,7 +380,7 @@
 
 @push('javascript')
     <script async type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1
             let uploadRunning = false
@@ -439,7 +439,7 @@
                             )
                         ) {
                             let fr = new FileReader()
-                            fr.onload = async (_) => {
+                            fr.onload = async () => {
                                 file.id = fileId++
                                 fileQueue.push(file)
                                 await uploadFiles(fileQueue)

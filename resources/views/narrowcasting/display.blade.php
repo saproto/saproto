@@ -188,7 +188,7 @@
             }
         }
 
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             updateCampaigns()
             const everyTwoHours = 60 * 60 * 2 * 1000
             setInterval(updateCampaigns, everyTwoHours)

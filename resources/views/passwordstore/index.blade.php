@@ -215,11 +215,11 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
             const copy = el.getAttribute('data-copy')
-            el.addEventListener('click', (_) => {
+            el.addEventListener('click', () => {
                 navigator.clipboard.writeText(copy)
                 let tooltip = tooltips[el.id]
                 tooltip.show()
-                setTimeout((_) => {
+                setTimeout(() => {
                     tooltip.hide()
                 }, 1000)
             })

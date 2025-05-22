@@ -234,7 +234,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
             const unscanList = Array.from(
                 document.getElementsByClassName('unscan')
@@ -256,7 +256,7 @@
                 let parent = e.target.parentElement
                 if (barcode === undefined) throw new Error("Can't find barcode")
                 scanRequest(barcode, unscan)
-                    .then((_) => {
+                    .then(() => {
                         console.log('Scanned barcode ' + barcode)
                         let link = document.createElement('a')
                         link.href = '#'

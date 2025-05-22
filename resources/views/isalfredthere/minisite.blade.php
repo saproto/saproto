@@ -107,7 +107,7 @@
             },
         }
 
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             updateStatus({
                 status: '{{ $status }}',
                 text: '{{ $text }}',

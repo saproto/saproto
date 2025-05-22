@@ -85,7 +85,7 @@
                                 <script nonce="{{ csp_nonce() }}">
                                     document
                                         .getElementById('clear-history')
-                                        .addEventListener('click', (_) =>
+                                        .addEventListener('click', () =>
                                             confirm('Are you sure?')
                                         )
                                 </script>

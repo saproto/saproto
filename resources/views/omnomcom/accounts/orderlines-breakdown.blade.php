@@ -94,12 +94,12 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const dayList = Array.from(
                 document.getElementsByClassName('collapse')
             )
             dayList.forEach((day) => {
-                day.addEventListener('hide.bs.collapse', (_) => {
+                day.addEventListener('hide.bs.collapse', () => {
                     const children = [
                         ...document.getElementsByClassName(
                             day.getAttribute('data-bs-target').slice(1)

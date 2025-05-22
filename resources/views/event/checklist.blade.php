@@ -128,7 +128,7 @@
         present = document.getElementById('present')
 
         document.querySelectorAll('.is_present').forEach((el) => {
-            el.onclick = (_) => {
+            el.onclick = () => {
                 get(
                     '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
                         'id',

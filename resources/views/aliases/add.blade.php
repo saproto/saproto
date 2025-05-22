@@ -75,13 +75,13 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        document.getElementById('user').addEventListener('change', (_) => {
+        document.getElementById('user').addEventListener('change', () => {
             document.getElementById('destination').value = ''
         })
 
         document
             .getElementById('destination')
-            .addEventListener('change', (_) => {
+            .addEventListener('change', () => {
                 document.getElementById('destination').focus()
                 document.getElementById('user').value = ''
             })

@@ -397,7 +397,7 @@
                 moment().format('HH:mm:ss')
         }
 
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             updateTimetable()
             updateActivities()
             updateProtopeners()

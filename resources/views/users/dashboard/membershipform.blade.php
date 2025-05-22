@@ -6,7 +6,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const signatureAlert = document.getElementById('signature-alert')
             const canvas = document.getElementById('signature-pad')
             const signaturePad = new SignaturePad(canvas)
@@ -25,7 +25,7 @@
                 signaturePad.clear()
             }
 
-            document.getElementById('clear').addEventListener('click', (_) => {
+            document.getElementById('clear').addEventListener('click', () => {
                 signaturePad.clear()
             })
 

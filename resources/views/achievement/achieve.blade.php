@@ -9,7 +9,7 @@
         <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
             <div class="card mb-3">
                 <div class="card-header">
-                    <h5 class="card-title">
+    <h5 class="card-title">
                         <i
                             class="fas fa-{{ $achievement->fa_icon }} fa-fw me-2"
                         ></i>
@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text">
+        <p class="card-text">
                         {!! $parsed_content !!}
                     </p>
                 </div>

@@ -43,7 +43,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             window.Echo.channel(`stickers`)
                 .listen('StickerPlacedEvent', (marker) => {
                     addMarkerToMap(marker)

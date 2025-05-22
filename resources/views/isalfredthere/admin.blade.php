@@ -177,7 +177,7 @@
             document.querySelectorAll('.where_is_alfred input[type="radio"]')
         )
         radioList.forEach((el) => {
-            el.addEventListener('change', (_) => {
+            el.addEventListener('change', () => {
                 if (
                     el.checked &&
                     el.value === '{{ IsAlfredThereEnum::AWAY }}'

@@ -127,7 +127,7 @@
                         location.pathname
                     )
                     setTimeout(
-                        (_) =>
+                        () =>
                             location.replace(
                                 '{{ route('photo::album::list', ['album' => $photo->album_id]) . '?page=' . $photo->albumPage }}'
                             ),

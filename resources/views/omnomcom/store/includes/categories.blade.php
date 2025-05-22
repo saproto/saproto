@@ -38,9 +38,9 @@
 
 @push('javascript')
     <script nonce="{{ csp_nonce() }}">
-        document.getElementById('logout-button').onclick = (_) =>
+        document.getElementById('logout-button').onclick = () =>
             (window.location = '{{ route('login::logout') }}')
-        document.getElementById('reload-button').onclick = (_) =>
+        document.getElementById('reload-button').onclick = () =>
             window.location.reload()
     </script>
 @endpush

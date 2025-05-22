@@ -299,7 +299,7 @@
             )
             let totalPrepaidSelected = 0
             selectList.forEach((ticket) =>
-                ticket.addEventListener('change', (_) => {
+                ticket.addEventListener('change', () => {
                     const total = selectList.reduce(
                         (agg, el) =>
                             agg + el.getAttribute('data-price') * el.value,

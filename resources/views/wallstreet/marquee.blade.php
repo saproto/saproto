@@ -325,7 +325,7 @@
     @vite('resources/assets/js/echo.js')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const swiper = new Swiper('#swiper-container', {
                 loop: true,
                 observer: true,
