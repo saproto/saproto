@@ -44,6 +44,7 @@
         "moment": "^2.29.2",
         "quagga": "^0.6.16",
         "radix-vue": "^1.9.13",
+        "reka-ui": "^2.2.1",
         "signature_pad": "^3.0.0-beta.4",
         "swiper": "^8.0.7",
         "tailwind-merge": "^2.6.0",
