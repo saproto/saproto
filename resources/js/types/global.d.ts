@@ -1,6 +1,6 @@
 import { PageProps as InertiaPageProps } from '@inertiajs/core'
 import { AxiosInstance } from 'axios'
-import { route as ziggyRoute} from '../../vendor/tightenco/ziggy';
+import { route as ziggyRoute } from '../../vendor/tightenco/ziggy'
 import { PageProps as AppPageProps } from './'
 
 declare global {
