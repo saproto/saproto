@@ -22,9 +22,10 @@
             href="{{ route('search::opensearch') }}"
         />
 
+        @routes(nonce: csp_nonce())
         <!-- Scripts -->
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
-        @routes(nonce: csp_nonce())
+
         @inertiaHead
 
         @section('opengraph')
