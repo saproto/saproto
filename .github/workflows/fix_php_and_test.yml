@@ -128,7 +128,7 @@ jobs:
 
 
       - name: 🧠 Run PHPStan static analysis
-        run: vendor/bin/phpstan analyse --memory-limit=512M
+        run: vendor/bin/phpstan analyse
 
       - name: Check if laravel caching works
         run: |
