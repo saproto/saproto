@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -47,6 +48,10 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
+    protected $with = ['page', 'children'];
+
+    protected $appends = ['parsed_url'];
+
     /**
      * @return BelongsTo<Page, $this>
      */
@@ -70,6 +75,25 @@ class MenuItem extends Model
     {
         return $this->belongsTo(MenuItem::class, 'id', 'parent');
     }
+
+    /**
+     * @return Attribute<string, never>
+     */
+    protected function parsedUrl(): Attribute
+    {
+        return Attribute::make(get: function () {
+            if (str_starts_with($this->url, '(route) ')) {
+                try {
+                    return route(substr($this->url, 8));
+                } catch (Exception) {
+                    return '#';
+                }
+            } else {
+                return $this->url;
+            }
+        });
+    }
+
 
     public function getUrl(): ?string
     {
