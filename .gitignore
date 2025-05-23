@@ -24,6 +24,8 @@ public/storage
 _ide_helper.php
 .php-cs-fixer.cache
 phpstan.neon
+.phpstan/
+
 
 # Meta files
 composer.phar

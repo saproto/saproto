@@ -97,6 +97,17 @@ jobs:
           name: Build
           path: public/build
 
+      - name: Cache PHPStan results
+        uses: actions/cache@v4
+        with:
+          path: .phpstan/cache
+          key: ${{ runner.os }}-phpstan-${{ hashFiles('phpstan.neon', 'composer.lock') }}
+          restore-keys: ${{ runner.os }}-phpstan-
+
+
+      - name: 🧠 Run PHPStan static analysis
+        run: vendor/bin/phpstan analyse --memory-limit=512M
+
       - name: Cache Pest test results
         uses: actions/cache@v4
         with:
