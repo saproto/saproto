@@ -26,8 +26,7 @@ use Spatie\Permission\Models\Permission;
 
 class UserDashboardController extends Controller
 {
-    /** @return View */
-    public function show()
+    public function show(): View
     {
         /** @var User $user */
         $user = Auth::user()->load('roles.permissions');

@@ -8,7 +8,7 @@
     <div class="row justify-content-end">
         <div class="col">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                     <a
                         href="{{ route('achievement::create') }}"
@@ -18,7 +18,7 @@
                     </a>
                 </div>
 
-                <table class="table table-hover table-sm">
+                <table class="table-hover table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td></td>

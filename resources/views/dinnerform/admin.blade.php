@@ -5,8 +5,8 @@
 @endsection
 
 @section('container')
-    <div class="card mb-3 col-lg-8 ms-auto me-auto">
-        <div class="card-header bg-dark text-white mb-1">
+    <div class="card col-lg-8 mb-3 me-auto ms-auto">
+        <div class="card-header bg-dark mb-1 text-white">
             <span>
                 Dinnerform orderline overview for
                 <strong>{{ $dinnerform->restaurant }}</strong>
@@ -46,7 +46,7 @@
                 )
             @else
                 <span
-                    class="badge btn bg-primary cursor-default badge float-end"
+                    class="badge btn badge float-end cursor-default bg-primary"
                 >
                     <i class="fas fa-check"></i>
                     Processed!
@@ -55,7 +55,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table table-sm text-center">
+            <table class="table-sm table text-center">
                 <thead>
                     <tr class="bg-dark text-white">
                         <th>Orders</th>
@@ -88,7 +88,7 @@
             </table>
 
             @if ($dinnerform->orderlines->count() > 0)
-                <table class="table table-sm">
+                <table class="table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <th></th>
@@ -149,7 +149,7 @@
                     </tbody>
                 </table>
             @else
-                <div class="text-center text-muted pb-3">
+                <div class="pb-3 text-center text-muted">
                     There are no orders yet!
                 </div>
             @endif

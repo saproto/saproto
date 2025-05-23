@@ -1,10 +1,10 @@
 <div class="card mb-3 p-0">
-    <div class="card-header bg-dark text-white mb-1">
+    <div class="card-header bg-dark mb-1 text-white">
         Activities related to this news
     </div>
 
     @if (count($upcomingEvents) > 0)
-        <table class="table table-sm table-hover">
+        <table class="table-sm table-hover table">
             <thead>
                 <tr class="bg-dark text-white">
                     <td>Event</td>

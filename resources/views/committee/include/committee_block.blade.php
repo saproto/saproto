@@ -12,7 +12,9 @@
                     $committee->is_society
                         ? 'society::show'
                         : 'committee::show',
-                    ['id' => $committee->getPublicId()],
+                    [
+                        'id' => $committee->getPublicId(),
+                    ],
                 )
                 : '#',
         'img' => $committee->image

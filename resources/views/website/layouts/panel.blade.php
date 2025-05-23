@@ -1,7 +1,7 @@
 @extends('website.layouts.content')
 
 @section('container')
-    <div id="container" class="container container-nobg">
+    <div id="container" class="container-nobg container">
         <div class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
             @include('website.announcements')
 

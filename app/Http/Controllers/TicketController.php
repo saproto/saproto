@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Mollie\Api\Exceptions\ApiException;
 use PDF;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
 
 class TicketController extends Controller
 {
@@ -62,10 +63,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $ticket = Ticket::query()->findOrFail($id);
 
@@ -73,10 +73,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
@@ -110,12 +109,11 @@ class TicketController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         /** @var Ticket $ticket */
         $ticket = Ticket::query()->findOrFail($id);
@@ -280,9 +278,9 @@ class TicketController extends Controller
     }
 
     /**
-     * @return string
+     * @throws Html2PdfException
      */
-    public function download(int $id)
+    public function download(int $id): string
     {
         /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->findOrFail($id);

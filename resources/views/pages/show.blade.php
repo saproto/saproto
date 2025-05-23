@@ -22,7 +22,7 @@
                         @can('board')
                             <a
                                 href="{{ route('page::edit', ['id' => $page->id]) }}"
-                                class="btn btn-info py-1 float-end"
+                                class="btn btn-info float-end py-1"
                             >
                                 edit
                                 <i class="fa fa-edit"></i>

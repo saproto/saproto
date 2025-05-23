@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                     <a
                         href="{{ route('leaderboards::create') }}"
@@ -18,7 +18,7 @@
                     </a>
                 </div>
 
-                <table class="table table-sm table-hover">
+                <table class="table-sm table-hover table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td>Leaderboard</td>
@@ -40,7 +40,7 @@
                                 <a
                                     href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}"
                                 >
-                                    <i class="fas fa-edit me-2 fa-fw"></i>
+                                    <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
                                 <a
                                     href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}"

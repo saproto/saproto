@@ -1,6 +1,6 @@
 <div
     id="controls"
-    class="fixed-bottom bg-omnomcom align-content-center p-2 mb-4"
+    class="fixed-bottom bg-omnomcom align-content-center mb-4 p-2"
 >
     <button
         id="purchase"
@@ -13,7 +13,7 @@
     @if ($store['cash_allowed'])
         <button
             id="purchase-cash-initiate"
-            class="purchase-button btn btn-lg bg-dark me-2 float-end"
+            class="purchase-button btn btn-lg bg-dark float-end me-2"
             disabled
         >
             <i class="fas fa-coins me-2"></i>
@@ -24,7 +24,7 @@
     @if ($store['bank_card_allowed'])
         <button
             id="purchase-bank-card-initiate"
-            class="purchase-button btn btn-lg bg-dark me-2 float-end"
+            class="purchase-button btn btn-lg bg-dark float-end me-2"
             disabled
         >
             <i class="fas fa-credit-card me-2"></i>
@@ -32,14 +32,14 @@
         </button>
     @endif
 
-    <span id="rfid" class="btn btn-lg bg-dark me-2 float-end">
+    <span id="rfid" class="btn btn-lg bg-dark float-end me-2">
         Link RFID card
     </span>
-    <span class="info float-end font-weight-bold me-3 my-auto">
+    <span class="info font-weight-bold float-end my-auto me-3">
         Order total: &euro;
         <span id="total">0.00</span>
     </span>
-    <span id="status" class="info float-end me-3 inactive">
+    <span id="status" class="info inactive float-end me-3">
         RFID Service: Disconnected
     </span>
 

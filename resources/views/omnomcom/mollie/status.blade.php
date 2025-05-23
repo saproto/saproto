@@ -8,11 +8,11 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                 </div>
 
-                <table class="table table-borderless table-sm">
+                <table class="table-borderless table-sm table">
                     <tr>
                         <th>User</th>
                         <td>{{ $transaction->user->name }}</td>
@@ -68,7 +68,7 @@
                         </p>
 
                         <table
-                            class="table table-hover table-borderless table-sm"
+                            class="table-hover table-borderless table-sm table"
                         >
                             <thead>
                                 <tr>

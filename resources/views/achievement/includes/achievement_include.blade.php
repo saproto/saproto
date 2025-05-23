@@ -5,7 +5,7 @@
         <strong class="text-white">{{ $achievement->name }}</strong>
         @if (isset($obtained) && $obtained)
             <i
-                class="fas fa-check text-primary fa-fw"
+                class="fas fa-check fa-fw text-primary"
                 aria-hidden="true"
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
@@ -25,7 +25,7 @@
         <span class="float-end">
             @for ($i = 0; $i < 5; $i++)
                 @if ($i < $achievement->numberOfStars())
-                    <i class="text-white fas fa-star"></i>
+                    <i class="fas fa-star text-white"></i>
                 @else
                     <i
                         class="achievement-{{ $achievement->tier }} fas fa-star"
@@ -40,7 +40,7 @@
 
         @if ($obtained?->description)
             <br />
-            <div class="text-secondary fst-italic">
+            <div class="fst-italic text-secondary">
                 "{{ $obtained->description }}"
             </div>
         @endif

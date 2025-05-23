@@ -9,7 +9,7 @@
 
     @if (count($orderlines) > 0)
         <div class="table-responsive">
-            <table class="table table-hover table-sm">
+            <table class="table-hover table-sm table">
                 <tbody>
                     @foreach ($orderlines as $orderline)
                         <tr>
@@ -38,7 +38,7 @@
                                 {{ number_format($orderline->total_price, 2, '.', '') }}
                             </td>
                             <td>
-                                <span class="text-muted me-2">
+                                <span class="me-2 text-muted">
                                     {{ $orderline->units }}x
                                 </span>
                             </td>
@@ -91,7 +91,7 @@
         @endif
     @else
         <div class="card-body">
-            <p class="text-center mt-3">
+            <p class="mt-3 text-center">
                 No orderlines for this {{ $date ? 'date' : 'user' }}.
             </p>
         </div>

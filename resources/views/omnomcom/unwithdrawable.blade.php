@@ -20,7 +20,7 @@
                     </p>
                 </div>
 
-                <table class="table table-hover table-sm">
+                <table class="table-hover table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td></td>
@@ -51,7 +51,7 @@
                             </tr>
 
                             @foreach ($user->orderlines as $orderline)
-                                <tr class="collapse collapse-{{ $key }}">
+                                <tr class="collapse-{{ $key }} collapse">
                                     <td>{{ $orderline->id }}</td>
                                     <td>
                                         {{ $orderline->units }}x

@@ -1,4 +1,4 @@
-window.broto = (_) => {
+window.broto = () => {
     console.log('BROTO')
     document.querySelectorAll('img').forEach((el) => {
         if (el.classList.contains('rounded-circle'))

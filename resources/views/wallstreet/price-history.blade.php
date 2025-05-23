@@ -27,7 +27,7 @@
 
     <script nonce="{{ csp_nonce() }}">
         // Initialize when page is loaded
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const ctx = document.getElementById('myChart')
 
             get(

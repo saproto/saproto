@@ -39,13 +39,13 @@ global.debounce = (callback, timeout = 300) => {
     let timer
     return (...args) => {
         clearTimeout(timer)
-        timer = setTimeout((_) => {
+        timer = setTimeout(() => {
             callback.apply(this, args)
         }, timeout)
     }
 }
 
-global.preventSubmitBounce = (e) => (e.target.onsubmit = (_) => false)
+global.preventSubmitBounce = (e) => (e.target.onsubmit = () => false)
 
 import { Alert } from 'bootstrap'
 const alertWrapper = document.getElementById('alert-wrapper')
@@ -67,7 +67,7 @@ const createAlertElement = (type, message) => {
 global.flash = (type, message, duration = 2000) => {
     if (currentAlert) currentAlert.close()
     let closeTimeout
-    setTimeout((_) => {
+    setTimeout(() => {
         clearTimeout(closeTimeout)
         let el = createAlertElement(type, message)
         alertWrapper.append(el)

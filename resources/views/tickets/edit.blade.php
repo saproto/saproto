@@ -13,7 +13,7 @@
                 enctype="multipart/form-data"
             >
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white mb-1">
+                    <div class="card-header bg-dark mb-1 text-white">
                         @yield('page-title')
                     </div>
 
@@ -91,7 +91,7 @@
                         )
 
                         <div
-                            class="collapse mt-3 ms-4 {{ $ticket?->has_buy_limit ? 'show' : '' }}"
+                            class="{{ $ticket?->has_buy_limit ? 'show' : '' }} collapse ms-4 mt-3"
                             id="buy_limit__collapse"
                         >
                             <div class="input-group mb-3">

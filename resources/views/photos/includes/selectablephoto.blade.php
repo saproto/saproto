@@ -20,7 +20,7 @@
                 @if ($photo->private)
                     <p class="card-text ellipsis align-self-end">
                         <i
-                            class="fas fa-eye-slash ms-2 mb-1 text-info"
+                            class="fas fa-eye-slash text-info mb-1 ms-2"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
                             title="This photo is only visible to members."

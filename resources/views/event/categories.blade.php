@@ -69,7 +69,7 @@
                             @foreach ($categories as $category)
                                 <div class="col-5 row m-1">
                                     <div
-                                        class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}"
+                                        class="w-75 rounded-start ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }} my-2 overflow-hidden px-4 py-2"
                                     >
                                         <i
                                             class="{{ $category->icon }} me-2"
@@ -77,7 +77,7 @@
                                         {{ $category->name }}
                                     </div>
                                     <div
-                                        class="bg-white px-2 py-2 my-2 w-25 rounded-end"
+                                        class="w-25 rounded-end my-2 bg-white px-2 py-2"
                                     >
                                         <a
                                             href="{{ route('event::categories.edit', ['category' => $category]) }}"
@@ -105,7 +105,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="text-center text-muted mb-0">
+                            <p class="mb-0 text-center text-muted">
                                 There are no event categories yet.
                             </p>
                         @endif

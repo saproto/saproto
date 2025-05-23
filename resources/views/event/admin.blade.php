@@ -68,7 +68,7 @@
                         @foreach ($event->tickets as $ticket)
                             <div class="card mb-3">
                                 <div
-                                    class="card-header bg-dark text-white cursor-pointer"
+                                    class="card-header bg-dark cursor-pointer text-white"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#ticket-collapse-{{ $ticket->id }}"
                                 >
@@ -76,7 +76,7 @@
                                     <strong>
                                         {{ $ticket->product->name }}
                                     </strong>
-                                    <span class="badge bg-primary float-end">
+                                    <span class="badge float-end bg-primary">
                                         {{ $ticket->sold() }} sold /
                                         {{ $ticket->product->stock }} available
                                     </span>
@@ -234,7 +234,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const scanList = Array.from(document.getElementsByClassName('scan'))
             const unscanList = Array.from(
                 document.getElementsByClassName('unscan')
@@ -256,7 +256,7 @@
                 let parent = e.target.parentElement
                 if (barcode === undefined) throw new Error("Can't find barcode")
                 scanRequest(barcode, unscan)
-                    .then((_) => {
+                    .then(() => {
                         console.log('Scanned barcode ' + barcode)
                         let link = document.createElement('a')
                         link.href = '#'

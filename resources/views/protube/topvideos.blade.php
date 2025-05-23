@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <div class="btn text-center btn-block mb-3">
+    <div class="btn btn-block mb-3 text-center">
         <i class="fas fa-bolt me-3"></i>
         ProTube is developed with
         <span class="text-danger">

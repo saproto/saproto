@@ -30,13 +30,13 @@
 
         <div class="col-12 col-sm-8">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     Password store
                 </div>
 
                 @if (count($passwords) > 0)
                     <div class="table-responsive">
-                        <table class="table table-hover table-sm">
+                        <table class="table-hover table-sm table">
                             <thead>
                                 <tr class="bg-dark text-white">
                                     <td></td>
@@ -215,11 +215,11 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.passwordmanager__copy').forEach((el) => {
             const copy = el.getAttribute('data-copy')
-            el.addEventListener('click', (_) => {
+            el.addEventListener('click', () => {
                 navigator.clipboard.writeText(copy)
                 let tooltip = tooltips[el.id]
                 tooltip.show()
-                setTimeout((_) => {
+                setTimeout(() => {
                     tooltip.hide()
                 }, 1000)
             })

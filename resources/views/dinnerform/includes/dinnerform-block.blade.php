@@ -1,4 +1,4 @@
-<div class="card mb-3 leftborder leftborder-info">
+<div class="card leftborder leftborder-info mb-3">
     <div class="card-body text-start">
         <a
             class="stretched-link text-decoration-none"

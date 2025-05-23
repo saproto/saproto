@@ -4,11 +4,11 @@
 
 @if ($event->mayViewEvent(Auth::user()))
     <a
-        class="card mb-3 leftborder leftborder-info text-decoration-none"
+        class="card leftborder leftborder-info text-decoration-none mb-3"
         href="{{ route('event::show', ['event' => $event]) }}"
     >
         <div
-            class="card-body event text-start {{ $event->image ? 'bg-img' : 'no-img' }}"
+            class="card-body event {{ $event->image ? 'bg-img' : 'no-img' }} text-start"
             style="{{ empty($lazyload) && $event->image ? 'background-size: cover; background: center no-repeat url(' . $event->image->generateImagePath(800, 300) . ')' : '' }}"
             data-bgimage="{{ ! empty($lazyload) && $event->image ? $event->image->generateImagePath(800, 300) ?? '' : '' }}"
         >
@@ -57,7 +57,7 @@
                     ></i>
                 @else
                     <i
-                        class="fas fa-check text-primary fa-fw"
+                        class="fas fa-check fa-fw text-primary"
                         aria-hidden="true"
                         data-bs-toggle="tooltip"
                         data-bs-placement="top"
@@ -118,7 +118,7 @@
             {{-- Category --}}
             @if ($event->category)
                 <span
-                    class="badge rounded-pill bg-info px-3 me-1 mb-1 d-inline-block mw-100 ellipsis float-end"
+                    class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis float-end mb-1 me-1 px-3"
                 >
                     <i
                         class="{{ $event->category->icon }} fa-fw"

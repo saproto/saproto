@@ -6,7 +6,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const signatureAlert = document.getElementById('signature-alert')
             const canvas = document.getElementById('signature-pad')
             const signaturePad = new SignaturePad(canvas)
@@ -25,7 +25,7 @@
                 signaturePad.clear()
             }
 
-            document.getElementById('clear').addEventListener('click', (_) => {
+            document.getElementById('clear').addEventListener('click', () => {
                 signaturePad.clear()
             })
 
@@ -67,7 +67,7 @@
                     </div>
                     <div
                         id="signature-alert"
-                        class="alert alert-danger text-center d-none p-1 my-2 mx-4"
+                        class="alert alert-danger d-none mx-4 my-2 p-1 text-center"
                         role="alert"
                     >
                         We need your signature for the membership contract to be

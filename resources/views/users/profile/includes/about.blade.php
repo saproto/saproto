@@ -3,14 +3,14 @@
         class="card-header text-bg-dark border-bottom-0 bg-dark position-relative mb-2"
     >
         <div>
-            <h3 class="text-center ellipsis mb-3 mt-4">
+            <h3 class="ellipsis mb-3 mt-4 text-center">
                 {{ $user->name }}
             </h3>
 
             <div class="text-center">
                 <img
                     src="{{ $user->generatePhotoPath(170, 170) }}"
-                    class="rounded-circle mt-2 border border-5 border-white bg-dark"
+                    class="rounded-circle border-5 bg-dark mt-2 border border-white"
                     width="170px"
                     height="170px"
                 />
@@ -44,7 +44,7 @@
         @can('board')
             <p class="card-text ellipsis">
                 <i
-                    class="fas fa-user-cog fa-fw me-3 text-info"
+                    class="fas fa-user-cog fa-fw text-info me-3"
                     aria-hidden="true"
                 ></i>
                 <a

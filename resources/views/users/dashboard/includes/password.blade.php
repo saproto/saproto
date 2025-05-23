@@ -4,7 +4,7 @@
     <div class="card-body">
         <a
             href="{{ route('login::password::change::index') }}"
-            class="mb-2 btn btn-outline-info btn-block"
+            class="btn btn-outline-info btn-block mb-2"
         >
             Change Proto password
         </a>
