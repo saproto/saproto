@@ -154,8 +154,6 @@ jobs:
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
-      - run: composer dump-autoload
-
       - name: Cache PHPStan results
         uses: actions/cache@v4
         with:
