@@ -11,12 +11,14 @@ import {
 
 <template>
     <Menubar
-        class="sticky top-0 z-50 flex justify-between items-center w-full px-6 py-3 bg-white dark:bg-gray-900 shadow border-b border-gray-200 dark:border-gray-700"
+        class="sticky top-0 z-50 flex w-full items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow dark:border-gray-700 dark:bg-gray-900"
     >
         <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>
             <MenubarContent>
-                <MenubarItem @click="() => console.log('New clicked')">New</MenubarItem>
+                <MenubarItem @click="() => console.log('New clicked')"
+                    >New</MenubarItem
+                >
                 <MenubarItem>Open</MenubarItem>
                 <MenubarItem>Save</MenubarItem>
             </MenubarContent>

@@ -7,7 +7,7 @@ function handleClick() {
 }
 
 defineOptions({
-    layout: AppLayout
+    layout: AppLayout,
 })
 </script>
 
