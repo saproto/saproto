@@ -7,7 +7,6 @@ const globals = require("globals");
 const parser = require("vue-eslint-parser");
 const vue = require("eslint-plugin-vue");
 const typescriptEslint = require("@typescript-eslint/eslint-plugin");
-const prettier = require("eslint-plugin-prettier");
 const js = require("@eslint/js");
 
 const {
@@ -38,13 +37,12 @@ module.exports = defineConfig([{
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:vue/vue3-recommended",
-        "plugin:prettier/recommended",
+        "prettier",
     ),
 
     plugins: {
         vue,
         "@typescript-eslint": typescriptEslint,
-        prettier,
     },
 
     rules: {

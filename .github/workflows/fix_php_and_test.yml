@@ -26,8 +26,11 @@ jobs:
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
 
-      - name: lint with eslint and prettier
-        run: npx eslint resources --fix
+      - name: lint with eslint
+        run: npx eslint resources/ --fix
+
+      - name: lint with prettier
+        run: npx prettier --write resources/
 
       - name: Pull the latest changes
         run: git pull origin ${{ github.head_ref }}
@@ -35,7 +38,7 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Automatic Blade linting (Prettier Blade)
+          commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
 
       - name: 🔨 build front-end

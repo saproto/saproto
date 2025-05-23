@@ -88,12 +88,12 @@
 
         <div class="col-md-9">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover table-sm">
+                    <table class="table-striped table-hover table-sm table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td class="ps-3">Controls</td>
@@ -127,7 +127,7 @@
                                                 class="text-decoration-none"
                                             >
                                                 <i
-                                                    class="fas fa-info-circle fa-fw me-1 text-info"
+                                                    class="fas fa-info-circle fa-fw text-info me-1"
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
@@ -159,7 +159,7 @@
                                                 class="text-decoration-none"
                                             >
                                                 <i
-                                                    class="fas fa-sign-in-alt fa-fw me-1 text-warning"
+                                                    class="fas fa-sign-in-alt fa-fw text-warning me-1"
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>

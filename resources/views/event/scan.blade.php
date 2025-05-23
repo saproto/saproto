@@ -146,7 +146,7 @@
 
             <hr />
 
-            <table class="table history">
+            <table class="history table">
                 <thead>
                     <tr>
                         <th>#</th>

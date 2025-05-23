@@ -49,7 +49,7 @@
                 <div id="collapse-outstanding" class="collapse">
                     <div class="cursor-default p-0">
                         <table
-                            class="table table-borderless table-responsive table-sm mt-1"
+                            class="table-borderless table-responsive table-sm mt-1 table"
                         >
                             <thead>
                                 <tr>

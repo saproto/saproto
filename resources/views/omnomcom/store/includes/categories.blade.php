@@ -2,7 +2,7 @@
     <nav id="category-nav" class="nav p-3">
         @foreach ($categories as $category)
             <div
-                class="btn btn-lg btn-category btn-block bg-omnomcom rounded-0 px-2 py-2 text-start {{ $category == $categories[0] ? 'active' : '' }}"
+                class="btn btn-lg btn-category btn-block bg-omnomcom rounded-0 {{ $category == $categories[0] ? 'active' : '' }} px-2 py-2 text-start"
                 data-id="{{ $category->id }}"
             >
                 {{ $category->name }}
@@ -23,7 +23,7 @@
             <a
                 id="logout-button"
                 href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}"
-                class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis"
+                class="btn btn-lg btn-block bg-omnomcom rounded-0 ellipsis mt-4 px-2 py-2 text-start"
             >
                 Log out
                 <strong>{{ Auth::user()->calling_name }}</strong>

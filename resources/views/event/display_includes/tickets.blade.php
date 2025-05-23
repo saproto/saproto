@@ -18,7 +18,7 @@
                             <div class="card-body">
                                 <p class="card-title">
                                     <span
-                                        class="badge bg-dark text-white float-end"
+                                        class="badge bg-dark float-end text-white"
                                     >
                                         #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                     </span>
@@ -101,12 +101,12 @@
                         @endphp
 
                         <div
-                            class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}"
+                            class="card {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }} mb-3"
                         >
                             <div class="card-body">
                                 <p class="card-title">
                                     @if ($ticket->buyLimitReached(Auth::user()))
-                                        <span class="badge float-end bg-danger">
+                                        <span class="badge bg-danger float-end">
                                             Buy limit reached
                                         </span>
                                     @elseif ($ticket->is_prepaid || ! Auth::user()->is_member)

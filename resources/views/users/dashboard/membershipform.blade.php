@@ -67,7 +67,7 @@
                     </div>
                     <div
                         id="signature-alert"
-                        class="alert alert-danger text-center d-none p-1 my-2 mx-4"
+                        class="alert alert-danger d-none mx-4 my-2 p-1 text-center"
                         role="alert"
                     >
                         We need your signature for the membership contract to be

@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-responsive">
+                    <table class="table-responsive table">
                         <thead>
                             <tr>
                                 <th>Present</th>
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-responsive">
+                    <table class="table-responsive table">
                         <thead>
                             <tr>
                                 <th>Check</th>
@@ -62,7 +62,7 @@
                                     <td>
                                         @if ($participation)
                                             <span
-                                                class="cursor-pointer is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }}"
+                                                class="is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }} cursor-pointer"
                                                 data-id="{{ $participation->id }}"
                                             >
                                                 {{ $participation->is_present ? 'Present' : 'Absent' }}

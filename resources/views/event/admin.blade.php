@@ -68,7 +68,7 @@
                         @foreach ($event->tickets as $ticket)
                             <div class="card mb-3">
                                 <div
-                                    class="card-header bg-dark text-white cursor-pointer"
+                                    class="card-header bg-dark cursor-pointer text-white"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#ticket-collapse-{{ $ticket->id }}"
                                 >
@@ -76,7 +76,7 @@
                                     <strong>
                                         {{ $ticket->product->name }}
                                     </strong>
-                                    <span class="badge bg-primary float-end">
+                                    <span class="badge float-end bg-primary">
                                         {{ $ticket->sold() }} sold /
                                         {{ $ticket->product->stock }} available
                                     </span>

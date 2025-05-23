@@ -1,6 +1,6 @@
 <div class="card mb-3">
-    <div class="card-header px-1 border-bottom-0 text-bg-dark bg-dark">
-        <div class="text-center text-bg-dark">
+    <div class="card-header border-bottom-0 text-bg-dark bg-dark px-1">
+        <div class="text-bg-dark text-center">
             <h3 class="mb-0">
                 User statistics
                 <i

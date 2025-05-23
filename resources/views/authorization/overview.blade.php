@@ -8,18 +8,18 @@
     <div class="row justify-content-center">
         <div class="col-xl-6">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                 </div>
 
                 <div class="card-body overflow-auto">
-                    <table class="table table-bordered table-sm">
+                    <table class="table-bordered table-sm table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <th></th>
                                 @foreach ($permissions as $permission)
                                     <th
-                                        class="text-end align-middle py-2"
+                                        class="py-2 text-end align-middle"
                                         style="writing-mode: vertical-lr"
                                     >
                                         {{ $permission->name }}
@@ -31,7 +31,7 @@
                         <tbody>
                             @foreach ($roles as $role)
                                 <tr>
-                                    <th class="text-end px-2">
+                                    <th class="px-2 text-end">
                                         {{ $role->name }}
                                     </th>
                                     @foreach ($permissions as $permission)
@@ -53,7 +53,7 @@
 
         <div class="col-xl-3">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     Manage role membership
                 </div>
 
@@ -65,7 +65,7 @@
                         >
                             <div class="card mb-2">
                                 <div
-                                    class="card-header bg-info text-white cursor-pointer"
+                                    class="card-header bg-info cursor-pointer text-white"
                                     data-bs-toggle="collapse"
                                     data-bs-target="#role-accordion-{{ $role->id }}"
                                 >

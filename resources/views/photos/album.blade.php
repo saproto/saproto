@@ -22,7 +22,7 @@
     @endif
 
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white text-end">
+        <div class="card-header bg-dark text-end text-white">
             <a
                 href="{{ route('photo::albums') }}"
                 class="btn btn-success float-start me-3"
@@ -40,7 +40,7 @@
                 </a>
             @endcan
 
-            <div class="p-1 m-1 fw-bold">
+            <div class="fw-bold m-1 p-1">
                 {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
             </div>
         </div>

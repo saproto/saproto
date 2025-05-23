@@ -40,7 +40,7 @@
         <br />
 
         <table
-            class="table table-light table-borderless"
+            class="table-light table-borderless table"
             style="
                 width: 500px;
                 margin: 0 auto;
@@ -62,7 +62,7 @@
         </table>
 
         <table
-            class="table table-dark table-borderless"
+            class="table-dark table-borderless table"
             style="width: 500px; margin: 0 auto 40px auto; padding: 20px 40px"
         >
             <tr style="padding: 0; margin: 0">

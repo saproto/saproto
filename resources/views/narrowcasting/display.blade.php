@@ -59,7 +59,7 @@
 
     <div id="slideshow" class="opacity-0"></div>
 
-    <div id="yt-player" class="opacity-0 w-full"></div>
+    <div id="yt-player" class="w-full opacity-0"></div>
 </div>
 
 @push('javascript')

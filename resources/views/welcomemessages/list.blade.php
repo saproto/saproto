@@ -17,7 +17,7 @@
                 </div>
 
                 @if (count($messages) > 0)
-                    <table class="table table-sm table-hover">
+                    <table class="table-sm table-hover table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td style="min-width: 200px">User</td>

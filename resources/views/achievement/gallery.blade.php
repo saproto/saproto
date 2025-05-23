@@ -8,7 +8,7 @@
     <div id="achievement-accordion">
         @foreach (['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
             <div
-                class="card mb-3 achievement-{{ $tier }}"
+                class="card achievement-{{ $tier }} mb-3"
                 id="achievement-{{ $tier }}"
             >
                 <div
@@ -18,7 +18,7 @@
                 >
                     @for ($i = 0; $i < 5; $i++)
                         @if ($i < $achievements[0]->numberOfStars())
-                            <i class="text-white fas fa-star"></i>
+                            <i class="fas fa-star text-white"></i>
                         @else
                             <i class="achievement-{{ $tier }} fas fa-star"></i>
                         @endif
@@ -30,7 +30,7 @@
                 </div>
 
                 <div
-                    class="card-body collapse {{ $tier == 'common' ? 'show' : '' }}"
+                    class="card-body {{ $tier == 'common' ? 'show' : '' }} collapse"
                     id="collapse-achievement-{{ $tier }}"
                     data-parent="#achievement-accordion"
                 >

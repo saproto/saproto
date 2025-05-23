@@ -207,7 +207,7 @@
                                                 class="text-decoration-none"
                                             >
                                                 <i
-                                                    class="fas fa-download fa-fw me-2 text-info"
+                                                    class="fas fa-download fa-fw text-info me-2"
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>
@@ -264,7 +264,7 @@
                                                 class="text-decoration-none"
                                             >
                                                 <i
-                                                    class="fas fa-download fa-fw me-2 text-info"
+                                                    class="fas fa-download fa-fw text-info me-2"
                                                     aria-hidden="true"
                                                 ></i>
                                             </a>

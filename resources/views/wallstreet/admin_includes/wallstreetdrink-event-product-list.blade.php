@@ -1,5 +1,5 @@
 <div class="card mb-3">
-    <div class="card-header bg-dark text-white mb-1">
+    <div class="card-header bg-dark mb-1 text-white">
         WallstreetDrink Event Product overview
     </div>
     <form
@@ -43,7 +43,7 @@
             </div>
         </div>
     @else
-        <div class="text-center text-muted py-3">
+        <div class="py-3 text-center text-muted">
             There are products associated with this Event yet!
         </div>
     @endif

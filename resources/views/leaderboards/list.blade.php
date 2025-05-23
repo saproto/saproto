@@ -20,7 +20,7 @@
 
                     <div
                         id="collapse-leaderboard-{{ $leaderboard->id }}"
-                        class="table-responsive collapse {{ $loop->index == 0 ? 'show' : '' }}"
+                        class="table-responsive {{ $loop->index == 0 ? 'show' : '' }} collapse"
                         data-parent="#leaderboard-accordion"
                     >
                         @if ($leaderboard->description)
@@ -30,7 +30,7 @@
                         @endif
 
                         @if (count($leaderboard->entries) > 0)
-                            <table class="table table-sm">
+                            <table class="table-sm table">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -44,7 +44,7 @@
                                     @foreach ($leaderboard->entries->sortByDesc('points') as $entry)
                                         <tr>
                                             <td
-                                                class="ps-3 place-{{ $loop->index + 1 }}"
+                                                class="place-{{ $loop->index + 1 }} ps-3"
                                                 style="max-width: 50px"
                                             >
                                                 <i
@@ -71,7 +71,7 @@
                             </table>
                         @else
                             <hr />
-                            <p class="text-muted text-center pt-3">
+                            <p class="pt-3 text-center text-muted">
                                 There are no entries yet.
                             </p>
                         @endif

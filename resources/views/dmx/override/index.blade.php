@@ -20,7 +20,7 @@
 
                 @if (count($overrides) > 0)
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table-hover table">
                             <thead>
                                 <tr>
                                     <th>Fixtures</th>

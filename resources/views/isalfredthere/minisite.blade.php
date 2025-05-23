@@ -11,11 +11,11 @@
 @section('container')
     <div class="row text-white">
         <div class="col-md-12 text-center">
-            <h1 class="mt-3 mb-3" style="font-size: 70px">Is Alfred There?</h1>
+            <h1 class="mb-3 mt-3" style="font-size: 70px">Is Alfred There?</h1>
 
             <h1
                 id="alfred-status"
-                class="mt-3 mb-3 proto-countdown"
+                class="proto-countdown mb-3 mt-3"
                 style="font-size: 50px"
                 data-countdown-text-counting="Nope. Alfred will be back in {}."
                 data-countdown-text-finished="Alfred should be there. 👀"
@@ -24,7 +24,7 @@
             </h1>
             <h4 id="alfred-actualtime"></h4>
             <h1 id="alfred-text"></h1>
-            <div class="mt-5 mb-5 flex flex-row">
+            <div class="mb-5 mt-5 flex flex-row">
                 <i class="d-none" id="alfred-error" style="font-size: 120px">
                     <i class="fas fa-triangle-exclamation"></i>
                 </i>

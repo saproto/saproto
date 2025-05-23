@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                     <a
                         href="{{ route('announcement::clear') }}"
@@ -25,7 +25,7 @@
                 </div>
 
                 @if (count($announcements) > 0)
-                    <table class="table table-hover table-sm">
+                    <table class="table-hover table-sm table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td></td>

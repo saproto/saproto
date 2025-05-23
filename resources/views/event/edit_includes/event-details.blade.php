@@ -7,7 +7,7 @@
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">
-            <div class="p-1 m-1 fw-bold d-inline-block">Event details</div>
+            <div class="fw-bold d-inline-block m-1 p-1">Event details</div>
 
             @include('event.edit_includes.buttonbar')
         </div>

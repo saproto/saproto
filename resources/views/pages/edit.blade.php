@@ -142,7 +142,7 @@
                         <div class="card-footer">
                             <button
                                 type="submit"
-                                class="btn btn-success float-end btn-block"
+                                class="btn btn-success btn-block float-end"
                             >
                                 Replace featured image
                             </button>
@@ -158,12 +158,12 @@
                     @csrf
 
                     <div class="card mb-3">
-                        <div class="card-header bg-dark text-white mb-1">
+                        <div class="card-header bg-dark mb-1 text-white">
                             Attachments
                         </div>
 
                         @if ($item->files->count() > 0)
-                            <table class="table table-hover table-sm">
+                            <table class="table-hover table-sm table">
                                 <thead>
                                     <tr class="bg-dark text-white">
                                         <td>Filename</td>
@@ -173,7 +173,7 @@
 
                                 @foreach ($item->files as $file)
                                     <tr>
-                                        <td class="ps-3 ellipsis">
+                                        <td class="ellipsis ps-3">
                                             <a
                                                 href="{{ $file->generatePath() }}"
                                                 target="_blank"
@@ -189,7 +189,7 @@
                                                     rel="{{ $file->generateImagePath(1000, null) }}"
                                                 >
                                                     <i
-                                                        class="fas fa-image me-2 fa-fw"
+                                                        class="fas fa-image fa-fw me-2"
                                                     ></i>
                                                 </a>
                                             @else
@@ -200,7 +200,7 @@
                                                     rel="{{ $file->generatePath() }}"
                                                 >
                                                     <i
-                                                        class="fas fa-link me-2 fa-fw"
+                                                        class="fas fa-link fa-fw me-2"
                                                     ></i>
                                                 </a>
                                             @endif

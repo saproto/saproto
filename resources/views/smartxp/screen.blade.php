@@ -79,11 +79,11 @@
             @endif
         </div>
 
-        <div class="ms-2 col h-auto d-flex flex-column">
+        <div class="col d-flex flex-column ms-2 h-auto">
             {{-- On screen clock --}}
             <div class="row mb-3">
                 <div
-                    class="protubecard protubebackground p-3 text-center font-weight-bold display-3"
+                    class="protubecard protubebackground font-weight-bold display-3 p-3 text-center"
                 >
                     <div id="clock" class="notice">Loading</div>
                 </div>
@@ -103,11 +103,11 @@
             </div>
         </div>
     </div>
-    <div id="info-row" class="row text-black d-flex">
-        <div class="col-9 mt-3 h-100" style="padding: 0">
-            <div id="activities" class="d-flex flex-row mb-3 gap-2 h-100">
+    <div id="info-row" class="row d-flex text-black">
+        <div class="col-9 h-100 mt-3" style="padding: 0">
+            <div id="activities" class="d-flex h-100 mb-3 flex-row gap-2">
                 <div
-                    class="notice protubecard protubebackground flex-grow-1 p-2 font-weight-bold"
+                    class="notice protubecard protubebackground flex-grow-1 font-weight-bold p-2"
                 >
                     <div id="event-loader" class="font-size-lg">
                         Loading events
@@ -115,10 +115,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 mt-3 h-100" style="padding: 0 0 0 8px">
+        <div class="col-3 h-100 mt-3" style="padding: 0 0 0 8px">
             <div
                 id="protopeners"
-                class="box protubecard protubebackground p-3 h-100"
+                class="box protubecard protubebackground h-100 p-3"
             >
                 <div class="box-header font-size-lg">
                     <i

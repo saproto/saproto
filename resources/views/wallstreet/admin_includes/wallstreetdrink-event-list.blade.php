@@ -1,11 +1,11 @@
 <div class="card mb-3">
-    <div class="card-header bg-dark mb-1 justify-content-between d-inline-flex">
+    <div class="card-header bg-dark justify-content-between d-inline-flex mb-1">
         <div class="text-white">WallstreetDrink events overview</div>
     </div>
 
     @if (count($allEvents) > 0)
         <div class="table-responsive">
-            <table class="table table-sm">
+            <table class="table-sm table">
                 <thead>
                     <tr class="bg-dark text-white">
                         <th>ID</th>
@@ -18,7 +18,7 @@
 
                 <tbody>
                     @foreach ($allEvents as $wallstreetEvent)
-                        <tr class="align-middle text-nowrap">
+                        <tr class="text-nowrap align-middle">
                             <td class="text-muted">
                                 #{{ $wallstreetEvent->id }}
                             </td>
@@ -63,7 +63,7 @@
             </table>
         </div>
     @else
-        <div class="text-center text-muted py-3">
+        <div class="py-3 text-center text-muted">
             There are no wallstreet events yet!
         </div>
     @endif

@@ -12,7 +12,7 @@
                 {{ iban_to_human_format($user->bank->bic) }}
             </p>
 
-            <table class="table table-borderless table-sm text-muted mb-0">
+            <table class="table-borderless table-sm mb-0 table text-muted">
                 <tbody>
                     <tr>
                         <th>Type</th>

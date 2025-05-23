@@ -43,7 +43,7 @@
 
                     <div class="card-body">
                         @if (count($data) <= 0)
-                            <p class="text-center card-text">
+                            <p class="card-text text-center">
                                 Your search returned no results.
                             </p>
                         @else

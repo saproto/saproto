@@ -144,7 +144,7 @@
                                 <form action="">
                                     <div class="table-responsive">
                                         <table
-                                            class="table table-sm table-hover mb-0"
+                                            class="table-sm table-hover mb-0 table"
                                         >
                                             <thead>
                                                 <tr>
@@ -153,7 +153,7 @@
                                                     <th>
                                                         {{ $leaderboard->points_name }}
                                                         <i
-                                                            class="ms-1 {{ $leaderboard->icon }}"
+                                                            class="{{ $leaderboard->icon }} ms-1"
                                                         ></i>
                                                     </th>
                                                     <th></th>
@@ -193,10 +193,10 @@
                                                             "
                                                         >
                                                             <span
-                                                                class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"
+                                                                class="fa fas fa-lg fa-caret-up le-points-increase ms-2"
                                                             ></span>
                                                             <span
-                                                                class="fa fas fa-lg fa-caret-down ms-1 le-points-decrease"
+                                                                class="fa fas fa-lg fa-caret-down le-points-decrease ms-1"
                                                             ></span>
                                                         </td>
                                                         <td>
