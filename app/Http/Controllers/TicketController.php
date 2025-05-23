@@ -135,7 +135,6 @@ class TicketController extends Controller
      */
     public function scan(string $barcode)
     {
-        /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::query()->where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');

@@ -31,6 +31,7 @@ class MenuItemData extends Data
 
         public bool $is_member_only,
 
+        /** @var Collection<int, MenuItemData> */
         #[DataCollectionOf(MenuItemData::class)]
         public Collection $children,
 
