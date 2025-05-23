@@ -166,6 +166,9 @@ jobs:
       - name: generate laravel app key
         run: php artisan key:generate
 
+      - name: run laravel-ide helper
+        run: php artisan ide-helper:generate
+
       - name: 🧠 Run PHPStan static analysis
         run: vendor/bin/phpstan analyse
 
