@@ -88,5 +88,5 @@ return [
      * the package will transform them to types.
      */
 
-    'transform_to_native_enums' => false,
+    'transform_to_native_enums' => true,
 ];
