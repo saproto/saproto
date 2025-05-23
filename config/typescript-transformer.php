@@ -81,7 +81,7 @@ return [
      * The generated TypeScript will not be formatted when no formatter was set.
      */
 
-    'formatter' => PrettierFormatter::class,
+    'formatter' => null,
 
     /*
      * Enums can be transformed into types or native TypeScript enums, by default
