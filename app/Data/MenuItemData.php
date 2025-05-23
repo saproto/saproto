@@ -2,12 +2,12 @@
 
 namespace App\Data;
 
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use App\Models\MenuItem;
 use App\Models\Page;
-use Spatie\LaravelData\Data;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Data;
 
 /** @typescript */
 class MenuItemData extends Data
