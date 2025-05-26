@@ -94,7 +94,6 @@ class MenuItem extends Model
         });
     }
 
-
     public function getUrl(): ?string
     {
         if (str_starts_with($this->url, '(route) ')) {

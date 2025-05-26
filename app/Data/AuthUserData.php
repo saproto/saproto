@@ -4,6 +4,7 @@ namespace App\Data;
 
 use App\Models\User;
 use Spatie\LaravelData\Data;
+
 /** @typescript */
 class AuthUserData extends Data
 {
@@ -17,7 +18,7 @@ class AuthUserData extends Data
 
     public static function fromModel(?User $user): ?self
     {
-        return $user ? new self(
+        return $user instanceof User ? new self(
             $user->id,
             $user->calling_name,
             $user->getRoleNames()->toArray(), // Get role names

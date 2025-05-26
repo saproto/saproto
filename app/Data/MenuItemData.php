@@ -3,8 +3,6 @@
 namespace App\Data;
 
 use App\Models\MenuItem;
-use App\Models\Page;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
@@ -28,12 +26,12 @@ class MenuItemData extends Data
 
     public static function fromModel(?MenuItem $menuItem): ?self
     {
-        return $menuItem ? new self(
+        return $menuItem instanceof MenuItem ? new self(
             $menuItem->menuname,
             $menuItem->url,
             $menuItem->order,
             $menuItem->is_member_only,
-            $menuItem->children->map(fn (MenuItem $child) => MenuItemData::fromModel($child)),
+            $menuItem->children->map(fn (MenuItem $child): ?\App\Data\MenuItemData => MenuItemData::fromModel($child)),
         ) : null;
     }
 }

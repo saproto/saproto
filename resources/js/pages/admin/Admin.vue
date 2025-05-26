@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import AppLayout from '@/layouts/AppLayout.vue'
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
 function handleClick() {
     console.log('Button clicked!')
 }
 
 defineOptions({
-    layout: AppLayout,
+    layout: AdminLayout,
 })
 import { usePage } from '@inertiajs/vue3'
 // import { computed } from 'vue'
@@ -16,6 +16,5 @@ const page = usePage()
 </script>
 
 <template>
-    {{page.props}}
     <Button @click="handleClick">Click me</Button>
 </template>

@@ -5,9 +5,17 @@ namespace App\Http\Middleware;
 use App\Data\AuthUserData;
 use App\Data\MenuItemData;
 use App\Models\MenuItem;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\AbstractCursorPaginator;
+use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Enumerable;
 use Inertia\Middleware;
 use Override;
+use Spatie\LaravelData\CursorPaginatedDataCollection;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,11 +44,11 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth.user' => fn () => AuthUserData::fromModel($request->user()),
+            'auth.user' => fn (): ?AuthUserData => AuthUserData::fromModel($request->user()),
             'flash' => [
-                'message'=>$request->session()->get('flash_message')
+                'message' => $request->session()->get('flash_message'),
             ],
-            'menuitems'=>fn()=> MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
+            'menuitems' => fn (): DataCollection|PaginatedDataCollection|CursorPaginatedDataCollection|Enumerable|AbstractPaginator|Paginator|AbstractCursorPaginator|CursorPaginator|array => MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
         ]);
     }
 }

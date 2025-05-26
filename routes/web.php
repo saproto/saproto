@@ -1065,6 +1065,7 @@ Route::middleware('forcedomain')->group(function () {
 
     Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
         Route::get('/', fn () => inertia('Welcome'))->name('index');
+        Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
     });
 
     /* --- Route related to the december theme --- */
