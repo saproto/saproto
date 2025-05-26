@@ -22,6 +22,11 @@ class ProtoPolicy extends Policy
             return false;
         }
 
+        // Skip CSP for Pulse
+        if ($request->is('pulse*')) {
+            return false;
+        }
+
         return parent::shouldBeApplied($request, $response);
     }
 
@@ -57,6 +62,7 @@ class ProtoPolicy extends Policy
                 Keyword::SELF,
                 Keyword::UNSAFE_INLINE,
                 'https://fonts.googleapis.com/css2',
+                'https://fonts.bunny.net/',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
             ->addDirective(Directive::IMG, [
@@ -81,6 +87,7 @@ class ProtoPolicy extends Policy
                 Keyword::SELF,
                 'data:',
                 'https://fonts.gstatic.com',
+                'https://fonts.bunny.net/',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
             ->addDirective(Directive::CONNECT, [

@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\MenuItem;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Override;
@@ -39,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
                     $view->with('newAchievements', $newAchievements);
                 }
             }
+        });
+
+        Gate::define('viewPulse', function (User $user) {
+            return $user->can('sysadmin');
         });
     }
 
