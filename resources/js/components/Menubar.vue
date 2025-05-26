@@ -38,10 +38,10 @@ const {can} = useCan()
 <template>
     <!-- Menu Items -->
     <UseTemplate>
-        <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.id">
+        <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname">
             <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
             <MenubarContent class="w-full">
-                <MenubarItem v-for="child in menuitem.children" :key="child.id" class="w-full">
+                <MenubarItem v-for="child in menuitem.children" :key="child.menuname" class="w-full">
                     {{ child.menuname }}
                 </MenubarItem>
             </MenubarContent>
