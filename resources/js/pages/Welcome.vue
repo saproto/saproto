@@ -16,6 +16,6 @@ const page = usePage()
 </script>
 
 <template>
-    {{page.props}}
+    {{ page.props }}
     <Button @click="handleClick">Click me</Button>
 </template>

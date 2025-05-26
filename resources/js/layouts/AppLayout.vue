@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Menubar from '@/components/Menubar.vue'
-import { router } from "@inertiajs/vue3";
+import { router } from '@inertiajs/vue3'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import AppSidebar from '@/components/AppSidebar.vue'
 router.on('invalid', (event) => {
@@ -14,7 +14,6 @@ router.on('invalid', (event) => {
     <div class="min-h-screen w-full">
         <Menubar />
         <SidebarProvider>
-
             <AppSidebar />
             <main>
                 <SidebarTrigger />

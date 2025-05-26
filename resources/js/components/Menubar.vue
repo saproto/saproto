@@ -32,7 +32,7 @@ const page = usePage()
 const menuitems = computed(() => page.props.menuitems)
 
 import { useCan } from '@/composables/useCan'
-const {can} = useCan()
+const { can } = useCan()
 </script>
 
 <template>
@@ -41,13 +41,17 @@ const {can} = useCan()
         <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname">
             <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
             <MenubarContent class="w-full">
-                <MenubarItem v-for="child in menuitem.children" :key="child.menuname" class="w-full">
+                <MenubarItem
+                    v-for="child in menuitem.children"
+                    :key="child.menuname"
+                    class="w-full"
+                >
                     {{ child.menuname }}
                 </MenubarItem>
             </MenubarContent>
         </MenubarMenu>
 
-        <MenubarMenu>
+        <MenubarMenu v-if="can('sysadmin')">
             <Link :href="route('admin')">
                 <MenubarTrigger>Admin</MenubarTrigger>
             </Link>
@@ -56,7 +60,7 @@ const {can} = useCan()
 
     <!-- Menubar -->
     <Menubar
-        class="sticky top-0 z-50 justify-end md:justify-start flex w-full items-center border-b border-gray-200 bg-white px-6 py-3 shadow dark:border-gray-700 dark:bg-gray-900"
+        class="sticky top-0 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-3 shadow dark:border-gray-700 dark:bg-gray-900 md:justify-start"
     >
         <!-- Show full menu on desktop -->
         <GridForm v-if="isDesktop" />
@@ -65,16 +69,17 @@ const {can} = useCan()
         <Drawer v-else v-model:open="isOpen">
             <MenubarMenu>
                 <DrawerTrigger as-child>
-                    <MenubarTrigger class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md">
-                        <Menu class="w-5 h-5" />
+                    <MenubarTrigger
+                        class="rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                        <Menu class="h-5 w-5" />
                     </MenubarTrigger>
                 </DrawerTrigger>
             </MenubarMenu>
             <DrawerContent>
                 <DrawerHeader class="text-left">
                     <DrawerTitle>Navigation</DrawerTitle>
-                    <DrawerDescription>
-                    </DrawerDescription>
+                    <DrawerDescription> </DrawerDescription>
                 </DrawerHeader>
 
                 <GridForm />

@@ -4,7 +4,7 @@ import { useForwardPropsEmits } from 'reka-ui'
 import { DrawerRoot } from 'vaul-vue'
 
 const props = withDefaults(defineProps<DrawerRootProps>(), {
-  shouldScaleBackground: true,
+    shouldScaleBackground: true,
 })
 
 const emits = defineEmits<DrawerRootEmits>()
@@ -13,7 +13,7 @@ const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
-  <DrawerRoot v-bind="forwarded as any">
-    <slot />
-  </DrawerRoot>
+    <DrawerRoot v-bind="forwarded as any">
+        <slot />
+    </DrawerRoot>
 </template>
