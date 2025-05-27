@@ -63,7 +63,8 @@ class HomeController extends Controller
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->where('show_birthday', true)
-            ->where('birthdate', 'LIKE', Carbon::now()->format('%-m-d'))
+            ->whereMonth('birthdate', Carbon::now()->month)
+            ->whereDay('birthdate', Carbon::now()->day)
             ->with('photo')
             ->get();
 

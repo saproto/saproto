@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class VerifyPersonalDetailsEmailCron extends Command
 {
@@ -40,9 +39,9 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = Str::padLeft((string) Carbon::now()->addMonth()->month, 2, '0');
-
-        $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month < 10 ? '0'.$month : $month))->get();
+        $users = User::query()
+            ->whereMonth('created_at', Carbon::now()->addMonth())
+            ->get();
 
         foreach ($users as $user) {
             Mail::to($user)->queue((new VerifyPersonalDetails($user))->onQueue('low'));

@@ -10,6 +10,7 @@
 # Cache files
 .tmp
 *.cache
+tmp/
 
 # Local files
 /personal
