@@ -52,7 +52,6 @@ class WithdrawalController extends Controller
 
         $date = $request->date('date')->format('Y-m-d');
 
-        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
             'date' => $date,
         ]);
@@ -83,7 +82,7 @@ class WithdrawalController extends Controller
         foreach ($totalPerUser as $user_id => $total) {
             if ($total < 0) {
                 $user = User::query()->findOrFail($user_id);
-                $orderlinesFor = $withdrawal->orderlinesForUser($user)->get();
+                $orderlinesFor = $withdrawal->orderlinesForUser($user);
                 foreach ($orderlinesFor as $orderlineFor) {
                     $orderlineFor->withdrawal()->dissociate();
                     $orderlineFor->save();
@@ -208,7 +207,6 @@ class WithdrawalController extends Controller
         $user = User::withTrashed()->findOrFail($user_id);
 
         foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
-            /** @var OrderLine $orderline */
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }

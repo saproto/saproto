@@ -40,7 +40,7 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = Str::padLeft(Carbon::now()->addMonth()->month, 2, '0');
+        $month = Str::padLeft((string) Carbon::now()->addMonth()->month, 2, '0');
 
         $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month < 10 ? '0'.$month : $month))->get();
 
