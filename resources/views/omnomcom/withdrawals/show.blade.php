@@ -26,11 +26,11 @@
                 @csrf
 
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white mb-2">
+                    <div class="card-header bg-dark mb-2 text-white">
                         @yield('page-title')
                     </div>
 
-                    <table class="table table-sm table-borderless ms-3">
+                    <table class="table-sm table-borderless ms-3 table">
                         <tbody>
                             <tr>
                                 <th>ID</th>
@@ -137,12 +137,12 @@
 
         <div class="col-md-9">
             <div class="card mb-3">
-                <div class="card-header mb-1 bg-dark text-white">
+                <div class="card-header bg-dark mb-1 text-white">
                     Users in this withdrawal
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-sm table-hover">
+                    <table class="table-sm table-hover table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td>ID</td>
@@ -212,7 +212,7 @@
                                         @else
                                             <a
                                                 href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
-                                                class="text-white fw-bold underline-on-hover"
+                                                class="fw-bold underline-on-hover text-white"
                                             >
                                                 Remove
                                             </a>
@@ -232,7 +232,7 @@
                                                         'Are you sure you want to mark this withdrawal for ' .
                                                         $data->user->name .
                                                         ' as failed? They <b>will</b> automatically receive an e-mail about this!',
-                                                    'classes' => 'text-white fw-bold underline-on-hover',
+                                                    'classes' => 'fw-bold underline-on-hover text-white',
                                                 ]
                                             )
 
@@ -251,7 +251,7 @@
                                                         'Are you sure you want to mark this withdrawal for ' .
                                                         $data->user->name .
                                                         ' as a loss? <b>This cannot easily be undone!</b>',
-                                                    'classes' => 'text-white fw-bold underline-on-hover',
+                                                    'classes' => 'fw-bold underline-on-hover text-white',
                                                 ]
                                             )
                                         @endif

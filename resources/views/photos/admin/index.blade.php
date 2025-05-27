@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Albums
                 </div>
 
@@ -39,7 +39,7 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Add Album
                 </div>
 
@@ -89,7 +89,7 @@
 
         <div class="col-lg-9">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Unpublished albums
                 </div>
 
@@ -122,7 +122,7 @@
                 </div>
             </div>
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Published albums
                 </div>
 

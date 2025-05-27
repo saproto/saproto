@@ -14,10 +14,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Override;
 
 /**
@@ -59,10 +60,6 @@ use Override;
  * @property-read int|null $tickets_count
  * @property-read Collection<int, Video> $videos
  * @property-read int|null $videos_count
- * @property-read bool|null $user_has_participation
- * @property-read bool|null $user_has_helper_participation
- * @property-read bool|null $user_has_backup_participation
- * @property-read bool|null $user_has_tickets
  *
  * @method static EventFactory factory($count = null, $state = [])
  * @method static Builder<static>|Event newModelQuery()
@@ -109,7 +106,7 @@ class Event extends Model
 
     protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
-    protected $with = ['category', 'activity'];
+    protected $with = ['category'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -126,14 +123,29 @@ class Event extends Model
         ];
     }
 
-    public function getPublicId(): string
+    #[Override]
+    public function getRouteKey(): string
     {
-        return Hashids::connection('event')->encode($this->id);
+        return Str::slug($this->title).'-'.self::getPublicId($this->id);
     }
 
-    public static function fromPublicId(string $public_id): Event
+    #[Override]
+    public function resolveRouteBinding($value, $field = null): ?Model
     {
-        return self::query()->findOrFail(self::getIdFromPublicId($public_id));
+        $id = Str::afterLast($value, '-');
+        $model = parent::resolveRouteBinding(self::getIdFromPublicId($id), $field);
+        if (! $model || $model->getRouteKey() === $value) {
+            return $model;
+        }
+
+        throw new HttpResponseException(
+            redirect()->route('event::show', $model->getRouteKey())
+        );
+    }
+
+    public static function getPublicId(int $id): string
+    {
+        return Hashids::connection('event')->encode($id);
     }
 
     public static function getIdFromPublicId(string $public_id): int
@@ -180,22 +192,26 @@ class Event extends Model
             ->orderBy('start')
             ->with('image')
             ->with('activity', static function ($e) use ($user) {
-                $e->withExists(['backupUsers as user_has_backup_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }, 'helpingParticipations as user_has_helper_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id);
-                }, 'participation as user_has_participation' => static function ($q) use ($user) {
-                    $q->where('user_id', $user?->id)
-                        ->whereNull('committees_activities_id');
-                },
-                ])->withCount([
-                    'users',
-                ]);
-            })->withExists(['tickets as user_has_tickets' => static function ($q) use ($user) {
-                $q->whereHas('purchases', static function ($q) use ($user) {
+                $e
+                    ->with('participation', function ($q) use ($user) {
+                        $q->where('user_id', $user?->id);
+                    })
+                    ->withCount([
+                        'users',
+                    ]);
+            })
+            ->with('committee', static function ($q) use ($user) {
+                $q->with('users', function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 });
-            }]);
+            })
+            ->with('tickets', function ($q) use ($user) {
+                $q->with('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                })->whereHas('purchases', static function ($q) use ($user) {
+                    $q->where('user_id', $user?->id);
+                });
+            });
     }
 
     public function isPublished(): bool
@@ -267,17 +283,6 @@ class Event extends Model
         return $this->committee?->isMember($user) ?? false;
     }
 
-    /** @return Collection<int, TicketPurchase> */
-    public function getTicketPurchasesFor(User $user): Collection
-    {
-        return TicketPurchase::query()
-            ->where('user_id', $user->id)
-            ->whereHas('ticket', function ($q) {
-                $q->where('event_id', $this->id);
-            })
-            ->get();
-    }
-
     public function current(): bool
     {
         return $this->start < Carbon::now()->timestamp && $this->end > Carbon::now()->timestamp;
@@ -308,8 +313,12 @@ class Event extends Model
     /**
      * @return bool Whether the user is an admin of the event.
      */
-    public function isEventAdmin(User $user): bool
+    public function isEventAdmin(?User $user): bool
     {
+        if (! $user instanceof User) {
+            return false;
+        }
+
         if ($user->can('board')) {
             return true;
         }
@@ -338,17 +347,7 @@ class Event extends Model
             return false;
         }
 
-        $eroHelping = HelpingCommittee::query()
-            ->where('activity_id', $this->activity->id)
-            ->where('committee_id', Config::integer('proto.committee.ero'))->first();
-        if ($eroHelping) {
-            return ActivityParticipation::query()
-                ->where('activity_id', $this->activity->id)
-                ->where('committees_activities_id', $eroHelping->id)
-                ->where('user_id', $user->id)->count() > 0;
-        }
-
-        return false;
+        return $this->activity->isEro($user);
     }
 
     /**
@@ -356,7 +355,7 @@ class Event extends Model
      */
     public function hasBoughtTickets(User $user): bool
     {
-        return $this->getTicketPurchasesFor($user)->count() > 0;
+        return $this->tickets->pluck('purchases')->flatten()->filter(fn ($purchase): bool => $purchase->user_id === $user->id)->isNotEmpty();
     }
 
     /** @return Collection<int, User> */

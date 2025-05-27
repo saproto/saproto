@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-sm table-hover">
+                    <table class="table-sm table-hover table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td>Event</td>
@@ -78,7 +78,7 @@
                             <tr>
                                 <td>
                                     <a
-                                        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+                                        href="{{ route('event::show', ['event' => $event]) }}"
                                     >
                                         {{ $event->title }}
                                     </a>

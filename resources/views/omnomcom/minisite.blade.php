@@ -232,7 +232,7 @@
             const results = Array.from(
                 document.getElementsByClassName('result')
             )
-            search.addEventListener('keyup', (_) => {
+            search.addEventListener('keyup', () => {
                 let query = search.value
                 results.forEach((el) =>
                     el.classList.replace('result_left', 'd-none')

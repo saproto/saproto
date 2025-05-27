@@ -31,7 +31,7 @@
 
             @push('javascript')
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-                    window.addEventListener('load', (_) => {
+                    window.addEventListener('load', () => {
                         modals['{{ $announcement->modal_id }}'].show()
                     })
                 </script>

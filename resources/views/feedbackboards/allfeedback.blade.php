@@ -1,7 +1,7 @@
-<div class="card mb-3 w-100">
+<div class="card w-100 mb-3">
     <div class="card-header bg-dark text-white">
         <div
-            class="d-flex align-items-center justify-items-center justify-content-between mb-2"
+            class="d-flex align-items-center justify-content-between mb-2 justify-items-center"
         >
             <span class="">{{ $category->title }}</span>
             @can('board')
@@ -9,7 +9,7 @@
                     @if (count($data) > 0)
                         <a
                             href="{{ route('feedback::archiveall', ['category' => $category->url]) }}"
-                            class="ms-3 btn btn-danger"
+                            class="btn btn-danger ms-3"
                         >
                             <i class="fas fa-box-archive text-white"></i>
                             Archive all
@@ -18,7 +18,7 @@
 
                     <a
                         href="{{ route('feedback::archived', ['category' => $category->url]) }}"
-                        class="float-end ms-3 btn btn-info"
+                        class="btn btn-info float-end ms-3"
                     >
                         <i class="fas fa-inbox text-white"></i>
                         <span class="d-none d-sm-inline">View archived</span>
@@ -47,7 +47,7 @@
                 @endforeach
             </div>
         @else
-            <p class="text-center text-muted mt-3">
+            <p class="mt-3 text-center text-muted">
                 There are no {{ $category->title }} at the moment, be the first
                 to post a new one!
             </p>

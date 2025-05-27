@@ -21,7 +21,7 @@
                 'components.modals.confirm-modal',
                 [
                     'action' => route('api::user::gdpr_export'),
-                    'classes' => 'btn btn-outline-info btn-block mb-3 ellipsis',
+                    'classes' => 'btn btn-outline-info btn-block ellipsis mb-3',
                     'text' =>
                         '<strong>Download all my personal information. (GDPR)</strong>',
                     'title' => 'Confirm Download',

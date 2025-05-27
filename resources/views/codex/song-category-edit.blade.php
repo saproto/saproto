@@ -15,7 +15,7 @@
             value="{{ ! empty($category) ? 'PUT' : 'POST' }}"
         />
         {{ csrf_field() }}
-        <div class="row gap-3 justify-content-center">
+        <div class="row justify-content-center gap-3">
             <div class="col-6">
                 <div class="row">
                     <div class="card mb-3">

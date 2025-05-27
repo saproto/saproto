@@ -7,15 +7,15 @@
 @section('container')
     <div class="row">
         <div class="col-12">
-            <div class="card mb-3 mx-4">
+            <div class="card mx-4 mb-3">
                 <div class="card-header bg-dark text-white">
-                    <span class="m-0 float-left">
-                        <i class="fas fa-archive text-white me-2"></i>
+                    <span class="float-left m-0">
+                        <i class="fas fa-archive me-2 text-white"></i>
                         Archived {{ $category->title }}
                     </span>
                     <a
                         href="{{ route('feedback::index', ['category' => $category->url]) }}"
-                        class="float-end ms-3 px-2 py-1 btn btn-info"
+                        class="btn btn-info float-end ms-3 px-2 py-1"
                     >
                         <i class="fas fa-eye text-white"></i>
                         <span class="d-none d-sm-inline">View Public</span>
@@ -38,7 +38,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-center text-muted mt-3">
+                        <p class="mt-3 text-center text-muted">
                             No archived {{ $category->title }}.
                         </p>
                     @endif

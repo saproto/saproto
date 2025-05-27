@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-xl-9 col-md-6 col-sm-12">
             <div
-                class="card text-white mb-3 border-0"
+                class="card mb-3 border-0 text-white"
                 style="
                     @if ($header)
                         background-image: url({{ $header->image->generateImagePath(1500, 400) }});
@@ -32,7 +32,7 @@
                 @endphp
 
                 @if ($header?->user)
-                    <small class="ellipsis text-end pe-3 pt-2">
+                    <small class="ellipsis pe-3 pt-2 text-end">
                         @if (Auth::user()?->is_member && $header->user->member)
                             Photo by
                             <a
@@ -47,7 +47,7 @@
                     </small>
                 @endif
 
-                <div class="card-body text-start d-flex align-items-end">
+                <div class="card-body d-flex align-items-end text-start">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section("greeting")
                             
@@ -60,7 +60,7 @@
 
             @if (count($companies) > 0)
                 <div class="card mb-3">
-                    <div class="card-body pb-0 pt-1 position-relative">
+                    <div class="card-body position-relative pb-0 pt-1">
                         <div class="swiper row mb-1" style="height: 70px">
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)

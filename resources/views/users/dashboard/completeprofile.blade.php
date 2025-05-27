@@ -52,7 +52,7 @@
                     <div class="card-footer">
                         <button
                             type="submit"
-                            class="btn btn-outline-primary float-end btn-block"
+                            class="btn btn-outline-primary btn-block float-end"
                         >
                             Complete profile
                         </button>

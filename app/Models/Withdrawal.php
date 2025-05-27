@@ -69,11 +69,11 @@ class Withdrawal extends Model
     }
 
     /**
-     * @return HasMany<OrderLine, $this>
+     * @return Collection<int, OrderLine>
      */
-    public function orderlinesForUser(User $user): HasMany
+    public function orderlinesForUser(User $user): Collection
     {
-        return $this->orderlines()->where('user_id', $user->id);
+        return $this->orderlines->where('user_id', $user->id);
     }
 
     public function totalForUser(User $user): int

@@ -27,7 +27,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbar">
+            <div class="navbar-collapse collapse" id="navbar">
                 <ul class="navbar-nav me-auto">
                     @foreach ($menuItems as $menuItem)
                         @if (! $menuItem->is_member_only || (Auth::check() && Auth::user()->is_member))
@@ -624,7 +624,7 @@
                 <form
                     method="post"
                     action="{{ route('search::post') }}"
-                    class="form-inline mt-2 mt-md-0 me-2 float-end"
+                    class="form-inline mt-md-0 float-end me-2 mt-2"
                 >
                     {{ csrf_field() }}
                     <div class="input-group">
@@ -645,7 +645,7 @@
                 </form>
 
                 @if (Auth::check())
-                    <form class="form-inline mt-2 mt-md-0">
+                    <form class="form-inline mt-md-0 mt-2">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item dropdown">
                                 <a
@@ -744,7 +744,7 @@
                         </ul>
                     </form>
                 @else
-                    <form class="form-inline mt-2 mt-md-0">
+                    <form class="form-inline mt-md-0 mt-2">
                         <a
                             class="btn btn-outline-light me-2"
                             href="{{ route('login::register::index') }}"

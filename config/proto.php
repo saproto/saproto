@@ -264,7 +264,7 @@ return [
             'www.isalfredthere.nl',
         ],
         'static' => [
-            env('STATIC_URL'),
+            env(' ASSET_URL'),
         ],
     ],
 

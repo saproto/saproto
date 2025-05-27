@@ -19,7 +19,7 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             modals['flash-modal'].show()
         })
     </script>

@@ -72,7 +72,7 @@ class Ticket extends Model
      */
     public function purchases(): HasMany
     {
-        return $this->hasMany(TicketPurchase::class);
+        return $this->hasMany(TicketPurchase::class)->chaperone('ticket');
     }
 
     /** @return Collection<int, User> */

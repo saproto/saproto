@@ -4,7 +4,7 @@
     </div>
 
     @isset($orderlines)
-        <table class="table table-borderless table-hover table-sm mt-1">
+        <table class="table-borderless table-hover table-sm mt-1 table">
             <?php $current_date = null; ?>
 
             @foreach ($orderlines as $orderline)
@@ -13,7 +13,7 @@
                         $orderline->created_at,
                     )->format('d-m-Y'); ?>
 
-                    <tr class="bg-dark text-white mt-3">
+                    <tr class="bg-dark mt-3 text-white">
                         <td class="text-end">
                             <i class="fas fa-calendar-alt"></i>
                         </td>
@@ -29,7 +29,7 @@
                         {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
-                        <span class="text-muted me-2">
+                        <span class="me-2 text-muted">
                             {{ $orderline->units }}x
                         </span>
                         {{ $orderline->product->name }}

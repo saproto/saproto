@@ -2,7 +2,7 @@
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Your membership</div>
         <div class="card-body">
-            <table class="table table-borderless table-sm mb-2">
+            <table class="table-borderless table-sm mb-2 table">
                 <tbody>
                     @if ($user->is_member)
                         <tr>

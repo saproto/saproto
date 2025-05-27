@@ -138,7 +138,7 @@
                             Cancel
                         </a>
 
-                        <p class="text-center mb-0 mt-2">
+                        <p class="mb-0 mt-2 text-center">
                             Developed with
                             <span class="text-danger">
                                 <i class="fab fa-youtube fa-fw"></i>

@@ -1,9 +1,9 @@
 <div class="card mb-3">
-    <div class="card-header bg-dark text-white mb-1">Dinnerform overview</div>
+    <div class="card-header bg-dark mb-1 text-white">Dinnerform overview</div>
 
     @if (count($dinnerformList) > 0)
         <div class="table-responsive">
-            <table class="table table-sm">
+            <table class="table-sm table">
                 <thead>
                     <tr class="bg-dark text-white">
                         <th></th>
@@ -11,9 +11,8 @@
                         <th>Event</th>
                         <th class="text-center">Status</th>
                         <th>Start</th>
-                        <th>End</th>
                         <th>Total</th>
-                        <th class="text-center text-nowrap">Ordered by</th>
+                        <th class="text-nowrap text-center">Ordered by</th>
                         <th class="text-center">Admin</th>
                         <th class="text-center">Controls</th>
                     </tr>
@@ -21,7 +20,7 @@
 
                 <tbody>
                     @foreach ($dinnerformList as $dinnerform)
-                        <tr class="align-middle text-nowrap">
+                        <tr class="text-nowrap align-middle">
                             <td class="text-muted">#{{ $dinnerform->id }}</td>
                             <td>
                                 <a
@@ -33,9 +32,9 @@
                             <td>
                                 @isset($dinnerform->event)
                                     <a
-                                        href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}"
+                                        href="{{ route('event::show', ['event' => $dinnerform->event]) }}"
                                     >
-                                        {{ $dinnerform->event->title }}
+                                        {{ \Illuminate\Support\Str::limit($dinnerform->event->title, 15) }}
                                     </a>
                                 @endisset
                             </td>
@@ -67,12 +66,9 @@
                                 {{ $dinnerform->start->format('Y m-d H:i') }}
                             </td>
                             <td>
-                                {{ $dinnerform->end->format('Y m-d H:i') }}
-                            </td>
-                            <td>
                                 €{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}
                             </td>
-                            <td class="text-center px-4">
+                            <td class="px-4 text-center">
                                 @if ($dinnerform->orderedBy)
                                     <a
                                         class="btn btn-info badge"
@@ -82,12 +78,12 @@
                                     </a>
                                 @endif
                             </td>
-                            <td class="text-center px-4">
+                            <td class="px-4 text-center">
                                 <a
                                     class="btn btn-info badge"
                                     href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}"
                                 >
-                                    View orders
+                                    Orders
                                 </a>
                             </td>
                             <td class="text-center">
@@ -128,7 +124,7 @@
             </table>
         </div>
     @else
-        <div class="text-center text-muted py-3">There are no dinnerforms!</div>
+        <div class="py-3 text-center text-muted">There are no dinnerforms!</div>
     @endif
 
     <div class="card-footer pb-0">{{ $dinnerformList->links() }}</div>

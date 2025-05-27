@@ -27,9 +27,9 @@
                     </a>
 
                     @if ($video->event)
-                        <p class="text-end float-end text-white">
+                        <p class="float-end text-end text-white">
                             <a
-                                href="{{ route('event::show', ['id' => $video->event->getPublicId()]) }}"
+                                href="{{ route('event::show', ['event' => $video->event]) }}"
                                 class="btn btn-info float-end"
                             >
                                 <i

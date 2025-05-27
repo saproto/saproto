@@ -52,7 +52,7 @@
             <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
                 @csrf
                 @if ($use_fees)
-                    <div class="modal-body text-left container">
+                    <div class="modal-body container text-left">
                         Available payment methods
                         <div
                             class="row justify-content-around btn-group-toggle mb-2"

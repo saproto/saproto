@@ -1,4 +1,4 @@
-<footer class="main-footer bg-dark text-white py-3 mt-3">
+<footer class="main-footer bg-dark mt-3 py-3 text-white">
     <div class="container">
         <div class="row vcard">
             <div class="col-md-3 col-sm-6 col-5">
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <p class="text-center mt-3 mb-2">
+        <p class="mb-2 mt-3 text-center">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">

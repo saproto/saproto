@@ -42,7 +42,7 @@
                     a payment method's icon to see the transaction fee.
                 </p>
             </div>
-            <div class="modal-body text-left container">
+            <div class="modal-body container text-left">
                 Available payment methods
                 <div
                     class="row justify-content-around btn-group-toggle mb-2"

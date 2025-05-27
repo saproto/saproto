@@ -28,7 +28,7 @@
                         )
                     @endif
 
-                    @if (! $event->activity->closed && Auth::user()->committees->contains($instance->committee))
+                    @if (! $event->activity->closed && $instance->users->contains(Auth::user()))
                         @if ($instance->users->contains(Auth::user()))
                             <a
                                 class="btn btn-outline-warning btn-block mt-1"

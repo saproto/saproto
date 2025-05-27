@@ -19,9 +19,7 @@
                 {{ $destination == 'event with backup' ? 'or you are on the backuplist' : '' }}:
                 @foreach ($events as $event)
                     <br />
-                    <a
-                        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
-                    >
+                    <a href="{{ route('event::show', ['event' => $event]) }}">
                         {{ $event->title }}
                     </a>
                 @endforeach

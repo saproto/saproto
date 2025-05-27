@@ -207,7 +207,7 @@ class WithdrawalController extends Controller
         /** @var User $user */
         $user = User::withTrashed()->findOrFail($user_id);
 
-        foreach ($withdrawal->orderlinesForUser($user)->get() as $orderline) {
+        foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
             /** @var OrderLine $orderline */
             $orderline->withdrawal()->dissociate();
             $orderline->save();
@@ -285,8 +285,7 @@ class WithdrawalController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($user_id);
 
-        /** @var Orderline[] $orderlines */
-        $orderlines = $withdrawal->orderlinesForUser($user)->get();
+        $orderlines = $withdrawal->orderlinesForUser($user);
 
         foreach ($orderlines as $orderline) {
             $orderline->withdrawal()->dissociate();
@@ -410,9 +409,12 @@ class WithdrawalController extends Controller
     public function showForUser(int $id): View
     {
         /** @var Withdrawal $withdrawal */
-        $withdrawal = Withdrawal::query()->findOrFail($id);
+        $withdrawal = Withdrawal::query()
+            ->with([
+                'orderlines.product',
+            ])->findOrFail($id);
 
-        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())->get()]);
+        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
     }
 
     /**

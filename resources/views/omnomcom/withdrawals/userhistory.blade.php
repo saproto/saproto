@@ -10,7 +10,7 @@
 @section('container')
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-10 col-sm-12">
-            <div class="card mb-3 bg-dark text-white">
+            <div class="card bg-dark mb-3 text-white">
                 <div class="card-body">
                     @if ($withdrawal->getFailedWithdrawal(Auth::user()))
                         <div class="alert alert-danger text-center">

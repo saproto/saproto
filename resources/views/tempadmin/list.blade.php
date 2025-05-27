@@ -8,17 +8,17 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                     <a
                         href="{{ route('tempadmins.create') }}"
-                        class="float-end bg-info badge"
+                        class="bg-info badge float-end"
                     >
                         Add new temporary admin.
                     </a>
                 </div>
 
-                <table class="table table-hover table-sm">
+                <table class="table-hover table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td>User</td>

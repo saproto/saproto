@@ -146,7 +146,7 @@
 
             <hr />
 
-            <table class="table history">
+            <table class="history table">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -295,7 +295,7 @@
                 )
             }
 
-            window.addEventListener('load', (_) => {
+            window.addEventListener('load', () => {
                 initializeCamera()
             })
         </script>

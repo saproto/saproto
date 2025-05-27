@@ -12,7 +12,7 @@
             </li>
             <div
                 id="omnomcom-years-{{ $year }}"
-                class="collapse {{ $year == date('Y') ? 'show' : null }}"
+                class="{{ $year == date('Y') ? 'show' : null }} collapse"
                 data-parent="#omnomcom-years-accordion"
             >
                 @foreach ($months as $month)

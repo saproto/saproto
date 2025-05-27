@@ -3,7 +3,7 @@
 @section('page-title')
     Participant checklist for {{ $event->title }}
     <a
-        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}"
+        href="{{ route('event::show', ['event' => $event]) }}"
         class="btn btn-default float-end"
     >
         Back to event
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-responsive">
+                    <table class="table-responsive table">
                         <thead>
                             <tr>
                                 <th>Present</th>
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-responsive">
+                    <table class="table-responsive table">
                         <thead>
                             <tr>
                                 <th>Check</th>
@@ -62,7 +62,7 @@
                                     <td>
                                         @if ($participation)
                                             <span
-                                                class="cursor-pointer is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }}"
+                                                class="is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }} cursor-pointer"
                                                 data-id="{{ $participation->id }}"
                                             >
                                                 {{ $participation->is_present ? 'Present' : 'Absent' }}
@@ -128,7 +128,7 @@
         present = document.getElementById('present')
 
         document.querySelectorAll('.is_present').forEach((el) => {
-            el.onclick = (_) => {
+            el.onclick = () => {
                 get(
                     '{{ route('event::togglepresence', ['participation' => 'id']) }}'.replace(
                         'id',

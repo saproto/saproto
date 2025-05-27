@@ -14,7 +14,7 @@
     @if ($album->event)
         <a
             class="btn btn-info btn-block mb-3"
-            href="{{ route('event::show', ['id' => $album->event->getPublicId()]) }}"
+            href="{{ route('event::show', ['event' => $album->event]) }}"
         >
             These photos were taken at the event {{ $album->event->title }},
             click here for more info.
@@ -22,7 +22,7 @@
     @endif
 
     <div class="card mb-3">
-        <div class="card-header bg-dark text-white text-end">
+        <div class="card-header bg-dark text-end text-white">
             <a
                 href="{{ route('photo::albums') }}"
                 class="btn btn-success float-start me-3"
@@ -40,7 +40,7 @@
                 </a>
             @endcan
 
-            <div class="p-1 m-1 fw-bold">
+            <div class="fw-bold m-1 p-1">
                 {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
             </div>
         </div>

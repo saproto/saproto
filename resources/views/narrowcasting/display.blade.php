@@ -59,7 +59,7 @@
 
     <div id="slideshow" class="opacity-0"></div>
 
-    <div id="yt-player" class="opacity-0 w-full"></div>
+    <div id="yt-player" class="w-full opacity-0"></div>
 </div>
 
 @push('javascript')
@@ -188,7 +188,7 @@
             }
         }
 
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             updateCampaigns()
             const everyTwoHours = 60 * 60 * 2 * 1000
             setInterval(updateCampaigns, everyTwoHours)

@@ -75,6 +75,8 @@ class Product extends Model
 
     protected $appends = ['image_url'];
 
+    protected $with = ['image:id,hash'];
+
     /**
      * @return BelongsTo<FinancialAccount, $this>
      */

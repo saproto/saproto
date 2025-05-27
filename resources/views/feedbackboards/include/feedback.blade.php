@@ -1,4 +1,4 @@
-<div class="feedback card mb-3 h-100">
+<div class="feedback card h-100 mb-3">
     <div class="card-header bg-dark text-reset">
         <span data-id="{{ $feedback->id }}">
             <span class="votes d-inline-block">
@@ -21,7 +21,7 @@
                 href="{{ route('feedback::approve', ['id' => $feedback->id, 'id' => $feedback->id]) }}"
                 class="float-end"
             >
-                <i class="reply me-1 fa-solid fa-circle-check"></i>
+                <i class="reply fa-solid fa-circle-check me-1"></i>
             </a>
         @endif
 
@@ -46,7 +46,7 @@
                     href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
                     class="float-end"
                 >
-                    <i class="archive me-3 fas fa-box-archive hover-danger"></i>
+                    <i class="archive fas fa-box-archive hover-danger me-3"></i>
                 </a>
                 @if (! $feedback->reply && $feedback->category->can_reply && $controls)
                     <span class="float-end me-3 cursor-pointer">
@@ -60,7 +60,7 @@
                     href="{{ route('feedback::archive', ['id' => $feedback->id]) }}"
                     class="float-end"
                 >
-                    <i class="restore me-3 fas fa-trash-restore"></i>
+                    <i class="restore fas fa-trash-restore me-3"></i>
                 </a>
             @endif
         @endcan
@@ -73,7 +73,7 @@
         @if ($feedback->reply)
             <hr />
             <i
-                class="me-1 fa {{ $feedback->accepted ? 'fa-circle-check text-primary' : 'fa-circle-xmark text-danger' }}"
+                class="fa {{ $feedback->accepted ? 'fa-circle-check text-primary' : 'fa-circle-xmark text-danger' }} me-1"
                 aria-hidden="true"
             ></i>
             <b>Board:</b>
@@ -124,7 +124,7 @@
                             Reject
                         </button>
                     </div>
-                    <p class="text-center mt-1">
+                    <p class="mt-1 text-center">
                         <i class="fas fa-triangle-exclamation"></i>
                         Replying will email this member.
                     </p>
@@ -134,7 +134,7 @@
     </div>
 
     <div class="card-footer ps-0">
-        <div class="text-muted text-end mt-2">
+        <div class="mt-2 text-end text-muted">
             <em>
                 <sub>
                     @if (Auth::user()->can('board') || $feedback->category->show_publisher)

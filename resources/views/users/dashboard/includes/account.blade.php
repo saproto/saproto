@@ -20,7 +20,7 @@
                 </i>
             </p>
 
-            <table class="table table-borderless table-sm mb-0">
+            <table class="table-borderless table-sm mb-0 table">
                 <tbody>
                     <tr>
                         <th>E-mail</th>
@@ -71,7 +71,7 @@
         <div class="card-header bg-dark text-white">Your personal details</div>
 
         <div class="card-body">
-            <table class="table table-borderless table-sm mb-0">
+            <table class="table-borderless table-sm mb-0 table">
                 <tbody>
                     <tr>
                         <th>Name</th>
@@ -143,7 +143,7 @@
                             @else
                                 Not linked
                                 <a
-                                    class="badge rounded-pill bg-primary float-end"
+                                    class="badge rounded-pill float-end bg-primary"
                                     href="{{ route('user::surf::link') }}"
                                 >
                                     <i class="fas fa-user-plus fa-fw"></i>
@@ -161,14 +161,14 @@
 
                                 @if ($user->is_member)
                                     <a
-                                        class="badge rounded-pill bg-primary float-end"
+                                        class="badge rounded-pill float-end bg-primary"
                                         href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
                                     </a>
                                 @else
                                     <a
-                                        class="badge rounded-pill bg-primary float-end ms-2"
+                                        class="badge rounded-pill float-end ms-2 bg-primary"
                                         href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
@@ -198,7 +198,7 @@
                                         Visible to the board
                                     @endif
                                     <a
-                                        class="badge rounded-pill bg-primary float-end"
+                                        class="badge rounded-pill float-end bg-primary"
                                         href="{{ route('user::address::togglehidden') }}"
                                     >
                                         @if ($user->address_visible)
@@ -224,7 +224,7 @@
                             <td>
                                 <input
                                     type="tel"
-                                    class="mb-1 form-control form-control-sm"
+                                    class="form-control form-control-sm mb-1"
                                     id="phone"
                                     name="phone"
                                     value="{{ $user->phone }}"
@@ -277,7 +277,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text text-muted mb-2 d-block"
+                                    class="form-text d-block mb-2 text-muted"
                                 >
                                     This feature was requested by members who
                                     want to be aware of how much they spend.
@@ -292,7 +292,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text text-muted mb-2 d-block"
+                                    class="form-text d-block mb-2 text-muted"
                                 >
                                     This feature was requested by members who
                                     want to be aware of how much calories they
@@ -319,7 +319,7 @@
                                     if you need that.
                                 </small>
                                 <small
-                                    class="form-text text-muted mb-2 d-block"
+                                    class="form-text d-block mb-2 text-muted"
                                 >
                                     This feature was requested by members who
                                     wanted some help controlling their personal
@@ -335,7 +335,7 @@
                                     'label' => 'Keep my personal orderline history.',
                                 ]
                             )
-                            <small class="form-text text-muted mb-2 d-block">
+                            <small class="form-text d-block mb-2 text-muted">
                                 We are required to keep financial information
                                 for 7 years. If you disable this setting, your
                                 purchases will be anonymised after this time.
@@ -396,7 +396,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text text-muted d-block mb-2"
+                                    class="form-text d-block mb-2 text-muted"
                                 >
                                     Achievements you obtain may reveal some
                                     personal details.
@@ -412,7 +412,7 @@
                                         'label' => 'Use my profile picture in the Lustrum Almanac.',
                                     ]
                                 )
-                                <small class="form-text text-muted d-block">
+                                <small class="form-text d-block text-muted">
                                     With this you allow for the use of your
                                     profile picture in the Lustrum Alamanac if
                                     one will be published during your Proto

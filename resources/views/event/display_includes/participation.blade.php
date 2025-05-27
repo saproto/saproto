@@ -79,7 +79,7 @@
             @else
                 @if ($event->activity->canSubscribeBackup())
                     <a
-                        class="list-group-item text-white bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }}"
+                        class="list-group-item bg-{{ $event->activity->isFull() || ! $event->activity->canSubscribe() ? 'warning' : 'success' }} text-white"
                         href="{{ route('event::addparticipation', ['event' => $event]) }}"
                     >
                         <strong>
@@ -143,12 +143,12 @@
 
     @if ($event->activity->users->count() > 0 || Auth::user()->can('board'))
         <div class="card mb-3">
-            <div class="card-header text-center bg-dark text-white">
+            <div class="card-header bg-dark text-center text-white">
                 {{ $event->activity->users->count() }} participants
             </div>
 
             @if ($event->activity->hide_participants)
-                <div class="card-header text-center bg-warning text-white">
+                <div class="card-header bg-warning text-center text-white">
                     <strong>
                         The participants for this activity are hidden!
                     </strong>
@@ -204,7 +204,7 @@
 
     @if ($event->activity->backupUsers->count() > 0)
         <div class="card">
-            <div class="card-header text-center bg-dark text-white">
+            <div class="card-header bg-dark text-center text-white">
                 {{ $event->activity->backupUsers->count() }} people on the
                 back-up list
             </div>
@@ -222,7 +222,7 @@
     @endif
 @elseif ($event->activity?->withParticipants())
     <div class="card">
-        <div class="card-header text-center bg-dark text-white">
+        <div class="card-header bg-dark text-center text-white">
             Participate in this activity.
         </div>
         <div class="card-body">
@@ -234,7 +234,7 @@
                     <p class="card-text">
                         Please
                         <a
-                            href="{{ route('event::login', ['id' => $event->getPublicId()]) }}"
+                            href="{{ route('event::login', ['event' => $event]) }}"
                         >
                             log-in
                         </a>

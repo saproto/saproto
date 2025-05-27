@@ -1,6 +1,6 @@
 <div class="card mb-3">
     <div
-        class="card-header bg-dark text-white cursor-pointer"
+        class="card-header bg-dark cursor-pointer text-white"
         data-bs-toggle="collapse"
         data-bs-target="#committee_collapse_{{ $unique }}"
     >
@@ -27,7 +27,7 @@
 
     <div
         id="committee_collapse_{{ $unique }}"
-        class="collapse {{ $display ? 'show' : null }}"
+        class="{{ $display ? 'show' : null }} collapse"
         data-parent="#committee_collapse"
     >
         <div class="card-body">

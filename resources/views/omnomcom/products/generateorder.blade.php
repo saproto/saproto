@@ -39,7 +39,7 @@
 
                     <div class="table-responsive">
                         <table
-                            class="table table-hover table-borderless table-sm"
+                            class="table-hover table-borderless table-sm table"
                         >
                             <thead>
                                 <tr class="text-nowrap">
