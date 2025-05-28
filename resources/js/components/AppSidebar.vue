@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-vue-next"
+import { Calendar, Home, Inbox, Search, Settings } from 'lucide-vue-next'
 import {
     Sidebar,
     SidebarContent,
@@ -9,36 +9,36 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar'
 
 // Menu items.
 const items = [
     {
-        title: "Home",
-        url: "#",
+        title: 'Home',
+        url: '#',
         icon: Home,
     },
     {
-        title: "Inbox",
-        url: "#",
+        title: 'Inbox',
+        url: '#',
         icon: Inbox,
     },
     {
-        title: "Calendar",
-        url: "#",
+        title: 'Calendar',
+        url: '#',
         icon: Calendar,
     },
     {
-        title: "Search",
-        url: "#",
+        title: 'Search',
+        url: '#',
         icon: Search,
     },
     {
-        title: "Settings",
-        url: "#",
+        title: 'Settings',
+        url: '#',
         icon: Settings,
     },
-];
+]
 </script>
 
 <template>
@@ -48,7 +48,10 @@ const items = [
                 <SidebarGroupLabel>Application</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
-                        <SidebarMenuItem v-for="item in items" :key="item.title">
+                        <SidebarMenuItem
+                            v-for="item in items"
+                            :key="item.title"
+                        >
                             <SidebarMenuButton as-child>
                                 <a :href="item.url">
                                     <component :is="item.icon" />

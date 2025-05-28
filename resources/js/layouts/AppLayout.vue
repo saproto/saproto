@@ -11,8 +11,8 @@ router.on('invalid', (event) => {
 <template>
     <div class="min-h-screen w-full">
         <Menubar />
-            <main>
-                <slot />
-            </main>
+        <main>
+            <slot />
+        </main>
     </div>
 </template>
