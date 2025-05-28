@@ -11,6 +11,7 @@ class AuthUserData extends Data
     public function __construct(
         public int $id,
         public string $calling_name,
+        /** @var array<string> $roles */
         public array $roles,
         public bool $is_member,
         public string $photo,

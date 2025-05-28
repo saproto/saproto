@@ -48,7 +48,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
             ],
-            'menuitems' => fn (): DataCollection|PaginatedDataCollection|CursorPaginatedDataCollection|Enumerable|AbstractPaginator|Paginator|AbstractCursorPaginator|CursorPaginator|array => MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
+            'menuitems' => fn (): array => MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
         ]);
     }
 }
