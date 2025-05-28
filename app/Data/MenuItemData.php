@@ -3,8 +3,6 @@
 namespace App\Data;
 
 use App\Models\MenuItem;
-use App\Models\Page;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
@@ -13,19 +11,9 @@ use Spatie\LaravelData\Data;
 class MenuItemData extends Data
 {
     public function __construct(
-        public int $id,
-
-        public ?MenuItem $parent,
-
         public string $menuname,
 
-        public ?string $url,
-
-        public ?int $page_id,
-
-        public ?Carbon $created_at,
-
-        public ?Carbon $updated_at,
+        public ?string $parsed_url,
 
         public int $order,
 
@@ -34,9 +22,16 @@ class MenuItemData extends Data
         /** @var Collection<int, MenuItemData> */
         #[DataCollectionOf(MenuItemData::class)]
         public Collection $children,
-
-        public ?int $children_count,
-
-        public ?Page $page
     ) {}
+
+    public static function fromModel(?MenuItem $menuItem): ?self
+    {
+        return $menuItem instanceof MenuItem ? new self(
+            $menuItem->menuname,
+            $menuItem->url,
+            $menuItem->order,
+            $menuItem->is_member_only,
+            $menuItem->children->map(fn (MenuItem $child): ?\App\Data\MenuItemData => MenuItemData::fromModel($child)),
+        ) : null;
+    }
 }

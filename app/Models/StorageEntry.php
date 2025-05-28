@@ -129,7 +129,7 @@ class StorageEntry extends Model
         return $url;
     }
 
-    public function generateImagePath(?int $w, ?int $h): string
+    public function generateImagePath(?int $w = null, ?int $h = null): string
     {
         $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
         if (Config::get('app-proto.assets-domain') != null) {

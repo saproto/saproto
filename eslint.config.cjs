@@ -50,4 +50,11 @@ module.exports = defineConfig([{
         "vue/multi-word-component-names": "off",
         "@typescript-eslint/no-explicit-any": "off"
     },
-}, globalIgnores(["**/node_modules/", "**/dist/"])]);
+},
+    {
+        files: ["resources/js/components/ui/**/*.vue"],
+        rules: {
+            "vue/require-default-prop": "off",
+            "@typescript-eslint/no-unused-vars": "off"
+        },
+    },globalIgnores(["**/node_modules/", "**/dist/"])]);

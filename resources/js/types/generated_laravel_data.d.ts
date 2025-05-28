@@ -1,17 +1,17 @@
 declare namespace App.Data {
-export type MenuItemData = {
+export type AuthUserData = {
 id: number;
-parent: any | null;
+calling_name: string;
+roles: Array<string>;
+is_member: boolean;
+photo: string;
+};
+export type MenuItemData = {
 menuname: string;
-url: string | null;
-page_id: number | null;
-created_at: string | null;
-updated_at: string | null;
+parsed_url: string | null;
 order: number;
 is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
-children_count: number | null;
-page: any | null;
 };
 }
 declare namespace App.Enums {
