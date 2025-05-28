@@ -11,7 +11,6 @@
                         <th>Event</th>
                         <th class="text-center">Status</th>
                         <th>Start</th>
-                        <th>End</th>
                         <th>Total</th>
                         <th class="text-nowrap text-center">Ordered by</th>
                         <th class="text-center">Admin</th>
@@ -35,7 +34,7 @@
                                     <a
                                         href="{{ route('event::show', ['event' => $dinnerform->event]) }}"
                                     >
-                                        {{ $dinnerform->event->title }}
+                                        {{ \Illuminate\Support\Str::limit($dinnerform->event->title, 15) }}
                                     </a>
                                 @endisset
                             </td>
@@ -67,9 +66,6 @@
                                 {{ $dinnerform->start->format('Y m-d H:i') }}
                             </td>
                             <td>
-                                {{ $dinnerform->end->format('Y m-d H:i') }}
-                            </td>
-                            <td>
                                 €{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}
                             </td>
                             <td class="px-4 text-center">
@@ -87,7 +83,7 @@
                                     class="btn btn-info badge"
                                     href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}"
                                 >
-                                    View orders
+                                    Orders
                                 </a>
                             </td>
                             <td class="text-center">
