@@ -18,11 +18,11 @@
         </div>
 
         @if ($leaderboard->entries->count() > 0)
-            <table class="table table-sm mb-0">
+            <table class="table-sm mb-0 table">
                 @foreach ($leaderboard->entries as $entry)
                     <tr>
                         <td
-                            class="ps-3 place-{{ $loop->index + 1 }}"
+                            class="place-{{ $loop->index + 1 }} ps-3"
                             style="max-width: 50px"
                         >
                             <i
@@ -46,7 +46,7 @@
             </table>
         @else
             <hr />
-            <p class="text-muted text-center pt-3">There are no entries yet.</p>
+            <p class="pt-3 text-center text-muted">There are no entries yet.</p>
         @endif
 
         <div class="p-3">

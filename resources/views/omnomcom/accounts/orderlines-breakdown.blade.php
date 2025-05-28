@@ -8,11 +8,11 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                 </div>
 
-                <table class="table table-hover table-sm">
+                <table class="table-hover table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td></td>
@@ -48,7 +48,7 @@
 
                             @foreach ($dates as $date => $products)
                                 <tr
-                                    class="cursor-pointer collapse collapse-{{ $account_id }}"
+                                    class="collapse-{{ $account_id }} collapse cursor-pointer"
                                     data-bs-toggle="collapse"
                                     data-bs-target=".innercollapse-{{ $account_id }}-{{ $date }}"
                                 >
@@ -62,7 +62,7 @@
                                 </tr>
                                 @foreach ($products as $product)
                                     <tr
-                                        class="collapse innercollapse innercollapse-{{ $account_id }}-{{ $date }}"
+                                        class="innercollapse innercollapse-{{ $account_id }}-{{ $date }} collapse"
                                     >
                                         <td></td>
                                         <td></td>
@@ -94,12 +94,12 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const dayList = Array.from(
                 document.getElementsByClassName('collapse')
             )
             dayList.forEach((day) => {
-                day.addEventListener('hide.bs.collapse', (_) => {
+                day.addEventListener('hide.bs.collapse', () => {
                     const children = [
                         ...document.getElementsByClassName(
                             day.getAttribute('data-bs-target').slice(1)

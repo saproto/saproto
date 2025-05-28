@@ -38,7 +38,7 @@ if (discordOnlineCount) {
         .then((data) => {
             discordOnlineCount.innerHTML = data.presence_count
         })
-        .catch((_) => {
+        .catch(() => {
             discordOnlineCount.innerHTML = '...'
         })
 }
@@ -85,7 +85,7 @@ const customFileInputList = Array.from(
 )
 if (customFileInputList.length) {
     customFileInputList.forEach((el) => {
-        el.addEventListener('change', (_) => {
+        el.addEventListener('change', () => {
             let fileName = this.value.split('\\').pop()
             let label = this.nextElementSibling
             label.classList.add('selected')
@@ -206,7 +206,7 @@ const navbar = document.getElementById('nav')
 if (navbar) {
     const navbarHeight = 100
     let currentScroll = 0
-    window.addEventListener('wheel', (_) => {
+    window.addEventListener('wheel', () => {
         currentScroll = document.documentElement.scrollTop
         if (currentScroll > navbarHeight) navbar.classList.add('navbar-scroll')
         else navbar.classList.remove('navbar-scroll')

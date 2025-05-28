@@ -176,7 +176,7 @@
                         </div>
 
                         <div
-                            class="form-group {{ $email?->to_event ?: 'd-none' }} mt-1 mb-2"
+                            class="form-group {{ $email?->to_event ?: 'd-none' }} mb-2 mt-1"
                             id="backupDiv"
                         >
                             @include(

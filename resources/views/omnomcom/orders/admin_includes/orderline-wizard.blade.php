@@ -169,7 +169,7 @@
 
         document
             .getElementById('orderline-modal')
-            .addEventListener('change', (_) => {
+            .addEventListener('change', () => {
                 calculateTotalPrice()
             })
 
@@ -193,7 +193,7 @@
                 '&euro; ' + totalPrice.toFixed(2)
         }
 
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             calculateTotalPrice()
         })
     </script>

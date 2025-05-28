@@ -101,7 +101,7 @@
             Create my account
         </button>
 
-        <div class="text-center mt-1">
+        <div class="mt-1 text-center">
             <input
                 hidden
                 class="form-check-input"

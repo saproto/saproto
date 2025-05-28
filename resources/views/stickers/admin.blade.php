@@ -17,12 +17,12 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table-hover table-sm table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <th scope="col" class="col-1">Placed by</th>

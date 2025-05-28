@@ -1,6 +1,6 @@
 <div
     id="{{ $id ?? null }}"
-    class="card mb-3 text-decoration-none {{ isset($classes) ? implode(' ', $classes) : null }} {{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}"
+    class="card text-decoration-none {{ isset($classes) ? implode(' ', $classes) : null }} {{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }} mb-3"
 >
     <a
         href="{{ $url ?? '#' }}"

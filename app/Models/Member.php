@@ -169,8 +169,6 @@ class Member extends Model
 
     /**
      * Create an email alias friendly username from a full name.
-     *
-     * @param  $name  string
      */
     public static function createProtoUsername(string $name): string
     {

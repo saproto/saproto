@@ -24,7 +24,7 @@
                     </p>
                 </div>
 
-                <table class="table table-hover table-sm">
+                <table class="table-hover table-sm table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td>Product</td>

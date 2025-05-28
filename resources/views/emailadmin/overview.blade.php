@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card mb-4">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     E-mail lists
                     <a
                         href="{{ route('email::list::create') }}"
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover table-sm">
+                    <table class="table-hover table-sm table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td>List name</td>
@@ -100,7 +100,7 @@
 
         <div class="col-md-7">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     Emails
                     <a
                         href="{{ route('email::create') }}"
@@ -110,7 +110,7 @@
                     </a>
                 </div>
 
-                <table class="table table-sm table-hover">
+                <table class="table-sm table-hover table">
                     <thead>
                         <tr class="bg-dark text-white">
                             <td>Description</td>
@@ -172,7 +172,7 @@
                                 <a
                                     href="{{ route('email::show', ['id' => $email->id]) }}"
                                 >
-                                    <i class="fas fa-eye me-2 text-info"></i>
+                                    <i class="fas fa-eye text-info me-2"></i>
                                 </a>
                                 @if (! $email->sent)
                                     @include(

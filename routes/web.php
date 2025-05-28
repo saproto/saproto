@@ -78,7 +78,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 require __DIR__.'/minisites.php';
-
 /* Route block convention:
  *
  * Route::controller(C::class)->prefix('section')->name('section::')->middleware(['some:middleware'])->group( function () {
@@ -506,7 +505,6 @@ Route::middleware('forcedomain')->group(function () {
     Route::prefix('events')->name('event::')->group(function () {
 
         Route::controller(EventController::class)->group(function () {
-
             // Financials related to events (Finadmin only)
             Route::prefix('financial')->name('financial::')->middleware('permission:finadmin')->group(function () {
                 Route::get('list', 'finindex')->name('list');
@@ -1062,6 +1060,11 @@ Route::middleware('forcedomain')->group(function () {
         Route::resource('codexSongCategory', CodexSongCategoryController::class)->except(['index', 'show']);
         Route::resource('codexText', CodexTextController::class)->except(['index', 'show']);
         Route::resource('codexTextType', CodexTextTypeController::class)->except(['index', 'show']);
+    });
+
+    Route::middleware(['auth', 'permission:sysadmin'])->prefix('inertia')->group(function () {
+        Route::get('/', fn () => inertia('Welcome'))->name('index');
+        Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
     });
 
     /* --- Route related to the december theme --- */

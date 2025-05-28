@@ -139,7 +139,7 @@
                     document.getElementsByClassName('btn-category')
                 )
                 categoryBtnList.forEach((el) => {
-                    el.addEventListener('click', (_) => {
+                    el.addEventListener('click', () => {
                         setTabActive(el)
                     })
                 })
@@ -174,7 +174,7 @@
                     document.getElementsByClassName('product')
                 )
                 productList.forEach((el) => {
-                    el.addEventListener('click', (_) => {
+                    el.addEventListener('click', () => {
                         if (el.classList.contains('random')) {
                             if (el.getAttribute('data-stock') > 0) {
                                 let data = el
@@ -239,7 +239,7 @@
                 /* Modal handlers */
                 document
                     .getElementById('rfid')
-                    .addEventListener('click', (_) => {
+                    .addEventListener('click', () => {
                         actionStatus = 'rfid'
                         modals['rfid-modal'].show()
                         document.querySelector(
@@ -249,7 +249,7 @@
 
                 document
                     .getElementById('purchase')
-                    .addEventListener('click', (_) =>
+                    .addEventListener('click', () =>
                         purchaseInitiate(
                             false,
                             false,
@@ -264,7 +264,7 @@
                     'purchase-cash-initiate'
                 )
                 if (cashCompleted) {
-                    cashCompleted.addEventListener('click', (_) =>
+                    cashCompleted.addEventListener('click', () =>
                         purchaseInitiate(
                             true,
                             false,
@@ -278,7 +278,7 @@
                     'purchase-bank-card-initiate'
                 )
                 if (cardCompleted) {
-                    cardCompleted.addEventListener('click', (_) =>
+                    cardCompleted.addEventListener('click', () =>
                         purchaseInitiate(
                             false,
                             true,
@@ -456,7 +456,7 @@
                             qrLink +
                             '</strong>'
                         authToken = data.auth_token
-                        const qrAuthInterval = setInterval((_) => {
+                        const qrAuthInterval = setInterval(() => {
                             if (actionStatus == null)
                                 return clearInterval(qrAuthInterval)
                             get('{{ route('qr::approved') }}', {
@@ -484,11 +484,11 @@
                     ).innerHTML = `<span>${display_message}</span>`
                 document
                     .getElementById('finished-modal-continue')
-                    .addEventListener('click', (_) => window.location.reload())
+                    .addEventListener('click', () => window.location.reload())
                 modals['finished-modal'].show()
                 const movie = document.getElementById('purchase-movie')
                 const audio = document.getElementById('purchase-audio')
-                movie.addEventListener('ended', (_) => window.location.reload())
+                movie.addEventListener('ended', () => window.location.reload())
                 if (sound) {
                     audio.src = sound
                     movie.muted = true
@@ -592,12 +592,12 @@
                     }
                 }
 
-                server.onopen = (_) => {
+                server.onopen = () => {
                     status.classList.remove('inactive')
                     status.innerHTML = 'RFID Service: Connected'
                 }
 
-                server.onclose = (_) => {
+                server.onclose = () => {
                     status.classList.add('inactive')
                     status.innerHTML = 'RFID Service: Disconnected'
                     setTimeout(establishNfcConnection, 5000)
@@ -660,7 +660,7 @@
                                             })
                                     )
                                     .finally(
-                                        (_) =>
+                                        () =>
                                             (document.querySelector(
                                                 '#rfid-modal .modal-status'
                                             ).innerHTML =
@@ -688,22 +688,22 @@
             let idleWarning = false
 
             // Reset idle timer on mouse movement.
-            document.body.addEventListener('mousemove', (_) => {
+            document.body.addEventListener('mousemove', () => {
                 idleTime = 0
                 idleWarning = false
             })
 
             // Reset idle timer on keydown
-            document.body.addEventListener('keydown', (_) => {
+            document.body.addEventListener('keydown', () => {
                 idleTime = 0
                 idleWarning = false
             })
 
             // Initialize when page is loaded
-            window.addEventListener('load', (_) => {
+            window.addEventListener('load', () => {
                 initializeOmNomCom()
 
-                setInterval((_) => {
+                setInterval(() => {
                     idleTime = idleTime + 1
 
                     if (idleTime > 60 && !idleWarning) {
@@ -715,7 +715,7 @@
                             Object.values(modals).forEach((el) => el.hide())
                             modals['idlewarning-modal'].show()
 
-                            setTimeout((_) => {
+                            setTimeout(() => {
                                 if (idleWarning) window.location.reload()
                             }, 10000)
                         }

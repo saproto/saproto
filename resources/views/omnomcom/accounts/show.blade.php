@@ -60,7 +60,7 @@
 
         <div class="col-md-4">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     Account products
                 </div>
 

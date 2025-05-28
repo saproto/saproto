@@ -25,7 +25,7 @@
         @if ($events->count() > 0)
             @foreach ($events as $i => $event)
                 <table
-                    class="table {{ $i % 2 == 0 ? 'bg-body' : 'table-light' }}"
+                    class="{{ $i % 2 == 0 ? 'bg-body' : 'table-light' }} table"
                     style="margin: 0; padding: 0; border: none"
                     width="100%"
                 >

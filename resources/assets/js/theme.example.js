@@ -1,3 +1,3 @@
-window.theme = (_) => {
+window.theme = () => {
     console.log('ohboi! theme specific javascript.')
 }

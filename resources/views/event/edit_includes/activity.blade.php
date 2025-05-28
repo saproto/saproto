@@ -2,6 +2,10 @@
     <div class="card-header bg-dark text-white">Sign-up details</div>
 
     @if ($event != null)
+        @php
+            /** @var \App\Models\Event $event */
+        @endphp
+
         <form
             method="post"
             action="{{ route('event::addsignup', ['event' => $event]) }}"

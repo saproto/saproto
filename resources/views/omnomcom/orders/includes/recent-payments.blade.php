@@ -57,7 +57,7 @@
                         >
                             {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
                             <i
-                                class="fas ms-2 {{ $status == 'open' ? ' fa-spinner text-normal' : '' }} {{ $status == 'failed' ? 'fa-times text-danger' : '' }} {{ $status == 'paid' ? 'fa-check text-success' : '' }} {{ $status == 'unknown' ? 'fa-question text-normal' : '' }}"
+                                class="fas {{ $status == 'open' ? ' fa-spinner text-normal' : '' }} {{ $status == 'failed' ? 'fa-times text-danger' : '' }} {{ $status == 'paid' ? 'fa-check text-success' : '' }} {{ $status == 'unknown' ? 'fa-question text-normal' : '' }} ms-2"
                             ></i>
                         </a>
                     @else

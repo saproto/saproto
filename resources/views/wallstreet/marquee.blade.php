@@ -191,7 +191,7 @@
         <div
             id=" swipers-container
                     "
-            class="h-100 d-flex flex-column overflow-hidden justify-content-end z-index-2"
+            class="h-100 d-flex flex-column justify-content-end z-index-2 overflow-hidden"
         >
             <div class="wallstreet-body mt-2 px-4 py-4">
                 <div>
@@ -247,7 +247,7 @@
                     </div>
                 </div>
                 <div class="wallstreet-right px-4 pb-4 pt-2">
-                    <div class="wallstreet-graph-title mb-3 fs-3">
+                    <div class="wallstreet-graph-title fs-3 mb-3">
                         Current stonks
                     </div>
                     <div class="wallstreet-graph-container">
@@ -261,7 +261,7 @@
 
             <div
                 id="swiper-container"
-                class="swiper-container swiper-container-free-mode stonks-cards mb-2 d-flex align-items-center"
+                class="swiper-container swiper-container-free-mode stonks-cards d-flex align-items-center mb-2"
             >
                 <div class="swiper-wrapper">
                     @foreach ($prices as $price)
@@ -270,7 +270,7 @@
                             class="swiper-slide card w-25"
                         >
                             <div
-                                class="stonks-card card-body event text-start d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img' }}"
+                                class="stonks-card card-body event d-flex justify-content-between flex-column {{ $price->image_url ? 'bg-img' : 'no-img' }} text-start"
                                 style="{{ sprintf('background: center no-repeat url(%s);', $price->img) }} background-size: cover;"
                             >
                                 {{-- Title --}}
@@ -279,7 +279,7 @@
                                 </div>
 
                                 <div
-                                    class="d-flex flex-row justify-content-between"
+                                    class="d-flex justify-content-between flex-row"
                                 >
                                     {{-- Price --}}
                                     <div id="price" class="fs-5">
@@ -325,7 +325,7 @@
     @vite('resources/assets/js/echo.js')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             const swiper = new Swiper('#swiper-container', {
                 loop: true,
                 observer: true,

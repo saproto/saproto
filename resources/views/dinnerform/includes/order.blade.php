@@ -6,7 +6,7 @@
     <div class="card-header bg-dark text-white">Your order:</div>
 
     <div class="table-responsive">
-        <table class="table table-sm">
+        <table class="table-sm table">
             <thead>
                 <tr>
                     <th>Description</th>

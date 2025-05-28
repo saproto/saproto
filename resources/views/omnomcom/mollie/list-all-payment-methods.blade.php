@@ -1,6 +1,6 @@
 @foreach ($methods as $index => $method)
     <div
-        class="mx-2 col-lg-3 col-5 my-2 h-md-75 rounded btn btn-outline-info"
+        class="col-lg-3 col-5 h-md-75 btn btn-outline-info mx-2 my-2 rounded"
         style="position: relative; height: 145px"
     >
         <input
@@ -14,7 +14,7 @@
         />
         <span>{{ $method->description }}</span>
         <svg
-            class="mb-2 mb-md-3"
+            class="mb-md-3 mb-2"
             style="
                 position: absolute;
                 bottom: 0;

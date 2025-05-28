@@ -12,7 +12,7 @@
                     @yield('page-title')
                     <a
                         href="{{ route('omnomcom::categories::create') }}"
-                        class="float-end badge bg-success"
+                        class="badge bg-success float-end"
                     >
                         Add new category
                     </a>
@@ -20,7 +20,7 @@
 
                 @if (count($categories) > 0)
                     <div class="table-responsive">
-                        <table class="table table-borderless table-hover">
+                        <table class="table-borderless table-hover table">
                             @foreach ($categories as $category)
                                 <tr>
                                     <td class="text-end">

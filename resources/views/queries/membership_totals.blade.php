@@ -12,7 +12,7 @@
                     @yield('page-title')
                 </div>
 
-                <table class="table table-sm table-hover mb-0">
+                <table class="table-sm table-hover mb-0 table">
                     <tr>
                         <td><strong>Total number of members</strong></td>
                         <td>{{ $total }}</td>

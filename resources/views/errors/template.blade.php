@@ -10,7 +10,7 @@
             class="col-xl-4 col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-3 text-center"
         >
             <div class="card mb-3 mt-5">
-                <div class="card-header text-center bg-dark text-white">
+                <div class="card-header bg-dark text-center text-white">
                     S.A. Proto |
                     @yield('page-title')
                 </div>
@@ -36,7 +36,7 @@
 
                 <a
                     href="/"
-                    class="card-footer text-muted text-center text-decoration-none"
+                    class="card-footer text-decoration-none text-center text-muted"
                 >
                     Go back to homepage.
                 </a>

@@ -18,7 +18,7 @@
         @if ($event->isEventAdmin(Auth::user()))
             <a
                 href="{{ route('event::admin', ['event' => $event]) }}"
-                class="btn btn-primary float-start col mx-3"
+                class="btn btn-primary col float-start mx-3"
             >
                 Admin
             </a>
@@ -27,7 +27,7 @@
         @can('board')
             <a
                 href="{{ route('event::edit', ['event' => $event]) }}"
-                class="btn btn-info float-end col mx-3"
+                class="btn btn-info col float-end mx-3"
             >
                 Edit
             </a>
@@ -56,7 +56,7 @@
         <h5 class="card-title">@yield('page-title')</h5>
 
         @if ($event->category)
-            <span class="badge rounded-pill bg-info ellipsis float-end mw-100">
+            <span class="badge rounded-pill bg-info ellipsis mw-100 float-end">
                 <i
                     class="{{ $event->category->icon }} fa-fw"
                     aria-hidden="true"
@@ -127,7 +127,7 @@
         @if (! Auth::check())
             <a
                 href="{{ route('becomeamember') }}"
-                class="list-group-item bg-info text-white text-center"
+                class="list-group-item bg-info text-center text-white"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                 To join this activity you need to be a member.
@@ -139,7 +139,7 @@
         @if (! Auth::check() && ! isset($event->activity))
             <a
                 href="{{ route('event::login', ['event' => $event]) }}"
-                class="list-group-item bg-info text-white text-center"
+                class="list-group-item bg-info text-center text-white"
             >
                 <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                 <i>
@@ -157,7 +157,7 @@
 
 @if ($event->videos->count() || $event->albums->count())
     <div class="card">
-        <div class="card-header text-center bg-dark text-white">
+        <div class="card-header bg-dark text-center text-white">
             Media from this event
         </div>
 

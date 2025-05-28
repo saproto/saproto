@@ -2,7 +2,7 @@
     <nav id="category-nav" class="nav p-3">
         @foreach ($categories as $category)
             <div
-                class="btn btn-lg btn-category btn-block bg-omnomcom rounded-0 px-2 py-2 text-start {{ $category == $categories[0] ? 'active' : '' }}"
+                class="btn btn-lg btn-category btn-block bg-omnomcom rounded-0 {{ $category == $categories[0] ? 'active' : '' }} px-2 py-2 text-start"
                 data-id="{{ $category->id }}"
             >
                 {{ $category->name }}
@@ -40,7 +40,7 @@
 
 @push('javascript')
     <script nonce="{{ csp_nonce() }}">
-        document.getElementById('reload-button').onclick = (_) =>
+        document.getElementById('reload-button').onclick = () =>
             window.location.reload()
     </script>
 @endpush

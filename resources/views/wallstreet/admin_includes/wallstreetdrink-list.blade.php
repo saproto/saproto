@@ -1,5 +1,5 @@
 <div class="card mb-3">
-    <div class="card-header bg-dark mb-1 justify-content-between d-inline-flex">
+    <div class="card-header bg-dark justify-content-between d-inline-flex mb-1">
         <div class="text-white">WallstreetDrink overview</div>
         <div>
             <a
@@ -13,7 +13,7 @@
 
     @if (count($allDrinks) > 0)
         <div class="table-responsive">
-            <table class="table table-sm">
+            <table class="table-sm table">
                 <thead>
                     <tr class="bg-dark text-white">
                         <th>Id</th>
@@ -30,7 +30,7 @@
 
                 <tbody>
                     @foreach ($allDrinks as $wallstreetDrink)
-                        <tr class="align-middle text-nowrap">
+                        <tr class="text-nowrap align-middle">
                             <td class="text-muted">
                                 #{{ $wallstreetDrink->id }}
                             </td>
@@ -48,7 +48,7 @@
                                         1/{{ $wallstreetDrink->random_events_chance }}
                                 @endif
                             </td>
-                            <td class="text-center px-4">
+                            <td class="px-4 text-center">
                                 <a
                                     class="btn btn-info badge"
                                     href="{{ route('wallstreet::statistics', ['id' => $wallstreetDrink->id]) }}"
@@ -98,7 +98,7 @@
             </table>
         </div>
     @else
-        <div class="text-center text-muted py-3">
+        <div class="py-3 text-center text-muted">
             There are no wallstreet drinks yet!
         </div>
     @endif

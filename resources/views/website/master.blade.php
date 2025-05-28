@@ -62,7 +62,7 @@
             @include('components.modals.flashmessages')
 
             <div
-                class="position-absolute top-0 start-50"
+                class="position-absolute start-50 top-0"
                 style="margin-top: 70px"
                 id="alert-wrapper"
             ></div>

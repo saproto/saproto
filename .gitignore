@@ -10,6 +10,7 @@
 # Cache files
 .tmp
 *.cache
+tmp
 
 # Local files
 /personal
@@ -24,6 +25,8 @@ public/storage
 _ide_helper.php
 .php-cs-fixer.cache
 phpstan.neon
+.phpstan/
+
 
 # Meta files
 composer.phar

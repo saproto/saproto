@@ -117,7 +117,7 @@
 
                     <!-- Event -->
                     <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3 form-group autocomplete">
+                        <div class="col-md-12 form-group autocomplete mb-3">
                             <label for="event-select">Event:</label>
                             <input
                                 class="form-control event-search"

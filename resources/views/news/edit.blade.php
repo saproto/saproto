@@ -1,5 +1,10 @@
 @extends('website.layouts.redesign.dashboard')
+@php
+    /**@var \App\Models\Newsitem $item */
+@endphp
+
 @php($newsName = $is_weekly ? 'weekly' : 'news')
+
 @section('page-title')
     @if ($new)
         Create a new {{ $newsName }}

@@ -5,6 +5,7 @@ use App\Models\Newsitem;
 use Illuminate\Support\Carbon;
 
 it('shows members the news section on the homepage', function () {
+    /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
         ->get('/');
@@ -15,6 +16,7 @@ it('shows members the news section on the homepage', function () {
 });
 
 it('shows members an empty news page', function () {
+    /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
         ->get('/news/index');
@@ -24,6 +26,7 @@ it('shows members an empty news page', function () {
 });
 
 it('lets admins create news', function ($article) {
+    /** @var Member $member */
     $member = Member::factory()->create();
     $member->user->assignRole('board');
 
@@ -52,6 +55,7 @@ it('lets admins create news', function ($article) {
 ]);
 
 it('does not let non board members create news', function () {
+    /** @var Member $member */
     $member = Member::factory()->create();
     $response = $this->actingAs($member->user)
         ->get('/news/create');

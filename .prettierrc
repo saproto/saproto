@@ -3,9 +3,7 @@
     "tabWidth": 4,
     "semi": false,
     "singleQuote": true,
-    "plugins": [
-        "prettier-plugin-blade"
-    ],
+    "plugins": ["prettier-plugin-blade", "prettier-plugin-tailwindcss"],
     "overrides": [
         {
             "files": [

@@ -4,7 +4,7 @@
     </div>
 
     @if ($product->orderlines->count() > 0)
-        <table class="table table-hover table-sm">
+        <table class="table-hover table-sm table">
             <tbody>
                 @foreach ($orderlines as $orderline)
                     <tr>

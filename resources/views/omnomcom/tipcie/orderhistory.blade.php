@@ -56,7 +56,7 @@
         <div class="col-md-4">
             <div class="card mb-3">
                 @if (count($products) > 0)
-                    <table class="table table-borderless table-hover">
+                    <table class="table-borderless table-hover table">
                         <tbody>
                             @php
                                 /**@var \App\Models\Product $product **/
@@ -105,7 +105,7 @@
                 </div>
 
                 @if (count($pinOrders) > 0)
-                    <table class="table table-borderless table-hover">
+                    <table class="table-borderless table-hover table">
                         <tbody>
                             @foreach ($pinOrders as $pinOrder)
                                 <tr>

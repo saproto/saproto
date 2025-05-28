@@ -9,6 +9,7 @@ use App\Http\Middleware\EnforceHTTPS;
 use App\Http\Middleware\EnforceTFA;
 use App\Http\Middleware\EnforceWizard;
 use App\Http\Middleware\ForceDomain;
+use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\Member;
 use App\Http\Middleware\ProBoto;
 use App\Http\Middleware\TrustProxies;
@@ -19,6 +20,7 @@ use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
@@ -57,9 +59,12 @@ class Kernel extends HttpKernel
             ApiMiddleware::class,
             AddCspHeaders::class,
             SubstituteBindings::class,
+            AddLinkHeadersForPreloadedAssets::class,
+            HandleInertiaRequests::class,
         ],
         'api' => [
             'throttle:60,1',
+            'substitutebindings',
         ],
     ];
 
@@ -78,5 +83,6 @@ class Kernel extends HttpKernel
         'permission' => PermissionMiddleware::class,
         'role_or_permission' => RoleOrPermissionMiddleware::class,
         'proboto' => ProBoto::class,
+        'substitutebindings' => SubstituteBindings::class,
     ];
 }

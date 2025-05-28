@@ -3,7 +3,7 @@
         <label for="iconpicker-{{ $name }}">{{ $label }}</label>
     @endisset
 
-    <div class="input-group mb-3 iconpicker-wrapper">
+    <div class="input-group iconpicker-wrapper mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text h-100 selected-icon"></span>
         </div>

@@ -38,8 +38,8 @@
                 </div>
             </div>
 
-            <div id="fishcam-unavailable" class="card mb-3 d-none">
-                <div class="card-header bg-danger text-white fishcam-warning">
+            <div id="fishcam-unavailable" class="card d-none mb-3">
+                <div class="card-header bg-danger fishcam-warning text-white">
                     <i
                         class="fas fa-exclamation-triangle mr-2"
                         aria-hidden="true"
@@ -57,7 +57,7 @@
 
             <div
                 id="fishcam"
-                class="mb-3 card bg-transparent d-none h-100 w-auto"
+                class="card d-none h-100 mb-3 w-auto bg-transparent"
             >
                 <img
                     class="d-none h-100 ml-auto"

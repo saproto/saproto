@@ -9,11 +9,11 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white mb-1">
+                    <div class="card-header bg-dark mb-1 text-white">
                         All unclosed activities.
                     </div>
 
-                    <table class="table table-hover">
+                    <table class="table-hover table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td>Event</td>
@@ -111,7 +111,7 @@
             </div>
         </div>
     @else
-        <p class="text-center mt-3">
+        <p class="mt-3 text-center">
             There are no activities to close! Hurray!
         </p>
     @endif

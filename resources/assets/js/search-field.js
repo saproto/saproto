@@ -126,7 +126,7 @@ class SearchField extends BaseComponent {
         let el = document.createElement('div')
         el.classList.add(CLASS_NAME_RESULT)
         this._config.optionTemplate(el, item)
-        el.addEventListener('click', (_) => {
+        el.addEventListener('click', () => {
             if (this._multiple) this._addSelected(item)
             else this._setSelected(item)
             this._search()
@@ -153,7 +153,7 @@ class SearchField extends BaseComponent {
         let el = document.createElement('span')
         el.innerHTML = this._config.selectedTemplate(item)
         el.classList.add(CLASS_NAME_SELECTED)
-        el.onclick = (_) => {
+        el.onclick = () => {
             el.remove()
             if (this._selectedContainer.children.length === 0) {
                 this._element.required = true

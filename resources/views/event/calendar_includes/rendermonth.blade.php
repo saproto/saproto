@@ -14,7 +14,7 @@
                     )
                 @endforeach
             @else
-                <div class="card-text text-muted text-center">
+                <div class="card-text text-center text-muted">
                     No activities {{ strtolower($month_name) }} 😟
                 </div>
             @endif

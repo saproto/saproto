@@ -8,7 +8,7 @@
     <div id="companies-admin" class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white mb-1">
+                <div class="card-header bg-dark mb-1 text-white">
                     @yield('page-title')
                     <a
                         href="{{ route('companies::create') }}"
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-sm table-hover">
+                    <table class="table-sm table-hover table">
                         <thead>
                             <tr class="bg-dark text-white">
                                 <td>Name</td>
@@ -51,7 +51,7 @@
                                     <a
                                         href="{{ route('companies::edit', ['id' => $company->id]) }}"
                                     >
-                                        <i class="fas fa-edit me-2 fa-fw"></i>
+                                        <i class="fas fa-edit fa-fw me-2"></i>
                                     </a>
 
                                     @include(
@@ -70,7 +70,7 @@
                                             href="{{ route('companies::orderUp', ['id' => $company->id]) }}"
                                         >
                                             <i
-                                                class="fas fa-arrow-up me-2 fa-fw text-info"
+                                                class="fas fa-arrow-up fa-fw text-info me-2"
                                             ></i>
                                         </a>
                                     @endif
@@ -80,7 +80,7 @@
                                             href="{{ route('companies::orderDown', ['id' => $company->id]) }}"
                                         >
                                             <i
-                                                class="fas fa-arrow-down me-2 fa-fw text-info"
+                                                class="fas fa-arrow-down fa-fw text-info me-2"
                                             ></i>
                                         </a>
                                     @endif

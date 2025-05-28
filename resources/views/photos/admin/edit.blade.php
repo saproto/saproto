@@ -20,7 +20,7 @@
             @if ($album->published)
                 @can('publishalbums')
                     <a
-                        class="btn btn-warning text-white btn-block mb-3"
+                        class="btn btn-warning btn-block mb-3 text-white"
                         href="{{ route('photo::admin::unpublish', ['id' => $album->id]) }}"
                     >
                         This album is published so editing is limited, click
@@ -28,7 +28,7 @@
                     </a>
                 @else
                     <span
-                        class="btn btn-warning text-white btn-block mb-3 cursor-default"
+                        class="btn btn-warning btn-block mb-3 cursor-default text-white"
                     >
                         This album is published so editing is limited, ask a
                         Protography admin to unpublish it if you wish to make
@@ -38,7 +38,7 @@
             @else
                 @can('publishalbums')
                     <a
-                        class="btn btn-danger text-white btn-block mb-3"
+                        class="btn btn-danger btn-block mb-3 text-white"
                         href="{{ route('photo::admin::publish', ['id' => $album->id]) }}"
                     >
                         This album is not yet published, click here to publish
@@ -46,7 +46,7 @@
                     </a>
                 @else
                     <span
-                        class="btn btn-warning text-white btn-block mb-3 cursor-default"
+                        class="btn btn-warning btn-block mb-3 cursor-default text-white"
                     >
                         This album is not yet published, ask a Protography admin
                         to publish it.
@@ -55,7 +55,7 @@
             @endif
 
             <a
-                class="btn btn-info text-white btn-block mb-3"
+                class="btn btn-info btn-block mb-3 text-white"
                 href="{{ route('photo::album::list', ['album' => $album->id]) }}"
             >
                 Preview album
@@ -63,7 +63,7 @@
 
             <div class="card mb-3">
                 @if (Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && ! $album->published))
-                    <div class="card-header bg-dark text-white text-center">
+                    <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
 
@@ -117,7 +117,7 @@
                         </div>
                     </form>
                 @else
-                    <div class="card-header bg-dark text-white text-center">
+                    <div class="card-header bg-dark text-center text-white">
                         Edit album
                     </div>
 
@@ -183,7 +183,7 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Thumbnail
                 </div>
 
@@ -202,7 +202,7 @@
                         class="card-body d-flex opacity-25"
                         style="height: 300px"
                     >
-                        <div class="text-center m-auto">
+                        <div class="m-auto text-center">
                             <i class="fa fa-image fa-5x"></i>
                             <p>No thumbnail set</p>
                         </div>
@@ -213,7 +213,7 @@
 
         <div class="col-lg-9">
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white text-center">
+                <div class="card-header bg-dark text-center text-white">
                     Add photos
                 </div>
                 @if (! $album->published)
@@ -232,19 +232,19 @@
                         ></div>
                         <div
                             id="droparea"
-                            class="d-flex opacity-25 border border-2 border-light rounded-3"
+                            class="d-flex border-light rounded-3 border border-2 opacity-25"
                             style="height: 200px"
                         >
                             <div
                                 id="droparea-content"
-                                class="text-center m-auto pointer-events-none"
+                                class="pointer-events-none m-auto text-center"
                             >
                                 <i class="fa fa-images fa-5x mt-2"></i>
                                 <p>
                                     <span>Drop photos to upload</span>
                                     <span
                                         id="droparea-loader"
-                                        class="spinner-border spinner-border-sm ms-1 d-none"
+                                        class="spinner-border spinner-border-sm d-none ms-1"
                                         role="status"
                                     ></span>
                                 </p>
@@ -266,7 +266,7 @@
                 >
                     {{ csrf_field() }}
 
-                    <div class="card-header bg-dark text-white text-center">
+                    <div class="card-header bg-dark text-center text-white">
                         {{ $album->name }}
                         ({{ date('M j, Y', $album->date_taken) }})
                     </div>
@@ -380,7 +380,7 @@
 
 @push('javascript')
     <script async type="text/javascript" nonce="{{ csp_nonce() }}">
-        window.addEventListener('load', (_) => {
+        window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1
             let uploadRunning = false
@@ -439,7 +439,7 @@
                             )
                         ) {
                             let fr = new FileReader()
-                            fr.onload = async (_) => {
+                            fr.onload = async () => {
                                 file.id = fileId++
                                 fileQueue.push(file)
                                 await uploadFiles(fileQueue)
@@ -459,7 +459,9 @@
                     await post(
                         '{{ route('photo::admin::upload', ['id' => $album->id], false) }}',
                         formData,
-                        { parse: false }
+                        {
+                            parse: false,
+                        }
                     )
                         .then((response) => {
                             response.text().then((text) => {

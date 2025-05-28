@@ -1,11 +1,11 @@
 <div id="archive-bar" class="row justify-content-center px-2">
-    <div class="col-12 col-sm-auto text-center mb-2 overflow-auto">
+    <div class="col-12 col-sm-auto mb-2 overflow-auto text-center">
         <div class="btn-group mb-1">
             @if (Route::currentRouteName() == 'event::index')
-                <span class="bg-primary text-white px-3 py-2 rounded-start">
+                <span class="rounded-start bg-primary px-3 py-2 text-white">
                     Upcoming
                 </span>
-                <span class="bg-secondary text-white px-3 py-2">Archive</span>
+                <span class="bg-secondary px-3 py-2 text-white">Archive</span>
             @else
                 <a
                     href="{{ route('event::index', ['category' => $cur_category]) }}"
@@ -13,7 +13,7 @@
                 >
                     Upcoming
                 </a>
-                <span class="bg-primary text-white px-3 py-2">Archive</span>
+                <span class="bg-primary px-3 py-2 text-white">Archive</span>
             @endif
 
             @foreach ($years as $y)
@@ -30,7 +30,7 @@
         <div class="btn-group">
             <button
                 type="button"
-                class="btn btn-info px-4 px-sm-3 {{ ! Auth::check() || ! Auth::user()->can('board') ? 'rounded-end' : '' }}"
+                class="btn btn-info px-sm-3 {{ ! Auth::check() || ! Auth::user()->can('board') ? 'rounded-end' : '' }} px-4"
                 data-bs-toggle="modal"
                 data-bs-target="#calendar-modal"
             >
