@@ -2,7 +2,7 @@ declare namespace App.Data {
 export type AuthUserData = {
 id: number;
 calling_name: string;
-roles: Array<any>;
+roles: Array<string>;
 is_member: boolean;
 photo: string;
 };
