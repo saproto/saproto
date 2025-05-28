@@ -23,7 +23,7 @@
             <form action="{{ route('login::logout') }}" method="POST">
                 @csrf
                 <button
-                    class="btn btn-lg btn-block bg-omnomcom rounded-0 px-2 py-2 mt-4 text-start ellipsis"
+                    class="btn btn-lg btn-block bg-omnomcom rounded-0 ellipsis mt-4 px-2 py-2 text-start"
                     type="submit"
                 >
                     Logout
