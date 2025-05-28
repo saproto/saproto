@@ -6,6 +6,7 @@ use App\Models\PlayedVideo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -29,7 +30,7 @@ class ProtubeController extends Controller
     {
         $user_count = PlayedVideo::query()->where('user_id', Auth::user()->id)->count();
         $history = PlayedVideo::query()
-            ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
+            ->where('created_at', '>', Carbon::now()->subWeek()->format('Y-m-d'))
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -55,7 +56,7 @@ class ProtubeController extends Controller
                 DB::raw('count(*) as played_count'),
             ])
             ->when($since, function ($query) use ($since) {
-                $query->where('created_at', '>', date('Y-m-d', strtotime($since)));
+                $query->where('created_at', '>', Carbon::parse($since)->format('Y-m-d'));
             })
             ->when($user, function ($query) use ($user) {
                 $query->where('user_id', $user->id);

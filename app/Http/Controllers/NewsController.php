@@ -81,7 +81,7 @@ class NewsController extends Controller
     public function create(Request $request): View
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get();
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get();
 
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
@@ -89,7 +89,7 @@ class NewsController extends Controller
     public function edit(int $id): View
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->format('U'))->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
         $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 
@@ -122,7 +122,7 @@ class NewsController extends Controller
         if ($request->has('title')) {
             $newsitem->is_weekly = false;
             $newsitem->title = $request->input('title');
-            $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
+            $newsitem->published_at = $request->date('published_at')->toDateTimeString();
         } else {
             $newsitem->is_weekly = true;
             $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
@@ -170,7 +170,7 @@ class NewsController extends Controller
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = date('Y-m-d H:i:s', Carbon::now()->timestamp);
+        $newsitem->published_at = Carbon::now()->toDateTimeString();
 
         $newsitem->save();
         Session::flash('flash_message', 'Newsletter has been sent.');
@@ -200,7 +200,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = strtotime($newsitem->published_at);
+                $returnItem->published_at = Carbon::parse($newsitem->published_at)->timestamp;
 
                 $return[] = $returnItem;
             }

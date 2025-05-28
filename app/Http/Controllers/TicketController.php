@@ -52,8 +52,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = $request->date('available_from')->timestamp;
+        $ticket->available_to = $request->date('available_to')->timestamp;
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -98,8 +98,8 @@ class TicketController extends Controller
         $ticket->has_buy_limit = $request->has('has_buy_limit');
         $ticket->buy_limit = $request->input('buy_limit', $ticket->buy_limit);
         $ticket->is_prepaid = $request->has('is_prepaid');
-        $ticket->available_from = strtotime($request->input('available_from'));
-        $ticket->available_to = strtotime($request->input('available_to'));
+        $ticket->available_from = $request->date('available_from')->timestamp;
+        $ticket->available_to = $request->date('available_to')->timestamp;
         $ticket->show_participants = $request->has('show_participants');
         $ticket->save();
 
@@ -143,7 +143,7 @@ class TicketController extends Controller
         }
 
         if ($ticket) {
-            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->toDateTimeString();
             $ticket->save();
             Session::flash('flash_message', 'Ticket has been scanned!');
         } else {
@@ -226,7 +226,7 @@ class TicketController extends Controller
                 ];
             }
 
-            $ticket->scanned = Carbon::now()->format('Y-m-d H:i:s');
+            $ticket->scanned = Carbon::now()->toDateTimeString();
             if ($unscan) {
                 $ticket->scanned = null;
             }

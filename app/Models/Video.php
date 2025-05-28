@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * Video Model.
@@ -100,11 +101,11 @@ class Video extends Model
 
     public function getUnixTimeStamp(): string
     {
-        return date('U', strtotime($this->video_date));
+        return Carbon::parse($this->video_date)->timestamp;
     }
 
     public function getFormDate(): string
     {
-        return date('d-m-Y', strtotime($this->video_date));
+        return Carbon::parse($this->video_date)->format('d-m-Y');
     }
 }

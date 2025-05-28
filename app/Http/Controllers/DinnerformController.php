@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dinnerform;
 use App\Models\DinnerformOrderline;
 use App\Models\Product;
+use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,8 +66,8 @@ class DinnerformController extends Controller
             'restaurant' => $request->input('restaurant'),
             'description' => $request->input('description'),
             'url' => $request->input('url'),
-            'start' => strtotime($request->input('start')),
-            'end' => strtotime($request->input('end')),
+            'start' => $request->date('start')->timestamp,
+            'end' => $request->date('end')->timestamp,
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -98,15 +99,13 @@ class DinnerformController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
-
-        if ($request->input('end') < $request->input('start')) {
-            Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
-
-            return Redirect::back();
-        }
-
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()->findOrFail($id);
+
+        $request->validate([
+            'start' => 'required|date_format:Y-m-d H:i',
+            'end' => 'required|date_format:Y-m-d H:i|after:start',
+        ]);
 
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'You cannot update a closed dinnerform!');
@@ -114,17 +113,20 @@ class DinnerformController extends Controller
             return Redirect::back();
         }
 
+        $start = CarbonImmutable::parse($request->input('start'))->timestamp;
+        $end = CarbonImmutable::parse($request->input('end'))->timestamp;
+        $restaurant = $request->string('restaurant');
         $changed_important_details =
-            $dinnerform->start->timestamp != strtotime($request->input('start')) ||
-            $dinnerform->end->timestamp != strtotime($request->input('end')) ||
+            $dinnerform->start->timestamp != $start ||
+            $dinnerform->end->timestamp != $end ||
             $dinnerform->restaurant != $request->input('restaurant');
 
         $dinnerform->update([
-            'restaurant' => $request->input('restaurant'),
-            'description' => $request->input('description'),
+            'restaurant' => $restaurant,
+            'description' => $request->string('description'),
             'url' => $request->input('url'),
-            'start' => strtotime($request->input('start')),
-            'end' => strtotime($request->input('end')),
+            'start' => $start,
+            'end' => $end,
             'helper_discount' => $request->input('helper_discount'),
             'regular_discount' => (100 - $request->input('regular_discount')) / 100,
             'event_id' => $request->input('event_select') != '' ? $request->input('event_select') : null,
@@ -200,7 +202,7 @@ class DinnerformController extends Controller
                 $dinnerformOrderline->price_with_discount,
                 null,
                 null,
-                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", date('d-m-Y', strtotime($dinnerform->end))),
+                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Carbon::parse($dinnerform->end)->format('d-m-Y')),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed = true;

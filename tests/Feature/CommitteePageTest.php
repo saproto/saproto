@@ -13,7 +13,7 @@ it('shows the committee page with previous events', function () {
         'public' => true,
     ]))->create([
         'secret' => false,
-        'end' => Carbon::now()->getTimestamp() - 500,
+        'end' => Carbon::now()->timestamp - 500,
     ]);
 
     $response = $this->actingAs($user)

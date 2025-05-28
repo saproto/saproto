@@ -218,7 +218,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return ! (
             $this->password ||
             $this->edu_username ||
-            strtotime($this->created_at) > strtotime('-1 hour') ||
+            Carbon::parse($this->created_at)->timestamp > Carbon::now()->subHour()->timestamp ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
             Bank::query()->where('user_id', $this->id)->first() ||
             Address::query()->where('user_id', $this->id)->first() ||
@@ -677,7 +677,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $reset = PasswordReset::query()->create([
             'email' => $this->email,
             'token' => Str::random(128),
-            'valid_to' => strtotime('+1 hour'),
+            'valid_to' => Carbon::now()->addHour()->timestamp,
         ]);
 
         Mail::to($this)->queue((new PasswordResetEmail($this, $reset->token))->onQueue('high'));
