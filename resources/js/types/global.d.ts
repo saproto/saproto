@@ -18,5 +18,8 @@ declare module 'vue' {
 }
 
 declare module '@inertiajs/core' {
-    interface PageProps extends InertiaPageProps, AppPageProps {}
+    interface PageProps extends InertiaPageProps, AppPageProps {
+        menuitems: Array<App.Data.MenuItemData>
+        auth: { user: App.Data.AuthUserData }
+    }
 }
