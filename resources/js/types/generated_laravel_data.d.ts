@@ -8,7 +8,7 @@ photo: string;
 };
 export type MenuItemData = {
 menuname: string;
-url: string | null;
+parsed_url: string | null;
 order: number;
 is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
