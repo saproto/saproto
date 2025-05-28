@@ -40,7 +40,7 @@ class VerifyPersonalDetailsEmailCron extends Command
     public function handle(): void
     {
         $users = User::query()
-            ->whereMonth('created_at', Carbon::now()->addMonth())
+            ->whereMonth('created_at', Carbon::now()->addMonth()->month)
             ->get();
 
         foreach ($users as $user) {
