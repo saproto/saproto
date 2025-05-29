@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer base {
+    [data-theme="light"],
     :root {
         --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
@@ -62,7 +63,7 @@
         --sidebar-ring: 217.2 91.2% 59.8%;
     }
 
-    .dark {
+    [data-theme="dark"] {
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
 
@@ -117,6 +118,25 @@
         --sidebar-border: 240 3.7% 15.9%;
 
         --sidebar-ring: 217.2 91.2% 59.8%;
+    }
+
+    [data-theme="night"] {
+        --background: 240 10% 10%;
+        --foreground: 210 30% 90%;
+
+        --primary: 260 80% 60%;
+        --primary-foreground: 0 0% 100%;
+
+        --card: 240 10% 12%;
+        --card-foreground: 210 30% 90%;
+
+        --accent: 260 30% 30%;
+        --accent-foreground: 210 30% 90%;
+
+        --sidebar-background: 240 10% 8%;
+        --sidebar-foreground: 210 30% 90%;
+        --sidebar-primary: 280 70% 50%;
+        --sidebar-primary-foreground: 0 0% 100%;
     }
 }
 
