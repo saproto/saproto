@@ -99,6 +99,7 @@ class ProtoPolicy extends Policy
                 'https://nominatim.openstreetmap.org/search',
                 'https://api.fontawesome.com/',
                 'https://www.google.com/recaptcha/',
+                'https://wiki.proto.utwente.nl/',
                 ...['https://websockets.saproto.nl:*', 'ws://websockets.saproto.nl:*', 'wss://websockets.saproto.nl:*'],
                 ...(App::environment('production') ? [] : ['ws://localhost:*', 'http://localhost:*', 'ws://127.0.0.1:*']),
             ]);
