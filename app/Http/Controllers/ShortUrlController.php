@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ShortUrl;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,8 +28,12 @@ class ShortUrlController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        ShortUrl::query()->create($request->all());
-        Session::flash('flash_message', 'New URL created!');
+        try {
+            ShortUrl::query()->create($request->all());
+            Session::flash('flash_message', 'New URL created!');
+        } catch (UniqueConstraintViolationException) {
+            Session::flash('flash_message', 'A shortlink with this URL already exists!');
+        }
 
         return Redirect::route('short_urls.index');
     }
@@ -40,8 +45,12 @@ class ShortUrlController extends Controller
 
     public function update(Request $request, ShortUrl $short_url): RedirectResponse
     {
-        $short_url->update($request->all());
-        Session::flash('flash_message', 'Short URL updated!');
+        try {
+            $short_url->update($request->all());
+            Session::flash('flash_message', 'Short URL updated!');
+        } catch (UniqueConstraintViolationException) {
+            Session::flash('flash_message', 'A shortlink with this URL already exists!');
+        }
 
         return Redirect::route('short_urls.index');
     }
