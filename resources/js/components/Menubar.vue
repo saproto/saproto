@@ -39,16 +39,25 @@ const { can } = useCan()
     <!-- Menu Items -->
     <UseTemplate>
         <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname">
-            <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
-            <MenubarContent class="w-full">
-                <MenubarItem
-                    v-for="child in menuitem.children"
-                    :key="child.menuname"
-                    class="w-full"
-                >
-                    {{ child.menuname }}
-                </MenubarItem>
-            </MenubarContent>
+            <template v-if="menuitem.children.length>0">
+                <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
+                <MenubarContent class="w-full">
+                    <Link
+                        v-for="child in menuitem.children"
+                                                :key="child.menuname"
+                        :href="child.parsed_url"
+                                                class="w-full">
+                                            <MenubarItem>
+                                                {{ child.menuname }}
+                                            </MenubarItem>
+                    </Link>
+                </MenubarContent>
+            </template>
+            <MenubarMenu v-else>
+                <Link :href="menuitem.parsed_url">
+                    <MenubarTrigger>    {{ menuitem.menuname }}</MenubarTrigger>
+                </Link>
+            </MenubarMenu>
         </MenubarMenu>
 
         <MenubarMenu v-if="can('sysadmin')">
