@@ -121,13 +121,13 @@
     }
 
     [data-theme="night"] {
-        --background: 240 10% 10%;
+        --background: 227.55 91.38%, 22.75%;
         --foreground: 210 30% 90%;
 
         --primary: 260 80% 60%;
         --primary-foreground: 0 0% 100%;
 
-        --card: 240 10% 12%;
+        --card: 227.33, 88.24%, 40%;
         --card-foreground: 210 30% 90%;
 
         --accent: 260 30% 30%;
