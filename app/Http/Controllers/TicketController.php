@@ -328,6 +328,12 @@ class TicketController extends Controller
                 return Redirect::back();
             }
 
+            if (! $ticket->isOnSale()) {
+                Session::flash('flash_message', "Ticket ID#{$ticket_id} is not on sale at the moment. Entire order cancelled.");
+
+                return Redirect::back();
+            }
+
             if ($ticket->members_only && ! Auth::user()->is_member) {
                 Session::flash('flash_message', "Ticket ID#{$ticket_id} is only available to members. You are not a member. Entire order cancelled.");
 
@@ -365,14 +371,13 @@ class TicketController extends Controller
 
         $total_cost = 0;
         foreach ($tickets as $ticket_id => $amount) {
-            /** @var Ticket $ticket */
             $ticket = Ticket::query()->find($ticket_id);
 
             for ($i = 0; $i < $amount; $i++) {
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
 
                 // Non-members can only buy prepaid tickets, as we have no way of resolving their payment otherwise.
-                if ($ticket->is_prepaid || ! Auth::user()->is_member) {
+                if (($ticket->is_prepaid || ! Auth::user()->is_member) && $ticket->product->price > 0) {
                     $prepaid_tickets[] = $oid;
                     $total_cost += $ticket->product->price;
                 }
