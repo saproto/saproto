@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -160,12 +159,12 @@ class CommitteeController extends Controller
         Committee::query()->findOrFail($request->committee_id);
 
         $request->validate([
-            'start'=>'required|date',
-            'end'=>'nullable|date',
-            'role'=> 'required|string',
-            'edition'=> 'required|string',
-            'committee_id'=> 'required|integer',
-            'user_id'=> 'required|integer|exists:users,id',
+            'start' => 'required|date',
+            'end' => 'nullable|date',
+            'role' => 'required|string',
+            'edition' => 'required|string',
+            'committee_id' => 'required|integer',
+            'user_id' => 'required|integer|exists:users,id',
         ]);
 
         $membership = new CommitteeMembership;
@@ -195,10 +194,10 @@ class CommitteeController extends Controller
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         $validated = $request->validate([
-            'start'=>'required|date',
-            'end'=>'nullable|date',
-            'role'=> 'required|string',
-            'edition'=> 'required|string',
+            'start' => 'required|date',
+            'end' => 'nullable|date',
+            'role' => 'required|string',
+            'edition' => 'required|string',
         ]);
 
         $membership->update($validated);
