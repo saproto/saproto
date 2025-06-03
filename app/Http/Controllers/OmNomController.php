@@ -259,7 +259,7 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::query()->find($id);
 
-                if($product) {
+                if ($product) {
                     $cartTotal += $amount * $product->omnomcomPrice();
                 }
 
@@ -305,7 +305,7 @@ class OmNomController extends Controller
             }
 
             $soccerCards = min(floor($cartTotal / 0.5), 12);
-            if($soccerCards > 0) {
+            if ($soccerCards > 0) {
                 $result->message .= sprintf('<br><br> You may take <strong>%s</strong> soccer card%s!', $soccerCards, $soccerCards > 1 ? 's' : '');
             }
         }
