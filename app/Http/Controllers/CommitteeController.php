@@ -159,27 +159,22 @@ class CommitteeController extends Controller
         User::query()->findOrFail($request->user_id);
         Committee::query()->findOrFail($request->committee_id);
 
+        $request->validate([
+            'start'=>'required|date',
+            'end'=>'nullable|date',
+            'role'=> 'required|string',
+            'edition'=> 'required|string',
+            'committee_id'=> 'required|integer',
+            'user_id'=> 'required|integer|exists:users,id',
+        ]);
+
         $membership = new CommitteeMembership;
         $membership->role = $request->role;
         $membership->edition = $request->edition;
         $membership->user_id = $request->user_id;
         $membership->committee_id = $request->committee_id;
-
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
+        $membership->created_at = $request->date('start');
+        $membership->deleted_at = $request->date('end');
 
         $membership->save();
 
@@ -198,26 +193,15 @@ class CommitteeController extends Controller
     public function updateMembershipForm(Request $request, int $id): RedirectResponse
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-        $membership->role = $request->role;
-        $membership->edition = $request->edition;
 
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
+        $validated = $request->validate([
+            'start'=>'required|date',
+            'end'=>'nullable|date',
+            'role'=> 'required|string',
+            'edition'=> 'required|string',
+        ]);
 
-            return Redirect::back();
-        }
-
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
-
-        $membership->save();
+        $membership->update($validated);
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
