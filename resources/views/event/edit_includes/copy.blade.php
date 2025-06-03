@@ -22,8 +22,10 @@
                     [
                         'name' => 'newDate',
                         'label' => 'This will copy the event and move the start to:',
-                        'placeholder' => Carbon::createFromTimestamp($event->start)->addWeek()
-                            ->timestamp,
+                        'placeholder' => Carbon::createFromTimestamp(
+                            $event->start,
+                            date_default_timezone_get(),
+                        )->addWeek()->timestamp,
                         'format' => 'date',
                     ]
                 )

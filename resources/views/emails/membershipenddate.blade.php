@@ -11,7 +11,7 @@
     <p>
         Your membership will end at:
         <b>
-            {{ Carbon::createFromTimestamp($user->member->until)->format('d-m-Y') }}.
+            {{ Carbon::createFromTimestamp($user->member->until, date_default_timezone_get())->format('d-m-Y') }}.
         </b>
         <br />
         This means that your membership is valid up until this date and will

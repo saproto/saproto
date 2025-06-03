@@ -301,12 +301,12 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return Carbon::createFromTimestamp($this->start)->format($long_format).' '.$combiner.' '.(
+        return Carbon::createFromTimestamp($this->start, date_default_timezone_get())->format($long_format).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
-                Carbon::createFromTimestamp($this->end)->format($short_format)
+                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($short_format)
                 :
-                Carbon::createFromTimestamp($this->end)->format($long_format)
+                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($long_format)
         );
     }
 
@@ -418,7 +418,7 @@ class Event extends Model
      */
     protected function formattedDate(): Attribute
     {
-        $start = CarbonImmutable::createFromTimestamp($this->start);
+        $start = CarbonImmutable::createFromTimestamp($this->start, date_default_timezone_get());
 
         return Attribute::make(get: fn () => (object) [
             'simple' => $start->format('M d, Y'),

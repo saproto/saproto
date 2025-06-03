@@ -513,7 +513,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at)->age < 1
+            && Carbon::createFromTimestamp($this->member->created_at, date_default_timezone_get())->age < 1
             && $this->did_study_create;
     }
 
