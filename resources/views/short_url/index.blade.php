@@ -112,10 +112,14 @@
                 const modal = document.querySelector(
                     el.getAttribute('data-bs-target')
                 )
+
+                    const id = el.getAttribute('data-url-id');
+
                 modal.querySelector('#qr-modal-url').src =
-                    '{{ route('short_urls.qr_code', '') }}/' +
-                    el.getAttribute('data-url-id')
-                console.log(document.getElementById('qr-modal-url').src)
+                    `{{ route('short_urls.qr_code', ['id' => '_id']) }}`.replace(
+                        '_id',
+                        id
+                    )
             })
         )
 
