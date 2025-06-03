@@ -444,11 +444,15 @@
                 })
                     .then((data) => {
                         const qrImg =
-                            '{{ route('qr::code', '') }}' + '/' + data.qr_token
+                            `{{ route('qr::code', ['code' => '_code']) }}`.replace(
+                                '_code',
+                                data.qr_token
+                            )
                         const qrLink =
-                            '{{ route('qr::dialog', '') }}' +
-                            '/' +
-                            data.qr_token
+                            `{{ route('qr::dialog', ['code' => '_code']) }}`.replace(
+                                '_code',
+                                data.qr_token
+                            )
                         element.innerHTML =
                             'Scan this QR code<br><br><img alt="QR code" class="bg-white p-2" src="' +
                             qrImg +
