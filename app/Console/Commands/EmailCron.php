@@ -48,7 +48,7 @@ class EmailCron extends Command
             ->with(['events'])
             ->where('sent', false)
             ->where('ready', true)
-            ->where('time', '<', Carbon::now()->getTimestamp())
+            ->where('time', '<', Carbon::now()->timestamp)
             ->get();
 
         $this->info('There are '.$emails->count().' queued e-mails.');

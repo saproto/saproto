@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
 use Google\Service\Directory;
 use Google\Service\Directory\User as GoogleUser;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -47,7 +47,7 @@ class UserPasswordController extends Controller
      */
     public function resetPasswordIndex(string $token): RedirectResponse|View
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->format('U'))->delete();
+        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
@@ -65,7 +65,7 @@ class UserPasswordController extends Controller
      */
     public function resetPassword(Request $request): RedirectResponse
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->format('U'))->delete();
+        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
         if (! $reset) {
             Session::flash('flash_message', 'This reset token does not exist or has expired.');

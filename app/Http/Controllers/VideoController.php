@@ -7,6 +7,7 @@ use App\Models\Video;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -70,7 +71,7 @@ class VideoController extends Controller
             'youtube_user_id' => $youtube_video->snippet->channelId,
             'youtube_user_name' => $youtube_video->snippet->channelTitle,
             'youtube_thumb_url' => $youtube_video->snippet->thumbnails->high->url,
-            'video_date' => date('Y-m-d', strtotime($youtube_video->snippet->publishedAt)),
+            'video_date' => Carbon::parse($youtube_video->snippet->publishedAt)->format('Y-m-d'),
         ])->save();
 
         Session::flash('flash_message', sprintf('The video %s has been added!', $youtube_video->snippet->title));
@@ -95,7 +96,7 @@ class VideoController extends Controller
     {
         /** @var Video $video */
         $video = Video::query()->findOrFail($request->id);
-        $video->video_date = date('Y-m-d', strtotime($request->video_date));
+        $video->video_date = $request->date('video_date')->format('Y-m-d');
         $video->save();
 
         if ($request->has('event')) {

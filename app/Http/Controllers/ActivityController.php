@@ -28,8 +28,8 @@ class ActivityController extends Controller
         $newPrice = floatval(str_replace(',', '.', $request->price));
         $newNoShow = floatval(str_replace(',', '.', $request->no_show_fee));
 
-        $newRegistrationStart = strtotime($request->registration_start);
-        $newRegistrationEnd = strtotime($request->registration_end);
+        $newRegistrationStart = $request->date('registration_start')->timestamp;
+        $newRegistrationEnd = $request->date('registration_end')->timestamp;
 
         if ($newRegistrationEnd < $newRegistrationStart) {
             Session::flash('flash_message', 'You cannot let the event sign-up end before it starts.');
@@ -58,7 +58,7 @@ class ActivityController extends Controller
         $data = [
             'registration_start' => $newRegistrationStart,
             'registration_end' => $newRegistrationEnd,
-            'deregistration_end' => strtotime($request->deregistration_end),
+            'deregistration_end' => $request->date('deregistration_end')->timestamp,
             'participants' => $request->participants,
             'price' => $newPrice,
             'no_show_fee' => $newNoShow,

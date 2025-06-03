@@ -71,17 +71,20 @@ class CalendarController extends Controller
                 }
             }
 
+            $end = Carbon::parse($endTime)->timestamp;
+            $start = Carbon::parse($startTime)->timestamp;
+            $now = Carbon::now()->timestamp;
             $results[] = [
                 'title' => trim($name),
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',
-                'start' => strtotime($startTime),
-                'end' => strtotime($endTime),
+                'start' => $start,
+                'end' => $end,
                 'type' => empty($type) ? null : $type[1],
                 'year' => $year,
                 'study' => $study,
                 'studyShort' => $studyShort,
-                'over' => strtotime($endTime) < Carbon::now()->getTimestamp(),
-                'current' => strtotime($startTime) < Carbon::now()->getTimestamp() && strtotime($endTime) > Carbon::now()->getTimestamp(),
+                'over' => $end < $now,
+                'current' => $start < $now && $end > $now,
             ];
         }
 

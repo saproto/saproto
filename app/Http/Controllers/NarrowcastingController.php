@@ -53,8 +53,8 @@ class NarrowcastingController extends Controller
 
         $narrowcasting = new NarrowcastingItem;
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = $request->date('campaign_start')->timestamp;
+        $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
@@ -101,8 +101,8 @@ class NarrowcastingController extends Controller
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
         $narrowcasting->name = $request->name;
-        $narrowcasting->campaign_start = strtotime($request->campaign_start);
-        $narrowcasting->campaign_end = strtotime($request->campaign_end);
+        $narrowcasting->campaign_start = $request->date('campaign_start')->timestamp;
+        $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
@@ -153,7 +153,7 @@ class NarrowcastingController extends Controller
      */
     public function clear()
     {
-        foreach (NarrowcastingItem::query()->where('campaign_end', '<', Carbon::now()->format('U'))->get() as $item) {
+        foreach (NarrowcastingItem::query()->where('campaign_end', '<', Carbon::now()->timestamp)->get() as $item) {
             $item->delete();
         }
 
@@ -167,7 +167,7 @@ class NarrowcastingController extends Controller
     {
         $data = [];
         foreach (
-            NarrowcastingItem::query()->where('campaign_start', '<', Carbon::now()->format('U'))->where('campaign_end', '>', Carbon::now()->format('U'))->get() as $item) {
+            NarrowcastingItem::query()->where('campaign_start', '<', Carbon::now()->timestamp)->where('campaign_end', '>', Carbon::now()->timestamp)->get() as $item) {
             if ($item->youtube_id) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,

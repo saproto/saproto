@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -46,10 +45,7 @@ class CommitteeController extends Controller
         return view('committee.list', ['data' => $data, 'society' => $showSociety]);
     }
 
-    /**
-     * @return View
-     */
-    public function show(string $id)
+    public function show(string $id): View
     {
         $committee = Committee::fromPublicId($id);
 
@@ -70,16 +66,12 @@ class CommitteeController extends Controller
         ]);
     }
 
-    /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('committee.edit', ['new' => true]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $committee = new Committee;
 
@@ -91,20 +83,14 @@ class CommitteeController extends Controller
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
 
-    /**
-     * @return View
-     */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $committee = Committee::query()->findOrFail($id);
 
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(int $id, Request $request)
+    public function update(int $id, Request $request): RedirectResponse
     {
         // Retrieve the committee
         $committee = Committee::query()->find($id);
@@ -131,11 +117,9 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
-    public function image(int $id, Request $request)
+    public function image(int $id, Request $request): RedirectResponse
     {
         $committee = Committee::query()->find($id);
 
@@ -159,27 +143,22 @@ class CommitteeController extends Controller
         User::query()->findOrFail($request->user_id);
         Committee::query()->findOrFail($request->committee_id);
 
+        $request->validate([
+            'start' => 'required|date',
+            'end' => 'nullable|date',
+            'role' => 'required|string',
+            'edition' => 'required|string',
+            'committee_id' => 'required|integer',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
         $membership = new CommitteeMembership;
         $membership->role = $request->role;
         $membership->edition = $request->edition;
         $membership->user_id = $request->user_id;
         $membership->committee_id = $request->committee_id;
-
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
+        $membership->created_at = $request->date('start');
+        $membership->deleted_at = $request->date('end');
 
         $membership->save();
 
@@ -198,25 +177,18 @@ class CommitteeController extends Controller
     public function updateMembershipForm(Request $request, int $id): RedirectResponse
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-        $membership->role = $request->role;
-        $membership->edition = $request->edition;
 
-        if (($membership->created_at = Carbon::create($request->start)) === false) {
-            Session::flash('flash_message', 'Ill-formatted start date.');
+        $validated = $request->validate([
+            'start' => 'required|date',
+            'end' => 'nullable|date',
+            'role' => 'required|string',
+            'edition' => 'required|string',
+        ]);
 
-            return Redirect::back();
-        }
-
-        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
-            Session::flash('flash_message', 'Ill-formatted end date.');
-
-            return Redirect::back();
-        }
-
-        if ($request->end == '') {
-            $membership->deleted_at = null;
-        }
-
+        $membership->role = $validated['role'];
+        $membership->edition = $validated['edition'];
+        $membership->created_at = $request->date('start');
+        $membership->deleted_at = $request->date('end');
         $membership->save();
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
@@ -227,7 +199,6 @@ class CommitteeController extends Controller
      */
     public function deleteMembership(int $id): RedirectResponse
     {
-        /** @var CommitteeMembership $membership */
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $committee_id = $membership->committee->id;
 

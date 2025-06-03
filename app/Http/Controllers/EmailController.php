@@ -69,11 +69,9 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        if (strtotime($request->input('time')) === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::route('email::index');
-        }
+        $request->validate([
+            'time' => 'required|date',
+        ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
@@ -86,7 +84,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => strtotime($request->input('time')),
+            'time' => $request->date('time')->timestamp,
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -136,6 +134,10 @@ class EmailController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $request->validate([
+            'time' => 'required|date',
+        ]);
+
         /** @var Email $email */
         $email = Email::query()->findOrFail($id);
 
@@ -143,12 +145,6 @@ class EmailController extends Controller
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
             return Redirect::route('email::index');
-        }
-
-        if (strtotime($request->input('time')) === false) {
-            Session::flash('flash_message', 'Schedule time improperly formatted.');
-
-            return Redirect::back();
         }
 
         $senderAddress = $request->input('sender_address');
@@ -162,7 +158,7 @@ class EmailController extends Controller
             'description' => $request->input('description'),
             'subject' => $request->input('subject'),
             'body' => $request->input('body'),
-            'time' => strtotime($request->input('time')),
+            'time' => $request->date('time')->timestamp,
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $senderAddress,
         ]);
@@ -193,7 +189,7 @@ class EmailController extends Controller
             $email->save();
             Session::flash('flash_message', 'The e-mail has been put on hold.');
         } else {
-            if ($email->time - Carbon::now()->format('U') < 5 * 60) {
+            if ($email->time - Carbon::now()->timestamp < 5 * 60) {
                 Session::flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
 
                 return Redirect::route('email::index');

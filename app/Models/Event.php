@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonImmutable;
 use Database\Factories\EventFactory;
 use Hashids;
 use Illuminate\Database\Eloquent\Builder;
@@ -284,12 +285,12 @@ class Event extends Model
 
     public function current(): bool
     {
-        return $this->start < Carbon::now()->format('U') && $this->end > Carbon::now()->format('U');
+        return $this->start < Carbon::now()->timestamp && $this->end > Carbon::now()->timestamp;
     }
 
     public function over(): bool
     {
-        return $this->end < Carbon::now()->format('U');
+        return $this->end < Carbon::now()->timestamp;
     }
 
     /**
@@ -300,12 +301,12 @@ class Event extends Model
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
+        return Carbon::createFromTimestamp($this->start, date_default_timezone_get())->format($long_format).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
-                date($short_format, $this->end)
+                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($short_format)
                 :
-                date($long_format, $this->end)
+                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($long_format)
         );
     }
 
@@ -338,7 +339,7 @@ class Event extends Model
             return true;
         }
 
-        if (Carbon::now()->format('U') > $this->end) {
+        if (Carbon::now()->timestamp > $this->end) {
             return false;
         }
 
@@ -401,7 +402,7 @@ class Event extends Model
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > strtotime('-1 week');
+        return $this->involves_food && $this->end > Carbon::now()->subWeek()->timestamp;
     }
 
     /**
@@ -409,7 +410,7 @@ class Event extends Model
      */
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::now()->format('U') < $this->start);
+        return Attribute::make(get: fn (): bool => Carbon::now()->timestamp < $this->start);
     }
 
     /**
@@ -417,11 +418,13 @@ class Event extends Model
      */
     protected function formattedDate(): Attribute
     {
+        $start = CarbonImmutable::createFromTimestamp($this->start, date_default_timezone_get());
+
         return Attribute::make(get: fn () => (object) [
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start),
+            'simple' => $start->format('M d, Y'),
+            'year' => $start->format('Y'),
+            'month' => $start->format('M Y'),
+            'time' => $start->format('H:i'),
         ]);
     }
 

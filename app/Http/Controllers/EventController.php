@@ -129,8 +129,8 @@ class EventController extends Controller
     {
         $event = Event::query()->create([
             'title' => $request->title,
-            'start' => strtotime($request->start),
-            'end' => strtotime($request->end),
+            'start' => $request->date('start')->timestamp,
+            'end' => $request->date('end')->timestamp,
             'location' => $request->location,
             'maps_location' => $request->maps_location,
             'secret' => $request->publication ? false : $request->secret,
@@ -139,7 +139,7 @@ class EventController extends Controller
             'is_featured' => $request->has('is_featured'),
             'is_external' => $request->has('is_external'),
             'force_calendar_sync' => $request->has('force_calendar_sync'),
-            'publication' => $request->publication ? strtotime($request->publication) : null,
+            'publication' => $request->publication ? $request->date('publication')->timestamp : null,
         ]);
 
         if ($request->file('image')) {
@@ -175,8 +175,8 @@ class EventController extends Controller
     public function update(StoreEventRequest $request, Event $event)
     {
         $event->title = $request->title;
-        $event->start = strtotime($request->start);
-        $event->end = strtotime($request->end);
+        $event->start = $request->date('start')->timestamp;
+        $event->end = $request->date('end')->timestamp;
         $event->location = $request->location;
         $event->maps_location = $request->maps_location;
         $event->secret = $request->publication ? false : $request->secret;
@@ -186,7 +186,7 @@ class EventController extends Controller
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
-        $event->publication = $request->publication ? strtotime($request->publication) : null;
+        $event->publication = $request->publication ? $request->date('publication')->timestamp : null;
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
@@ -213,7 +213,7 @@ class EventController extends Controller
 
         $event->save();
 
-        $changed_important_details = $event->start !== strtotime($request->start) || $event->end !== strtotime($request->end) || $event->location != $request->location;
+        $changed_important_details = $event->start !== $request->date('start')->timestamp || $event->end !== $request->date('end')->timestamp || $event->location != $request->location;
 
         if ($changed_important_details) {
             Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
@@ -238,10 +238,10 @@ class EventController extends Controller
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', strtotime($year.'-01-01 00:00:01'))
-            ->where('start', '<', strtotime($year.'-12-31 23:59:59'))
+            })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->timestamp)
+            ->where('start', '<', Carbon::create($year, 12, 31, 23, 59, 59)->timestamp)
             ->get()
-            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
+            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start, date_default_timezone_get())->month);
 
         $years = $this->getAvailableYears();
 
@@ -414,8 +414,10 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
-            ->where('end', '>', strtotime('today'))
-            ->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))
+            ->where('end', '>', Carbon::today()->timestamp)
+            ->unless($noFutureLimit, static function ($query) {
+                $query->where('start', '<', Carbon::now()->addMonth()->timestamp);
+            })
             ->whereNull('publication')
             ->orderBy('start')
             ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
@@ -467,7 +469,7 @@ class EventController extends Controller
                 'price' => $event->activity?->price,
                 'no_show_fee' => $event->activity?->no_show_fee,
                 'user_signedup' => $user && $userParticipation !== null,
-                'user_signedup_backup' => $user && $userParticipation->backup,
+                'user_signedup_backup' => $user && $userParticipation?->backup,
                 'user_signedup_id' => $userParticipation?->id,
                 'can_signup' => ($user && $event->activity?->canSubscribe()),
                 'can_signup_backup' => ($user && $event->activity?->canSubscribeBackup()),
@@ -547,7 +549,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
-            ->where('start', '>', strtotime('-6 months'))
+            ->where('start', '>', Carbon::now()->subMonths(6)->timestamp)
             ->with('committee.users')
             ->withCount('tickets')
             ->get();
@@ -598,9 +600,9 @@ CALSCALE:GREGORIAN
             $calendar .= 'BEGIN:VEVENT
 '.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', strtotime($event->created_at)))."\r\n".
-                sprintf('DTSTART:%s', date('Ymd\THis', $event->start))."\r\n".
-                sprintf('DTEND:%s', date('Ymd\THis', $event->end))."\r\n".
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->created_at)->timestamp))."\r\n".
+                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -609,7 +611,7 @@ CALSCALE:GREGORIAN
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->updated_at)->timestamp))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
@@ -617,7 +619,7 @@ CALSCALE:GREGORIAN
 '.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
@@ -647,7 +649,7 @@ CALSCALE:GREGORIAN
     {
         $event = Event::query()->findOrFail($request->input('id'));
 
-        $oldStart = Carbon::createFromTimestamp($event->start);
+        $oldStart = Carbon::createFromTimestamp($event->start, date_default_timezone_get());
 
         $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
             ->setHour($oldStart->hour)

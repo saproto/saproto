@@ -48,7 +48,7 @@ class WallstreetDrink extends Model
 
     public function isCurrent(): bool
     {
-        return $this->start_time <= Carbon::now()->getTimestamp() && $this->end_time >= Carbon::now()->getTimestamp();
+        return $this->start_time <= Carbon::now()->timestamp && $this->end_time >= Carbon::now()->timestamp;
     }
 
     /**
@@ -67,8 +67,8 @@ class WallstreetDrink extends Model
         $productIDs = $this->products()->pluck('id');
 
         return OrderLine::query()
-            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time))
-            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time))
+            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time, date_default_timezone_get()))
+            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time, date_default_timezone_get()))
             ->whereHas('product', function ($q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             });

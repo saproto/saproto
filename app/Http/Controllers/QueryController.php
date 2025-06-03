@@ -27,11 +27,11 @@ class QueryController extends Controller
     {
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = strtotime("{$year_start}-09-01 00:00:01");
-            $end = Carbon::now()->format('U');
+            $start = Carbon::parse("{$year_start}-09-01 00:00:01")->timestamp;
+            $end = Carbon::now()->timestamp;
         } else {
-            $start = strtotime($request->start);
-            $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
+            $start = $request->date('start')->timestamp;
+            $end = $request->date('end')->addDay()->timestamp; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
@@ -108,12 +108,13 @@ class QueryController extends Controller
     public function activityStatistics(Request $request): View
     {
         if ($request->missing('start') || $request->missing('end')) {
-            $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
-            $start = strtotime("{$year_start}-09-01 00:00:01");
-            $end = Carbon::now()->format('U');
+            $now = Carbon::now();
+            $year_start = $now->month >= 9 ? $now->year : $now->year - 1;
+            $start = Carbon::create($year_start, 9, 1, 0, 0, 1)->timestamp;
+            $end = Carbon::now()->timestamp;
         } else {
-            $start = Carbon::parse($request->start)->getTimestamp();
-            $end = Carbon::parse($request->end)->addDay()->getTimestamp();
+            $start = $request->date('start')->timestamp;
+            $end = $request->date('end')->addDay()->timestamp;
         }
 
         $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {
@@ -139,19 +140,19 @@ class QueryController extends Controller
             })->sum('attendees');
         }
 
-        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
+        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS year, start, COUNT(*) AS total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
 
         $totalEvents = Event::query()->where('start', '>=', $start)->where('end', '<=', $end)->count();
 
-        $changeGMM = Carbon::parse('01-09-2010');
+        $changeGMM = Carbon::createFromDate(2010, 9, 01)->startOfDay();
         foreach ($events as $event) {
             /** @phpstan-ignore-next-line */
-            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
+            $event->board = (int) $changeGMM->diffInYears(Carbon::createFromTimestamp($event->start, date_default_timezone_get())->startOfDay());
         }
 
-        return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
+        return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
     }
 }

@@ -35,10 +35,10 @@
                                 #{{ $wallstreetDrink->id }}
                             </td>
                             <td>
-                                {{ Carbon::createFromTimestamp($wallstreetDrink->start_time)->format('m-d-Y H:i') }}
+                                {{ Carbon::createFromTimestamp($wallstreetDrink->start_time, date_default_timezone_get())->format('m-d-Y H:i') }}
                             </td>
                             <td>
-                                {{ Carbon::createFromTimestamp($wallstreetDrink->end_time)->format('m-d-Y H:i') }}
+                                {{ Carbon::createFromTimestamp($wallstreetDrink->end_time, date_default_timezone_get())->format('m-d-Y H:i') }}
                             </td>
                             <td>€{{ $wallstreetDrink->minimum_price }}</td>
                             <td>€{{ $wallstreetDrink->price_decrease }}</td>
@@ -67,9 +67,10 @@
                                             'title' => 'Confirm Close',
                                             'message' =>
                                                 'Are you sure you want to close this wallstreet drink early? The drink will close automatically at:' .
-                                                Carbon::createFromTimestamp($wallstreetDrink->end_time)->format(
-                                                    'm-d-Y H:i',
-                                                ),
+                                                Carbon::createFromTimestamp(
+                                                    $wallstreetDrink->end_time,
+                                                    date_default_timezone_get(),
+                                                )->format('m-d-Y H:i'),
                                             'confirm' => 'Close',
                                         ]
                                     )

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Mail\VerifyPersonalDetails;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class VerifyPersonalDetailsEmailCron extends Command
@@ -38,9 +39,9 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle(): void
     {
-        $month = date('m', strtotime('+1 month'));
-
-        $users = User::query()->where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month))->get();
+        $users = User::query()
+            ->whereMonth('created_at', Carbon::now()->addMonth()->month)
+            ->get();
 
         foreach ($users as $user) {
             Mail::to($user)->queue((new VerifyPersonalDetails($user))->onQueue('low'));
