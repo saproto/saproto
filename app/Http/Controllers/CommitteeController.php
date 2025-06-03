@@ -45,9 +45,6 @@ class CommitteeController extends Controller
         return view('committee.list', ['data' => $data, 'society' => $showSociety]);
     }
 
-    /**
-     * @return View
-     */
     public function show(string $id): View
     {
         $committee = Committee::fromPublicId($id);
@@ -69,15 +66,11 @@ class CommitteeController extends Controller
         ]);
     }
 
-    /** @return View */
     public function create(): View
     {
         return view('committee.edit', ['new' => true]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function store(Request $request): RedirectResponse
     {
         $committee = new Committee;
@@ -90,9 +83,6 @@ class CommitteeController extends Controller
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
 
-    /**
-     * @return View
-     */
     public function edit(int $id): View
     {
         $committee = Committee::query()->findOrFail($id);
@@ -200,7 +190,6 @@ class CommitteeController extends Controller
         $membership->created_at = $request->date('start');
         $membership->deleted_at = $request->date('end');
         $membership->save();
-
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
