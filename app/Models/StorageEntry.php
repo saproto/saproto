@@ -116,7 +116,7 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(Carbon::now()->format('U').mt_rand(1, 99999999999));
+        return sha1(Carbon::now()->timestamp.mt_rand(1, 99999999999));
     }
 
     public function generatePath(): string

@@ -43,26 +43,23 @@ class WithdrawalController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $max = ($request->has('max') ? $request->input('max') : null);
-        if ($max < 0) {
-            $max = null;
-        }
+        $request->validate([
+            'date' => 'required|date',
+            'max' => 'required|numeric|min:1',
+        ]);
 
-        $date = strtotime($request->input('date'));
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
+        $max = $request->integer('max');
 
-            return Redirect::back();
-        }
+        $date = $request->date('date')->format('Y-m-d');
 
-        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->create([
-            'date' => date('Y-m-d', $date),
+            'date' => $date,
         ]);
 
         $totalPerUser = [];
-        foreach (OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get() as $orderline) {
-            /** @var OrderLine $orderline */
+
+        $orderlines = OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get();
+        foreach ($orderlines as $orderline) {
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
@@ -84,12 +81,11 @@ class WithdrawalController extends Controller
 
         foreach ($totalPerUser as $user_id => $total) {
             if ($total < 0) {
-                /** @var User $user */
                 $user = User::query()->findOrFail($user_id);
-                foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
-                    /** @var OrderLine $orderline */
-                    $orderline->withdrawal()->dissociate();
-                    $orderline->save();
+                $orderlinesFor = $withdrawal->orderlinesForUser($user);
+                foreach ($orderlinesFor as $orderlineFor) {
+                    $orderlineFor->withdrawal()->dissociate();
+                    $orderlineFor->save();
                 }
             }
         }
@@ -136,7 +132,7 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => $accounts,
-            'title' => 'Accounts of withdrawal of '.date('d-m-Y', strtotime($withdrawal->date)),
+            'title' => 'Accounts of withdrawal of '.Carbon::parse($withdrawal->date)->format('d-m-Y'),
             'total' => $withdrawal->total(),
         ]);
     }
@@ -146,20 +142,17 @@ class WithdrawalController extends Controller
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
+        $request->validate([
+            'date' => 'required|date',
+            'max' => 'required|numeric|min:1',
+        ]);
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
             return Redirect::back();
         }
 
-        $date = strtotime($request->input('date'));
-        if ($date === false) {
-            Session::flash('flash_message', 'Invalid date.');
-
-            return Redirect::back();
-        }
-
-        $withdrawal->date = date('Y-m-d', $date);
+        $withdrawal->date = $request->date('date')->format('Y-m-d');
         $withdrawal->save();
 
         Session::flash('flash_message', 'Withdrawal updated.');
@@ -214,7 +207,6 @@ class WithdrawalController extends Controller
         $user = User::withTrashed()->findOrFail($user_id);
 
         foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
-            /** @var OrderLine $orderline */
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }
@@ -257,7 +249,7 @@ class WithdrawalController extends Controller
             $total,
             null,
             null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
+            sprintf('Overdue payment due to the failed withdrawal from %s.', Carbon::parse($withdrawal->date)->format('d-m-Y')),
             sprintf('failed_withdrawal_by_%u', Auth::user()->id)
         ));
 
@@ -359,7 +351,7 @@ class WithdrawalController extends Controller
                     /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'dtOfSgntr' => Carbon::parse($user->bank->created_at)->format('Y-m-d'),
                     'bic' => $user->bank->bic,
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,

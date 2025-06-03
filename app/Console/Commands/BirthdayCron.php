@@ -43,7 +43,8 @@ class BirthdayCron extends Command
     public function handle(): int
     {
         $users = User::query()
-            ->where('birthdate', 'LIKE', '%-'.Carbon::now()->format('m-d'))
+            ->whereMonth('birthdate', Carbon::now()->month)
+            ->whereDay('birthdate', Carbon::now()->day)
             ->whereHas('member', static function ($q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })

@@ -47,7 +47,7 @@ class OmNomController extends Controller
 
         if ($store_slug === 'tipcie') {
             $minors = User::query()
-                ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
+                ->where('birthdate', '>', Carbon::now()->subYears(18)->format('Y-m-d'))
                 ->whereHas('member', static function ($q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })

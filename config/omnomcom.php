@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Carbon;
+
 return [
 
     /*
@@ -56,8 +58,8 @@ return [
         ],
         (object) [
             'name' => 'easter',
-            'start' => date('M-d-Y', easter_date()),
-            'end' => date('M-d-Y', easter_date()).' +1 day',
+            'start' => Carbon::createFromTimestamp(easter_date())->format('M-d-Y'),
+            'end' => Carbon::createFromTimestamp(easter_date())->format('M-d-Y').' +1 day',
         ],
         (object) [
             'name' => 'dies',
