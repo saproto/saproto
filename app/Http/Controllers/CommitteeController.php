@@ -49,7 +49,7 @@ class CommitteeController extends Controller
     /**
      * @return View
      */
-    public function show(string $id)
+    public function show(string $id): View
     {
         $committee = Committee::fromPublicId($id);
 
@@ -71,7 +71,7 @@ class CommitteeController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('committee.edit', ['new' => true]);
     }
@@ -79,7 +79,7 @@ class CommitteeController extends Controller
     /**
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $committee = new Committee;
 
@@ -94,17 +94,14 @@ class CommitteeController extends Controller
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $committee = Committee::query()->findOrFail($id);
 
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(int $id, Request $request)
+    public function update(int $id, Request $request): RedirectResponse
     {
         // Retrieve the committee
         $committee = Committee::query()->find($id);
@@ -131,11 +128,9 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
-    public function image(int $id, Request $request)
+    public function image(int $id, Request $request): RedirectResponse
     {
         $committee = Committee::query()->find($id);
 
@@ -201,7 +196,12 @@ class CommitteeController extends Controller
             'edition'=> 'required|string',
         ]);
 
-        $membership->update($validated);
+        $membership->role = $validated['role'];
+        $membership->edition = $validated['edition'];
+        $membership->created_at = $request->date('start');
+        $membership->deleted_at = $request->date('end');
+        $membership->save();
+
 
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
@@ -211,7 +211,6 @@ class CommitteeController extends Controller
      */
     public function deleteMembership(int $id): RedirectResponse
     {
-        /** @var CommitteeMembership $membership */
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $committee_id = $membership->committee->id;
 
