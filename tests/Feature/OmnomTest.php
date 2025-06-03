@@ -9,6 +9,5 @@ it('shows the omnomcom protopolis page', function () {
     $response = $this->actingAs($user)
         ->get(route('omnomcom::store::show', ['store' => 'protopolis']));
     $response->assertStatus(200);
-    dump($response->getContent());
     $response->assertSee('Link RFID card');
 });
