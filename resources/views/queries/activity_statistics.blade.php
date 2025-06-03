@@ -141,7 +141,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const ctx = document.getElementById('chart')
         var chart = null
-        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!};
+        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
 
         function createDataSets(data) {
             let myData = {
