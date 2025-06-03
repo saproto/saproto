@@ -170,7 +170,7 @@
                                     <td>
                                         <b>Until:</b>
                                         <i>
-                                            {{ Carbon::createFromTimestamp($user->member->until)->format('d M Y') }}
+                                            {{ Carbon::createFromTimestamp($user->member->until, date_default_timezone_get())->format('d M Y') }}
                                         </i>
                                     </td>
                                 </tr>

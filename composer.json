@@ -57,7 +57,7 @@
         "league/oauth1-client": "^1.7",
         "milon/barcode": "^12.0",
         "mollie/laravel-mollie": "^3.0",
-        "nesbot/carbon": "^2.62",
+        "nesbot/carbon": "^3.9.1",
         "nickurt/laravel-pwned-passwords": "^2.0",
         "pragmarx/google2fa": "^8.0",
         "sentry/sentry-laravel": "^4.4.1",

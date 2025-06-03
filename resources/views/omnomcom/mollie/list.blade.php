@@ -141,7 +141,7 @@
                                 $month = \Illuminate\Support\Carbon::parse(sprintf('-%s months', $m))
                                     ->timestamp;
                                 $total = \App\Http\Controllers\MollieController::getTotalForMonth(
-                                    \Illuminate\Support\Carbon::createFromTimestamp($month)->format('Y-m'),
+                                    \Illuminate\Support\Carbon::createFromTimestamp($month, date_default_timezone_get())->format('Y-m'),
                                 );
                                 ?>
 

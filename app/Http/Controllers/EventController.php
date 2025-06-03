@@ -241,7 +241,7 @@ class EventController extends Controller
             })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->timestamp)
             ->where('start', '<', Carbon::create($year, 12, 31, 23, 59, 59)->timestamp)
             ->get()
-            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start)->month);
+            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start, date_default_timezone_get())->month);
 
         $years = $this->getAvailableYears();
 
@@ -601,8 +601,8 @@ CALSCALE:GREGORIAN
 '.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
                 sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->created_at)->timestamp))."\r\n".
-                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start)->format('Ymd\THis'))."\r\n".
-                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end)->format('Ymd\THis'))."\r\n".
+                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -619,7 +619,7 @@ CALSCALE:GREGORIAN
 '.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start)->format('l F j, H:i:s'))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
@@ -649,7 +649,7 @@ CALSCALE:GREGORIAN
     {
         $event = Event::query()->findOrFail($request->input('id'));
 
-        $oldStart = Carbon::createFromTimestamp($event->start);
+        $oldStart = Carbon::createFromTimestamp($event->start, date_default_timezone_get());
 
         $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
             ->setHour($oldStart->hour)

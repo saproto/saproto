@@ -60,12 +60,11 @@ class PasswordEntry extends Model
     }
 
     /**
-     * @return float|int
+     * @return int
      *
-     * @throws Exception
      */
-    public function age()
+    public function age(): int
     {
-        return Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now());
+        return (int) Carbon::createFromTimestamp($this->updated_at, date_default_timezone_get())->diffInMonths(Carbon::now(), true);
     }
 }

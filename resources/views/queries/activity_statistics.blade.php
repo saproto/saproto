@@ -141,7 +141,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const ctx = document.getElementById('chart')
         var chart = null
-        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!}
+        var data = {!! json_encode($events->toArray(), JSON_HEX_TAG) !!};
 
         function createDataSets(data) {
             let myData = {
@@ -150,7 +150,7 @@
             Object.values(data).forEach((product) => {
                 let prices = []
                 product.forEach((item) => {
-                    date = new Date(item.Start * 1000)
+                    date = new Date(item.start * 1000)
                     date = date.setFullYear(
                         date.getFullYear(),
                         date.getMonth(),
@@ -158,10 +158,10 @@
                     )
                     prices.push({
                         x: date,
-                        y: item.Total,
+                        y: item.total,
                     })
                 })
-                myData.datasets.push({ label: product[0].Board, data: prices })
+                myData.datasets.push({ label: product[0].board, data: prices })
             })
             return myData
         }

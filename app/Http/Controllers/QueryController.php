@@ -140,19 +140,19 @@ class QueryController extends Controller
             })->sum('attendees');
         }
 
-        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS Year, WEEK(FROM_UNIXTIME(start)) AS Week, start as Start, COUNT(*) AS Total')
+        $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS year, start, COUNT(*) AS total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
             ->get();
 
         $totalEvents = Event::query()->where('start', '>=', $start)->where('end', '<=', $end)->count();
 
-        $changeGMM = Carbon::parse('01-09-2010');
+        $changeGMM = Carbon::createFromDate(2010, 9, 01)->startOfDay();
         foreach ($events as $event) {
             /** @phpstan-ignore-next-line */
-            $event->Board = Carbon::createFromTimestamp($event->start)->diffInYears($changeGMM);
+            $event->board = (int) $changeGMM->diffInYears(Carbon::createFromTimestamp($event->start, date_default_timezone_get())->startOfDay());
         }
 
-        return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('Board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
+        return view('queries.activity_statistics', ['start' => $start, 'end' => $end, 'events' => $events->groupBy('board'), 'totalEvents' => $totalEvents, 'eventCategories' => $eventCategories]);
     }
 }

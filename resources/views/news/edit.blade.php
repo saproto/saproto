@@ -138,8 +138,8 @@
                                             'title' => 'Confirm Sending Weekly',
                                             'classes' =>
                                                 'btn ms-2 ' .
-                                                (Carbon::parse($lastWeekly->published_at)->diffInDays(
-                                                    Carbon::now(),
+                                                ((int) Carbon::parse($lastWeekly->published_at)->diffInDays(
+                                                    Carbon::now(), true
                                                 ) < 7
                                                     ? 'btn-danger'
                                                     : 'btn-success'),
