@@ -17,6 +17,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Random\RandomException;
@@ -87,7 +88,7 @@ class ApiController extends Controller
     /**
      * @throws RandomException
      */
-    public function randomAlbum()
+    public function randomAlbum(): JsonResponse
     {
         //30% chance the normal photo album is from the last year
         //55-30 = 25% chance the album is from one year ago
@@ -118,9 +119,9 @@ class ApiController extends Controller
     }
     /**
      * @param array{0: int, 1: int, 2: int, 3: int} $numbers
-     * /
+     * @return array{photos: Collection<(int|string), mixed>, album_name: string, date_taken: non-falsy-string}|array{error: string}
      * @throws RandomException
-     * /**
+     *
      */
     private function randomDistributedAlbum(array $numbers): array
     {
