@@ -39,7 +39,9 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], static function () {
         Route::get('random_album', ['as' => 'randomAlbum', 'uses' => 'ApiController@randomAlbum']);
+        Route::get('random_old_album', ['as' => 'randomOldAlbum', 'uses' => 'ApiController@randomOldAlbum']);
     });
+
     Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], static function () {
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);

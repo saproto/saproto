@@ -87,7 +87,37 @@ class ApiController extends Controller
     /**
      * @throws RandomException
      */
+    public function randomOldAlbum(): JsonResponse
+    {
+        //10% chance the photo is from the last year
+        //30-10 = 20% chance the album is from one year ago
+        //50-30 = 20% chance the album is from two years ago
+        //70-50 = 20% chance the album is from three years ago
+        //100-70 = 30% chance the album is older than 4 years
+        $distribution = [10,30,50,70];
+        return $this->randomDistributedAlbum($distribution);
+    }
+
+    /**
+     * @throws RandomException
+     */
     public function randomAlbum(): JsonResponse
+    {
+        //30% chance the photo is from the last year
+        //55-30 = 25% chance the album is from one year ago
+        //70-55 = 15% chance the album is from two years ago
+        //80-70 = 10% chance the album is from three years ago
+        //100-80 = 20% chance the album is older than 4 years
+        $distribution = [30,55,70,80];
+        return $this->randomDistributedAlbum($distribution);
+    }
+    /**
+     * @param array{0: int, 1: int, 2: int, 3: int} $numbers
+     * /
+     * @throws RandomException
+     * /**
+     */
+    private function randomDistributedAlbum(array $numbers): JsonResponse
     {
         $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
             $query->where('private', false);
@@ -96,15 +126,15 @@ class ApiController extends Controller
         }])->without('thumbPhoto');
 
         $random = random_int(1, 100);
-        if ($random <= 30) { // 30% chance the album is from within the last year
+        if ($random <= $numbers[0]) { // $numbers[0]% chance the album is from within the last year
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
-        } elseif ($random <= 55) { // 25% chance the album is from one year ago
+        } elseif ($random <= $numbers[1]) { // $numbers[1] - $numbers[0]% chance the album is from one year ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
-        } elseif ($random <= 70) {// 15% chance the album is from two years ago
+        } elseif ($random <= $numbers[2]) {// $numbers[2] - $numbers[1]% chance the album is from two years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
-        } elseif ($random <= 80) {// 10% chance the album is from three years ago
+        } elseif ($random <= $numbers[3]) {// $numbers[3] - $numbers[2]% chance the album is from three years ago
             $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
-        } else {// 20% chance the album is older than 4 years
+        } else {// 100 - $numbers[3]% chance the album is older than 4 years
             $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
         }
 
