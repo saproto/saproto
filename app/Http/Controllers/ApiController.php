@@ -89,38 +89,41 @@ class ApiController extends Controller
      */
     public function randomAlbum()
     {
-        //30% chance the normal photo album is from the last year
-        //55-30 = 25% chance the album is from one year ago
-        //70-55 = 15% chance the album is from two years ago
-        //80-70 = 10% chance the album is from three years ago
-        //100-80 = 20% chance the album is older than 4 years
-        $normal_distribution = [30,55,70,80];
+        // 30% chance the normal photo album is from the last year
+        // 55-30 = 25% chance the album is from one year ago
+        // 70-55 = 15% chance the album is from two years ago
+        // 80-70 = 10% chance the album is from three years ago
+        // 100-80 = 20% chance the album is older than 4 years
+        $normal_distribution = [30, 55, 70, 80];
 
-        //10% chance the old photo is from the last year
-        //30-10 = 20% chance the album is from one year ago
-        //50-30 = 20% chance the album is from two years ago
-        //70-50 = 20% chance the album is from three years ago
-        //100-70 = 30% chance the album is older than 4 years
-        $old_distribution = [10,30,50,70];
+        // 10% chance the old photo is from the last year
+        // 30-10 = 20% chance the album is from one year ago
+        // 50-30 = 20% chance the album is from two years ago
+        // 70-50 = 20% chance the album is from three years ago
+        // 100-70 = 30% chance the album is older than 4 years
+        $old_distribution = [10, 30, 50, 70];
 
         $photosData = $this->randomDistributedAlbum($normal_distribution);
         $oldPhotosData = $this->randomDistributedAlbum($old_distribution);
         if (isset($photosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "photos": ' . $photosData['error']], 500);
+            return response()->json(['error' => 'Failed to retrieve "photos": '.$photosData['error']], 500);
         }
+
         if (isset($oldPhotosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "old_photos": ' . $oldPhotosData['error']], 500);
+            return response()->json(['error' => 'Failed to retrieve "old_photos": '.$oldPhotosData['error']], 500);
         }
+
         return response()->json([
             'photos' => $photosData,
             'old_photos' => $oldPhotosData,
         ]);
     }
+
     /**
-     * @param array{0: int, 1: int, 2: int, 3: int} $numbers
-     * /
+     * @param  array{0: int, 1: int, 2: int, 3: int}  $numbers
+     *                                                          /
      * @throws RandomException
-     * /**
+     *                         /**
      */
     private function randomDistributedAlbum(array $numbers): array
     {
@@ -154,6 +157,7 @@ class ApiController extends Controller
         if (! $album) {
             return ['error' => 'No public photo albums found.'];
         }
+
         return [
             'photos' => $album->items->pluck('url'),
             'album_name' => $album->name,
