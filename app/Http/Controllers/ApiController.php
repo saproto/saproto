@@ -121,10 +121,10 @@ class ApiController extends Controller
     }
 
     /**
-     * @param array{0: int, 1: int, 2: int, 3: int} $numbers
+     * @param  array{0: int, 1: int, 2: int, 3: int}  $numbers
      * @return array{photos: Collection<(int|string), mixed>, album_name: string, date_taken: non-falsy-string}|array{error: string}
-     * @throws RandomException
      *
+     * @throws RandomException
      */
     private function randomDistributedAlbum(array $numbers): array
     {
