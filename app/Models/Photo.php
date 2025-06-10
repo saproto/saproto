@@ -148,11 +148,6 @@ class Photo extends Model
         return 1;
     }
 
-    public function getLikes(): int
-    {
-        return $this->likes()->count();
-    }
-
     public function thumbnail(): string
     {
         return $this->file->generateImagePath(800, 300);

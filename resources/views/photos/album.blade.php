@@ -57,7 +57,7 @@
                                 'img' => $photo->thumbnail(),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
-                                    $photo->getLikes(),
+                                    $photo->likes_count,
                                     $photo->private
                                         ? '<i class="fas fa-eye-slash ms-4 me-2 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This photo is only visible to members."></i>'
                                         : null,
