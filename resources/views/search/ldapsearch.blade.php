@@ -78,7 +78,7 @@
                                                             {{ $result['department'] ?? null }}
                                                         @else
                                                             Functional Account
-                                                            {{ $result['department'] ? '(' . $result->department . ')' : null }}
+                                                            {{ $result['department'] ? '(' . $result['department'] . ')' : null }}
                                                         @endif
                                                     </em>
 
