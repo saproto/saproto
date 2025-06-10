@@ -25,7 +25,7 @@
             />
 
             <input
-                id="password2"
+                id="password_confirmation"
                 type="password"
                 name="password_confirmation"
                 class="form-control mb-3"
