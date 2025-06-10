@@ -40,6 +40,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], static function () {
         Route::get('random_album', ['as' => 'randomAlbum', 'uses' => 'ApiController@randomAlbum']);
     });
+
     Route::group(['prefix' => 'screen', 'as' => 'screen::', 'middleware' => 'api'], static function () {
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);

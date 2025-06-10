@@ -26,6 +26,7 @@ class PhotoController extends Controller
     {
         $photos = $album->items()
             ->orderBy('date_taken', 'desc')
+            ->withCount('likes')
             ->paginate(24);
 
         return view('photos.album', [

@@ -59,6 +59,6 @@ class PasswordEntry extends Model
 
     public function age(): int
     {
-        return (int) Carbon::createFromTimestamp($this->updated_at, date_default_timezone_get())->diffInMonths(Carbon::now(), true);
+        return (int) $this->updated_at->diffInMonths(Carbon::now(), true);
     }
 }
