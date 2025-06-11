@@ -148,11 +148,11 @@ class Event extends Model
         return Hashids::connection('event')->encode($id);
     }
 
-    public static function getIdFromPublicId(string $public_id): int
+    public static function getIdFromPublicId(string $public_id): ?int
     {
         $id = Hashids::connection('event')->decode($public_id);
 
-        return count($id) > 0 ? $id[0] : 0;
+        return count($id) > 0 ? (int) $id[0] : null;
     }
 
     /**

@@ -283,7 +283,7 @@ class TicketController extends Controller
      * @throws Html2PdfException
      * @throws BindingResolutionException
      */
-    public function download(int $id): Response| RedirectResponse
+    public function download(int $id): Response|RedirectResponse
     {
         $ticket = TicketPurchase::query()->findOrFail($id);
         if ($ticket->user->id != Auth::id()) {
@@ -294,15 +294,16 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        $html2pdf  = new PDF('P', 'A4', 'en', true, 'UTF-8');
-        $html2pdf ->writeHTML(view('tickets.download', ['ticket' => $ticket]));
+        $html2pdf = new PDF('P', 'A4', 'en', true, 'UTF-8');
+        $html2pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));
 
         $filename = sprintf('saproto-ticket-%s.pdf', $ticket->id);
         $pdf = $html2pdf->output($filename, 'S');
+
         return response()->make($pdf, 200, [
             'Content-Type' => 'application/pdf',
             'Content-Length' => strlen($pdf),
-            'Content-Disposition' => sprintf('inline; filename="%s"', $filename)
+            'Content-Disposition' => sprintf('inline; filename="%s"', $filename),
         ]);
     }
 
