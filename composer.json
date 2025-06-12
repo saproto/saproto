@@ -41,7 +41,7 @@
     "type": "project",
     "minimum-stability": "stable",
     "require": {
-        "abcaeffchen/sephpa": "^2.1.2",
+        "abcaeffchen/sephpa": "^3.0.2",
         "alaouy/youtube": "2.2.5",
         "ext-calendar": "*",
         "ext-curl": "*",
@@ -88,8 +88,6 @@
         "itsgoingd/clockwork": "^5.1",
         "laravel/tinker": "^2.6",
         "larastan/larastan": "^3.4",
-        "symfony/css-selector": "~4.0",
-        "symfony/dom-crawler": "~4.0",
         "laravel/sail": "^1.16",
         "laravel/pint": "^1.10",
         "driftingly/rector-laravel": "^2.0.2",
