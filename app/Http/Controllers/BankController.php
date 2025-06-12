@@ -42,13 +42,13 @@ class BankController extends Controller
     {
         $user = Auth::user();
 
-        if (! SepaUtilities::checkIBAN($request->input('iban'))) {
+        if (in_array(SepaUtilities::checkIBAN($request->input('iban')), ['', '0'], true) || SepaUtilities::checkIBAN($request->input('iban')) === false) {
             Session::flash('flash_message', 'Your IBAN is not valid.');
 
             return Redirect::back();
         }
 
-        if (! SepaUtilities::checkBIC($request->input('bic'))) {
+        if (in_array(SepaUtilities::checkBIC($request->input('bic')), ['', '0'], true) || SepaUtilities::checkBIC($request->input('bic')) === false) {
             Session::flash('flash_message', 'Your BIC is not valid.');
 
             return Redirect::back();
