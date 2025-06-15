@@ -42,7 +42,7 @@
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        {{ route('page::show', '') }}/
+                                        {{ str_replace('/_', '', route('page::show', ['slug' => '_'])) }}/
                                     </span>
                                 </div>
                                 <input
