@@ -143,7 +143,7 @@
                             @else
                                 Not linked
                                 <a
-                                    class="badge rounded-pill float-end bg-primary"
+                                    class="badge rounded-pill bg-primary float-end"
                                     href="{{ route('user::surf::link') }}"
                                 >
                                     <i class="fas fa-user-plus fa-fw"></i>
@@ -161,14 +161,14 @@
 
                                 @if ($user->is_member)
                                     <a
-                                        class="badge rounded-pill float-end bg-primary"
+                                        class="badge rounded-pill bg-primary float-end"
                                         href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
                                     </a>
                                 @else
                                     <a
-                                        class="badge rounded-pill float-end ms-2 bg-primary"
+                                        class="badge rounded-pill bg-primary float-end ms-2"
                                         href="{{ route('user::address::edit') }}"
                                     >
                                         <i class="far fa-edit fa-fw"></i>
@@ -198,7 +198,7 @@
                                         Visible to the board
                                     @endif
                                     <a
-                                        class="badge rounded-pill float-end bg-primary"
+                                        class="badge rounded-pill bg-primary float-end"
                                         href="{{ route('user::address::togglehidden') }}"
                                     >
                                         @if ($user->address_visible)
@@ -277,7 +277,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text d-block mb-2 text-muted"
+                                    class="form-text d-block text-muted mb-2"
                                 >
                                     This feature was requested by members who
                                     want to be aware of how much they spend.
@@ -292,7 +292,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text d-block mb-2 text-muted"
+                                    class="form-text d-block text-muted mb-2"
                                 >
                                     This feature was requested by members who
                                     want to be aware of how much calories they
@@ -319,7 +319,7 @@
                                     if you need that.
                                 </small>
                                 <small
-                                    class="form-text d-block mb-2 text-muted"
+                                    class="form-text d-block text-muted mb-2"
                                 >
                                     This feature was requested by members who
                                     wanted some help controlling their personal
@@ -335,7 +335,7 @@
                                     'label' => 'Keep my personal orderline history.',
                                 ]
                             )
-                            <small class="form-text d-block mb-2 text-muted">
+                            <small class="form-text d-block text-muted mb-2">
                                 We are required to keep financial information
                                 for 7 years. If you disable this setting, your
                                 purchases will be anonymised after this time.
@@ -396,7 +396,7 @@
                                     ]
                                 )
                                 <small
-                                    class="form-text d-block mb-2 text-muted"
+                                    class="form-text d-block text-muted mb-2"
                                 >
                                     Achievements you obtain may reveal some
                                     personal details.

@@ -26,7 +26,7 @@
 
         @if ($outstandingAmount > 0)
             <div class="border-bottom-0">
-                <span class="w-100 d-inline-flex justify-content-between">
+                <span class="d-inline-flex justify-content-between w-100">
                     <span
                         class="cursor-pointer"
                         data-bs-toggle="collapse"

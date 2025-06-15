@@ -48,7 +48,7 @@
                 </a>
             </div>
 
-            <div class="col-3 d-none d-lg-block text-end">
+            <div class="d-none d-lg-block col-3 text-end">
                 <br />
                 <a
                     class="text-white"
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <p class="mb-2 mt-3 text-center">
+        <p class="mt-3 mb-2 text-center">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">

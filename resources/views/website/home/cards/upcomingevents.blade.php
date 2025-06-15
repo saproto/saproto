@@ -15,7 +15,7 @@
                 @endif
             @endforeach
         @else
-            <p class="card-text mb-4 mt-2 text-center">
+            <p class="card-text mt-2 mb-4 text-center">
                 We have no events coming up this month, sorry! 😟
             </p>
         @endif

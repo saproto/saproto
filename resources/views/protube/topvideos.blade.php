@@ -20,7 +20,7 @@
         .
 
         <i
-            class="fab fa-spotify fa-fw ms-3 text-primary"
+            class="fab fa-spotify fa-fw text-primary ms-3"
             aria-hidden="true"
         ></i>
         <a

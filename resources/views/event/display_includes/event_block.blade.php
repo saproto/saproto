@@ -118,7 +118,7 @@
             {{-- Category --}}
             @if ($event->category)
                 <span
-                    class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis float-end mb-1 me-1 px-3"
+                    class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis float-end me-1 mb-1 px-3"
                 >
                     <i
                         class="{{ $event->category->icon }} fa-fw"

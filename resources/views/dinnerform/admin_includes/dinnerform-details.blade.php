@@ -147,7 +147,7 @@
                     </div>
 
                     <!-- Homepage -->
-                    <div class="col-md-12 mb-3 mt-5">
+                    <div class="col-md-12 mt-5 mb-3">
                         @include(
                             'components.forms.checkbox',
                             [

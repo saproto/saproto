@@ -77,7 +77,7 @@
                             width="500px"
                             height="300px"
                             src="{{ $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500, 300) : null }}"
-                            class="img-fluid img-thumbnail w-50 d-block mx-auto mb-3"
+                            class="img-fluid img-thumbnail d-block mx-auto mb-3 w-50"
                             alt="Featured image"
                         />
                     @endif
@@ -93,7 +93,7 @@
                     </a>
                 </div>
             @else
-                <p class="card-text mb-4 ms-4 mt-4 text-left">
+                <p class="card-text ms-4 mt-4 mb-4 text-left">
                     Weekly update is coming soon...
                 </p>
             @endif
@@ -157,7 +157,7 @@
                     </div>
                 @endforeach
             @else
-                <p class="card-text mb-4 ms-1 mt-3 text-left">
+                <p class="card-text ms-1 mt-3 mb-4 text-left">
                     No recent news. It's
                     <a
                         href="https://en.wikipedia.org/wiki/Silly_season"

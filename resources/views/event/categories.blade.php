@@ -67,9 +67,9 @@
                         @php($categories = \App\Models\EventCategory::all())
                         @if (count($categories) > 0)
                             @foreach ($categories as $category)
-                                <div class="col-5 row m-1">
+                                <div class="row col-5 m-1">
                                     <div
-                                        class="w-75 rounded-start ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }} my-2 overflow-hidden px-4 py-2"
+                                        class="rounded-start ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }} my-2 w-75 overflow-hidden px-4 py-2"
                                     >
                                         <i
                                             class="{{ $category->icon }} me-2"
@@ -77,13 +77,13 @@
                                         {{ $category->name }}
                                     </div>
                                     <div
-                                        class="w-25 rounded-end my-2 bg-white px-2 py-2"
+                                        class="rounded-end my-2 w-25 bg-white px-2 py-2"
                                     >
                                         <a
                                             href="{{ route('event::categories.edit', ['category' => $category]) }}"
                                         >
                                             <i
-                                                class="fas fa-edit me-2 ms-1 mt-1"
+                                                class="fas fa-edit ms-1 me-2 mt-1"
                                             ></i>
                                         </a>
 
@@ -105,7 +105,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="mb-0 text-center text-muted">
+                            <p class="text-muted mb-0 text-center">
                                 There are no event categories yet.
                             </p>
                         @endif

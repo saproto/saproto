@@ -139,14 +139,14 @@
 
 @section('body')
     @if (! $activeDrink)
-        <div class="d-flex justify-content-center w-100 h-100">
+        <div class="d-flex justify-content-center h-100 w-100">
             <div class="alert alert-danger align-self-center">
                 No active drink! Create one in the admin panel and refresh the
                 page!
             </div>
         </div>
     @elseif (! count($prices))
-        <div class="d-flex justify-content-center w-100 h-100">
+        <div class="d-flex justify-content-center h-100 w-100">
             <div class="alert alert-danger align-self-center">
                 No prices found for this drink! Add some in the admin panel and
                 refresh the page!
@@ -191,7 +191,7 @@
         <div
             id=" swipers-container
                     "
-            class="h-100 d-flex flex-column justify-content-end z-index-2 overflow-hidden"
+            class="d-flex flex-column justify-content-end z-index-2 h-100 overflow-hidden"
         >
             <div class="wallstreet-body mt-2 px-4 py-4">
                 <div>
@@ -199,7 +199,7 @@
                         <div>WALLSTREET</div>
                         <div class="fs-1">Drink</div>
                     </div>
-                    <div class="wallstreet-info px-4 pb-4 pt-2">
+                    <div class="wallstreet-info px-4 pt-2 pb-4">
                         <div class="wallstreet-info-title fs-2 mb-4">
                             TIPcie Consolidated, Inc.
                         </div>
@@ -246,7 +246,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="wallstreet-right px-4 pb-4 pt-2">
+                <div class="wallstreet-right px-4 pt-2 pb-4">
                     <div class="wallstreet-graph-title fs-3 mb-3">
                         Current stonks
                     </div>

@@ -38,7 +38,7 @@
                                 {{ number_format($orderline->total_price, 2, '.', '') }}
                             </td>
                             <td>
-                                <span class="me-2 text-muted">
+                                <span class="text-muted me-2">
                                     {{ $orderline->units }}x
                                 </span>
                             </td>

@@ -57,10 +57,10 @@
 
             <div
                 id="fishcam"
-                class="card d-none h-100 mb-3 w-auto bg-transparent"
+                class="card d-none mb-3 h-100 w-auto bg-transparent"
             >
                 <img
-                    class="d-none h-100 ml-auto"
+                    class="d-none ml-auto h-100"
                     id="fishcam-src"
                     style="object-fit: contain"
                 />

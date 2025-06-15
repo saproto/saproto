@@ -46,7 +46,7 @@
             </table>
         @else
             <hr />
-            <p class="pt-3 text-center text-muted">There are no entries yet.</p>
+            <p class="text-muted pt-3 text-center">There are no entries yet.</p>
         @endif
 
         <div class="p-3">

@@ -11,7 +11,7 @@ const props = defineProps<{
     <span
         :class="
             cn(
-                'ml-auto text-xs tracking-widest text-muted-foreground',
+                'text-muted-foreground ml-auto text-xs tracking-widest',
                 props.class
             )
         "

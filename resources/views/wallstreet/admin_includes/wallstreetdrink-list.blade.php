@@ -30,7 +30,7 @@
 
                 <tbody>
                     @foreach ($allDrinks as $wallstreetDrink)
-                        <tr class="text-nowrap align-middle">
+                        <tr class="align-middle text-nowrap">
                             <td class="text-muted">
                                 #{{ $wallstreetDrink->id }}
                             </td>
@@ -99,7 +99,7 @@
             </table>
         </div>
     @else
-        <div class="py-3 text-center text-muted">
+        <div class="text-muted py-3 text-center">
             There are no wallstreet drinks yet!
         </div>
     @endif

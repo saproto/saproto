@@ -1,6 +1,6 @@
 @foreach ($methods as $index => $method)
     <div
-        class="col-lg-3 col-5 h-md-75 btn btn-outline-info mx-2 my-2 rounded"
+        class="col-lg-3 h-md-75 btn btn-outline-info col-5 mx-2 my-2 rounded"
         style="position: relative; height: 145px"
     >
         <input

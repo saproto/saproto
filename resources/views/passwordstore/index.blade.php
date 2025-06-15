@@ -13,7 +13,7 @@
 
 @section('container')
     <div class="row justify-content-center">
-        <div class="col-12 col-sm-2 mb-3">
+        <div class="col-sm-2 col-12 mb-3">
             <a
                 href="{{ route('passwordstore::create', ['type' => 'password']) }}"
                 class="btn btn-success btn-block mb-3"
@@ -28,7 +28,7 @@
             </a>
         </div>
 
-        <div class="col-12 col-sm-8">
+        <div class="col-sm-8 col-12">
             <div class="card mb-3">
                 <div class="card-header bg-dark mb-1 text-white">
                     Password store

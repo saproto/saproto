@@ -12,7 +12,7 @@
                         <th class="text-center">Status</th>
                         <th>Start</th>
                         <th>Total</th>
-                        <th class="text-nowrap text-center">Ordered by</th>
+                        <th class="text-center text-nowrap">Ordered by</th>
                         <th class="text-center">Admin</th>
                         <th class="text-center">Controls</th>
                     </tr>
@@ -20,7 +20,7 @@
 
                 <tbody>
                     @foreach ($dinnerformList as $dinnerform)
-                        <tr class="text-nowrap align-middle">
+                        <tr class="align-middle text-nowrap">
                             <td class="text-muted">#{{ $dinnerform->id }}</td>
                             <td>
                                 <a
@@ -124,7 +124,7 @@
             </table>
         </div>
     @else
-        <div class="py-3 text-center text-muted">There are no dinnerforms!</div>
+        <div class="text-muted py-3 text-center">There are no dinnerforms!</div>
     @endif
 
     <div class="card-footer pb-0">{{ $dinnerformList->links() }}</div>
