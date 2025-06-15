@@ -95,9 +95,9 @@
                     <div class="row justify-content-center">
                         @if (count($categories) > 0)
                             @foreach ($categories as $category)
-                                <div class="col-5 row w-100 m-1">
+                                <div class="row col-5 m-1 w-100">
                                     <div
-                                        class="w-75 rounded-start ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }} my-2 overflow-hidden px-4 py-2"
+                                        class="rounded-start ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }} my-2 w-75 overflow-hidden px-4 py-2"
                                     >
                                         <a
                                             href="{{ route('feedback::index', ['category' => $category->url]) }}"
@@ -108,13 +108,13 @@
                                         {{ $category->reviewer ? ' | Reviewer:' . $category->reviewer->calling_name : '' }}
                                     </div>
                                     <div
-                                        class="w-25 rounded-end my-2 bg-white px-2 py-2"
+                                        class="rounded-end my-2 w-25 bg-white px-2 py-2"
                                     >
                                         <a
                                             href="{{ route('feedback::category::admin', ['id' => $category]) }}"
                                         >
                                             <i
-                                                class="fas fa-edit float-end me-2 ms-1 mt-1"
+                                                class="fas fa-edit float-end ms-1 me-2 mt-1"
                                             ></i>
                                         </a>
                                         @include(
@@ -134,7 +134,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <p class="mb-0 text-center text-muted">
+                            <p class="text-muted mb-0 text-center">
                                 There are no feedback categories yet.
                             </p>
                         @endif

@@ -7,7 +7,7 @@
         @if ($user->member->customOmnomcomSound)
             <div class="card-body">
                 <div
-                    class="d-inline-flex justify-content-around w-100 mb-2 flex-wrap"
+                    class="d-inline-flex justify-content-around mb-2 w-100 flex-wrap"
                 >
                     <div class="d-flex align-items-center">
                         {{ $user->calling_name }}'s custom sound:

@@ -53,7 +53,7 @@
                                         class="col-lg-4 col-md-6 col-sm-12 mb-3"
                                     >
                                         <div
-                                            class="card h-100 leftborder leftborder-info"
+                                            class="card leftborder leftborder-info h-100"
                                         >
                                             <div class="card-body">
                                                 <p class="card-text">

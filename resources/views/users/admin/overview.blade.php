@@ -141,13 +141,13 @@
                                                     class="text-decoration-none"
                                                 >
                                                     <i
-                                                        class="fas fa-user-circle fa-fw me-1 text-primary"
+                                                        class="fas fa-user-circle fa-fw text-primary me-1"
                                                         aria-hidden="true"
                                                     ></i>
                                                 </a>
                                             @else
                                                 <i
-                                                    class="fas fa-user-circle fa-fw me-1 text-muted"
+                                                    class="fas fa-user-circle fa-fw text-muted me-1"
                                                     aria-hidden="true"
                                                 ></i>
                                             @endif

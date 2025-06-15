@@ -6,7 +6,7 @@
 
 @section('container')
     <div class="row justify-content-center">
-        <div id="leaderboard-accordion" class="col-10 col-md-6">
+        <div id="leaderboard-accordion" class="col-md-6 col-10">
             @foreach ($leaderboards as $leaderboard)
                 <div class="card mb-2">
                     <div
@@ -71,7 +71,7 @@
                             </table>
                         @else
                             <hr />
-                            <p class="pt-3 text-center text-muted">
+                            <p class="text-muted pt-3 text-center">
                                 There are no entries yet.
                             </p>
                         @endif

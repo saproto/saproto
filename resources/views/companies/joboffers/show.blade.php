@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <h3>{{ $joboffer->title }}</h3>
 
-                    <h6 class="card-subtitle mb-3 text-muted">
+                    <h6 class="card-subtitle text-muted mb-3">
                         Posted on
                         {{ date_format($joboffer->created_at, 'd-m-Y') }} for
                         <a

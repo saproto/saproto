@@ -10,7 +10,7 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-5 d-flex align-items-center">
+                <div class="d-flex align-items-center col-5">
                     <h5 class="text-center">
                         This is you
                         <i class="far fa-hand-point-right ms-2"></i>

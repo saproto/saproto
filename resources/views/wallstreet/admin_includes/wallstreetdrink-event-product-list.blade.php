@@ -43,7 +43,7 @@
             </div>
         </div>
     @else
-        <div class="py-3 text-center text-muted">
+        <div class="text-muted py-3 text-center">
             There are products associated with this Event yet!
         </div>
     @endif

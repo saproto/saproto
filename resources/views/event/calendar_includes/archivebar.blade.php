@@ -1,5 +1,5 @@
 <div id="archive-bar" class="row justify-content-center px-2">
-    <div class="col-12 col-sm-auto mb-2 overflow-auto text-center">
+    <div class="col-sm-auto col-12 mb-2 overflow-auto text-center">
         <div class="btn-group mb-1">
             @if (Route::currentRouteName() == 'event::index')
                 <span class="rounded-start bg-primary px-3 py-2 text-white">
@@ -26,7 +26,7 @@
             @endforeach
         </div>
     </div>
-    <div class="col-12 col-sm-auto mb-2 text-center">
+    <div class="col-sm-auto col-12 mb-2 text-center">
         <div class="btn-group">
             <button
                 type="button"
@@ -191,7 +191,7 @@
 
                         <div class="row">
                             <div
-                                class="col-6 col-sm-4 d-flex {{ Auth::user()->getCalendarAlarm() ? '' : 'offset-sm-2' }}"
+                                class="col-sm-4 d-flex {{ Auth::user()->getCalendarAlarm() ? '' : 'offset-sm-2' }} col-6"
                             >
                                 <input
                                     id="hours"
@@ -207,7 +207,7 @@
                                     hours
                                 </label>
                             </div>
-                            <div class="col-6 col-sm-4">
+                            <div class="col-sm-4 col-6">
                                 <button
                                     class="btn btn-success btn-block"
                                     type="submit"

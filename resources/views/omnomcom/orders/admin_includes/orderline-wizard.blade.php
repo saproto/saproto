@@ -92,7 +92,7 @@
                             <div class="col-lg-2">
                                 <button
                                     type="button"
-                                    class="btn btn-danger w-100 orderline-delete-row"
+                                    class="btn btn-danger orderline-delete-row w-100"
                                     disabled
                                 >
                                     <i class="fas fa-minus-circle"></i>

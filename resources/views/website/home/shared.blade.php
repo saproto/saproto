@@ -60,7 +60,7 @@
 
             @if (count($companies) > 0)
                 <div class="card mb-3">
-                    <div class="card-body position-relative pb-0 pt-1">
+                    <div class="card-body position-relative pt-1 pb-0">
                         <div class="swiper row mb-1" style="height: 70px">
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)

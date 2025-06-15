@@ -95,11 +95,11 @@ if (customFileInputList.length) {
 }
 
 // Enable Swiper with default settings
-import Swiper from 'swiper';
-import { Autoplay, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/navigation';
+import Swiper from 'swiper'
+import { Autoplay, Navigation } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/autoplay'
+import 'swiper/css/navigation'
 
 if (document.querySelectorAll('.swiper').length) {
     window.swiper = new Swiper('.swiper', {
@@ -119,7 +119,7 @@ if (document.querySelectorAll('.swiper').length) {
                 spaceBetween: 50,
             },
         },
-    });
+    })
 }
 
 // Enable EasyMDE markdown fields

@@ -18,7 +18,7 @@
 
                 <tbody>
                     @foreach ($allEvents as $wallstreetEvent)
-                        <tr class="text-nowrap align-middle">
+                        <tr class="align-middle text-nowrap">
                             <td class="text-muted">
                                 #{{ $wallstreetEvent->id }}
                             </td>
@@ -63,7 +63,7 @@
             </table>
         </div>
     @else
-        <div class="py-3 text-center text-muted">
+        <div class="text-muted py-3 text-center">
             There are no wallstreet events yet!
         </div>
     @endif

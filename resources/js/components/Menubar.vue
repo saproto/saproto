@@ -60,7 +60,7 @@ const { can } = useCan()
 
     <!-- Menubar -->
     <Menubar
-        class="sticky top-0 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-3 shadow dark:border-gray-700 dark:bg-gray-900 md:justify-start"
+        class="sticky top-0 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-3 shadow md:justify-start dark:border-gray-700 dark:bg-gray-900"
     >
         <!-- Show full menu on desktop -->
         <GridForm v-if="isDesktop" />

@@ -3,8 +3,8 @@
 @section('body')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-lg-5 text-center">
-                <div class="card mb-3 mt-5">
+            <div class="col-lg-5 col-12 text-center">
+                <div class="card mt-5 mb-3">
                     <div class="card-header bg-dark text-center text-white">
                         S.A. Proto |
                         @yield('page-title')
@@ -16,7 +16,7 @@
 
                     <a
                         href="/"
-                        class="card-footer text-decoration-none text-center text-muted"
+                        class="card-footer text-decoration-none text-muted text-center"
                     >
                         Go back to homepage.
                     </a>
@@ -25,7 +25,7 @@
                 <img
                     src="{{ asset('images/logo/regular.png') }}"
                     width="60%"
-                    class="mb-3 mt-5"
+                    class="mt-5 mb-3"
                     alt="Proto logo"
                 />
             </div>

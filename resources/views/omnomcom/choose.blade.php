@@ -9,7 +9,7 @@
         <div
             class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12 mx-3 text-center"
         >
-            <div class="card mb-3 mt-5">
+            <div class="card mt-5 mb-3">
                 <div class="card-header bg-dark text-center text-white">
                     @yield('page-title')
                 </div>
@@ -27,7 +27,7 @@
 
                 <small
                     href="/"
-                    class="card-footer text-decoration-none text-center text-muted"
+                    class="card-footer text-decoration-none text-muted text-center"
                 >
                     @if (Auth::check())
                         Logged in as
