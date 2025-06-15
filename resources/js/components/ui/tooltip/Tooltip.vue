@@ -9,7 +9,10 @@ import {
 const props = defineProps<TooltipRootProps>()
 const emits = defineEmits<TooltipRootEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits) as Record<string, any> as Record<string, any>
+const forwarded = useForwardPropsEmits(props, emits) as Record<
+    string,
+    any
+> as Record<string, any>
 </script>
 
 <template>
