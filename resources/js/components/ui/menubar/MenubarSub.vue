@@ -9,11 +9,11 @@ interface MenubarSubRootProps {
 const props = defineProps<MenubarSubRootProps>()
 const emits = defineEmits<MenubarSubEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits)
+const forwarded = useForwardPropsEmits(props, emits) as Record<string, any>
 </script>
 
 <template>
-    <MenubarSub v-bind="forwarded">
+    <MenubarSub data-slot="menubar-sub" v-bind="forwarded">
         <slot />
     </MenubarSub>
 </template>

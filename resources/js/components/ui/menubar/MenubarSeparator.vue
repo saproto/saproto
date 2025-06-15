@@ -19,7 +19,8 @@ const forwardedProps = useForwardProps(delegatedProps)
 
 <template>
     <MenubarSeparator
-        :class="cn('bg-muted -mx-1 my-1 h-px', props.class)"
+        data-slot="menubar-separator"
+        :class="cn('bg-border -mx-1 my-1 h-px', props.class)"
         v-bind="forwardedProps"
     />
 </template>

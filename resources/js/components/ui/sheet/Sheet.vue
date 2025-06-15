@@ -9,11 +9,11 @@ import {
 const props = defineProps<DialogRootProps>()
 const emits = defineEmits<DialogRootEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits)
+const forwarded = useForwardPropsEmits(props, emits) as Record<string, any>
 </script>
 
 <template>
-    <DialogRoot v-bind="forwarded">
+    <DialogRoot data-slot="sheet" v-bind="forwarded">
         <slot />
     </DialogRoot>
 </template>
