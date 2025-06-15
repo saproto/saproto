@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
-
+[data-theme='light'],
 :root {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -39,7 +39,7 @@
     --sidebar-ring: oklch(0.708 0 0);
 }
 
-.dark {
+[data-theme='dark'] {
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.145 0 0);
@@ -72,6 +72,57 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* --- Night Theme --- */
+[data-theme='night'] {
+    /* Define your custom properties using your Bootstrap colors */
+    --background: #05103a; /* $blue-dark */
+    --foreground: #fff; /* $body-color */
+    --card: #1e2f62; /* $blue-light */
+    --card-foreground: #f1f1f1; /* $card-color */
+    --popover: #1e2f62; /* $popover-bg (which is $blue-light) */
+    --popover-foreground: #fff; /* Assuming white text on popover */
+    --primary: #597c13; /* $brand-primary */
+    --primary-foreground: #fff; /* Assuming white text for primary buttons/elements */
+    --secondary: #0c1f66; /* $blue-medium ($dark) */
+    --secondary-foreground: #fff; /* Assuming white text for secondary elements */
+    --muted: #0c1f66; /* Using $blue-medium for muted backgrounds */
+    --muted-foreground: rgba(
+        255,
+        255,
+        255,
+        0.75
+    ); /* Similar to $navbar-dark-color */
+    --accent: #028090; /* $info as an accent color */
+    --accent-foreground: #fff; /* White text on accent */
+    --destructive: #ea5d0b; /* $warning for destructive (orange) */
+    --destructive-foreground: #fff; /* White text on destructive */
+    --border: #05103a; /* $blue-dark for borders */
+    --input: #05103a; /* $input-group-addon-bg (which is $blue-dark) */
+    --ring: #028090; /* Using $info for ring color */
+
+    /* Chart colors - You'll need to decide how to map these from your old theme,
+       or pick some appropriate shades of blue/other colors.
+       I'm using some of your blues and the $info color as examples. */
+    --chart-1: #1e2f62; /* $blue-light */
+    --chart-2: #0c1f66; /* $blue-medium */
+    --chart-3: #05103a; /* $blue-dark */
+    --chart-4: #028090; /* $info */
+    --chart-5: #597c13; /* $brand-primary */
+
+    /* Radius (you defined this in :root already, keeping it consistent) */
+    --radius: 0.625rem;
+
+    /* Sidebar colors based on your blue palette */
+    --sidebar: #0c1f66; /* $blue-medium for sidebar background */
+    --sidebar-foreground: #fff; /* White text */
+    --sidebar-primary: #597c13; /* $brand-primary for primary elements in sidebar */
+    --sidebar-primary-foreground: #fff; /* White text */
+    --sidebar-accent: #028090; /* $info for accent elements in sidebar */
+    --sidebar-accent-foreground: #fff; /* White text */
+    --sidebar-border: #05103a; /* $blue-dark for sidebar borders */
+    --sidebar-ring: #028090; /* $info for sidebar ring */
 }
 
 @theme inline {
