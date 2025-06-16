@@ -88,6 +88,7 @@ class ParticipationController extends Controller
 
             $data['committees_activities_id'] = $helping->id;
         } else {
+            abort_unless($user->is_member, 403, $user->name.' is not a member of the association and therefore can not be subscribed for '.$event->title.'.');
             abort_if($event->activity->isParticipating($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
         }
 
