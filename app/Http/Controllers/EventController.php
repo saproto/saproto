@@ -528,7 +528,7 @@ CALSCALE:GREGORIAN
             'X-WR-CALNAME:'.$calendar_name."\r\n".
             "X-WR-CALDESC:All of Proto's events, straight from the website!"."\r\n".
             'BEGIN:VTIMEZONE'."\r\n".
-            'TZID:Central European Standard Time'."\r\n".
+            'TZID:'.date_default_timezone_get().''."\r\n".
             'BEGIN:STANDARD'."\r\n".
             'DTSTART:20161002T030000'."\r\n".
             'RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10'."\r\n".
@@ -560,7 +560,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user)|| $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user) )) {
                 continue;
             }
 
