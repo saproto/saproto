@@ -359,7 +359,7 @@ class EmailController extends Controller
                 $email->to_event = true;
                 $email->to_backup = $toBackup;
                 $email->lists()->sync([]);
-                if ($events !== []) {
+                if ($events !== null && $events !== []) {
                     $email->events()->sync($events);
                 }
 

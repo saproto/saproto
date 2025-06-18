@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -273,6 +274,14 @@ class Event extends Model
     public function category(): BelongsTo
     {
         return $this->BelongsTo(EventCategory::class);
+    }
+
+    /**
+     * @return BelongsToMany<Email, $this>
+     */
+    public function emails(): BelongsToMany
+    {
+        return $this->belongsToMany(Email::class, 'emails_events', 'event_id', 'email_id');
     }
 
     /**

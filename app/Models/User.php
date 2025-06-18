@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
@@ -294,6 +295,28 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
+    }
+
+    /**
+     * @return BelongsToMany<Activity, $this, Pivot>
+     */
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', false)
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Activity, $this, Pivot>
+     */
+    public function backupActivities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', true)
+            ->withTimestamps();
     }
 
     /**
