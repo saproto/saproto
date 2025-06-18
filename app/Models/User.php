@@ -296,6 +296,15 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->groups()->where('is_society', true);
     }
 
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', false)
+            ->withTimestamps();
+    }
+
     /**
      * @return HasOne<Bank, $this>
      */

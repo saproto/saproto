@@ -167,18 +167,15 @@ class Email extends Model
             })->orderBy('name')->get();
         }
 
-        if ($this->to_event) {
-            $user_ids = [];
-            foreach ($this->events as $event) {
-                if ($event != null) {
-                    $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if ($this->to_backup && $event->activity) {
-                        $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
-                    }
-                }
-            }
 
-            return User::query()->whereIn('id', $user_ids)->orderBy('name')->get();
+        if ($this->to_event) {
+            return User::whereHas('activities', function($q){
+                $q->whereHas('event', function ($q){
+                    $q->whereHas('emails', function ($q){
+                        $q->where('emails.id', $this->id);
+                    });
+                });
+            })->orderBy('name')->get();
         }
 
         return collect();
