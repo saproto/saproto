@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Enums\MembershipTypeEnum;
 use App\Http\Controllers\EmailListController;
 use App\Mail\PasswordResetEmail;
@@ -296,6 +297,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->groups()->where('is_society', true);
     }
 
+    /**
+     * @return BelongsToMany<Activity, $this, Pivot>
+     */
     public function activities(): BelongsToMany
     {
         return $this->belongsToMany(Activity::class, 'activities_users')

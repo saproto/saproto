@@ -169,7 +169,7 @@ class Email extends Model
 
 
         if ($this->to_event) {
-            return User::whereHas('activities', function($q){
+            return User::query()->whereHas('activities', function($q){
                 $q->whereHas('event', function ($q){
                     $q->whereHas('emails', function ($q){
                         $q->where('emails.id', $this->id);
