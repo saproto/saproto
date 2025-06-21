@@ -19,9 +19,9 @@
 
                 <div class="col-7 text-center">
                     <img
-                        src="{{ $user->generatePhotoPath(150, 150) }}"
-                        width="150px"
-                        height="150px"
+                        src="{{ $user->smallPhoto() }}"
+                        width="100px"
+                        height="100px"
                         class="rounded-circle"
                     />
                 </div>

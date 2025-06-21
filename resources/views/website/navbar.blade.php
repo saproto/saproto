@@ -661,7 +661,7 @@
                                         id="profile-picture"
                                         class="rounded-circle ms-2"
                                         alt="your profile picture"
-                                        src="{{ Auth::user()->load('photo')->generatePhotoPath() }}"
+                                        src="{{ Auth::user()->load('photo')->smallPhoto() }}"
                                     />
                                 </a>
 
