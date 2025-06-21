@@ -32,8 +32,6 @@ use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Image\Enums\Fit;
-use Spatie\MediaLibrary\Conversions\ImageGenerators\Webp;
-use Spatie\MediaLibrary\Conversions\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;

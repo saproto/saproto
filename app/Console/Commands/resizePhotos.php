@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Photo;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -27,7 +26,7 @@ class resizePhotos extends Command
      */
     public function handle(): void
     {
-       User::whereHas('photo')->whereHas('roles', function ($q){
+       User::query()->whereHas('photo')->whereHas('roles', function ($q){
            $q->where('name', 'sysadmin');
        })->with('photo')->chunkById(100, function ($users) {
            /** @var User $user */

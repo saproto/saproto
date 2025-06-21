@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StorageEntry;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +29,7 @@ class ProfilePictureController extends Controller
             Session::flash('flash_message', $e->getMessage());
             Redirect::back();
         }
+
         Session::flash('flash_message', 'Your profile picture has been updated!');
         return Redirect::back();
     }
