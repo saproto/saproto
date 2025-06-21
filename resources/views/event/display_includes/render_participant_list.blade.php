@@ -1,11 +1,12 @@
-@php use App\Models\User; @endphp
-@foreach ($participants as $user)
-        <?php $pid =
-        $user::class == User::class && $event
-            ? $user->pivot->id
-            : $user->id; ?>
+@php
+    use App\Models\User;
+@endphp
 
-        <?php $u = $user::class == User::class ? $user : $user->user; ?>
+@foreach ($participants as $user)
+    <?php $pid =
+    $user::class == User::class && $event ? $user->pivot->id : $user->id; ?>
+
+    <?php $u = $user::class == User::class ? $user : $user->user; ?>
 
     <div class="btn-group btn-group-sm mb-1">
         <a
