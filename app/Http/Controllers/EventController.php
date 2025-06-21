@@ -439,11 +439,11 @@ class EventController extends Controller
 
             $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(static fn ($item) => (object) [
                 'name' => $item->name,
-                'photo' => $item->smallPhoto(),
+                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
             ]) : null);
             $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(static fn ($item) => (object) [
                 'name' => $item->name,
-                'photo' => $item->smallPhoto(),
+                'photo' => $item->getFirstMediaUrl('profile_picture', 'thumb'),
             ]) : null);
             $data[] = (object) [
                 'id' => $event->id,

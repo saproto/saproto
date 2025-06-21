@@ -1,11 +1,11 @@
 <?php
 
+use App\Services\MediaLibrary\CustomUrlGenerator;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\MediaCollections\Models\Observers\MediaObserver;
 use Spatie\MediaLibraryPro\Models\TemporaryUpload;
 use Spatie\MediaLibrary\Support\FileNamer\DefaultFileNamer;
 use Spatie\MediaLibrary\Support\FileRemover\DefaultFileRemover;
-use Spatie\MediaLibrary\Support\UrlGenerator\DefaultUrlGenerator;
 use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 use Spatie\ImageOptimizer\Optimizers\Pngquant;
 use Spatie\ImageOptimizer\Optimizers\Optipng;
@@ -44,7 +44,7 @@ return [
      * This queue connection will be used to generate derived and responsive images.
      * Leave empty to use the default queue connection.
      */
-    'queue_connection_name' => env('QUEUE_CONNECTION', 'sync'),
+    'queue_connection_name' => env('QUEUE_CONNECTION', 'database'),
 
     /*
      * This queue will be used to generate derived and responsive images.
@@ -127,13 +127,13 @@ return [
      * When urls to files get generated, this class will be called. Use the default
      * if your files are stored locally above the site root or on s3.
      */
-    'url_generator' => DefaultUrlGenerator::class,
+    'url_generator' => CustomUrlGenerator::class,
 
     /*
      * Moves media on updating to keep path consistent. Enable it only with a custom
      * PathGenerator that uses, for example, the media UUID.
      */
-    'moves_media_on_update' => false,
+    'moves_media_on_update' => true,
 
     /*
      * Whether to activate versioning when urls to files get generated.

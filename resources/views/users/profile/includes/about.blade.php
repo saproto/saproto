@@ -9,7 +9,7 @@
 
             <div class="text-center">
                 <img
-                    src="{{ $user->smallPhoto() }}"
+                    src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
                     class="rounded-circle bg-dark mt-2 border border-5 border-white"
                     width="170px"
                     height="170px"

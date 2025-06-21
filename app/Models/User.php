@@ -247,10 +247,16 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function registerMediaConversions(Media $media = null): void
     {
+        $this->addMediaConversion('preview')
+            ->performOnCollections('profile_picture')
+            ->nonQueued()
+            ->fit(Fit::Crop, 250, 250)
+            ->format('webp');
+
         $this->addMediaConversion('thumb')
             ->performOnCollections('profile_picture')
-//            ->nonQueued()
-            ->fit(Fit::Crop, 100, 100)
+            ->nonQueued()
+            ->fit(Fit::Crop, 25, 25)
             ->format('webp');
     }
 
@@ -673,12 +679,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
             return $this->isTempadmin();
         });
-    }
-
-
-    public function smallPhoto(): string
-    {
-        return $this->photo ? $this->generatePhotoPath(150, 150):$this->getFirstMediaUrl('profile_picture', 'thumb');
     }
 
     public function getIcalUrl(): string
