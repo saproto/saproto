@@ -14,7 +14,7 @@
             class="btn btn-outline-primary"
         >
             <img
-                src="{{ $u->smallPhoto()}}"
+                src="{{ $u->smallPhoto() }}"
                 class="rounded-circle me-1"
                 style="width: 21px; height: 21px; margin-top: -3px"
             />
