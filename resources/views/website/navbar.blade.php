@@ -661,7 +661,7 @@
                                         id="profile-picture"
                                         class="rounded-circle ms-2"
                                         alt="your profile picture"
-                                        src="{{ Auth::user()->getFirstMediaUrl('profile_picture', 'preview')  }}"
+                                        src="{{ Auth::user()->getFirstMediaUrl('profile_picture', 'preview') }}"
                                     />
                                 </a>
 
