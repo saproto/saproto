@@ -45,7 +45,7 @@ class FileCleanup extends Command
             foreach ($files as $file) {
                 if ($file->isOrphan()) {
                     $count++;
-                    Storage::delete($file->filename);
+                    Storage::disk('local')->delete($file->filename);
                     $file->delete();
                 }
             }
