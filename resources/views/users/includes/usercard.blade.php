@@ -6,7 +6,7 @@
                 height="50px"
                 class="rounded-circle float-end"
                 alt="{{ $user->name }}'s photo"
-                src="{!! $user->smallPhoto() !!}"
+                src="{!! $user->getFirstMediaUrl('profile_picture', 'preview') !!}"
             />
             <a
                 href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}"

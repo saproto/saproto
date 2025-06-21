@@ -4,6 +4,6 @@
     </div>
 
     <div class="card-body p-5 text-center">
-        <img src="{{ $user->smallPhoto() }}" class="rounded-circle mw-100" />
+        <img src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}" class="rounded-circle mw-100" />
     </div>
 </div>
