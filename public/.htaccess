@@ -1,5 +1,3 @@
-Header set X-Content-Type-Options nosniff
-
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -11,19 +9,22 @@ Header set X-Content-Type-Options nosniff
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Handle Front Controller...
+    # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
 
 # START GZIP COMPRESSION
-
 <ifModule mod_gzip.c>
     mod_gzip_on Yes
     mod_gzip_dechunk Yes
@@ -34,8 +35,8 @@ Header set X-Content-Type-Options nosniff
     mod_gzip_item_exclude mime ^image/.*
     mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
 </ifModule>
-
 # END GZIP COMPRESSION
+
 # START DEFLATE COMPRESSION
 
     AddOutputFilterByType DEFLATE "application/atom+xml" \
@@ -99,46 +100,22 @@ Header set X-Content-Type-Options nosniff
     AddOutputFilterByType DEFLATE text/xml
 
 # END DEFLATE COMPRESSION
-# START ENABLE KEEP ALIVE
 
-    Header set Connection keep-alive
+# BROWSER CACHING USING CACHE-CONTROL HEADERS
 
-# END ENABLE KEEP ALIVE
-# START EXPIRES CACHING #
+<ifModule mod_headers.c>
+    # One year for image and video files
+    <filesMatch ".(flv|gif|ico|jpg|jpeg|mp4|mpeg|png|svg|swf|webp)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </filesMatch>
 
-    ExpiresActive On
-    ExpiresByType text/css "access 1 month"
-    ExpiresByType text/html "access 1 month"
-    ExpiresByType image/gif "access 1 year"
-    ExpiresByType image/png "access 1 year"
-    ExpiresByType image/jpg "access 1 year"
-    ExpiresByType image/jpeg "access 1 year"
-    ExpiresByType image/x-icon "access 1 year"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType audio/ogg "access plus 1 year"
-    ExpiresByType video/mp4 "access plus 1 year"
-    ExpiresByType video/ogg "access plus 1 year"
-    ExpiresByType video/webm "access plus 1 year"
-    ExpiresByType application/atom+xml "access plus 1 hour"
-    ExpiresByType application/rss+xml "access plus 1 hour"
-    ExpiresByType application/pdf "access 1 month"
-    ExpiresByType application/javascript "access 1 month"
-    ExpiresByType text/x-javascript "access 1 month"
-    ExpiresByType text/x-component "access plus 1 month"
-    ExpiresByType application/x-shockwave-flash "access 1 month"
-    ExpiresByType font/opentype "access plus 1 month"
-    ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
-    ExpiresByType application/x-font-ttf "access plus 1 month"
-    ExpiresByType application/font-woff "access plus 1 month"
-    ExpiresByType application/font-woff2 "access plus 1 month"
-    ExpiresDefault "access 1 month"
+    # One month for JavaScript and PDF files
+    <filesMatch ".(js|pdf)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </filesMatch>
 
-# END EXPIRES CACHING #
-# BEGIN Cache-Control Headers
-
-    Header set Cache-Control "public"
-    Header set Cache-Control "public"
-    Header set Cache-Control "private"
-    Header set Cache-Control "private, must-revalidate"
-
-# END Cache-Control Headers
+    # One week for CSS files
+    <filesMatch ".(css)$">
+        Header set Cache-Control "max-age=604800, public"
+    </filesMatch>
+</ifModule>
