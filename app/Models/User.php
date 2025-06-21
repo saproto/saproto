@@ -31,6 +31,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\Conversions\ImageGenerators\Webp;
+use Spatie\MediaLibrary\Conversions\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -176,8 +182,9 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
 {
+    use InteractsWithMedia;
     use CanResetPassword;
     use HasApiTokens;
 
@@ -231,6 +238,23 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             PlayedVideo::query()->where('user_id', $this->id)->count() > 0 ||
             AchievementOwnership::query()->where('user_id', $this->id)->count() > 0
         );
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('profile_picture')
+            ->useFallbackUrl(asset('images/default-avatars/other.png'))
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->format('webp')
+            ->nonOptimized()
+            ->fit(Fit::Crop, 100, 100)
+            ->performOnCollections('profile_picture')
+            ->nonQueued();
     }
 
     /**

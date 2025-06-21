@@ -171,7 +171,7 @@ class StorageEntry extends Model
 
     public function generateLocalPath(): string
     {
-        return storage_path('app/'.$this->filename);
+        return Storage::disk('local')->path($this->filename);
     }
 
     /**
