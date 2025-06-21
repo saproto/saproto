@@ -9,7 +9,7 @@
 
             <div class="text-center">
                 <img
-                    src="{{ $user->generatePhotoPath(170, 170) }}"
+                    src="{{ $user->smallPhoto() }}"
                     class="rounded-circle bg-dark mt-2 border border-5 border-white"
                     width="170px"
                     height="170px"
