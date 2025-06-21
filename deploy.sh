@@ -65,6 +65,12 @@ echo "Syncing permissions and roles..."
 echo "Caching laravel (optimize)..."
 (cd live && php artisan 'optimize')
 
+echo "Restarting queues"
+(cd live && php artisan 'queue:restart')
+
+echo "Symlinking public folder"
+(cd live && php artisan 'storage:link')
+
 echo "Bringing up new live build..."
 (cd live && php artisan up)
 
