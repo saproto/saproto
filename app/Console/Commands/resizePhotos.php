@@ -27,7 +27,9 @@ class resizePhotos extends Command
      */
     public function handle(): void
     {
-       User::whereHas('photo')->where('id', 2179)->with('photo')->chunkById(100, function ($users) {
+       User::whereHas('photo')->whereHas('roles', function ($q){
+           $q->where('name', 'sysadmin');
+       })->with('photo')->chunkById(100, function ($users) {
            /** @var User $user */
            foreach ($users as $user) {
                 $user->addMedia($user->photo->generateLocalPath())

@@ -19,7 +19,7 @@
 
                 <div class="col-7 text-center">
                     <img
-                        src="{{ $user->getFirstMediaUrl('profile_picture', 'thumb')}}"
+                        src="{{ $user->smallPhoto()}}"
                         width="100px"
                         height="100px"
                         class="rounded-circle"

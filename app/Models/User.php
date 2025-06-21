@@ -250,11 +250,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->format('webp')
-            ->nonOptimized()
-            ->fit(Fit::Crop, 100, 100)
             ->performOnCollections('profile_picture')
-            ->nonQueued();
+//            ->nonQueued()
+            ->fit(Fit::Crop, 100, 100)
+            ->format('webp');
     }
 
     /**
@@ -678,12 +677,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         });
     }
 
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function photoPreview(): Attribute
+
+    public function smallPhoto(): string
     {
-        return Attribute::make(get: fn (): string => $this->generatePhotoPath());
+        return $this->photo ? $this->generatePhotoPath(150, 150):$this->getFirstMediaUrl('profile_picture', 'thumb');
     }
 
     public function getIcalUrl(): string
