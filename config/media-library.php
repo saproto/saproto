@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\MediaLibrary\CustomUrlGenerator;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\MediaCollections\Models\Observers\MediaObserver;
 use Spatie\MediaLibraryPro\Models\TemporaryUpload;
@@ -127,13 +128,13 @@ return [
      * When urls to files get generated, this class will be called. Use the default
      * if your files are stored locally above the site root or on s3.
      */
-    'url_generator' => DefaultUrlGenerator::class,
+    'url_generator' => CustomUrlGenerator::class,
 
     /*
      * Moves media on updating to keep path consistent. Enable it only with a custom
      * PathGenerator that uses, for example, the media UUID.
      */
-    'moves_media_on_update' => false,
+    'moves_media_on_update' => true,
 
     /*
      * Whether to activate versioning when urls to files get generated.
