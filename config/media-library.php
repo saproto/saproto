@@ -6,7 +6,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Observers\MediaObserver;
 use Spatie\MediaLibraryPro\Models\TemporaryUpload;
 use Spatie\MediaLibrary\Support\FileNamer\DefaultFileNamer;
 use Spatie\MediaLibrary\Support\FileRemover\DefaultFileRemover;
-use Spatie\MediaLibrary\Support\UrlGenerator\DefaultUrlGenerator;
 use Spatie\ImageOptimizer\Optimizers\Jpegoptim;
 use Spatie\ImageOptimizer\Optimizers\Pngquant;
 use Spatie\ImageOptimizer\Optimizers\Optipng;
