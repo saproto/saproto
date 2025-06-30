@@ -88,7 +88,7 @@ class Photo extends Model implements HasMedia
             ->withResponsiveImages();
 
         $this->addMediaCollection('private')
-            ->useDisk('private')
+            ->useDisk('local')
             ->singleFile()
             ->withResponsiveImages();
     }
@@ -187,7 +187,7 @@ class Photo extends Model implements HasMedia
 
         static::deleting(static function ($photo) {
             /* @var Photo $photo */
-            $photo->file->delete();
+            $photo->file?->delete();
             if ($photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;

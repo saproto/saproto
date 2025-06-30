@@ -11,11 +11,10 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-
-        if ($this->media->disk === 'private') {
+        if ($this->media->disk === 'local') {
             return route('media::show', [
-                'mediaId' => $this->media->id,
-                'conversion' => $conversionName,
+                'id' => $this->media->id,
+                'conversion' => null,
             ]);
         }
         $url = $this->versionUrl($this->getDisk()->url($this->getPathRelativeToRoot()));
