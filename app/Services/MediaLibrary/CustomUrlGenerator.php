@@ -11,6 +11,13 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
+
+        if ($this->media->disk === 'private') {
+            return route('media::show', [
+                'mediaId' => $this->media->id,
+                'conversion' => $conversionName,
+            ]);
+        }
         $url = $this->versionUrl($this->getDisk()->url($this->getPathRelativeToRoot()));
 
         if (Config::get('app-proto.assets-domain') != null) {
