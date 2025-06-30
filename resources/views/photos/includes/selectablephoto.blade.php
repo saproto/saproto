@@ -8,13 +8,14 @@
             id="photo_{{ $photo->id }}"
         />
         <div class="card mb-3">
+            {{$photo->getFirstMedia($photo->private?'private':'public')->disk}}
             <label
                 for="photo_{{ $photo->id }}"
                 class="card-img photo_pop"
                 style="
                     display: flex;
                     height: 200px;
-                    background-image: url({{ $photo->getFirstMediaUrl() }});
+                    background-image: url({{ $photo->getFirstMediaUrl($photo->private?'private':'public') }});
                 "
             >
                 @if ($photo->private)

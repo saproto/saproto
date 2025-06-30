@@ -12,14 +12,15 @@ class PrivateMediaController extends Controller
     public function show($mediaId, $conversion = null): StreamedResponse{
         $media = Media::query()->findOrFail($mediaId);
 
-        if ($media->disk !== 'private') {
+        if ($media->disk !== 'local') {
             abort(403, 'This is not a private media file.');
         }
 
-        $path = $conversion ? $media->getPath($conversion) : $media->getPath();
+
+        $path = $conversion ? $media->getPathRelativeToRoot($conversion) : $media->getPathRelativeToRoot();
 
         if ($conversion && !Storage::disk($media->disk)->exists($path)) {
-            $path = $media->getPath();
+            $path = $media->getPathRelativeToRoot();
         }
 
         if (!Storage::disk($media->disk)->exists($path)) {
