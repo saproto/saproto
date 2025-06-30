@@ -54,7 +54,7 @@
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
                                 'url' => route('photo::view', ['photo' => $photo]),
-                                'img' => $photo->thumbnail(),
+                                'img' => $photo->getFirstMediaUrl(),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
                                     $photo->likes_count,

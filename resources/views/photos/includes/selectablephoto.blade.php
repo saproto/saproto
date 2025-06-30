@@ -14,7 +14,7 @@
                 style="
                     display: flex;
                     height: 200px;
-                    background-image: url({{ $photo->thumbnail() }});
+                    background-image: url({{ $photo->getFirstMediaUrl() }});
                 "
             >
                 @if ($photo->private)

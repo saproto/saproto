@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PhotoAdminController extends Controller
 {
@@ -87,12 +89,11 @@ class PhotoAdminController extends Controller
      */
     public function upload(Request $request, int $id)
     {
+        $request->validate([
+            'file' => 'required|image|max:5120', // max 5MB
+        ]);
+
         $album = PhotoAlbum::query()->findOrFail($id);
-        if (! $request->hasFile('file')) {
-            return response()->json([
-                'message' => 'photo not found in request!',
-            ], 404);
-        }
 
         if ($album->published) {
             return response()->json([
@@ -100,16 +101,20 @@ class PhotoAdminController extends Controller
             ], 500);
         }
 
+        $photo = Photo::create([
+            'date_taken' => $request->file('file')->getCTime(),
+            'album_id' => $album->id,
+            'private'=>$album->private,
+            'file_id' => 1
+        ]);
+
+        $disk = $album->private?'local':'public';
         try {
-            $uploadFile = $request->file('file');
-
-            $photo = $this->createPhotoFromUpload($uploadFile, $id);
-
+            $photo->addMediaFromRequest('file')->withResponsiveImages()->toMediaCollection(diskName:  $disk);
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
-
-        } catch (Exception $exception) {
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
             return response()->json([
-                'message' => $exception,
+                'message' => $e->getMessage(),
             ], 500);
         }
     }

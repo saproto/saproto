@@ -60,11 +60,12 @@
                     @endif
                 </div>
 
-                <img
-                    class="card-img-bottom"
-                    src="{!! $photo->url !!}"
-                    style="max-height: 70vh; object-fit: scale-down"
-                />
+                {{$photo->getFirstMedia()}}
+{{--                <img--}}
+{{--                    class="card-img-bottom"--}}
+{{--                    src="{!! $photo->url !!}"--}}
+{{--                    style="max-height: 70vh; object-fit: scale-down"--}}
+{{--                />--}}
             </div>
 
             <div class="card mb-3">
