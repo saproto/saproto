@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Photo model.
@@ -45,10 +49,12 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class Photo extends Model
+class Photo extends Model implements HasMedia
 {
     /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'photos';
 
@@ -72,6 +78,19 @@ class Photo extends Model
                 $query->where('published', true);
             }));
         });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('public')
+            ->useDisk('public')
+            ->singleFile()
+            ->withResponsiveImages();
+
+        $this->addMediaCollection('private')
+            ->useDisk('private')
+            ->singleFile()
+            ->withResponsiveImages();
     }
 
     /**
