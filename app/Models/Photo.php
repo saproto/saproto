@@ -80,19 +80,6 @@ class Photo extends Model implements HasMedia
         });
     }
 
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('public')
-            ->useDisk('public')
-            ->singleFile()
-            ->withResponsiveImages();
-
-        $this->addMediaCollection('private')
-            ->useDisk('local')
-            ->singleFile()
-            ->withResponsiveImages();
-    }
-
     /**
      * @return BelongsTo<PhotoAlbum, $this>
      */

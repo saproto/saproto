@@ -108,9 +108,9 @@ class PhotoAdminController extends Controller
             'file_id' => 1
         ]);
 
-        $disk = $album->private?'private':'public';
+        $disk = $album->private?'local':'public';
         try {
-            $photo->addMediaFromRequest('file')->withResponsiveImages()->toMediaCollection($disk);
+            $photo->addMediaFromRequest('file')->withResponsiveImages()->toMediaCollection(diskName: $disk);
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             return response()->json([
@@ -152,8 +152,8 @@ class PhotoAdminController extends Controller
                         if ($album->published && $photo->private) {
                             continue;
                         }
-                        $media = $photo->getFirstMedia($photo->private ? 'private' : 'public');
-                        $media->move($photo, !$photo->private?'private' : 'public');
+                        $media = $photo->getFirstMedia();
+                        $media->move($photo, diskName:!$photo->private? 'local' : 'public');
 
                         $photo->update([
                             'private' => !$photo->private,
