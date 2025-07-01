@@ -1,4 +1,7 @@
-@php use App\Enums\PhotoEnum; @endphp
+@php
+    use App\Enums\PhotoEnum;
+@endphp
+
 <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
     <div class="photo-select">
         <input

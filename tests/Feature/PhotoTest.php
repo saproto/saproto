@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Member;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
-use App\Models\Member;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,26 +33,25 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
 
     $response->assertStatus(200);
 
-    $photo = Photo::where('album_id', $album->id)->first();
+    $photo = Photo::query()->where('album_id', $album->id)->first();
     $media = $photo->getFirstMedia();
-    $hashedPath = md5($media->id . config('app.key'));
+    $hashedPath = md5($media->id.config('app.key'));
     $disk = $private ? 'local' : 'public';
 
     Storage::disk($disk)->assertExists("{$hashedPath}/{$media->file_name}");
 
     $response = $this->actingAs($user)->post(route('photo::admin::action', ['id' => $album->id]), [
-        'action'=>'private',
-        'photos'=>[$photo->id],
+        'action' => 'private',
+        'photos' => [$photo->id],
     ]);
 
     $response->assertStatus(302);
 
     $photo->refresh();
     $media = $photo->getFirstMedia();
-    $hashedPath = md5($media->id . config('app.key'));
+    $hashedPath = md5($media->id.config('app.key'));
 
     $newDisk = $private ? 'public' : 'local';
-
 
     Storage::disk($newDisk)->assertExists("{$hashedPath}/{$media->file_name}");
     Storage::disk($disk)->assertMissing("{$hashedPath}/{$media->file_name}");

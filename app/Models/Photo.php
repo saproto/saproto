@@ -81,7 +81,7 @@ class Photo extends Model implements HasMedia
         });
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion(PhotoEnum::LARGE->value)
             ->fit(Fit::Max, 1920, 1920)
@@ -92,9 +92,9 @@ class Photo extends Model implements HasMedia
             ->format('webp');
 
         $this->addMediaConversion(PhotoEnum::SMALL->value)
+            ->nonQueued()
             ->fit(Fit::Max, 420, 420)
-            ->format('webp')
-            ->nonQueued();
+            ->format('webp');
 
         $this->addMediaConversion(PhotoEnum::TINY->value)
             ->fit(Fit::Max, 50, 50)
@@ -177,7 +177,7 @@ class Photo extends Model implements HasMedia
 
     public function thumbnail(): string
     {
-        return $this->file->generateImagePath(800, 300);
+        return $this->getFirstMediaUrl(conversionName: PhotoEnum::MEDIUM->value);
     }
 
     /**
@@ -185,7 +185,7 @@ class Photo extends Model implements HasMedia
      */
     protected function url(): Attribute
     {
-        return Attribute::make(get: fn () => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
+        return Attribute::make(get: fn (): string => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
     }
 
     #[Override]
