@@ -175,7 +175,7 @@ class Committee extends Model
             ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
             ->orderBy('created_at', 'desc')
             ->orderBy('deleted_at', 'desc')
-            ->with('user.photo')
+            ->with('user')
             ->get();
 
         foreach ($memberships as $membership) {

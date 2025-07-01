@@ -32,7 +32,7 @@ class SearchController extends Controller
                 User::class,
                 $term,
                 Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
-            )?->with('photo')->get();
+            )?->get();
 
             if ($presearch_users) {
                 foreach ($presearch_users as $user) {
@@ -185,7 +185,7 @@ class SearchController extends Controller
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
-        $users = $this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->with('photo')->get() ?? [];
+        $users = $this->getGenericSearchQuery(User::class, $request->get('q'), $search_attributes)?->get() ?? [];
         foreach ($users as $user) {
             /** @var User $user */
             $result[] = (object) [

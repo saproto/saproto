@@ -68,10 +68,6 @@ class UserController extends Controller
         RfidCard::query()->where('user_id', $user->id)->delete();
         WelcomeMessage::query()->where('user_id', $user->id)->delete();
 
-        if ($user->photo) {
-            $user->photo->delete();
-        }
-
         $user->password = null;
         $user->remember_token = null;
         $user->birthdate = null;
