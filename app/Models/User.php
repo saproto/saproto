@@ -121,8 +121,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $tempadmin_count
  * @property-read Collection<int, Ticket> $tickets
  * @property-read int|null $tickets_count
- * @property-read Collection<int, Token> $tokens
- * @property-read int|null $tokens_count
  * @property-read WelcomeMessage|null $welcomeMessage
  * @property-read Collection<int, Withdrawal> $withdrawals
  * @property-read int|null $withdrawals_count
@@ -182,14 +180,14 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
 {
-    use InteractsWithMedia;
     use CanResetPassword;
     use HasApiTokens;
-
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
 
     use HasRoles;
+
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'users';
@@ -245,7 +243,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->singleFile();
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->performOnCollections('profile_picture')
@@ -408,14 +406,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function rfid(): HasMany
     {
         return $this->hasMany(RfidCard::class);
-    }
-
-    /**
-     * @return HasMany<Token, $this>
-     */
-    public function tokens(): HasMany
-    {
-        return $this->hasMany(Token::class);
     }
 
     /**
@@ -585,22 +575,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
 
         return $this->personal_key;
-    }
-
-    public function generateNewToken(): Token
-    {
-        $token = new Token;
-        $token->generate($this);
-
-        return $token;
-    }
-
-    public function getToken(): Token
-    {
-        $token = $this->tokens->last() ?? $this->generateNewToken();
-        $token->touch();
-
-        return $token;
     }
 
     /** Removes user's birthdate and phone number. */
