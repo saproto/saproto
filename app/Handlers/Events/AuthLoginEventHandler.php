@@ -21,14 +21,11 @@ class AuthLoginEventHandler
 
     /**
      * Handle the event.
-     *
-     * @param  Login  $event
      */
-    public function handle($event): void
+    public function handle(Login $event): void
     {
         /** @var User $user */
         $user = $event->user;
-        $user->generateNewToken();
 
         // We will grant the user all roles to which they are entitled to!
         $committees = [

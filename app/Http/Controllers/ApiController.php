@@ -21,7 +21,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Random\RandomException;
-use stdClass;
 
 class ApiController extends Controller
 {
@@ -61,28 +60,6 @@ class ApiController extends Controller
         $playedVideo->save();
 
         PlayedVideo::query()->where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function getToken(Request $request)
-    {
-        $response = new stdClass;
-
-        if (Auth::check()) {
-            $response->name = Auth::user()->name;
-            $response->photo = Auth::user()->getFirstMediaUrl('profile_picture', 'preview');
-            $response->token = Auth::user()->getToken()->token;
-        } else {
-            $response->token = 0;
-        }
-
-        if ($request->has('callback')) {
-            return response()->json($response)->setCallback($request->input('callback'));
-        }
-
-        return response()->json($response);
     }
 
     /**

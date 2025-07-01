@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -104,7 +103,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $orderlines_count
  * @property-read Collection<int, Permission> $permissions
  * @property-read int|null $permissions_count
- * @property-read StorageEntry|null $photo
  * @property-read Collection<int, PlayedVideo> $playedVideos
  * @property-read int|null $played_videos_count
  * @property-read mixed $proto_email
@@ -121,8 +119,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $tempadmin_count
  * @property-read Collection<int, Ticket> $tickets
  * @property-read int|null $tickets_count
- * @property-read Collection<int, Token> $tokens
- * @property-read int|null $tokens_count
  * @property-read WelcomeMessage|null $welcomeMessage
  * @property-read Collection<int, Withdrawal> $withdrawals
  * @property-read int|null $withdrawals_count
@@ -182,14 +178,14 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
 {
-    use InteractsWithMedia;
     use CanResetPassword;
     use HasApiTokens;
-
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
 
     use HasRoles;
+
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'users';
@@ -245,7 +241,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->singleFile();
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('preview')
             ->performOnCollections('profile_picture')
@@ -258,14 +254,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->nonQueued()
             ->fit(Fit::Crop, 25, 25)
             ->format('webp');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function photo(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /**
@@ -411,14 +399,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<Token, $this>
-     */
-    public function tokens(): HasMany
-    {
-        return $this->hasMany(Token::class);
-    }
-
-    /**
      * @return HasMany<PlayedVideo, $this>
      */
     public function playedVideos(): HasMany
@@ -440,20 +420,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function stickers(): HasMany
     {
         return $this->hasMany(Sticker::class);
-    }
-
-    /**
-     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
-     *
-     * @return string Path to a resized version of someone's profile picture.
-     */
-    public function generatePhotoPath(int $w = 100, int $h = 100): string
-    {
-        if ($this->photo) {
-            return $this->photo->generateImagePath($w, $h);
-        }
-
-        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -585,22 +551,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
 
         return $this->personal_key;
-    }
-
-    public function generateNewToken(): Token
-    {
-        $token = new Token;
-        $token->generate($this);
-
-        return $token;
-    }
-
-    public function getToken(): Token
-    {
-        $token = $this->tokens->last() ?? $this->generateNewToken();
-        $token->touch();
-
-        return $token;
     }
 
     /** Removes user's birthdate and phone number. */

@@ -92,15 +92,15 @@ class EventController extends Controller
         $event->load([
             'committee',
             'tickets.product',
-            'tickets.purchases.user.photo',
+            'tickets.purchases.user.media',
             'tickets.purchases.orderline.molliePayment',
-            'activity.users.photo',
+            'activity.users.media',
             'activity.participation' => function ($query) {
                 $query->where('user_id', Auth::id());
             },
-            'activity.backupUsers.photo',
+            'activity.backupUsers.media',
             'activity.helpingCommitteeInstances.committee',
-            'activity.helpingCommitteeInstances.users.photo',
+            'activity.helpingCommitteeInstances.users.media',
             'videos',
             'albums',
             'dinnerforms',
@@ -420,7 +420,7 @@ class EventController extends Controller
             })
             ->whereNull('publication')
             ->orderBy('start')
-            ->with('activity.users.photo', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
+            ->with('activity.users.media', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
             ->take($limit)
             ->get();
 
