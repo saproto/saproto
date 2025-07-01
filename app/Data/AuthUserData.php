@@ -24,7 +24,7 @@ class AuthUserData extends Data
             $user->calling_name,
             $user->getRoleNames()->toArray(), // Get role names
             $user->is_member,
-            $user->photo->generateImagePath()
+            $user->getFirstMediaUrl('profile_picture', 'preview')
         ) : null;
     }
 }

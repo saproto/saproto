@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
 use App\Models\User;
+use Google\Service\Directory\User as GoogleUser;
+use Google\Service\Directory;
+use Google\Service\Exception;
+use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -98,6 +102,7 @@ class UserPasswordController extends Controller
 
     /**
      * Synchronize the password of the user.
+     * @throws \Exception
      */
     public function syncPasswords(Request $request): View|RedirectResponse
     {
@@ -107,6 +112,7 @@ class UserPasswordController extends Controller
 
         if ($user_verify?->id === $user->id) {
             $user->setPassword($pass);
+            $this->syncGooglePassword($user, $pass);
             Session::flash('flash_message', 'Your password was successfully synchronized.');
 
             return Redirect::route('user::dashboard::show');
@@ -115,6 +121,32 @@ class UserPasswordController extends Controller
         Session::flash('flash_message', 'Password incorrect.');
 
         return view('auth.sync');
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Google\Exception
+     */
+    private function syncGooglePassword(User $protoUser, string $password): void
+    {
+        $client = new Google_Client;
+        $client->setAuthConfig(config('proto.google_application_credentials'));
+        $client->useApplicationDefaultCredentials();
+        $client->setSubject('superadmin@proto.utwente.nl');
+        $client->setApplicationName('Proto Website');
+        $client->setScopes(['https://www.googleapis.com/auth/admin.directory.user']);
+
+        $directory = new Directory($client);
+        $optParams = ['domain' => 'proto.utwente.nl', 'query' => "externalId:$protoUser->id"];
+        $googleUser = $directory->users->listUsers($optParams)->getUsers();
+        if ($googleUser == null) {
+            return;
+        }
+
+        $directory->users->update(
+            $googleUser[0]->id,
+            new GoogleUser(['password' => $password])
+        );
     }
 
     /**
