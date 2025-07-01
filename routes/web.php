@@ -917,7 +917,7 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Fetching media: Private --- */
     Route::controller(PrivateMediaController::class)->middleware(['auth', 'member'])->prefix('media')->name('media::')->group(function () {
-        Route::get('{id}', 'show')->name('show');
+        Route::get('{id}/{conversion?}', 'show')->name('show');
     });
 
     /* --- Fetching images: Public --- */

@@ -1,4 +1,7 @@
-@php use App\Enums\PhotoEnum; @endphp
+@php
+    use App\Enums\PhotoEnum;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 @php
     /**
@@ -8,7 +11,7 @@
 @endphp
 
 @section('page-title')
-    {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
 @section('container')
@@ -55,7 +58,9 @@
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
                                 'url' => route('photo::view', ['photo' => $photo]),
-                                'img' => $photo->getFirstMediaUrl(conversionName: PhotoEnum::SMALL->value),
+                                'img' => $photo->getFirstMediaUrl(
+                                    conversionName: PhotoEnum::SMALL->value,
+                                ),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
                                     $photo->likes_count,
