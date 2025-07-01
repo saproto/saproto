@@ -65,7 +65,7 @@ class HomeController extends Controller
             ->where('show_birthday', true)
             ->whereMonth('birthdate', Carbon::now()->month)
             ->whereDay('birthdate', Carbon::now()->day)
-            ->with('photo')
+            ->with('media')
             ->get();
 
         $dinnerforms = Dinnerform::query()

@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -104,7 +103,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $orderlines_count
  * @property-read Collection<int, Permission> $permissions
  * @property-read int|null $permissions_count
- * @property-read StorageEntry|null $photo
  * @property-read Collection<int, PlayedVideo> $playedVideos
  * @property-read int|null $played_videos_count
  * @property-read mixed $proto_email
@@ -256,14 +254,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->nonQueued()
             ->fit(Fit::Crop, 25, 25)
             ->format('webp');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function photo(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /**
@@ -430,20 +420,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function stickers(): HasMany
     {
         return $this->hasMany(Sticker::class);
-    }
-
-    /**
-     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
-     *
-     * @return string Path to a resized version of someone's profile picture.
-     */
-    public function generatePhotoPath(int $w = 100, int $h = 100): string
-    {
-        if ($this->photo) {
-            return $this->photo->generateImagePath($w, $h);
-        }
-
-        return asset('images/default-avatars/other.png');
     }
 
     /**

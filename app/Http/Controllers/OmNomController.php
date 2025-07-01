@@ -51,7 +51,7 @@ class OmNomController extends Controller
                 ->whereHas('member', static function ($q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
-                ->with('photo')
+                ->with('media')
                 ->get();
         }
 
