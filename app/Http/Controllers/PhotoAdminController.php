@@ -101,16 +101,17 @@ class PhotoAdminController extends Controller
             ], 500);
         }
 
-        $photo = Photo::create([
+        $photo = Photo::query()->create([
             'date_taken' => $request->file('file')->getCTime(),
             'album_id' => $album->id,
-            'private'=>$album->private,
-            'file_id' => 1
+            'private' => $album->private,
+            'file_id' => 1,
         ]);
 
         $disk = $album->private ? 'local' : 'public';
         try {
             $photo->addMediaFromRequest('file')->toMediaCollection(diskName: $disk);
+
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             return response()->json([
@@ -152,11 +153,12 @@ class PhotoAdminController extends Controller
                         if ($album->published && $photo->private) {
                             continue;
                         }
+
                         $media = $photo->getFirstMedia();
-                        $media->move($photo, diskName:!$photo->private? 'local' : 'public');
+                        $media->move($photo, diskName: $photo->private ? 'public' : 'local');
 
                         $photo->update([
-                            'private' => !$photo->private,
+                            'private' => ! $photo->private,
                         ]);
                     }
 
@@ -212,25 +214,5 @@ class PhotoAdminController extends Controller
         $album->save();
 
         return Redirect::route('photo::admin::edit', ['id' => $id]);
-    }
-
-    /**
-     * @throws FileNotFoundException
-     */
-    private function createPhotoFromUpload(UploadedFile $uploaded_photo, int $album_id): Photo
-    {
-        $path = 'photos/'.$album_id.'/';
-
-        $file = new StorageEntry;
-        $file->createFromFile($uploaded_photo, $path);
-        $file->save();
-
-        $photo = new Photo;
-        $photo->date_taken = $uploaded_photo->getCTime();
-        $photo->album_id = $album_id;
-        $photo->file_id = $file->id;
-        $photo->save();
-
-        return $photo;
     }
 }
