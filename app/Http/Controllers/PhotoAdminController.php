@@ -108,9 +108,9 @@ class PhotoAdminController extends Controller
             'file_id' => 1
         ]);
 
-        $disk = $album->private?'local':'public';
+        $disk = $album->private ? 'local' : 'public';
         try {
-            $photo->addMediaFromRequest('file')->withResponsiveImages()->toMediaCollection(diskName: $disk);
+            $photo->addMediaFromRequest('file')->toMediaCollection(diskName: $disk);
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             return response()->json([

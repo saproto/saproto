@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -78,6 +79,26 @@ class Photo extends Model implements HasMedia
                 $query->where('published', true);
             }));
         });
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion(PhotoEnum::LARGE->value)
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::MEDIUM->value)
+            ->fit(Fit::Max, 750, 750)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::SMALL->value)
+            ->fit(Fit::Max, 420, 420)
+            ->format('webp')
+            ->nonQueued();
+
+        $this->addMediaConversion(PhotoEnum::TINY->value)
+            ->fit(Fit::Max, 50, 50)
+            ->format('webp');
     }
 
     /**
@@ -164,7 +185,7 @@ class Photo extends Model implements HasMedia
      */
     protected function url(): Attribute
     {
-        return Attribute::make(get: fn () => $this->file->generatePath());
+        return Attribute::make(get: fn () => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
     }
 
     #[Override]
