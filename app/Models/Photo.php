@@ -61,7 +61,7 @@ class Photo extends Model implements HasMedia
 
     protected $guarded = ['id'];
 
-    protected $with = ['file'];
+    protected $with = ['media'];
 
     #[Override]
     protected static function booted(): void
@@ -173,11 +173,6 @@ class Photo extends Model implements HasMedia
         }
 
         return 1;
-    }
-
-    public function thumbnail(): string
-    {
-        return $this->getFirstMediaUrl(conversionName: PhotoEnum::MEDIUM->value);
     }
 
     /**
