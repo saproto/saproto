@@ -1,3 +1,4 @@
+@php use App\Enums\PhotoEnum; @endphp
 <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
     <div class="photo-select">
         <input
@@ -8,14 +9,13 @@
             id="photo_{{ $photo->id }}"
         />
         <div class="card mb-3">
-            {{$photo->getFirstMedia()?->disk}}
             <label
                 for="photo_{{ $photo->id }}"
                 class="card-img photo_pop"
                 style="
                     display: flex;
                     height: 200px;
-                    background-image: url({{ $photo->getFirstMediaUrl() }});
+                    background-image: url({{ $photo->getFirstMediaUrl(conversionName: PhotoEnum::SMALL->value) }});
                 "
             >
                 @if ($photo->private)

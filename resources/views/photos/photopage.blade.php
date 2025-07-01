@@ -1,3 +1,4 @@
+@php use App\Enums\PhotoEnum; @endphp
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -59,13 +60,11 @@
                         </a>
                     @endif
                 </div>
-
-                {{$photo->getFirstMedia()}}
-{{--                <img--}}
-{{--                    class="card-img-bottom"--}}
-{{--                    src="{!! $photo->url !!}"--}}
-{{--                    style="max-height: 70vh; object-fit: scale-down"--}}
-{{--                />--}}
+                        <img
+                            class="card-img-bottom"
+                            src="{!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value)!!}"
+                            style="max-height: 70vh; object-fit: scale-down"
+                        />
             </div>
 
             <div class="card mb-3">
@@ -120,7 +119,7 @@
 
         window.addEventListener(
             'popstate',
-            function () {
+            function() {
                 if (location.hash === '#!/history') {
                     history.replaceState(
                         null,
