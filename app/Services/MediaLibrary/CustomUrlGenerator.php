@@ -14,7 +14,7 @@ class CustomUrlGenerator extends BaseUrlGenerator
         if ($this->media->disk === 'local') {
             return route('media::show', [
                 'id' => $this->media->id,
-                'conversion' => $this->conversion->getName(),
+                'conversion' => $this->conversion?->getName(),
             ]);
         }
 
