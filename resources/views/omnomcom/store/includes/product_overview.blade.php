@@ -91,7 +91,7 @@
                         <div
                             class="product-image user-image"
                             style="
-                                background-image: url('{!! $user->generatePhotoPath(200, 200) !!}');
+                                background-image: url('{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}');
                             "
                         ></div>
                         <div class="product-details">
