@@ -404,11 +404,12 @@
             updateClock()
 
             const everySecond = 1000
-            const everyMinute = 60 * 1000
             const everyFiveMinutes = 5 * 60 * 1000
             setInterval(updateTimetable, everyFiveMinutes)
             setInterval(updateActivities, everyFiveMinutes)
-            setInterval(updateProtopeners, everyMinute)
+            setTimeout(() => {
+                setInterval(updateProtopeners, everyFiveMinutes)
+            }, everyFiveMinutes / 2)
             setInterval(updateClock, everySecond)
         })
     </script>
