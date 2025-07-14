@@ -7,6 +7,7 @@ use App\Data\PhotoData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
+use Config;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -42,16 +43,21 @@ class PhotoController extends Controller
     {
         $album = PhotoAlbum::query()->whereHas('items', function ($query) use ($photo) {
             $query->where('id', $photo->id);
-        })->with(['items'=> function($q){
+        })->with(['items' => function ($q) {
             $q->withCount('likes')->withExists([
                 'likes as liked_by_me' => function ($query) {
                     $query->where('user_id', Auth::id());
                 },
-            ])    ->orderBy('date_taken', 'desc')
+            ])->orderBy('date_taken', 'desc')
                 ->orderBy('id');
         }])->first();
 
-        return Inertia::render('Photos/Photo', ['photo'=>PhotoData::from($photo), 'album'=>PhotoAlbumData::from($album)]);
+        return Inertia::render('Photos/Photo',
+            [
+                'photo' => PhotoData::from($photo),
+                'album' => PhotoAlbumData::from($album),
+                'config.emaildomain'=>Config::string('proto.emaildomain'),
+            ]);
     }
 
     /**
@@ -68,7 +74,6 @@ class PhotoController extends Controller
 
         if ($like) {
             $like->delete();
-
             return Redirect::route('photo::view', ['photo' => $photo->id]);
         }
 

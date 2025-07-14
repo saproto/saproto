@@ -57,7 +57,11 @@ class Photo extends Model implements HasMedia
 
     protected $guarded = ['id'];
 
+<<<<<<< HEAD
     protected $with = ['media'];
+=======
+    protected $with = ['file'];
+>>>>>>> 9a29ee17 (Make the like a POST request)
 
     protected $appends = ['url'];
 
