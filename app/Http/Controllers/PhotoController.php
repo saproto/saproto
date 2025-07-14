@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\PhotoAlbumData;
+use App\Data\PhotoData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
@@ -9,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Inertia\Inertia;
 
 class PhotoController extends Controller
 {
@@ -35,22 +38,20 @@ class PhotoController extends Controller
         ]);
     }
 
-    /**
-     * @return View
-     */
     public function photo(Photo $photo)
     {
-        $photo->load([
-            'album',
-        ])->loadCount([
-            'likes',
-        ])->loadExists([
-            'likes as liked_by_me' => function ($query) {
-                $query->where('user_id', Auth::id());
-            },
-        ]);
+        $album = PhotoAlbum::query()->whereHas('items', function ($query) use ($photo) {
+            $query->where('id', $photo->id);
+        })->with(['items'=> function($q){
+            $q->withCount('likes')->withExists([
+                'likes as liked_by_me' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                },
+            ])    ->orderBy('date_taken', 'desc')
+                ->orderBy('id');
+        }])->first();
 
-        return view('photos.photopage', ['photo' => $photo]);
+        return Inertia::render('Photos/Photo', ['photo'=>PhotoData::from($photo), 'album'=>PhotoAlbumData::from($album)]);
     }
 
     /**
