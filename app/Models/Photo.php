@@ -59,6 +59,8 @@ class Photo extends Model implements HasMedia
 
     protected $with = ['media'];
 
+    protected $appends = ['url'];
+
     #[Override]
     protected static function booted(): void
     {
@@ -113,56 +115,6 @@ class Photo extends Model implements HasMedia
     public function likes(): HasMany
     {
         return $this->hasMany(PhotoLikes::class);
-    }
-
-    private function getAdjacentPhoto(bool $next = true): ?Photo
-    {
-        if ($next) {
-            $ord = 'DESC';
-            $comp = '<';
-        } else {
-            $ord = 'ASC';
-            $comp = '>';
-        }
-
-        return self::query()->where(function ($query) use ($comp) {
-            $query->where('date_taken', $comp, $this->date_taken)
-                ->orWhere(function ($query) use ($comp) {
-                    $query->where('date_taken', '=', $this->date_taken)
-                        ->where('id', $comp, $this->id);
-                });
-        })
-            ->where('album_id', $this->album_id)
-            ->orderBy('date_taken', $ord)
-            ->orderBy('id', $ord)
-            ->first();
-    }
-
-    public function getNextPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto();
-    }
-
-    public function getPreviousPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto(false);
-    }
-
-    public function getAlbumPageNumber(int $paginateLimit): float|int
-    {
-        $photoIndex = 1;
-        $photos = self::query()->where('album_id', $this->album_id)
-            ->orderBy('date_taken', 'desc')->orderBy('id', 'desc')
-            ->get();
-        foreach ($photos as $photoItem) {
-            if ($this->id == $photoItem->id) {
-                return ceil($photoIndex / $paginateLimit);
-            }
-
-            $photoIndex++;
-        }
-
-        return 1;
     }
 
     /**
