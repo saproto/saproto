@@ -13,9 +13,9 @@ const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
 
-let photo = page.props.photo as PhotoData;
+let photo = page.props.photo as PhotoData
 const state = reactive({
-    index: photoList.value.findIndex((p: any) => p.id === photo.id as number),
+    index: photoList.value.findIndex((p: any) => p.id === (photo.id as number)),
 })
 
 const currentPhoto = computed(() => photoList.value[state.index])
@@ -59,7 +59,6 @@ function downloadPhoto(photoUrl: string) {
     link.click()
     document.body.removeChild(link)
 }
-
 
 onMounted(() => {
     let isDownloading = false
