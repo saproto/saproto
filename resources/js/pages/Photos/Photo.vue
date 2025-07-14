@@ -3,13 +3,14 @@ import { usePage, router } from '@inertiajs/vue3'
 import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Shield, ArrowLeft, ArrowRight, Heart, Images } from 'lucide-vue-next'
+import PhotoAlbumData = App.Data.PhotoAlbumData
 
 const page = usePage()
 
-const album = computed(() => page.props.album)
+const album = computed(() => page.props.album) as PhotoAlbumData
 const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
-const config = computed(() => page.props.config)
+const emaildomain = computed(() => page.props.emaildomain)
 
 const state = reactive({
     index: photoList.value.findIndex((p: any) => p.id === page.props.photo.id),
@@ -81,7 +82,7 @@ onMounted(() => {
     <div class="mx-auto max-w-4xl space-y-6 p-4">
         <div class="bg-background overflow-hidden rounded-xl border shadow">
             <div class="bg-muted flex items-center justify-end gap-2 p-3">
-                <Button variant="success" class="me-auto" @click="goToAlbum">
+                <Button variant="default" class="me-auto" @click="goToAlbum">
                     <Images class="me-2 h-4 w-4" />
                     {{ album.name }}
                 </Button>
@@ -147,10 +148,10 @@ onMounted(() => {
             <Shield class="me-2 inline" />
             If there is a photo that you would like removed, please contact
             <a
-                :href="`mailto:photos@${config?.emaildomain || 'example.com'}`"
+                :href="`mailto:photos@${emaildomain || 'example.com'}`"
                 class="underline"
             >
-                photos@{{ config?.emaildomain || 'example.com' }} </a
+                photos@{{ emaildomain || 'example.com' }} </a
             >.
         </div>
     </div>
