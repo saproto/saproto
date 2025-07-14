@@ -560,7 +560,7 @@ CALSCALE:GREGORIAN
                 continue;
             }
 
-            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user)|| $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user) )) {
+            if (! $event->force_calendar_sync && $relevant_only && ! ($event->activity?->isParticipating($user) || $event->isOrganising($user) || $event->hasBoughtTickets($user) || $event->activity?->isHelping($user))) {
                 continue;
             }
 

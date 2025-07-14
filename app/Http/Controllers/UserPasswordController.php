@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
 use App\Models\User;
-use Google\Service\Directory\User as GoogleUser;
 use Google\Service\Directory;
+use Google\Service\Directory\User as GoogleUser;
 use Google\Service\Exception;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
@@ -102,6 +102,7 @@ class UserPasswordController extends Controller
 
     /**
      * Synchronize the password of the user.
+     *
      * @throws \Exception
      */
     public function syncPasswords(Request $request): View|RedirectResponse

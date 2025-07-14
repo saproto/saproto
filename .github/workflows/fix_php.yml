@@ -43,7 +43,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pint-
 
       - name: Run pint
-        run: ./vendor/bin/pint --diff=master
+        run: ./vendor/bin/pint --diff=master --parallel
 
       - name: Pull the latest changes
         run: git pull origin ${{ github.head_ref }}

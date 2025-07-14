@@ -14,7 +14,6 @@ class ProfilePictureController extends Controller
 {
     /**
      * @return RedirectResponse|string
-     *
      */
     public function update(Request $request)
     {
@@ -24,13 +23,14 @@ class ProfilePictureController extends Controller
 
         $user = Auth::user();
         try {
-           $user->addMediaFromRequest('image')->toMediaCollection('profile_picture');
+            $user->addMediaFromRequest('image')->toMediaCollection('profile_picture');
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Session::flash('flash_message', $e->getMessage());
             Redirect::back();
         }
 
         Session::flash('flash_message', 'Your profile picture has been updated!');
+
         return Redirect::back();
     }
 

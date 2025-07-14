@@ -180,11 +180,11 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 {
     use CanResetPassword;
     use HasApiTokens;
+
     /** @use HasFactory<UserFactory>*/
     use HasFactory;
 
     use HasRoles;
-
     use InteractsWithMedia;
     use SoftDeletes;
 
