@@ -55,6 +55,7 @@ class Photo extends Model
     protected $guarded = ['id'];
 
     protected $with = ['file'];
+
     protected $appends = ['url'];
 
     #[Override]

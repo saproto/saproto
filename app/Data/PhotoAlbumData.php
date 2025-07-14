@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Data;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
+
 use Illuminate\Support\Collection;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 
 /** @typescript */
