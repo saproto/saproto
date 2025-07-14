@@ -4,16 +4,18 @@ import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Shield, ArrowLeft, ArrowRight, Heart, Images } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
+import PhotoData = App.Data.PhotoData
 
 const page = usePage()
 
-const album = computed(() => page.props.album) as PhotoAlbumData
+const album = computed(() => page.props.album as PhotoAlbumData)
 const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
 
+let photo = page.props.photo as PhotoData;
 const state = reactive({
-    index: photoList.value.findIndex((p: any) => p.id === page.props.photo.id),
+    index: photoList.value.findIndex((p: any) => p.id === photo.id as number),
 })
 
 const currentPhoto = computed(() => photoList.value[state.index])
@@ -49,15 +51,38 @@ function handleLikeClick() {
     router.post(route('photo::likes', { photo: currentPhoto.value.id }))
 }
 
+function downloadPhoto(photoUrl: string) {
+    const link = document.createElement('a')
+    link.href = photoUrl
+    link.download = '' // Optional: set filename like 'photo.jpg'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+}
+
+
 onMounted(() => {
+    let isDownloading = false
     window.addEventListener('keydown', (e) => {
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key))
             e.preventDefault()
-        if (e.key === 'ArrowLeft' && previousPhoto.value)
+        if (e.key === 'ArrowLeft' && previousPhoto.value) {
             goToPhotoAt(state.index - 1)
-        if (e.key === 'ArrowRight' && nextPhoto.value)
+        }
+        if (e.key === 'ArrowRight' && nextPhoto.value) {
             goToPhotoAt(state.index + 1)
-        if (e.key === 'ArrowUp') handleLikeClick()
+        }
+        if (e.key === 'ArrowUp') {
+            handleLikeClick()
+        }
+        if (e.key === 'ArrowDown') {
+            if (isDownloading) return
+            isDownloading = true
+            downloadPhoto(currentPhoto.value.url)
+            setTimeout(() => {
+                isDownloading = false
+            }, 1000)
+        }
     })
 
     history.replaceState(
