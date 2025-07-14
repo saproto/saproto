@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PhotoController extends Controller
 {
@@ -39,7 +40,7 @@ class PhotoController extends Controller
         ]);
     }
 
-    public function photo(Photo $photo)
+    public function photo(Photo $photo): Response
     {
         $album = PhotoAlbum::query()->whereHas('items', function ($query) use ($photo) {
             $query->where('id', $photo->id);
@@ -56,14 +57,11 @@ class PhotoController extends Controller
             [
                 'photo' => PhotoData::from($photo),
                 'album' => PhotoAlbumData::from($album),
-                'config.emaildomain'=>Config::string('proto.emaildomain'),
+                'emaildomain' => Config::string('proto.emaildomain'),
             ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function toggleLike(Photo $photo)
+    public function toggleLike(Photo $photo): RedirectResponse
     {
         $user = Auth::user();
 
@@ -74,6 +72,7 @@ class PhotoController extends Controller
 
         if ($like) {
             $like->delete();
+
             return Redirect::route('photo::view', ['photo' => $photo->id]);
         }
 
