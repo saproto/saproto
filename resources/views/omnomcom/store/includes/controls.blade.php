@@ -1,4 +1,7 @@
-@php use Illuminate\Support\Facades\Vite; @endphp
+@php
+    use Illuminate\Support\Facades\Vite;
+@endphp
+
 <div
     id="controls"
     class="fixed-bottom bg-omnomcom align-content-center mb-4 p-2"
