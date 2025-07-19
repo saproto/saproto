@@ -4,7 +4,6 @@ import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Shield, ArrowLeft, ArrowRight, Heart, Images } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
-import PhotoData = App.Data.PhotoData
 
 const page = usePage()
 

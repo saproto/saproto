@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PhotoAlbumController extends Controller
 {
@@ -37,7 +38,7 @@ class PhotoAlbumController extends Controller
         ]);
     }
 
-    public function photo(HttpRequest $request, PhotoAlbum $album)
+    public function photo(HttpRequest $request, PhotoAlbum $album): Response
     {
         $album->load(['items' => function ($q) {
             $q->withCount('likes')->withExists([
@@ -56,7 +57,7 @@ class PhotoAlbumController extends Controller
             ]);
     }
 
-    public function toggleLike(Photo $photo)
+    public function toggleLike(Photo $photo): RedirectResponse
     {
         $user = Auth::user();
 
