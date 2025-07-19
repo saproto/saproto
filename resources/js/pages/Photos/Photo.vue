@@ -12,11 +12,13 @@ const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
 
-const photo = computed(()=> parseInt(page.props.photo));
-
+const photo = computed(() => parseInt(page.props.photo))
 
 const state = reactive({
-    index: photoList.value.findIndex((p: any) => p.id === photo.value) !== -1?photoList.value.findIndex((p: any) => p.id === photo.value):1,
+    index:
+        photoList.value.findIndex((p: any) => p.id === photo.value) !== -1
+            ? photoList.value.findIndex((p: any) => p.id === photo.value)
+            : 1,
 })
 
 const currentPhoto = computed(() => photoList.value[state.index])
@@ -37,7 +39,10 @@ function goToPhotoAt(index: number) {
     window.history.replaceState(
         { isPhotoView: true },
         '',
-        route('albums::album::show', { album: album.value.id, photo: currentPhoto.value.id })
+        route('albums::album::show', {
+            album: album.value.id,
+            photo: currentPhoto.value.id,
+        })
     )
 }
 
@@ -88,7 +93,10 @@ onMounted(() => {
     history.replaceState(
         { isPhotoView: true },
         '',
-        route('albums::album::show', {album: album.value.id, photo: currentPhoto.value.id })
+        route('albums::album::show', {
+            album: album.value.id,
+            photo: currentPhoto.value.id,
+        })
     )
 
     window.addEventListener('popstate', (e) => {

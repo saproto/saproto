@@ -53,7 +53,10 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => route('albums::album::show', ['album'=>$album, 'photo' => $photo]),
+                                'url' => route('albums::album::show', [
+                                    'album' => $album,
+                                    'photo' => $photo,
+                                ]),
                                 'img' => $photo->thumbnail(),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
