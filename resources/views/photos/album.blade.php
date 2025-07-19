@@ -1,7 +1,3 @@
-@php
-    use App\Enums\PhotoEnum;
-@endphp
-
 @extends('website.layouts.redesign.generic')
 @php
     /**
@@ -57,7 +53,10 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => route('albums::album::show', ['album'=>$album, 'photo' => $photo]),
+                                'url' => route('albums::album::show', [
+                                    'album' => $album,
+                                    'photo' => $photo,
+                                ]),
                                 'img' => $photo->getFirstMediaUrl(
                                     conversionName: PhotoEnum::SMALL->value,
                                 ),
