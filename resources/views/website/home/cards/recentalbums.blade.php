@@ -8,7 +8,7 @@
             @include(
                 'website.home.cards.card-bg-image',
                 [
-                    'url' => route('photo::album::list', ['album' => $album->id]),
+                    'url' => route('albums::album::list', ['album' => $album->id]),
                     'img' => $album->thumb(),
                     'html' => sprintf(
                         '<sub>%s</sub><br><strong>%s</strong>',
@@ -20,7 +20,7 @@
             )
         @endforeach
 
-        <a href="{{ route('photo::albums') }}" class="btn btn-info btn-block">
+        <a href="{{ route('albums::index') }}" class="btn btn-info btn-block">
             All photos
         </a>
     </div>

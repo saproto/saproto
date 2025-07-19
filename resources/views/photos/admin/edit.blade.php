@@ -21,7 +21,7 @@
                 @can('publishalbums')
                     <a
                         class="btn btn-warning btn-block mb-3 text-white"
-                        href="{{ route('photo::admin::unpublish', ['id' => $album->id]) }}"
+                        href="{{ route('albums::admin::unpublish', ['id' => $album->id]) }}"
                     >
                         This album is published so editing is limited, click
                         here to unpublish the album.
@@ -39,7 +39,7 @@
                 @can('publishalbums')
                     <a
                         class="btn btn-danger btn-block mb-3 text-white"
-                        href="{{ route('photo::admin::publish', ['id' => $album->id]) }}"
+                        href="{{ route('albums::admin::publish', ['id' => $album->id]) }}"
                     >
                         This album is not yet published, click here to publish
                         the album.
@@ -56,7 +56,7 @@
 
             <a
                 class="btn btn-info btn-block mb-3 text-white"
-                href="{{ route('photo::album::list', ['album' => $album->id]) }}"
+                href="{{ route('albums::album::list', ['album' => $album->id]) }}"
             >
                 Preview album
             </a>
@@ -173,7 +173,7 @@
                             </button>
                             <a
                                 class="btn btn-danger"
-                                href="{{ route('photo::admin::delete', ['id' => $album->id]) }}"
+                                href="{{ route('albums::admin::delete', ['id' => $album->id]) }}"
                             >
                                 Delete Album
                             </a>
@@ -262,7 +262,7 @@
             <div class="card mb-3">
                 <form
                     method="POST"
-                    action="{{ route('photo::admin::action', ['id' => $album->id]) }}"
+                    action="{{ route('albums::admin::action', ['id' => $album->id]) }}"
                 >
                     {{ csrf_field() }}
 
@@ -457,7 +457,7 @@
                     formData.append('file', file)
                     toggleRunning()
                     await post(
-                        '{{ route('photo::admin::upload', ['id' => $album->id], false) }}',
+                        '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
                         formData,
                         {
                             parse: false,
