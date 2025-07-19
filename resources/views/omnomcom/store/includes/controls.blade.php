@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Vite;
+@endphp
+
 <div
     id="controls"
     class="fixed-bottom bg-omnomcom align-content-center mb-4 p-2"
@@ -49,7 +53,7 @@
                 <div
                     class="cart-product-image-inner"
                     style="
-                        background-image: url({{ asset('images/font-awesome/fa-cart-shopping.svg') }});
+                        background-image: url({{ Vite::asset('resources/assets/images/font-awesome/fa-cart-shopping.svg') }});
                     "
                 ></div>
             </div>

@@ -1,4 +1,7 @@
 window.global ||= window
+
+import.meta.glob(['../images/**'])
+
 // Vendors
 import SignaturePad from 'signature_pad'
 
