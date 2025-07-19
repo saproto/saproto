@@ -463,7 +463,7 @@
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route('photo::admin::index') }}"
+                                        href="{{ route('albums::admin::index') }}"
                                     >
                                         Photo Admin
                                     </a>
@@ -554,7 +554,7 @@
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('photo::admin::index') }}"
+                                            href="{{ route('albums::admin::index') }}"
                                         >
                                             Photo Admin
                                         </a>
@@ -566,7 +566,7 @@
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
-                                        href="{{ route('photo::admin::index') }}"
+                                        href="{{ route('albums::admin::index') }}"
                                         role="button"
                                         aria-haspopup="false"
                                         aria-expanded="false"

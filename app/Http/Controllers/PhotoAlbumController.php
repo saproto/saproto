@@ -9,13 +9,15 @@ use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use Config;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PhotoController extends Controller
+class PhotoAlbumController extends Controller
 {
     /** @return View */
     public function index()
@@ -29,39 +31,35 @@ class PhotoController extends Controller
 
     public function show(PhotoAlbum $album): View|RedirectResponse
     {
-        $photos = $album->items()
-            ->orderBy('date_taken', 'desc')
-            ->withCount('likes')
-            ->paginate(24);
-
         return view('photos.album', [
             'album' => $album,
-            'photos' => $photos,
+            'photos' => $album->items()
+                ->orderBy('date_taken', 'desc')
+                ->withCount('likes')
+                ->paginate(24),
         ]);
     }
 
-    public function photo(Photo $photo): Response
+    public function photo(HttpRequest $request, PhotoAlbum $album)
     {
-        $album = PhotoAlbum::query()->whereHas('items', function ($query) use ($photo) {
-            $query->where('id', $photo->id);
-        })->with(['items' => function ($q) {
+        $album->load(['items' => function ($q) {
             $q->withCount('likes')->withExists([
                 'likes as liked_by_me' => function ($query) {
                     $query->where('user_id', Auth::id());
                 },
             ])->orderBy('date_taken', 'desc')
                 ->orderBy('id');
-        }])->first();
+        }]);
 
         return Inertia::render('Photos/Photo',
             [
-                'photo' => PhotoData::from($photo),
+                'photo' => $request->get('photo'),
                 'album' => PhotoAlbumData::from($album),
                 'emaildomain' => Config::string('proto.emaildomain'),
             ]);
     }
 
-    public function toggleLike(Photo $photo): RedirectResponse
+    public function toggleLike(Photo $photo)
     {
         $user = Auth::user();
 
@@ -73,7 +71,7 @@ class PhotoController extends Controller
         if ($like) {
             $like->delete();
 
-            return Redirect::route('photo::view', ['photo' => $photo->id]);
+            return Redirect::route('albums::album::show', ['album' => $photo->album_id, 'photo' => $photo->id]);
         }
 
         PhotoLikes::query()->create([
@@ -81,6 +79,6 @@ class PhotoController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return Redirect::route('photo::view', ['photo' => $photo->id]);
+        return Redirect::route('albums::album::show', ['album' => $photo->album_id, 'photo' => $photo->id]);
     }
 }

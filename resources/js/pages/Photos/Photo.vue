@@ -13,9 +13,11 @@ const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
 
-let photo = page.props.photo as PhotoData
+const photo = computed(()=> parseInt(page.props.photo));
+
+
 const state = reactive({
-    index: photoList.value.findIndex((p: any) => p.id === (photo.id as number)),
+    index: photoList.value.findIndex((p: any) => p.id === photo.value) !== -1?photoList.value.findIndex((p: any) => p.id === photo.value):1,
 })
 
 const currentPhoto = computed(() => photoList.value[state.index])
@@ -36,19 +38,19 @@ function goToPhotoAt(index: number) {
     window.history.replaceState(
         { isPhotoView: true },
         '',
-        route('photo::view', { photo: currentPhoto.value.id })
+        route('albums::album::show', { album: album.value.id, photo: currentPhoto.value.id })
     )
 }
 
 function goToAlbum() {
-    window.location.href = route('photo::album::list', {
+    window.location.href = route('albums::album::list', {
         album: album.value.id,
         page: albumPage.value ?? 1,
     })
 }
 
 function handleLikeClick() {
-    router.post(route('photo::likes', { photo: currentPhoto.value.id }))
+    router.post(route('albums::like', { photo: currentPhoto.value.id }))
 }
 
 function downloadPhoto(photoUrl: string) {
@@ -87,13 +89,13 @@ onMounted(() => {
     history.replaceState(
         { isPhotoView: true },
         '',
-        route('photo::view', { photo: currentPhoto.value.id })
+        route('albums::album::show', {album: album.value.id, photo: currentPhoto.value.id })
     )
 
     window.addEventListener('popstate', (e) => {
         if (e.state?.isPhotoView) {
             // Navigate to the album page based on current index
-            window.location.href = route('photo::album::list', {
+            window.location.href = route('albums::album::list', {
                 album: album.value.id,
                 page: albumPage.value,
             })

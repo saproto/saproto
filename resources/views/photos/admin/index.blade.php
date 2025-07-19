@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <form
                         method="post"
-                        action="{{ route('photo::admin::index') }}"
+                        action="{{ route('albums::admin::index') }}"
                         class="form-main"
                     >
                         {{ csrf_field() }}
@@ -45,7 +45,7 @@
 
                 <form
                     method="post"
-                    action="{{ route('photo::admin::create') }}"
+                    action="{{ route('albums::admin::create') }}"
                 >
                     {{ csrf_field() }}
                     <div class="card-body">
@@ -102,7 +102,7 @@
                                 @include(
                                     'website.home.cards.card-bg-image',
                                     [
-                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'url' => route('albums::admin::edit', ['id' => $album->id]),
                                         'img' => $album->thumb(),
                                         'html' => sprintf(
                                             '<sub>%s</sub><br>%s<strong>%s</strong>',
@@ -135,7 +135,7 @@
                                 @include(
                                     'website.home.cards.card-bg-image',
                                     [
-                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'url' => route('albums::admin::edit', ['id' => $album->id]),
                                         'img' => $album->thumb(),
                                         'html' => sprintf(
                                             '<sub>%s</sub><br>%s<strong>%s</strong>',
