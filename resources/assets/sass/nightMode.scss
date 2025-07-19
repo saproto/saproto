@@ -32,6 +32,11 @@ $body-color: #fff;
 //modal
 $modal-content-bg: $blue-light;
 
+//tooltips
+.tooltip .tooltip-inner {
+    color: #fff !important;
+}
+
 //table
 $table-color: #fff;
 $table-border-color: $blue-dark;
