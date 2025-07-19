@@ -67,7 +67,9 @@
                 id="alert-wrapper"
             ></div>
 
-            @include('components.modals.achievement-popup')
+            @if (Auth::check())
+                @include('components.modals.achievement-popup')
+            @endif
 
             @include('components.modals.errormessages')
 
