@@ -122,6 +122,18 @@
             let stock = []
             let price = []
 
+            function addToCart(el){
+                const id = el.getAttribute('data-id')
+                const s = stock[id]
+                if (s <= 0) {
+                    modals['outofstock-modal'].show()
+                } else {
+                    cart[id]++
+                    stock[id]--
+                    update('add')
+                }
+            }
+
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {
                     store: '{{ $store_slug }}',
@@ -193,15 +205,7 @@
                                 modals['outofstock-modal'].show()
                             }
                         } else {
-                            const id = el.getAttribute('data-id')
-                            const s = stock[id]
-                            if (s <= 0) {
-                                modals['outofstock-modal'].show()
-                            } else {
-                                cart[id]++
-                                stock[id]--
-                                update('add')
-                            }
+                            addToCart(el)
                         }
                     })
                 })
@@ -697,8 +701,35 @@
                 idleWarning = false
             })
 
+            function findItem(barcode){
+                const el = document.querySelector(
+                    `[data-barcode="${barcode}"]`
+                )
+                if(el){
+                    addToCart(el)
+                }
+            }
+
+            let barcode = '';
+            let lastkeyPress = performance.now();
+
             // Reset idle timer on keydown
-            document.body.addEventListener('keydown', () => {
+            document.body.addEventListener('keydown', function (event) {
+                const key = event.key;
+                const now = performance.now();
+                if((now - lastkeyPress) > 30){
+                    barcode = ''
+                    barcode +=key
+                }else{
+                    if(event.key === 'Enter' && barcode !== ''){
+                     findItem(barcode)
+                        barcode = ''
+                    }else{
+                        barcode +=key
+                    }
+                }
+
+                lastkeyPress = now
                 idleTime = 0
                 idleWarning = false
             })

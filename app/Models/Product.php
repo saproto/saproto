@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property float $price
  * @property int $calories
+ * @property int|null $barcode
  * @property string|null $supplier_id
  * @property int $stock
  * @property int $preferred_stock

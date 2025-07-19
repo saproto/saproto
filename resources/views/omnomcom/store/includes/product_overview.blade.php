@@ -22,6 +22,7 @@
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
+                        data-barcode="{{ $product->barcode }}"
                     >
                         <div class="product-inner">
                             <div class="product-image">

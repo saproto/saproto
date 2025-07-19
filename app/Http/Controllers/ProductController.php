@@ -49,7 +49,7 @@ class ProductController extends Controller
     {
         return view('omnomcom.products.edit', [
             'product' => null,
-            'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
+            'accounts' => Account::query()->orderBy('account_number')->get(),
             'categories' => ProductCategory::all(),
         ]);
     }
@@ -61,11 +61,12 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::query()->create($request->except('image', 'product_categories'));
+        $product = Product::query()->create($request->except('image', 'product_categories', 'barcode'));
         $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->barcode = $request->input('barcode')!='' ? $request->input('barcode') : null;
 
         if ($request->file('image')) {
             $file = new StorageEntry;
@@ -105,7 +106,7 @@ class ProductController extends Controller
             'product' => $product,
             'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
             'categories' => ProductCategory::all(),
-            'orderlines' => $product->orderlines()->orderBy('created_at', 'DESC')->paginate(20),
+            'orderlines' => $product->orderlines()->with('user')->orderBy('created_at', 'DESC')->paginate(20),
         ]);
     }
 
@@ -156,6 +157,7 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->barcode = $request->input('barcode')!='' ? $request->input('barcode') : null;
 
         if ($request->file('image')) {
             $file = new StorageEntry;

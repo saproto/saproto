@@ -123,6 +123,7 @@
                                     <td>Stock</td>
                                     <td>Visible</td>
                                     <td>Alcoholic</td>
+                                    <td>Barcode</td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -140,11 +141,12 @@
                                         <td>{{ $product->calories }}</td>
                                         <td>{{ $product->stock }}</td>
                                         <td>
-                                            {{ $product->is_visible ? 'Yes' : 'No' }}
+                                            {{ $product->is_visible ? '✅' : '❌' }}
                                         </td>
                                         <td>
-                                            {{ $product->is_alcoholic ? 'Yes' : 'No' }}
+                                            {{ $product->is_alcoholic ? '✅' : '❌' }}
                                         </td>
+                                        <td>{{ $product->barcode }}</td>
                                         <td style="min-width: 60px">
                                             <a
                                                 href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}"
