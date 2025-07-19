@@ -174,6 +174,11 @@
                 </div>
                 <div class="col-md-6">
                     <label for="barcode">Barcode:</label>
+                    <i
+                        class="fas fa-info-circle fa-fw mr-2"
+                        data-bs-toggle="tooltip"
+                        title="The number under the barcode of the product so it can be scanned"
+                    ></i>
                     <div class="input-group">
                         <input
                             type="text"
