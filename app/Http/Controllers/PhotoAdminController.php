@@ -47,7 +47,7 @@ class PhotoAdminController extends Controller
 
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $album->id]);
+        return Redirect::route('albums::admin::edit', ['id' => $album->id]);
     }
 
     /**
@@ -79,7 +79,7 @@ class PhotoAdminController extends Controller
         $album->private = (bool) $request->input('private');
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return Redirect::route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -158,7 +158,7 @@ class PhotoAdminController extends Controller
             $album->save();
         }
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return Redirect::route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -172,7 +172,7 @@ class PhotoAdminController extends Controller
         $album->items->each->delete();
         $album->delete();
 
-        return Redirect::route('photo::admin::index');
+        return Redirect::route('albums::admin::index');
     }
 
     /**
@@ -191,7 +191,7 @@ class PhotoAdminController extends Controller
         $album->published = true;
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return Redirect::route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -203,7 +203,7 @@ class PhotoAdminController extends Controller
         $album->published = false;
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return Redirect::route('albums::admin::edit', ['id' => $id]);
     }
 
     /**

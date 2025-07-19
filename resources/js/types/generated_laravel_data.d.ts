@@ -13,6 +13,20 @@ order: number;
 is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
 };
+export type PhotoAlbumData = {
+id: number;
+name: string;
+private: boolean;
+items: Array<App.Data.PhotoData>;
+};
+export type PhotoData = {
+id: number;
+private: boolean;
+date_taken: number;
+url: string;
+likes_count: number | null;
+liked_by_me: boolean | null;
+};
 }
 declare namespace App.Enums {
 export enum IsAlfredThereEnum { THERE = 'there', AWAY = 'away', UNKNOWN = 'unknown', JUR = 'jur', TEXT_ONLY = 'text' };

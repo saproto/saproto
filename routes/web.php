@@ -43,7 +43,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PhotoAdminController;
-use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\PhotoAlbumController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilePictureController;
@@ -891,13 +891,16 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Routes related to photos --- */
-    Route::prefix('photos')->name('photo::')->group(function () {
+    Route::prefix('albums')->name('albums::')->group(function () {
         // Public routes
-        Route::controller(PhotoController::class)->group(function () {
-            Route::get('', 'index')->name('albums');
-            Route::get('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('likes');
-            Route::get('/photo/{photo}', 'photo')->name('view');
-            Route::get('{album}', 'show')->name('album::list');
+        Route::controller(PhotoAlbumController::class)->group(function () {
+            Route::get('', 'index')->name('index');
+            Route::prefix('{album}')->name("album::")->group(function () {
+                Route::get('', 'show')->name('list');
+                Route::get('viewer', 'photo')->name('show');
+            });
+
+            Route::post('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('like');
         });
 
         /* --- Routes related to the photo admin. (Protography only) --- */
