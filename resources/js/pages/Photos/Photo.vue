@@ -12,7 +12,7 @@ const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
 
-const photo = computed(() => parseInt(page.props.photo))
+const photo = computed(() => parseInt(page.props.photo as string))
 
 const state = reactive({
     index:
