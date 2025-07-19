@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Data\PhotoAlbumData;
-use App\Data\PhotoData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
@@ -12,10 +11,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class PhotoAlbumController extends Controller
 {
