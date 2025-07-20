@@ -11,7 +11,6 @@ use App\Models\EventCategory;
 use App\Models\HelpingCommittee;
 use App\Models\PhotoAlbum;
 use App\Models\Product;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -28,6 +27,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Mollie\Api\Exceptions\ApiException;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class EventController extends Controller
 {
@@ -143,9 +144,14 @@ class EventController extends Controller
         ]);
 
         if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-            $event->image()->associate($file);
+            try {
+                $event->addMediaFromRequest('image')
+                    ->usingFileName('event_'.$event->id)
+                    ->toMediaCollection('header');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+                Redirect::back();
+            }
         }
 
         $committee = Committee::query()->find($request->input('committee'));
@@ -195,10 +201,14 @@ class EventController extends Controller
         }
 
         if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-
-            $event->image()->associate($file);
+            try {
+                $event->addMediaFromRequest('image')
+                    ->usingFileName('event_'.$event->id)
+                    ->toMediaCollection('header');
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+                Redirect::back();
+            }
         }
 
         if ($request->has('committee')) {
@@ -420,7 +430,7 @@ class EventController extends Controller
             })
             ->whereNull('publication')
             ->orderBy('start')
-            ->with('activity.users.media', 'activity.backupUsers', 'image', 'committee.users', 'tickets')
+            ->with('activity.users.media', 'activity.backupUsers', 'media', 'committee.users', 'tickets')
             ->take($limit)
             ->get();
 
@@ -448,7 +458,7 @@ class EventController extends Controller
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
-                'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
+                'image' => ($event->getFirstMediaUrl('header', 'card')),
                 'description' => $event->description,
                 'start' => $event->start,
                 'organizing_committee' => ($event->committee ? [
@@ -645,6 +655,10 @@ CALSCALE:GREGORIAN
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
     }
 
+    /**
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
     public function copyEvent(Request $request): RedirectResponse
     {
         $event = Event::query()->findOrFail($request->input('id'));
@@ -669,6 +683,16 @@ CALSCALE:GREGORIAN
             'update_sequence' => 0,
         ]);
         $newEvent->save();
+
+        $image = $event->getFirstMedia('header');
+        if($image) {
+            $newEvent->addMedia($image->getPath())
+                ->usingName($image->file_name)
+                ->usingFileName('event_'.$newEvent->id)
+                ->preservingOriginal()
+                ->toMediaCollection('header');
+        }
+
 
         if ($event->activity) {
             $newActivity = $event->activity->replicate([

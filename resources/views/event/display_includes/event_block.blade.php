@@ -7,10 +7,14 @@
         class="card leftborder leftborder-info text-decoration-none mb-3"
         href="{{ route('event::show', ['event' => $event]) }}"
     >
+        @php
+            $url = $event->getFirstMediaUrl('header', 'card');
+        @endphp
+
         <div
-            class="card-body event {{ $event->image ? 'bg-img' : 'no-img' }} text-start"
-            style="{{ empty($lazyload) && $event->image ? 'background-size: cover; background: center no-repeat url(' . $event->image->generateImagePath(800, 300) . ')' : '' }}"
-            data-bgimage="{{ ! empty($lazyload) && $event->image ? $event->image->generateImagePath(800, 300) ?? '' : '' }}"
+            class="card-body event {{ $url !== '' ? 'bg-img' : 'no-img' }} text-start"
+            style="{{ empty($lazyload) && $url !== '' ? 'background-size: cover; background: center no-repeat url(' . $event->getFirstMediaUrl('header', 'card') . ')' : '' }}"
+            data-bgimage="{{ ! empty($lazyload) ? $url : '' }}"
         >
             {{-- Countdown --}}
             @if (! empty($countdown))
