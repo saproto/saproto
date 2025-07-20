@@ -143,14 +143,15 @@ class EventController extends Controller
             'publication' => $request->publication ? $request->date('publication')->timestamp : null,
         ]);
 
-        if ($request->file('image')) {
+        $file = $request->file('image');
+        if ($file) {
             try {
                 $event->addMediaFromRequest('image')
                     ->usingFileName('event_'.$event->id)
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
-                Redirect::back();
+                return Redirect::back();
             }
         }
 
@@ -200,14 +201,15 @@ class EventController extends Controller
             return Redirect::back();
         }
 
-        if ($request->file('image')) {
+        $file = $request->file('image');
+        if ($file) {
             try {
                 $event->addMediaFromRequest('image')
                     ->usingFileName('event_'.$event->id)
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
-                Redirect::back();
+                return Redirect::back();
             }
         }
 

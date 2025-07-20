@@ -26,7 +26,7 @@ class ProfilePictureController extends Controller
             $user->addMediaFromRequest('image')->toMediaCollection('profile_picture');
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Session::flash('flash_message', $e->getMessage());
-            Redirect::back();
+            return Redirect::back();
         }
 
         Session::flash('flash_message', 'Your profile picture has been updated!');
