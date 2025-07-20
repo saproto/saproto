@@ -286,6 +286,10 @@ class EventController extends Controller
 
         Session::flash('flash_message', "The event '".$event->title."' has been deleted.");
 
+        foreach ($event->getMedia('header') as $media) {
+            $media->delete();
+        }
+
         $event->delete();
 
         return Redirect::route('event::index');
