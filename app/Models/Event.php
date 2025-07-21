@@ -174,14 +174,6 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class);
-    }
-
-    /**
      * @return BelongsTo<Committee, $this>
      */
     public function committee(): BelongsTo

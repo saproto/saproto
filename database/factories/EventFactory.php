@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\EventCategory;
-use App\Models\StorageEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Override;
@@ -36,7 +35,6 @@ class EventFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'unique_users_count' => fake()->randomNumber(),
-            'image_id' => StorageEntry::factory(),
             'committee_id' => Committee::factory(),
             'category_id' => EventCategory::factory(),
         ];

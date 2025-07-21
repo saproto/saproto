@@ -67,7 +67,6 @@ class StorageEntry extends Model
             Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
             Committee::query()->where('image_id', $this->id)->count() == 0 &&
-            Event::query()->where('image_id', $this->id)->count() == 0 &&
             Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
             SoundboardSound::query()->where('file_id', $this->id)->count() == 0 &&
             HeaderImage::query()->where('image_id', $this->id)->count() == 0 &&
