@@ -18,7 +18,7 @@ class ProfilePictureController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|max:5120', // max 5MB
+            'image' => 'required|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
         ]);
 
         $user = Auth::user();
@@ -26,7 +26,7 @@ class ProfilePictureController extends Controller
             $user->addMediaFromRequest('image')->toMediaCollection('profile_picture');
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Session::flash('flash_message', $e->getMessage());
-            Redirect::back();
+            return Redirect::back();
         }
 
         Session::flash('flash_message', 'Your profile picture has been updated!');

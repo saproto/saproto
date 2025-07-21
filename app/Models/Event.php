@@ -21,6 +21,10 @@ use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Event Model.
@@ -43,7 +47,6 @@ use Override;
  * @property bool $involves_food
  * @property bool $secret
  * @property bool $force_calendar_sync
- * @property int|null $image_id
  * @property Carbon|null $deleted_at
  * @property int|null $committee_id
  * @property string|null $summary
@@ -55,7 +58,6 @@ use Override;
  * @property-read Collection<int, Dinnerform> $dinnerforms
  * @property-read int|null $dinnerforms_count
  * @property-read mixed $formatted_date
- * @property-read StorageEntry|null $image
  * @property-read bool $is_future
  * @property-read Collection<int, Ticket> $tickets
  * @property-read int|null $tickets_count
@@ -75,7 +77,6 @@ use Override;
  * @method static Builder<static>|Event whereEnd($value)
  * @method static Builder<static>|Event whereForceCalendarSync($value)
  * @method static Builder<static>|Event whereId($value)
- * @method static Builder<static>|Event whereImageId($value)
  * @method static Builder<static>|Event whereInvolvesFood($value)
  * @method static Builder<static>|Event whereIsExternal($value)
  * @method static Builder<static>|Event whereIsFeatured($value)
@@ -94,18 +95,19 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class Event extends Model
+class Event extends Model implements HasMedia
 {
     /** @use HasFactory<EventFactory>*/
     use HasFactory;
 
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'events';
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'deleted_at', 'update_sequence'];
 
     protected $with = ['category'];
 
@@ -156,6 +158,29 @@ class Event extends Model
         return count($id) > 0 ? (int) $id[0] : null;
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('header')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('card')
+            ->performOnCollections('header')
+            ->nonQueued()
+            ->fit(Fit::Crop, 800, 300)
+            ->format('webp');
+    }
+
+    /**
+     * @return BelongsTo<StorageEntry, $this>
+     */
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(StorageEntry::class);
+    }
+
     /**
      * @return BelongsTo<Committee, $this>
      */
@@ -191,7 +216,7 @@ class Event extends Model
 
         return Event::query()
             ->orderBy('start')
-            ->with('image')
+            ->with('media')
             ->with('activity', static function ($e) use ($user) {
                 $e
                     ->with('participation', function ($q) use ($user) {
@@ -218,14 +243,6 @@ class Event extends Model
     public function isPublished(): bool
     {
         return $this->publication < Carbon::now()->timestamp;
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class);
     }
 
     /**

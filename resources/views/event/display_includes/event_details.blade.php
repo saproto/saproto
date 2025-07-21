@@ -42,10 +42,10 @@
 </div>
 
 <div class="card mb-3">
-    @if ($event->image)
+    @if ($event->getFirstMediaUrl('header', 'card') != '')
         <img
             class="card-img-top"
-            src="{{ $event->image->generateImagePath(800, 300) }}"
+            src="{{ $event->getFirstMediaUrl('header', 'card') }}"
             width="100%"
         />
     @endif

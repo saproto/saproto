@@ -247,7 +247,7 @@
 
                         <h5>Current image:</h5>
                         <img
-                            src="{!! $event->image->generateImagePath(800, 300) !!}"
+                            src="{!! $event->getFirstMediaUrl('header', 'card') !!}"
                             class="w-100 border"
                         />
                     @endif

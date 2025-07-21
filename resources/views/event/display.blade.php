@@ -11,9 +11,9 @@
     {{ $event->description }}
 @endsection
 
-@if ($event->image)
+@if ($event->getFirstMediaUrl('header', 'card') !== '')
     @section('og-image')
-        {{ $event->image->generateImagePath(800, 300) }}
+        {{ $event->getFirstMediaUrl('header', 'card') }}
     @endsection
 @endif
 
