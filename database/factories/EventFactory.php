@@ -36,7 +36,6 @@ class EventFactory extends Factory
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'unique_users_count' => fake()->randomNumber(),
-            'image_id' => StorageEntry::factory(),
             'committee_id' => Committee::factory(),
             'category_id' => EventCategory::factory(),
         ];
