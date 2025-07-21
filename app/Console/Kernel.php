@@ -7,7 +7,6 @@ use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
-use App\Console\Commands\CopyEventPictures;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
@@ -79,7 +78,6 @@ class Kernel extends ConsoleKernel
         TempAdminCleanup::class,
         SyncUTAccounts::class,
         GoogleSync::class,
-        CopyEventPictures::class,
     ];
 
     /**
