@@ -183,22 +183,6 @@ class Photo extends Model implements HasMedia
         return Attribute::make(get: fn (): string => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
     }
 
-    #[Override]
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::deleting(static function ($photo) {
-            /* @var Photo $photo */
-            $photo->file?->delete();
-            if ($photo->id == $photo->album->thumb_id) {
-                $album = $photo->album;
-                $album->thumb_id = null;
-                $album->save();
-            }
-        });
-    }
-
     protected function casts(): array
     {
         return [
