@@ -111,7 +111,7 @@ class PhotoAdminController extends Controller
         $disk = $album->private ? 'local' : 'public';
         try {
             $photo->addMediaFromRequest('file')
-                ->usingFileName('photo_'.$photo->id)
+                ->usingFileName($album->id.'_'.$photo->id)
                 ->toMediaCollection(diskName: $disk);
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));

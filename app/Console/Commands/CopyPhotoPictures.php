@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Photo;
+use App\Models\PhotoAlbum;
 use Exception;
 use Illuminate\Console\Command;
 
@@ -27,28 +28,31 @@ class CopyPhotoPictures extends Command
      */
     public function handle(): void
     {
-        $photoQuery = Photo::query()->whereHas('file');
-        $bar = $this->output->createProgressBar($photoQuery->count());
+        $albums = PhotoAlbum::query()->withoutGlobalScopes()->with(['items'=> function ($q){
+            $q->withoutGlobalScopes()->whereHas('file')->with('file');
+        }]);
+        $bar = $this->output->createProgressBar($albums->count());
         $bar->start();
-        $photoQuery
-            ->with('file')->chunkById(100, function ($photos) use(&$bar) {
-                /** @var Photo $photo */
-                foreach ($photos as $photo) {
+        $albums
+           ->chunkById(100, function ($albums) use(&$bar) {
+                foreach ($albums as $album) {
 
-                    $disk = $photo->private ? 'local' : 'public';
-                    try {
-                        $photo->addMedia($photo->file->generateLocalPath())
-                            ->usingName($photo->file->original_filename)
-                            ->usingFileName('photo_'. $photo->id)
-                            ->preservingOriginal()
-                            ->toMediaCollection(diskName: $disk);
-                        $photo->update(['file_id' => null]);
-                        $bar->advance();
-
-                    } catch (Exception $e) {
-                        $this->warn('Photo: '.$photo->id.' error: '.$e->getMessage());
-                        $bar->advance();
+                    foreach ($album->items as $photo) {
+                        $disk = $photo->private || $album->private ? 'local' : 'public';
+                        try {
+                            $photo->addMedia($photo->file->generateLocalPath())
+                                ->usingName($photo->file->original_filename)
+                                ->usingFileName($album->id.'_'.$photo->id)
+                                ->preservingOriginal()
+                                ->toMediaCollection(diskName: $disk);
+                            if(!$photo->private && $album->private){
+                                $photo->update(['private' => true]);
+                            }
+                        } catch (Exception $e) {
+                            $this->warn('Photo: '.$photo->id.' error: '.$e->getMessage());
+                        }
                     }
+                    $bar->advance();
                 }
             });
 
