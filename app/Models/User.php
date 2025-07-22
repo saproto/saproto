@@ -237,6 +237,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('profile_picture')
+            ->useDisk('public')
             ->useFallbackUrl(asset('images/default-avatars/other.png'))
             ->singleFile();
     }
