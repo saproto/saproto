@@ -26,7 +26,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $file_id
  * @property int $album_id
  * @property int $date_taken
  * @property bool $private

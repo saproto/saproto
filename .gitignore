@@ -16,7 +16,7 @@ tmp
 /personal
 public/storage
 /storage/media-library
-
+/storage/framework/testing/*
 # IDE files
 /.idea
 .phpactor.json
