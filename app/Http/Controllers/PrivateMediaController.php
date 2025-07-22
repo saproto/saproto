@@ -17,7 +17,7 @@ class PrivateMediaController extends Controller
             abort(403, 'This is not a private media file.');
         }
 
-        $path = $conversion ? $media->getPathRelativeToRoot($conversion) : $media->getPathRelativeToRoot();
+        $path = $conversion !== null && $conversion !== '' && $conversion !== '0' ? $media->getPathRelativeToRoot($conversion) : $media->getPathRelativeToRoot();
 
         if ($conversion && ! Storage::disk($media->disk)->exists($path)) {
             $path = $media->getPathRelativeToRoot();

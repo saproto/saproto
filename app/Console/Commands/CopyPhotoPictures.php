@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use Exception;
 use Illuminate\Console\Command;
@@ -33,6 +32,7 @@ class CopyPhotoPictures extends Command
         }]);
         $bar = $this->output->createProgressBar($albums->count());
         $bar->start();
+
         $albums
            ->chunkById(100, function ($albums) use(&$bar) {
                 foreach ($albums as $album) {
@@ -52,6 +52,7 @@ class CopyPhotoPictures extends Command
                             $this->warn('Photo: '.$photo->id.' error: '.$e->getMessage());
                         }
                     }
+
                     $bar->advance();
                 }
             });
