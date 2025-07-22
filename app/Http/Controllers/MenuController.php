@@ -175,8 +175,10 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    /** @return array<string>|null */
-    private function getAllRoutes(Router $router): ?array
+    /**
+     * @return array<string>
+     */
+    private function getAllRoutes(Router $router): array
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 
