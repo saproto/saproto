@@ -1,3 +1,7 @@
+@php
+    use App\Enums\PhotoEnum;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 @php
     /**
@@ -54,7 +58,9 @@
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
                                 'url' => route('photo::view', ['photo' => $photo]),
-                                'img' => $photo->thumbnail(),
+                                'img' => $photo->getFirstMediaUrl(
+                                    conversionName: PhotoEnum::SMALL->value,
+                                ),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
                                     $photo->likes_count,

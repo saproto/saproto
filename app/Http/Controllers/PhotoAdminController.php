@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
-use App\Models\StorageEntry;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PhotoAdminController extends Controller
 {
@@ -87,12 +86,11 @@ class PhotoAdminController extends Controller
      */
     public function upload(Request $request, int $id)
     {
+        $request->validate([
+            'file' => 'required|image|max:5120', // max 5MB
+        ]);
+
         $album = PhotoAlbum::query()->findOrFail($id);
-        if (! $request->hasFile('file')) {
-            return response()->json([
-                'message' => 'photo not found in request!',
-            ], 404);
-        }
 
         if ($album->published) {
             return response()->json([
@@ -100,16 +98,23 @@ class PhotoAdminController extends Controller
             ], 500);
         }
 
-        try {
-            $uploadFile = $request->file('file');
+        $photo = Photo::query()->create([
+            'date_taken' => $request->file('file')->getCTime(),
+            'album_id' => $album->id,
+            'private' => $album->private,
+            'file_id' => 1,
+        ]);
 
-            $photo = $this->createPhotoFromUpload($uploadFile, $id);
+        $disk = $album->private ? 'local' : 'public';
+        try {
+            $photo->addMediaFromRequest('file')
+                ->usingFileName($album->id.'_'.$photo->id)
+                ->toMediaCollection(diskName: $disk);
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
-
-        } catch (Exception $exception) {
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
             return response()->json([
-                'message' => $exception,
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -148,8 +153,12 @@ class PhotoAdminController extends Controller
                             continue;
                         }
 
-                        $photo->private = ! $photo->private;
-                        $photo->save();
+                        $media = $photo->getFirstMedia();
+                        $media->move($photo, diskName: $photo->private ? 'public' : 'local');
+
+                        $photo->update([
+                            'private' => ! $photo->private,
+                        ]);
                     }
 
                     break;
@@ -204,25 +213,5 @@ class PhotoAdminController extends Controller
         $album->save();
 
         return Redirect::route('photo::admin::edit', ['id' => $id]);
-    }
-
-    /**
-     * @throws FileNotFoundException
-     */
-    private function createPhotoFromUpload(UploadedFile $uploaded_photo, int $album_id): Photo
-    {
-        $path = 'photos/'.$album_id.'/';
-
-        $file = new StorageEntry;
-        $file->createFromFile($uploaded_photo, $path);
-        $file->save();
-
-        $photo = new Photo;
-        $photo->date_taken = $uploaded_photo->getCTime();
-        $photo->album_id = $album_id;
-        $photo->file_id = $file->id;
-        $photo->save();
-
-        return $photo;
     }
 }

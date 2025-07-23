@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Photo model.
@@ -21,7 +26,6 @@ use Override;
  * @property int $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $file_id
  * @property int $album_id
  * @property int $date_taken
  * @property bool $private
@@ -45,16 +49,18 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class Photo extends Model
+class Photo extends Model implements HasMedia
 {
     /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'photos';
 
     protected $guarded = ['id'];
 
-    protected $with = ['file'];
+    protected $with = ['media'];
 
     #[Override]
     protected static function booted(): void
@@ -72,6 +78,26 @@ class Photo extends Model
                 $query->where('published', true);
             }));
         });
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(PhotoEnum::LARGE->value)
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::MEDIUM->value)
+            ->fit(Fit::Max, 750, 750)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 420, 420)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::TINY->value)
+            ->fit(Fit::Max, 50, 50)
+            ->format('webp');
     }
 
     /**
@@ -148,33 +174,12 @@ class Photo extends Model
         return 1;
     }
 
-    public function thumbnail(): string
-    {
-        return $this->file->generateImagePath(800, 300);
-    }
-
     /**
      * @return Attribute<string, never>
      */
     protected function url(): Attribute
     {
-        return Attribute::make(get: fn () => $this->file->generatePath());
-    }
-
-    #[Override]
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::deleting(static function ($photo) {
-            /* @var Photo $photo */
-            $photo->file->delete();
-            if ($photo->id == $photo->album->thumb_id) {
-                $album = $photo->album;
-                $album->thumb_id = null;
-                $album->save();
-            }
-        });
+        return Attribute::make(get: fn (): string => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
     }
 
     protected function casts(): array

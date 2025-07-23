@@ -1,3 +1,7 @@
+@php
+    use App\Enums\PhotoEnum;
+@endphp
+
 <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
     <div class="photo-select">
         <input
@@ -14,7 +18,7 @@
                 style="
                     display: flex;
                     height: 200px;
-                    background-image: url({{ $photo->thumbnail() }});
+                    background-image: url({{ $photo->getFirstMediaUrl(conversionName: PhotoEnum::SMALL->value) }});
                 "
             >
                 @if ($photo->private)

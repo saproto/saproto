@@ -1,3 +1,7 @@
+@php
+    use App\Enums\PhotoEnum;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -59,10 +63,9 @@
                         </a>
                     @endif
                 </div>
-
                 <img
                     class="card-img-bottom"
-                    src="{!! $photo->url !!}"
+                    src="{!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value) !!}"
                     style="max-height: 70vh; object-fit: scale-down"
                 />
             </div>

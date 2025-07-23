@@ -44,6 +44,7 @@ use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PhotoAdminController;
 use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\PrivateMediaController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilePictureController;
@@ -912,6 +913,11 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('publish/{id}', 'publish')->middleware(['permission:publishalbums'])->name('publish');
             Route::get('unpublish/{id}', 'unpublish')->middleware(['permission:publishalbums'])->name('unpublish');
         });
+    });
+
+    /* --- Fetching media: Private --- */
+    Route::controller(PrivateMediaController::class)->middleware(['auth', 'member'])->prefix('media')->name('media::')->group(function () {
+        Route::get('{id}/{conversion?}', 'show')->name('show');
     });
 
     /* --- Fetching images: Public --- */

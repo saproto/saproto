@@ -17,4 +17,5 @@ children: Array<App.Data.MenuItemData>;
 declare namespace App.Enums {
 export enum IsAlfredThereEnum { THERE = 'there', AWAY = 'away', UNKNOWN = 'unknown', JUR = 'jur', TEXT_ONLY = 'text' };
 export enum MembershipTypeEnum { PENDING = 0, REGULAR = 1, PET = 2, LIFELONG = 3, HONORARY = 4, DONOR = 5 };
+export enum PhotoEnum { LARGE = 'large', MEDIUM = 'medium', SMALL = 'small', TINY = 'tiny' };
 }

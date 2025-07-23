@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PhotoEnum;
 use Database\Factories\PhotoAlbumFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -104,11 +105,7 @@ class PhotoAlbum extends Model
 
     public function thumb(): ?string
     {
-        if ($this->thumb_id) {
-            return $this->thumbPhoto->thumbnail();
-        }
-
-        return null;
+        return $this->thumbPhoto?->getFirstMediaUrl(conversionName: PhotoEnum::MEDIUM->value);
     }
 
     protected function casts(): array
