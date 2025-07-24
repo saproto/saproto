@@ -34,7 +34,7 @@ class CopyPhotoPictures extends Command
         $bar->start();
 
         $albums
-           ->chunkById(100, function ($albums) use(&$bar) {
+            ->chunkById(10, function ($albums) use (&$bar) {
                 foreach ($albums as $album) {
 
                     foreach ($album->items as $photo) {
@@ -45,7 +45,7 @@ class CopyPhotoPictures extends Command
                                 ->usingFileName($album->id.'_'.$photo->id)
                                 ->preservingOriginal()
                                 ->toMediaCollection(diskName: $disk);
-                            if(!$photo->private && $album->private){
+                            if (! $photo->private && $album->private) {
                                 $photo->update(['private' => true]);
                             }
                         } catch (Exception $e) {

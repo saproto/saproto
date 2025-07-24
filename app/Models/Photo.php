@@ -80,6 +80,12 @@ class Photo extends Model implements HasMedia
         });
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->singleFile();
+    }
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion(PhotoEnum::LARGE->value)
