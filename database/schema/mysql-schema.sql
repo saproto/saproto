@@ -515,7 +515,6 @@ CREATE TABLE `events` (
   `involves_food` tinyint(1) NOT NULL DEFAULT 0,
   `secret` tinyint(1) NOT NULL DEFAULT 0,
   `force_calendar_sync` tinyint(1) NOT NULL DEFAULT 0,
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `committee_id` bigint(20) unsigned DEFAULT NULL,
   `summary` mediumtext DEFAULT NULL,
@@ -523,8 +522,7 @@ CREATE TABLE `events` (
   KEY `events_start_index` (`start`),
   KEY `events_end_index` (`end`),
   KEY `events_category_id_index` (`category_id`),
-  KEY `events_committee_id_index` (`committee_id`),
-  KEY `events_image_id_index` (`image_id`)
+  KEY `events_committee_id_index` (`committee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -1093,12 +1091,10 @@ CREATE TABLE `photos` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `file_id` bigint(20) unsigned NOT NULL,
   `album_id` bigint(20) unsigned NOT NULL,
   `date_taken` int(11) NOT NULL,
   `private` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `photos_file_id_index` (`file_id`),
   KEY `photos_album_id_index` (`album_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1401,7 +1397,6 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `birthdate` date DEFAULT NULL,
@@ -1434,8 +1429,7 @@ CREATE TABLE `users` (
   `personal_key` varchar(64) DEFAULT NULL,
   `discord_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`),
-  KEY `users_image_id_index` (`image_id`)
+  UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users_mailinglists`;
@@ -1835,3 +1829,6 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_05_16_172633_move_
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_06_21_185748_create_media_table',164);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_01_171217_drop_tokens_table',165);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_19_100444_add_barcode_to_products',166);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_21_230526_remove_image_id_from_events',167);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_105252_remove_file_id_from_photos',168);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_131956_remove_image_id_from_users',168);

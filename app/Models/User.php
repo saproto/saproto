@@ -47,7 +47,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property string|null $password
  * @property string|null $remember_token
- * @property int|null $image_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $birthdate
@@ -145,7 +144,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User whereEduUsername($value)
  * @method static Builder<static>|User whereEmail($value)
  * @method static Builder<static>|User whereId($value)
- * @method static Builder<static>|User whereImageId($value)
  * @method static Builder<static>|User whereKeepOmnomcomHistory($value)
  * @method static Builder<static>|User whereKeepProtubeHistory($value)
  * @method static Builder<static>|User whereName($value)
@@ -196,7 +194,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $appends = ['is_member', 'is_protube_admin'];
 
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
+    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
 
     public function getPublicId(): ?string
     {
