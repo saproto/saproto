@@ -20,7 +20,6 @@ class PhotoFactory extends Factory
     public function definition(): array
     {
         return [
-            'file_id' => StorageEntry::factory(),
             'date_taken' => fake()->randomNumber(),
             'private' => false,
             'created_at' => Carbon::now(),
