@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Override;
@@ -30,7 +29,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $date_taken
  * @property bool $private
  * @property-read PhotoAlbum|null $album
- * @property-read StorageEntry|null $file
  * @property-read Collection<int, PhotoLikes> $likes
  * @property-read int|null $likes_count
  * @property-read mixed $url
@@ -42,7 +40,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Photo whereAlbumId($value)
  * @method static Builder<static>|Photo whereCreatedAt($value)
  * @method static Builder<static>|Photo whereDateTaken($value)
- * @method static Builder<static>|Photo whereFileId($value)
  * @method static Builder<static>|Photo whereId($value)
  * @method static Builder<static>|Photo wherePrivate($value)
  * @method static Builder<static>|Photo whereUpdatedAt($value)
@@ -100,10 +97,6 @@ class Photo extends Model implements HasMedia
             ->nonQueued()
             ->fit(Fit::Max, 420, 420)
             ->format('webp');
-
-        $this->addMediaConversion(PhotoEnum::TINY->value)
-            ->fit(Fit::Max, 50, 50)
-            ->format('webp');
     }
 
     /**
@@ -120,14 +113,6 @@ class Photo extends Model implements HasMedia
     public function likes(): HasMany
     {
         return $this->hasMany(PhotoLikes::class);
-    }
-
-    /**
-     * @return HasOne<StorageEntry, $this>
-     */
-    public function file(): HasOne
-    {
-        return $this->hasOne(StorageEntry::class, 'id', 'file_id');
     }
 
     private function getAdjacentPhoto(bool $next = true): ?Photo

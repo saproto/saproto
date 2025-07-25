@@ -66,7 +66,13 @@
                 <img
                     class="card-img-bottom"
                     src="{!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value) !!}"
+                    srcset="
+                        {!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::SMALL->value) !!}   420w,
+                        {!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::MEDIUM->value) !!}  750w,
+                        {!! $photo->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value) !!}  1920w
+                    "
                     style="max-height: 70vh; object-fit: scale-down"
+                    sizes="50vw"
                 />
             </div>
 

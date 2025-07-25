@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
-use App\Models\StorageEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Override;
@@ -20,7 +19,6 @@ class PhotoFactory extends Factory
     public function definition(): array
     {
         return [
-            'file_id' => StorageEntry::factory(),
             'date_taken' => fake()->randomNumber(),
             'private' => false,
             'created_at' => Carbon::now(),
