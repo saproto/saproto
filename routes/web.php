@@ -72,6 +72,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\WikiPageController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
@@ -584,7 +585,20 @@ Route::middleware('forcedomain')->group(function () {
         });
 
     });
+    /* --- Routes related to the wiki --- */
+    Route::prefix('wiki')->name('wiki::')->group(function () {
 
+
+        Route::middleware(['auth', 'permission:board'])->name('admin::')->group(function (){
+            Route::get('/{path}/edit', [WikiPageController::class, 'edit'])
+                ->where('path', '.*')
+                ->name('edit');
+        });
+        Route::get('/', [WikiPageController::class, 'index'])->name('index');
+        Route::get('/{path}', [WikiPageController::class, 'show'])
+            ->where('path', '.*')
+            ->name('show');
+    });
     /* --- Routes related to pages --- */
     Route::controller(PageController::class)->prefix('page')->name('page::')->group(function () {
 

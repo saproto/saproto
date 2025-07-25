@@ -39,7 +39,7 @@
             />
 
             <button type="submit" class="btn btn-success btn-block mb-2">
-                <i class="fas fa-unlock me-2"></i>
+          D
                 Login with Proto account
             </button>
 
