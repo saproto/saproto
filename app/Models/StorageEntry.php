@@ -63,7 +63,6 @@ class StorageEntry extends Model
             DB::table('pages_files')->where('file_id', $this->id)->count() == 0 &&
             Product::query()->where('image_id', $this->id)->count() == 0 &&
             Company::query()->where('image_id', $this->id)->count() == 0 &&
-            User::query()->where('image_id', $this->id)->count() == 0 &&
             Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
             Committee::query()->where('image_id', $this->id)->count() == 0 &&
