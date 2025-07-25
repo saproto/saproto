@@ -54,16 +54,4 @@ class WikiPage extends Model
     {
         return $this->hasMany(WikiPage::class, 'parent_id');
     }
-    public static function boot(): void
-    {
-        parent::boot();
-
-        static::saving(function () {
-            if ($this->parent) {
-                $this->full_path = trim($this->parent->full_path . '/' . $this->slug, '/');
-            } else {
-                $this->full_path = $this->slug;
-            }
-        });
-    }
 }

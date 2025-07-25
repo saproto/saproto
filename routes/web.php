@@ -588,14 +588,13 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the wiki --- */
     Route::prefix('wiki')->name('wiki::')->group(function () {
 
-
         Route::middleware(['auth', 'permission:board'])->name('admin::')->group(function (){
             Route::get('/{path}/edit', [WikiPageController::class, 'edit'])
                 ->where('path', '.*')
                 ->name('edit');
         });
-        Route::get('/', [WikiPageController::class, 'index'])->name('index');
-        Route::get('/{path}', [WikiPageController::class, 'show'])
+//        Route::get('/', [WikiPageController::class, 'index'])->name('index');
+        Route::get('{path?}', [WikiPageController::class, 'show'])
             ->where('path', '.*')
             ->name('show');
     });

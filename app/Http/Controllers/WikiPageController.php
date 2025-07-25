@@ -4,15 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\WikiPage;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class WikiPageController extends Controller
 {
-    public function index()
-    {
-            return view('wiki.index', [
-                'page'=>null,
-                'children' => WikiPage::query()->whereNull('parent_id')->get()]);
-    }
 
     public function store(Request $request)
     {
@@ -27,19 +22,16 @@ class WikiPageController extends Controller
         return WikiPage::query()->create($data);
     }
 
-    public function show(string $path)
+    public function show($path = null)
     {
-        $path = trim($path, '/'); // remove leading/trailing slashes
-
-        $page = WikiPage::query()->with('parent')->where('full_path', $path)->first();
-
-        if (! $page) {
-            abort(404);
-        }
-
-        return view('wiki.index', [
-            'page'=>$page,
-            'children' =>$page->children]);
+        $page = WikiPage::where('full_path', $path)->first();
+        $children = $page
+            ? $page->children()->orderBy('title')->get()
+            : WikiPage::whereNull('parent_id')->orderBy('title')->get();
+        return Inertia::render('wiki/Show', [
+            'page' => $page,
+            'children' => $children,
+        ]);
     }
 
     public function edit(string $path)
