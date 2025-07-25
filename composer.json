@@ -112,6 +112,7 @@
         }
     },
     "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup",
         "fix": [
             "./vendor/bin/rector process && ./vendor/bin/pint --diff=master --parallel && npx eslint resources/ --fix && npx prettier --write resources/"
         ],
@@ -157,5 +158,12 @@
             "php-http/discovery": true,
             "pestphp/pest-plugin": true
         }
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive",
+            "Gmail",
+            "Directory"
+        ]
     }
 }
