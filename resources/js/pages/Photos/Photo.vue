@@ -2,7 +2,14 @@
 import { usePage, router, Head } from '@inertiajs/vue3'
 import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
-import { Shield, ArrowLeft, ArrowRight, Heart,Images , Download } from 'lucide-vue-next'
+import {
+    Shield,
+    ArrowLeft,
+    ArrowRight,
+    Heart,
+    Images,
+    Download,
+} from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
 
