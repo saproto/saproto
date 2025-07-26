@@ -18,7 +18,7 @@
                 style="
                     display: flex;
                     height: 200px;
-                    background-image: url({{ $photo->getFirstMediaUrl(conversionName: PhotoEnum::SMALL->value) }});
+                    background-image: url({{ $photo->getUrl(PhotoEnum::SMALL) }});
                 "
             >
                 @if ($photo->private)

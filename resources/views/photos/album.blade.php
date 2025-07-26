@@ -1,13 +1,10 @@
-@php
-    use App\Enums\PhotoEnum;
-@endphp
-
 @extends('website.layouts.redesign.generic')
 @php
+    use App\Enums\PhotoEnum;
     /**
-    * @var \App\Models\PhotoAlbum $album
-    * @var \Illuminate\Support\Collection<\App\Models\Photo> $photos
-    */
+     * @var \App\Models\PhotoAlbum $album
+     * @var \Illuminate\Support\Collection<\App\Models\Photo> $photos
+     */
 @endphp
 
 @section('page-title')
@@ -28,7 +25,7 @@
     <div class="card mb-3">
         <div class="card-header bg-dark text-end text-white">
             <a
-                href="{{ route('photo::albums') }}"
+                href="{{ route('albums::index') }}"
                 class="btn btn-success float-start me-3"
             >
                 <i class="fas fa-list"></i>
@@ -36,7 +33,7 @@
             </a>
             @can('protography')
                 <a
-                    href="{{ route('photo::admin::edit', ['id' => $album->id]) }}"
+                    href="{{ route('albums::admin::edit', ['id' => $album->id]) }}"
                     class="btn btn-success float-start me-3"
                 >
                     <i class="fas fa-edit"></i>
@@ -57,10 +54,11 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => route('photo::view', ['photo' => $photo]),
-                                'img' => $photo->getFirstMediaUrl(
-                                    conversionName: PhotoEnum::SMALL->value,
-                                ),
+                                'url' => route('albums::album::show', [
+                                    'album' => $album,
+                                    'photo' => $photo,
+                                ]),
+                                'img' => $photo->getUrl(PhotoEnum::SMALL),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
                                     $photo->likes_count,
