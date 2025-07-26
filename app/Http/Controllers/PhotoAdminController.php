@@ -71,6 +71,21 @@ class PhotoAdminController extends Controller
     public function update(Request $request, int $id)
     {
         $album = PhotoAlbum::query()->findOrFail($id);
+        $private = $request->input('private');
+        if ($private !== $album->private) {
+            foreach ($album->items as $item) {
+                if ($private === $item->private) {
+                    continue;
+                }
+
+                $media = $item->getFirstMedia();
+                $media->move($item, diskName: $private ? 'public' : 'local');
+                $item->update([
+                    'private' => $private,
+                ]);
+            }
+        }
+
         $album->name = $request->input('album');
         $album->date_taken = $request->date('date')->timestamp;
         $album->private = (bool) $request->input('private');
