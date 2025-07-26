@@ -56,9 +56,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::query()
             ->with([
-                'items' => function ($query) {
-                    $query->orderBy('date_taken', 'desc');
-                },
+                'items',
                 'event'])
             ->findOrFail($id);
 

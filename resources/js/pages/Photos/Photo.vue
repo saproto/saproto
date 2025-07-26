@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePage, router, Head } from '@inertiajs/vue3'
-import { computed, reactive, onMounted } from 'vue'
+import { usePage, Head, router } from '@inertiajs/vue3'
+import { computed, reactive, onMounted, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import {
     Shield,
@@ -12,12 +12,18 @@ import {
 } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
+import axios from 'axios'
+import { Toaster } from '@/components/ui/sonner'
+import 'vue-sonner/style.css'
+import { toast } from 'vue-sonner'
 
 const page = usePage()
 
 const album = computed(() => page.props.album as PhotoAlbumData)
 const albumPage = computed(() => Math.floor(state.index / 24) + 1)
-const photoList = computed(() => album.value.items)
+
+const photoList = ref(album.value.items)
+
 const emaildomain = computed(() => page.props.emaildomain)
 const user = computed(() => page.props.auth.user as AuthUserData)
 
@@ -40,6 +46,7 @@ const nextPhoto = computed(() =>
 )
 
 function goToPhotoAt(index: number) {
+    if (isLiking) return
     if (index < 0 || index >= photoList.value.length) return
     state.index = index
 
@@ -61,24 +68,51 @@ function goToAlbum() {
     })
 }
 
-function handleLikeClick() {
+let isLiking = false
+const handleLikeClick = (index: number) => {
+    if (isLiking) return
+    isLiking = true
     if (!user.value) {
         window.location.href = route('login::show')
     }
-    router.post(route('albums::like', { photo: currentPhoto.value.id }))
+    const photo = photoList.value[index]
+    axios
+        .post(route('albums::like', { photo: photo.id }))
+        .then((response) => {
+            photo.liked_by_me = response.data.liked_by_me as boolean
+            photo.likes_count = response.data.likes_count as number
+            isLiking = false
+        })
+        .catch(() => {
+            toast('Something went wrong liking the photo', {
+                description: 'Try again later',
+                action: {
+                    label: 'Reload',
+                    onClick: () => router.reload(),
+                },
+            })
+            isLiking = false
+        })
 }
 
-function downloadPhoto(photoUrl: string) {
+let isDownloading = false
+const downloadPhoto = (photoUrl: string) => {
+    if (isDownloading) return
+    isDownloading = true
+
     const link = document.createElement('a')
     link.href = photoUrl
-    link.download = '' // Optional: set filename like 'photo.jpg'
+    link.download = ''
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    setTimeout(() => {
+        isDownloading = false
+    }, 1000)
 }
 
 onMounted(() => {
-    let isDownloading = false
     window.addEventListener('keydown', (e) => {
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key))
             e.preventDefault()
@@ -89,15 +123,10 @@ onMounted(() => {
             goToPhotoAt(state.index + 1)
         }
         if (e.key === 'ArrowUp') {
-            handleLikeClick()
+            handleLikeClick(state.index)
         }
         if (e.key === 'ArrowDown') {
-            if (isDownloading) return
-            isDownloading = true
             downloadPhoto(currentPhoto.value.url)
-            setTimeout(() => {
-                isDownloading = false
-            }, 1000)
         }
     })
 
@@ -123,6 +152,8 @@ onMounted(() => {
 </script>
 
 <template>
+    <Toaster />
+
     <Head :title="'Album '.concat(album.id.toString())" />
 
     <div class="mx-auto max-w-4xl space-y-6 p-4">
@@ -150,7 +181,7 @@ onMounted(() => {
 
                 <Button
                     :variant="currentPhoto.liked_by_me ? 'default' : 'outline'"
-                    @click="handleLikeClick"
+                    @click="handleLikeClick(state.index)"
                 >
                     <Heart class="me-2" />
                     {{ currentPhoto.likes_count }}

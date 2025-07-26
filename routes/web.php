@@ -894,12 +894,8 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Legacy routes related to photos --- */
     Route::prefix('photos')->group(function () {
-        Route::get('/photo/{photo}', function (Photo $photo) {
-            return Redirect::route('albums::album::show', ['album'=>$photo->album, 'photo' => $photo->id]);
-        });
-        Route::get('{album}', function($album) {
-            return Redirect::route('albums::album::list', ['album'=>$album]);
-        });
+        Route::get('/photo/{photo}', fn (Photo $photo) => Redirect::route('albums::album::show', ['album' => $photo->album, 'photo' => $photo->id]));
+        Route::get('{album}', fn ($album) => Redirect::route('albums::album::list', ['album' => $album]));
     });
 
     /* --- Routes related to photos --- */
