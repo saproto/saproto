@@ -73,6 +73,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
+use App\Models\Photo;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -889,6 +890,16 @@ Route::middleware('forcedomain')->group(function () {
             Route::get('clear', 'clear')->name('clear');
         });
         Route::get('dismiss/{id}', 'dismiss')->name('dismiss');
+    });
+
+    /* --- Legacy routes related to photos --- */
+    Route::prefix('photos')->group(function () {
+        Route::get('/photo/{photo}', function (Photo $photo) {
+            return Redirect::route('albums::album::show', ['album'=>$photo->album, 'photo' => $photo->id]);
+        });
+        Route::get('{album}', function($album) {
+            return Redirect::route('albums::album::list', ['album'=>$album]);
+        });
     });
 
     /* --- Routes related to photos --- */
