@@ -2,7 +2,7 @@
 import { usePage, router, Head } from '@inertiajs/vue3'
 import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
-import { Shield, ArrowLeft, ArrowRight, Heart, Images } from 'lucide-vue-next'
+import { Shield, ArrowLeft, ArrowRight, Heart,Images , Download } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
 
@@ -124,6 +124,13 @@ onMounted(() => {
                 <Button variant="default" class="me-auto" @click="goToAlbum">
                     <Images class="me-2 h-4 w-4" />
                     {{ album.name }}
+                </Button>
+
+                <Button
+                    variant="outline"
+                    @click="downloadPhoto(currentPhoto.url)"
+                >
+                    <Download />
                 </Button>
 
                 <Button
