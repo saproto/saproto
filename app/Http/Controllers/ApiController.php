@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PhotoEnum;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
 use App\Models\EmailListSubscription;
@@ -9,6 +10,7 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\OrderLine;
+use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
@@ -99,7 +101,7 @@ class ApiController extends Controller
 
     /**
      * @param  array{0: int, 1: int, 2: int, 3: int}  $numbers
-     * @return array{photos: Collection<(int|string), mixed>, album_name: string, date_taken: non-falsy-string}|array{error: string}
+     * @return array{photos: Collection<int, string>, album_name: string, date_taken: non-falsy-string}|array{error: string}
      *
      * @throws RandomException
      */
@@ -131,13 +133,14 @@ class ApiController extends Controller
             $album = $privateQuery->inRandomOrder()->first();
         }
 
+        //
         // if we still do not have an album, there are no public albums
         if (! $album) {
             return ['error' => 'No public photo albums found.'];
         }
 
         return [
-            'photos' => $album->items->pluck('url'),
+            'photos' => $album->items->map(fn (Photo $item): string => $item->getUrl(PhotoEnum::LARGE)),
             'album_name' => $album->name,
             'date_taken' => Carbon::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
         ];
@@ -223,7 +226,7 @@ class ApiController extends Controller
         }
 
         foreach (PhotoLikes::query()->with('photo')->where('user_id', $user->id)->get() as $photo_like) {
-            $data['liked_photos'][] = $photo_like->photo->url;
+            $data['liked_photos'][] = $photo_like->photo->getUrl();
         }
 
         foreach ($user->stickers()->get() as $sticker) {

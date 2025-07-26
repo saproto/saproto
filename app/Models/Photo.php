@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +30,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read PhotoAlbum|null $album
  * @property-read Collection<int, PhotoLikes> $likes
  * @property-read int|null $likes_count
- * @property-read mixed $url
+ * @property-read bool|null $liked_by_me
  *
  * @method static PhotoFactory factory($count = null, $state = [])
  * @method static Builder<static>|Photo newModelQuery()
@@ -58,8 +57,6 @@ class Photo extends Model implements HasMedia
     protected $guarded = ['id'];
 
     protected $with = ['media'];
-
-    protected $appends = ['url'];
 
     #[Override]
     protected static function booted(): void
@@ -117,12 +114,9 @@ class Photo extends Model implements HasMedia
         return $this->hasMany(PhotoLikes::class);
     }
 
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function url(): Attribute
+    public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        return Attribute::make(get: fn (): string => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
+        return $this->getFirstMediaUrl(conversionName: $photoEnum->value);
     }
 
     protected function casts(): array

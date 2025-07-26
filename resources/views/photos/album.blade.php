@@ -58,9 +58,7 @@
                                     'album' => $album,
                                     'photo' => $photo,
                                 ]),
-                                'img' => $photo->getFirstMediaUrl(
-                                    conversionName: PhotoEnum::SMALL->value,
-                                ),
+                                'img' => $photo->getUrl(PhotoEnum::SMALL),
                                 'html' => sprintf(
                                     '<i class="fas fa-heart"></i> %s %s',
                                     $photo->likes_count,

@@ -896,6 +896,7 @@ Route::middleware('forcedomain')->group(function () {
         // Public routes
         Route::controller(PhotoAlbumController::class)->group(function () {
             Route::get('', 'index')->name('index');
+
             Route::prefix('{album}')->name('album::')->group(function () {
                 Route::get('', 'show')->name('list');
                 Route::get('viewer', 'photo')->name('show');

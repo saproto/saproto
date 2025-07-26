@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { usePage, router } from '@inertiajs/vue3'
+import { usePage, router, Head } from '@inertiajs/vue3'
 import { computed, reactive, onMounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Shield, ArrowLeft, ArrowRight, Heart, Images } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
+import AuthUserData = App.Data.AuthUserData
 
 const page = usePage()
 
@@ -11,14 +12,14 @@ const album = computed(() => page.props.album as PhotoAlbumData)
 const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const photoList = computed(() => album.value.items)
 const emaildomain = computed(() => page.props.emaildomain)
+const user = computed(() => page.props.auth.user as AuthUserData)
 
 const photo = computed(() => parseInt(page.props.photo as string))
-
 const state = reactive({
     index:
         photoList.value.findIndex((p: any) => p.id === photo.value) !== -1
             ? photoList.value.findIndex((p: any) => p.id === photo.value)
-            : 1,
+            : 0,
 })
 
 const currentPhoto = computed(() => photoList.value[state.index])
@@ -54,6 +55,9 @@ function goToAlbum() {
 }
 
 function handleLikeClick() {
+    if (!user.value) {
+        window.location.href = route('login::show')
+    }
     router.post(route('albums::like', { photo: currentPhoto.value.id }))
 }
 
@@ -112,6 +116,9 @@ onMounted(() => {
 </script>
 
 <template>
+
+    <Head :title="'Album '.concat(album.id.toString())" />
+
     <div class="mx-auto max-w-4xl space-y-6 p-4">
         <div class="bg-background overflow-hidden rounded-xl border shadow">
             <div class="bg-muted flex items-center justify-end gap-2 p-3">
@@ -122,7 +129,7 @@ onMounted(() => {
 
                 <Button
                     v-if="previousPhoto"
-                    variant="ghost"
+                    variant="outline"
                     @click="() => goToPhotoAt(state.index - 1)"
                 >
                     <ArrowLeft />
@@ -146,7 +153,7 @@ onMounted(() => {
 
                 <Button
                     v-if="nextPhoto"
-                    variant="ghost"
+                    variant="outline"
                     @click="() => goToPhotoAt(state.index + 1)"
                 >
                     <ArrowRight />
@@ -154,24 +161,26 @@ onMounted(() => {
             </div>
 
             <img
-                :src="currentPhoto.url"
-                alt="Photo"
+                :src="currentPhoto.large_url"
                 class="w-full object-contain"
                 style="max-height: 70vh"
+                :alt="'Image '.concat(currentPhoto.id.toString())"
             />
 
             <!-- Prefetch next/previous images invisibly -->
             <img
                 v-if="nextPhoto"
-                :src="nextPhoto.url"
+                :src="nextPhoto.large_url"
                 class="hidden"
                 aria-hidden="true"
+                :alt="'Image '.concat(nextPhoto.id.toString())"
             />
             <img
                 v-if="previousPhoto"
-                :src="previousPhoto.url"
+                :src="previousPhoto.large_url"
                 class="hidden"
                 aria-hidden="true"
+                :alt="'Image '.concat(previousPhoto.id.toString())"
             />
         </div>
 
