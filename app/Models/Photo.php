@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +30,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read PhotoAlbum|null $album
  * @property-read Collection<int, PhotoLikes> $likes
  * @property-read int|null $likes_count
- * @property-read mixed $url
+ * @property-read bool|null $liked_by_me
  *
  * @method static PhotoFactory factory($count = null, $state = [])
  * @method static Builder<static>|Photo newModelQuery()
@@ -115,62 +114,9 @@ class Photo extends Model implements HasMedia
         return $this->hasMany(PhotoLikes::class);
     }
 
-    private function getAdjacentPhoto(bool $next = true): ?Photo
+    public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        if ($next) {
-            $ord = 'DESC';
-            $comp = '<';
-        } else {
-            $ord = 'ASC';
-            $comp = '>';
-        }
-
-        return self::query()->where(function ($query) use ($comp) {
-            $query->where('date_taken', $comp, $this->date_taken)
-                ->orWhere(function ($query) use ($comp) {
-                    $query->where('date_taken', '=', $this->date_taken)
-                        ->where('id', $comp, $this->id);
-                });
-        })
-            ->where('album_id', $this->album_id)
-            ->orderBy('date_taken', $ord)
-            ->orderBy('id', $ord)
-            ->first();
-    }
-
-    public function getNextPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto();
-    }
-
-    public function getPreviousPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto(false);
-    }
-
-    public function getAlbumPageNumber(int $paginateLimit): float|int
-    {
-        $photoIndex = 1;
-        $photos = self::query()->where('album_id', $this->album_id)
-            ->orderBy('date_taken', 'desc')->orderBy('id', 'desc')
-            ->get();
-        foreach ($photos as $photoItem) {
-            if ($this->id == $photoItem->id) {
-                return ceil($photoIndex / $paginateLimit);
-            }
-
-            $photoIndex++;
-        }
-
-        return 1;
-    }
-
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function url(): Attribute
-    {
-        return Attribute::make(get: fn (): string => $this->getFirstMediaUrl(conversionName: PhotoEnum::LARGE->value));
+        return $this->getFirstMediaUrl(conversionName: $photoEnum->value);
     }
 
     protected function casts(): array

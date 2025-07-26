@@ -27,7 +27,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
 
     $file = UploadedFile::fake()->image('photo.jpg');
 
-    $response = $this->actingAs($user)->post(route('photo::admin::upload', ['id' => $album->id]), [
+    $response = $this->actingAs($user)->post(route('albums::admin::upload', ['id' => $album->id]), [
         'file' => $file,
     ]);
 
@@ -40,7 +40,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
 
     Storage::disk($disk)->assertExists("{$hashedPath}/{$media->file_name}");
 
-    $response = $this->actingAs($user)->post(route('photo::admin::action', ['id' => $album->id]), [
+    $response = $this->actingAs($user)->post(route('albums::admin::action', ['id' => $album->id]), [
         'action' => 'private',
         'photos' => [$photo->id],
     ]);
