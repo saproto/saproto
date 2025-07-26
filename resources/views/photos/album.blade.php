@@ -1,9 +1,10 @@
 @extends('website.layouts.redesign.generic')
 @php
+    use App\Enums\PhotoEnum;
     /**
-    * @var \App\Models\PhotoAlbum $album
-    * @var \Illuminate\Support\Collection<\App\Models\Photo> $photos
-    */
+     * @var \App\Models\PhotoAlbum $album
+     * @var \Illuminate\Support\Collection<\App\Models\Photo> $photos
+     */
 @endphp
 
 @section('page-title')

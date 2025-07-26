@@ -43,8 +43,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PhotoAdminController;
-use App\Http\Controllers\PrivateMediaController;
 use App\Http\Controllers\PhotoAlbumController;
+use App\Http\Controllers\PrivateMediaController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilePictureController;
@@ -896,7 +896,7 @@ Route::middleware('forcedomain')->group(function () {
         // Public routes
         Route::controller(PhotoAlbumController::class)->group(function () {
             Route::get('', 'index')->name('index');
-            Route::prefix('{album}')->name("album::")->group(function () {
+            Route::prefix('{album}')->name('album::')->group(function () {
                 Route::get('', 'show')->name('list');
                 Route::get('viewer', 'photo')->name('show');
             });
