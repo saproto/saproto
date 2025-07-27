@@ -9,7 +9,7 @@ import {
 const props = defineProps<DialogRootProps>()
 const emits = defineEmits<DialogRootEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits) as Record<string, any>
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

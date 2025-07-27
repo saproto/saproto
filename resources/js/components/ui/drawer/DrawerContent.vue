@@ -11,7 +11,7 @@ const props = defineProps<
 >()
 const emits = defineEmits<DialogContentEmits>()
 
-const forwarded = useForwardPropsEmits(props, emits) as Record<string, any>
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>

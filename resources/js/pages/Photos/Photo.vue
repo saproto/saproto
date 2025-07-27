@@ -45,9 +45,11 @@ const nextPhoto = computed(() =>
         : null
 )
 
+let justSkipped = false
 function goToPhotoAt(index: number) {
-    if (isLiking) return
+    if (isLiking || justSkipped) return
     if (index < 0 || index >= photoList.value.length) return
+    justSkipped = true
     state.index = index
 
     // Replace history so back goes to album
@@ -59,6 +61,10 @@ function goToPhotoAt(index: number) {
             photo: currentPhoto.value.id,
         })
     )
+
+    setTimeout(() => {
+        justSkipped = false
+    }, 100)
 }
 
 function goToAlbum() {
