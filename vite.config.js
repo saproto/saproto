@@ -35,7 +35,9 @@ export default defineConfig({
                 '/resources/assets/js/leaflet.js',
                 '/node_modules/leaflet-geosearch/dist/geosearch.css',
                 '/node_modules/leaflet.markercluster/dist/MarkerCluster.css',
-                '/node_modules/leaflet/dist/leaflet.css'
+                '/node_modules/leaflet/dist/leaflet.css',
+                //exif-reader for getting the date_taken from photos
+                '/node_modules/exifreader/dist/exif-reader.js'
             ],
             refresh: true,
         }),

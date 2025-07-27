@@ -4,6 +4,8 @@
         Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
+@vite('node_modules/exifreader/dist/exif-reader.js')
+
 @section('container')
     @if ($album->event)
         <a
@@ -453,8 +455,14 @@
             async function uploadFiles(fileQueue) {
                 while (fileQueue.length) {
                     let file = fileQueue.shift()
+
                     let formData = new FormData()
                     formData.append('file', file)
+                    const tags = await ExifReader.load(file)
+                    const imageDate = tags['DateTimeOriginal']?.description
+                    if (imageDate) {
+                        formData.append('date', imageDate)
+                    }
                     toggleRunning()
                     await post(
                         '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
@@ -465,15 +473,9 @@
                     )
                         .then((response) => {
                             response.text().then((text) => {
-                                document.getElementById(
-                                    'photo-view'
-                                ).innerHTML += text
-                                document
-                                    .getElementById('error-bar')
-                                    .classList.add('d-none')
-                                document.querySelector(
-                                    '#error-bar ul'
-                                ).innerHTML = ''
+                                const node =
+                                    document.getElementById('photo-view')
+                                node.innerHTML = text + node.innerHTML
                                 toggleRunning()
                             })
                         })

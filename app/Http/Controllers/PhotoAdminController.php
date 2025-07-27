@@ -86,6 +86,7 @@ class PhotoAdminController extends Controller
     {
         $request->validate([
             'file' => 'required|image|max:5120', // max 5MB
+            'date' => 'nullable|date',
         ]);
 
         $album = PhotoAlbum::query()->findOrFail($id);
@@ -96,8 +97,13 @@ class PhotoAdminController extends Controller
             ], 500);
         }
 
+        $date = $request->file('file')->getCTime();
+        if ($request->has('date')) {
+            $date = $request->date('date')->timestamp;
+        }
+
         $photo = Photo::query()->create([
-            'date_taken' => $request->file('file')->getCTime(),
+            'date_taken' => $date,
             'album_id' => $album->id,
             'private' => $album->private,
             'file_id' => 1,
