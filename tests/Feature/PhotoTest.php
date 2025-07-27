@@ -40,6 +40,12 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
 
     Storage::disk($disk)->assertExists("{$hashedPath}/{$media->file_name}");
 
+    /*
+     * Test that a photo is moved when executing the action
+     * For a public album, it should move the photo from the public disk to the private disk
+     * For a private album, this is not allowed, so it should still be on the private disk
+     */
+
     $response = $this->actingAs($user)->post(route('albums::admin::action', ['id' => $album->id]), [
         'action' => 'private',
         'photos' => [$photo->id],
@@ -51,9 +57,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
     $media = $photo->getFirstMedia();
     $hashedPath = md5($media->id.config('app.key'));
 
-    $newDisk = $private ? 'public' : 'local';
-
-    Storage::disk($newDisk)->assertExists("{$hashedPath}/{$media->file_name}");
-    Storage::disk($disk)->assertMissing("{$hashedPath}/{$media->file_name}");
+    Storage::disk('local')->assertExists("{$hashedPath}/{$media->file_name}");
+    Storage::disk('public')->assertMissing("{$hashedPath}/{$media->file_name}");
 
 })->with('privacy_states');

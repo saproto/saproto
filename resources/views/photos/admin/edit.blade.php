@@ -39,13 +39,22 @@
                 @endcan
             @else
                 @can('publishalbums')
-                    <a
-                        class="btn btn-danger btn-block mb-3 text-white"
-                        href="{{ route('albums::admin::publish', ['id' => $album->id]) }}"
-                    >
-                        This album is not yet published, click here to publish
-                        the album.
-                    </a>
+                    @if ($album->thumbPhoto)
+                        <a
+                            class="btn btn-danger btn-block mb-3 text-white"
+                            href="{{ route('albums::admin::publish', ['id' => $album->id]) }}"
+                        >
+                            This album is not yet published, click here to
+                            publish the album.
+                        </a>
+                    @else
+                        <div
+                            class="btn btn-warning disabled btn-block mb-3 text-white"
+                        >
+                            This album is not yet published, but you need to set
+                            a thumbnail to publish it!
+                        </div>
+                    @endif
                 @else
                     <span
                         class="btn btn-warning btn-block mb-3 cursor-default text-white"
@@ -92,14 +101,10 @@
                                     'format' => 'date',
                                 ]
                             )
-                            @include(
-                                'components.forms.checkbox',
-                                [
-                                    'name' => 'private',
-                                    'checked' => $album->private,
-                                    'label' => 'Private album',
-                                ]
-                            )
+                            <p class="mt-2">
+                                Private album:
+                                {{ $album->private ? '✅' : '❌' }}
+                            </p>
                         </div>
 
                         <div class="card-footer">
@@ -131,9 +136,7 @@
                         {{ date('d-m-Y', $album->date_taken) }}
                         <br />
                         <b>Private album:</b>
-                        <i
-                            class="fa fa-{{ $album->private ? 'check' : 'times' }}"
-                        ></i>
+                        {{ $album->private ? '✅' : '❌' }}
                     </div>
                 @endif
             </div>
@@ -306,15 +309,17 @@
                                             <i class="fa fa-image"></i>
                                             Set thumbnail
                                         </button>
-                                        <button
-                                            {{ $attr }}
-                                            name="action"
-                                            value="private"
-                                            class="btn btn-warning"
-                                        >
-                                            <i class="fa fa-eye"></i>
-                                            Toggle private
-                                        </button>
+                                        @if (! $album->private)
+                                            <button
+                                                {{ $attr }}
+                                                name="action"
+                                                value="private"
+                                                class="btn btn-warning"
+                                            >
+                                                <i class="fa fa-eye"></i>
+                                                Toggle private
+                                            </button>
+                                        @endif
                                     </div>
 
                                     <div
