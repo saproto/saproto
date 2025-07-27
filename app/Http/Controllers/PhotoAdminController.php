@@ -70,25 +70,11 @@ class PhotoAdminController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $album = PhotoAlbum::query()->findOrFail($id);
-        $private = $request->input('private');
-        if ($private !== $album->private) {
-            foreach ($album->items as $item) {
-                if ($private === $item->private) {
-                    continue;
-                }
-
-                $media = $item->getFirstMedia();
-                $media->move($item, diskName: $private ? 'public' : 'local');
-                $item->update([
-                    'private' => $private,
-                ]);
-            }
-        }
+        $album = PhotoAlbum::query()
+            ->findOrFail($id);
 
         $album->name = $request->input('album');
         $album->date_taken = $request->date('date')->timestamp;
-        $album->private = (bool) $request->input('private');
         $album->save();
 
         return Redirect::route('albums::admin::edit', ['id' => $id]);
@@ -160,6 +146,11 @@ class PhotoAdminController extends Controller
                     break;
 
                 case 'private':
+                    if ($album->private) {
+                        Session::flash('flash_message', 'You can not set photos to public in a private album.');
+                        break;
+                    }
+
                     foreach ($photos as $photoId) {
                         $photo = Photo::query()->find($photoId);
                         if ($album->published && $photo->private) {

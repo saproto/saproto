@@ -67,13 +67,21 @@
                                 'placeholder' => strtotime(Carbon::now()),
                             ]
                         )
-                        @include(
-                            'components.forms.checkbox',
-                            [
-                                'name' => 'private',
-                                'label' => 'Private album',
-                            ]
-                        )
+                        <div class="d-inline-flex align-content-center mt-2">
+                            @include(
+                                'components.forms.checkbox',
+                                [
+                                    'name' => 'private',
+                                    'label' => 'Private album',
+                                ]
+                            )
+                            <i
+                                class="fas fa-info-circle align-self-center ms-1"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                title="A private album can only be seen by members. Note: This can not be changed!"
+                            ></i>
+                        </div>
                     </div>
 
                     <div class="card-footer">
