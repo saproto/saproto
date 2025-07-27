@@ -385,6 +385,7 @@
 
 @push('javascript')
     <script async type="text/javascript" nonce="{{ csp_nonce() }}">
+
         window.addEventListener('load', () => {
             let fileSizeLimit = '{{ $fileSizeLimit }}B'
             let fileId = 1
@@ -458,8 +459,14 @@
             async function uploadFiles(fileQueue) {
                 while (fileQueue.length) {
                     let file = fileQueue.shift()
+
                     let formData = new FormData()
                     formData.append('file', file)
+                    const tags = await window.ExifReader.load(file)
+                    const imageDate = tags['DateTimeOriginal']?.description
+                    if (imageDate) {
+                        formData.append('date', imageDate)
+                    }
                     toggleRunning()
                     await post(
                         '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
@@ -470,9 +477,9 @@
                     )
                         .then((response) => {
                             response.text().then((text) => {
-                                document.getElementById(
-                                    'photo-view'
-                                ).innerHTML += text
+                                const node =
+                                    document.getElementById('photo-view')
+                                node.innerHTML = text + node.innerHTML
                                 toggleRunning()
                             })
                         })

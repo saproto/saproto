@@ -10,6 +10,8 @@ import moment from 'moment/moment.js'
 
 global.moment = moment
 
+import ExifReader from 'exifreader';
+global.ExifReader = ExifReader;
 //Temporarily disabled due to an import error: Uncaught ReferenceError: glMatrixArrayType is not defined
 // import quagga from 'quagga';
 // global.Quagga = quagga;
