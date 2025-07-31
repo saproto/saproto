@@ -33,6 +33,11 @@ class PhotoAlbumController extends Controller
             'album' => $album,
             'photos' => $album->items()
                 ->withCount('likes')
+                ->withExists([
+                    'likes as liked_by_me' => function ($query) {
+                        $query->where('user_id', Auth::id());
+                    },
+                ])
                 ->paginate(24),
         ]);
     }
@@ -40,11 +45,12 @@ class PhotoAlbumController extends Controller
     public function photo(HttpRequest $request, PhotoAlbum $album): Response
     {
         $album->load(['items' => function ($q) {
-            $q->withCount('likes')->withExists([
-                'likes as liked_by_me' => function ($query) {
-                    $query->where('user_id', Auth::id());
-                },
-            ]);
+            $q->withCount('likes')
+                ->withExists([
+                    'likes as liked_by_me' => function ($query) {
+                        $query->where('user_id', Auth::id());
+                    },
+                ]);
         }]);
 
         return Inertia::render('Photos/Photo',

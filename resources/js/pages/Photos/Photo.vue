@@ -45,6 +45,10 @@ const nextPhoto = computed(() =>
         : null
 )
 
+const currentAlbum = computed(() => {
+    return currentPhoto.value.album ?? album.value
+})
+
 let justSkipped = false
 function goToPhotoAt(index: number) {
     if (isLiking || justSkipped) return
@@ -67,10 +71,10 @@ function goToPhotoAt(index: number) {
     }, 100)
 }
 
-function goToAlbum() {
+function goToAlbum(newAlbum: PhotoAlbumData, albumPage: number | null) {
     window.location.href = route('albums::album::list', {
-        album: album.value.id,
-        page: albumPage.value ?? 1,
+        album: newAlbum.id,
+        page: albumPage ?? 1,
     })
 }
 
@@ -160,56 +164,103 @@ onMounted(() => {
 <template>
     <Toaster />
 
-    <Head :title="'Album '.concat(album.id.toString())" />
+    <Head :title="'Album '.concat(currentAlbum.id.toString())" />
 
     <div class="mx-auto max-w-4xl space-y-6 p-4">
         <div class="bg-background overflow-hidden rounded-xl border shadow">
-            <div class="bg-muted flex items-center justify-end gap-2 p-3">
-                <Button variant="default" class="me-auto" @click="goToAlbum">
-                    <Images class="me-2 h-4 w-4" />
-                    {{ album.name }}
-                </Button>
+            <div
+                class="bg-muted align-content-center flex items-center justify-between p-2"
+            >
+                <div class="">
+                    <Button
+                        v-if="currentAlbum.id !== album.id"
+                        class="me-2 mb-1"
+                        variant="default"
+                        @click="goToAlbum(album, albumPage)"
+                    >
+                        <Images class="me-2 h-4 w-4" />
+                        {{ album.name }}
+                    </Button>
+                    <Button
+                        variant="default"
+                        @click="goToAlbum(currentAlbum, 1)"
+                    >
+                        <Images class="me-2 h-4 w-4" />
+                        {{ currentAlbum.name }}
+                    </Button>
+                </div>
+                <div class="flex items-center gap-2">
+                    <Button
+                        v-if="currentPhoto.private"
+                        disabled
+                        class="bg-blue-500"
+                        title="Only visible to members"
+                    >
+                        <EyeOff />
+                    </Button>
+
+                    <Button
+                        :disabled="!previousPhoto"
+                        variant="outline"
+                        class="hidden md:inline-block"
+                        @click="() => goToPhotoAt(state.index - 1)"
+                    >
+                        <ArrowLeft />
+                    </Button>
+
+                    <Button
+                        :variant="
+                            currentPhoto.liked_by_me ? 'default' : 'outline'
+                        "
+                        @click="handleLikeClick(state.index)"
+                    >
+                        <Heart
+                            class="me-2"
+                            :fill="currentPhoto.liked_by_me ? 'red' : 'none'"
+                        />
+                        {{ currentPhoto.likes_count }}
+                    </Button>
+
+                    <Button
+                        class="hidden md:inline-block"
+                        :disabled="!nextPhoto"
+                        variant="outline"
+                        @click="() => goToPhotoAt(state.index + 1)"
+                    >
+                        <ArrowRight />
+                    </Button>
+                </div>
+            </div>
+            <div
+                class="relative flex w-full items-center justify-center"
+                style="max-height: 70vh"
+            >
+                <!-- Image -->
+                <img
+                    :src="currentPhoto.large_url"
+                    class="w-full object-contain"
+                    style="max-height: 70vh"
+                    :alt="'Image '.concat(currentPhoto.id.toString())"
+                />
 
                 <Button
-                    v-if="currentPhoto.private"
-                    disabled
-                    class="bg-blue-500"
-                    title="Only visible to members"
-                >
-                    <EyeOff />
-                </Button>
-
-                <Button
+                    :variant="'ghost'"
                     :disabled="!previousPhoto"
-                    variant="outline"
-                    @click="() => goToPhotoAt(state.index - 1)"
+                    class="text-black-100 absolute top-1/2 left-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2"
+                    @click="goToPhotoAt(state.index - 1)"
                 >
                     <ArrowLeft />
                 </Button>
 
                 <Button
-                    :variant="currentPhoto.liked_by_me ? 'default' : 'outline'"
-                    @click="handleLikeClick(state.index)"
-                >
-                    <Heart class="me-2" />
-                    {{ currentPhoto.likes_count }}
-                </Button>
-
-                <Button
+                    :variant="'ghost'"
                     :disabled="!nextPhoto"
-                    variant="outline"
-                    @click="() => goToPhotoAt(state.index + 1)"
+                    class="text-black-100 absolute top-1/2 right-0 flex h-full w-25 -translate-y-1/2 transform items-center justify-center p-2"
+                    @click="goToPhotoAt(state.index + 1)"
                 >
                     <ArrowRight />
                 </Button>
             </div>
-
-            <img
-                :src="currentPhoto.large_url"
-                class="w-full object-contain"
-                style="max-height: 70vh"
-                :alt="'Image '.concat(currentPhoto.id.toString())"
-            />
 
             <!-- Prefetch next/previous images invisibly -->
             <img
