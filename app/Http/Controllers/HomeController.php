@@ -17,13 +17,17 @@ use App\Models\WelcomeMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show(): View
+    public function show()
     {
+
+        Storage::disk('s3')->put('example.txt', 'Hello, Minio!', 'public');
+        return Storage::disk('s3')->url('example.txt');
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')
