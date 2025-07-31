@@ -92,7 +92,7 @@ class PhotoAlbum extends Model
      */
     public function items(): HasMany
     {
-        return $this->hasMany(Photo::class, 'album_id')->orderBy('date_taken')->chaperone('album');
+        return $this->hasMany(Photo::class, 'album_id')->orderBy('date_taken');
     }
 
     /** @param Builder<$this> $query
