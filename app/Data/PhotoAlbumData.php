@@ -16,6 +16,6 @@ class PhotoAlbumData extends Data
 
         /** @var Collection<int, PhotoData> */
         #[DataCollectionOf(PhotoData::class)]
-        public Collection $items,
+        public ?Collection $items,
     ) {}
 }

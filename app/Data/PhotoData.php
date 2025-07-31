@@ -18,7 +18,7 @@ class PhotoData extends Data
         public string $large_url,
         public ?int $likes_count,
         public ?bool $liked_by_me,
-        public ?PhotoAlbum $album,
+        public ?PhotoAlbumData $album,
     ) {}
 
     public static function fromModel(?Photo $photo): ?self
@@ -31,7 +31,7 @@ class PhotoData extends Data
             $photo->getUrl(PhotoEnum::LARGE),
             $photo->likes_count,
             $photo->liked_by_me,
-            $photo->album,
+            PhotoAlbumData::from($photo->album),
         ) : null;
     }
 }

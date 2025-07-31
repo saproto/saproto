@@ -20,8 +20,6 @@ import { toast } from 'vue-sonner'
 const page = usePage()
 
 const album = computed(() => page.props.album as PhotoAlbumData)
-const albumPage = computed(() => Math.floor(state.index / 24) + 1)
-
 const photoList = ref(album.value.items)
 
 const emaildomain = computed(() => page.props.emaildomain)
@@ -39,6 +37,7 @@ const currentPhoto = computed(() => photoList.value[state.index])
 const previousPhoto = computed(() =>
     state.index > 0 ? photoList.value[state.index - 1] : null
 )
+const albumPage = computed(() => Math.floor(state.index / 24) + 1)
 const nextPhoto = computed(() =>
     state.index < photoList.value.length - 1
         ? photoList.value[state.index + 1]
@@ -171,7 +170,7 @@ onMounted(() => {
             <div
                 class="bg-muted align-content-center flex items-center justify-between p-2"
             >
-                <div class="">
+                <div>
                     <Button
                         v-if="currentAlbum.id !== album.id"
                         class="me-2 mb-1"
