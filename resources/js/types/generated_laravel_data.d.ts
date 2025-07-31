@@ -14,7 +14,7 @@ is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
 };
 export type PhotoAlbumData = {
-id: number;
+id: string | number;
 name: string;
 private: boolean;
 items: Array<App.Data.PhotoData>;
@@ -24,11 +24,10 @@ id: number;
 private: boolean;
 date_taken: number;
 url: string;
-small_url: string;
-medium_url: string;
 large_url: string;
 likes_count: number | null;
 liked_by_me: boolean | null;
+album: any | null;
 };
 }
 declare namespace App.Enums {
