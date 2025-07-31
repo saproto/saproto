@@ -28,6 +28,8 @@ services:
             - soketi
             - redis
             - selenium
+            - minio
+
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
         image: 'mariadb:10'
@@ -103,6 +105,19 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+    minio:
+        image: minio/minio
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ROOT_USER: minioadmin
+            MINIO_ROOT_PASSWORD: minioadmin
+        command: server --console-address ":9001" /data
+        volumes:
+            - minio-data:/data
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -110,4 +125,6 @@ volumes:
     sail-mariadb:
         driver: local
     sail-redis:
+        driver: local
+    minio-data:
         driver: local
