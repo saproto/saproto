@@ -10,12 +10,12 @@ use Spatie\LaravelData\Data;
 class PhotoAlbumData extends Data
 {
     public function __construct(
-        public int $id,
+        public int|string $id,
         public string $name,
         public bool $private,
 
         /** @var Collection<int, PhotoData> */
         #[DataCollectionOf(PhotoData::class)]
-        public Collection $items,
+        public ?Collection $items,
     ) {}
 }

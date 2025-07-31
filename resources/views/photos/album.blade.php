@@ -2,17 +2,19 @@
 @php
     use App\Enums\PhotoEnum;
     /**
-     * @var \App\Models\PhotoAlbum $album
+     * @var \App\Models\PhotoAlbum|null $album
      * @var \Illuminate\Support\Collection<\App\Models\Photo> $photos
      */
+
+    $title = ($album?->name ?? 'My liked photos') . ' ' . date('M j, Y', $album?->date_taken ?? time());
 @endphp
 
 @section('page-title')
-        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+    {{ $title }}
 @endsection
 
 @section('container')
-    @if ($album->event)
+    @if ($album?->event)
         <a
             class="btn btn-info btn-block mb-3"
             href="{{ route('event::show', ['event' => $album->event]) }}"
@@ -32,17 +34,19 @@
                 <span class="d-none d-sm-inline">Album overview</span>
             </a>
             @can('protography')
-                <a
-                    href="{{ route('albums::admin::edit', ['id' => $album->id]) }}"
-                    class="btn btn-success float-start me-3"
-                >
-                    <i class="fas fa-edit"></i>
-                    <span class="d-none d-sm-inline">Edit album</span>
-                </a>
+                @if ($album)
+                    <a
+                        href="{{ route('albums::admin::edit', ['id' => $album->id]) }}"
+                        class="btn btn-success float-start me-3"
+                    >
+                        <i class="fas fa-edit"></i>
+                        <span class="d-none d-sm-inline">Edit album</span>
+                    </a>
+                @endif
             @endcan
 
             <div class="fw-bold m-1 p-1">
-                {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
+                {{ $title }}
             </div>
         </div>
 
@@ -55,12 +59,13 @@
                             [
                                 'id' => sprintf('photo_%s', $photo->id),
                                 'url' => route('albums::album::show', [
-                                    'album' => $album,
+                                    'album' => $album?->id ?? 'liked',
                                     'photo' => $photo,
                                 ]),
                                 'img' => $photo->getUrl(PhotoEnum::SMALL),
                                 'html' => sprintf(
-                                    '<i class="fas fa-heart"></i> %s %s',
+                                    '<i class="fas fa-heart %s"></i> %s %s',
+                                    ! $photo->liked_by_me ? '' : 'text-danger',
                                     $photo->likes_count,
                                     $photo->private
                                         ? '<i class="fas fa-eye-slash ms-4 me-2 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This photo is only visible to members."></i>'

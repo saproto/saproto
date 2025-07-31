@@ -682,6 +682,13 @@
                                         >
                                             My Profile
                                         </a>
+
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('albums::liked::list') }}"
+                                        >
+                                            My Liked Photos
+                                        </a>
                                     @else
                                         <a
                                             class="dropdown-item"

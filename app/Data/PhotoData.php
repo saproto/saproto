@@ -14,11 +14,10 @@ class PhotoData extends Data
         public bool $private,
         public int $date_taken,
         public string $url,
-        public string $small_url,
-        public string $medium_url,
         public string $large_url,
         public ?int $likes_count,
         public ?bool $liked_by_me,
+        public ?PhotoAlbumData $album,
     ) {}
 
     public static function fromModel(?Photo $photo): ?self
@@ -28,11 +27,10 @@ class PhotoData extends Data
             $photo->private,
             $photo->date_taken,
             $photo->getUrl(),
-            $photo->getUrl(PhotoEnum::SMALL),
-            $photo->getUrl(PhotoEnum::MEDIUM),
             $photo->getUrl(PhotoEnum::LARGE),
             $photo->likes_count,
             $photo->liked_by_me,
+            PhotoAlbumData::from($photo->album),
         ) : null;
     }
 }
