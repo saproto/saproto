@@ -16,14 +16,19 @@ import axios from 'axios'
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 import { toast } from 'vue-sonner'
+import PhotoData = App.Data.PhotoData
 
 const page = usePage()
 
 const album = computed(() => page.props.album as PhotoAlbumData)
-const photoList = ref(album.value.items)
+const photoList = ref(album.value.items??[])
 
 const emaildomain = computed(() => page.props.emaildomain)
 const user = computed(() => page.props.auth.user as AuthUserData)
+
+const showHeart = ref(false)
+const heartColor = ref('red');
+let lastTapTime = 0
 
 const photo = computed(() => parseInt(page.props.photo as string))
 const state = reactive({
@@ -105,13 +110,16 @@ const handleLikeClick = (index: number) => {
 }
 
 let isDownloading = false
-const downloadPhoto = (photoUrl: string) => {
+const downloadPhoto = (photo: PhotoData) => {
     if (isDownloading) return
     isDownloading = true
 
     const link = document.createElement('a')
-    link.href = photoUrl
-    link.download = ''
+    link.href = photo.url
+
+    const parts = photo.url.split('/')
+
+    link.download = parts.pop()??''
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -120,7 +128,23 @@ const downloadPhoto = (photoUrl: string) => {
         isDownloading = false
     }, 1000)
 }
+const handlePhotoTap = () => {
+    const now = new Date().getTime()
+    const DOUBLE_TAP_DELAY = 300 // milliseconds
 
+    if (now - lastTapTime < DOUBLE_TAP_DELAY) {
+        // Double tap detected
+        showHeart.value = true
+        heartColor.value=currentPhoto.value.liked_by_me?'black':'red';
+        handleLikeClick(state.index)
+
+        setTimeout(() => {
+            showHeart.value = false
+        }, 400)
+    }
+
+    lastTapTime = now
+}
 onMounted(() => {
     window.addEventListener('keydown', (e) => {
         if (['ArrowLeft', 'ArrowRight', 'ArrowUp'].includes(e.key))
@@ -135,7 +159,7 @@ onMounted(() => {
             handleLikeClick(state.index)
         }
         if (e.key === 'ArrowDown') {
-            downloadPhoto(currentPhoto.value.url)
+            downloadPhoto(currentPhoto.value)
         }
     })
 
@@ -240,6 +264,14 @@ onMounted(() => {
                     class="w-full object-contain"
                     style="max-height: 70vh"
                     :alt="'Image '.concat(currentPhoto.id.toString())"
+                    @click="handlePhotoTap"
+                />
+
+                <Heart
+                    v-if="showHeart"
+                    class="w-24 h-24 absolute animate-ping duration-[800ms] "
+                    :fill="heartColor"
+                    :stroke="heartColor"
                 />
 
                 <Button
