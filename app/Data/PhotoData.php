@@ -4,7 +4,6 @@ namespace App\Data;
 
 use App\Enums\PhotoEnum;
 use App\Models\Photo;
-use App\Models\PhotoAlbum;
 use Spatie\LaravelData\Data;
 
 /** @typescript */

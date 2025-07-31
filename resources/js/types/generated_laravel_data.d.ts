@@ -17,7 +17,7 @@ export type PhotoAlbumData = {
 id: string | number;
 name: string;
 private: boolean;
-items: Array<App.Data.PhotoData>;
+items: Array<App.Data.PhotoData> | null;
 };
 export type PhotoData = {
 id: number;
@@ -27,7 +27,7 @@ url: string;
 large_url: string;
 likes_count: number | null;
 liked_by_me: boolean | null;
-album: any | null;
+album: App.Data.PhotoAlbumData | null;
 };
 }
 declare namespace App.Enums {
