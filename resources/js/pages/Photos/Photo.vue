@@ -21,13 +21,13 @@ import PhotoData = App.Data.PhotoData
 const page = usePage()
 
 const album = computed(() => page.props.album as PhotoAlbumData)
-const photoList = ref(album.value.items??[])
+const photoList = ref(album.value.items ?? [])
 
 const emaildomain = computed(() => page.props.emaildomain)
 const user = computed(() => page.props.auth.user as AuthUserData)
 
 const showHeart = ref(false)
-const heartColor = ref('red');
+const heartColor = ref('red')
 let lastTapTime = 0
 
 const photo = computed(() => parseInt(page.props.photo as string))
@@ -119,7 +119,7 @@ const downloadPhoto = (photo: PhotoData) => {
 
     const parts = photo.url.split('/')
 
-    link.download = parts.pop()??''
+    link.download = parts.pop() ?? ''
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -135,7 +135,7 @@ const handlePhotoTap = () => {
     if (now - lastTapTime < DOUBLE_TAP_DELAY) {
         // Double tap detected
         showHeart.value = true
-        heartColor.value=currentPhoto.value.liked_by_me?'black':'red';
+        heartColor.value = currentPhoto.value.liked_by_me ? 'black' : 'red'
         handleLikeClick(state.index)
 
         setTimeout(() => {
@@ -269,7 +269,7 @@ onMounted(() => {
 
                 <Heart
                     v-if="showHeart"
-                    class="w-24 h-24 absolute animate-ping duration-[800ms] "
+                    class="absolute h-24 w-24 animate-ping duration-[800ms]"
                     :fill="heartColor"
                     :stroke="heartColor"
                 />
