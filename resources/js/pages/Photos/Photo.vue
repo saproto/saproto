@@ -9,6 +9,7 @@ import {
     Heart,
     Images,
     Shield,
+    Download,
 } from 'lucide-vue-next'
 import PhotoAlbumData = App.Data.PhotoAlbumData
 import AuthUserData = App.Data.AuthUserData
@@ -130,10 +131,9 @@ const downloadPhoto = (photo: PhotoData) => {
 }
 const handlePhotoTap = () => {
     const now = new Date().getTime()
-    const DOUBLE_TAP_DELAY = 300 // milliseconds
+    const DOUBLE_TAP_DELAY = 400
 
     if (now - lastTapTime < DOUBLE_TAP_DELAY) {
-        // Double tap detected
         showHeart.value = true
         heartColor.value = currentPhoto.value.liked_by_me ? 'black' : 'red'
         handleLikeClick(state.index)
@@ -192,9 +192,9 @@ onMounted(() => {
     <div class="mx-auto max-w-4xl space-y-6 p-4">
         <div class="bg-background overflow-hidden rounded-xl border shadow">
             <div
-                class="bg-muted align-content-center flex items-center justify-between p-2"
+                class="bg-muted align-content-center flex w-full flex-col items-center justify-between gap-2 p-2 md:flex-row"
             >
-                <div>
+                <div class="flex w-full flex-wrap">
                     <Button
                         v-if="currentAlbum.id !== album.id"
                         class="me-2 mb-1"
@@ -214,12 +214,19 @@ onMounted(() => {
                 </div>
                 <div class="flex items-center gap-2">
                     <Button
-                        v-if="currentPhoto.private"
+                        v-if="currentPhoto.private || true"
                         disabled
                         class="bg-blue-500"
                         title="Only visible to members"
                     >
                         <EyeOff />
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        @click="() => downloadPhoto(currentPhoto)"
+                    >
+                        <Download />
                     </Button>
 
                     <Button

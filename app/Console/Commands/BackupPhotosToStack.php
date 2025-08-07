@@ -31,15 +31,15 @@ class BackupPhotosToStack extends Command
             $q->withoutGlobalScopes();
         })->with(['album' => function ($q) {
             $q->withoutGlobalScopes();
-        }]);
+        }])->orderBy('photos.id')
+            ->where('photos.id', '>', 0);
         $bar = $this->output->createProgressBar($photos->count());
         $bar->start();
 
         $photos
             ->chunkById(200, function ($photos) use ($bar) {
                 foreach ($photos as $photo) {
-                    $title = preg_replace('/[^A-Za-z0-9 ]/', '_', $photo->album->name);
-                    $stackPath = $title.'/'.$photo->id;
+                    $stackPath = $photo->album->id.'/'.$photo->id;
                     if (Storage::disk('stack')->missing($stackPath)) {
                         $media = $photo->getFirstMedia();
                         $file = $media->getPathRelativeToRoot();

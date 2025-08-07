@@ -30,7 +30,7 @@ class PhotoData extends Data
             $photo->getUrl(PhotoEnum::LARGE),
             $photo->likes_count,
             $photo->liked_by_me,
-            PhotoAlbumData::from($photo->album),
+            $photo->relationLoaded('album') ? PhotoAlbumData::from($photo->album) : null
         ) : null;
     }
 }
