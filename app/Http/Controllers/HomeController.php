@@ -25,9 +25,6 @@ class HomeController extends Controller
     /** Display the homepage. */
     public function show()
     {
-
-        Storage::disk('s3')->put('example.txt', 'Hello, Minio!', 'public');
-        return Storage::disk('s3')->url('example.txt');
         $companies = Company::query()
             ->where('in_logo_bar', true)
             ->with('image')

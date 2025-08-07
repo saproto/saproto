@@ -110,7 +110,7 @@ class PhotoAdminController extends Controller
             'file_id' => 1,
         ]);
 
-        $disk = $album->private ? 's3' : 's3_public';
+        $disk = $album->private ? 's3_private' : 's3_public';
         try {
             $photo->addMediaFromRequest('file')
                 ->usingFileName($album->id.'_'.$photo->id)
@@ -164,7 +164,7 @@ class PhotoAdminController extends Controller
                         }
 
                         $media = $photo->getFirstMedia();
-                        $media->move($photo, diskName: $photo->private ? 's3_public' : 's3');
+                        $media->move($photo, diskName: $photo->private ? 's3_public' : 's3_private');
 
                         $photo->update([
                             'private' => ! $photo->private,

@@ -11,7 +11,7 @@ class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-        if ($this->media->disk === 'local'||$this->media->disk === 's3') {
+        if ($this->media->disk === 'local'||$this->media->disk === 's3_private') {
             return route('media::show', [
                 'id' => $this->media->id,
                 'conversion' => $this->conversion?->getName(),

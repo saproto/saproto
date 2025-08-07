@@ -132,10 +132,10 @@ services:
         entrypoint: >
             /bin/sh -c "
               sleep 5;
-              mc alias set local http://minio:9000 sail password;
-              mc mb local/local;
-              mc mb local/public;
-              mc anonymous set download local/public;
+              mc alias set laravel http://minio:9000 sail password;
+              mc mb laravel/local;
+              mc mb laravel/public;
+              mc anonymous set download laravel/public;
               echo 'Buckets created and public access set.';
               exit 0;
             "
