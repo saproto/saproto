@@ -13,7 +13,7 @@ class PrivateMediaController extends Controller
     {
         $media = Media::query()->findOrFail($mediaId);
 
-        if ($media->disk !== 'local') {
+        if ($media->disk !== 'local' || $media->disk !== 's3') {
             abort(403, 'This is not a private media file.');
         }
 

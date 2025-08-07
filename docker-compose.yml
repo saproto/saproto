@@ -122,6 +122,23 @@ services:
             test: [ "CMD", "mc", "ready", "local" ]
             retries: 3
             timeout: 5s
+
+    createbuckets:
+        image: minio/mc
+        depends_on:
+            - minio
+        networks:
+            - sail
+        entrypoint: >
+            /bin/sh -c "
+              sleep 5;
+              mc alias set local http://minio:9000 sail password;
+              mc mb local/local;
+              mc mb local/public;
+              mc anonymous set download local/public;
+              echo 'Buckets created and public access set.';
+              exit 0;
+            "
 networks:
     sail:
         driver: bridge
