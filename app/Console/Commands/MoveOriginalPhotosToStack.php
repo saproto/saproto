@@ -44,6 +44,7 @@ class MoveOriginalPhotosToStack extends Command
                     }catch (Exception $exception){
                         $this->warn("Photo: ".$photo->id. " :".$exception->getMessage());
                     }
+
                     $bar->advance();
                 }
             });

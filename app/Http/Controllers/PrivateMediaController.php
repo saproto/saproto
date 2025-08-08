@@ -13,7 +13,7 @@ class PrivateMediaController extends Controller
     {
         $media = Media::query()->findOrFail($mediaId);
 
-        $conversionPath =  !empty($conversion) ? $media->getPathRelativeToRoot($conversion) : null;
+        $conversionPath =  empty($conversion) ? null : $media->getPathRelativeToRoot($conversion);
         if (!empty($conversionPath) && $media->conversions_disk==='public' || $media->disk === 'public') {
             abort(403, 'This is not a private media file.');
         }
