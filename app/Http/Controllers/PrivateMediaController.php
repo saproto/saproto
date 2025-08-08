@@ -13,16 +13,25 @@ class PrivateMediaController extends Controller
     {
         $media = Media::query()->findOrFail($mediaId);
 
-        if ($media->disk !== 'local') {
+        $conversionPath =  !empty($conversion) ? $media->getPathRelativeToRoot($conversion) : null;
+        if (!empty($conversionPath) && $media->conversions_disk==='public' || $media->disk === 'public') {
             abort(403, 'This is not a private media file.');
         }
 
-        $path = $conversion !== null && $conversion !== '' && $conversion !== '0' ? $media->getPathRelativeToRoot($conversion) : $media->getPathRelativeToRoot();
-
-        if ($conversion && ! Storage::disk($media->disk)->exists($path)) {
-            $path = $media->getPathRelativeToRoot();
+        if ($conversionPath && Storage::disk($media->conversions_disk)->exists($conversionPath)) {
+            $path = $media->getPathRelativeToRoot($conversion);
+            return Response::stream(function () use ($media, $path) {
+                echo Storage::disk($media->conversions_disk)->get($path);
+            }, 200, [
+                'Content-Type' => $media->mime_type,
+                'Content-Disposition' => 'inline; filename="'.$media->file_name.'"',
+                'Cache-Control' => 'private, max-age=3600',
+                'Pragma' => 'public',
+            ]);
         }
 
+
+        $path = $media->getPathRelativeToRoot();
         if (! Storage::disk($media->disk)->exists($path)) {
             abort(404, 'Media file not found.');
         }

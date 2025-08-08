@@ -51,7 +51,16 @@ return [
             'port' => env('SFTP_PORT', 22),
             'username' => env('SFTP_USERNAME'),
             'password' => env('SFTP_PASSWORD'),
-            'root' => env('SFTP_ROOT', 'Laravel'),
+            'root' => env('SFTP_ROOT', 'photo_storage'),
+        ],
+
+        'stack_backup' => [
+            'driver' => 'sftp',
+            'host' => env('SFTP_HOST'),
+            'port' => env('SFTP_PORT', 22),
+            'username' => env('SFTP_USERNAME'),
+            'password' => env('SFTP_PASSWORD'),
+            'root' => env('SFTP_ROOT_BACKUP', 'laravel_backup'),
         ],
     ],
     /*

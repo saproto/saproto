@@ -78,7 +78,14 @@ class Photo extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('default')
+        $this->addMediaCollection('private')
+            ->useDisk('stack')
+            ->storeConversionsOnDisk('local')
+            ->singleFile();
+
+        $this->addMediaCollection('public')
+            ->useDisk('stack')
+            ->storeConversionsOnDisk('public')
             ->singleFile();
     }
 
@@ -116,7 +123,7 @@ class Photo extends Model implements HasMedia
 
     public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        return $this->getFirstMediaUrl(conversionName: $photoEnum->value);
+        return $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value);
     }
 
     protected function casts(): array
