@@ -40,11 +40,11 @@ class BackupPhotosToStack extends Command
             ->chunkById(200, function ($photos) use ($bar) {
                 foreach ($photos as $photo) {
                     $stackPath = $photo->album->id.'/'.$photo->id;
-                    if (Storage::disk('stack')->missing($stackPath)) {
-                        $media = $photo->getFirstMedia();
+                    if (Storage::disk('stack_backup')->missing($stackPath)) {
+                        $media = $photo->getFirstMedia('*');
                         $file = $media->getPathRelativeToRoot();
                         $content = Storage::disk($media->disk)->get($file);
-                        Storage::disk('stack')->put($stackPath, $content);
+                        Storage::disk('stack_backup')->put($stackPath, $content);
                     }
 
                     $bar->advance();

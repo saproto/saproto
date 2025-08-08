@@ -110,11 +110,10 @@ class PhotoAdminController extends Controller
             'file_id' => 1,
         ]);
 
-        $disk = $album->private ? 'local' : 'public';
         try {
             $photo->addMediaFromRequest('file')
                 ->usingFileName($album->id.'_'.$photo->id)
-                ->toMediaCollection(diskName: $disk);
+                ->toMediaCollection($album->private ? 'private' : 'public');
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
         } catch (FileDoesNotExist|FileIsTooBig $e) {
@@ -163,8 +162,8 @@ class PhotoAdminController extends Controller
                             continue;
                         }
 
-                        $media = $photo->getFirstMedia();
-                        $media->move($photo, diskName: $photo->private ? 'public' : 'local');
+                        $media = $photo->getFirstMedia('*');
+                        $media->move($photo, $photo->private ? 'public' : 'private');
 
                         $photo->update([
                             'private' => ! $photo->private,
