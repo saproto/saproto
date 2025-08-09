@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -36,8 +35,6 @@ use Illuminate\Support\Carbon;
  */
 class QrAuthRequest extends Model
 {
-    use HasFactory;
-
     protected $table = 'qrauth_requests';
 
     protected $guarded = ['id'];
