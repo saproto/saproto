@@ -76,7 +76,7 @@ try {
                 RenamePropertyRector::class,
                 RenameClassRector::class,
                 DateFuncCallToCarbonRector::class,
-                AddHasFactoryToModelsRector::class ,
+                AddHasFactoryToModelsRector::class,
                 __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {
