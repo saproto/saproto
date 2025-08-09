@@ -758,11 +758,9 @@ Route::middleware('forcedomain')->group(function () {
                     Route::get('', 'adminindex')->name('adminlist');
 
                     Route::prefix('filter')->name('filter::')->group(function () {
-                        Route::get('name/{name?}', 'filterByUser')->name('name');
-                        Route::get('date/{date?}', 'filterByDate')->name('date');
+                        Route::get('', 'filter')->name('filter');
                     });
                 });
-
             });
 
             // Routes related to Payment Statistics

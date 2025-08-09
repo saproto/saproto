@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
@@ -18,6 +19,8 @@ use Illuminate\Support\MessageBag;
  */
 class Validatable extends Model
 {
+    use HasFactory;
+
     /** @var array|string[] */
     protected array $rules = [];
 

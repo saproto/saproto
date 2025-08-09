@@ -9,9 +9,7 @@
         <div class="col-md-3 col-md-push-9">
             @include('omnomcom.orders.admin_includes.orderline-addone')
 
-            @include('omnomcom.orders.admin_includes.pickdate')
-
-            @include('omnomcom.orders.admin_includes.pickuser')
+            @include('omnomcom.orders.admin_includes.filter')
         </div>
 
         <div class="col-md-9 col-md-3">
