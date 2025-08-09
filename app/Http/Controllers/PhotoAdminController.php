@@ -145,6 +145,7 @@ class PhotoAdminController extends Controller
                             Session::flash('flash_message', 'You can not remove the thumbnail of a published album!');
                             continue;
                         }
+
                         Photo::query()->find($photoId)->delete();
                     }
 
