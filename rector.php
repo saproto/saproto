@@ -15,6 +15,7 @@ use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
+use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Set\LaravelSetList;
 
@@ -75,6 +76,7 @@ try {
                 RenamePropertyRector::class,
                 RenameClassRector::class,
                 DateFuncCallToCarbonRector::class,
+                AddHasFactoryToModelsRector::class,
                 __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {

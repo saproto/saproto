@@ -1,9 +1,19 @@
 <div class="card">
     <div class="card-header bg-dark text-white">
+        Orderlines
+        @if ($user)
+            for {{ $user }}
+        @endif
+
         @if ($date)
-            Orderlines on {{ $date }}
-        @elseif ($user)
-            Orderlines for {{ $user }}
+                on {{ $date->format('Y-m-d') }}
+        @endif
+
+        @if (! $products->isEmpty())
+            for product(s)
+            @foreach ($products as $product)
+                {{ $product }};
+            @endforeach
         @endif
     </div>
 
@@ -76,7 +86,7 @@
                                 {{ $orderline->authenticated_by }}
                             </td>
                             <td>
-                                {{ date('Y/m/d H:i:s', strtotime($orderline->created_at)) }}
+                                {{ date('d/m/Y H:i:s', strtotime($orderline->created_at)) }}
                             </td>
                         </tr>
                     @endforeach
