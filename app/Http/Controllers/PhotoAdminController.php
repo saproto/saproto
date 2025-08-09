@@ -141,6 +141,10 @@ class PhotoAdminController extends Controller
             switch ($action) {
                 case 'remove':
                     foreach ($photos as $photoId) {
+                        if($album->published  && (int)$photoId === $album->thumb_id){
+                            Session::flash('flash_message', 'You can not remove the thumbnail of a published album!');
+                            continue;
+                        }
                         Photo::query()->find($photoId)->delete();
                     }
 
