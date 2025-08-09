@@ -756,10 +756,6 @@ Route::middleware('forcedomain')->group(function () {
                     Route::post('store/single', 'store')->name('store');
                     Route::get('delete/{id}', 'destroy')->name('delete');
                     Route::get('', 'adminindex')->name('adminlist');
-
-                    Route::prefix('filter')->name('filter::')->group(function () {
-                        Route::get('', 'filter')->name('filter');
-                    });
                 });
             });
 
