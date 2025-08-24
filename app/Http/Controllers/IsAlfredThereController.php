@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\IsAlfredThereEnum;
 use App\Events\IsAlfredThereEvent;
 use App\Models\HashMapItem;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -53,7 +54,12 @@ class IsAlfredThereController extends Controller
 
         $unix = HashMapItem::query()->updateOrCreate(['key' => self::$HashMapUnixKey], ['value' => $unix]);
 
-        IsAlfredThereEvent::dispatch($status->value, $text->value, $unix->value);
+        try {
+            IsAlfredThereEvent::dispatch($status->value, $text->value, $unix->value);
+        } catch (Exception) {
+            // if the websocket server is not running, we don't care about the error
+            // the webpage will then revert to polling anyway
+        }
 
         return Redirect::back();
     }
