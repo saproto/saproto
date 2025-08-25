@@ -227,7 +227,7 @@ features such as timelines of runtime requests, database queries and client-metr
 
 ### Testing
 
-For testing we use Pest for basic tests and Dusk for browser tests.
+For testing we use Pest for testing.
 These tests should be run locally, but are also run on every PR in GitHub Actions.
 
 If tests are failing, and it shows that all the tests using a database fail, you should run
@@ -244,8 +244,3 @@ To make a new test you can use the following command:
 
 To make a unit test you can use the following command:
 ```sail artisan make:test {{TestName}} --unit```.
-
-#### Dusk
-
-The dusk tests can be run with the following command:
-```sail dusk```.
