@@ -130,7 +130,7 @@ class OrderLine extends Model
     /** @param Builder<OrderLine> $query
      * @return Builder<OrderLine>
      */
-    public function scopeUnpayed(Builder $query): Builder
+    protected function scopeUnpayed(Builder $query): Builder
     {
         return $query->whereNull('payed_with_cash')
             ->whereNull('payed_with_bank_card')

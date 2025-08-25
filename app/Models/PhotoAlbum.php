@@ -98,7 +98,7 @@ class PhotoAlbum extends Model
     /** @param Builder<$this> $query
      * @return Builder<$this>
      * */
-    public function scopeName(Builder $query, string $name): Builder
+    protected function scopeName(Builder $query, string $name): Builder
     {
         return $query->where('name', 'LIKE', '%'.$name.'%');
     }

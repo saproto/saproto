@@ -10,13 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  call-phplint:
-    name: Fix php
-    uses: ./.github/workflows/fix_php.yml
-    secrets: inherit
-
   deploy:
-    needs: call-phplint
     name: Deploy
     runs-on: ubuntu-latest
     env:

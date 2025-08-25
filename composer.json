@@ -93,11 +93,10 @@
         "laravel/sail": "^1.16",
         "laravel/pint": "^1.10",
         "driftingly/rector-laravel": "^2.0.2",
-        "pestphp/pest": "^3.0",
         "mockery/mockery": "^1.6",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "laravel/dusk": "^8.2",
-        "beyondcode/expose": "^3.0"
+        "pestphp/pest-plugin-laravel": "^4.0.0",
+        "beyondcode/expose": "^3.0",
+        "pestphp/pest-plugin-browser": "^4.0"
     },
     "autoload": {
         "psr-4": {

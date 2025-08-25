@@ -23,7 +23,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vue-tsc && vite build"
+        "build": "vue-tsc && vite build",
+        "postinstall": "npx playwright install chromium"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^6.6.0",
@@ -46,6 +47,7 @@
         "leaflet.markercluster": "^1.5.3",
         "lucide-vue-next": "^0.515.0",
         "moment": "^2.29.2",
+        "playwright": "^1.55.0",
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.4.0",
         "signature_pad": "^3.0.0-beta.4",
