@@ -8,7 +8,7 @@ concurrency:
 jobs:
   frontendbuild:
     runs-on: ubuntu-latest
-    name: 🛠 Build front-end
+    name: 🛠 Lint front-end
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,9 +24,7 @@ jobs:
           cache: npm
 
       - name: 📥 Install front-end dependencies
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: 0
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: lint with eslint
         run: npx eslint resources/ --fix
@@ -43,17 +41,11 @@ jobs:
           commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
 
-      - name: 🔨 build front-end
-        run: npm run build --if-present
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: Build
-          path: public/build
   call-phplint:
     name: Fix php
     uses: ./.github/workflows/fix_php.yml
     secrets: inherit
+
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
@@ -94,10 +86,25 @@ jobs:
         with:
           composer-options: "--ignore-platform-reqs --optimize-autoloader --prefer-dist"
 
-      - uses: actions/download-artifact@v4
+      - name: 🔍 Read .env
+        run: grep -E 'NODE_VERSION' .env.prod >> $GITHUB_ENV
+
+      - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
         with:
-          name: Build
-          path: public/build
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: 📥 Install front-end dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install playwright dependencies
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
+        run: npx playwright install --with-deps
+
+      - name: 🔨 build front-end
+        run: npm run build --if-present
 
       - name: Cache Pest test results
         uses: actions/cache@v4
