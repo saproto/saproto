@@ -24,7 +24,9 @@ jobs:
           cache: npm
 
       - name: 📥 Install front-end dependencies
-        run: npm ci --ignore-scripts
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
+        run: npm ci
 
       - name: lint with eslint
         run: npx eslint resources/ --fix
