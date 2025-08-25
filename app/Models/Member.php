@@ -116,7 +116,7 @@ class Member extends Model
     /** @param Builder<$this> $query
      * @return Builder<$this>
      */
-    public function scopePrimary(Builder $query): Builder
+    protected function scopePrimary(Builder $query): Builder
     {
         return $query->whereMembershipType(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)

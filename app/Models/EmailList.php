@@ -57,7 +57,7 @@ class EmailList extends Model
     /** @param Builder<$this> $query
      * @return Builder<$this>
      */
-    public function scopeSubscribed(Builder $query, User $user): Builder
+    protected function scopeSubscribed(Builder $query, User $user): Builder
     {
         return $query->whereHas('users', function ($q) use ($user) {
             $q->where('user_id', $user->id);
