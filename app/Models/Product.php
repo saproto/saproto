@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductEnum;
 use App\Http\Controllers\WallstreetController;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -12,13 +13,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Product Model.
  *
  * @property int $id
  * @property int $account_id
- * @property int|null $image_id
  * @property string $name
  * @property float $price
  * @property int $calories
@@ -36,7 +41,6 @@ use Illuminate\Support\Carbon;
  * @property-read FinancialAccount|null $account
  * @property-read Collection<int, ProductCategory> $categories
  * @property-read int|null $categories_count
- * @property-read StorageEntry|null $image
  * @property-read mixed $image_url
  * @property-read Collection<int, OrderLine> $orderlines
  * @property-read int|null $orderlines_count
@@ -66,8 +70,31 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class Product extends Model
+class Product extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(ProductEnum::LARGE->value)
+            ->fit(Fit::Max, 1080)
+            ->nonQueued()
+            ->format('webp');
+
+        $this->addMediaConversion(ProductEnum::THUMB->value)
+            ->fit(Fit::Max, 400)
+            ->nonQueued()
+            ->format('webp');
+    }
+
     protected $table = 'products';
 
     protected $guarded = ['id'];
@@ -75,8 +102,6 @@ class Product extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $appends = ['image_url'];
-
-    protected $with = ['image:id,hash'];
 
     /**
      * @return BelongsTo<FinancialAccount, $this>
@@ -99,7 +124,12 @@ class Product extends Model
      */
     protected function imageUrl(): Attribute
     {
-        return Attribute::make(get: fn () => $this->image?->generateImagePath(null, null));
+        return Attribute::make(get: fn (): string => $this->getImageUrl(ProductEnum::LARGE));
+    }
+
+    public function getImageUrl(ProductEnum $productEnum = ProductEnum::ORIGINAL): string
+    {
+        return $this->getFirstMediaUrl('default', $productEnum->value);
     }
 
     /**

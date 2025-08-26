@@ -42,7 +42,7 @@ class OmNomController extends Controller
             abort(403);
         }
 
-        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
+        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.media')->get();
         $minors = collect();
 
         if ($store_slug === 'tipcie') {
@@ -75,7 +75,7 @@ class OmNomController extends Controller
                     )
                 );
             })
-            ->with('image', 'categories')
+            ->with(['media', 'categories'])
             ->get();
 
         return view('omnomcom.minisite', ['products' => $products]);
@@ -97,7 +97,7 @@ class OmNomController extends Controller
             abort(403);
         }
 
-        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.image')->get();
+        $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.media')->get();
 
         $products = [];
         foreach ($categories as $category) {

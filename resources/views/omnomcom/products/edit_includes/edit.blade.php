@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ProductEnum;
+@endphp
+
 <div class="card">
     <form
         method="post"
@@ -11,11 +15,16 @@
         @csrf
 
         <div class="card-body">
-            @if ($product != null && $product->image != null)
+            @php
+                $imageUrl = $product?->getImageUrl(ProductEnum::LARGE);
+            @endphp
+
+            @if ($product != null && $imageUrl !== '')
                 <div class="d-flex justify-content-center">
                     <div class="product-image bg-dark mb-2">
                         <img
-                            src="{!! $product->image->generateImagePath(null, null) !!}"
+                            src="{!! $imageUrl !!}"
+                            alt="{{ $product->name }}'s image"
                         />
                     </div>
                 </div>

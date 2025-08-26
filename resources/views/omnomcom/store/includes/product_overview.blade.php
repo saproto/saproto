@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ProductEnum;
+@endphp
+
 <div id="product-nav" class="col-10">
     @foreach ($categories as $category)
         <?php $products_in_category = []; ?>
@@ -30,7 +34,7 @@
                                     <div
                                         class="product-image-inner"
                                         style="
-                                            background-image: url('{!! $product->image->generateImagePath(100, null) !!}');
+                                            background-image: url('{!! $product->getImageUrl(ProductEnum::THUMB) !!}');
                                         "
                                     ></div>
                                 @endif
