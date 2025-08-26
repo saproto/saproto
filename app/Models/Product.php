@@ -112,14 +112,6 @@ class Product extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
-    }
-
-    /**
      * @return Attribute<string, never>
      */
     protected function imageUrl(): Attribute
