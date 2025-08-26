@@ -85,13 +85,13 @@ class Product extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion(ProductEnum::LARGE->value)
-            ->fit(Fit::Max, 1080)
             ->nonQueued()
+            ->fit(Fit::Max, 1080)
             ->format('webp');
 
         $this->addMediaConversion(ProductEnum::THUMB->value)
-            ->fit(Fit::Max, 400)
             ->nonQueued()
+            ->fit(Fit::Max, 400)
             ->format('webp');
     }
 
