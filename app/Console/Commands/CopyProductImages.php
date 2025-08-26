@@ -34,15 +34,15 @@ class CopyProductImages extends Command
         $productQuery
             ->chunkById(10, function ($products) use ($bar) {
                 foreach ($products as $product) {
-                        try {
-                            $product->addMedia($product->image->generateLocalPath())
-                                ->usingName($product->image->original_filename)
-                                ->usingFileName('product_'.$product->id)
-                                ->preservingOriginal()
-                                ->toMediaCollection();
-                        } catch (Exception $e) {
-                            $this->warn('Product: '.$product->id.' error: '.$e->getMessage());
-                        }
+                    try {
+                        $product->addMedia($product->image->generateLocalPath())
+                            ->usingName($product->image->original_filename)
+                            ->usingFileName('product_'.$product->id)
+                            ->preservingOriginal()
+                            ->toMediaCollection();
+                    } catch (Exception $e) {
+                        $this->warn('Product: '.$product->id.' error: '.$e->getMessage());
+                    }
 
                     $bar->advance();
                 }

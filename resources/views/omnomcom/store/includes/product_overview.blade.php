@@ -30,11 +30,15 @@
                     >
                         <div class="product-inner">
                             <div class="product-image">
-                                @if ($product->image)
+                                @php
+                                    $productImage = $product->getImageUrl(ProductEnum::THUMB);
+                                @endphp
+
+                                @if ($productImage != '')
                                     <div
                                         class="product-image-inner"
                                         style="
-                                            background-image: url('{!! $product->getImageUrl(ProductEnum::THUMB) !!}');
+                                            background-image: url('{!! $productImage !!}');
                                         "
                                     ></div>
                                 @endif
