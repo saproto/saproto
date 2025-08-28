@@ -47,7 +47,7 @@
                                             class="fab fa-youtube"
                                             aria-hidden="true"
                                         ></i>
-                                    @elseif ($message->image)
+                                    @elseif ($message->hasMedia())
                                         <i
                                             class="fas fa-picture-o"
                                             aria-hidden="true"

@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\NarrowcastingEnum;
+use App\Enums\ProductEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Narrowcasting Item Model.
@@ -36,8 +43,10 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class NarrowcastingItem extends Model
+class NarrowcastingItem extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'narrowcasting';
 
     protected $guarded = ['id'];
@@ -47,5 +56,38 @@ class NarrowcastingItem extends Model
     public function image(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+
+        $this->addMediaCollection('videos')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(NarrowcastingEnum::LARGE->value)
+            ->nonQueued()
+            ->fit(Fit::Fill, 1366, 768)
+            ->format('webp')
+            ->performOnCollections('videos');
+
+        $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232)
+            ->extractVideoFrameAtSecond(20)
+            ->performOnCollections('videos');
+    }
+
+    public function getImageUrl(NarrowcastingEnum $narrowcastingEnum = NarrowcastingEnum::ORIGINAL): string
+    {
+        return $this->getFirstMediaUrl('default', $narrowcastingEnum->value);
     }
 }

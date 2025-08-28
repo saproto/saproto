@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\NarrowcastingEnum;
 use App\Models\NarrowcastingItem;
-use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +12,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class NarrowcastingController extends Controller
 {
@@ -19,7 +21,7 @@ class NarrowcastingController extends Controller
     public function index()
     {
         $messages = NarrowcastingItem::query()
-            ->with('image')
+            ->with(['image', 'media'])
             ->orderBy('campaign_start', 'desc')
             ->paginate(10);
 
@@ -51,17 +53,28 @@ class NarrowcastingController extends Controller
             return Redirect::back();
         }
 
+
+        $request->validate([
+            'image' => 'nullable|image|max:5120', // max 5MB
+        ]);
+
         $narrowcasting = new NarrowcastingItem;
         $narrowcasting->name = $request->name;
         $narrowcasting->campaign_start = $request->date('campaign_start')->timestamp;
         $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->slide_duration;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
 
-            $narrowcasting->image()->associate($file);
+        if ($request->has('image')) {
+            try {
+                $narrowcasting->addMediaFromRequest('image')
+                    ->usingFileName('narrowcasting_'.$narrowcasting->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
         }
 
         $youtube_id = $request->get('youtube_id');
@@ -80,10 +93,10 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
@@ -91,13 +104,17 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
+        $request->validate([
+            'image' => 'nullable|image|max:5120', // max 5MB
+        ]);
+
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
         $narrowcasting->name = $request->name;
@@ -105,11 +122,16 @@ class NarrowcastingController extends Controller
         $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->slide_duration;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
+        if ($request->has('image')) {
+            try {
+                $narrowcasting->addMediaFromRequest('image')
+                    ->usingFileName('narrowcasting_'.$narrowcasting->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-            $narrowcasting->image()->associate($file);
+                return Redirect::back();
+            }
         }
 
         $youtube_id = $request->get('youtube_id');
@@ -131,12 +153,12 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
@@ -167,16 +189,20 @@ class NarrowcastingController extends Controller
     {
         $data = [];
         foreach (
-            NarrowcastingItem::query()->where('campaign_start', '<', Carbon::now()->timestamp)->where('campaign_end', '>', Carbon::now()->timestamp)->get() as $item) {
+            NarrowcastingItem::query()
+                ->where('campaign_start', '<', Carbon::now()->timestamp)
+                ->where('campaign_end', '>', Carbon::now()->timestamp)
+                ->with('media')
+                ->get() as $item) {
             if ($item->youtube_id) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
                     'video' => $item->youtube_id,
                 ];
-            } elseif ($item->image) {
+            } elseif ($item->hasMedia()) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
-                    'image' => $item->image->generateImagePath(2000, 1200),
+                    'image' => $item->getImageUrl(NarrowcastingEnum::LARGE),
                 ];
             }
         }

@@ -1,3 +1,4 @@
+@php use App\Enums\NarrowcastingEnum; @endphp
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -87,43 +88,43 @@
                             @if ($item?->youtube_id)
                                 <label>Current video:</label>
 
-                                <div class="row">
-                                    <iframe
-                                        height="300"
-                                        src="https://www.youtube.com/embed/{{ $item->youtube_id }}"
-                                        allow="encrypted-media"
-                                        allowfullscreen
-                                    ></iframe>
-                                </div>
-                            @else
-                                <div class="custom-file mb-3">
-                                    <input
-                                        id="image"
-                                        type="file"
-                                        class="form-control"
-                                        name="image"
-                                    />
-                                    <label class="form-label">
-                                        Upload an image
-                                    </label>
-                                </div>
+                        <div class="row">
+                            <iframe
+                                height="300"
+                                src="https://www.youtube.com/embed/{{ $item->youtube_id }}"
+                                allow="encrypted-media"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        @else
+                            <div class="custom-file mb-3">
+                                <input
+                                    id="image"
+                                    type="file"
+                                    class="form-control"
+                                    name="image"
+                                />
+                                <label class="form-label">
+                                    Upload an image
+                                </label>
+                            </div>
 
-                                <p>
-                                    <sup>
-                                        <strong>Images should be</strong>
-                                        1366 x 768 pixels.
-                                    </sup>
+                            <p>
+                                <sup>
+                                    <strong>Images should be</strong>
+                                    1366 x 768 pixels.
+                                </sup>
 
-                                    @if ($item?->image)
-                                        <label>Current image:</label>
-                                        <img
-                                            src="{!! $item->image->generateImagePath(500, null) !!}"
-                                            class="w-100"
-                                        />
-                                    @endif
-                                </p>
+                                @if ($item?->image)
+                                    <label>Current image:</label>
+                                    <img
+                                        src="{!! $item->getImageUrl(NarrowcastingEnum::LARGE) !!}"
+                                        class="w-100"
+                                        alt="{{$item->id}}'s image" />
+                                @endif
+                            </p>
                             @endif
-                        </p>
+                            </p>
                     </div>
 
                     <div class="card-footer">
