@@ -428,74 +428,79 @@
                 window.addEventListener('drop', dropFiles)
             }
 
-            function dropFiles(e) {
-                console.log(e)
+            async function dropFiles(e) {
                 e.stopPropagation()
                 e.preventDefault()
                 dropArea.classList.add('opacity-25')
 
-                let files = e.dataTransfer.files
+                toggleRunning()
+
+                const files = e.dataTransfer.files
                 if (files.length) {
                     let fileQueue = []
+
                     for (const file of files) {
                         if (
                             ['image/png', 'image/jpg', 'image/jpeg'].includes(
                                 file.type
                             )
                         ) {
-                            let fr = new FileReader()
-                            fr.onload = async () => {
-                                file.id = fileId++
-                                fileQueue.push(file)
-                                await uploadFiles(fileQueue)
-                            }
-                            fr.readAsDataURL(file)
+                            file.id = fileId++
+                            const loadedFile = await readFile(file)
+                            fileQueue.push(loadedFile)
                         }
                     }
+
+                    await uploadFiles(fileQueue)
+                    toggleRunning()
                 }
+            }
+
+            function readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const fr = new FileReader()
+                    fr.onload = () => resolve(file)
+                    fr.onerror = reject
+                    fr.readAsDataURL(file)
+                })
             }
 
             async function uploadFiles(fileQueue) {
                 while (fileQueue.length) {
-                    let file = fileQueue.shift()
+                    const file = fileQueue.shift()
 
-                    let formData = new FormData()
+                    const formData = new FormData()
                     formData.append('file', file)
+
                     const tags = await window.ExifReader.load(file)
                     const imageDate = tags['DateTimeOriginal']?.description
                     if (imageDate) {
                         formData.append('date', imageDate)
                     }
-                    toggleRunning()
-                    await post(
-                        '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
-                        formData,
-                        {
-                            parse: false,
+
+                    try {
+                        const response = await post(
+                            '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
+                            formData,
+                            { parse: false }
+                        )
+                        const text = await response.text()
+
+                        const node = document.getElementById('photo-view')
+                        node.innerHTML = text + node.innerHTML
+                    } catch (err) {
+                        let errText
+                        switch (err.status) {
+                            case 413:
+                                errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
+                                break
+                            default:
+                                errText = `Error ${err.status}: ${err.statusText}`
+                                break
                         }
-                    )
-                        .then((response) => {
-                            response.text().then((text) => {
-                                const node =
-                                    document.getElementById('photo-view')
-                                node.innerHTML = text + node.innerHTML
-                                toggleRunning()
-                            })
-                        })
-                        .catch((err) => {
-                            let errText
-                            switch (err.status) {
-                                case 413:
-                                    errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
-                                    break
-                                default:
-                                    errText = `Error ${err.status}: ${err.statusText}`
-                                    break
-                            }
-                            console.error(errText, err)
-                            uploadError(file, errText)
-                            toggleRunning()
-                        })
+                        console.error(errText, err)
+                        uploadError(file, errText)
+                    }
                 }
             }
 
