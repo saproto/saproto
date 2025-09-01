@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PhotoAdminController extends Controller
 {
@@ -116,9 +114,11 @@ class PhotoAdminController extends Controller
                 ->toMediaCollection($album->private ? 'private' : 'public');
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
-        } catch (FileDoesNotExist|FileIsTooBig $e) {
+        } catch (Exception $exception) {
+            $photo->delete();
+
             return response()->json([
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ], 500);
         }
     }
@@ -141,8 +141,9 @@ class PhotoAdminController extends Controller
             switch ($action) {
                 case 'remove':
                     foreach ($photos as $photoId) {
-                        if($album->published  && (int)$photoId === $album->thumb_id){
+                        if ($album->published && (int) $photoId === $album->thumb_id) {
                             Session::flash('flash_message', 'You can not remove the thumbnail of a published album!');
+
                             continue;
                         }
 
