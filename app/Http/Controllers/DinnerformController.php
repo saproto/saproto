@@ -91,7 +91,7 @@ class DinnerformController extends Controller
 
         $dinnerformList = Dinnerform::query()
             ->orderBy('end', 'desc')
-            ->with('orderedBy')
+            ->with(['orderedBy', 'event'])
             ->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
@@ -103,8 +103,8 @@ class DinnerformController extends Controller
         $dinnerform = Dinnerform::query()->findOrFail($id);
 
         $request->validate([
-            'start' => 'required|date_format:Y-m-d H:i',
-            'end' => 'required|date_format:Y-m-d H:i|after:start',
+            'start' => 'required|date_format:Y-m-d\TH:i',
+            'end' => 'required|date_format:Y-m-d\TH:i|after:start',
         ]);
 
         if ($dinnerform->closed) {
