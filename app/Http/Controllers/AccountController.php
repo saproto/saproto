@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Account;
 use App\Models\Product;
 use Exception;
@@ -15,7 +16,7 @@ use Illuminate\View\View;
 class AccountController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $accounts = Account::query()->orderBy('account_number')->withCount('products')->get();
 

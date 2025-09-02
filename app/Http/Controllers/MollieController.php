@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
@@ -28,7 +29,7 @@ class MollieController extends Controller
     /**
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
 
@@ -110,7 +111,7 @@ class MollieController extends Controller
      *
      * @throws Exception
      */
-    public function status(int $id)
+    public function status(int $id): \Illuminate\Contracts\View\View|Factory
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);

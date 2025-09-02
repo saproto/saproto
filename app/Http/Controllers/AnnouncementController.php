@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Announcement;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -15,13 +16,13 @@ use Illuminate\View\View;
 class AnnouncementController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('announcements.list', ['announcements' => Announcement::query()->orderBy('display_from', 'asc')->get()]);
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('announcements.edit', ['announcement' => null]);
     }
@@ -57,7 +58,7 @@ class AnnouncementController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, $id): \Illuminate\Contracts\View\View|Factory
     {
         return view('announcements.edit', ['announcement' => Announcement::query()->findOrFail($id)]);
     }

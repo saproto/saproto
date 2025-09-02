@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Mail\ProductBulkUpdateNotification;
 use App\Models\Account;
 use App\Models\Product;
@@ -26,7 +27,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         if ($request->has('search') && strlen($request->get('search')) > 2) {
             $search = $request->get('search');
@@ -46,7 +47,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('omnomcom.products.edit', [
             'product' => null,
@@ -108,7 +109,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $product = Product::query()->findOrFail($id);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Tempadmin;
 use App\Models\User;
 use App\Services\ProTubeApiService;
@@ -19,7 +20,7 @@ class TempAdminController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $tempadmins = Tempadmin::query()
             ->with('user', 'creator')
@@ -32,7 +33,7 @@ class TempAdminController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('tempadmin.edit', ['tempadmin' => null, 'new' => true]);
     }
@@ -59,7 +60,7 @@ class TempAdminController extends Controller
     /**
      * @return View
      */
-    public function edit(Tempadmin $tempadmin)
+    public function edit(Tempadmin $tempadmin): \Illuminate\Contracts\View\View|Factory
     {
         return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }

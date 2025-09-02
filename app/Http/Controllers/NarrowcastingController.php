@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\NarrowcastingItem;
 use App\Models\StorageEntry;
 use Exception;
@@ -16,7 +17,7 @@ use Illuminate\View\View;
 class NarrowcastingController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $messages = NarrowcastingItem::query()
             ->with('image')
@@ -27,13 +28,13 @@ class NarrowcastingController extends Controller
     }
 
     /** @return View */
-    public function show()
+    public function show(): \Illuminate\Contracts\View\View|Factory
     {
         return view('narrowcasting.show');
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('narrowcasting.edit', ['item' => null]);
     }
@@ -83,7 +84,7 @@ class NarrowcastingController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|Factory
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 

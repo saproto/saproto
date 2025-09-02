@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
@@ -24,7 +25,7 @@ class CommitteeController extends Controller
     /**
      * @return View
      */
-    public function index(bool $showSociety = false)
+    public function index(bool $showSociety = false): \Illuminate\Contracts\View\View|Factory
     {
         if (Auth::user()?->can('board')) {
             $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();

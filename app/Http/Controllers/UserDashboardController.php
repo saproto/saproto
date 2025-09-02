@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
@@ -191,7 +192,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function becomeAMemberOf()
+    public function becomeAMemberOf(): \Illuminate\Contracts\View\View|Factory
     {
         /* @var null|User $user */
         $user = Auth::check() ? Auth::user() : null;
@@ -393,7 +394,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function getClearProfile()
+    public function getClearProfile(): \Illuminate\Contracts\View\View|Factory
     {
         /** @var User $user */
         $user = Auth::user();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Event;
 use App\Models\Video;
 use Exception;
@@ -16,13 +17,13 @@ use Youtube;
 class VideoController extends Controller
 {
     /** @return View */
-    public static function index()
+    public static function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('videos.index', ['videos' => Video::query()->with('event')->get()]);
     }
 
     /** @return View */
-    public static function publicIndex()
+    public static function publicIndex(): \Illuminate\Contracts\View\View|Factory
     {
         return view('videos.public_index', ['videos' => Video::query()->orderBy('video_date', 'desc')->get()]);
     }
@@ -30,7 +31,7 @@ class VideoController extends Controller
     /**
      * @return View
      */
-    public static function show(Request $request)
+    public static function show(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         return view('videos.view', ['video' => Video::query()->findOrFail($request->id)]);
     }
@@ -82,7 +83,7 @@ class VideoController extends Controller
     /**
      * @return View
      */
-    public static function edit(Request $request)
+    public static function edit(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $video = Video::query()->findOrFail($request->id);
 

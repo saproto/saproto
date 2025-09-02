@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Http\Request;
@@ -51,7 +52,7 @@ class FileController extends Controller
     /**
      * @return Response
      */
-    public function getImage(int $id, string $hash, Request $request)
+    public function getImage(int $id, string $hash, Request $request): ResponseFactory|Response
     {
         $validated = $request->validate([
             'w' => 'nullable|integer',

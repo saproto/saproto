@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use Carbon\CarbonInterface;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -13,7 +14,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function show()
+    public function show(): \Illuminate\Contracts\View\View|Factory
     {
         return view('smartxp.screen', ['protube' => true]);
     }
@@ -21,7 +22,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function showProtopolis()
+    public function showProtopolis(): \Illuminate\Contracts\View\View|Factory
     {
         return view('smartxp.screen');
     }
@@ -137,7 +138,7 @@ class SmartXpScreenController extends Controller
     }
 
     /** @return View */
-    public function canWork()
+    public function canWork(): \Illuminate\Contracts\View\View|Factory
     {
         $timetable = $this->smartxpTimetable();
 

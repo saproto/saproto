@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Alias;
 use App\Models\User;
 use Exception;
@@ -28,7 +29,7 @@ class AliasController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('aliases.add');
     }

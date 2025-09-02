@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
@@ -59,7 +60,7 @@ class OmNomController extends Controller
     }
 
     /** @return View */
-    public function miniSite()
+    public function miniSite(): \Illuminate\Contracts\View\View|Factory
     {
         $products = Product::query()->where('is_visible', true)
             ->where(function ($query) {
@@ -306,7 +307,7 @@ class OmNomController extends Controller
     /**
      * @return View
      */
-    public function generateOrder(Request $request)
+    public function generateOrder(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $products = Product::query()->where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
         $orders = [];
