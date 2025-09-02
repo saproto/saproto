@@ -1061,7 +1061,7 @@ CREATE TABLE `photo_albums` (
   `name` char(255) NOT NULL,
   `date_create` int(11) NOT NULL,
   `date_taken` int(11) NOT NULL,
-  `thumb_id` bigint(20) unsigned NOT NULL,
+  `thumb_id` bigint(20) unsigned DEFAULT NULL,
   `event_id` bigint(20) unsigned DEFAULT NULL,
   `private` tinyint(1) NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT 0,
@@ -1143,7 +1143,6 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` bigint(20) unsigned NOT NULL,
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `price` double(8,2) NOT NULL,
   `calories` int(11) NOT NULL DEFAULT 0,
@@ -1159,8 +1158,7 @@ CREATE TABLE `products` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `products_account_id_index` (`account_id`),
-  KEY `products_image_id_index` (`image_id`)
+  KEY `products_account_id_index` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `products_categories`;
@@ -1416,7 +1414,6 @@ CREATE TABLE `users` (
   `keep_omnomcom_history` tinyint(1) NOT NULL DEFAULT 1,
   `disable_omnomcom` tinyint(1) NOT NULL DEFAULT 0,
   `theme` int(11) NOT NULL DEFAULT 0,
-  `use_dark_theme` tinyint(1) NOT NULL DEFAULT 0,
   `pref_calendar_relevant_only` tinyint(1) NOT NULL DEFAULT 0,
   `utwente_username` varchar(255) DEFAULT NULL,
   `edu_username` varchar(255) DEFAULT NULL,
@@ -1832,3 +1829,6 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_19_100444_add_b
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_21_230526_remove_image_id_from_events',167);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_105252_remove_file_id_from_photos',168);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_131956_remove_image_id_from_users',168);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_26_152555_change_album_thumb_id_to_nullable',169);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_09_181322_remove_use_dark_theme_from_users',169);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remove_image_id_from_products',169);
