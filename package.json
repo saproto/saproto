@@ -42,11 +42,11 @@
         "leaflet": "^1.9.4",
         "leaflet-geosearch": "^4.2.0",
         "leaflet.markercluster": "^1.5.3",
-        "lucide-vue-next": "^0.515.0",
+        "lucide-vue-next": "^0.542.0",
         "moment": "^2.29.2",
         "radix-vue": "^1.9.13",
         "reka-ui": "^2.4.0",
-        "signature_pad": "^3.0.0-beta.4",
+        "signature_pad": "^5.0.10",
         "swiper": "^11.2.8",
         "tailwind-merge": "^3.3.1",
         "tailwindcss-animate": "^1.0.7",
@@ -73,7 +73,7 @@
         "cross-env": "^10.0.0",
         "eslint": "^9.34.0",
         "eslint-config-prettier": "^10.1.5",
-        "eslint-plugin-vue": "^9.28.0",
+        "eslint-plugin-vue": "^10.4.0",
         "glob": "^11.0.0",
         "globals": "^16.1.0",
         "laravel-echo": "^2.1.5",
@@ -90,10 +90,10 @@
         "tailwindcss": "^4.1.10",
         "tw-colors": "^3.3.2",
         "typescript": "^5.8.3",
-        "vite-plugin-checker": "^0.9.3",
+        "vite-plugin-checker": "^0.10.3",
         "vue": "^3.4.0",
         "vue-eslint-parser": "^10.2.0",
-        "vue-tsc": "^2.2.10"
+        "vue-tsc": "^3.0.6"
     },
     "type": "module"
 }
