@@ -17,5 +17,5 @@ const page = usePage()
     <Head title="Welcome" />
 
     {{ page.props }}
-    <Button @click="handleClick">Click me</Button>
+    <Button @click="handleClick"> Click me </Button>
 </template>

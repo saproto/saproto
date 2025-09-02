@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -15,6 +14,7 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -152,6 +152,7 @@ class EventController extends Controller
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         }
@@ -210,6 +211,7 @@ class EventController extends Controller
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         }
@@ -692,14 +694,13 @@ CALSCALE:GREGORIAN
         $newEvent->save();
 
         $image = $event->getFirstMedia('header');
-        if($image) {
+        if ($image) {
             $newEvent->addMedia($image->getPath())
                 ->usingName($image->file_name)
                 ->usingFileName('event_'.$newEvent->id)
                 ->preservingOriginal()
                 ->toMediaCollection('header');
         }
-
 
         if ($event->activity) {
             $newActivity = $event->activity->replicate([

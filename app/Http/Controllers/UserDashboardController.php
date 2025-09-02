@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\UserMailChange;
 use App\Models\Member;
@@ -11,6 +10,7 @@ use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

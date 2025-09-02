@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
 use App\Enums\MembershipTypeEnum;
 use App\Models\Activity;
 use App\Models\FailedWithdrawal;
@@ -11,6 +10,7 @@ use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
 use App\Mail\ProductBulkUpdateNotification;
 use App\Models\Account;
 use App\Models\Product;
@@ -10,6 +9,7 @@ use App\Models\ProductCategory;
 use App\Models\StockMutation;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

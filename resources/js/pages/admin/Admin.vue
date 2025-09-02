@@ -12,5 +12,5 @@ defineOptions({
 </script>
 
 <template>
-    <Button @click="handleClick">Click me</Button>
+    <Button @click="handleClick"> Click me </Button>
 </template>

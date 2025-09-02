@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\Factory;
 use App\Models\Account;
 use App\Models\Event;
 use App\Models\MollieTransaction;
@@ -11,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Exceptions\InvalidFormatException;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
