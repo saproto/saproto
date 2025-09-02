@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Data\PhotoAlbumData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
@@ -18,7 +19,7 @@ use Inertia\Response;
 class PhotoAlbumController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $albums = PhotoAlbum::query()->orderBy('date_taken', 'desc')
             ->where('published', true)

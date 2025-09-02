@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Company;
 use App\Models\Joboffer;
 use Exception;
@@ -14,7 +15,7 @@ use Illuminate\View\View;
 class JobofferController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $companies = Company::query()->has('joboffers')->get();
 
@@ -22,7 +23,7 @@ class JobofferController extends Controller
     }
 
     /** @return View */
-    public function adminIndex()
+    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
     {
         $joboffers = Joboffer::all();
 
@@ -30,7 +31,7 @@ class JobofferController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         $companies = Company::all();
 
@@ -68,7 +69,7 @@ class JobofferController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\View|Factory
     {
         $joboffer = Joboffer::query()->findOrFail($id);
 
@@ -79,7 +80,7 @@ class JobofferController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|Factory
     {
         $joboffer = Joboffer::query()->findOrFail($id);
         $companies = Company::all();

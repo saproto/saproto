@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -73,7 +74,7 @@ class EventController extends Controller
     }
 
     /** @return View */
-    public function finindex()
+    public function finindex(): \Illuminate\Contracts\View\View|Factory
     {
         $activities = Activity::query()
             ->with('event')
@@ -116,7 +117,7 @@ class EventController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => null]);
     }
@@ -169,7 +170,7 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function edit(Event $event)
+    public function edit(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => $event]);
     }
@@ -239,7 +240,7 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function archive(Request $request, int $year)
+    public function archive(Request $request, int $year): \Illuminate\Contracts\View\View|Factory
     {
         /** @var EventCategory|null $category */
         $category = EventCategory::query()->find($request->input('category'));

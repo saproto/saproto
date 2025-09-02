@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\DmxChannel;
 use App\Models\DmxFixture;
 use App\Models\DmxOverride;
@@ -16,13 +17,13 @@ use Illuminate\View\View;
 class DmxFixtureController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('dmx.index', ['fixtures' => DmxFixture::query()->orderBy('name', 'asc')->get()]);
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('dmx.edit', ['fixture' => null]);
     }
@@ -50,7 +51,7 @@ class DmxFixtureController extends Controller
     /**
      * @return View
      */
-    public function edit(DmxFixture $fixture)
+    public function edit(DmxFixture $fixture): \Illuminate\Contracts\View\View|Factory
     {
         return view('dmx.edit', ['fixture' => $fixture]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use Exception;
@@ -16,7 +17,7 @@ use Illuminate\View\View;
 class PhotoAdminController extends Controller
 {
     /** @return View */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $name = $request->input('query');
         $published = PhotoAlbum::query()->where('published', true)->orderBy('date_taken', 'desc');
@@ -50,7 +51,7 @@ class PhotoAdminController extends Controller
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $album = PhotoAlbum::query()
             ->with([

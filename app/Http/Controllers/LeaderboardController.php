@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\Committee;
 use App\Models\Leaderboard;
 use Illuminate\Http\RedirectResponse;
@@ -35,7 +36,7 @@ class LeaderboardController extends Controller
      *
      * @return View
      */
-    public function adminIndex()
+    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
     {
         $leaderboards = Leaderboard::query()
             ->with('committee')
@@ -52,7 +53,7 @@ class LeaderboardController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('leaderboards.edit', ['leaderboard' => null]);
     }
@@ -84,7 +85,7 @@ class LeaderboardController extends Controller
      *
      * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $leaderboard = Leaderboard::query()->with('entries.user')->findOrFail($id);
 

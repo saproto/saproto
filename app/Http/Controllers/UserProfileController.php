@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
 use App\Models\ActivityParticipation;
 use App\Models\CommitteeMembership;
 use App\Models\OrderLine;
@@ -15,7 +16,7 @@ class UserProfileController extends Controller
     /**
      * @return View
      */
-    public function show(?string $id = null)
+    public function show(?string $id = null): \Illuminate\Contracts\View\View|Factory
     {
         $user = $id == null ? Auth::user() : User::fromPublicId($id);
 
