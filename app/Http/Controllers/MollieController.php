@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Carbon\Exceptions\InvalidFormatException;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,7 +29,7 @@ class MollieController extends Controller
     /**
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $user = $request->input('user_id') ? User::query()->findOrFail($request->input('user_id')) : null;
 
@@ -110,7 +111,7 @@ class MollieController extends Controller
      *
      * @throws Exception
      */
-    public function status(int $id)
+    public function status(int $id): \Illuminate\Contracts\View\View|Factory
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::query()->findOrFail($id);

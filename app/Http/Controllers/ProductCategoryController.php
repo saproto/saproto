@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -13,13 +14,13 @@ use Illuminate\View\View;
 class ProductCategoryController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('omnomcom.categories.index', ['categories' => ProductCategory::query()->withCount('products')->get()]);
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('omnomcom.categories.edit', ['category' => null]);
     }
@@ -41,7 +42,7 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\View|Factory
     {
         $category = ProductCategory::query()->findOrFail($id);
 

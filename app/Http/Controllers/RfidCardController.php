@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\QrAuthRequest;
 use App\Models\RfidCard;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,7 +74,7 @@ class RfidCardController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|Factory
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);

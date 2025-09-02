@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -191,7 +192,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function becomeAMemberOf()
+    public function becomeAMemberOf(): \Illuminate\Contracts\View\View|Factory
     {
         /* @var null|User $user */
         $user = Auth::check() ? Auth::user() : null;
@@ -393,7 +394,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function getClearProfile()
+    public function getClearProfile(): \Illuminate\Contracts\View\View|Factory
     {
         /** @var User $user */
         $user = Auth::user();

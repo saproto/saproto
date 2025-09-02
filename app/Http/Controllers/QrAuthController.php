@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\QrAuthRequest;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -48,7 +49,7 @@ class QrAuthController extends Controller
      * @param  string  $code
      * @return View
      */
-    public function showDialog($code)
+    public function showDialog($code): \Illuminate\Contracts\View\View|Factory
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
@@ -63,7 +64,7 @@ class QrAuthController extends Controller
      * @param  string  $code
      * @return View
      */
-    public function approve($code)
+    public function approve($code): \Illuminate\Contracts\View\View|Factory
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 

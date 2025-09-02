@@ -7,6 +7,7 @@ use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class PageController extends Controller
     protected array $reservedSlugs = ['add', 'edit', 'delete'];
 
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $pages = Page::query()->orderBy('created_at', 'desc')->paginate(20);
 
@@ -32,7 +33,7 @@ class PageController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('pages.edit', ['item' => null, 'new' => true]);
     }
@@ -71,7 +72,7 @@ class PageController extends Controller
      * @param  string  $slug
      * @return View
      */
-    public function show($slug)
+    public function show($slug): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->where('slug', '=', $slug)->first();
 
@@ -90,7 +91,7 @@ class PageController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->findOrFail($id);
 

@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -73,7 +74,7 @@ class EventController extends Controller
     }
 
     /** @return View */
-    public function finindex()
+    public function finindex(): \Illuminate\Contracts\View\View|Factory
     {
         $activities = Activity::query()
             ->with('event')
@@ -116,7 +117,7 @@ class EventController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => null]);
     }
@@ -151,6 +152,7 @@ class EventController extends Controller
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         }
@@ -169,7 +171,7 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function edit(Event $event)
+    public function edit(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         return view('event.edit', ['event' => $event]);
     }
@@ -209,6 +211,7 @@ class EventController extends Controller
                     ->toMediaCollection('header');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         }
@@ -239,7 +242,7 @@ class EventController extends Controller
     /**
      * @return View
      */
-    public function archive(Request $request, int $year)
+    public function archive(Request $request, int $year): \Illuminate\Contracts\View\View|Factory
     {
         /** @var EventCategory|null $category */
         $category = EventCategory::query()->find($request->input('category'));
@@ -691,14 +694,13 @@ CALSCALE:GREGORIAN
         $newEvent->save();
 
         $image = $event->getFirstMedia('header');
-        if($image) {
+        if ($image) {
             $newEvent->addMedia($image->getPath())
                 ->usingName($image->file_name)
                 ->usingFileName('event_'.$newEvent->id)
                 ->preservingOriginal()
                 ->toMediaCollection('header');
         }
-
 
         if ($event->activity) {
             $newActivity = $event->activity->replicate([

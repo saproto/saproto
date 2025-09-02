@@ -8,6 +8,7 @@ use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -116,7 +117,7 @@ class ActivityController extends Controller
     /**
      * @return View
      */
-    public function checklist(Event $event)
+    public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');

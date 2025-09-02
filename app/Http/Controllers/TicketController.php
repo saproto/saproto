@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use App\Models\TicketPurchase;
 use Exception;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,13 +26,13 @@ use Spipu\Html2Pdf\Exception\Html2PdfException;
 class TicketController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('tickets.index', ['tickets' => Ticket::query()->orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('tickets.edit', ['ticket' => null]);
     }
@@ -67,7 +68,7 @@ class TicketController extends Controller
     /**
      * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $ticket = Ticket::query()->findOrFail($id);
 

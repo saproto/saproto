@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -89,7 +90,7 @@ class OrderLineController extends Controller
     /**
      * @return View
      */
-    public function adminindex(Request $request)
+    public function adminindex(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $user = $request->has('user') ? User::query()->find($request->integer('user')) : null;
         $products = $request->array('product');
@@ -219,7 +220,7 @@ class OrderLineController extends Controller
      *
      * @return View
      */
-    public function showPaymentStatistics(Request $request)
+    public function showPaymentStatistics(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         if ($request->has('start') && $request->has('end')) {
             $start = $request->date('start')->toDateTimeString();

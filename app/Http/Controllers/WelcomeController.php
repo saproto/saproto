@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\WelcomeMessage;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,7 +13,7 @@ use Illuminate\View\View;
 class WelcomeController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $messages = WelcomeMessage::query()->orderBy('created_at', 'desc')->with('user')->get();
 

@@ -79,14 +79,14 @@ const { can } = useCan()
             <DrawerContent>
                 <DrawerHeader class="text-left">
                     <DrawerTitle>Navigation</DrawerTitle>
-                    <DrawerDescription> </DrawerDescription>
+                    <DrawerDescription />
                 </DrawerHeader>
 
                 <GridForm />
 
                 <DrawerFooter class="pt-2">
                     <DrawerClose as-child>
-                        <Button variant="outline">Close</Button>
+                        <Button variant="outline"> Close </Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

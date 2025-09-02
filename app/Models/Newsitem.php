@@ -99,7 +99,7 @@ class Newsitem extends Model
      */
     protected function url(): Attribute
     {
-        return Attribute::make(get: function () {
+        return Attribute::make(get: function (): string {
             if ($this->is_weekly) {
                 return route('news::showWeeklyPreview', ['id' => $this->id]);
             }

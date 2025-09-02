@@ -9,6 +9,7 @@ use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class CommitteeController extends Controller
     /**
      * @return View
      */
-    public function index(bool $showSociety = false)
+    public function index(bool $showSociety = false): \Illuminate\Contracts\View\View|Factory
     {
         if (Auth::user()?->can('board')) {
             $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();

@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -53,7 +54,7 @@ class CompanyController extends Controller
      *
      * @return View
      */
-    public function adminIndex()
+    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.adminlist', ['companies' => Company::query()->orderBy('sort')->paginate(20)]);
     }
@@ -63,7 +64,7 @@ class CompanyController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.edit', ['company' => null]);
     }
@@ -108,7 +109,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function show($id)
+    public function show($id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.show', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -119,7 +120,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function showMembercard($id)
+    public function showMembercard($id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.showmembercard', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -130,7 +131,7 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit($id): \Illuminate\Contracts\View\View|Factory
     {
         $company = Company::query()->findOrFail($id);
 

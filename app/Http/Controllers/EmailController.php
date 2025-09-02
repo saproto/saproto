@@ -9,6 +9,7 @@ use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -20,7 +21,7 @@ use Illuminate\View\View;
 class EmailController extends Controller
 {
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.overview', [
             'lists' => EmailList::query()->withCount('users')->get(),
@@ -59,7 +60,7 @@ class EmailController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.editmail', ['email' => null]);
     }
@@ -99,7 +100,7 @@ class EmailController extends Controller
      *
      * @throws Exception
      */
-    public function show(int $id)
+    public function show(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $email = Email::query()->findOrFail($id);
 
