@@ -16,6 +16,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -62,7 +63,7 @@ class OmNomController extends Controller
     /** @return View */
     public function miniSite(): \Illuminate\Contracts\View\View|Factory
     {
-        $products = Product::query()->where('is_visible', true)
+        $products = Cache::remember('omnomcom.minisite', 60, fn()=>Product::query()->where('is_visible', true)
             ->where(function ($query) {
                 $query
                     ->where('is_visible_when_no_stock', true)
@@ -77,7 +78,7 @@ class OmNomController extends Controller
                 );
             })
             ->with(['media', 'categories'])
-            ->get();
+            ->get()) ;
 
         return view('omnomcom.minisite', ['products' => $products]);
     }
