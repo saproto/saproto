@@ -85,6 +85,7 @@ class Leaderboard extends Model
     }
 
     #[Override]
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();
