@@ -106,10 +106,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function show($id): \Illuminate\Contracts\View\View|Factory
+    public function show(int $id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.show', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -117,10 +116,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function showMembercard($id): \Illuminate\Contracts\View\View|Factory
+    public function showMembercard(int $id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.showmembercard', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -128,10 +126,9 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function edit($id): \Illuminate\Contracts\View\View|Factory
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $company = Company::query()->findOrFail($id);
 
@@ -141,12 +138,11 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $company = Company::query()->findOrFail($id);
         $company->name = $request->name;
@@ -173,10 +169,9 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function orderUp($id)
+    public function orderUp(int $id)
     {
         $company = Company::query()->findOrFail($id);
 
@@ -196,10 +191,9 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function orderDown($id)
+    public function orderDown(int $id)
     {
         $company = Company::query()->findOrFail($id);
 
@@ -221,12 +215,10 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $company = Company::query()->findOrFail($id);
 

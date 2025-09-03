@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * News Item Model.
@@ -113,5 +115,15 @@ class Newsitem extends Model
         return [
             'is_weekly' => 'boolean',
         ];
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (Newsitem $newsitem) {
+            Cache::forget('home.newsitems');
+        });
     }
 }

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -173,6 +174,8 @@ class NewsController extends Controller
         $newsitem->published_at = Carbon::now()->toDateTimeString();
 
         $newsitem->save();
+
+        Cache::forget('home.weekly');
         Session::flash('flash_message', 'Newsletter has been sent.');
 
         return Redirect::route('news::admin');

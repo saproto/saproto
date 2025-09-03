@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * Company Model.
@@ -79,5 +81,15 @@ class Company extends Model
             'in_logo_bar' => 'boolean',
             'on_membercard' => 'boolean',
         ];
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (Company $company) {
+            Cache::forget('home.companies');
+        });
     }
 }

@@ -14,75 +14,83 @@ use App\Models\PhotoAlbum;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show(): View
+    public function show(): \Illuminate\Contracts\View\View|Factory
     {
-        $companies = Company::query()
-            ->where('in_logo_bar', true)
-            ->with('image')
-            ->inRandomOrder()
-            ->get();
+        $companies =
+            Cache::remember('home.companies', 3600, fn () => Company::query()
+                ->where('in_logo_bar', true)
+                ->with('image')
+                ->get())->shuffle();
 
-        $header = HeaderImage::query()->inRandomOrder()->first();
+        $header = Cache::remember('home.headerimages', Carbon::tomorrow(), fn () => HeaderImage::query()->with('user')->get())->shuffle()->first();
 
-        $albums = PhotoAlbum::query()->orderBy('date_taken', 'desc')
-            ->with('thumbPhoto')
-            ->where('published', true)
-            ->take(4)
-            ->get();
+        $albums =
+            Cache::remember('home.albums', Carbon::tomorrow(), fn () => PhotoAlbum::query()->orderBy('date_taken', 'desc')
+                ->with('thumbPhoto')
+                ->where('published', true)
+                ->take(4)
+                ->get());
 
         if (! Auth::user()?->is_member) {
             return view('website.home.external', ['companies' => $companies, 'header' => $header, 'albums' => $albums]);
         }
 
-        $weekly = Newsitem::query()
+        $weekly = Cache::remember('home.weekly', Carbon::tomorrow(), fn () => Newsitem::query()
+            ->with('featuredImage')
             ->where('published_at', '<=', Carbon::now())
-            ->where('published_at', '>', Carbon::now()->subWeeks(1))
+            ->where('published_at', '>', Carbon::now()->subWeek())
             ->where('is_weekly', true)
             ->orderBy('published_at', 'desc')
-            ->first();
+            ->first()
+        );
 
-        $newsitems = Newsitem::query()
+        $newsitems = Cache::remember('home.newsitems', Carbon::tomorrow(), fn () => Newsitem::query()
             ->whereNotNull('published_at')
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeeks(2))
             ->where('id', '!=', $weekly?->id)
             ->orderBy('published_at', 'desc')
             ->take(3)
-            ->get();
+            ->get());
 
-        $birthdays = User::query()
-            ->whereHas('member', static function ($q) {
-                $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
-            })
-            ->where('show_birthday', true)
-            ->whereMonth('birthdate', Carbon::now()->month)
-            ->whereDay('birthdate', Carbon::now()->day)
-            ->with('media')
-            ->get();
+        $birthdays =
+            Cache::remember('home.birthdays', Carbon::tomorrow(), fn () => User::query()
+                ->whereHas('member', static function ($q) {
+                    $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
+                })
+                ->where('show_birthday', true)
+                ->whereMonth('birthdate', Carbon::now()->month)
+                ->whereDay('birthdate', Carbon::now()->day)
+                ->with('media')
+                ->get());
 
-        $dinnerforms = Dinnerform::query()
-            ->where('closed', false)
-            ->where('start', '<=', Carbon::now())
-            ->where('end', '>', Carbon::now()->subHour())
-            ->where('visible_home_page', true)
-            ->orderBy('end')
-            ->get();
+        $dinnerforms =
+            Cache::remember('home.dinnerforms', Carbon::tomorrow(), fn () => Dinnerform::query()
+                ->where('closed', false)
+                ->where('start', '<=', Carbon::now())
+                ->where('end', '>', Carbon::now()->subHour())
+                ->where('visible_home_page', true)
+                ->orderBy('end')
+                ->get());
 
-        $videos = Video::query()
-            ->orderBy('video_date', 'desc')
-            ->where('video_date', '>', Carbon::now()->subMonths(3))
-            ->limit(3)
-            ->get();
+        $videos =
+            Cache::remember('home.videos', Carbon::tomorrow(), fn () => Video::query()
+                ->orderBy('video_date', 'desc')
+                ->where('video_date', '>', Carbon::now()->subMonths(3))
+                ->limit(3)
+                ->get());
 
-        $message = WelcomeMessage::query()->where('user_id', Auth::user()->id)->first();
+        $message = Cache::remember(WelcomeMessage::getCacheKey(Auth::id()), Carbon::tomorrow(), fn () => WelcomeMessage::query()->where('user_id', Auth::id())->first());
 
         $upcomingEventQuery = Event::getEventBlockQuery()
             ->where([

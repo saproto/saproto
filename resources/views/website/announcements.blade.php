@@ -1,4 +1,11 @@
-@foreach (App\Models\Announcement::all() as $announcement)
+@php
+    use App\Models\Announcement;
+    $announcements = \Illuminate\Support\Facades\Cache::remember('announcement.announcements', Carbon::tomorrow(), function () {
+        return Announcement::all();
+    });
+@endphp
+
+@foreach ($announcements as $announcement)
     @if ($announcement->showForUser(Auth::user()))
         @if ($announcement->show_as_popup)
             <?php
