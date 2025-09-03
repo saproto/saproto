@@ -110,7 +110,7 @@ class ApiController extends Controller
         $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
             $query->where('private', false);
         })->with(['items' => function ($q) {
-            $q->inRandomOrder()->take(6);
+            $q->reorder()->inRandomOrder()->take(6);
         }])->without('thumbPhoto');
 
         $random = random_int(1, 100);
