@@ -1,9 +1,9 @@
 @php
-    $leaderboard = App\Models\Leaderboard::where('featured', true)
-        ->with('entries', function ($q) {
+    $leaderboard = Cache::rememberForever('leaderboard.leaderboard', fn ()=>App\Models\Leaderboard::where('featured', true)
+        ->with(['entries' => function ($q) {
             $q->orderBy('points', 'DESC')->limit(5);
-        })
-        ->first();
+        }])
+        ->first());
 @endphp
 
 @if ($leaderboard)

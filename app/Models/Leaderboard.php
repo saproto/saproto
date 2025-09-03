@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Leaderboard Model.
@@ -82,4 +83,16 @@ class Leaderboard extends Model
             'featured' => 'boolean',
         ];
     }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function () {
+            Cache::forget('leaderboard.leaderboard');
+        });
+    }
+
+
 }
