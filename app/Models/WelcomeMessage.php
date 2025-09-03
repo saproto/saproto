@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * Welcome Message Model.
@@ -45,5 +47,20 @@ class WelcomeMessage extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function getCacheKey(int $id): string
+    {
+        return "home.welcomemessage:{$id}";
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (self $welcomeMessage) {
+            Cache::forget(self::getCacheKey($welcomeMessage->user_id));
+        });
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -215,6 +216,7 @@ class PhotoAdminController extends Controller
 
         $album->published = true;
         $album->save();
+        Cache::forget('home.albums');
 
         return Redirect::route('albums::admin::edit', ['id' => $id]);
     }
@@ -227,6 +229,7 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::query()->where('id', $id)->first();
         $album->published = false;
         $album->save();
+        Cache::forget('home.albums');
 
         return Redirect::route('albums::admin::edit', ['id' => $id]);
     }

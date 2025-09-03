@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use Override;
 
 /**
  * Announcement Model.
@@ -219,5 +221,15 @@ class Announcement extends Model
             'show_only_firstyear' => 'boolean',
             'show_only_active' => 'boolean',
         ];
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function () {
+            Cache::forget('announcement.announcements');
+        });
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * Video Model.
@@ -107,5 +109,15 @@ class Video extends Model
     public function getFormDate(): string
     {
         return Carbon::parse($this->video_date)->format('d-m-Y');
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (Video $video) {
+            Cache::forget('home.videos');
+        });
     }
 }

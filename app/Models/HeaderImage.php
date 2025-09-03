@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Override;
 
 /**
  * Header Image Model.
@@ -68,5 +70,15 @@ class HeaderImage extends Model
     public function StorageEntry(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
+    }
+
+    #[Override]
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::saved(function (HeaderImage $headerImage) {
+            Cache::forget('home.headerimages');
+        });
     }
 }
