@@ -51,7 +51,7 @@ class WelcomeMessage extends Model
 
     public static function getCacheKey(int $id): string
     {
-        return "home.welcomemessage:{$id}";
+        return "home.welcomemessage::user::{$id}";
     }
 
     #[Override]
