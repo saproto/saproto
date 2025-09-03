@@ -75,12 +75,10 @@ class IsAlfredThereController extends Controller
     } */
     private function getStatus(): array
     {
-        return Cache::rememberForever('isalfredthere.status', function () {
-            return [
-                'text' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapTextKey], ['value' => ''])->value,
-                'status' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapItemKey], ['value' => IsAlfredThereEnum::UNKNOWN])->value,
-                'unix' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapUnixKey], ['value' => ''])->value,
-            ];
-        });
+        return Cache::rememberForever('isalfredthere.status', fn(): array => [
+            'text' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapTextKey], ['value' => ''])->value,
+            'status' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapItemKey], ['value' => IsAlfredThereEnum::UNKNOWN])->value,
+            'unix' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapUnixKey], ['value' => ''])->value,
+        ]);
     }
 }
