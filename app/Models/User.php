@@ -49,6 +49,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $last_seen_at
  * @property string|null $birthdate
  * @property string|null $phone
  * @property string|null $diet
