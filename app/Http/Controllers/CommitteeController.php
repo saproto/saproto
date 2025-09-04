@@ -148,7 +148,7 @@ class CommitteeController extends Controller
             'start' => 'required|date',
             'end' => 'nullable|date',
             'role' => 'required|string',
-            'edition' => 'required|string',
+            'edition' => 'nullable|string',
             'committee_id' => 'required|integer',
             'user_id' => 'required|integer|exists:users,id',
         ]);
@@ -183,7 +183,7 @@ class CommitteeController extends Controller
             'start' => 'required|date',
             'end' => 'nullable|date',
             'role' => 'required|string',
-            'edition' => 'required|string',
+            'edition' => 'nullable|string',
         ]);
 
         $membership->role = $validated['role'];
