@@ -9,8 +9,6 @@ jobs:
   pest:
     name: 🐘 Pest Tests
     runs-on: ubuntu-latest
-    env:
-      PLAYWRIGHT_BROWSERS_PATH: 0
     services:
       mysql:
         image: mariadb:10
@@ -85,8 +83,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
+      - uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
+
+      - name: Install playwright deps
+        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - uses: dorny/paths-filter@v3
         id: changes
@@ -108,9 +117,6 @@ jobs:
         with:
           commit_message: Automatic linting (Prettier and eslint)
           skip_fetch: true
-
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
 
       - name: 🔨 build front-end
         run: npm run build --if-present
