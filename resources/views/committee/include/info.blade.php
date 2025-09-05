@@ -1,4 +1,7 @@
-@php use App\Enums\CommitteeEnum; @endphp
+@php
+    use App\Enums\CommitteeEnum;
+@endphp
+
 @if (! $committee->public)
     <div class="alert alert-info" role="alert">
         This is a hidden
