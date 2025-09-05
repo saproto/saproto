@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +17,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class CommitteeController extends Controller
 {
@@ -117,23 +117,24 @@ class CommitteeController extends Controller
         return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function image(int $id, Request $request): RedirectResponse
     {
-        $committee = Committee::query()->find($id);
-
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $committee->image()->associate($file);
+        $committee = Committee::query()->findOrFail($id);
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+        if ($request->has('image')) {
+            try {
+                $committee->addMediaFromRequest('image')
+                    ->usingFileName('committee_'.$committee->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+                return Redirect::back();
+            }
         } else {
-            $committee->image()->dissociate();
+            $committee->getFirstMedia()->delete();
         }
-
-        $committee->save();
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }

@@ -119,7 +119,7 @@ class Product extends Model implements HasMedia
         return Attribute::make(get: fn (): string => $this->getImageUrl(ProductEnum::LARGE));
     }
 
-    public function getImageUrl(ProductEnum $productEnum = ProductEnum::ORIGINAL): string
+    public function getImageUrl(ProductEnum $productEnum = ProductEnum::LARGE): string
     {
         return $this->getFirstMediaUrl('default', $productEnum->value);
     }

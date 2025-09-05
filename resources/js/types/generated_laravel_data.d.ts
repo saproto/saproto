@@ -31,8 +31,9 @@ album: App.Data.PhotoAlbumData | null;
 };
 }
 declare namespace App.Enums {
+export enum CommitteeEnum { CARD = 'card', BLOCK = 'block' };
 export enum IsAlfredThereEnum { THERE = 'there', AWAY = 'away', UNKNOWN = 'unknown', JUR = 'jur', TEXT_ONLY = 'text' };
 export enum MembershipTypeEnum { PENDING = 0, REGULAR = 1, PET = 2, LIFELONG = 3, HONORARY = 4, DONOR = 5 };
 export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', MEDIUM = 'medium', SMALL = 'small' };
-export enum ProductEnum { ORIGINAL = 'original', LARGE = 'large', THUMB = 'thumb' };
+export enum ProductEnum { LARGE = 'large', THUMB = 'thumb' };
 }
