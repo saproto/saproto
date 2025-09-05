@@ -27,7 +27,7 @@ class CopyCommitteeImages extends Command
      */
     public function handle(): void
     {
-        Committee::query()->withTrashed()->whereHas('image')
+        Committee::query()->whereHas('image')
             ->with('image')->chunkById(100, function ($committees) {
                 /** @var Committee $committee */
                 foreach ($committees as $committee) {
