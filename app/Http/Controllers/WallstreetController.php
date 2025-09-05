@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\StorageEntry;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -202,6 +200,7 @@ class WallstreetController extends Controller
 
         return view('wallstreet.admin_includes.wallstreetdrink-events', ['allEvents' => $allEvents, 'currentEvent' => null]);
     }
+
     public function addEvent(Request $request): RedirectResponse
     {
         $event = new WallstreetEvent;
