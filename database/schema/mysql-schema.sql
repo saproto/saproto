@@ -1833,3 +1833,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_04_161326_add_last_seen_at_to_users',173);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remove_image_id_from_committees',174);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remove_image_id_from_narrowcasting',175);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',176);
