@@ -30,12 +30,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $public
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int|null $image_id
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property int $is_active
  * @property-read string $email
- * @property-read StorageEntry|null $image
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
@@ -47,7 +45,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Committee whereCreatedAt($value)
  * @method static Builder<static>|Committee whereDescription($value)
  * @method static Builder<static>|Committee whereId($value)
- * @method static Builder<static>|Committee whereImageId($value)
  * @method static Builder<static>|Committee whereIsActive($value)
  * @method static Builder<static>|Committee whereIsSociety($value)
  * @method static Builder<static>|Committee whereName($value)
@@ -67,8 +64,6 @@ class Committee extends Model implements HasMedia
     protected $table = 'committees';
 
     protected $guarded = ['id'];
-
-    protected $hidden = ['image_id'];
 
     protected $with = ['media'];
 

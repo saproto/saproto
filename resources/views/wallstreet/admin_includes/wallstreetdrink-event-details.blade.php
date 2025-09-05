@@ -52,23 +52,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <!-- Image -->
-                <div class="custom-file">
-                    @if ($currentEvent?->image == null)
-                        <label for="image">Set event image:</label>
-                    @else
-                        <image
-                            class="mb-3"
-                            src="{{ $currentEvent->image->generatePath() ?? '' }}"
-                        />
-                    @endif
-                    <input
-                        type="file"
-                        id="image"
-                        class="form-control"
-                        name="image"
-                    />
-                </div>
                 <label for="editor">Description</label>
                 @include(
                     'components.forms.markdownfield',

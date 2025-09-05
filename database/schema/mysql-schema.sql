@@ -1526,12 +1526,10 @@ CREATE TABLE `wallstreet_drink_events` (
   `name` varchar(255) NOT NULL,
   `percentage` int(11) NOT NULL,
   `description` mediumtext DEFAULT NULL,
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  KEY `wallstreet_drink_events_image_id_index` (`image_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `wallstreet_drink_prices`;
@@ -1834,3 +1832,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_04_161326_add_l
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remove_image_id_from_committees',174);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remove_image_id_from_narrowcasting',175);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',176);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',177);
