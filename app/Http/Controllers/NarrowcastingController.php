@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\NarrowcastingItem;
-use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
@@ -12,28 +11,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class NarrowcastingController extends Controller
 {
-    /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $messages = NarrowcastingItem::query()
-            ->with('image')
+            ->with('media')
             ->orderBy('campaign_start', 'desc')
             ->paginate(10);
 
         return view('narrowcasting.list', ['messages' => $messages]);
     }
 
-    /** @return View */
     public function show(): \Illuminate\Contracts\View\View|Factory
     {
         return view('narrowcasting.show');
     }
 
-    /** @return View */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('narrowcasting.edit', ['item' => null]);
@@ -46,30 +43,36 @@ class NarrowcastingController extends Controller
      */
     public function store(Request $request)
     {
-        if (! $request->file('image') && ! $request->has('youtube_id')) {
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
+        if (! $request->has('image') && ! $request->has('youtube_id')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
 
             return Redirect::back();
         }
 
         $narrowcasting = new NarrowcastingItem;
-        $narrowcasting->name = $request->name;
+        $narrowcasting->name = $request->string('name');
         $narrowcasting->campaign_start = $request->date('campaign_start')->timestamp;
         $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
-        $narrowcasting->slide_duration = $request->slide_duration;
+        $narrowcasting->slide_duration = $request->integer('slide_duration');
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
+        $youtube_id = $request->string('youtube_id');
 
-            $narrowcasting->image()->associate($file);
-        }
+        if ($request->has('image')) {
+            try {
+                $narrowcasting->addMediaFromRequest('image')
+                    ->usingFileName('narrowcasting_'.$narrowcasting->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-        $youtube_id = $request->get('youtube_id');
-
-        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+                return Redirect::back();
+            }
+        } elseif ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $narrowcasting->youtube_id = $youtube_id;
-            $narrowcasting->save();
             $narrowcasting->slide_duration = -1;
         }
 
@@ -77,14 +80,10 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
 
-        return Redirect::route('narrowcasting::index');
+        return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
     }
 
-    /**
-     * @param  int  $id
-     * @return View
-     */
-    public function edit($id): \Illuminate\Contracts\View\View|Factory
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
@@ -92,13 +91,15 @@ class NarrowcastingController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
+
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
         $narrowcasting->name = $request->name;
@@ -106,15 +107,19 @@ class NarrowcastingController extends Controller
         $narrowcasting->campaign_end = $request->date('campaign_end')->timestamp;
         $narrowcasting->slide_duration = $request->slide_duration;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
+        if ($request->has('image')) {
+            try {
+                $narrowcasting->addMediaFromRequest('image')
+                    ->usingFileName('narrowcasting_'.$narrowcasting->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-            $narrowcasting->image()->associate($file);
+                return Redirect::back();
+            }
         }
 
-        $youtube_id = $request->get('youtube_id');
-
+        $youtube_id = $request->string('youtube_id');
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
 
             $narrowcasting->youtube_id = $youtube_id;
@@ -128,7 +133,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
 
-        return Redirect::route('narrowcasting::index');
+        return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
     }
 
     /**
@@ -174,10 +179,10 @@ class NarrowcastingController extends Controller
                     'slide_duration' => $item->slide_duration,
                     'video' => $item->youtube_id,
                 ];
-            } elseif ($item->image) {
+            } elseif ($item->hasMedia()) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
-                    'image' => $item->image->generateImagePath(2000, 1200),
+                    'image' => $item->getImageUrl(),
                 ];
             }
         }

@@ -47,7 +47,7 @@
                                             class="fab fa-youtube"
                                             aria-hidden="true"
                                         ></i>
-                                    @elseif ($message->image)
+                                    @elseif ($message->hasMedia())
                                         <i
                                             class="fas fa-picture-o"
                                             aria-hidden="true"
@@ -69,7 +69,7 @@
                                     {{ date('l F j Y, H:i', $message->campaign_end) }}
                                 </td>
                                 <td>
-                                    @if ($message->image || $message->youtube_id)
+                                    @if ($message->hasMedia() || $message->youtube_id)
                                         {{ $message->slide_duration }} seconds
                                     @else
                                         <p class="text-danger">no content!</p>
