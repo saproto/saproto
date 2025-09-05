@@ -269,12 +269,10 @@ CREATE TABLE `committees` (
   `public` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `allow_anonymous_email` tinyint(1) NOT NULL DEFAULT 0,
   `is_society` tinyint(1) NOT NULL DEFAULT 0,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  KEY `committees_image_id_index` (`image_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `committees_activities`;
@@ -1395,6 +1393,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
+  `last_seen_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `birthdate` date DEFAULT NULL,
@@ -1426,7 +1425,8 @@ CREATE TABLE `users` (
   `personal_key` varchar(64) DEFAULT NULL,
   `discord_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`)
+  UNIQUE KEY `users_email_unique` (`email`),
+  KEY `users_last_seen_at_index` (`last_seen_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users_mailinglists`;
@@ -1828,7 +1828,9 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_01_171217_drop_
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_19_100444_add_barcode_to_products',166);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_21_230526_remove_image_id_from_events',167);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_105252_remove_file_id_from_photos',168);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_131956_remove_image_id_from_users',168);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_26_152555_change_album_thumb_id_to_nullable',169);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_09_181322_remove_use_dark_theme_from_users',169);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remove_image_id_from_products',169);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_25_131956_remove_image_id_from_users',169);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_07_26_152555_change_album_thumb_id_to_nullable',170);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_09_181322_remove_use_dark_theme_from_users',171);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remove_image_id_from_products',172);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_04_161326_add_last_seen_at_to_users',173);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remove_image_id_from_committees',174);
