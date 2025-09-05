@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use App\Models\NarrowcastingItem;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -62,6 +62,13 @@ class NarrowcastingController extends Controller
 
         $youtube_id = $request->string('youtube_id');
 
+        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+            $narrowcasting->youtube_id = $youtube_id;
+            $narrowcasting->slide_duration = -1;
+        }
+
+        $narrowcasting->save();
+
         if ($request->has('image')) {
             try {
                 $narrowcasting->addMediaFromRequest('image')
@@ -70,14 +77,9 @@ class NarrowcastingController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
             }
-        } elseif ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-            $narrowcasting->youtube_id = $youtube_id;
-            $narrowcasting->slide_duration = -1;
         }
-
-        $narrowcasting->save();
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
 
