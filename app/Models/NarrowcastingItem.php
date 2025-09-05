@@ -6,7 +6,6 @@ use App;
 use App\Enums\NarrowcastingEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -64,7 +63,7 @@ class NarrowcastingItem extends Model implements HasMedia
     {
         $this->addMediaConversion(NarrowcastingEnum::LARGE->value)
             ->nonQueued()
-            ->fit(Fit::Crop, 1366, 768)
+            ->fit(Fit::FillMax, 1366, 768)
             ->format('webp');
 
         $this->addMediaConversion(NarrowcastingEnum::SMALL->value)
@@ -76,12 +75,5 @@ class NarrowcastingItem extends Model implements HasMedia
     public function getImageUrl(NarrowcastingEnum $narrowcastingEnum = NarrowcastingEnum::LARGE): string
     {
         return $this->getFirstMediaUrl('default', $narrowcastingEnum->value);
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this> */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class);
     }
 }

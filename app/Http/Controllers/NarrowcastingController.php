@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use App\Models\NarrowcastingItem;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -62,10 +62,11 @@ class NarrowcastingController extends Controller
 
         $youtube_id = $request->string('youtube_id');
 
-      if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->slide_duration = -1;
         }
+
         $narrowcasting->save();
 
         if ($request->has('image')) {

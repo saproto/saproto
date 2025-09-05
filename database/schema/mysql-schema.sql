@@ -825,15 +825,13 @@ DROP TABLE IF EXISTS `narrowcasting`;
 CREATE TABLE `narrowcasting` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `image_id` bigint(20) unsigned DEFAULT NULL,
   `campaign_start` int(11) NOT NULL,
   `campaign_end` int(11) NOT NULL,
   `slide_duration` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `youtube_id` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `narrowcasting_image_id_index` (`image_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `newsitems`;
@@ -1834,3 +1832,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_09_181322_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remove_image_id_from_products',172);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_04_161326_add_last_seen_at_to_users',173);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remove_image_id_from_committees',174);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remove_image_id_from_narrowcasting',175);
