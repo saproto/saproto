@@ -28,7 +28,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|WallstreetEvent whereCreatedAt($value)
  * @method static Builder<static>|WallstreetEvent whereDescription($value)
  * @method static Builder<static>|WallstreetEvent whereId($value)
- * @method static Builder<static>|WallstreetEvent whereImageId($value)
  * @method static Builder<static>|WallstreetEvent whereName($value)
  * @method static Builder<static>|WallstreetEvent wherePercentage($value)
  * @method static Builder<static>|WallstreetEvent whereUpdatedAt($value)
