@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App;
 use App\Enums\CommitteeEnum;
 use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -84,7 +85,7 @@ class Committee extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('default')
-            ->useDisk('stack')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
             ->storeConversionsOnDisk('public')
             ->singleFile();
     }

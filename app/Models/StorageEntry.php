@@ -58,7 +58,6 @@ class StorageEntry extends Model
     public function isOrphan(): bool
     {
         return
-            NarrowcastingItem::query()->where('image_id', $this->id)->count() == 0 &&
             Page::query()->where('featured_image_id', $this->id)->count() == 0 &&
             DB::table('pages_files')->where('file_id', $this->id)->count() == 0 &&
             Company::query()->where('image_id', $this->id)->count() == 0 &&
