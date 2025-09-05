@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\CommitteeEnum;
+use App\Enums\PhotoEnum;
 use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +16,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Committee Model.
@@ -52,10 +58,12 @@ use Illuminate\Support\Facades\DB;
  *
  * @mixin \Eloquent
  */
-class Committee extends Model
+class Committee extends Model implements HasMedia
 {
     /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'committees';
 
@@ -63,7 +71,7 @@ class Committee extends Model
 
     protected $hidden = ['image_id'];
 
-    protected $with = ['image'];
+    protected $with = ['media'];
 
     public function getPublicId(): string
     {
@@ -73,6 +81,34 @@ class Committee extends Model
     public static function fromPublicId(string $public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk('stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        //800x300
+        //450x300
+        $this->addMediaConversion(CommitteeEnum::CARD->value)
+            ->nonQueued()
+            ->fit(Fit::Crop, 800, 300)
+            ->format('webp');
+
+        $this->addMediaConversion(CommitteeEnum::BLOCK->value)
+            ->nonQueued()
+            ->fit(Fit::Crop, 450, 300)
+            ->format('webp');
+    }
+
+    public function getImageUrl(CommitteeEnum $committeeEnum = CommitteeEnum::CARD): string
+    {
+        return $this->getFirstMediaUrl('default', $committeeEnum->value);
     }
 
     /**

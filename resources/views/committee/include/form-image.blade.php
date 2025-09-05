@@ -6,10 +6,10 @@
     @csrf
 
     <div class="card mb-3">
-        @if ($committee->image)
+        @if ($committee->hasMedia())
             <img
                 class="card-img-top"
-                src="{!! $committee->image->generateImagePath(700, 300) !!}"
+                src="{!! $committee->getImageUrl() !!}"
                 width="100%"
             />
 

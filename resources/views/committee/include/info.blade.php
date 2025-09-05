@@ -1,3 +1,4 @@
+@php use App\Enums\CommitteeEnum; @endphp
 @if (! $committee->public)
     <div class="alert alert-info" role="alert">
         This is a hidden
@@ -26,10 +27,10 @@
 @endif
 
 <div class="card mb-3">
-    @if ($committee->image)
+    @if ($committee->hasMedia())
         <img
             class="card-img-top"
-            src="{{ $committee->image->generateImagePath(800, 300) }}"
+            src="{{ $committee->getImageUrl() }}"
             width="100%"
         />
     @endif

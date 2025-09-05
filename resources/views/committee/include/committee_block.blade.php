@@ -17,8 +17,8 @@
                     ],
                 )
                 : '#',
-        'img' => $committee->image
-            ? $committee->image->generateImagePath(450, 300)
+        'img' => $committee->hasMedia()
+            ?  $committee->getImageUrl(\App\Enums\CommitteeEnum::BLOCK)
             : null,
         'html' => ! $committee->public
             ? sprintf(
