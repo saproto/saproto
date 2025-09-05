@@ -28,7 +28,6 @@ class CommitteeFactory extends Factory
             'allow_anonymous_email' => fake()->unique()->safeEmail(),
             'is_society' => fake()->boolean(),
             'is_active' => fake()->boolean(),
-            'image_id' => StorageEntry::factory(),
         ];
     }
 }
