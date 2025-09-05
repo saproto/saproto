@@ -55,7 +55,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Product whereCalories($value)
  * @method static Builder<static>|Product whereCreatedAt($value)
  * @method static Builder<static>|Product whereId($value)
- * @method static Builder<static>|Product whereImageId($value)
  * @method static Builder<static>|Product whereIsAlcoholic($value)
  * @method static Builder<static>|Product whereIsVisible($value)
  * @method static Builder<static>|Product whereIsVisibleWhenNoStock($value)

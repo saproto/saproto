@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\StorageEntry;
 use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -154,7 +152,7 @@ class WallstreetController extends Controller
      */
     public function getLatestPrices(WallstreetDrink $drink): Collection
     {
-        $products = $drink->products()->select('name', 'price', 'id', 'image_id')->get();
+        $products = $drink->products()->select('name', 'price', 'id')->get();
         foreach ($products as $product) {
             /** @var Product $product */
             /** @phpstan-ignore-next-line */
@@ -193,7 +191,7 @@ class WallstreetController extends Controller
     {
         return WallstreetDrink::query()->find($drinkID)->products()->with('wallstreetPrices', static function ($q) use ($drinkID) {
             $q->where('wallstreet_drink_id', $drinkID)->orderBy('id', 'asc');
-        })->select('id', 'image_id', 'name')->get();
+        })->select('id', 'name')->get();
     }
 
     public function events(): View
@@ -203,9 +201,6 @@ class WallstreetController extends Controller
         return view('wallstreet.admin_includes.wallstreetdrink-events', ['allEvents' => $allEvents, 'currentEvent' => null]);
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function addEvent(Request $request): RedirectResponse
     {
         $event = new WallstreetEvent;
@@ -213,39 +208,18 @@ class WallstreetController extends Controller
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $event->image()->associate($file);
-        }
-
         $event->save();
         Session::flash('flash_message', 'Wallstreet event created. Do not forget to add products above!');
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $event->id]));
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function updateEvent(Request $request, int $id): RedirectResponse
     {
         $event = WallstreetEvent::query()->findOrFail($id);
-        /** @var WallstreetEvent $event */
         $event->name = $request->input('title');
         $event->description = $request->input('description');
         $event->percentage = $request->integer('percentage');
-
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $event->image()->associate($file);
-        } else {
-            $event->image()->dissociate();
-        }
-
         $event->save();
 
         return Redirect::to(route('wallstreet::events::edit', ['id' => $id]));
@@ -264,7 +238,6 @@ class WallstreetController extends Controller
         $currentEvent = WallstreetEvent::query()->findOrFail($id);
         /** @var WallstreetEvent $currentEvent */
         $currentEvent->products()->detach();
-        $currentEvent->image()->dissociate();
         $currentEvent->save();
         $currentEvent->delete();
 
