@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -92,8 +91,8 @@ class Committee extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        //800x300
-        //450x300
+        // 800x300
+        // 450x300
         $this->addMediaConversion(CommitteeEnum::CARD->value)
             ->nonQueued()
             ->fit(Fit::Crop, 800, 300)
@@ -125,14 +124,6 @@ class Committee extends Model implements HasMedia
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderByPivot('created_at', 'desc');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /**
