@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\CommitteeEnum;
-use App\Enums\PhotoEnum;
 use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
