@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Committee;
-use App\Models\StorageEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Override;
