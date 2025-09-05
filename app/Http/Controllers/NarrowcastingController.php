@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
 use App\Models\NarrowcastingItem;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -16,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class NarrowcastingController extends Controller
 {
-    public function index(): \Illuminate\Contracts\View\View|Factory
+    public function index(): View|Factory
     {
         $messages = NarrowcastingItem::query()
             ->with('media')
@@ -26,12 +27,12 @@ class NarrowcastingController extends Controller
         return view('narrowcasting.list', ['messages' => $messages]);
     }
 
-    public function show(): \Illuminate\Contracts\View\View|Factory
+    public function show(): View|Factory
     {
         return view('narrowcasting.show');
     }
 
-    public function create(): \Illuminate\Contracts\View\View|Factory
+    public function create(): View|Factory
     {
         return view('narrowcasting.edit', ['item' => null]);
     }
@@ -83,7 +84,7 @@ class NarrowcastingController extends Controller
         return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
     }
 
-    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
+    public function edit(int $id): View|Factory
     {
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
 
