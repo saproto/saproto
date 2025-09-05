@@ -223,8 +223,7 @@
                                     id="files"
                                     type="file"
                                     class="form-control"
-                                    name="files[]"
-                                    multiple
+                                    name="files"
                                 />
                                 <label class="form-label" for="files">
                                     Upload a file

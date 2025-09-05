@@ -151,14 +151,13 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function featuredImage(Request $request, $id)
+    public function featuredImage(Request $request, int $id)
     {
-        $page = Page::query()->find($id);
+        $page = Page::query()->findOrFail($id);
 
         $image = $request->file('image');
         if ($image) {
@@ -187,7 +186,7 @@ class PageController extends Controller
             return Redirect::back();
         }
 
-        $page = Page::query()->find($id);
+        $page = Page::query()->findOrFail($id);
         $file = $request->file('files');
         $newFile = new StorageEntry;
         $newFile->createFromFile($file);
@@ -199,13 +198,11 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $file_id
      * @return RedirectResponse
      */
-    public function deleteFile($id, $file_id)
+    public function deleteFile(int $id, int $file_id)
     {
-        $page = Page::query()->find($id);
+        $page = Page::query()->findOrFail($id);
 
         $page->files()->detach($file_id);
         $page->save();
