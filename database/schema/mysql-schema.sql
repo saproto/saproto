@@ -964,7 +964,6 @@ CREATE TABLE `pages` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `is_member_only` tinyint(1) NOT NULL DEFAULT 0,
-  `deleted_at` timestamp NULL DEFAULT NULL,
   `featured_image_id` bigint(20) unsigned DEFAULT NULL,
   `show_attachments` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
@@ -1832,3 +1831,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',176);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',177);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',178);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remove_soft_deletes_from_pages',179);
