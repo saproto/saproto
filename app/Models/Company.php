@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App;
+use App\Enums\CompanyEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Company Model.
@@ -19,7 +24,6 @@ use Override;
  * @property string $url
  * @property string $excerpt
  * @property string $description
- * @property int $image_id
  * @property bool $on_carreer_page
  * @property bool $in_logo_bar
  * @property Carbon|null $created_at
@@ -28,7 +32,6 @@ use Override;
  * @property string|null $membercard_excerpt
  * @property string|null $membercard_long
  * @property int $sort
- * @property-read StorageEntry|null $image
  * @property-read Collection<int, Joboffer> $joboffers
  * @property-read int|null $joboffers_count
  *
@@ -39,7 +42,6 @@ use Override;
  * @method static Builder<static>|Company whereDescription($value)
  * @method static Builder<static>|Company whereExcerpt($value)
  * @method static Builder<static>|Company whereId($value)
- * @method static Builder<static>|Company whereImageId($value)
  * @method static Builder<static>|Company whereInLogoBar($value)
  * @method static Builder<static>|Company whereMembercardExcerpt($value)
  * @method static Builder<static>|Company whereMembercardLong($value)
@@ -52,18 +54,38 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class Company extends Model
+class Company extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $table = 'companies';
 
     protected $guarded = ['id'];
 
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
+    public function registerMediaCollections(): void
     {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(CompanyEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(CompanyEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 500)
+            ->format('webp');
+    }
+
+    public function getImageUrl(CompanyEnum $companyEnum = CompanyEnum::LARGE): string
+    {
+        return $this->getFirstMediaUrl('default', $companyEnum->value);
     }
 
     /**

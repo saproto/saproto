@@ -1,3 +1,4 @@
+@php use App\Enums\CompanyEnum; @endphp
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -20,10 +21,10 @@
                     </div>
 
                     <div class="card-body">
-                        @if ($company?->image)
+                        @if ($company?->hasMedia())
                             <div class="text-center">
                                 <img
-                                    src="{!! $company->image->generateImagePath(500, null) !!}"
+                                    src="{!! $company->getImageUrl(CompanyEnum::SMALL) !!}"
                                     style="max-height: 100px"
                                 />
                             </div>

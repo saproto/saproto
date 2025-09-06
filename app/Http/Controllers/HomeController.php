@@ -29,7 +29,7 @@ class HomeController extends Controller
         $companies =
             Cache::remember('home.companies', 3600, fn () => Company::query()
                 ->where('in_logo_bar', true)
-                ->with('image')
+                ->with('media')
                 ->get())->shuffle();
 
         $header = Cache::remember('home.headerimages', Carbon::tomorrow(), fn () => HeaderImage::query()->with('user')->get())->shuffle()->first();

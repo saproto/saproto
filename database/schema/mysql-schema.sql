@@ -317,7 +317,6 @@ CREATE TABLE `companies` (
   `url` varchar(255) NOT NULL,
   `excerpt` mediumtext NOT NULL,
   `description` mediumtext NOT NULL,
-  `image_id` bigint(20) unsigned NOT NULL,
   `on_carreer_page` tinyint(1) NOT NULL,
   `in_logo_bar` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -326,8 +325,7 @@ CREATE TABLE `companies` (
   `membercard_excerpt` mediumtext DEFAULT NULL,
   `membercard_long` mediumtext DEFAULT NULL,
   `sort` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `companies_image_id_index` (`image_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dinnerform_orderline`;
@@ -1833,3 +1831,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remove_image_id_from_narrowcasting',175);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',176);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',177);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',178);

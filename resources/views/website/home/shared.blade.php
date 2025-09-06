@@ -1,3 +1,4 @@
+@php use App\Enums\CompanyEnum; @endphp
 @extends("website.layouts.redesign.generic")
 
 @section("page-title")
@@ -50,7 +51,7 @@
                 <div class="card-body d-flex align-items-end text-start">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section("greeting")
-                            
+
                         @endsection
 
                         @yield("greeting")
@@ -64,7 +65,7 @@
                         <div class="swiper row mb-1" style="height: 70px">
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)
-                                    @if ($company->image)
+                                    @if ($company->hasMedia())
                                         <div
                                             class="swiper-slide justify-content-center align-items-center d-flex"
                                         >
@@ -73,8 +74,9 @@
                                             >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"
-                                                    src="{{ $company->image->generateImagePath(null, 50) }}"
+                                                    src="{{ $company->getImageUrl(CompanyEnum::SMALL) }}"
                                                     alt="logo of {{ $company->name }}"
+                                                    height="50"
                                                 />
                                             </a>
                                         </div>
@@ -88,7 +90,7 @@
 
             <div class="row justify-content-center">
                 @section("left-column")
-                    
+
                 @endsection
 
                 @yield("left-column")
@@ -97,7 +99,7 @@
 
         <div class="col-xl-3 col-md-6 col-sm-12">
             @section("right-column")
-                
+
             @endsection
 
             @yield("right-column")

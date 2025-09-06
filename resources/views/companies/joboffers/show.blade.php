@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card mb-3">
-                @if ($joboffer->company->image)
+                @if ($joboffer->company->hasMedia())
                     <div class="card-header text-center">
                         <div
                             class="align-items-center row"
@@ -16,7 +16,7 @@
                         >
                             <div class="col d-block">
                                 <img
-                                    src="{{ $joboffer->company->image->generateImagePath(null, null) }}"
+                                    src="{{ $joboffer->company->getImageUrl() }}"
                                     style="max-width: 70%; max-height: 160px"
                                 />
                             </div>

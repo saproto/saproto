@@ -242,7 +242,7 @@
                         </div>
                     </div>
 
-                    @if ($event?->image)
+                    @if ($event?->hasMedia('header'))
                         <hr />
 
                         <h5>Current image:</h5>
