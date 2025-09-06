@@ -1,4 +1,7 @@
-@php use App\Enums\CompanyEnum; @endphp
+@php
+    use App\Enums\CompanyEnum;
+@endphp
+
 @extends("website.layouts.redesign.generic")
 
 @section("page-title")
@@ -51,7 +54,7 @@
                 <div class="card-body d-flex align-items-end text-start">
                     <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section("greeting")
-
+                            
                         @endsection
 
                         @yield("greeting")
@@ -90,7 +93,7 @@
 
             <div class="row justify-content-center">
                 @section("left-column")
-
+                    
                 @endsection
 
                 @yield("left-column")
@@ -99,7 +102,7 @@
 
         <div class="col-xl-3 col-md-6 col-sm-12">
             @section("right-column")
-
+                
             @endsection
 
             @yield("right-column")

@@ -1,4 +1,7 @@
-@php use App\Enums\CompanyEnum; @endphp
+@php
+    use App\Enums\CompanyEnum;
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
