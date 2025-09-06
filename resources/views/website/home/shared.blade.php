@@ -1,3 +1,7 @@
+@php
+    use App\Enums\CompanyEnum;
+@endphp
+
 @extends("website.layouts.redesign.generic")
 
 @section("page-title")
@@ -64,7 +68,7 @@
                         <div class="swiper row mb-1" style="height: 70px">
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)
-                                    @if ($company->image)
+                                    @if ($company->hasMedia())
                                         <div
                                             class="swiper-slide justify-content-center align-items-center d-flex"
                                         >
@@ -73,8 +77,9 @@
                                             >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"
-                                                    src="{{ $company->image->generateImagePath(null, 50) }}"
+                                                    src="{{ $company->getImageUrl(CompanyEnum::SMALL) }}"
                                                     alt="logo of {{ $company->name }}"
+                                                    height="50"
                                                 />
                                             </a>
                                         </div>

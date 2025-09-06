@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
@@ -12,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class CompanyController extends Controller
 {
@@ -22,7 +23,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::query()->with('image')->where('on_carreer_page', true)->inRandomOrder()->get();
+        $companies = Company::query()->with('media')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         }
@@ -78,6 +79,10 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
         $company = new Company;
         $company->name = $request->name;
         $company->url = $request->url;
@@ -90,13 +95,19 @@ class CompanyController extends Controller
         $company->on_membercard = $request->has('on_membercard');
         $company->sort = Company::query()->max('sort') + 1;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
-        }
-
         $company->save();
+
+        if ($request->has('image')) {
+            try {
+                $company->addMediaFromRequest('image')
+                    ->usingFileName('company_'.$company->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
+        }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
 
@@ -144,6 +155,10 @@ class CompanyController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
         $company = Company::query()->findOrFail($id);
         $company->name = $request->name;
         $company->url = $request->url;
@@ -155,13 +170,20 @@ class CompanyController extends Controller
         $company->membercard_long = $request->membercard_long;
         $company->on_membercard = $request->has('on_membercard');
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
-        }
-
         $company->save();
+
+
+        if ($request->has('image')) {
+            try {
+                $company->addMediaFromRequest('image')
+                    ->usingFileName('company_'.$company->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
+        }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
 
