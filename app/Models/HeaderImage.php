@@ -23,11 +23,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $id
  * @property string $title
  * @property int|null $credit_id
- * @property int $image_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read StorageEntry|null $StorageEntry
- * @property-read StorageEntry|null $image
  * @property-read User|null $user
  *
  * @method static HeaderImageFactory factory($count = null, $state = [])
@@ -37,7 +34,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|HeaderImage whereCreatedAt($value)
  * @method static Builder<static>|HeaderImage whereCreditId($value)
  * @method static Builder<static>|HeaderImage whereId($value)
- * @method static Builder<static>|HeaderImage whereImageId($value)
  * @method static Builder<static>|HeaderImage whereTitle($value)
  * @method static Builder<static>|HeaderImage whereUpdatedAt($value)
  *
