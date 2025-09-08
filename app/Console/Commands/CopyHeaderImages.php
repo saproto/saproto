@@ -35,7 +35,7 @@ class CopyHeaderImages extends Command
         $bar->start();
 
         $query->chunkById(100, function ($narrowcastingItems) use ($bar) {
-            /** @var NarrowcastingItem $item */
+            /** @var HeaderImage $item */
             foreach ($narrowcastingItems as $item) {
                 try {
                     $item->addMedia($item->image->generateLocalPath())
