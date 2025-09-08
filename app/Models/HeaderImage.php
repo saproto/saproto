@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App;
+use App\Enums\HeaderImageEnum;
 use Database\Factories\HeaderImageFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +12,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Header Image Model.
@@ -37,23 +43,38 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class HeaderImage extends Model
+class HeaderImage extends Model implements HasMedia
 {
     /** @use HasFactory<HeaderImageFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'headerimages';
 
     protected $guarded = ['id'];
 
-    protected $with = ['image'];
+    protected $with = ['media'];
 
-    /**
-     * @return BelongsTo<User, $this>
-     */
-    public function user(): BelongsTo
+    public function registerMediaCollections(): void
     {
-        return $this->belongsTo(User::class, 'credit_id');
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(HeaderImageEnum::LARGE->value)
+            ->nonQueued()
+            ->fit(Fit::Crop, 1500, 400)
+            ->format('webp');
+    }
+
+    public function getImageUrl(HeaderImageEnum $headerImageEnum = HeaderImageEnum::LARGE): string
+    {
+        return $this->getFirstMediaUrl('default', $headerImageEnum->value);
     }
 
     /**
@@ -65,11 +86,11 @@ class HeaderImage extends Model
     }
 
     /**
-     * @return BelongsTo<StorageEntry, $this>
+     * @return BelongsTo<User, $this>
      */
-    public function StorageEntry(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(StorageEntry::class, 'image_id', 'id');
+        return $this->belongsTo(User::class, 'credit_id');
     }
 
     #[Override]

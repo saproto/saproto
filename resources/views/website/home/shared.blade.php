@@ -15,7 +15,7 @@
                 class="card mb-3 border-0 text-white"
                 style="
                     @if ($header)
-                        background-image: url({{ $header->image->generateImagePath(1500, 400) }});
+                        background-image: url({{ $header->getImageUrl() }});
                         background-size: cover;
                         background-position: center
                         center;
