@@ -25,7 +25,6 @@ class HeaderImageFactory extends Factory
             'updated_at' => Carbon::now(),
 
             'credit_id' => User::factory(),
-            'image_id' => StorageEntry::factory(),
         ];
     }
 }
