@@ -25,6 +25,10 @@ it('does not lists the headerimages for someone without permission', function ()
 });
 
 it('lets the appropriate user create a new headerimage', function () {
+
+    Storage::fake('public');
+    Storage::fake('stack');
+
     /** @var Member $member * */
     $member = Member::factory()->create();
     $member->user->givePermissionTo('header-image');
