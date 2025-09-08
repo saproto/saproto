@@ -2,7 +2,6 @@
 
 use App\Models\HeaderImage;
 use App\Models\Member;
-use App\Models\StorageEntry;
 use Illuminate\Http\UploadedFile;
 
 it('lists the headerimages', function () {
@@ -49,7 +48,7 @@ it('lets the appropriate user create a new headerimage', function () {
         'credit_id' => $image['credit_id'],
     ]);
     $this->assertDatabaseHas('media', [
-        'file_name' => 'header_'.HeaderImage::max('id'),
+        'file_name' => 'header_'.HeaderImage::query()->max('id'),
     ]);
 });
 
