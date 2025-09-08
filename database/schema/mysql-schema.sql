@@ -618,12 +618,10 @@ CREATE TABLE `headerimages` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `credit_id` bigint(20) unsigned DEFAULT NULL,
-  `image_id` bigint(20) unsigned NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `headerimages_credit_id_index` (`credit_id`),
-  KEY `headerimages_image_id_index` (`image_id`)
+  KEY `headerimages_credit_id_index` (`credit_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `joboffers`;
@@ -1832,3 +1830,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',177);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',178);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remove_soft_deletes_from_pages',179);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_08_161957_remove_image_id_from_headerimages',179);
