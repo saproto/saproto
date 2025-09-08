@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\HeaderImage;
-use App\Models\NarrowcastingItem;
 use Exception;
 use Illuminate\Console\Command;
 
