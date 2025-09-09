@@ -49,22 +49,18 @@ class CopyPageFiles extends Command
                             ->preservingOriginal()
                             ->toMediaCollection($collection);
 
-                        if($collection==='images' && $media){
+                        if($collection==='images'){
                             $page->update([
-                                'content'=> str_replace($file->generatePath(), $media->getFullUrl('large'), $page->content)
+                                'content'=> str_replace($file->generateImagePath(), $media->getFullUrl('large'), $page->content)
                             ]);
                         }else{
                             $page->update([
                                 'content'=> str_replace($file->generatePath(), $media->getFullUrl(), $page->content)
                             ]);
                         }
-
                     } catch (Exception $e) {
                         $this->warn('Page: '.$page->id.' error: '.$e->getMessage());
                     }
-
-//                    replace the link https://www.proto.utwente.nl/image/25747/c1939f2e28237ec2ec14eaa852e8c02d7e251cb6?w=1000
-//                      with the new link $media-> $page->content
                 }
 
                 $bar->advance();
