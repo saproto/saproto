@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PageController extends Controller
 {
@@ -69,10 +71,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  string  $slug
      * @return View
      */
-    public function show($slug): \Illuminate\Contracts\View\View|Factory
+    public function show(string $slug): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->where('slug', '=', $slug)->first();
 
@@ -88,10 +89,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id): \Illuminate\Contracts\View\View|Factory
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->findOrFail($id);
 
@@ -175,24 +175,50 @@ class PageController extends Controller
 
     /**
      * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
      */
     public function addFile(Request $request, int $id)
     {
-        if (! $request->file('files')) {
-            Session::flash('flash_message', 'You forgot to add any files.');
+        $request->validate([
+            'file' => 'required|file|max:5120|mimes:pdf,jpg,png,jpeg', // max 5MB
+        ]);
+        $page = Page::query()->findOrFail($id);
+
+        try {
+            if (in_array($request->file('file')->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])) {
+                $collection = 'images';
+            } else {
+                $collection = 'files';
+            }
+
+            $page->addMediaFromRequest('file')
+                ->toMediaCollection($collection);
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            Session::flash('flash_message', $e->getMessage());
 
             return Redirect::back();
         }
 
-        $page = Page::query()->findOrFail($id);
-        $file = $request->file('files');
-        $newFile = new StorageEntry;
-        $newFile->createFromFile($file);
+        return Redirect::route('page::edit', ['id' => $id]);
+    }
 
-        $page->files()->attach($newFile);
-        $page->save();
+    /**
+     * @return RedirectResponse
+     */
+    public function addImage(Request $request, int $id)
+    {
+        $request->validate([
+            'image' => 'required|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+        $page = Page::query()->findOrFail($id);
+
+        try {
+            $page->addMediaFromRequest('image')
+                ->toMediaCollection('images');
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            Session::flash('flash_message', $e->getMessage());
+
+            return Redirect::back();
+        }
 
         return Redirect::route('page::edit', ['id' => $id]);
     }
@@ -203,9 +229,8 @@ class PageController extends Controller
     public function deleteFile(int $id, int $file_id)
     {
         $page = Page::query()->findOrFail($id);
-
-        $page->files()->detach($file_id);
-        $page->save();
+        $item = $page->media()->where('id', $file_id)->firstOrFail();
+        $item->delete();
 
         return Redirect::route('page::edit', ['id' => $id]);
     }

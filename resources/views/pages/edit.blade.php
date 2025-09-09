@@ -1,3 +1,7 @@
+@php
+    use App\Enums\PageEnum;
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -162,7 +166,7 @@
                             Attachments
                         </div>
 
-                        @if ($item->files->count() > 0)
+                        @if ($item->hasMedia('files') || $item->hasMedia('images'))
                             <table class="table-hover table-sm table">
                                 <thead>
                                     <tr class="bg-dark text-white">
@@ -171,41 +175,60 @@
                                     </tr>
                                 </thead>
 
-                                @foreach ($item->files as $file)
+                                @foreach ($item->getMedia('files') as $file)
                                     <tr>
                                         <td class="ellipsis ps-3">
                                             <a
-                                                href="{{ $file->generatePath() }}"
+                                                href="{{ $file->getFullUrl() }}"
                                                 target="_blank"
                                             >
-                                                {{ $file->original_filename }}
+                                                {{ $file->name }}
                                             </a>
                                         </td>
                                         <td>
-                                            @if (str_starts_with($file->mime, 'image'))
-                                                <a
-                                                    class="pageEdit_insertImage"
-                                                    href="#"
-                                                    rel="{{ $file->generateImagePath(1000, null) }}"
-                                                >
-                                                    <i
-                                                        class="fas fa-image fa-fw me-2"
-                                                    ></i>
-                                                </a>
-                                            @else
-                                                <a
-                                                    class="pageEdit_insertLink"
-                                                    href="#"
-                                                    role="button"
-                                                    rel="{{ $file->generatePath() }}"
-                                                >
-                                                    <i
-                                                        class="fas fa-link fa-fw me-2"
-                                                    ></i>
-                                                </a>
-                                            @endif
+                                            <a
+                                                class="pageEdit_insertLink"
+                                                href="#"
+                                                role="button"
+                                                rel="{{ $file->getFullUrl() }}"
+                                            >
+                                                <i
+                                                    class="fas fa-link fa-fw me-2"
+                                                ></i>
+                                            </a>
                                             <a
                                                 href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
+                                            >
+                                                <i
+                                                    class="fas fa-trash text-danger"
+                                                ></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                @foreach ($item->getMedia('images') as $file)
+                                    <tr>
+                                        <td class="ellipsis ps-3">
+                                            <a
+                                                href="{{ $file->getFullUrl(PageEnum::LARGE->value) }}"
+                                                target="_blank"
+                                            >
+                                                {{ $file->name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                class="pageEdit_insertImage"
+                                                href="#"
+                                                rel="{{ $file->getFullUrl(PageEnum::LARGE->value) }}"
+                                            >
+                                                <i
+                                                    class="fas fa-image fa-fw me-2"
+                                                ></i>
+                                            </a>
+                                            <a
+                                                href="{{ route('page::image::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-trash text-danger"
@@ -220,12 +243,12 @@
                         <div class="card-body">
                             <div class="custom-file">
                                 <input
-                                    id="files"
+                                    id="file"
                                     type="file"
                                     class="form-control"
-                                    name="files"
+                                    name="file"
                                 />
-                                <label class="form-label" for="files">
+                                <label class="form-label" for="file">
                                     Upload a file
                                 </label>
                             </div>

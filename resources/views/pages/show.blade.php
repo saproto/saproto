@@ -34,15 +34,15 @@
                 <div class="card-body">
                     {!! $parsedContent !!}
 
-                    @if ($page->files->count() > 0 && $page->show_attachments)
+                    @if ($page->hasMedia('files') && $page->show_attachments)
                         <hr />
 
                         <p>
                             <strong>Attachments</strong>
 
-                            @foreach ($page->files as $file)
+                            @foreach ($page->getMedia('files') as $file)
                                 <a
-                                    href="{{ $file->generatePath() }}"
+                                    href="{{ $file->getFullUrl() }}"
                                     target="_blank"
                                     class="card-link"
                                 >
@@ -50,7 +50,7 @@
                                         class="fas fa-paperclip"
                                         aria-hidden="true"
                                     ></i>
-                                    {{ $file->original_filename }}
+                                    {{ $file->name }}
                                 </a>
                             @endforeach
                         </p>
