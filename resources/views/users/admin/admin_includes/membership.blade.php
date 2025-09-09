@@ -217,6 +217,7 @@
                                                     'action' => route('memberform::delete', [
                                                         'id' => $membership->membership_form_id,
                                                     ]),
+                                                    'method' => 'POST',
                                                     'classes' => 'text-danger',
                                                     'text' => '<i class="fas fa-trash fa-fw me-2 text-danger"></i>',
                                                     'title' => 'Confirm Delete',
