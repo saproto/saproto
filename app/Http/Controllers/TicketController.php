@@ -296,6 +296,7 @@ class TicketController extends Controller
         }
 
         $html2pdf = new PDF('P', 'A4', 'en', true, 'UTF-8');
+        $html2pdf->setDefaultFont('freeserif');
         $html2pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));
 
         $filename = sprintf('saproto-ticket-%s.pdf', $ticket->id);

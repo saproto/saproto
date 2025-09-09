@@ -380,6 +380,7 @@ class UserDashboardController extends Controller
         $member->membership_type = MembershipTypeEnum::PENDING;
 
         $form = new PDF('P', 'A4', 'en');
+        $form->setDefaultFont('freeserif');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
         $file = new StorageEntry;

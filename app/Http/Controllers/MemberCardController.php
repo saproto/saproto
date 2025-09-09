@@ -26,6 +26,7 @@ class MemberCardController extends Controller
         }
 
         $card = new PDF('L', [86, 54], 'en');
+        $card->setDefaultFont('freeserif');
         $card->writeHTML(view('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]));
 
         return $card->output();

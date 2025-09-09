@@ -393,7 +393,7 @@ class UserAdminController extends Controller
         }
 
         $form = new PDF('P', 'A4', 'en');
-        $form->setDefaultFont('Arial');
+        $form->setDefaultFont('freeserif');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]));
 
         return $form->output();
