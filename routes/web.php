@@ -604,6 +604,11 @@ Route::middleware('forcedomain')->group(function () {
                 Route::post('create', 'addFile')->name('create');
                 Route::get('{file_id}/delete', 'deleteFile')->name('delete');
             });
+
+            Route::prefix('/edit/{id}/image')->name('image::')->group(function () {
+                Route::post('create', 'addImage')->name('create');
+                Route::get('{file_id}/delete', 'deleteFile')->name('delete');
+            });
         });
 
         /* --- Public --- */
