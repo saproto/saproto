@@ -597,16 +597,10 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
-            Route::post('edit/{id}/image', 'featuredImage')->name('image');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
             Route::prefix('/edit/{id}/file')->name('file::')->group(function () {
                 Route::post('create', 'addFile')->name('create');
-                Route::get('{file_id}/delete', 'deleteFile')->name('delete');
-            });
-
-            Route::prefix('/edit/{id}/image')->name('image::')->group(function () {
-                Route::post('create', 'addImage')->name('create');
                 Route::get('{file_id}/delete', 'deleteFile')->name('delete');
             });
         });

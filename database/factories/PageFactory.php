@@ -25,7 +25,6 @@ class PageFactory extends Factory
             'slug' => fn ($attributes) => Str::slug($attributes['title']),
             'content' => fake()->paragraphs(fake()->numberBetween(5, 15), true),
             'is_member_only' => fake()->boolean(),
-            'featured_image_id' => null,
             'show_attachments' => false,
         ];
     }
