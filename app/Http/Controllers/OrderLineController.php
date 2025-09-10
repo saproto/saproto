@@ -63,9 +63,9 @@ class OrderLineController extends Controller
 
         $outstandingAmount = $outstanding->sum('price');
 
-        $withdrawals = $user->withdrawals()->with('failedWithdrawals', function ($q) {
+        $withdrawals = $user->withdrawals()->with(['failedWithdrawals' => function ($q) {
             $q->where('user_id', Auth::user()->id);
-        })->withSum(['orderlines' => function ($q) {
+        }])->withSum(['orderlines' => function ($q) {
             $q->where('user_id', Auth::user()->id);
         }], 'total_price')->take(6)->get();
 

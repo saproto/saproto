@@ -212,25 +212,25 @@ class Event extends Model implements HasMedia
             ->with('media')
             ->with('activity', static function ($e) use ($user) {
                 $e
-                    ->with('participation', function ($q) use ($user) {
+                    ->with(['participation' => function ($q) use ($user) {
                         $q->where('user_id', $user?->id);
-                    })
+                    }])
                     ->withCount([
                         'users',
                     ]);
             })
             ->with('committee', static function ($q) use ($user) {
-                $q->with('users', function ($q) use ($user) {
+                $q->with(['users' => function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
-                });
+                }]);
             })
-            ->with('tickets', function ($q) use ($user) {
+            ->with(['tickets' => function ($q) use ($user) {
                 $q->with('purchases', static function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 })->whereHas('purchases', static function ($q) use ($user) {
                     $q->where('user_id', $user?->id);
                 });
-            });
+            }]);
     }
 
     public function isPublished(): bool

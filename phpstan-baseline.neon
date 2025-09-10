@@ -60,9 +60,3 @@ parameters:
 			identifier: method.notFound
 			count: 1
 			path: app/Http/Controllers/WithdrawalController.php
-
-		-
-			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\Relation\<\*, \*, \*\>\:\:unpayed\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: app/Http/Controllers/WithdrawalController.php
