@@ -111,51 +111,6 @@
             <div class="col-md-3">
                 <form
                     method="post"
-                    action="{{ route('page::image', ['id' => $item->id]) }}"
-                    enctype="multipart/form-data"
-                >
-                    @csrf
-
-                    <div class="card mb-3">
-                        @if ($item->featuredImage)
-                            <img
-                                src="{!! $item->featuredImage->generateImagePath(700, null) !!}"
-                                width="100%;"
-                                class="card-img-top"
-                            />
-                        @endif
-
-                        <div class="card-header bg-dark text-white">
-                            Featured image
-                        </div>
-
-                        <div class="card-body">
-                            <div class="custom-file">
-                                <input
-                                    id="image"
-                                    type="file"
-                                    class="form-control"
-                                    name="image"
-                                />
-                                <label class="form-label" for="image">
-                                    Upload featured image
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block float-end"
-                            >
-                                Replace featured image
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <form
-                    method="post"
                     action="{{ route('page::file::create', ['id' => $item->id]) }}"
                     enctype="multipart/form-data"
                 >
@@ -228,7 +183,7 @@
                                                 ></i>
                                             </a>
                                             <a
-                                                href="{{ route('page::image::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
+                                                href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                             >
                                                 <i
                                                     class="fas fa-trash text-danger"

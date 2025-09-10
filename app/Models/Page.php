@@ -7,7 +7,6 @@ use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Spatie\Image\Enums\Fit;
@@ -84,14 +83,6 @@ class Page extends Model implements HasMedia
     public function getImageUrl(PageEnum $pageEnum = PageEnum::LARGE): string
     {
         return $this->getFirstMediaUrl('images', $pageEnum->value);
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function featuredImage(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'featured_image_id');
     }
 
     public function getUrl(): string

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
-use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -99,10 +97,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|View
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         /** @var Page $page */
         $page = Page::query()->findOrFail($id);
@@ -133,12 +130,11 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         /** @var Page $page */
         $page = Page::query()->findOrfail($id);
@@ -148,29 +144,6 @@ class PageController extends Controller
         $page->delete();
 
         return Redirect::route('page::list');
-    }
-
-    /**
-     * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
-     */
-    public function featuredImage(Request $request, int $id)
-    {
-        $page = Page::query()->findOrFail($id);
-
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $page->featuredImage()->associate($file);
-        } else {
-            $page->featuredImage()->dissociate();
-        }
-
-        $page->save();
-
-        return Redirect::route('page::edit', ['id' => $id]);
     }
 
     /**
@@ -192,28 +165,6 @@ class PageController extends Controller
 
             $page->addMediaFromRequest('file')
                 ->toMediaCollection($collection);
-        } catch (FileDoesNotExist|FileIsTooBig $e) {
-            Session::flash('flash_message', $e->getMessage());
-
-            return Redirect::back();
-        }
-
-        return Redirect::route('page::edit', ['id' => $id]);
-    }
-
-    /**
-     * @return RedirectResponse
-     */
-    public function addImage(Request $request, int $id)
-    {
-        $request->validate([
-            'image' => 'required|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
-        ]);
-        $page = Page::query()->findOrFail($id);
-
-        try {
-            $page->addMediaFromRequest('image')
-                ->toMediaCollection('images');
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Session::flash('flash_message', $e->getMessage());
 

@@ -964,10 +964,8 @@ CREATE TABLE `pages` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `is_member_only` tinyint(1) NOT NULL DEFAULT 0,
-  `featured_image_id` bigint(20) unsigned DEFAULT NULL,
   `show_attachments` tinyint(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  KEY `pages_featured_image_id_index` (`featured_image_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -1819,3 +1817,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_08_161957_remove_image_id_from_headerimages',179);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_09_102812_add_extra_indexes_to_orderlines',180);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_004900_remove_pages_files',181);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_120553_remove_featured_image_from_pages',182);

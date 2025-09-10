@@ -57,7 +57,6 @@ class StorageEntry extends Model
     public function isOrphan(): bool
     {
         return
-            Page::query()->where('featured_image_id', $this->id)->count() == 0 &&
             Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
             Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
