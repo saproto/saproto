@@ -58,7 +58,7 @@ class WithdrawalController extends Controller
 
         $totalPerUser = [];
 
-        $orderlines = OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get();
+        $orderlines = OrderLine::unpayed()->whereHas('user')->with(['product', 'product.ticket'])->get();
         foreach ($orderlines as $orderline) {
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
@@ -99,9 +99,9 @@ class WithdrawalController extends Controller
     {
         $withdrawal = Withdrawal::query()
             ->withCount(['orderlines', 'users'])
-            ->with('failedWithdrawals', function ($q) {
+            ->with(['failedWithdrawals', function ($q) {
                 $q->where('user_id', Auth::user()->id);
-            })
+            }])
             ->findOrFail($id);
 
         $userLines = OrderLine::query()
@@ -440,12 +440,12 @@ class WithdrawalController extends Controller
 
     public function unwithdrawable(): View
     {
-        $users = User::query()->whereHas('orderlines', function ($q) {
+        $users = User::query()->whereHas('orderlines', static function ($q) {
             $q->unpayed();
         })->whereDoesntHave('bank')
-            ->with('orderlines', function ($q) {
+            ->with(['orderlines' => function ($q) {
                 $q->unpayed()->with('product');
-            })
+            }])
             ->withTrashed()
             ->get();
 
