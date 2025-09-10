@@ -8,14 +8,6 @@
     <div class="row justify-content-center">
         <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
             <div class="card mb-3">
-                @if ($page->featuredImage)
-                    <img
-                        class="card-img-top w-100"
-                        alt="featured image"
-                        src="{{ $page->featuredImage->generateImagePath('1000', '200') }}"
-                    />
-                @endif
-
                 <div class="card-header">
                     <h3 class="card-title m-0">
                         @yield('page-title')
