@@ -93,7 +93,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection<int, Committee> $groups
  * @property-read int|null $groups_count
  * @property-read bool $is_member
- * @property-read bool $is_protube_admin
  * @property-read Collection<int, EmailList> $lists
  * @property-read int|null $lists_count
  * @property-read Member|null $member
@@ -193,7 +192,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $with = ['member'];
 
-    protected $appends = ['is_member', 'is_protube_admin'];
+    protected $appends = ['is_member'];
 
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
 
@@ -615,20 +614,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected function signedMembershipForm(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
-    }
-
-    /**
-     * @return Attribute<bool, never>
-     */
-    protected function isProtubeAdmin(): Attribute
-    {
-        return Attribute::make(get: function (): bool {
-            if ($this->can('protube')) {
-                return true;
-            }
-
-            return $this->isTempadmin();
-        });
     }
 
     public function getIcalUrl(): string
