@@ -948,7 +948,9 @@ CREATE TABLE `orderlines` (
   KEY `orderlines_user_id_index` (`user_id`),
   KEY `orderlines_created_at_index` (`created_at`),
   KEY `orderlines_cashier_id_index` (`cashier_id`),
-  KEY `orderlines_product_id_index` (`product_id`)
+  KEY `orderlines_product_id_index` (`product_id`),
+  KEY `orderlines_payed_with_mollie_index` (`payed_with_mollie`),
+  KEY `orderlines_payed_with_withdrawal_index` (`payed_with_withdrawal`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages`;
@@ -966,22 +968,6 @@ CREATE TABLE `pages` (
   `show_attachments` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `pages_featured_image_id_index` (`featured_image_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `pages_files`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pages_files` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `page_id` bigint(20) unsigned NOT NULL,
-  `file_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pages_files_page_id_foreign` (`page_id`),
-  KEY `pages_files_file_id_foreign` (`file_id`),
-  KEY `pages_files_page_id_index` (`page_id`),
-  KEY `pages_files_file_id_index` (`file_id`),
-  CONSTRAINT `pages_files_file_id_foreign` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `pages_files_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -1831,3 +1817,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',178);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remove_soft_deletes_from_pages',179);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_08_161957_remove_image_id_from_headerimages',179);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_09_102812_add_extra_indexes_to_orderlines',180);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_004900_remove_pages_files',181);
