@@ -38,19 +38,19 @@ class DmxOverride extends Model
 
     public $timestamps = false;
 
-    /** @return Collection<int, $this> */
+    /** @return Collection<int, DmxOverride> */
     public static function getActiveSorted(): Collection
     {
         return self::query()->where('start', '<', Carbon::now()->timestamp)->where('end', '>', Carbon::now()->timestamp)->get()->sortBy('window_size');
     }
 
-    /** @return Collection<int, $this> */
+    /** @return Collection<int, DmxOverride> */
     public static function getUpcomingSorted(): Collection
     {
         return self::query()->where('start', '>', Carbon::now()->timestamp)->get()->sortByDesc('start');
     }
 
-    /** @return Collection<int, $this> */
+    /** @return Collection<int, DmxOverride> */
     public static function getPastSorted(): Collection
     {
         return self::query()->where('end', '<', Carbon::now()->timestamp)->get()->sortByDesc('start');

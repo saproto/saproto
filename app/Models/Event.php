@@ -199,7 +199,7 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * @return Builder<$this>
+     * @return Builder<Event>
      */
     public static function getEventBlockQuery(?User $user = null): Builder
     {
