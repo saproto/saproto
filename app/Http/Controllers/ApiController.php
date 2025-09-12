@@ -49,19 +49,18 @@ class ApiController extends Controller
             abort(403);
         }
 
-        $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);
-
-        if ($user->keep_protube_history) {
-            $playedVideo->user()->associate($user);
-        }
-
-        $playedVideo->video_id = $request->video_id;
-        $playedVideo->video_title = urldecode($request->video_title);
-
-        $playedVideo->save();
-
-        PlayedVideo::query()->where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
+        $youtubeId = $request->video_id;
+        $earlierSpotifyMatch = PlayedVideo::query()->where('video_id', $youtubeId)->whereNotNull('spotify_id')->orderBy('created_at', 'desc')->first();
+        $title = urldecode($request->video_title);
+        PlayedVideo::query()->create([
+            'video_id' => $request->video_id,
+            'video_title' => $title,
+            'user_id' => $user->keep_protube_history ? $user->id : null,
+            'spotify_id' => $earlierSpotifyMatch?->spotify_id,
+            'spotify_name' => $earlierSpotifyMatch?->spotify_name,
+        ]);
+        PlayedVideo::query()->where('video_id', $youtubeId)->update(['video_title' => $title]);
     }
 
     /**
