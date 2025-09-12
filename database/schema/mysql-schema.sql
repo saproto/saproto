@@ -1042,7 +1042,8 @@ CREATE TABLE `photo_albums` (
   `published` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `photo_albums_thumb_id_index` (`thumb_id`),
-  KEY `photo_albums_event_id_index` (`event_id`)
+  KEY `photo_albums_event_id_index` (`event_id`),
+  KEY `photo_albums_published_private_date_taken_index` (`published`,`private`,`date_taken`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `photo_likes`;
@@ -1087,7 +1088,9 @@ CREATE TABLE `playedvideos` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `playedvideos_user_id_index` (`user_id`),
-  KEY `playedvideos_video_id_index` (`video_id`)
+  KEY `playedvideos_video_id_index` (`video_id`),
+  KEY `playedvideos_created_at_video_id_index` (`created_at`,`video_id`),
+  KEY `playedvideos_spotify_id_index` (`spotify_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `product_categories`;
@@ -1818,3 +1821,6 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_08_161957_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_09_102812_add_extra_indexes_to_orderlines',180);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_004900_remove_pages_files',181);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_120553_remove_featured_image_from_pages',182);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_171228_add_created_at_index_to_playedvideos',183);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_123717_add_published_private_date_taken_index_to_photo_albums',183);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_131536_add_index_to_spotify_id_on_playedvideos',183);

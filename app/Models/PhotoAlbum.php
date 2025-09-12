@@ -24,7 +24,7 @@ use Override;
  * @property string $name
  * @property int $date_create
  * @property int $date_taken
- * @property int $thumb_id
+ * @property int|null $thumb_id
  * @property int|null $event_id
  * @property bool $private
  * @property bool $published
