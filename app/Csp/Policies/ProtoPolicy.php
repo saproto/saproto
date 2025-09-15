@@ -49,6 +49,7 @@ class ProtoPolicy extends Policy
                 'https://s.ytimg.com',
                 'https://www.google.com/recaptcha/api.js',
                 'https://www.gstatic.com/recaptcha/',
+                'https://unpkg.com/iban-to-bic@latest/dist/iban-to-bic.js',
                 'blob:',
                 ...(App::environment('production') ? [] : ['http://localhost:*']),
             ])
