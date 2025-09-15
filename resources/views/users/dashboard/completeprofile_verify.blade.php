@@ -22,8 +22,16 @@
                         @csrf
 
                         <input type="hidden" name="verified" value="true" />
-                        <input type="hidden" name="phone_verified" value="{{$userdata['phone']}}" />
-                        <input type="hidden" name="birthdate_verified" value="{{$userdata['birthdate']}}" />
+                        <input
+                            type="hidden"
+                            name="phone_verified"
+                            value="{{ $userdata['phone'] }}"
+                        />
+                        <input
+                            type="hidden"
+                            name="birthdate_verified"
+                            value="{{ $userdata['birthdate'] }}"
+                        />
 
                         <p class="text-center">
                             Please check that you've entered the information

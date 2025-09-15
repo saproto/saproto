@@ -178,23 +178,24 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript" src="https://unpkg.com/iban-to-bic@latest/dist/iban-to-bic.js">
-    </script>
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            window.addEventListener('load', () => {
+    <script
+        type="text/javascript"
+        src="https://unpkg.com/iban-to-bic@latest/dist/iban-to-bic.js"
+    ></script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        window.addEventListener('load', () => {
+            const iban = document.getElementById('iban')
+            const bic_field = document.getElementById('bic')
 
-                const iban = document.getElementById('iban')
-                const bic_field = document.getElementById('bic')
-
-                iban.addEventListener('keyup', () => {
-                    iban.value = iban.value.replace(' ', '')
-                    if (iban.value.length >= 15) {
-                        let bic = window.ibanToBic.ibanToBic(iban.value)
-                        if(bic){
-                            bic_field.value = bic
-                        }
+            iban.addEventListener('keyup', () => {
+                iban.value = iban.value.replace(' ', '')
+                if (iban.value.length >= 15) {
+                    let bic = window.ibanToBic.ibanToBic(iban.value)
+                    if (bic) {
+                        bic_field.value = bic
                     }
-                })
+                }
+            })
         })
     </script>
 @endpush
