@@ -167,9 +167,9 @@
                                 @if (! $withdrawal->closed)
                                     @isset($data->user->bank)
                                         <td>
-                                            {{ $data->user->bank->iban }}
+                                            {{ iban_to_obfuscated_format($data->user->bank->iban) }}
                                             <span class="text-muted">
-                                                / {{ $data->user->bank->bic }}
+                                                / {{ iban_to_obfuscated_format($data->user->bank->bic) }}
                                             </span>
                                         </td>
                                         <td>

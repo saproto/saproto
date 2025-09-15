@@ -19,7 +19,7 @@
         <li>You have revoked the withdrawal authorisation you gave us.</li>
         <li>
             Your bank account is no longer
-            <strong>{{ $user->bank->iban }}</strong>
+            <strong>{{ iban_to_obfuscated_format($user->bank->iban) }}</strong>
             .
         </li>
     </ul>
