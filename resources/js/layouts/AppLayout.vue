@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Menubar from '@/components/Menubar.vue'
+import Footer from '@/components/Footer.vue'
 import { router } from '@inertiajs/vue3'
 router.on('invalid', (event) => {
     event.preventDefault()
@@ -14,5 +15,6 @@ router.on('invalid', (event) => {
         <main>
             <slot />
         </main>
+        <Footer/>
     </div>
 </template>
