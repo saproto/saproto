@@ -8,7 +8,8 @@
         withdrawal for S.A. Proto will take place to settle your purchases at
         our association. This withdrawal concerns an amount of
         &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }}
-        and will be withdrawn from {{ iban_to_obfuscated_format($user->bank->iban) }}. Furthermore, this
+        and will be withdrawn from
+        {{ iban_to_obfuscated_format($user->bank->iban) }}. Furthermore, this
         withdrawal has the following details:
     </p>
 

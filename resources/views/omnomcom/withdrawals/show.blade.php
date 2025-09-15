@@ -169,7 +169,8 @@
                                         <td>
                                             {{ iban_to_obfuscated_format($data->user->bank->iban) }}
                                             <span class="text-muted">
-                                                / {{ iban_to_obfuscated_format($data->user->bank->bic) }}
+                                                /
+                                                {{ iban_to_obfuscated_format($data->user->bank->bic) }}
                                             </span>
                                         </td>
                                         <td>
