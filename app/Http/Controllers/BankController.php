@@ -168,14 +168,6 @@ class BankController extends Controller
     }
 
     /**
-     * @return false|string
-     */
-    public function verifyIban(Request $request)
-    {
-        return json_encode(self::doVerifyIban($request->input('iban'), $request->input('bic')));
-    }
-
-    /**
      * @param  string  $iban
      * @param  string|null  $bic
      * @return object
