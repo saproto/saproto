@@ -7,9 +7,9 @@
                 You have issued us an authorisation for:
                 <br />
                 <strong class="me-5">
-                    {{ iban_to_human_format($user->bank->iban) }}
+                    {{ iban_to_obfuscated_format($user->bank->iban) }}
                 </strong>
-                {{ iban_to_human_format($user->bank->bic) }}
+                {{ iban_to_obfuscated_format($user->bank->bic) }}
             </p>
 
             <table class="table-borderless table-sm text-muted mb-0 table">

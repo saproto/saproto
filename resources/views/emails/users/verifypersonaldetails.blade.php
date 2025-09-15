@@ -68,10 +68,14 @@
                 <strong>SEPA direct withdrawal authorization</strong>
                 <br />
                 IBAN:
-                <strong>{{ $user->bank->iban }}</strong>
+                <strong>
+                    {{ iban_to_obfuscated_format($user->bank->iban) }}
+                </strong>
                 <br />
                 BIC:
-                <strong>{{ $user->bank->bic }}</strong>
+                <strong>
+                    {{ iban_to_obfuscated_format($user->bank->bic) }}
+                </strong>
                 <br />
                 Authorization ID:
                 <strong>{{ $user->bank->machtigingid }}</strong>
