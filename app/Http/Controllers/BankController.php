@@ -228,10 +228,6 @@ class BankController extends Controller
         return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) === 1;
     }
 
-    /**
-     * @param User $user
-     * @return string
-     */
     public static function generateAuthorizationId(User $user): string
     {
         return 'PROTOX'.str_pad(strval($user->id), 5, '0', STR_PAD_LEFT).'X'.str_pad(strval(mt_rand(0, 99999)), 5, '0');
