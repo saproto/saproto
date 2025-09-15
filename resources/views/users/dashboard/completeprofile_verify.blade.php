@@ -22,6 +22,8 @@
                         @csrf
 
                         <input type="hidden" name="verified" value="true" />
+                        <input type="hidden" name="phone_verified" value="{{$userdata['phone']}}" />
+                        <input type="hidden" name="birthdate_verified" value="{{$userdata['birthdate']}}" />
 
                         <p class="text-center">
                             Please check that you've entered the information
@@ -36,6 +38,13 @@
                                 {{ date('F j, Y', strtotime($userdata['birthdate'])) }}
                             </strong>
                             ({{ $age }} years).
+                        </p>
+
+                        <p class="text-center">
+                            My phone number is
+                            <strong>
+                                {{ $userdata['phone'] }}
+                            </strong>
                         </p>
                     </div>
 

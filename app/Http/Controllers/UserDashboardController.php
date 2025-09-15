@@ -314,33 +314,43 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        $userdata = Session::has('flash_userdata') ? Session::get('flash_userdata') : $request->only(['birthdate', 'phone']);
-        $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
+        if(!$request->has('phone_verified')||!$request->has('birthdate_verified')){
+            $userdata = $request->only(['birthdate', 'phone']);
+            $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
+
+            $validator = Validator::make($userdata, [
+                'birthdate' => 'required|date',
+                'phone' => 'required|regex:(\+[0-9]{8,16})',
+            ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+
+            Session::flash('flash_userdata', $userdata);
+
+            return view(
+                'users.dashboard.completeprofile_verify',
+                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+            );
+        }
+
+        $userdata = $request->only(['birthdate_verified', 'phone_verified']);
 
         $validator = Validator::make($userdata, [
-            'birthdate' => 'required|date',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
+            'birthdate_verified' => 'required|date',
+            'phone_verified' => 'required|regex:(\+[0-9]{8,16})',
         ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
+        $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
+        $userdata['phone'] =$userdata['phone_verified'];
+        $user->fill($userdata);
+        $user->save();
 
-        if (Session::has('flash_userdata') && $request->has('verified')) {
-            $userdata['birthdate'] = Carbon::parse($userdata['birthdate'])->format('Y-m-d');
-            $user->fill($userdata);
-            $user->save();
+        Session::flash('flash_message', 'Completed profile.');
 
-            Session::flash('flash_message', 'Completed profile.');
-
-            return Redirect::route('becomeamember');
-        }
-
-        Session::flash('flash_userdata', $userdata);
-
-        return view(
-            'users.dashboard.completeprofile_verify',
-            ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
-        );
+        return Redirect::route('becomeamember');
     }
 
     /**
