@@ -343,6 +343,7 @@ class UserDashboardController extends Controller
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
+
         $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
         $userdata['phone'] =$userdata['phone_verified'];
         $user->fill($userdata);
