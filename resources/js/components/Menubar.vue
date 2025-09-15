@@ -21,8 +21,6 @@ import {
     MenubarItem,
 } from '@/components/ui/menubar'
 
-
-
 import { Menu } from 'lucide-vue-next'
 import { Link, usePage } from '@inertiajs/vue3'
 
@@ -40,7 +38,11 @@ const { can } = useCan()
 <template>
     <!-- Menu Items -->
     <UseTemplate>
-        <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname" class="bg-green">
+        <MenubarMenu
+            v-for="menuitem in menuitems"
+            :key="menuitem.menuname"
+            class="bg-green"
+        >
             <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
             <MenubarContent class="w-full">
                 <MenubarItem
@@ -55,8 +57,6 @@ const { can } = useCan()
             </MenubarContent>
         </MenubarMenu>
 
-        
-
         <MenubarMenu v-if="can('sysadmin')">
             <Link :href="route('admin')">
                 <MenubarTrigger>Admin</MenubarTrigger>
@@ -66,7 +66,7 @@ const { can } = useCan()
 
     <!-- Menubar -->
     <Menubar
-        class="sticky top-0 gap-2 text-xl mb-3 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-5  shadow md:justify-start dark:border-gray-700 dark:bg-gray-900"
+        class="sticky top-0 z-50 mb-3 flex w-full items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 py-5 text-xl shadow md:justify-start dark:border-gray-700 dark:bg-gray-900"
     >
         <!-- Show full menu on desktop -->
         <GridForm v-if="isDesktop" />

@@ -15,6 +15,6 @@ router.on('invalid', (event) => {
         <main>
             <slot />
         </main>
-        <Footer/>
+        <Footer />
     </div>
 </template>
