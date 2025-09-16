@@ -23,7 +23,8 @@ class TempAdminController extends Controller
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $tempadmins = Tempadmin::query()
-            ->with('user', 'creator')
+            ->with('user')
+            ->with('creator')
             ->where('end_at', '>', DB::raw('NOW()'))
             ->orderBy('end_at', 'desc')
             ->get();

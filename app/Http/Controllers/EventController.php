@@ -439,7 +439,10 @@ class EventController extends Controller
             })
             ->whereNull('publication')
             ->orderBy('start')
-            ->with('activity.users.media', 'activity.backupUsers', 'media', 'committee.users', 'tickets')
+            ->with('activity.users.media')
+            ->with('activity.backupUsers')
+            ->with('committee.users')
+            ->with('tickets')
             ->take($limit)
             ->get();
 
