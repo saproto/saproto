@@ -113,7 +113,7 @@ class OrderLineController extends Controller
             })
             ->with(['user', 'product', 'molliePayment', 'cashier:id,name'])
             ->orderBy('created_at', 'desc')
-            ->paginate(20)->withQueryString();
+            ->simplePaginate(20)->withQueryString();
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
