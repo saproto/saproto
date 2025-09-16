@@ -2,17 +2,17 @@
 
 namespace App\Services\MediaLibrary;
 
-use Spatie\MediaLibrary\Conversions\Conversion;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\Conversions\Conversion;
 use Spatie\MediaLibrary\Support\UrlGenerator\BaseUrlGenerator;
 
 class CustomUrlGenerator extends BaseUrlGenerator
 {
     public function getUrl(): string
     {
-        if( $this->conversion instanceof Conversion && $this->media->conversions_disk !== 'public' || !$this->conversion instanceof Conversion && $this->media->disk !== 'public') {
+        if ($this->conversion instanceof Conversion && $this->media->conversions_disk !== 'public' || ! $this->conversion instanceof Conversion && $this->media->disk !== 'public') {
             return route('media::show', [
                 'id' => $this->media->id,
                 'conversion' => $this->conversion?->getName(),

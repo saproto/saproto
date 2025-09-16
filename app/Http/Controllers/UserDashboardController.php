@@ -314,7 +314,7 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        if(!$request->has('phone_verified')||!$request->has('birthdate_verified')){
+        if (! $request->has('phone_verified') || ! $request->has('birthdate_verified')) {
             $userdata = $request->only(['birthdate', 'phone']);
             $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
 
@@ -345,7 +345,7 @@ class UserDashboardController extends Controller
         }
 
         $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
-        $userdata['phone'] =$userdata['phone_verified'];
+        $userdata['phone'] = $userdata['phone_verified'];
         $user->fill($userdata);
         $user->save();
 
