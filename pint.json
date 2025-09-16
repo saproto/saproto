@@ -1,4 +1,7 @@
 {
   "preset": "laravel",
-  "cache-file": ".tmp/pint.cache"
+  "cache-file": ".tmp/pint.cache",
+    "rules": {
+        "method_chaining_indentation": true
+    }
 }
