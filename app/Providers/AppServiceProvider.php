@@ -23,8 +23,6 @@ class AppServiceProvider extends ServiceProvider
 
         Model::preventLazyLoading(! app()->isProduction());
 
-        Vite::prefetch(concurrency: 3);
-
         view()->composer('*', function ($view) {
             view()->share('viewName', Str::replace('.', '-', (string) $view->getName()));
         });
