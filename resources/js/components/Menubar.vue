@@ -38,7 +38,11 @@ const { can } = useCan()
 <template>
     <!-- Menu Items -->
     <UseTemplate>
-        <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname">
+        <MenubarMenu
+            v-for="menuitem in menuitems"
+            :key="menuitem.menuname"
+            class="bg-green"
+        >
             <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
             <MenubarContent class="w-full">
                 <MenubarItem
@@ -46,7 +50,9 @@ const { can } = useCan()
                     :key="child.menuname"
                     class="w-full"
                 >
-                    {{ child.menuname }}
+                    <Link :href="child.parsed_url!">
+                        {{ child.menuname }}
+                    </Link>
                 </MenubarItem>
             </MenubarContent>
         </MenubarMenu>
@@ -60,7 +66,7 @@ const { can } = useCan()
 
     <!-- Menubar -->
     <Menubar
-        class="sticky top-0 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-3 shadow md:justify-start dark:border-gray-700 dark:bg-gray-900"
+        class="sticky top-0 z-50 mb-3 flex w-full items-center justify-end gap-2 border-b border-gray-200 bg-white px-6 py-5 text-xl shadow md:justify-start dark:border-gray-700 dark:bg-gray-900"
     >
         <!-- Show full menu on desktop -->
         <GridForm v-if="isDesktop" />
