@@ -94,6 +94,4 @@ class Leaderboard extends Model
             Cache::forget('leaderboard.leaderboard');
         });
     }
-
-
 }
