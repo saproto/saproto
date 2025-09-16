@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Override;
