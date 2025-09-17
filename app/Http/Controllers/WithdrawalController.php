@@ -58,7 +58,11 @@ class WithdrawalController extends Controller
 
         $totalPerUser = [];
 
-        $orderlines = OrderLine::unpayed()->whereHas('user')->with(['product', 'product.ticket'])->get();
+        $orderlines = OrderLine::unpayed()
+            ->whereHas('user')
+            ->with('product')
+            ->with('product.ticket')
+            ->get();
         foreach ($orderlines as $orderline) {
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
@@ -408,9 +412,8 @@ class WithdrawalController extends Controller
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()
-            ->with([
-                'orderlines.product',
-            ])->findOrFail($id);
+            ->with('orderlines.product')
+            ->findOrFail($id);
 
         return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
     }

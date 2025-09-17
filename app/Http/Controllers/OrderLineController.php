@@ -47,7 +47,8 @@ class OrderLineController extends Controller
         $orderlines = OrderLine::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->with('product:name,id', 'molliePayment:id,status')
+            ->with('product:name,id')
+            ->with('molliePayment:id,status')
             ->where('created_at', '>', Carbon::parse($date)->startOfMonth())
             ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
             ->get();
@@ -67,7 +68,9 @@ class OrderLineController extends Controller
             $q->where('user_id', Auth::user()->id);
         }])->withSum(['orderlines' => function ($q) {
             $q->where('user_id', Auth::user()->id);
-        }], 'total_price')->take(6)->get();
+        }], 'total_price')
+            ->take(6)
+            ->get();
 
         $molliePayments = $user->mollieTransactions()->where('amount', '>', 0)->orderBy('created_at', 'desc')->take(6)->get();
         $payment_methods = MollieController::getPaymentMethods();
@@ -111,7 +114,10 @@ class OrderLineController extends Controller
             ->when($products, function ($query) use ($products) {
                 $query->whereIn('product_id', $products);
             })
-            ->with(['user', 'product', 'molliePayment', 'cashier:id,name'])
+            ->with('user')
+            ->with('product')
+            ->with('molliePayment')
+            ->with('cashier:id,name')
             ->orderBy('created_at', 'desc')
             ->simplePaginate(20)->withQueryString();
 

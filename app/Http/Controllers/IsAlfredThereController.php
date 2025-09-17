@@ -55,7 +55,6 @@ class IsAlfredThereController extends Controller
 
         $unix = HashMapItem::query()->updateOrCreate(['key' => self::$HashMapUnixKey], ['value' => $unix]);
 
-
         try {
             IsAlfredThereEvent::dispatch($status->value, $text->value, $unix->value);
         } catch (Exception) {
@@ -75,7 +74,7 @@ class IsAlfredThereController extends Controller
     } */
     private function getStatus(): array
     {
-        return Cache::rememberForever('isalfredthere.status', fn(): array => [
+        return Cache::rememberForever('isalfredthere.status', fn (): array => [
             'text' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapTextKey], ['value' => ''])->value,
             'status' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapItemKey], ['value' => IsAlfredThereEnum::UNKNOWN])->value,
             'unix' => HashMapItem::query()->firstOrCreate(['key' => self::$HashMapUnixKey], ['value' => ''])->value,

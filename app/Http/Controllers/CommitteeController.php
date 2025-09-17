@@ -130,6 +130,7 @@ class CommitteeController extends Controller
                     ->toMediaCollection();
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         } else {

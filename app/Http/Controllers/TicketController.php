@@ -28,7 +28,14 @@ class TicketController extends Controller
     /** @return View */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
-        return view('tickets.index', ['tickets' => Ticket::query()->orderBy('id', 'desc')->with('event', 'product', 'purchases')->paginate(20)]);
+        $tickets = Ticket::query()
+            ->orderBy('id', 'desc')
+            ->with('event')
+            ->with('product')
+            ->with('purchases')
+            ->paginate(20);
+
+        return view('tickets.index', ['tickets' => $tickets]);
     }
 
     /** @return View */

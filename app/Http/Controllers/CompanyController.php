@@ -172,7 +172,6 @@ class CompanyController extends Controller
 
         $company->save();
 
-
         if ($request->has('image')) {
             try {
                 $company->addMediaFromRequest('image')

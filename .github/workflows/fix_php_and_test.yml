@@ -66,7 +66,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pint-
 
       - name: Run pint
-        run: ./vendor/bin/pint --diff=master --parallel
+        run: ./vendor/bin/pint --parallel
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
