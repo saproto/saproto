@@ -1,3 +1,10 @@
+@php
+    use App\Models\PlayedVideo;
+    /**
+     * @var PlayedVideo $video
+     */
+@endphp
+
 <div class="card leftborder leftborder-info mb-3">
     <div class="card-body">
         <p class="card-text ellipsis">

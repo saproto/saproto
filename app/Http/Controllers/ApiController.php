@@ -51,6 +51,7 @@ class ApiController extends Controller
 
         $user = User::query()->findOrFail($request->user_id);
         $youtubeId = $request->video_id;
+        $duration_played = $request->duration_played;
         $earlierSpotifyMatch = PlayedVideo::query()->where('video_id', $youtubeId)->whereNotNull('spotify_id')->orderBy('created_at', 'desc')->first();
         $title = urldecode($request->video_title);
         PlayedVideo::query()->create([
@@ -59,6 +60,7 @@ class ApiController extends Controller
             'user_id' => $user->keep_protube_history ? $user->id : null,
             'spotify_id' => $earlierSpotifyMatch?->spotify_id,
             'spotify_name' => $earlierSpotifyMatch?->spotify_name,
+            'duration_played' => $duration_played,
         ]);
         PlayedVideo::query()->where('video_id', $youtubeId)->update(['video_title' => $title]);
     }
