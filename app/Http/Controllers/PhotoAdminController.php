@@ -55,9 +55,8 @@ class PhotoAdminController extends Controller
     public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $album = PhotoAlbum::query()
-            ->with([
-                'items',
-                'event'])
+            ->with('items')
+            ->with('event')
             ->findOrFail($id);
 
         $fileSizeLimit = ini_get('post_max_size');

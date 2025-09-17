@@ -63,7 +63,7 @@ class OmNomController extends Controller
     /** @return View */
     public function miniSite(): \Illuminate\Contracts\View\View|Factory
     {
-        $products = Cache::remember('omnomcom.minisite', 60, fn()=>Product::query()->where('is_visible', true)
+        $products = Cache::remember('omnomcom.minisite', 60, fn () => Product::query()->where('is_visible', true)
             ->where(function ($query) {
                 $query
                     ->where('is_visible_when_no_stock', true)
@@ -77,8 +77,9 @@ class OmNomController extends Controller
                     )
                 );
             })
-            ->with(['media', 'categories'])
-            ->get()) ;
+            ->with('media')
+            ->with('categories')
+            ->get());
 
         return view('omnomcom.minisite', ['products' => $products]);
     }

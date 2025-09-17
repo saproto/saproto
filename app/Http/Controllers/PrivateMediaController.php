@@ -9,17 +9,18 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PrivateMediaController extends Controller
 {
-    public function show(int $mediaId, string $conversion = null): StreamedResponse
+    public function show(int $mediaId, ?string $conversion = null): StreamedResponse
     {
         $media = Media::query()->findOrFail($mediaId);
 
-        $conversionPath =  empty($conversion) ? null : $media->getPathRelativeToRoot($conversion);
-        if (!empty($conversionPath) && $media->conversions_disk==='public' || $media->disk === 'public') {
+        $conversionPath = empty($conversion) ? null : $media->getPathRelativeToRoot($conversion);
+        if (! empty($conversionPath) && $media->conversions_disk === 'public' || $media->disk === 'public') {
             abort(403, 'This is not a private media file.');
         }
 
         if ($conversionPath && Storage::disk($media->conversions_disk)->exists($conversionPath)) {
             $path = $media->getPathRelativeToRoot($conversion);
+
             return Response::stream(function () use ($media, $path) {
                 echo Storage::disk($media->conversions_disk)->get($path);
             }, 200, [
@@ -29,7 +30,6 @@ class PrivateMediaController extends Controller
                 'Pragma' => 'public',
             ]);
         }
-
 
         $path = $media->getPathRelativeToRoot();
         if (! Storage::disk($media->disk)->exists($path)) {

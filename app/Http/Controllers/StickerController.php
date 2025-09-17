@@ -23,7 +23,10 @@ class StickerController extends Controller
     {
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
-            ->with(['user', 'image'])->get()->map(fn ($item): array => [
+            ->with('user')
+            ->with('image')
+            ->get()
+            ->map(fn ($item): array => [
                 'id' => $item->id,
                 'lat' => $item->lat,
                 'lng' => $item->lng,
@@ -40,7 +43,9 @@ class StickerController extends Controller
     {
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
-            ->with(['user'])->get()->map(fn ($item): array => [
+            ->with('user')
+            ->get()
+            ->map(fn ($item): array => [
                 'id' => $item->id,
                 'lat' => $item->lat,
                 'lng' => $item->lng,
@@ -115,7 +120,12 @@ class StickerController extends Controller
 
     public function admin(): View
     {
-        $reported = Sticker::query()->with(['user', 'image', 'reporter'])->whereNotNull('reporter_id')->get();
+        $reported = Sticker::query()
+            ->with('user')
+            ->with('image')
+            ->with('reporter')
+            ->whereNotNull('reporter_id')
+            ->get();
 
         return view('stickers.admin', ['reported' => $reported]);
     }

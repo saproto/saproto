@@ -167,7 +167,12 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (ActivityParticipation::query()->with(['activity.event', 'help.committee'])->where('user_id', $user->id)->get() as $activity_participation) {
+        $activityParticipations = ActivityParticipation::query()
+            ->with('activity.event')
+            ->with('help.committee')
+            ->where('user_id', $user->id)
+            ->get();
+        foreach ($activityParticipations as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
                 'date' => $activity_participation->activity?->event ? Carbon::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
@@ -181,7 +186,14 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (OrderLine::query()->with(['molliePayment', 'withdrawal', 'product'])->where('user_id', $user->id)->get() as $orderline) {
+        $orderlines = OrderLine::query()
+            ->with('molliePayment')
+            ->with('withdrawal')
+            ->with('product')
+            ->where('user_id', $user->id)
+            ->get();
+
+        foreach ($orderlines as $orderline) {
             $payment_method = null;
             if ($orderline->payed_with_cash) {
                 $payment_method = 'cash_cashier';

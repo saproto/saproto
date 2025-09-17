@@ -34,9 +34,10 @@ class ParticipationController extends Controller
         if ($request->has('helping_committee_id')) {
             $helpingCommittee = HelpingCommittee::query()
                 ->withCount('users')
-                ->with([
-                    'committee.users',
-                ])->findOrFail($request->input('helping_committee_id'));
+                ->with(
+                    'committee.users'
+                )
+                ->findOrFail($request->input('helping_committee_id'));
             abort_unless($event->activity->getHelperParticipation(Auth::user(), $helpingCommittee) === null, 403, 'You are already helping at '.$event->title.'.');
 
             abort_unless($helpingCommittee->committee->isMember(Auth::user()), 403, 'You are not a member of the '.$helpingCommittee->committee.' and thus cannot help on behalf of it.');
@@ -169,7 +170,8 @@ class ParticipationController extends Controller
     {
         $backup_participation = ActivityParticipation::query()->where('activity_id', $activity->id)
             ->whereNull('committees_activities_id')->where('backup', true)
-            ->with('user', 'activity.event')
+            ->with('activity.event')
+            ->with('user')
             ->first();
 
         if ($backup_participation == null) {

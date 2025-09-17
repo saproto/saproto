@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Override;
@@ -22,8 +21,6 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         Model::preventLazyLoading(! app()->isProduction());
-
-        Vite::prefetch(concurrency: 3);
 
         view()->composer('*', function ($view) {
             view()->share('viewName', Str::replace('.', '-', (string) $view->getName()));
