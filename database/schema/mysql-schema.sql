@@ -1082,6 +1082,8 @@ CREATE TABLE `playedvideos` (
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `video_id` varchar(255) NOT NULL,
   `video_title` varchar(255) NOT NULL,
+  `duration_played` double DEFAULT NULL COMMENT 'Duration played in seconds',
+  `duration` double DEFAULT NULL COMMENT 'Duration of the video in seconds',
   `spotify_id` varchar(50) DEFAULT NULL,
   `spotify_name` mediumtext DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -1812,15 +1814,16 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_09_181322_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_08_26_192009_remove_image_id_from_products',172);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_04_161326_add_last_seen_at_to_users',173);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_135249_remove_image_id_from_committees',174);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_152443_remove_image_id_from_narrowcasting',175);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',176);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',177);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',178);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remove_soft_deletes_from_pages',179);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_155553_remove_image_id_from_narrowcasting',175);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_05_162513_remove_image_id_from_wallstreet_drink_events',176);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_170441_remove_image_id_from_companies',177);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_06_181647_remove_soft_deletes_from_pages',178);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_08_161957_remove_image_id_from_headerimages',179);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_09_102812_add_extra_indexes_to_orderlines',180);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_004900_remove_pages_files',181);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_120553_remove_featured_image_from_pages',182);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_10_171228_add_created_at_index_to_playedvideos',183);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_123717_add_published_private_date_taken_index_to_photo_albums',183);
-INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_131536_add_index_to_spotify_id_on_playedvideos',183);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_123717_add_published_private_date_taken_index_to_photo_albums',184);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_131536_add_index_to_spotify_id_on_playedvideos',185);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_111109_add_duration_played_to_playedvideos',186);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_114212_add_duration_to_playedvideos',187);

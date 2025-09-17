@@ -52,6 +52,7 @@ class ApiController extends Controller
         $user = User::query()->findOrFail($request->user_id);
         $youtubeId = $request->video_id;
         $duration_played = $request->duration_played;
+        $duration = $request->duration;
         $earlierSpotifyMatch = PlayedVideo::query()->where('video_id', $youtubeId)->whereNotNull('spotify_id')->orderBy('created_at', 'desc')->first();
         $title = urldecode($request->video_title);
         PlayedVideo::query()->create([
@@ -61,6 +62,7 @@ class ApiController extends Controller
             'spotify_id' => $earlierSpotifyMatch?->spotify_id,
             'spotify_name' => $earlierSpotifyMatch?->spotify_name,
             'duration_played' => $duration_played,
+            'duration' => $duration,
         ]);
         PlayedVideo::query()->where('video_id', $youtubeId)->update(['video_title' => $title]);
     }

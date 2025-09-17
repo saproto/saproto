@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int|null $user_id
  * @property float|null $duration_played
+ * @property float|null $duration
  * @property string $video_id
  * @property string $video_title
  * @property string|null $spotify_id
