@@ -119,10 +119,6 @@
                                 />
                             </div>
 
-                            <!-- <p>
-                                <span id="bic-message">Enter your IBAN first.</span>
-                             -->
-
                             <hr />
 
                             <p>
@@ -156,10 +152,9 @@
 
                     <div class="card-footer">
                         <button
-                            type="button"
+                            type="submit"
                             id="iban-submit"
                             class="btn btn-success float-end"
-                            disabled
                         >
                             I have read the authorization statement and agree
                             with it.
