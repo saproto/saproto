@@ -83,8 +83,7 @@ class ParticipationController extends Controller
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'));
-
-            abort_unless($event->activity->getHelperParticipation($user, $helping) === null, 403, $user->name.' is already helping at '.$event->title.'.');
+            abort_unless($event->activity->getHelperParticipation($user, $helping) === null, 403, $user->name.' is already helping at '.$event->title.' for the '.$helping->committee->name.'.');
             abort_unless($helping->committee->isMember($user), 403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
 
             $data['committees_activities_id'] = $helping->id;

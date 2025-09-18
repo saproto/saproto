@@ -191,7 +191,7 @@ class Activity extends Validatable
 
     public function getHelperParticipation(User $user, ?HelpingCommittee $h = null): ?ActivityParticipation
     {
-        return $this->participation->whereNotNull('committees_activities_id')
+        return $this->participation()->whereNotNull('committees_activities_id')
             ->where('user_id', $user->id)
             ->when($h instanceof HelpingCommittee, function ($q) use ($h) {
                 $q->where('committees_activities_id', $h->id);
