@@ -66,9 +66,6 @@ class StorageEntry extends Model
             Sticker::query()->where('file_id', $this->id)->count() == 0;
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function createFromFile(UploadedFile $file, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
@@ -79,7 +76,11 @@ class StorageEntry extends Model
             $this->filename = $customPath.$this->hash;
         }
 
-        Storage::disk('local')->put($this->filename, File::get($file));
+        try {
+            Storage::disk('local')->put($this->filename, $file->get());
+        } catch (FileNotFoundException $e) {
+            throw new \RuntimeException('Could not store file: '.$e->getMessage());
+        }
 
         $this->mime = $file->getClientMimeType();
         $this->original_filename = $file->getClientOriginalName();

@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Member Model.
@@ -59,12 +61,14 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Member extends Model
+class Member extends Model implements HasMedia
 {
     /** @use HasFactory<MemberFactory>*/
     use HasFactory;
 
     use SoftDeletes;
+
+    use InteractsWithMedia;
 
     protected $table = 'members';
 
@@ -79,6 +83,14 @@ class Member extends Model
             'membership_type' => MembershipTypeEnum::class,
             'is_primary_at_another_association' => 'boolean',
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('omnnomcom_sound')
+            ->useDisk('public')
+            ->acceptsMimeTypes(['audio/mpeg'])
+            ->singleFile();
     }
 
     /**
