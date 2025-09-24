@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Controllers\FileController;
 use Database\Factories\StorageEntryFactory;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,7 +76,11 @@ class StorageEntry extends Model
             $this->filename = $customPath.$this->hash;
         }
 
-        Storage::disk('local')->put($this->filename, $file);
+        try {
+            Storage::disk('local')->put($this->filename, $file->get());
+        } catch (FileNotFoundException $e) {
+            throw new \RuntimeException('Could not store file: '.$e->getMessage());
+        }
 
         $this->mime = $file->getClientMimeType();
         $this->original_filename = $file->getClientOriginalName();

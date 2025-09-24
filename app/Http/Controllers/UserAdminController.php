@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use PDF;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\Permission\Models\Permission;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 
@@ -326,19 +328,16 @@ class UserAdminController extends Controller
 
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
+
         $user = User::query()->findOrFail($id);
-        if ($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound()->delete();
-            $user->member->omnomcom_sound_id = null;
-            $user->member->save();
+        try {
+            $user->member->addMediaFromRequest('sound')->toMediaCollection('omnomcom_sound');
+            Session::flash('flash_message', 'Sound uploaded!');
+        } catch (FileDoesNotExist $e) {
+            Session::flash('flash_message', 'The file upload failed!');
+        } catch (FileIsTooBig $e) {
+            Session::flash('flash_message', 'The file is too big!');
         }
-
-        $file = new StorageEntry;
-        $file->createFromFile($request->file('sound'));
-
-        $user->member->customOmnomcomSound()->associate($file);
-        $user->member->save();
-        Session::flash('flash_message', 'Sound uploaded!');
 
         return Redirect::back();
     }
@@ -347,11 +346,7 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        if ($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound()->delete();
-            $user->member->omnomcom_sound_id = null;
-            $user->member->save();
-        }
+        $user->member->clearMediaCollection('omnomcom_sound');
 
         Session::flash('flash_message', 'Sound deleted');
 
