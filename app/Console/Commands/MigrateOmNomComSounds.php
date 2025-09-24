@@ -27,19 +27,19 @@ class MigrateOmNomComSounds extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
-        $membersToMigrate = Member::whereNotNull('omnomcom_sound_id')->get();
-        $this->info('Found ' . count($membersToMigrate) . ' members to migrate.');
+        $membersToMigrate = Member::query()->whereNotNull('omnomcom_sound_id')->get();
+        $this->info('Found '.count($membersToMigrate).' members to migrate.');
         foreach ($membersToMigrate as $member) {
-            $this->info('Migrating member ID ' . $member->id);
+            $this->info('Migrating member ID '.$member->id);
             $file = Storage::disk('local')->get($member->customOmnomcomSound->filename);
             try {
                 $member->addMediaFromString($file)->toMediaCollection('omnomcom_sound');
                 $member->customOmnomcomSound->delete();
                 $member->omnomcom_sound_id = null;
                 $member->save();
-                $this->info('Member ID ' . $member->id . ' migrated.');
+                $this->info('Member ID '.$member->id.' migrated.');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 $this->error($e->getMessage());
             }

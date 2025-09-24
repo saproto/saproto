@@ -9,7 +9,6 @@ use App\Mail\MembershipEndSet;
 use App\Mail\MembershipStarted;
 use App\Models\HashMapItem;
 use App\Models\Member;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -333,9 +332,9 @@ class UserAdminController extends Controller
         try {
             $user->member->addMediaFromRequest('sound')->toMediaCollection('omnomcom_sound');
             Session::flash('flash_message', 'Sound uploaded!');
-        } catch (FileDoesNotExist $e) {
+        } catch (FileDoesNotExist) {
             Session::flash('flash_message', 'The file upload failed!');
-        } catch (FileIsTooBig $e) {
+        } catch (FileIsTooBig) {
             Session::flash('flash_message', 'The file is too big!');
         }
 

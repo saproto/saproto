@@ -66,9 +66,8 @@ class Member extends Model implements HasMedia
     /** @use HasFactory<MemberFactory>*/
     use HasFactory;
 
-    use SoftDeletes;
-
     use InteractsWithMedia;
+    use SoftDeletes;
 
     protected $table = 'members';
 

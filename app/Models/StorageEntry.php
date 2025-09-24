@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Override;
+use RuntimeException;
 
 /**
  * Storage Entry Model.
@@ -78,8 +79,8 @@ class StorageEntry extends Model
 
         try {
             Storage::disk('local')->put($this->filename, $file->get());
-        } catch (FileNotFoundException $e) {
-            throw new \RuntimeException('Could not store file: '.$e->getMessage());
+        } catch (FileNotFoundException $fileNotFoundException) {
+            throw new RuntimeException('Could not store file: '.$fileNotFoundException->getMessage(), $fileNotFoundException->getCode(), $fileNotFoundException);
         }
 
         $this->mime = $file->getClientMimeType();
