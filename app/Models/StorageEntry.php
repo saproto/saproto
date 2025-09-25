@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Controllers\FileController;
 use Database\Factories\StorageEntryFactory;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,9 @@ class StorageEntry extends Model
             Sticker::query()->where('file_id', $this->id)->count() == 0;
     }
 
+    /**
+     * @throws FileNotFoundException
+     */
     public function createFromFile(UploadedFile $file, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
@@ -75,7 +79,7 @@ class StorageEntry extends Model
             $this->filename = $customPath.$this->hash;
         }
 
-        Storage::disk('local')->put($this->filename, $file);
+        Storage::disk('local')->put($this->filename, File::get($file));
 
         $this->mime = $file->getClientMimeType();
         $this->original_filename = $file->getClientOriginalName();
