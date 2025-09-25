@@ -117,7 +117,7 @@ class UserDashboardController extends Controller
                 'ip' => $request->ip(),
             ];
 
-            Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
+            Mail::to($to)->queue(new UserMailChange($user, $changer, $email)->onQueue('high'));
         }
 
         $user->email = $new_email;

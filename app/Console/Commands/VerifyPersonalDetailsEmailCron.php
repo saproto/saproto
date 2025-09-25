@@ -44,7 +44,7 @@ class VerifyPersonalDetailsEmailCron extends Command
             ->get();
 
         foreach ($users as $user) {
-            Mail::to($user)->queue((new VerifyPersonalDetails($user))->onQueue('low'));
+            Mail::to($user)->queue(new VerifyPersonalDetails($user)->onQueue('low'));
         }
 
         $this->info(sprintf('Sent reminder e-mail to %d members.', $users->count()));

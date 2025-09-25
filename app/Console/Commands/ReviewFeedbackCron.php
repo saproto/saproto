@@ -52,7 +52,7 @@ class ReviewFeedbackCron extends Command
 
             if (count($unreviewed) > 0) {
                 $this->info("Sending a review reminder mail for $category->title");
-                Mail::queue((new ReviewFeedbackMail($category, $unreviewed))->onQueue('low'));
+                Mail::queue(new ReviewFeedbackMail($category, $unreviewed)->onQueue('low'));
             } else {
                 $this->info('No new reviews which need to be checked today!');
             }

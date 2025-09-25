@@ -127,7 +127,7 @@ class FeeCron extends Command
 
                 $product->buyForUser($user, 1, null, null, null, null, 'membership_fee_cron');
 
-                Mail::to($user)->queue((new FeeEmail($user, $fee_type, $product->price, $email_remittance_reason))->onQueue('high'));
+                Mail::to($user)->queue(new FeeEmail($user, $fee_type, $product->price, $email_remittance_reason)->onQueue('high'));
             }
 
             $this->info('Charged '.$charged->count.' of '.Member::query()->whereNot('membership_type', MembershipTypeEnum::PENDING)->count().' members their fee.');
@@ -135,7 +135,7 @@ class FeeCron extends Command
 
         /** @phpstan-ignore-next-line */
         if ($charged->count > 0) {
-            Mail::queue((new FeeEmailForBoard($charged))->onQueue('high'));
+            Mail::queue(new FeeEmailForBoard($charged)->onQueue('high'));
         }
 
         return 0;
