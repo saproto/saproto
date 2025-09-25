@@ -29,11 +29,15 @@ class MigrateOmNomComSounds extends Command
      */
     public function handle(): void
     {
-        $membersToMigrate = Member::query()->whereNotNull('omnomcom_sound_id')->get();
+        $membersToMigrate = Member::query()->whereNotNull('omnomcom_sound_id')->with('customOmnomcomSound')->get();
         $this->info('Found '.count($membersToMigrate).' members to migrate.');
         foreach ($membersToMigrate as $member) {
             $this->info('Migrating member ID '.$member->id);
             $file = Storage::disk('local')->get($member->customOmnomcomSound->filename);
+            if(!$file) {
+                $this->error('Could not read file for member ID '.$member->id);
+                continue;
+            }
             try {
                 $member->addMediaFromString($file)->toMediaCollection('omnomcom_sound');
                 $member->customOmnomcomSound->delete();
