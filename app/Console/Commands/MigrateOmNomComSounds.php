@@ -34,10 +34,12 @@ class MigrateOmNomComSounds extends Command
         foreach ($membersToMigrate as $member) {
             $this->info('Migrating member ID '.$member->id);
             $file = Storage::disk('local')->get($member->customOmnomcomSound->filename);
-            if(!$file) {
+            if (! $file) {
                 $this->error('Could not read file for member ID '.$member->id);
+
                 continue;
             }
+
             try {
                 $member->addMediaFromString($file)->toMediaCollection('omnomcom_sound');
                 $member->customOmnomcomSound->delete();
