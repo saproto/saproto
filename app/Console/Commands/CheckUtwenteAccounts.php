@@ -67,7 +67,7 @@ class CheckUtwenteAccounts extends Command
             }
         }
 
-        Mail::queue((new UtwenteCleanup($unlinked))->onQueue('high'));
+        Mail::queue(new UtwenteCleanup($unlinked)->onQueue('high'));
 
         $this->info('Done');
     }
