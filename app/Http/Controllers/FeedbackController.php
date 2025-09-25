@@ -158,7 +158,7 @@ class FeedbackController extends Controller
 
         if ($feedback->reply == null && $reply != null) {
             $user = User::query()->findOrFail($feedback->user_id);
-            Mail::to($user)->queue(new FeedbackReplyEmail($feedback, $user, $reply, $accepted)->onQueue('low'));
+            Mail::to($user)->queue((new FeedbackReplyEmail($feedback, $user, $reply, $accepted))->onQueue('low'));
         }
 
         $feedback->reply = $reply;

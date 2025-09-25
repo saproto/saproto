@@ -63,7 +63,7 @@ class NewsletterCron extends Command
         $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 
         foreach ($newsletterlist->users as $user) {
-            Mail::to($user)->queue(new NewsletterMail($user, $newsletterlist, $newsitem->content, $events, $image_url)->onQueue('low'));
+            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $newsitem->content, $events, $image_url))->onQueue('low'));
         }
 
         $this->info('Done!');

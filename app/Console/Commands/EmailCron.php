@@ -66,7 +66,7 @@ class EmailCron extends Command
 
             foreach ($recipients as $recipient) {
                 Mail::to($recipient)
-                    ->queue(new ManualEmail(
+                    ->queue((new ManualEmail(
                         $email->sender_address.'@'.Config::string('proto.emaildomain'),
                         $email->sender_name,
                         $email->subject,
@@ -76,7 +76,7 @@ class EmailCron extends Command
                         $recipient->id,
                         $email->events,
                         $email->id
-
+                    )
                     )->onQueue('medium'));
             }
 

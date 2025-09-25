@@ -100,7 +100,7 @@ class ParticipationController extends Controller
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
-        Mail::to($participation->user)->queue(new ActivitySubscribedTo($participation, $helping->committee->name ?? null)->onQueue('high'));
+        Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $helping->committee->name ?? null))->onQueue('high'));
 
         return Redirect::back();
     }
@@ -130,7 +130,7 @@ class ParticipationController extends Controller
         abort_unless($participation->backup || $participation->activity->canUnsubscribe() || Auth::user()->can('board'), 403, 'You cannot unsubscribe for this event at this time.');
 
         if ($participation->user->id !== Auth::id()) {
-            Mail::to($participation->user)->queue(new ActivityUnsubscribedFrom($participation)->onQueue('high'));
+            Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
         }
 
         $participation->delete();
@@ -181,6 +181,6 @@ class ParticipationController extends Controller
 
         $backup_participation->activity->event->updateUniqueUsersCount();
 
-        Mail::to($backup_participation->user)->queue(new ActivityMovedFromBackup($backup_participation)->onQueue('high'));
+        Mail::to($backup_participation->user)->queue((new ActivityMovedFromBackup($backup_participation))->onQueue('high'));
     }
 }

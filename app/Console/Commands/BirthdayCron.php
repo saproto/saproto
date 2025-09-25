@@ -62,10 +62,10 @@ class BirthdayCron extends Command
                     'age' => $user->age(),
                 ];
 
-                Mail::to($user)->queue(new BirthdayEmail($user)->onQueue('medium'));
+                Mail::to($user)->queue((new BirthdayEmail($user))->onQueue('medium'));
             }
 
-            Mail::to('board@'.Config::string('proto.emaildomain'))->queue(new BirthdayEmailForBoard($adminoverview)->onQueue('low'));
+            Mail::to('board@'.Config::string('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
 
             $this->info('Done!');
         } else {

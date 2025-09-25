@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
-use RoundingMode;
 
 /**
  * DinnerformOrderline Model.
@@ -75,7 +74,7 @@ class DinnerformOrderline extends Model
     {
         return Attribute::make(get: function (): float|int {
             $with_regular_discount = $this->price * $this->dinnerform->regular_discount;
-            $price = round($with_regular_discount, 2, RoundingMode::HalfTowardsZero);
+            $price = round($with_regular_discount, 2, PHP_ROUND_HALF_DOWN);
             if ($this->helper && $this->dinnerform->helper_discount) {
                 $with_helper_discount = $price - $this->dinnerform->helper_discount;
 

@@ -42,7 +42,7 @@ class ReviewStickersCron extends Command
 
         if ($reported->count() > 0) {
             $this->info('Sending an email to remind the board to review the stickers reported.');
-            Mail::queue(new ReviewStickersMail($reported)->onQueue('low'));
+            Mail::queue((new ReviewStickersMail($reported))->onQueue('low'));
         } else {
             $this->info('No new stickers reported which need to be checked today!');
         }

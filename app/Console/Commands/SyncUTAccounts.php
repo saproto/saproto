@@ -67,7 +67,7 @@ class SyncUTAccounts extends Command
         UtAccount::query()->where('found', false)->delete();
 
         if ($removed->count() > 0) {
-            Mail::queue(new UtwenteCleanup($removed)->onQueue('high'));
+            Mail::queue((new UtwenteCleanup($removed))->onQueue('high'));
         }
     }
 
