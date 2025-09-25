@@ -95,12 +95,12 @@ class StockMutationController extends Controller
         $callback = static function () use ($mutations) {
             $f = fopen('php://output', 'w');
             $csv_header = ['Product ID', 'Product Name', 'Change', 'Old stock', 'Updated stock', 'Creation time'];
-            fputcsv($f, $csv_header);
+            fputcsv($f, $csv_header, escape: '\\');
             foreach ($mutations as $row) {
                 $product = Product::query()->find($row['product_id']);
 
                 if (! is_null($product)) {
-                    fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']]);
+                    fputcsv($f, [$row['product_id'], $product->name, $row['after'] - $row['before'], $row['before'], $row['after'], $row['created_at']], escape: '\\');
                 }
             }
 

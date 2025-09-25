@@ -636,7 +636,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             'edu_username' => $utwenteEmail,
         ]);
 
-        Mail::to($user)->queue((new RegistrationConfirmation($user))->onQueue('high'));
+        Mail::to($user)->queue(new RegistrationConfirmation($user)->onQueue('high'));
 
         $user->sendPasswordResetEmail();
 
@@ -657,7 +657,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             'valid_to' => Carbon::now()->addHour()->timestamp,
         ]);
 
-        Mail::to($this)->queue((new PasswordResetEmail($this, $reset->token))->onQueue('high'));
+        Mail::to($this)->queue(new PasswordResetEmail($this, $reset->token)->onQueue('high'));
     }
 
     /**
@@ -665,7 +665,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function sendForgotUsernameEmail(): void
     {
-        Mail::to($this)->queue((new UsernameReminderEmail($this))->onQueue('high'));
+        Mail::to($this)->queue(new UsernameReminderEmail($this)->onQueue('high'));
     }
 
     protected function casts(): array

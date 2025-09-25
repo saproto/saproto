@@ -262,7 +262,7 @@ class ProductController extends Controller
         }
 
         Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
+        Mail::queue(new ProductBulkUpdateNotification(Auth::user(), $errors.$log)->onQueue('low'));
 
         return Redirect::back();
     }
@@ -319,7 +319,7 @@ class ProductController extends Controller
         $callback = static function () use ($data) {
             $f = fopen('php://output', 'w');
             foreach ($data as $row) {
-                fputcsv($f, $row);
+                fputcsv($f, $row, escape: '\\');
             }
 
             fclose($f);
