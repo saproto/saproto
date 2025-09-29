@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use App\Enums\StickerEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -42,9 +48,37 @@ use Illuminate\Support\Carbon;
  *
  * @mixin \Eloquent
  */
-class Sticker extends Model
+class Sticker extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = ['lat', 'lng', 'city', 'country', 'country_code', 'reporter_id', 'report_reason', 'user_id', 'created_at'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(StickerEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(StickerEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 500)
+            ->format('webp');
+    }
+
+    public function getImageUrl(StickerEnum $stickerEnum = StickerEnum::LARGE): string
+    {
+        return $this->getFirstMediaUrl('default', $stickerEnum->value);
+    }
 
     /**
      * @return BelongsTo<User, $this>

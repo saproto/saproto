@@ -200,7 +200,6 @@
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
-                                        'checked' => $cur_category->can_reply ?? true,
                                         'label' => 'Today',
                                     ]
                                 )
@@ -247,7 +246,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
