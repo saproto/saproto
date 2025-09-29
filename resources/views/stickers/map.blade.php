@@ -200,6 +200,7 @@
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
+                                        'checked'=>true,
                                         'label' => 'Today',
                                     ]
                                 )

@@ -24,7 +24,7 @@ class StickerController extends Controller
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
             ->with('user')
-            ->with('image')
+            ->with('media')
             ->get()
             ->map(fn ($item): array => [
                 'id' => $item->id,
@@ -119,7 +119,6 @@ class StickerController extends Controller
         StickerRemovedEvent::dispatch($sticker);
 
         $sticker->delete();
-        $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
 
         return Redirect::back();
@@ -129,7 +128,7 @@ class StickerController extends Controller
     {
         $reported = Sticker::query()
             ->with('user')
-            ->with('image')
+            ->with('media')
             ->with('reporter')
             ->whereNotNull('reporter_id')
             ->get();
