@@ -151,12 +151,12 @@
 </div>
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        if ({{ isset($controls) }}) {
+    @if ($controls)
+        <script type="text/javascript" nonce="{{ csp_nonce() }}">
             document
                 .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
                 .forEach((element) => {
-                    element.addEventListener('click', (event) => {
+                    element.addEventListener('click', () => {
                         const enabled = document
                             .getElementById(
                                 'feedback__{{ $feedback->id }}__collapse'
@@ -175,6 +175,6 @@
                         }
                     })
                 })
-        }
-    </script>
+        </script>
+    @endif
 @endpush
