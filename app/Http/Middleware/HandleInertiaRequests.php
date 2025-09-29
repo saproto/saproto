@@ -4,8 +4,12 @@ namespace App\Http\Middleware;
 
 use App\Data\AuthUserData;
 use App\Data\MenuItemData;
+use App\Data\PhotoAlbumData;
 use App\Models\MenuItem;
+use App\Models\PhotoAlbum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Override;
 
