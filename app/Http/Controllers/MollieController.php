@@ -243,7 +243,7 @@ class MollieController extends Controller
      *
      * @throws ApiException
      */
-    public static function createPaymentForOrderlines(array $orderlines, object|string $selected_method)
+    public static function createPaymentForOrderlines(array $orderlines, object|string|null $selected_method)
     {
         $total = OrderLine::query()->whereIn('id', $orderlines)->sum('total_price');
 
