@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\StorageEntry;
 use Exception;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
 
 class FileController extends Controller
 {
@@ -30,46 +27,6 @@ class FileController extends Controller
         $response->header('Content-Disposition', sprintf('attachment; filename="%s"', $entry->original_filename));
 
         return $response;
-    }
-
-    public static function makeImage(StorageEntry $entry, ?int $w = null, ?int $h = null): string
-    {
-        $cacheKey = 'image:'.$entry->hash.'; w:'.$w.'; h:'.$h;
-        if (Storage::disk('local')->missing($entry->filename)) {
-            abort(404, 'File not found');
-        }
-
-        return Cache::remember($cacheKey, 31536000, function () use ($entry, $w, $h): string {
-            $image = Image::read(Storage::disk('local')->get($entry->filename));
-            if (empty($w) || empty($h)) {
-                return $image->scaleDown($w, $h)->toWebp()->toString();
-            }
-
-            return $image->coverDown($w, $h)->toWebp()->toString();
-        });
-    }
-
-    /**
-     * @return Response
-     */
-    public function getImage(int $id, string $hash, Request $request): ResponseFactory|Response
-    {
-        $validated = $request->validate([
-            'w' => 'nullable|integer',
-            'h' => 'nullable|integer',
-        ]);
-
-        $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
-
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
-
-        return Response(static::makeImage($entry, $validated['w'] ?? null, $validated['h'] ?? null), 200, [
-            'Content-Type' => 'image/webp',
-            'Cache-Control' => 'max-age=31536000, public',
-            'Content-Disposition', sprintf('filename="%s"', $entry->original_filename),
-        ]);
     }
 
     public static function requestPrint(string $printer, string $url, int $copies = 1): string

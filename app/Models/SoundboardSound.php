@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * UNUSED, when implemented in the new protube we want to preserve this data so for now left unused*/
@@ -27,13 +29,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin \Eloquent
  */
-class SoundboardSound extends Model
+class SoundboardSound extends Model implements HasMedia
 {
     protected $table = 'soundboard_sounds';
 
     protected $guarded = ['id'];
 
     public $timestamps = false;
+
+    use InteractsWithMedia;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('sound')
+            ->useDisk('local')
+            ->acceptsMimeTypes(['audio/mpeg'])
+            ->singleFile();
+    }
 
     /**
      * @return BelongsTo<StorageEntry, $this> */

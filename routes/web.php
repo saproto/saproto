@@ -931,11 +931,6 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('{id}/{conversion?}', 'show')->name('show');
     });
 
-    /* --- Fetching images: Public --- */
-    Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
-        Route::get('{id}/{hash}/{name?}', 'getImage')->name('get');
-    });
-
     /* --- Fetching files: Public   --- */
     Route::controller(FileController::class)->prefix('file')->name('file::')->group(function () {
         Route::get('{id}/{hash}/{name?}', 'get')->name('get');

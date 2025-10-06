@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\FileController;
 use Database\Factories\StorageEntryFactory;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
@@ -115,21 +114,6 @@ class StorageEntry extends Model
         }
 
         return $url;
-    }
-
-    public function generateImagePath(?int $w = null, ?int $h = null): string
-    {
-        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
-        if (Config::get('app-proto.assets-domain') != null) {
-            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
-        }
-
-        return $url;
-    }
-
-    public function getBase64(?int $w = null, ?int $h = null): string
-    {
-        return base64_encode(FileController::makeImage($this, $w, $h));
     }
 
     /**
