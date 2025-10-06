@@ -53,6 +53,8 @@
                                 type="file"
                                 class="form-control"
                                 name="sound"
+                                accept="audio/mpeg"
+                                required
                             />
                         </div>
                         <button type="submit" class="btn btn-outline-info">
