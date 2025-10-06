@@ -86,8 +86,8 @@ class Newsitem extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion(NewsEnum::LARGE->value)
-            ->fit(Fit::Crop, 1500, 350)
             ->nonQueued()
+            ->fit(Fit::Crop, 1500, 350)
             ->format('webp');
 
         $this->addMediaConversion(NewsEnum::CARD->value)
