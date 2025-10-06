@@ -2,7 +2,7 @@
     <div class="card mb-3">
         <div class="card-header bg-dark text-white">Attachments</div>
 
-        @if ($email->attachments->count() > 0)
+        @if ($email->hasMedia())
             <table class="table">
                 <thead>
                     <tr>
@@ -12,15 +12,15 @@
                     </tr>
                 </thead>
 
-                @foreach ($email->attachments as $attachment)
+                @foreach ($email->getMedia() as $media)
                     <tr>
                         <td>
-                            <a href="{{ $attachment->generatePath() }}">
-                                {{ $attachment->original_filename }}
+                            <a href="{{ $media->getUrl() }}">
+                                {{ $media->file_name }}
                             </a>
                         </td>
                         <td>
-                            <i>{{ $attachment->getFileSize() }}</i>
+                            <i>{{ $media->human_readable_size }}</i>
                         </td>
                         <td>
                             @include(
@@ -28,7 +28,7 @@
                                 [
                                     'action' => route('email::attachment::delete', [
                                         'id' => $email->id,
-                                        'file_id' => $attachment->id,
+                                        'file_id' => $media->id,
                                     ]),
                                     'text' => '<i class="fas fa-trash text-danger"></i>',
                                     'title' => 'Confirm Delete',

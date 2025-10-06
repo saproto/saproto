@@ -3,11 +3,11 @@
 namespace App\Mail;
 
 use App\Models\Event;
-use App\Models\StorageEntry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ManualEmail extends Mailable
 {
@@ -18,7 +18,7 @@ class ManualEmail extends Mailable
      * Create a new message instance.
      *
      * @param  Collection<int, Event>  $events
-     * @param  Collection<int, StorageEntry>  $submitted_attachments
+     * @param  Collection<int, Media>  $submitted_attachments
      * @return void
      */
     public function __construct(public string $sender_address, public string $sender_name, public string $email_subject, public string $body, public Collection $submitted_attachments, public string $destination, public int $user_id, public Collection $events, public int $email_id) {}
@@ -34,11 +34,7 @@ class ManualEmail extends Mailable
             ->from($this->sender_address, $this->sender_name)
             ->subject($this->email_subject);
         foreach ($this->submitted_attachments as $attachment) {
-            $options = [
-                'as' => $attachment->original_filename,
-                'mime' => $attachment->mime,
-            ];
-            $mail->attach($attachment->generateLocalPath(), $options);
+            $mail->attach($attachment);
         }
 
         return $mail;

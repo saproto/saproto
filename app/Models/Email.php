@@ -12,7 +12,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Email Model.
@@ -69,14 +72,22 @@ use Illuminate\Support\Facades\DB;
  *
  * @mixin \Eloquent
  */
-class Email extends Model
+class Email extends Model implements HasMedia
 {
     /** @use HasFactory<EmailFactory>*/
     use HasFactory;
 
+    use InteractsWithMedia;
+
     protected $table = 'emails';
 
     protected $guarded = ['id'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack');
+    }
 
     /**
      * @return BelongsToMany<EmailList, $this>

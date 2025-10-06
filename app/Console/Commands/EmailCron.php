@@ -71,7 +71,7 @@ class EmailCron extends Command
                         $email->sender_name,
                         $email->subject,
                         $email->parseBodyFor($recipient),
-                        $email->attachments,
+                        $email->getMedia(),
                         $email->destinationForBody(),
                         $recipient->id,
                         $email->events,
