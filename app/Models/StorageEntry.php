@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Override;
+use RuntimeException;
 
 /**
  * Storage Entry Model.
@@ -62,13 +63,9 @@ class StorageEntry extends Model
             DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
             Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
             SoundboardSound::query()->where('file_id', $this->id)->count() == 0 &&
-            Member::query()->where('omnomcom_sound_id', $this->id)->count() == 0 &&
             Sticker::query()->where('file_id', $this->id)->count() == 0;
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function createFromFile(UploadedFile $file, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
@@ -79,7 +76,11 @@ class StorageEntry extends Model
             $this->filename = $customPath.$this->hash;
         }
 
-        Storage::disk('local')->put($this->filename, File::get($file));
+        try {
+            Storage::disk('local')->put($this->filename, $file->get());
+        } catch (FileNotFoundException $fileNotFoundException) {
+            throw new RuntimeException('Could not store file: '.$fileNotFoundException->getMessage(), $fileNotFoundException->getCode(), $fileNotFoundException);
+        }
 
         $this->mime = $file->getClientMimeType();
         $this->original_filename = $file->getClientOriginalName();

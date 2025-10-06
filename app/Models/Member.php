@@ -15,6 +15,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * Member Model.
@@ -59,11 +61,12 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Member extends Model
+class Member extends Model implements HasMedia
 {
     /** @use HasFactory<MemberFactory>*/
     use HasFactory;
 
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'members';
@@ -81,6 +84,14 @@ class Member extends Model
         ];
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('omnomcom_sound')
+            ->useDisk('public')
+            ->acceptsMimeTypes(['audio/mpeg', 'audio/mp3', 'audio/mpga'])
+            ->singleFile();
+    }
+
     /**
      * @return BelongsTo<User, $this>
      */
@@ -95,14 +106,6 @@ class Member extends Model
     public function membershipForm(): BelongsTo
     {
         return $this->belongsTo(StorageEntry::class, 'membership_form_id');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function customOmnomcomSound(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
     }
 
     /**

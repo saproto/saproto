@@ -19,7 +19,7 @@ global.ExifReader = ExifReader
 import './countdown-timer'
 import './utilities'
 import './broto'
-import './nightMode'
+import './night'
 // Execute theme JavaScript
 if (new Date().getMonth() + 1 !== 12) {
     window[config.theme]?.()

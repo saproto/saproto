@@ -190,8 +190,8 @@ class OmNomController extends Controller
             return json_encode($result);
         }
 
-        if ($user->member->customOmnomcomSound) {
-            $result->sound = $user->member->customOmnomcomSound->generatePath();
+        if ($user->member->hasMedia('omnomcom_sound')) {
+            $result->sound = $user->member->getFirstMediaUrl('omnomcom_sound');
         }
 
         if ($user->disable_omnomcom) {
