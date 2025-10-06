@@ -64,14 +64,9 @@ class Sticker extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion(StickerEnum::SMALL->value)
+        $this->addMediaConversion(StickerEnum::LARGE->value)
             ->nonQueued()
             ->fit(Fit::Max, 1920, 1920)
-            ->format('webp');
-
-        $this->addMediaConversion(StickerEnum::SMALL->value)
-            ->nonQueued()
-            ->fit(Fit::Max, 500)
             ->format('webp');
     }
 

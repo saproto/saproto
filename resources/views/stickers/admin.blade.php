@@ -68,7 +68,7 @@
                                                 'classes' => 'btn btn-sm btn-success',
                                                 'text' => 'Restore',
                                                 'title' => 'Confirm restoring this sticker',
-                                                'message' => "Are you sure you want to restore this sticker? <img src='{$sticker->image->getImageUrl()}' class='img-fluid' />",
+                                                'message' => "Are you sure you want to restore this sticker? <img src='{$sticker->getImageUrl()}' class='img-fluid' />",
                                                 'confirm' => 'Restore',
                                                 'identifier' => 'restore',
                                                 'confirmButtonVariant' => 'btn-info',
