@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -235,7 +236,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('profile_picture')
-            ->useDisk('public')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
             ->useFallbackUrl(asset('images/default-avatars/other.png'))
             ->singleFile();
     }

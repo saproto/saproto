@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Event;
 use App\Models\OrderLine;
-use App\Models\StorageEntry;
 use App\Models\TicketPurchase;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +86,8 @@ class WrappedController extends Controller
                             ->where('activities_users.user_id', auth()->user()->id);
                     });
             })
-            ->select(['title', 'start', 'location', 'image_id', 'id'])
+            ->with('media')
+            ->select(['title', 'start', 'location', 'id'])
             ->groupBy('id')
             ->orderBy('start')
             ->get();
@@ -105,12 +105,6 @@ class WrappedController extends Controller
             ->groupBy('event_id')
             ->get();
 
-        $images = StorageEntry::query()
-            ->whereIn('files.id', $events->pluck('image_id'))
-            ->join('events', 'events.image_id', '=', 'files.id')
-            ->select(['files.*', 'events.id as event_id'])
-            ->get();
-
         $return = collect();
 
         foreach ($events as $event) {
@@ -123,7 +117,7 @@ class WrappedController extends Controller
             $returnEvent['location'] = $event->location;
             $returnEvent['formatted_date'] = $event->start;
             $returnEvent['price'] = $activity_price + $ticket_price;
-            $returnEvent['image_url'] = $images->where('event_id', $event->id)->first()?->generateImagePath(null, null);
+            $returnEvent['image_url'] = $event->getFirstMediaUrl('header', 'card');
             $return[] = $returnEvent;
         }
 

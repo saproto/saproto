@@ -16,6 +16,7 @@ use App\Console\Commands\GoogleSync;
 use App\Console\Commands\MakeAdmin;
 use App\Console\Commands\MemberCleanup;
 use App\Console\Commands\MemberRenewCron;
+use App\Console\Commands\MoveMedia;
 use App\Console\Commands\NewsletterCron;
 use App\Console\Commands\OmNomComCleanup;
 use App\Console\Commands\PrintActiveMembers;
@@ -80,6 +81,7 @@ class Kernel extends ConsoleKernel
         SyncUTAccounts::class,
         GoogleSync::class,
         BackupPhotosToStack::class,
+        MoveMedia::class,
     ];
 
     /**

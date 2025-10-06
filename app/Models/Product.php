@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\ProductEnum;
 use App\Http\Controllers\WallstreetController;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -100,22 +99,12 @@ class Product extends Model implements HasMedia
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $appends = ['image_url'];
-
     /**
      * @return BelongsTo<FinancialAccount, $this>
      */
     public function account(): BelongsTo
     {
         return $this->belongsTo(FinancialAccount::class);
-    }
-
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function imageUrl(): Attribute
-    {
-        return Attribute::make(get: fn (): string => $this->getImageUrl(ProductEnum::LARGE));
     }
 
     public function getImageUrl(ProductEnum $productEnum = ProductEnum::LARGE): string

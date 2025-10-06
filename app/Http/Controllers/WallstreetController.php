@@ -156,7 +156,7 @@ class WallstreetController extends Controller
         foreach ($products as $product) {
             /** @var Product $product */
             /** @phpstan-ignore-next-line */
-            $product->img = is_null($product->image_url) ? '' : $product->image_url;
+            $product->img = $product->getImageUrl();
 
             $newPrice = WallstreetPrice::query()->where('product_id', $product->id)->orderBy('id', 'desc')->first();
             if (! $newPrice || $product->price === 0.0) {
