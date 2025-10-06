@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\StickerPlacedEvent;
 use App\Events\StickerRemovedEvent;
 use App\Models\Sticker;
-use App\Models\StorageEntry;
 use Auth;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -16,6 +14,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class StickerController extends Controller
 {
@@ -24,14 +24,14 @@ class StickerController extends Controller
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
             ->with('user')
-            ->with('image')
+            ->with('media')
             ->get()
             ->map(fn ($item): array => [
                 'id' => $item->id,
                 'lat' => $item->lat,
                 'lng' => $item->lng,
                 'user' => $item->user?->calling_name ?? 'Unknown',
-                'image' => $item->image->generateImagePath(null, null),
+                'image' => $item->getImageUrl(),
                 'is_owner' => Auth::user()->id === $item->user?->id,
                 'date' => $item->created_at->format('d-m-Y'),
             ]);
@@ -57,9 +57,6 @@ class StickerController extends Controller
 
     public function create(): void {}
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -83,11 +80,21 @@ class StickerController extends Controller
             'created_at' => $request->has('today_checkbox') ? now() : $validated['stick_date'],
         ]);
 
-        $file = new StorageEntry;
-        $file->createFromFile($request->file('sticker'));
         $sticker->user()->associate(Auth::user());
-        $sticker->image()->associate($file);
         $sticker->save();
+
+        if ($request->has('sticker')) {
+            try {
+                $sticker->addMediaFromRequest('sticker')
+                    ->usingFileName('sticker_'.$sticker->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+                $sticker->delete();
+
+                return Redirect::back();
+            }
+        }
 
         StickerPlacedEvent::dispatch($sticker);
         Session::flash('message', 'Sticker added successfully');
@@ -112,7 +119,6 @@ class StickerController extends Controller
         StickerRemovedEvent::dispatch($sticker);
 
         $sticker->delete();
-        $sticker->image->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
 
         return Redirect::back();
@@ -122,7 +128,7 @@ class StickerController extends Controller
     {
         $reported = Sticker::query()
             ->with('user')
-            ->with('image')
+            ->with('media')
             ->with('reporter')
             ->whereNotNull('reporter_id')
             ->get();

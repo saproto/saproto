@@ -200,7 +200,7 @@
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
-                                        'checked' => $cur_category->can_reply ?? true,
+                                        'checked' => true,
                                         'label' => 'Today',
                                     ]
                                 )

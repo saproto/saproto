@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <img
-                                        src="{{ $sticker->image->generateImagePath(null, null) }}"
+                                        src="{{ $sticker->getImageUrl() }}"
                                         class="img-fluid"
                                     />
                                 </td>
@@ -68,10 +68,7 @@
                                                 'classes' => 'btn btn-sm btn-success',
                                                 'text' => 'Restore',
                                                 'title' => 'Confirm restoring this sticker',
-                                                'message' => "Are you sure you want to restore this sticker? <img src='{$sticker->image->generateImagePath(
-                                                    null,
-                                                    null,
-                                                )}' class='img-fluid' />",
+                                                'message' => "Are you sure you want to restore this sticker? <img src='{$sticker->getImageUrl()}' class='img-fluid' />",
                                                 'confirm' => 'Restore',
                                                 'identifier' => 'restore',
                                                 'confirmButtonVariant' => 'btn-info',
@@ -87,10 +84,7 @@
                                             'classes' => 'btn btn-sm btn-danger',
                                             'text' => 'Delete',
                                             'title' => 'Confirm deleting this sticker',
-                                            'message' => "Are you sure you want to permanently delete this sticker? <img src='{$sticker->image->generateImagePath(
-                                                null,
-                                                null,
-                                            )}' class='img-fluid'>",
+                                            'message' => "Are you sure you want to permanently delete this sticker? <img src='{$sticker->getImageUrl()}' class='img-fluid'>",
                                             'confirm' => 'Delete',
                                         ]
                                     )
