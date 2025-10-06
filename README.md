@@ -140,7 +140,7 @@ When you have finished the above setup the following port will be exposed on loc
 
 - `8080` = Website
 - `8081` = PhpMyAdmin
-- `8082` = [Mailhog](https://github.com/mailhog/MailHog)
+- `8082` = [Mailpit](https://github.com/axllent/mailpit)
 
 You can sign in with the same Proto username you use on the ***live*** website and the password given to you during the
 database seeding. This user will have full admin rights on the ***local*** website.
