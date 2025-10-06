@@ -56,7 +56,7 @@ class NewsletterCron extends Command
             return;
         }
 
-        $image_url = $newsitem->featuredImage?->generateImagePath(600, 300);
+        $image_url = $newsitem->getImageUrl();
 
         $events = $newsitem->events;
 

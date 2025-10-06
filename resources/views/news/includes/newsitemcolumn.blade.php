@@ -26,8 +26,8 @@
                             'website.home.cards.card-bg-image',
                             [
                                 'url' => $newsitem->url,
-                                'img' => $newsitem->featuredImage
-                                    ? $newsitem->featuredImage->generateImagePath(500, 300)
+                                'img' => $newsitem->hasMedia()
+                                    ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
                                         ? url('images/weekly-cover.png')
                                         : null),
@@ -38,7 +38,7 @@
                                     $published,
                                 ),
                                 'height' => '180',
-                                'photo_pop' => $newsitem->featuredImage,
+                                'photo_pop' => $newsitem->is_weekly || $newsitem->hasMedia(),
                             ]
                         )
                     </div>

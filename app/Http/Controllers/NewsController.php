@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsitem;
-use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -19,6 +18,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use stdClass;
 
 class NewsController extends Controller
@@ -73,9 +74,14 @@ class NewsController extends Controller
         return view('emails.newsletter', [
             'user' => Auth::user(),
             'list' => EmailList::query()->find(Config::integer('proto.weeklynewsletter')),
-            'events' => $newsitem->events()->get(),
+            'events' => $newsitem
+                ->events()
+                ->with('media')
+                ->with('activity')
+                ->with('tickets')
+                ->get(),
             'text' => $newsitem->content,
-            'image_url' => $newsitem->featuredImage?->generateImagePath(600, 300),
+            'image_url' => $newsitem->getImageUrl(),
         ]);
     }
 
@@ -134,15 +140,17 @@ class NewsController extends Controller
 
         $newsitem->events()->sync($request->input('event'));
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $file->save();
-            $newsitem->featuredImage()->associate($file);
-        }
+        if ($request->has('image')) {
+            try {
+                $newsitem->addMediaFromRequest('image')
+                    ->usingFileName('news_'.$newsitem->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-        $newsitem->save();
+                return Redirect::back();
+            }
+        }
 
         return Redirect::route('news::edit', ['id' => $newsitem->id]);
     }
@@ -201,7 +209,7 @@ class NewsController extends Controller
                 $returnItem = new stdClass;
                 $returnItem->id = $newsitem->id;
                 $returnItem->title = $newsitem->title;
-                $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
+                $returnItem->featured_image_url = $newsitem->getImageUrl();
                 $returnItem->content = $newsitem->content;
                 $returnItem->published_at = Carbon::parse($newsitem->published_at)->timestamp;
 

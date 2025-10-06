@@ -1,3 +1,7 @@
+@php
+    use App\Enums\NewsEnum;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -14,10 +18,11 @@
     <div class="row">
         <div class="{{ count($events) > 0 ? 'col-8' : '' }}">
             <div class="card mb-3">
-                @if ($newsitem->featuredImage)
+                @if ($newsitem->hasMedia())
                     <img
                         class="card-img-top"
-                        src="{{ $newsitem->featuredImage->generateImagePath('1500', '350') }}"
+                        src="{{ $newsitem->getImageUrl(NewsEnum::LARGE) }}"
+                        alt="The featured image of this newsitem"
                     />
                 @endif
 

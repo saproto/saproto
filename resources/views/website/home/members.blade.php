@@ -72,11 +72,11 @@
                     class="card-body overflow-hidden"
                     style="max-height: calc(100vh - 250px)"
                 >
-                    @if ($weekly->featuredImage)
+                    @if ($weekly->hasMedia())
                         <img
                             width="500px"
                             height="300px"
-                            src="{{ $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500, 300) : null }}"
+                            src="{{ $weekly->getImageUrl() }}"
                             class="img-fluid img-thumbnail d-block mx-auto mb-3 w-50"
                             alt="Featured image"
                         />
@@ -140,8 +140,8 @@
                             [
                                 'height' => $newsitem->is_weekly ? 80 : 120,
                                 'url' => $newsitem->url,
-                                'img' => $newsitem->featuredImage
-                                    ? $newsitem->featuredImage->generateImagePath(600, 300)
+                                'img' => $newsitem->hasMedia()
+                                    ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
                                         ? url('images/weekly-cover.png')
                                         : null),
@@ -150,7 +150,7 @@
                                     $newsitem->title,
                                     Carbon::parse($newsitem->published_at)->diffForHumans(),
                                 ),
-                                'photo_pop' => $newsitem->featuredImage,
+                                'photo_pop' => $newsitem->is_weekly || $newsitem->hasMedia(),
                                 'leftborder' => 'info',
                             ]
                         )
