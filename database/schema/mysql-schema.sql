@@ -441,20 +441,6 @@ CREATE TABLE `emails_events` (
   KEY `emails_events_event_id_index` (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `emails_files`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `emails_files` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `email_id` bigint(20) unsigned NOT NULL,
-  `file_id` bigint(20) unsigned NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`),
-  KEY `emails_files_email_id_index` (`email_id`),
-  KEY `emails_files_file_id_index` (`file_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `emails_lists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -1823,3 +1809,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_121727_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_124016_remove_file_id_from_stickers',190);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_154106_remove_featured_image_id_from_newsitems',191);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_212403_remove_file_id_from_soundboardsounds',192);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_224547_remove_emails_files_table',193);

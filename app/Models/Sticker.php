@@ -26,7 +26,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property string|null $report_reason
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read StorageEntry $image
  * @property-read User|null $reporter
  * @property-read User $user
  *
@@ -89,13 +88,5 @@ class Sticker extends Model implements HasMedia
     public function reporter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reporter_id');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'file_id');
     }
 }
