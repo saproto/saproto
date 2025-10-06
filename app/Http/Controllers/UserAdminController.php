@@ -327,10 +327,16 @@ class UserAdminController extends Controller
 
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
-
         $user = User::query()->findOrFail($id);
+        $member = $user->member;
+        if(! $member) {
+            Session::flash('flash_message', 'This user is not a member!');
+
+            return Redirect::back();
+        }
         try {
-            $user->member->addMediaFromRequest('sound')->toMediaCollection('omnomcom_sound');
+            $member->addMediaFromRequest('sound')
+                ->toMediaCollection('omnomcom_sound');
             Session::flash('flash_message', 'Sound uploaded!');
         } catch (FileDoesNotExist) {
             Session::flash('flash_message', 'The file upload failed!');
