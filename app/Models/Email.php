@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Email Model.
@@ -67,6 +69,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder<static>|Email whereToPending($value)
  * @method static Builder<static>|Email whereToUser($value)
  * @method static Builder<static>|Email whereUpdatedAt($value)
+ *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
  * @mixin \Eloquent
  */

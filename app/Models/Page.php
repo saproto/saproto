@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\App;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -43,6 +44,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Page whereUpdatedAt($value)
  * @method static Builder<static>|Page withTrashed()
  * @method static Builder<static>|Page withoutTrashed()
+ *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
  * @mixin \Eloquent
  */

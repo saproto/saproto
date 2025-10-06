@@ -14,6 +14,7 @@ use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -51,6 +52,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Company whereSort($value)
  * @method static Builder<static>|Company whereUpdatedAt($value)
  * @method static Builder<static>|Company whereUrl($value)
+ *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
  * @mixin \Eloquent
  */

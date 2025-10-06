@@ -31,9 +31,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\Token;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -172,6 +174,17 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutPermission($permissions)
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  * @method static Builder<static>|User withoutTrashed()
+ *
+ * @property-read Collection<int, \App\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read Collection<int, \App\Models\Activity> $backupActivities
+ * @property-read int|null $backup_activities_count
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read Collection<int, Token> $tokens
+ * @property-read int|null $tokens_count
+ *
+ * @method static Builder<static>|User whereLastSeenAt($value)
  *
  * @mixin Eloquent
  */

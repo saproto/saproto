@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Member Model.
@@ -56,6 +58,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder<static>|Member whereUserId($value)
  * @method static Builder<static>|Member withTrashed()
  * @method static Builder<static>|Member withoutTrashed()
+ *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
  * @mixin Eloquent
  */

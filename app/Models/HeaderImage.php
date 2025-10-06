@@ -15,6 +15,7 @@ use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
@@ -36,6 +37,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|HeaderImage whereId($value)
  * @method static Builder<static>|HeaderImage whereTitle($value)
  * @method static Builder<static>|HeaderImage whereUpdatedAt($value)
+ *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
  *
  * @mixin \Eloquent
  */

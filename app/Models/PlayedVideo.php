@@ -33,6 +33,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|PlayedVideo whereUserId($value)
  * @method static Builder<static>|PlayedVideo whereVideoId($value)
  * @method static Builder<static>|PlayedVideo whereVideoTitle($value)
+ * @method static Builder<static>|PlayedVideo whereDuration($value)
+ * @method static Builder<static>|PlayedVideo whereDurationPlayed($value)
  *
  * @mixin \Eloquent
  */
