@@ -1245,11 +1245,9 @@ DROP TABLE IF EXISTS `soundboard_sounds`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `soundboard_sounds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `file_id` bigint(20) unsigned NOT NULL,
   `hidden` tinyint(1) NOT NULL,
   `name` mediumtext NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `soundboard_sounds_file_id_index` (`file_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `stickers`;
@@ -1824,3 +1822,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_120017_remov
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_121727_remove_file_id_foreign_from_stickers',189);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_124016_remove_file_id_from_stickers',190);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_154106_remove_featured_image_id_from_newsitems',191);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_212403_remove_file_id_from_soundboardsounds',192);

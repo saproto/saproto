@@ -4,7 +4,7 @@ includes:
     - ./vendor/nesbot/carbon/extension.neon
 
 parameters:
-    tmpDir: tmp
+    tmpDir: .tmp/phpstan
     excludePaths:
         - app/Libraries
 

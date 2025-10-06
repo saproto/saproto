@@ -34,7 +34,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int|null $omnomcom_sound_id
  * @property MembershipTypeEnum $membership_type
  * @property-read UtAccount|null $UtAccount
- * @property-read StorageEntry|null $customOmnomcomSound
  * @property-read StorageEntry|null $membershipForm
  * @property-read User|null $user
  *
@@ -51,7 +50,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @method static Builder<static>|Member whereIsPrimaryAtAnotherAssociation($value)
  * @method static Builder<static>|Member whereMembershipFormId($value)
  * @method static Builder<static>|Member whereMembershipType($value)
- * @method static Builder<static>|Member whereOmnomcomSoundId($value)
  * @method static Builder<static>|Member whereProtoUsername($value)
  * @method static Builder<static>|Member whereUntil($value)
  * @method static Builder<static>|Member whereUpdatedAt($value)

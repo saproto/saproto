@@ -59,8 +59,7 @@ class StorageEntry extends Model
     {
         return
             Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
-            DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
-            SoundboardSound::query()->where('file_id', $this->id)->count() == 0;
+            DB::table('emails_files')->where('file_id', $this->id)->count() == 0;
     }
 
     public function createFromFile(UploadedFile $file, ?string $customPath = null): void

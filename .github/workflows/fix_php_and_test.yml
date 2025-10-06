@@ -179,7 +179,7 @@ jobs:
       - name: Cache PHPStan results
         uses: actions/cache@v4
         with:
-          path: tmp
+          path: .tmp/phpstan
           key: ${{ runner.os }}-phpstan-${{ hashFiles('phpstan.neon', 'composer.lock') }}
           restore-keys: ${{ runner.os }}-phpstan-
 
