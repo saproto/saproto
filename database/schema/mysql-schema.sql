@@ -739,11 +739,9 @@ CREATE TABLE `members` (
   `until` bigint(20) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `card_printed_on` date DEFAULT NULL,
-  `omnomcom_sound_id` bigint(20) unsigned DEFAULT NULL,
   `membership_type` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  KEY `members_user_id_index` (`user_id`),
-  KEY `members_omnomcom_sound_id_index` (`omnomcom_sound_id`)
+  KEY `members_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `menuitems`;
@@ -1827,3 +1825,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_123717_add_p
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_131536_add_index_to_spotify_id_on_playedvideos',185);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_111109_add_duration_played_to_playedvideos',186);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_114212_add_duration_to_playedvideos',187);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_120017_remove_omnomcom_sound_id_from_member',188);
