@@ -109,14 +109,6 @@ class Member extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function customOmnomcomSound(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
-    }
-
-    /**
      * @return HasOne<UtAccount, $this>
      */
     public function UtAccount(): HasOne
