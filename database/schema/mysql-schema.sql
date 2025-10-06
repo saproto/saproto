@@ -836,15 +836,13 @@ CREATE TABLE `newsitems` (
   `user_id` bigint(20) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
-  `featured_image_id` bigint(20) unsigned DEFAULT NULL,
   `published_at` datetime DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `is_weekly` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  KEY `newsitems_user_id_index` (`user_id`),
-  KEY `newsitems_featured_image_id_index` (`featured_image_id`)
+  KEY `newsitems_user_id_index` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `oauth_access_tokens`;
@@ -1825,3 +1823,4 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_114212_add_d
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_120017_remove_omnomcom_sound_id_from_member',188);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_121727_remove_file_id_foreign_from_stickers',189);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_124016_remove_file_id_from_stickers',190);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_154106_remove_featured_image_id_from_newsitems',191);
