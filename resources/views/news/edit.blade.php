@@ -166,7 +166,8 @@
                                     src="{!! $item->getImageUrl() !!}"
                                     width="100%;"
                                     class="card-img-top"
-                                 alt="The featured image of this newsitem"/>
+                                    alt="The featured image of this newsitem"
+                                />
                             @endif
 
                             <div class="card-body">

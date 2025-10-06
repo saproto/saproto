@@ -38,7 +38,7 @@
                                     $published,
                                 ),
                                 'height' => '180',
-                                'photo_pop' =>$newsitem->is_weekly|| $newsitem->hasMedia(),
+                                'photo_pop' => $newsitem->is_weekly || $newsitem->hasMedia(),
                             ]
                         )
                     </div>

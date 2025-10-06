@@ -76,7 +76,7 @@
                         <img
                             width="500px"
                             height="300px"
-                            src="{{ $weekly->getImageUrl()}}"
+                            src="{{ $weekly->getImageUrl() }}"
                             class="img-fluid img-thumbnail d-block mx-auto mb-3 w-50"
                             alt="Featured image"
                         />
@@ -150,7 +150,7 @@
                                     $newsitem->title,
                                     Carbon::parse($newsitem->published_at)->diffForHumans(),
                                 ),
-                                'photo_pop' => $newsitem->is_weekly||$newsitem->hasMedia(),
+                                'photo_pop' => $newsitem->is_weekly || $newsitem->hasMedia(),
                                 'leftborder' => 'info',
                             ]
                         )

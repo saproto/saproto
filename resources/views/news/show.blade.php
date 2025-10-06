@@ -1,4 +1,7 @@
-@php use App\Enums\NewsEnum; @endphp
+@php
+    use App\Enums\NewsEnum;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -19,7 +22,8 @@
                     <img
                         class="card-img-top"
                         src="{{ $newsitem->getImageUrl(NewsEnum::LARGE) }}"
-                     alt="The featured image of this newsitem"/>
+                        alt="The featured image of this newsitem"
+                    />
                 @endif
 
                 <div class="card-body">
