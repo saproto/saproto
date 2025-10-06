@@ -200,7 +200,7 @@
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
-                                        'checked'=>true,
+                                        'checked' => true,
                                         'label' => 'Today',
                                     ]
                                 )
@@ -247,7 +247,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')
