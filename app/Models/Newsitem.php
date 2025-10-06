@@ -65,9 +65,8 @@ class Newsitem extends Model implements HasMedia
     /** @use HasFactory<NewsitemFactory>*/
     use HasFactory;
 
-    use SoftDeletes;
-
     use InteractsWithMedia;
+    use SoftDeletes;
 
     protected $table = 'newsitems';
 

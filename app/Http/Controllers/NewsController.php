@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\EmailList;
 use App\Models\Event;
 use App\Models\Newsitem;
-use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -148,6 +147,7 @@ class NewsController extends Controller
                     ->toMediaCollection();
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
+
                 return Redirect::back();
             }
         }
