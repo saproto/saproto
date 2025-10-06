@@ -158,6 +158,7 @@ class MollieTransaction extends Model
 
             return $this;
         }
+
         if ($new_status === 'paid') {
             foreach ($this->orderlines as $orderline) {
                 $orderline->ticketPurchase?->update([
