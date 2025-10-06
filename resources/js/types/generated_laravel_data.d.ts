@@ -40,4 +40,5 @@ export enum NarrowcastingEnum { LARGE = 'large', SMALL = 'small' };
 export enum PageEnum { LARGE = 'large' };
 export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', MEDIUM = 'medium', SMALL = 'small' };
 export enum ProductEnum { LARGE = 'large', THUMB = 'thumb' };
+export enum StickerEnum { LARGE = 'large', SMALL = 'small' };
 }

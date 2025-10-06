@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\NarrowcastingItem;
 use App\Models\Sticker;
 use Exception;
 use Illuminate\Console\Command;
