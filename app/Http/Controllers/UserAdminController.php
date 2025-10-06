@@ -9,7 +9,6 @@ use App\Mail\MembershipEndSet;
 use App\Mail\MembershipStarted;
 use App\Models\HashMapItem;
 use App\Models\Member;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +20,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use PDF;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\Permission\Models\Permission;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 
@@ -327,18 +328,22 @@ class UserAdminController extends Controller
     public function uploadOmnomcomSound(MP3Request $request, int $id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
-        if ($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound()->delete();
-            $user->member->omnomcom_sound_id = null;
-            $user->member->save();
+        $member = $user->member;
+        if (! $member) {
+            Session::flash('flash_message', 'This user is not a member!');
+
+            return Redirect::back();
         }
 
-        $file = new StorageEntry;
-        $file->createFromFile($request->file('sound'));
-
-        $user->member->customOmnomcomSound()->associate($file);
-        $user->member->save();
-        Session::flash('flash_message', 'Sound uploaded!');
+        try {
+            $member->addMediaFromRequest('sound')
+                ->toMediaCollection('omnomcom_sound');
+            Session::flash('flash_message', 'Sound uploaded!');
+        } catch (FileDoesNotExist) {
+            Session::flash('flash_message', 'The file upload failed!');
+        } catch (FileIsTooBig) {
+            Session::flash('flash_message', 'The file is too big!');
+        }
 
         return Redirect::back();
     }
@@ -347,11 +352,7 @@ class UserAdminController extends Controller
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
-        if ($user->member->customOmnomcomSound) {
-            $user->member->customOmnomcomSound()->delete();
-            $user->member->omnomcom_sound_id = null;
-            $user->member->save();
-        }
+        $user->member->clearMediaCollection('omnomcom_sound');
 
         Session::flash('flash_message', 'Sound deleted');
 
