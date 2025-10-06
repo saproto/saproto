@@ -1265,16 +1265,13 @@ CREATE TABLE `stickers` (
   `country` varchar(255) DEFAULT NULL,
   `country_code` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
-  `file_id` bigint(20) unsigned NOT NULL,
   `reporter_id` bigint(20) unsigned DEFAULT NULL,
   `report_reason` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `stickers_user_id_foreign` (`user_id`),
-  KEY `stickers_file_id_foreign` (`file_id`),
   KEY `stickers_reporter_id_index` (`reporter_id`),
-  CONSTRAINT `stickers_file_id_foreign` FOREIGN KEY (`file_id`) REFERENCES `files` (`id`),
   CONSTRAINT `stickers_reporter_id_foreign` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`),
   CONSTRAINT `stickers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
@@ -1826,3 +1823,5 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_12_131536_add_i
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_111109_add_duration_played_to_playedvideos',186);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_09_17_114212_add_duration_to_playedvideos',187);
 INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_120017_remove_omnomcom_sound_id_from_member',188);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_121727_remove_file_id_foreign_from_stickers',189);
+INSERT INTO `migrations` (`migration`, `batch`) VALUES ('2025_10_06_124016_remove_file_id_from_stickers',190);
