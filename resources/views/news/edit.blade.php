@@ -80,7 +80,7 @@
             <div class="col-md-5">
                 <div class="row">
                     @include('news.includes.activities')
-                    @if ($is_weekly && $item?->featuredImage)
+                    @if ($is_weekly && $item?->hasMedia())
                         <div class="card mb-3">
                             <div class="card-header">Replace image</div>
                             <div class="card-body">
@@ -161,12 +161,12 @@
                     <div class="row">
                         <div class="card mb-3 p-0">
                             <div class="card-header">Featured image</div>
-                            @if ($item?->featuredImage)
+                            @if ($item?->hasMedia())
                                 <img
-                                    src="{!! $item->featuredImage->generateImagePath(700, null) !!}"
+                                    src="{!! $item->getImageUrl() !!}"
                                     width="100%;"
                                     class="card-img-top"
-                                />
+                                 alt="The featured image of this newsitem"/>
                             @endif
 
                             <div class="card-body">
@@ -176,6 +176,7 @@
                                         type="file"
                                         class="form-control"
                                         name="image"
+                                        accept="image/*"
                                     />
                                 </div>
                             </div>

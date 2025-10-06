@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\NewsEnum;
 use Database\Factories\NewsitemFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -12,8 +13,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * News Item Model.
@@ -54,18 +60,46 @@ use Override;
  *
  * @mixin \Eloquent
  */
-class Newsitem extends Model
+class Newsitem extends Model implements HasMedia
 {
     /** @use HasFactory<NewsitemFactory>*/
     use HasFactory;
 
     use SoftDeletes;
 
+    use InteractsWithMedia;
+
     protected $table = 'newsitems';
 
     protected $guarded = ['id'];
 
-    protected $with = ['featuredImage'];
+    protected $with = ['media'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(NewsEnum::LARGE->value)
+            ->fit(Fit::Crop, 1500, 350)
+            ->nonQueued()
+            ->format('webp');
+
+        $this->addMediaConversion(NewsEnum::CARD->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 600, 300)
+            ->format('webp');
+    }
+
+    public function getImageUrl(NewsEnum $stickerEnum = NewsEnum::CARD): string
+    {
+        return $this->getFirstMediaUrl('default', $stickerEnum->value);
+    }
 
     /**
      * @return BelongsTo<User, $this>

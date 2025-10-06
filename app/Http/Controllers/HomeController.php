@@ -46,7 +46,6 @@ class HomeController extends Controller
         }
 
         $weekly = Cache::remember('home.weekly', Carbon::tomorrow(), fn () => Newsitem::query()
-            ->with('featuredImage')
             ->where('published_at', '<=', Carbon::now())
             ->where('published_at', '>', Carbon::now()->subWeek())
             ->where('is_weekly', true)

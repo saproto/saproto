@@ -8,6 +8,7 @@ use App\Console\Commands\BackupPhotosToStack;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
+use App\Console\Commands\CopyNewsitemImages;
 use App\Console\Commands\EmailCron;
 use App\Console\Commands\EndMemberships;
 use App\Console\Commands\FeeCron;
@@ -80,6 +81,7 @@ class Kernel extends ConsoleKernel
         SyncUTAccounts::class,
         GoogleSync::class,
         BackupPhotosToStack::class,
+        CopyNewsitemImages::class
     ];
 
     /**
