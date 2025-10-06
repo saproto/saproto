@@ -329,11 +329,12 @@ class UserAdminController extends Controller
     {
         $user = User::query()->findOrFail($id);
         $member = $user->member;
-        if(! $member) {
+        if (! $member) {
             Session::flash('flash_message', 'This user is not a member!');
 
             return Redirect::back();
         }
+
         try {
             $member->addMediaFromRequest('sound')
                 ->toMediaCollection('omnomcom_sound');
