@@ -47,7 +47,8 @@ jobs:
 
       - run: php artisan typescript:transform
 
-      - uses: actions/cache@v4
+      - name: Cache Rector
+        uses: actions/cache@v4
         with:
           path: .tmp/rector
           key: ${{ runner.os }}-rector-${{ github.run_id }}-${{ hashFiles('**/composer.lock') }}
@@ -83,7 +84,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
 
-      - uses: actions/cache@v4
+      - name: Cache Playwright
+        uses: actions/cache@v4
         id: playwright-cache
         with:
           path: |
