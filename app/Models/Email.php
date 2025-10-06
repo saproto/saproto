@@ -39,8 +39,6 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $time
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, StorageEntry> $attachments
- * @property-read int|null $attachments_count
  * @property-read Collection<int, Event> $events
  * @property-read int|null $events_count
  * @property-read Collection<int, EmailList> $lists
@@ -103,14 +101,6 @@ class Email extends Model implements HasMedia
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
-    }
-
-    /**
-     * @return BelongsToMany<StorageEntry, $this>
-     */
-    public function attachments(): BelongsToMany
-    {
-        return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
 
     /**

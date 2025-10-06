@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Override;
@@ -57,31 +56,7 @@ class StorageEntry extends Model
      */
     public function isOrphan(): bool
     {
-        return
-            Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
-            DB::table('emails_files')->where('file_id', $this->id)->count() == 0;
-    }
-
-    public function createFromFile(UploadedFile $file, ?string $customPath = null): void
-    {
-        $this->hash = $this->generateHash();
-
-        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
-
-        if (! empty($customPath)) {
-            $this->filename = $customPath.$this->hash;
-        }
-
-        try {
-            Storage::disk('local')->put($this->filename, $file->get());
-        } catch (FileNotFoundException $fileNotFoundException) {
-            throw new RuntimeException('Could not store file: '.$fileNotFoundException->getMessage(), $fileNotFoundException->getCode(), $fileNotFoundException);
-        }
-
-        $this->mime = $file->getClientMimeType();
-        $this->original_filename = $file->getClientOriginalName();
-
-        $this->save();
+        return Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0;
     }
 
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
@@ -113,44 +88,6 @@ class StorageEntry extends Model
         }
 
         return $url;
-    }
-
-    /**
-     * @param  bool  $human  Defaults to true.
-     */
-    public function getFileSize(bool $human = true): int|string
-    {
-        $size = File::size($this->generateLocalPath());
-        if (! $human) {
-            return $size;
-        }
-
-        if ($size < 1024) {
-            return $size.' bytes';
-        }
-
-        if ($size < 1024 ** 2) {
-            return round($size / 1024 ** 1, 1).' kilobytes';
-        }
-
-        if ($size < 1024 ** 3) {
-            return round($size / 1024 ** 2, 1).' megabytes';
-        }
-
-        return round($size / 1024 ** 3, 1).' gigabytes';
-    }
-
-    public function generateLocalPath(): string
-    {
-        return Storage::disk('local')->path($this->filename);
-    }
-
-    /**
-     * @param  string  $algo  Defaults to md5.
-     */
-    public function getFileHash(string $algo = 'md5'): string
-    {
-        return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
     #[Override]
