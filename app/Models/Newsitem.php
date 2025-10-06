@@ -28,7 +28,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $user_id
  * @property string $title
  * @property string $content
- * @property int|null $featured_image_id
  * @property string|null $published_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -36,7 +35,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool $is_weekly
  * @property-read Collection<int, Event> $events
  * @property-read int|null $events_count
- * @property-read StorageEntry|null $featuredImage
  * @property-read mixed $url
  * @property-read User|null $user
  *
@@ -48,7 +46,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Newsitem whereContent($value)
  * @method static Builder<static>|Newsitem whereCreatedAt($value)
  * @method static Builder<static>|Newsitem whereDeletedAt($value)
- * @method static Builder<static>|Newsitem whereFeaturedImageId($value)
  * @method static Builder<static>|Newsitem whereId($value)
  * @method static Builder<static>|Newsitem whereIsWeekly($value)
  * @method static Builder<static>|Newsitem wherePublishedAt($value)
@@ -114,14 +111,6 @@ class Newsitem extends Model implements HasMedia
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_newsitem');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function featuredImage(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'featured_image_id');
     }
 
     public function isPublished(): bool
