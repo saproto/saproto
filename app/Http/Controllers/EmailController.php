@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Email;
 use App\Models\EmailList;
 use App\Models\EmailListSubscription;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -17,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
 
 class EmailController extends Controller
 {
@@ -106,7 +108,7 @@ class EmailController extends Controller
 
         return view('emails.manualemail', [
             'body' => $email->parseBodyFor(Auth::user()),
-            'attachments' => $email->attachments,
+            'attachments' => $email->getMedia(),
             'destination' => $email->destinationForBody(),
             'user_id' => Auth::user()->id,
             'events' => $email->events()->get(),
@@ -219,12 +221,15 @@ class EmailController extends Controller
             return Redirect::route('email::index');
         }
 
-        $upload = $request->file('attachment');
-        if ($upload) {
-            $file = new StorageEntry;
-            $file->createFromFile($upload);
-            $email->attachments()->attach($file);
-            $email->save();
+        if ($request->has('attachment')) {
+            try {
+                $email->addMediaFromRequest('attachment')
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
         } else {
             Session::flash('flash_message', 'Do not forget the attachment.');
 
@@ -238,6 +243,8 @@ class EmailController extends Controller
 
     /**
      * @return RedirectResponse
+     *
+     * @throws MediaCannotBeDeleted
      */
     public function deleteAttachment(int $id, int $file_id)
     {
@@ -249,10 +256,7 @@ class EmailController extends Controller
             return Redirect::route('email::index');
         }
 
-        $file = StorageEntry::query()->findOrFail($file_id);
-
-        $email->attachments()->detach($file);
-        $email->save();
+        $email->deleteMedia($file_id);
 
         Session::flash('flash_message', 'Attachment deleted.');
 

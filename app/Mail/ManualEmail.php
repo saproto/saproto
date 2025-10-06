@@ -34,11 +34,7 @@ class ManualEmail extends Mailable
             ->from($this->sender_address, $this->sender_name)
             ->subject($this->email_subject);
         foreach ($this->submitted_attachments as $attachment) {
-            $options = [
-                'as' => $attachment->original_filename,
-                'mime' => $attachment->mime,
-            ];
-            $mail->attach($attachment->generateLocalPath(), $options);
+            $mail->attach($attachment);
         }
 
         return $mail;
