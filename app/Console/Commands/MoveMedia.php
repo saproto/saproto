@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
+use App\Models\Event;
 use Exception;
 use Illuminate\Console\Command;
 
@@ -27,14 +27,14 @@ class MoveMedia extends Command
      */
     public function handle(): void
     {
-        User::query()->whereHas('media')->with('media')->chunk(100, function ($users) {
-            foreach ($users as $user) {
+        Event::query()->whereHas('media')->with('media')->chunk(100, function ($events) {
+            foreach ($events as $event) {
                 try {
-                    $this->info('Processing member '.$user->id);
-                    $media = $user->getFirstMediaPath('profile_picture');
-                    $user->addMedia($media)->toMediaCollection('profile_picture');
+                    $this->info('Processing Event '.$event->id);
+                    $media = $event->getFirstMediaPath('header');
+                    $event->addMedia($media)->toMediaCollection('header');
                 } catch (Exception $exception) {
-                    $this->error('Error processing member '.$user->id.': '.$exception->getMessage());
+                    $this->error('Error processing event '.$event->id.': '.$exception->getMessage());
                 }
             }
         });
