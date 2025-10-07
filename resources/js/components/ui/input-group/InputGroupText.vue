@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 
@@ -11,7 +11,7 @@ const props = defineProps<{
     <span
         :class="
             cn(
-                'text-muted-foreground ml-auto text-xs tracking-widest',
+                `text-muted-foreground flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4`,
                 props.class
             )
         "

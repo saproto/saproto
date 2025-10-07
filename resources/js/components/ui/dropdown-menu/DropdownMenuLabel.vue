@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import type { MenubarTriggerProps } from 'reka-ui'
+import type { DropdownMenuLabelProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
-import { MenubarTrigger, useForwardProps } from 'reka-ui'
+import { DropdownMenuLabel, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<
-    MenubarTriggerProps & { class?: HTMLAttributes['class'] }
+    DropdownMenuLabelProps & {
+        class?: HTMLAttributes['class']
+        inset?: boolean
+    }
 >()
 
 const delegatedProps = reactiveOmit(props, 'class')
@@ -15,15 +18,16 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-    <MenubarTrigger
+    <DropdownMenuLabel
         v-bind="forwardedProps"
         :class="
             cn(
-                'focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-sm px-3 py-1 text-sm font-medium outline-none select-none',
+                'px-2 py-1.5 text-sm font-semibold',
+                inset && 'pl-8',
                 props.class
             )
         "
     >
         <slot />
-    </MenubarTrigger>
+    </DropdownMenuLabel>
 </template>

@@ -1,6 +1,7 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
+import { Textarea } from '../textarea'
 
 const props = defineProps<{
     class?: HTMLAttributes['class']
@@ -8,14 +9,13 @@ const props = defineProps<{
 </script>
 
 <template>
-    <span
+    <Textarea
+        data-slot="input-group-control"
         :class="
             cn(
-                'text-muted-foreground ml-auto text-xs tracking-widest',
+                'flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent',
                 props.class
             )
         "
-    >
-        <slot />
-    </span>
+    />
 </template>

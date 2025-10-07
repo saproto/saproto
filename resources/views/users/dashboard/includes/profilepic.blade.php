@@ -37,6 +37,7 @@
                             name="image"
                             type="file"
                             class="form-control"
+                            accept="image/*"
                         />
                         <button type="submit" class="btn btn-outline-info">
                             <i class="fas fa-file-upload"></i>

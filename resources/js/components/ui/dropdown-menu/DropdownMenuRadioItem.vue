@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import type { MenubarRadioItemEmits, MenubarRadioItemProps } from 'reka-ui'
+import type {
+    DropdownMenuRadioItemEmits,
+    DropdownMenuRadioItemProps,
+} from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
 import { Circle } from 'lucide-vue-next'
 import {
-    MenubarItemIndicator,
-    MenubarRadioItem,
+    DropdownMenuItemIndicator,
+    DropdownMenuRadioItem,
     useForwardPropsEmits,
 } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<
-    MenubarRadioItemProps & { class?: HTMLAttributes['class'] }
+    DropdownMenuRadioItemProps & { class?: HTMLAttributes['class'] }
 >()
-const emits = defineEmits<MenubarRadioItemEmits>()
+
+const emits = defineEmits<DropdownMenuRadioItemEmits>()
 
 const delegatedProps = reactiveOmit(props, 'class')
 
@@ -21,11 +25,11 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-    <MenubarRadioItem
+    <DropdownMenuRadioItem
         v-bind="forwarded"
         :class="
             cn(
-                'focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
                 props.class
             )
         "
@@ -33,10 +37,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         <span
             class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center"
         >
-            <MenubarItemIndicator>
+            <DropdownMenuItemIndicator>
                 <Circle class="h-4 w-4 fill-current" />
-            </MenubarItemIndicator>
+            </DropdownMenuItemIndicator>
         </span>
         <slot />
-    </MenubarRadioItem>
+    </DropdownMenuRadioItem>
 </template>
