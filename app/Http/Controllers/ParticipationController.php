@@ -94,9 +94,7 @@ class ParticipationController extends Controller
 
         $participation = ActivityParticipation::query()->create($data);
 
-        if ($request->has('helping_committee_id')) {
-            $event->updateUniqueUsersCount();
-        }
+        $event->updateUniqueUsersCount();
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
