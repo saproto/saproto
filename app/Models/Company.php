@@ -76,7 +76,7 @@ class Company extends Model implements HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this->addMediaConversion(CompanyEnum::SMALL->value)
+        $this->addMediaConversion(CompanyEnum::LARGE->value)
             ->nonQueued()
             ->fit(Fit::Max, 1920, 1920)
             ->format('webp');
