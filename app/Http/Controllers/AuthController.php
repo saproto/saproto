@@ -81,7 +81,7 @@ class AuthController extends Controller
     {
         // User is already logged in
         if (Auth::check()) {
-            self::postLoginRedirect();
+            return Redirect::intended();
         }
 
         // Catch a login form submission for two-factor authentication.
@@ -123,7 +123,7 @@ class AuthController extends Controller
 
         if ($user == null) {
             $member = Member::query()->where('proto_username', $username)->first();
-            $user = ($member ? $member->user : null);
+            $user = ($member?->user);
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
@@ -139,20 +139,12 @@ class AuthController extends Controller
      * @param  User  $user  The user to be logged in.
      * @return RedirectResponse
      */
-    public static function loginUser(User $user)
+    public static function loginUser(Request $request, User $user)
     {
         Auth::login($user, true);
 
-        return self::postLoginRedirect();
-    }
+        $request->session()->regenerate();
 
-    /**
-     * The login has been completed (successfully or not). Return where the user is supposed to be redirected.
-     *
-     * @return RedirectResponse
-     */
-    private static function postLoginRedirect()
-    {
         return Redirect::intended();
     }
 
@@ -172,7 +164,7 @@ class AuthController extends Controller
         $user = self::verifyCredentials($credentials['email'], $credentials['password']);
 
         if ($user) {
-            return self::continueLogin($user);
+            return self::continueLogin($request, $user);
         }
 
         Session::flash('flash_message', 'Invalid username or password provided.');
@@ -186,7 +178,7 @@ class AuthController extends Controller
      * @param  User  $user  The username to be logged in.
      * @return View|RedirectResponse
      */
-    public static function continueLogin(User $user)
+    public static function continueLogin(Request $request, User $user)
     {
         // Catch users that have 2FA enabled.
         if ($user->tfa_totp_key) {
@@ -195,7 +187,7 @@ class AuthController extends Controller
             return view('auth.2fa');
         }
 
-        return self::loginUser($user);
+        return self::loginUser($request, $user);
     }
 
     /**
@@ -214,7 +206,7 @@ class AuthController extends Controller
             // Verify if the response is valid.
             try {
                 if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                    return self::loginUser($user);
+                    return self::loginUser($request, $user);
                 }
 
                 Session::flash('flash_message', 'Your code is invalid. Please try again.');

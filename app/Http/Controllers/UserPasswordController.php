@@ -136,32 +136,6 @@ class UserPasswordController extends Controller
     }
 
     /**
-     * @throws Exception
-     * @throws \Google\Exception
-     */
-    private function syncGooglePassword(User $protoUser, string $password): void
-    {
-        $client = new Google_Client;
-        $client->setAuthConfig(config('proto.google_application_credentials'));
-        $client->useApplicationDefaultCredentials();
-        $client->setSubject('superadmin@proto.utwente.nl');
-        $client->setApplicationName('Proto Website');
-        $client->setScopes(['https://www.googleapis.com/auth/admin.directory.user']);
-
-        $directory = new Directory($client);
-        $optParams = ['domain' => 'proto.utwente.nl', 'query' => "externalId:$protoUser->id"];
-        $googleUser = $directory->users->listUsers($optParams)->getUsers();
-        if ($googleUser == null) {
-            return;
-        }
-
-        $directory->users->update(
-            $googleUser[0]->id,
-            new GoogleUser(['password' => $password])
-        );
-    }
-
-    /**
      * Show the page to request a username via an email.
      */
     public function forgotUsernameIndex(): View

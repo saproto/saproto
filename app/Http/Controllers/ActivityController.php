@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Illuminate\View\Factory;
 
 class ActivityController extends Controller
 {
@@ -112,9 +112,6 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['event' => $event]);
     }
 
-    /**
-     * @return View
-     */
     public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
