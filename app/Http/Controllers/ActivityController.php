@@ -7,6 +7,7 @@ use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -112,7 +113,7 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['event' => $event]);
     }
 
-    public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
+    public function checklist(Event $event): View|Factory
     {
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');
