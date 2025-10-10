@@ -20,7 +20,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::group(['middleware' => ['web']], static function () {
             Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
             Route::get('dev_export/{table}/{personal_key}', ['as' => 'dev_export', 'uses' => 'ExportController@export']);
-        })->middleware('web');
+        })->aliasMiddleware('web');
     });
 
     Route::group(['prefix' => 'discord', 'as' => 'discord::'], function () {

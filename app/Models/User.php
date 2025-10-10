@@ -11,8 +11,6 @@ use Database\Factories\UserFactory;
 use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,11 +22,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
@@ -188,7 +188,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
+class User extends Authenticatable implements HasMedia
 {
     use CanResetPassword;
     use HasApiTokens;
@@ -198,7 +198,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     use HasRoles;
     use InteractsWithMedia;
+    use Notifiable;
     use SoftDeletes;
+    use TwoFactorAuthenticatable;
 
     protected $table = 'users';
 
@@ -208,7 +210,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $appends = ['is_member'];
 
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
+    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet',   'two_factor_secret',
+        'two_factory_recovery_codes',
+        'remember_token'];
 
     public function getPublicId(): ?string
     {
@@ -518,7 +522,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function hasDiet(): bool
     {
-        return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
+        return str_replace(["\r", "\n", ' '], '', $this->diet) !== '';
     }
 
     /**
@@ -578,10 +582,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
-
-        return $memberships;
+        return ['pending' => Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get(), 'previous' => Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get()];
     }
 
     public function getCalendarAlarm(): ?float
@@ -686,6 +687,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected function casts(): array
     {
         return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
             'deleted_at' => 'datetime',
             'phone_visible' => 'boolean',
             'address_visible' => 'boolean',

@@ -62,7 +62,7 @@ class NarrowcastingController extends Controller
 
         $youtube_id = $request->string('youtube_id');
 
-        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->slide_duration = -1;
         }
@@ -123,7 +123,7 @@ class NarrowcastingController extends Controller
         }
 
         $youtube_id = $request->string('youtube_id');
-        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();

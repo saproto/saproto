@@ -2,6 +2,7 @@
 
 use App\Providers\AppServiceProvider;
 use App\Providers\EventServiceProvider;
+use App\Providers\FortifyServiceProvider;
 use App\Providers\RouteServiceProvider;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use GrahamCampbell\Markdown\MarkdownServiceProvider;
@@ -236,6 +237,7 @@ return [
         EventServiceProvider::class,
         RouteServiceProvider::class,
         \App\Providers\BroadcastServiceProvider::class,
+        FortifyServiceProvider::class,
 
         /*
          * External Service Providers

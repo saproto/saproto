@@ -47,7 +47,7 @@ class FeeCron extends Command
      */
     public function handle(): int
     {
-        if (intval(Carbon::now()->format('n')) == 8 || intval(Carbon::now()->format('n')) == 9) {
+        if (intval(Carbon::now()->format('n')) === 8 || intval(Carbon::now()->format('n')) === 9) {
             $this->info("We don't charge membership fees in August or September.");
 
             return 0;

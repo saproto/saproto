@@ -33,11 +33,11 @@
                         Logged in as
                         <strong>{{ Auth::user()->name }}</strong>
                         .
-                        <a
-                            href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}"
-                        >
-                            Log out.
-                        </a>
+{{--                        <a--}}
+{{--                            href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}"--}}
+{{--                        >--}}
+{{--                            Log out.--}}
+{{--                        </a>--}}
                     @else
                         Nog logged in.
                         <a href="{{ route('login::show') }}">Log in.</a>

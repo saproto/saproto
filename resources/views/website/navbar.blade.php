@@ -741,7 +741,7 @@
                                     @else
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('login::logout') }}"
+{{--                                            href="{{ route('login::logout') }}"--}}
                                         >
                                             Logout
                                         </a>

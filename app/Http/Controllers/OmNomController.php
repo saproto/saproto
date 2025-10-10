@@ -298,7 +298,7 @@ class OmNomController extends Controller
                 $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf('%s %%', Carbon::now()->format('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
             }
 
-            if (strlen($result->message) > 0) {
+            if ($result->message !== '') {
                 $result->message .= sprintf(' today, %s.', $user->calling_name);
             }
         }

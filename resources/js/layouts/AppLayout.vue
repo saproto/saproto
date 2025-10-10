@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import Menubar from '@/components/Menubar.vue'
-import { router } from '@inertiajs/vue3'
-router.on('invalid', (event) => {
-    event.preventDefault()
-    const response = event.detail.response
-    window.location.href = response.request.responseURL
-})
+// import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
+import AppLayout from '@/layouts/app/AppHeaderLayout.vue';
+
+
+import type { BreadcrumbItemType } from '@/types';
+
+interface Props {
+    breadcrumbs?: BreadcrumbItemType[];
+}
+
+withDefaults(defineProps<Props>(), {
+    breadcrumbs: () => [],
+});
 </script>
 
 <template>
-    <div class="min-h-screen w-full">
-        <Menubar />
-        <main>
-            <slot />
-        </main>
-    </div>
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <slot />
+  </AppLayout>
 </template>

@@ -223,7 +223,7 @@ class ProductController extends Controller
         foreach ($input as $lineRaw) {
             $line = explode(',', $lineRaw);
 
-            if (count($line) == 2) {
+            if (count($line) === 2) {
                 $product = Product::query()->find($line[0]);
 
                 if ($product) {

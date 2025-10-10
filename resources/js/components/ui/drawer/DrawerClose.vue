@@ -6,7 +6,10 @@ const props = defineProps<DrawerCloseProps>()
 </script>
 
 <template>
-    <DrawerClose data-slot="drawer-close" v-bind="props">
-        <slot />
-    </DrawerClose>
+  <DrawerClose
+    data-slot="drawer-close"
+    v-bind="props"
+  >
+    <slot />
+  </DrawerClose>
 </template>
