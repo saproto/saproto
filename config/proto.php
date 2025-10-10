@@ -172,7 +172,7 @@ return [
     |
     */
 
-    'internal' => 'Jona Patig',
+    'internal' => 'Andres Mirabal Cadamo',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ return [
     |
     */
 
-    'treasurer' => 'Badr Boubric',
+    'treasurer' => 'Fee Wollseiffen',
 
     /*
     |--------------------------------------------------------------------------
@@ -194,7 +194,7 @@ return [
     |
     */
 
-    'secretary' => 'Bart van Dorst',
+    'secretary' => 'Troy Gordon',
 
     /*
     |--------------------------------------------------------------------------
@@ -205,7 +205,7 @@ return [
     |
     */
 
-    'boardnumber' => '14.0',
+    'boardnumber' => '15.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -323,7 +323,7 @@ return [
         1 => 'dark',
         2 => 'rainbowbarf',
         3 => 'broto',
-        4 => 'nightMode',
+        4 => 'night',
     ],
 
     'logoThemes' => [

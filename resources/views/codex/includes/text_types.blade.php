@@ -22,7 +22,7 @@
         @foreach ($textTypes as $textType)
             <div class="card border">
                 <div class="card-header border-bottom-0">
-                    <span class="w-100 d-inline-flex justify-content-between">
+                    <span class="d-inline-flex justify-content-between w-100">
                         <span
                             class="cursor-pointer"
                             data-bs-toggle="collapse"
@@ -65,7 +65,7 @@
                         <div class="card-body cursor-default">
                             @foreach ($textType->texts as $text)
                                 <span
-                                    class="w-100 d-inline-flex justify-content-between"
+                                    class="d-inline-flex justify-content-between w-100"
                                 >
                                     @if (isset($edit) && $edit)
                                         <div class="form-check">

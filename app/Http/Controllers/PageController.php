@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
-use App\Models\StorageEntry;
 use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PageController extends Controller
 {
@@ -24,7 +25,7 @@ class PageController extends Controller
     protected array $reservedSlugs = ['add', 'edit', 'delete'];
 
     /** @return View */
-    public function index()
+    public function index(): \Illuminate\Contracts\View\View|Factory
     {
         $pages = Page::query()->orderBy('created_at', 'desc')->paginate(20);
 
@@ -32,7 +33,7 @@ class PageController extends Controller
     }
 
     /** @return View */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('pages.edit', ['item' => null, 'new' => true]);
     }
@@ -68,10 +69,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  string  $slug
      * @return View
      */
-    public function show($slug)
+    public function show(string $slug): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->where('slug', '=', $slug)->first();
 
@@ -87,10 +87,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $page = Page::query()->findOrFail($id);
 
@@ -98,10 +97,9 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse|View
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         /** @var Page $page */
         $page = Page::query()->findOrFail($id);
@@ -132,12 +130,11 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         /** @var Page $page */
         $page = Page::query()->findOrfail($id);
@@ -150,64 +147,41 @@ class PageController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
-     */
-    public function featuredImage(Request $request, $id)
-    {
-        $page = Page::query()->find($id);
-
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $page->featuredImage()->associate($file);
-        } else {
-            $page->featuredImage()->dissociate();
-        }
-
-        $page->save();
-
-        return Redirect::route('page::edit', ['id' => $id]);
-    }
-
-    /**
-     * @return RedirectResponse
-     *
-     * @throws FileNotFoundException
      */
     public function addFile(Request $request, int $id)
     {
-        if (! $request->file('files')) {
-            Session::flash('flash_message', 'You forgot to add any files.');
+        $request->validate([
+            'file' => 'required|file|max:5120|mimes:pdf,jpg,png,jpeg', // max 5MB
+        ]);
+        $page = Page::query()->findOrFail($id);
+
+        try {
+            if (in_array($request->file('file')->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])) {
+                $collection = 'images';
+            } else {
+                $collection = 'files';
+            }
+
+            $page->addMediaFromRequest('file')
+                ->toMediaCollection($collection);
+        } catch (FileDoesNotExist|FileIsTooBig $e) {
+            Session::flash('flash_message', $e->getMessage());
 
             return Redirect::back();
         }
 
-        $page = Page::query()->find($id);
-        $file = $request->file('files');
-        $newFile = new StorageEntry;
-        $newFile->createFromFile($file);
-
-        $page->files()->attach($newFile);
-        $page->save();
-
         return Redirect::route('page::edit', ['id' => $id]);
     }
 
     /**
-     * @param  int  $id
-     * @param  int  $file_id
      * @return RedirectResponse
      */
-    public function deleteFile($id, $file_id)
+    public function deleteFile(int $id, int $file_id)
     {
-        $page = Page::query()->find($id);
-
-        $page->files()->detach($file_id);
-        $page->save();
+        $page = Page::query()->findOrFail($id);
+        $item = $page->media()->where('id', $file_id)->firstOrFail();
+        $item->delete();
 
         return Redirect::route('page::edit', ['id' => $id]);
     }

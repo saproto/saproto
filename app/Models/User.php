@@ -17,19 +17,26 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\Token;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
@@ -43,9 +50,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property string|null $password
  * @property string|null $remember_token
- * @property int|null $image_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $last_seen_at
  * @property string|null $birthdate
  * @property string|null $phone
  * @property string|null $diet
@@ -89,7 +96,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection<int, Committee> $groups
  * @property-read int|null $groups_count
  * @property-read bool $is_member
- * @property-read bool $is_protube_admin
  * @property-read Collection<int, EmailList> $lists
  * @property-read int|null $lists_count
  * @property-read Member|null $member
@@ -99,7 +105,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $orderlines_count
  * @property-read Collection<int, Permission> $permissions
  * @property-read int|null $permissions_count
- * @property-read StorageEntry|null $photo
  * @property-read Collection<int, PlayedVideo> $playedVideos
  * @property-read int|null $played_videos_count
  * @property-read mixed $proto_email
@@ -116,8 +121,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $tempadmin_count
  * @property-read Collection<int, Ticket> $tickets
  * @property-read int|null $tickets_count
- * @property-read Collection<int, Token> $tokens
- * @property-read int|null $tokens_count
  * @property-read WelcomeMessage|null $welcomeMessage
  * @property-read Collection<int, Withdrawal> $withdrawals
  * @property-read int|null $withdrawals_count
@@ -144,7 +147,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User whereEduUsername($value)
  * @method static Builder<static>|User whereEmail($value)
  * @method static Builder<static>|User whereId($value)
- * @method static Builder<static>|User whereImageId($value)
  * @method static Builder<static>|User whereKeepOmnomcomHistory($value)
  * @method static Builder<static>|User whereKeepProtubeHistory($value)
  * @method static Builder<static>|User whereName($value)
@@ -173,9 +175,20 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder<static>|User withoutRole($roles, $guard = null)
  * @method static Builder<static>|User withoutTrashed()
  *
+ * @property-read Collection<int, \App\Models\Activity> $activities
+ * @property-read int|null $activities_count
+ * @property-read Collection<int, \App\Models\Activity> $backupActivities
+ * @property-read int|null $backup_activities_count
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ * @property-read Collection<int, Token> $tokens
+ * @property-read int|null $tokens_count
+ *
+ * @method static Builder<static>|User whereLastSeenAt($value)
+ *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
 {
     use CanResetPassword;
     use HasApiTokens;
@@ -184,6 +197,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     use HasFactory;
 
     use HasRoles;
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'users';
@@ -192,9 +206,9 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     protected $with = ['member'];
 
-    protected $appends = ['is_member', 'is_protube_admin'];
+    protected $appends = ['is_member'];
 
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at', 'diet'];
+    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
 
     public function getPublicId(): ?string
     {
@@ -232,12 +246,28 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function photo(): BelongsTo
+    public function registerMediaCollections(): void
     {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
+        $this->addMediaCollection('profile_picture')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->useFallbackUrl(asset('images/default-avatars/other.png'))
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('preview')
+            ->performOnCollections('profile_picture')
+            ->nonQueued()
+            ->fit(Fit::Crop, 250, 250)
+            ->format('webp');
+
+        $this->addMediaConversion('thumb')
+            ->performOnCollections('profile_picture')
+            ->nonQueued()
+            ->fit(Fit::Crop, 25, 25)
+            ->format('webp');
     }
 
     /**
@@ -294,6 +324,28 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function societies(): BelongsToMany
     {
         return $this->groups()->where('is_society', true);
+    }
+
+    /**
+     * @return BelongsToMany<Activity, $this, Pivot>
+     */
+    public function activities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', false)
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Activity, $this, Pivot>
+     */
+    public function backupActivities(): BelongsToMany
+    {
+        return $this->belongsToMany(Activity::class, 'activities_users')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', true)
+            ->withTimestamps();
     }
 
     /**
@@ -361,14 +413,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * @return HasMany<Token, $this>
-     */
-    public function tokens(): HasMany
-    {
-        return $this->hasMany(Token::class);
-    }
-
-    /**
      * @return HasMany<PlayedVideo, $this>
      */
     public function playedVideos(): HasMany
@@ -390,20 +434,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function stickers(): HasMany
     {
         return $this->hasMany(Sticker::class);
-    }
-
-    /**
-     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
-     *
-     * @return string Path to a resized version of someone's profile picture.
-     */
-    public function generatePhotoPath(int $w = 100, int $h = 100): string
-    {
-        if ($this->photo) {
-            return $this->photo->generateImagePath($w, $h);
-        }
-
-        return asset('images/default-avatars/other.png');
     }
 
     /**
@@ -532,22 +562,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->personal_key;
     }
 
-    public function generateNewToken(): Token
-    {
-        $token = new Token;
-        $token->generate($this);
-
-        return $token;
-    }
-
-    public function getToken(): Token
-    {
-        $token = $this->tokens->last() ?? $this->generateNewToken();
-        $token->touch();
-
-        return $token;
-    }
-
     /** Removes user's birthdate and phone number. */
     public function clearMemberProfile(): void
     {
@@ -610,28 +624,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     protected function signedMembershipForm(): Attribute
     {
         return Attribute::make(get: fn (): bool => $this->member?->membershipForm !== null);
-    }
-
-    /**
-     * @return Attribute<bool, never>
-     */
-    protected function isProtubeAdmin(): Attribute
-    {
-        return Attribute::make(get: function (): bool {
-            if ($this->can('protube')) {
-                return true;
-            }
-
-            return $this->isTempadmin();
-        });
-    }
-
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function photoPreview(): Attribute
-    {
-        return Attribute::make(get: fn (): string => $this->generatePhotoPath());
     }
 
     public function getIcalUrl(): string

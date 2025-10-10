@@ -26,7 +26,6 @@ class AuthLoginEventHandler
     {
         /** @var User $user */
         $user = $event->user;
-        $user->generateNewToken();
 
         // We will grant the user all roles to which they are entitled to!
         $committees = [

@@ -33,7 +33,7 @@
                                 @include(
                                     'website.home.cards.card-bg-image',
                                     [
-                                        'url' => route('photo::album::list', ['album' => $album->id]),
+                                        'url' => route('albums::album::list', ['album' => $album->id]),
                                         'img' => $album->thumb(),
                                         'html' => sprintf(
                                             '<sub>%s</sub><br><strong>%s</strong>',
@@ -117,9 +117,7 @@
                                 'website.home.cards.card-bg-image',
                                 [
                                     'url' => route('page::show', ['slug' => $page->slug]),
-                                    'img' => $page->featuredImage
-                                        ? $page->featuredImage->generateImagePath(300, 200)
-                                        : null,
+                                    'img' => null,
                                     'photo_pop' => true,
                                     'html' => $page->title,
                                     'height' => 100,

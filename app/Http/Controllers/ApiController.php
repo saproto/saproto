@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PhotoEnum;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
 use App\Models\EmailListSubscription;
@@ -9,6 +10,7 @@ use App\Models\Feedback;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackVote;
 use App\Models\OrderLine;
+use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
@@ -21,7 +23,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Random\RandomException;
-use stdClass;
 
 class ApiController extends Controller
 {
@@ -48,41 +49,22 @@ class ApiController extends Controller
             abort(403);
         }
 
-        $playedVideo = new PlayedVideo;
         $user = User::query()->findOrFail($request->user_id);
-
-        if ($user->keep_protube_history) {
-            $playedVideo->user()->associate($user);
-        }
-
-        $playedVideo->video_id = $request->video_id;
-        $playedVideo->video_title = urldecode($request->video_title);
-
-        $playedVideo->save();
-
-        PlayedVideo::query()->where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function getToken(Request $request)
-    {
-        $response = new stdClass;
-
-        if (Auth::check()) {
-            $response->name = Auth::user()->name;
-            $response->photo = Auth::user()->generatePhotoPath(250, 250);
-            $response->token = Auth::user()->getToken()->token;
-        } else {
-            $response->token = 0;
-        }
-
-        if ($request->has('callback')) {
-            return response()->json($response)->setCallback($request->input('callback'));
-        }
-
-        return response()->json($response);
+        $youtubeId = $request->video_id;
+        $duration_played = $request->duration_played;
+        $duration = $request->duration;
+        $earlierSpotifyMatch = PlayedVideo::query()->where('video_id', $youtubeId)->whereNotNull('spotify_id')->orderBy('created_at', 'desc')->first();
+        $title = urldecode($request->video_title);
+        PlayedVideo::query()->create([
+            'video_id' => $request->video_id,
+            'video_title' => $title,
+            'user_id' => $user->keep_protube_history ? $user->id : null,
+            'spotify_id' => $earlierSpotifyMatch?->spotify_id,
+            'spotify_name' => $earlierSpotifyMatch?->spotify_name,
+            'duration_played' => $duration_played,
+            'duration' => $duration,
+        ]);
+        PlayedVideo::query()->where('video_id', $youtubeId)->update(['video_title' => $title]);
     }
 
     /**
@@ -122,7 +104,7 @@ class ApiController extends Controller
 
     /**
      * @param  array{0: int, 1: int, 2: int, 3: int}  $numbers
-     * @return array{photos: Collection<(int|string), mixed>, album_name: string, date_taken: non-falsy-string}|array{error: string}
+     * @return array{photos: Collection<int, string>, album_name: string, date_taken: non-falsy-string}|array{error: string}
      *
      * @throws RandomException
      */
@@ -131,7 +113,7 @@ class ApiController extends Controller
         $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
             $query->where('private', false);
         })->with(['items' => function ($q) {
-            $q->inRandomOrder()->take(6);
+            $q->reorder()->inRandomOrder()->take(6);
         }])->without('thumbPhoto');
 
         $random = random_int(1, 100);
@@ -154,13 +136,14 @@ class ApiController extends Controller
             $album = $privateQuery->inRandomOrder()->first();
         }
 
+        //
         // if we still do not have an album, there are no public albums
         if (! $album) {
             return ['error' => 'No public photo albums found.'];
         }
 
         return [
-            'photos' => $album->items->pluck('url'),
+            'photos' => $album->items->map(fn (Photo $item): string => $item->getUrl(PhotoEnum::LARGE)),
             'album_name' => $album->name,
             'date_taken' => Carbon::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
         ];
@@ -188,7 +171,12 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (ActivityParticipation::query()->with(['activity.event', 'help.committee'])->where('user_id', $user->id)->get() as $activity_participation) {
+        $activityParticipations = ActivityParticipation::query()
+            ->with('activity.event')
+            ->with('help.committee')
+            ->where('user_id', $user->id)
+            ->get();
+        foreach ($activityParticipations as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
                 'date' => $activity_participation->activity?->event ? Carbon::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
@@ -202,7 +190,14 @@ class ApiController extends Controller
             ];
         }
 
-        foreach (OrderLine::query()->with(['molliePayment', 'withdrawal', 'product'])->where('user_id', $user->id)->get() as $orderline) {
+        $orderlines = OrderLine::query()
+            ->with('molliePayment')
+            ->with('withdrawal')
+            ->with('product')
+            ->where('user_id', $user->id)
+            ->get();
+
+        foreach ($orderlines as $orderline) {
             $payment_method = null;
             if ($orderline->payed_with_cash) {
                 $payment_method = 'cash_cashier';
@@ -246,7 +241,7 @@ class ApiController extends Controller
         }
 
         foreach (PhotoLikes::query()->with('photo')->where('user_id', $user->id)->get() as $photo_like) {
-            $data['liked_photos'][] = $photo_like->photo->url;
+            $data['liked_photos'][] = $photo_like->photo->getUrl();
         }
 
         foreach ($user->stickers()->get() as $sticker) {

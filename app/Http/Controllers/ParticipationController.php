@@ -34,9 +34,10 @@ class ParticipationController extends Controller
         if ($request->has('helping_committee_id')) {
             $helpingCommittee = HelpingCommittee::query()
                 ->withCount('users')
-                ->with([
-                    'committee.users',
-                ])->findOrFail($request->input('helping_committee_id'));
+                ->with(
+                    'committee.users'
+                )
+                ->findOrFail($request->input('helping_committee_id'));
             abort_unless($event->activity->getHelperParticipation(Auth::user(), $helpingCommittee) === null, 403, 'You are already helping at '.$event->title.'.');
 
             abort_unless($helpingCommittee->committee->isMember(Auth::user()), 403, 'You are not a member of the '.$helpingCommittee->committee.' and thus cannot help on behalf of it.');
@@ -82,20 +83,18 @@ class ParticipationController extends Controller
 
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::query()->findOrFail($request->input('helping_committee_id'));
-
-            abort_unless($event->activity->getHelperParticipation($user, $helping) === null, 403, $user->name.' is already helping at '.$event->title.'.');
+            abort_unless($event->activity->getHelperParticipation($user, $helping) === null, 403, $user->name.' is already helping at '.$event->title.' for the '.$helping->committee->name.'.');
             abort_unless($helping->committee->isMember($user), 403, $user->name.' is not a member of the '.$helping->committee->name.' and thus cannot help on behalf of it.');
 
             $data['committees_activities_id'] = $helping->id;
         } else {
+            abort_unless($user->is_member, 403, $user->name.' is not a member of the association and therefore can not be subscribed for '.$event->title.'.');
             abort_if($event->activity->isParticipating($user), 403, $user->name.' is already subscribed for '.$event->title.'.');
         }
 
         $participation = ActivityParticipation::query()->create($data);
 
-        if ($request->has('helping_committee_id')) {
-            $event->updateUniqueUsersCount();
-        }
+        $event->updateUniqueUsersCount();
 
         Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
 
@@ -168,7 +167,8 @@ class ParticipationController extends Controller
     {
         $backup_participation = ActivityParticipation::query()->where('activity_id', $activity->id)
             ->whereNull('committees_activities_id')->where('backup', true)
-            ->with('user', 'activity.event')
+            ->with('activity.event')
+            ->with('user')
             ->first();
 
         if ($backup_participation == null) {

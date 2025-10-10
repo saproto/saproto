@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class CompanyController extends Controller
 {
@@ -21,7 +23,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = Company::query()->with('image')->where('on_carreer_page', true)->inRandomOrder()->get();
+        $companies = Company::query()->with('media')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         }
@@ -53,7 +55,7 @@ class CompanyController extends Controller
      *
      * @return View
      */
-    public function adminIndex()
+    public function adminIndex(): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.adminlist', ['companies' => Company::query()->orderBy('sort')->paginate(20)]);
     }
@@ -63,7 +65,7 @@ class CompanyController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.edit', ['company' => null]);
     }
@@ -77,6 +79,10 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
         $company = new Company;
         $company->name = $request->name;
         $company->url = $request->url;
@@ -89,13 +95,19 @@ class CompanyController extends Controller
         $company->on_membercard = $request->has('on_membercard');
         $company->sort = Company::query()->max('sort') + 1;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
-        }
-
         $company->save();
+
+        if ($request->has('image')) {
+            try {
+                $company->addMediaFromRequest('image')
+                    ->usingFileName('company_'.$company->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
+        }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
 
@@ -105,10 +117,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function show($id)
+    public function show(int $id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.show', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -116,10 +127,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function showMembercard($id)
+    public function showMembercard(int $id): \Illuminate\Contracts\View\View|Factory
     {
         return view('companies.showmembercard', ['company' => Company::query()->findOrFail($id)]);
     }
@@ -127,10 +137,9 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $company = Company::query()->findOrFail($id);
 
@@ -140,13 +149,16 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
      * @return RedirectResponse
      *
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+
         $company = Company::query()->findOrFail($id);
         $company->name = $request->name;
         $company->url = $request->url;
@@ -158,13 +170,19 @@ class CompanyController extends Controller
         $company->membercard_long = $request->membercard_long;
         $company->on_membercard = $request->has('on_membercard');
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
-        }
-
         $company->save();
+
+        if ($request->has('image')) {
+            try {
+                $company->addMediaFromRequest('image')
+                    ->usingFileName('company_'.$company->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+
+                return Redirect::back();
+            }
+        }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
 
@@ -172,10 +190,9 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function orderUp($id)
+    public function orderUp(int $id)
     {
         $company = Company::query()->findOrFail($id);
 
@@ -195,10 +212,9 @@ class CompanyController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function orderDown($id)
+    public function orderDown(int $id)
     {
         $company = Company::query()->findOrFail($id);
 
@@ -220,12 +236,10 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $company = Company::query()->findOrFail($id);
 

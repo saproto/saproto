@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
-use App\Models\StorageEntry;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,13 +17,15 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class CommitteeController extends Controller
 {
     /**
      * @return View
      */
-    public function index(bool $showSociety = false)
+    public function index(bool $showSociety = false): \Illuminate\Contracts\View\View|Factory
     {
         if (Auth::user()?->can('board')) {
             $data = Committee::query()->where('is_society', $showSociety)->orderby('name')->get();
@@ -116,23 +117,25 @@ class CommitteeController extends Controller
         return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function image(int $id, Request $request): RedirectResponse
     {
-        $committee = Committee::query()->find($id);
+        $committee = Committee::query()->findOrFail($id);
+        $request->validate([
+            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+        ]);
+        if ($request->has('image')) {
+            try {
+                $committee->addMediaFromRequest('image')
+                    ->usingFileName('committee_'.$committee->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry;
-            $file->createFromFile($image);
-            $committee->image()->associate($file);
+                return Redirect::back();
+            }
         } else {
-            $committee->image()->dissociate();
+            $committee->getFirstMedia()->delete();
         }
-
-        $committee->save();
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
@@ -147,7 +150,7 @@ class CommitteeController extends Controller
             'start' => 'required|date',
             'end' => 'nullable|date',
             'role' => 'required|string',
-            'edition' => 'required|string',
+            'edition' => 'nullable|string',
             'committee_id' => 'required|integer',
             'user_id' => 'required|integer|exists:users,id',
         ]);
@@ -182,7 +185,7 @@ class CommitteeController extends Controller
             'start' => 'required|date',
             'end' => 'nullable|date',
             'role' => 'required|string',
-            'edition' => 'required|string',
+            'edition' => 'nullable|string',
         ]);
 
         $membership->role = $validated['role'];

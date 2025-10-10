@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Rules\NotUtwenteEmail;
 use DateTime;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -191,7 +192,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function becomeAMemberOf()
+    public function becomeAMemberOf(): \Illuminate\Contracts\View\View|Factory
     {
         /* @var null|User $user */
         $user = Auth::check() ? Auth::user() : null;
@@ -313,33 +314,44 @@ class UserDashboardController extends Controller
             return Redirect::route('becomeamember');
         }
 
-        $userdata = Session::has('flash_userdata') ? Session::get('flash_userdata') : $request->only(['birthdate', 'phone']);
-        $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
+        if (! $request->has('phone_verified') || ! $request->has('birthdate_verified')) {
+            $userdata = $request->only(['birthdate', 'phone']);
+            $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
+
+            $validator = Validator::make($userdata, [
+                'birthdate' => 'required|date',
+                'phone' => 'required|regex:(\+[0-9]{8,16})',
+            ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
+            if ($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
+
+            Session::flash('flash_userdata', $userdata);
+
+            return view(
+                'users.dashboard.completeprofile_verify',
+                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+            );
+        }
+
+        $userdata = $request->only(['birthdate_verified', 'phone_verified']);
 
         $validator = Validator::make($userdata, [
-            'birthdate' => 'required|date',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
+            'birthdate_verified' => 'required|date',
+            'phone_verified' => 'required|regex:(\+[0-9]{8,16})',
         ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
 
-        if (Session::has('flash_userdata') && $request->has('verified')) {
-            $userdata['birthdate'] = Carbon::parse($userdata['birthdate'])->format('Y-m-d');
-            $user->fill($userdata);
-            $user->save();
+        $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
+        $userdata['phone'] = $userdata['phone_verified'];
+        $user->fill($userdata);
+        $user->save();
 
-            Session::flash('flash_message', 'Completed profile.');
+        Session::flash('flash_message', 'Completed profile.');
 
-            return Redirect::route('becomeamember');
-        }
-
-        Session::flash('flash_userdata', $userdata);
-
-        return view(
-            'users.dashboard.completeprofile_verify',
-            ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
-        );
+        return Redirect::route('becomeamember');
     }
 
     /**
@@ -379,6 +391,7 @@ class UserDashboardController extends Controller
         $member->membership_type = MembershipTypeEnum::PENDING;
 
         $form = new PDF('P', 'A4', 'en');
+        $form->setDefaultFont('freeserif');
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
         $file = new StorageEntry;
@@ -393,7 +406,7 @@ class UserDashboardController extends Controller
     }
 
     /** @return View */
-    public function getClearProfile()
+    public function getClearProfile(): \Illuminate\Contracts\View\View|Factory
     {
         /** @var User $user */
         $user = Auth::user();

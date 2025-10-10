@@ -1,3 +1,7 @@
+@php
+    use App\Enums\CompanyEnum;
+@endphp
+
 @extends("website.layouts.redesign.generic")
 
 @section("page-title")
@@ -11,7 +15,7 @@
                 class="card mb-3 border-0 text-white"
                 style="
                     @if ($header)
-                        background-image: url({{ $header->image->generateImagePath(1500, 400) }});
+                        background-image: url({{ $header->getImageUrl() }});
                         background-size: cover;
                         background-position: center
                         center;
@@ -60,11 +64,11 @@
 
             @if (count($companies) > 0)
                 <div class="card mb-3">
-                    <div class="card-body position-relative pb-0 pt-1">
+                    <div class="card-body position-relative pt-1 pb-0">
                         <div class="swiper row mb-1" style="height: 70px">
                             <div class="swiper-wrapper">
                                 @foreach ($companies as $i => $company)
-                                    @if ($company->image)
+                                    @if ($company->hasMedia())
                                         <div
                                             class="swiper-slide justify-content-center align-items-center d-flex"
                                         >
@@ -73,8 +77,9 @@
                                             >
                                                 <img
                                                     class="company-{{ strtolower($company->name) }}"
-                                                    src="{{ $company->image->generateImagePath(null, 50) }}"
+                                                    src="{{ $company->getImageUrl(CompanyEnum::SMALL) }}"
                                                     alt="logo of {{ $company->name }}"
+                                                    height="50"
                                                 />
                                             </a>
                                         </div>

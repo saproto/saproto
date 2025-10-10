@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\CarbonInterface;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
@@ -13,7 +14,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function show()
+    public function show(): \Illuminate\Contracts\View\View|Factory
     {
         return view('smartxp.screen', ['protube' => true]);
     }
@@ -21,7 +22,7 @@ class SmartXpScreenController extends Controller
     /**
      * @return View
      */
-    public function showProtopolis()
+    public function showProtopolis(): \Illuminate\Contracts\View\View|Factory
     {
         return view('smartxp.screen');
     }
@@ -44,8 +45,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.timetable-id'),
-            Carbon::today()->toDateTimeString(),
-            Carbon::tomorrow()->toDateTimeString()
+            Carbon::today()->toIso8601String(),
+            Carbon::tomorrow()->toIso8601String()
         );
     }
 
@@ -67,8 +68,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.protopeners-id'),
-            Carbon::today()->toDateTimeString(),
-            Carbon::tomorrow()->toDateTimeString()
+            Carbon::today()->toIso8601String(),
+            Carbon::tomorrow()->toIso8601String()
         );
     }
 
@@ -95,7 +96,7 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
 
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::now()->previous(CarbonInterface::MONDAY)->toDateTimeString()).'&timeMax='.urlencode(Carbon::now()->next(CarbonInterface::MONDAY)->toDateTimeString());
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::now()->previous(CarbonInterface::MONDAY)->toIso8601String()).'&timeMax='.urlencode(Carbon::now()->next(CarbonInterface::MONDAY)->toIso8601String());
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
@@ -137,7 +138,7 @@ class SmartXpScreenController extends Controller
     }
 
     /** @return View */
-    public function canWork()
+    public function canWork(): \Illuminate\Contracts\View\View|Factory
     {
         $timetable = $this->smartxpTimetable();
 

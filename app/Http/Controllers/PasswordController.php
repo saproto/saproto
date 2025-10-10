@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordEntry;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -18,7 +19,7 @@ use Permission;
 class PasswordController extends Controller
 {
     /** @return View */
-    public function getAuth()
+    public function getAuth(): \Illuminate\Contracts\View\View|Factory
     {
         return view('passwordstore.reauth');
     }

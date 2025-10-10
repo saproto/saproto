@@ -9,13 +9,13 @@ function handleClick() {
 defineOptions({
     layout: AppLayout,
 })
-import { usePage } from '@inertiajs/vue3'
-// import { computed } from 'vue'
+import { Head, usePage } from '@inertiajs/vue3'
 const page = usePage()
-// const user = computed(() => page.props.auth.user)
 </script>
 
 <template>
+    <Head title="Welcome" />
+
     {{ page.props }}
-    <Button @click="handleClick">Click me</Button>
+    <Button @click="handleClick"> Click me </Button>
 </template>

@@ -22,7 +22,7 @@ class DinnerformController extends Controller
     {
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()
-            ->with(['event'])->findOrFail($id);
+            ->with('event')->findOrFail($id);
         $order = DinnerformOrderline::query()
             ->where('user_id', Auth::user()->id)
             ->where('dinnerform_id', $dinnerform->id)
@@ -40,7 +40,9 @@ class DinnerformController extends Controller
     public function admin(int $id): View
     {
         $dinnerform = Dinnerform::query()
-            ->with(['orderlines.user', 'orderlines.dinnerform', 'event'])
+            ->with('orderlines.user')
+            ->with('orderlines.dinnerform')
+            ->with('event')
             ->findOrFail($id);
 
         return view('dinnerform.admin', ['dinnerform' => $dinnerform]);
@@ -92,6 +94,7 @@ class DinnerformController extends Controller
         $dinnerformList = Dinnerform::query()
             ->orderBy('end', 'desc')
             ->with('orderedBy')
+            ->with('event')
             ->paginate(20);
 
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
@@ -103,8 +106,8 @@ class DinnerformController extends Controller
         $dinnerform = Dinnerform::query()->findOrFail($id);
 
         $request->validate([
-            'start' => 'required|date_format:Y-m-d H:i',
-            'end' => 'required|date_format:Y-m-d H:i|after:start',
+            'start' => 'required|date_format:Y-m-d\TH:i',
+            'end' => 'required|date_format:Y-m-d\TH:i|after:start',
         ]);
 
         if ($dinnerform->closed) {
@@ -166,7 +169,8 @@ class DinnerformController extends Controller
     {
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::query()
-            ->with(['orderlines.user', 'orderlines.dinnerform'])
+            ->with('orderlines.user')
+            ->with('orderlines.dinnerform')
             ->findOrFail($id);
 
         $dinnerform->update([

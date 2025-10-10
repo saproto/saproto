@@ -42,10 +42,10 @@
                                     </a>
                                 </td>
                                 <td class="on-carreer-page">
-                                    {{ $company->on_carreer_page ? 'Yes' : 'No' }}
+                                    {{ $company->on_carreer_page ? '✅' : '❌' }}
                                 </td>
                                 <td class="in-logo-bar">
-                                    {{ $company->in_logo_bar ? 'Yes' : 'No' }}
+                                    {{ $company->in_logo_bar ? '✅' : '❌' }}
                                 </td>
                                 <td>
                                     <a

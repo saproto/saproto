@@ -31,9 +31,9 @@
                 >
                     <tr style="margin: 0; padding: 0; border: none">
                         <td style="margin: 0; padding: 20px 40px; border: none">
-                            @if ($event->image)
+                            @if ($event->getFirstMediaUrl('header', 'card') != '')
                                 <img
-                                    src="{{ $event->image->generateImagePath(350, 100) }}"
+                                    src="{{ $event->getFirstMediaUrl('header', 'card') }}"
                                     style="width: 100%"
                                     alt="{{ $event->title }}'s cover image"
                                 />

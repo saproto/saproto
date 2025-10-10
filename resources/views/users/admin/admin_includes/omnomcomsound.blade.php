@@ -4,17 +4,17 @@
             Custom OmNomCom Sound for {{ $user->calling_name }}
         </div>
 
-        @if ($user->member->customOmnomcomSound)
+        @if ($user->member->hasMedia('omnomcom_sound'))
             <div class="card-body">
                 <div
-                    class="d-inline-flex justify-content-around w-100 mb-2 flex-wrap"
+                    class="d-inline-flex justify-content-around mb-2 w-100 flex-wrap"
                 >
                     <div class="d-flex align-items-center">
                         {{ $user->calling_name }}'s custom sound:
                     </div>
                     <audio controls class="mw-100">
                         <source
-                            src="{{ $user->member->customOmnomcomSound->generatePath() }}"
+                            src="{{ $user->member->getFirstMediaUrl('omnomcom_sound') }}"
                             type="audio/mpeg"
                         />
                         Your browser does not support the audio element.
@@ -53,6 +53,8 @@
                                 type="file"
                                 class="form-control"
                                 name="sound"
+                                accept="audio/mpeg"
+                                required
                             />
                         </div>
                         <button type="submit" class="btn btn-outline-info">

@@ -58,7 +58,11 @@ class WithdrawalController extends Controller
 
         $totalPerUser = [];
 
-        $orderlines = OrderLine::unpayed()->whereHas('user')->with('product', 'product.ticket')->get();
+        $orderlines = OrderLine::unpayed()
+            ->whereHas('user')
+            ->with('product')
+            ->with('product.ticket')
+            ->get();
         foreach ($orderlines as $orderline) {
             if (! array_key_exists($orderline->user->id, $totalPerUser)) {
                 $totalPerUser[$orderline->user->id] = 0;
@@ -99,13 +103,13 @@ class WithdrawalController extends Controller
     {
         $withdrawal = Withdrawal::query()
             ->withCount(['orderlines', 'users'])
-            ->with('failedWithdrawals', function ($q) {
+            ->with(['failedWithdrawals' => function ($q) {
                 $q->where('user_id', Auth::user()->id);
-            })
+            }])
             ->findOrFail($id);
 
         $userLines = OrderLine::query()
-            ->selectRaw('user_id, count(id) as orderline_count, sum(total_price) as total_price')
+            ->selectRaw('user_id, count(*) as orderline_count, sum(total_price) as total_price')
             ->where('payed_with_withdrawal', $id)
             ->groupBy('user_id')
             ->with('user.bank')
@@ -408,9 +412,8 @@ class WithdrawalController extends Controller
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()
-            ->with([
-                'orderlines.product',
-            ])->findOrFail($id);
+            ->with('orderlines.product')
+            ->findOrFail($id);
 
         return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
     }
@@ -440,12 +443,12 @@ class WithdrawalController extends Controller
 
     public function unwithdrawable(): View
     {
-        $users = User::query()->whereHas('orderlines', function ($q) {
+        $users = User::query()->whereHas('orderlines', static function ($q) {
             $q->unpayed();
         })->whereDoesntHave('bank')
-            ->with('orderlines', function ($q) {
+            ->with(['orderlines' => function ($q) {
                 $q->unpayed()->with('product');
-            })
+            }])
             ->withTrashed()
             ->get();
 

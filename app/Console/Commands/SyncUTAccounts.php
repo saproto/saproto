@@ -80,19 +80,19 @@ class SyncUTAccounts extends Command
         $usersById = (clone $query)->whereNotNull('utwente_username')->get();
         $this->info('Checking '.$usersById->count().' users by student number');
         $newAccounts = $this->syncColumnToUTTrait($usersById, $this->standardQueryStringBuilder(...), $this->standardCompare(...), 'utwente_username', 'uid', $constraints);
-        UtAccount::query()->insert($newAccounts->toArray());
+        UtAccount::query()->insert($newAccounts->all());
 
         // try to find the users by their email
         $usersByEmail = (clone $query)->whereNotNull('email')->get();
         $this->info('Checking the remaining '.$usersByEmail->count().' users by email');
         $newerAccounts = $this->syncColumnToUTTrait($usersByEmail, $this->standardQueryStringBuilder(...), $this->standardCompare(...), 'email', 'userprincipalname', $constraints);
-        UtAccount::query()->insert($newerAccounts->toArray());
+        UtAccount::query()->insert($newerAccounts->all());
 
         // try to find the users by their name
         $usersByName = (clone $query)->whereNotNull('name')->get();
         $this->info('Checking another '.$usersByName->count().' users by name');
         $newerAccounts = $this->syncColumnToUTTrait($usersByName, $this->nameQueryStringBuilder(...), $this->nameCompare(...), 'name', 'givenname', $constraints);
-        UtAccount::query()->insert($newerAccounts->toArray());
+        UtAccount::query()->insert($newerAccounts->all());
     }
 
     /**

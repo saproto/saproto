@@ -1,4 +1,4 @@
-<div class="feedback card h-100 mb-3">
+<div class="feedback card mb-3 h-100">
     <div class="card-header bg-dark text-reset">
         <span data-id="{{ $feedback->id }}">
             <span class="votes d-inline-block">
@@ -134,7 +134,7 @@
     </div>
 
     <div class="card-footer ps-0">
-        <div class="mt-2 text-end text-muted">
+        <div class="text-muted mt-2 text-end">
             <em>
                 <sub>
                     @if (Auth::user()->can('board') || $feedback->category->show_publisher)
@@ -151,12 +151,12 @@
 </div>
 
 @push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        if ({{ isset($controls) }}) {
+    @if ($controls)
+        <script type="text/javascript" nonce="{{ csp_nonce() }}">
             document
                 .querySelectorAll('.toggle-navbar-{{ $feedback->id }}')
                 .forEach((element) => {
-                    element.addEventListener('click', (event) => {
+                    element.addEventListener('click', () => {
                         const enabled = document
                             .getElementById(
                                 'feedback__{{ $feedback->id }}__collapse'
@@ -175,6 +175,6 @@
                         }
                     })
                 })
-        }
-    </script>
+        </script>
+    @endif
 @endpush

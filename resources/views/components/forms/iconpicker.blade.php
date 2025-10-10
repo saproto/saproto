@@ -5,7 +5,7 @@
 
     <div class="input-group iconpicker-wrapper mb-3">
         <div class="input-group-prepend">
-            <span class="input-group-text h-100 selected-icon"></span>
+            <span class="input-group-text selected-icon h-100"></span>
         </div>
         <input
             id="iconpicker-{{ $name }}"

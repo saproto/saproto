@@ -7,10 +7,14 @@
         class="card leftborder leftborder-info text-decoration-none mb-3"
         href="{{ route('event::show', ['event' => $event]) }}"
     >
+        @php
+            $url = $event->getFirstMediaUrl('header', 'card');
+        @endphp
+
         <div
-            class="card-body event {{ $event->image ? 'bg-img' : 'no-img' }} text-start"
-            style="{{ empty($lazyload) && $event->image ? 'background-size: cover; background: center no-repeat url(' . $event->image->generateImagePath(800, 300) . ')' : '' }}"
-            data-bgimage="{{ ! empty($lazyload) && $event->image ? $event->image->generateImagePath(800, 300) ?? '' : '' }}"
+            class="card-body event {{ $url !== '' ? 'bg-img' : 'no-img' }} text-start"
+            style="{{ empty($lazyload) && $url !== '' ? 'background-size: cover; background: center no-repeat url(' . $event->getFirstMediaUrl('header', 'card') . ')' : '' }}"
+            data-bgimage="{{ ! empty($lazyload) ? $url : '' }}"
         >
             {{-- Countdown --}}
             @if (! empty($countdown))
@@ -118,7 +122,7 @@
             {{-- Category --}}
             @if ($event->category)
                 <span
-                    class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis float-end mb-1 me-1 px-3"
+                    class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis float-end me-1 mb-1 px-3"
                 >
                     <i
                         class="{{ $event->category->icon }} fa-fw"

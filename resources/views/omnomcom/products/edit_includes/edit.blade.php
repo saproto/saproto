@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ProductEnum;
+@endphp
+
 <div class="card">
     <form
         method="post"
@@ -11,11 +15,16 @@
         @csrf
 
         <div class="card-body">
-            @if ($product != null && $product->image != null)
+            @php
+                $imageUrl = $product?->getImageUrl(ProductEnum::LARGE);
+            @endphp
+
+            @if ($product != null && $imageUrl !== '')
                 <div class="d-flex justify-content-center">
                     <div class="product-image bg-dark mb-2">
                         <img
-                            src="{!! $product->image->generateImagePath(null, null) !!}"
+                            src="{!! $imageUrl !!}"
+                            alt="{{ $product->name }}'s image"
                         />
                     </div>
                 </div>
@@ -159,8 +168,8 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="price">Calories:</label>
+                <div class="col-md-6">
+                    <label for="calories">Calories:</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -169,6 +178,24 @@
                             name="calories"
                             placeholder="0"
                             value="{{ $product->calories ?? '' }}"
+                        />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="barcode">Barcode:</label>
+                    <i
+                        class="fas fa-info-circle fa-fw mr-2"
+                        data-bs-toggle="tooltip"
+                        title="The number under the barcode of the product so it can be scanned"
+                    ></i>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="barcode"
+                            name="barcode"
+                            placeholder="42256700"
+                            value="{{ $product->barcode ?? '' }}"
                         />
                     </div>
                 </div>

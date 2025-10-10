@@ -40,6 +40,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|MenuItem whereUpdatedAt($value)
  * @method static Builder<static>|MenuItem whereUrl($value)
  *
+ * @property-read mixed $parsed_url
+ *
  * @mixin \Eloquent
  */
 class MenuItem extends Model

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\HeaderImage;
-use App\Models\StorageEntry;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class HeaderImageController extends Controller
 {
@@ -31,26 +32,33 @@ class HeaderImageController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:255',
             'user' => 'required|integer',
-            'image' => 'required|image:jpeg,png,jpg|max:2048',
+            'image' => 'required|image:jpeg,png,jpg|max:5120',
         ]);
-
-        $file = new StorageEntry;
-        $file->createFromFile($validated['image']);
-        $file->save();
 
         $header = HeaderImage::query()->create([
             'title' => $validated['title'],
             'credit_id' => $validated['user'],
-            'image_id' => $file->id,
         ]);
         $header->save();
+
+        if ($request->has('image')) {
+            try {
+                $header->addMediaFromRequest('image')
+                    ->usingFileName('header_'.$header->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
+                $header->delete();
+
+                return Redirect::back();
+            }
+        }
 
         return Redirect::route('headerimages.index');
     }
 
     public function destroy(HeaderImage $headerimage): RedirectResponse
     {
-        $headerimage->image->delete();
         $headerimage->delete();
         Session::flash('flash_message', 'Header image deleted.');
 

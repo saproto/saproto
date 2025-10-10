@@ -281,7 +281,7 @@
                     @include(
                         'event.display_includes.render_participant_list',
                         [
-                            'participants' => $ticket->purchases->pluck('user'),
+                            'participants' => $ticket->purchases->pluck('user')->unique(),
                             'event' => null,
                         ]
                     )

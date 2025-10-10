@@ -15,6 +15,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Override;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Member Model.
@@ -32,7 +36,6 @@ use Override;
  * @property int|null $omnomcom_sound_id
  * @property MembershipTypeEnum $membership_type
  * @property-read UtAccount|null $UtAccount
- * @property-read StorageEntry|null $customOmnomcomSound
  * @property-read StorageEntry|null $membershipForm
  * @property-read User|null $user
  *
@@ -49,7 +52,6 @@ use Override;
  * @method static Builder<static>|Member whereIsPrimaryAtAnotherAssociation($value)
  * @method static Builder<static>|Member whereMembershipFormId($value)
  * @method static Builder<static>|Member whereMembershipType($value)
- * @method static Builder<static>|Member whereOmnomcomSoundId($value)
  * @method static Builder<static>|Member whereProtoUsername($value)
  * @method static Builder<static>|Member whereUntil($value)
  * @method static Builder<static>|Member whereUpdatedAt($value)
@@ -57,13 +59,17 @@ use Override;
  * @method static Builder<static>|Member withTrashed()
  * @method static Builder<static>|Member withoutTrashed()
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin Eloquent
  */
-class Member extends Model
+class Member extends Model implements HasMedia
 {
     /** @use HasFactory<MemberFactory>*/
     use HasFactory;
 
+    use InteractsWithMedia;
     use SoftDeletes;
 
     protected $table = 'members';
@@ -79,6 +85,14 @@ class Member extends Model
             'membership_type' => MembershipTypeEnum::class,
             'is_primary_at_another_association' => 'boolean',
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('omnomcom_sound')
+            ->useDisk('public')
+            ->acceptsMimeTypes(['audio/mpeg', 'audio/mp3', 'audio/mpga'])
+            ->singleFile();
     }
 
     /**
@@ -98,14 +112,6 @@ class Member extends Model
     }
 
     /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function customOmnomcomSound(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'omnomcom_sound_id');
-    }
-
-    /**
      * @return HasOne<UtAccount, $this>
      */
     public function UtAccount(): HasOne
@@ -116,7 +122,7 @@ class Member extends Model
     /** @param Builder<$this> $query
      * @return Builder<$this>
      */
-    public function scopePrimary(Builder $query): Builder
+    protected function scopePrimary(Builder $query): Builder
     {
         return $query->whereMembershipType(MembershipTypeEnum::REGULAR)
             ->where('is_primary_at_another_association', false)

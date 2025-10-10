@@ -2,17 +2,12 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\FileController;
 use Database\Factories\StorageEntryFactory;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Override;
 
@@ -57,45 +52,7 @@ class StorageEntry extends Model
      */
     public function isOrphan(): bool
     {
-        return
-            NarrowcastingItem::query()->where('image_id', $this->id)->count() == 0 &&
-            Page::query()->where('featured_image_id', $this->id)->count() == 0 &&
-            DB::table('pages_files')->where('file_id', $this->id)->count() == 0 &&
-            Product::query()->where('image_id', $this->id)->count() == 0 &&
-            Company::query()->where('image_id', $this->id)->count() == 0 &&
-            User::query()->where('image_id', $this->id)->count() == 0 &&
-            Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0 &&
-            DB::table('emails_files')->where('file_id', $this->id)->count() == 0 &&
-            Committee::query()->where('image_id', $this->id)->count() == 0 &&
-            Event::query()->where('image_id', $this->id)->count() == 0 &&
-            Newsitem::query()->where('featured_image_id', $this->id)->count() == 0 &&
-            SoundboardSound::query()->where('file_id', $this->id)->count() == 0 &&
-            HeaderImage::query()->where('image_id', $this->id)->count() == 0 &&
-            Photo::query()->withoutGlobalScopes()->where('file_id', $this->id)->count() == 0 &&
-            Member::query()->where('omnomcom_sound_id', $this->id)->count() == 0 &&
-            WallstreetEvent::query()->where('image_id', $this->id)->count() == 0 &&
-            Sticker::query()->where('file_id', $this->id)->count() == 0;
-    }
-
-    /**
-     * @throws FileNotFoundException
-     */
-    public function createFromFile(UploadedFile $file, ?string $customPath = null): void
-    {
-        $this->hash = $this->generateHash();
-
-        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
-
-        if (! empty($customPath)) {
-            $this->filename = $customPath.$this->hash;
-        }
-
-        Storage::disk('local')->put($this->filename, File::get($file));
-
-        $this->mime = $file->getClientMimeType();
-        $this->original_filename = $file->getClientOriginalName();
-
-        $this->save();
+        return Member::withTrashed()->where('membership_form_id', $this->id)->count() == 0;
     }
 
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
@@ -127,59 +84,6 @@ class StorageEntry extends Model
         }
 
         return $url;
-    }
-
-    public function generateImagePath(?int $w = null, ?int $h = null): string
-    {
-        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
-        if (Config::get('app-proto.assets-domain') != null) {
-            return str_replace(Config::string('app-proto.primary-domain'), Config::string('app-proto.assets-domain'), $url);
-        }
-
-        return $url;
-    }
-
-    public function getBase64(?int $w = null, ?int $h = null): string
-    {
-        return base64_encode(FileController::makeImage($this, $w, $h));
-    }
-
-    /**
-     * @param  bool  $human  Defaults to true.
-     */
-    public function getFileSize(bool $human = true): int|string
-    {
-        $size = File::size($this->generateLocalPath());
-        if (! $human) {
-            return $size;
-        }
-
-        if ($size < 1024) {
-            return $size.' bytes';
-        }
-
-        if ($size < 1024 ** 2) {
-            return round($size / 1024 ** 1, 1).' kilobytes';
-        }
-
-        if ($size < 1024 ** 3) {
-            return round($size / 1024 ** 2, 1).' megabytes';
-        }
-
-        return round($size / 1024 ** 3, 1).' gigabytes';
-    }
-
-    public function generateLocalPath(): string
-    {
-        return storage_path('app/'.$this->filename);
-    }
-
-    /**
-     * @param  string  $algo  Defaults to md5.
-     */
-    public function getFileHash(string $algo = 'md5'): string
-    {
-        return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
     #[Override]

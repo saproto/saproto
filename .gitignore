@@ -15,7 +15,8 @@ tmp
 # Local files
 /personal
 public/storage
-
+/storage/media-library
+/storage/framework/testing/*
 # IDE files
 /.idea
 .phpactor.json
@@ -55,4 +56,5 @@ storage/oauth-public.key
 
 #Google Cloud Platform Credentials
 application_default_credentials.json
+
 

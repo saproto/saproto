@@ -46,6 +46,7 @@
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Age</th>
+                                <th>Member</th>
                                 @if ($event->shouldShowDietInfo())
                                     <th width="20%">Allergies</th>
                                 @endif
@@ -105,6 +106,8 @@
                                             </span>
                                         @endif
                                     </td>
+
+                                    <td>{{ $user->is_member ? '✅' : '❌' }}</td>
 
                                     @if ($event->shouldShowDietInfo())
                                         <td>

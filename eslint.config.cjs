@@ -33,12 +33,14 @@ module.exports = defineConfig([{
         },
     },
 
-    extends: compat.extends(
+    extends: [...compat.extends(
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:vue/vue3-recommended",
         "prettier",
     ),
+        vue.configs["flat/recommended"],
+
+    ],
 
     plugins: {
         vue,

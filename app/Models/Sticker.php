@@ -2,10 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\StickerEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -20,7 +27,6 @@ use Illuminate\Support\Carbon;
  * @property string|null $report_reason
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read StorageEntry $image
  * @property-read User|null $reporter
  * @property-read User $user
  *
@@ -40,11 +46,37 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Sticker whereUpdatedAt($value)
  * @method static Builder<static>|Sticker whereUserId($value)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin \Eloquent
  */
-class Sticker extends Model
+class Sticker extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = ['lat', 'lng', 'city', 'country', 'country_code', 'reporter_id', 'report_reason', 'user_id', 'created_at'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(StickerEnum::LARGE->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+    }
+
+    public function getImageUrl(StickerEnum $stickerEnum = StickerEnum::LARGE): string
+    {
+        return $this->getFirstMediaUrl('default', $stickerEnum->value);
+    }
 
     /**
      * @return BelongsTo<User, $this>
@@ -60,13 +92,5 @@ class Sticker extends Model
     public function reporter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reporter_id');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'file_id');
     }
 }

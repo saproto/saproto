@@ -1,3 +1,7 @@
+@php
+    use App\Enums\NarrowcastingEnum;
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -114,11 +118,12 @@
                                         1366 x 768 pixels.
                                     </sup>
 
-                                    @if ($item?->image)
+                                    @if ($item?->hasMedia())
                                         <label>Current image:</label>
                                         <img
-                                            src="{!! $item->image->generateImagePath(500, null) !!}"
+                                            src="{!! $item->getImageUrl(NarrowcastingEnum::SMALL) !!}"
                                             class="w-100"
+                                            alt="{{ $item->name }}'s image"
                                         />
                                     @endif
                                 </p>
@@ -138,7 +143,7 @@
                             Cancel
                         </a>
 
-                        <p class="mb-0 mt-2 text-center">
+                        <p class="mt-2 mb-0 text-center">
                             Developed with
                             <span class="text-danger">
                                 <i class="fab fa-youtube fa-fw"></i>

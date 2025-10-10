@@ -143,7 +143,7 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $mutation->is_bulk ? 'Yes' : 'No' }}
+                                                {{ $mutation->is_bulk ? '✅' : '❌' }}
                                             </td>
                                             <td>{{ $mutation->date() }}</td>
                                         </tr>

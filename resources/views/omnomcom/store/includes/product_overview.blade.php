@@ -1,3 +1,7 @@
+@php
+    use App\Enums\ProductEnum;
+@endphp
+
 <div id="product-nav" class="col-10">
     @foreach ($categories as $category)
         <?php $products_in_category = []; ?>
@@ -18,18 +22,23 @@
                     ?>
 
                     <div
-                        class="product col-3 {{ $product->stock <= 0 ? 'nostock' : '' }}"
+                        class="product {{ $product->stock <= 0 ? 'nostock' : '' }} col-3"
                         data-id="{{ $product->id }}"
                         data-stock="{{ $product->stock }}"
                         data-price="{{ $product->price }}"
+                        data-barcode="{{ $product->barcode }}"
                     >
                         <div class="product-inner">
                             <div class="product-image">
-                                @if ($product->image)
+                                @php
+                                    $productImage = $product->getImageUrl(ProductEnum::THUMB);
+                                @endphp
+
+                                @if ($productImage != '')
                                     <div
                                         class="product-image-inner"
                                         style="
-                                            background-image: url('{!! $product->image->generateImagePath(100, null) !!}');
+                                            background-image: url('{!! $productImage !!}');
                                         "
                                     ></div>
                                 @endif
@@ -58,7 +67,7 @@
 
             @if (count($products_in_category) > 0)
                 <div
-                    class="product col-3 random {{ count($products_in_category) <= 1 ? 'nostock' : '' }}"
+                    class="product random {{ count($products_in_category) <= 1 ? 'nostock' : '' }} col-3"
                     data-list="{{ implode(',', $products_in_category) }}"
                     data-stock="{{ count($products_in_category) }}"
                 >
@@ -91,7 +100,7 @@
                         <div
                             class="product-image user-image"
                             style="
-                                background-image: url('{!! $user->generatePhotoPath(200, 200) !!}');
+                                background-image: url('{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}');
                             "
                         ></div>
                         <div class="product-details">

@@ -3,14 +3,14 @@
         class="card-header text-bg-dark border-bottom-0 bg-dark position-relative mb-2"
     >
         <div>
-            <h3 class="ellipsis mb-3 mt-4 text-center">
+            <h3 class="ellipsis mt-4 mb-3 text-center">
                 {{ $user->name }}
             </h3>
 
             <div class="text-center">
                 <img
-                    src="{{ $user->generatePhotoPath(170, 170) }}"
-                    class="rounded-circle border-5 bg-dark mt-2 border border-white"
+                    src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
+                    class="rounded-circle bg-dark mt-2 border border-5 border-white"
                     width="170px"
                     height="170px"
                 />
@@ -23,7 +23,7 @@
             @if ($user->member->membership_type === \App\Enums\MembershipTypeEnum::HONORARY)
                 <p class="card-text ellipsis">
                     <i
-                        class="fas fa-trophy fa-fw me-3 text-primary"
+                        class="fas fa-trophy fa-fw text-primary me-3"
                         aria-hidden="true"
                     ></i>
                     <strong>
@@ -33,7 +33,7 @@
             @elseif ($user->member->membership_type === \App\Enums\MembershipTypeEnum::PET)
                 <p class="card-text ellipsis">
                     <i
-                        class="fas fa-paw fa-fw me-3 text-primary"
+                        class="fas fa-paw fa-fw text-primary me-3"
                         aria-hidden="true"
                     ></i>
                     <strong>{{ $user->calling_name }} is a pet.</strong>

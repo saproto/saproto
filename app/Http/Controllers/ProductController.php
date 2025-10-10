@@ -7,9 +7,9 @@ use App\Models\Account;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StockMutation;
-use App\Models\StorageEntry;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
@@ -25,7 +27,7 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         if ($request->has('search') && strlen($request->get('search')) > 2) {
             $search = $request->get('search');
@@ -45,11 +47,11 @@ class ProductController extends Controller
     /**
      * @return View
      */
-    public function create()
+    public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('omnomcom.products.edit', [
             'product' => null,
-            'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
+            'accounts' => Account::query()->orderBy('account_number')->get(),
             'categories' => ProductCategory::all(),
         ]);
     }
@@ -61,17 +63,28 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = Product::query()->create($request->except('image', 'product_categories'));
+
+        $request->validate([
+            'image' => 'nullable|image|max:5120', // max 5MB
+        ]);
+
+        $product = Product::query()->create($request->except('image', 'product_categories', 'barcode'));
         $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->barcode = $request->input('barcode') != '' ? $request->input('barcode') : null;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
+        if ($request->has('image')) {
+            try {
+                $product->addMediaFromRequest('image')
+                    ->usingFileName('product_'.$product->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-            $product->image()->associate($file);
+                return Redirect::back();
+            }
         }
 
         $categories = [];
@@ -94,10 +107,9 @@ class ProductController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return View
      */
-    public function edit($id)
+    public function edit(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $product = Product::query()->findOrFail($id);
 
@@ -105,7 +117,7 @@ class ProductController extends Controller
             'product' => $product,
             'accounts' => Account::query()->orderBy('account_number', 'asc')->get(),
             'categories' => ProductCategory::all(),
-            'orderlines' => $product->orderlines()->orderBy('created_at', 'DESC')->paginate(20),
+            'orderlines' => $product->orderlines()->with('user')->orderBy('created_at', 'DESC')->paginate(20),
         ]);
     }
 
@@ -119,6 +131,10 @@ class ProductController extends Controller
     {
         /** @var Product $product */
         $product = Product::query()->findOrFail($id);
+
+        $request->validate([
+            'image' => 'nullable|image|max:5120', // max 5MB
+        ]);
 
         // Mutation logging point
         $old_stock = $product->stock;
@@ -156,12 +172,18 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->barcode = $request->input('barcode') != '' ? $request->input('barcode') : null;
 
-        if ($request->file('image')) {
-            $file = new StorageEntry;
-            $file->createFromFile($request->file('image'));
+        if ($request->has('image')) {
+            try {
+                $product->addMediaFromRequest('image')
+                    ->usingFileName('product_'.$product->id)
+                    ->toMediaCollection();
+            } catch (FileDoesNotExist|FileIsTooBig $e) {
+                Session::flash('flash_message', $e->getMessage());
 
-            $product->image()->associate($file);
+                return Redirect::back();
+            }
         }
 
         $product->account()->associate(Account::query()->findOrFail($request->input('account_id')));

@@ -31,7 +31,6 @@ class DinnerformOrderlineController extends Controller
         $validated = $request->validate([
             'order' => 'required|string',
             'price' => 'required|numeric',
-            'helper' => 'nullable|boolean',
         ]);
 
         $helper = $request->has('helper') || $dinnerform->isHelping();

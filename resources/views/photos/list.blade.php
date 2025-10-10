@@ -7,7 +7,7 @@
 @section('container')
     <div class="card mb-3">
         @can('protography')
-            <a href="{{ route('photo::admin::index') }}" class="btn btn-info">
+            <a href="{{ route('albums::admin::index') }}" class="btn btn-info">
                 <i class="fas fa-edit"></i>
                 <span class="d-none d-sm-inline">Photo admin</span>
             </a>
@@ -20,7 +20,7 @@
                         @include(
                             'website.home.cards.card-bg-image',
                             [
-                                'url' => route('photo::album::list', ['album' => $album->id]),
+                                'url' => route('albums::album::list', ['album' => $album->id]),
                                 'img' => $album->thumb(),
                                 'html' => sprintf(
                                     '<sub>%s</sub><br>%s<strong>%s</strong>',

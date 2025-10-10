@@ -76,7 +76,7 @@
                             Cancel
                         </a>
 
-                        <p class="mb-0 mt-2 text-center">
+                        <p class="mt-2 mb-0 text-center">
                             Developed with
                             <span class="text-danger">
                                 <i class="fab fa-youtube fa-fw"></i>

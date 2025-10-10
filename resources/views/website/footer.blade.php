@@ -27,10 +27,10 @@
             <div class="col-lg-3 col-md-4 col-sm-6 col-7">
                 <br />
                 <span class="fas fa-clock fa-fw"></span>
-                &nbsp;&nbsp;Monday 08:30-16:00
+                &nbsp;&nbsp;Monday & Friday 08:30-16:00
                 <br />
                 <span class="fas fa-clock fa-fw"></span>
-                &nbsp;&nbsp;Tuesday-Friday, 08:30-17:30
+                &nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30
                 <br />
                 <span class="fas fa-phone fa-fw"></span>
                 &nbsp;&nbsp;
@@ -48,7 +48,7 @@
                 </a>
             </div>
 
-            <div class="col-3 d-none d-lg-block text-end">
+            <div class="d-none d-lg-block col-3 text-end">
                 <br />
                 <a
                     class="text-white"
@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        <p class="mb-2 mt-3 text-center">
+        <p class="mt-3 mb-2 text-center">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">

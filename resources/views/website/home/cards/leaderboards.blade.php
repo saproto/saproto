@@ -1,9 +1,14 @@
 @php
-    $leaderboard = App\Models\Leaderboard::where('featured', true)
-        ->with('entries', function ($q) {
-            $q->orderBy('points', 'DESC')->limit(5);
-        })
-        ->first();
+    $leaderboard = Cache::rememberForever(
+        'leaderboard.leaderboard',
+        fn () => App\Models\Leaderboard::where('featured', true)
+            ->with([
+                'entries' => function ($q) {
+                    $q->orderBy('points', 'DESC')->limit(5);
+                },
+            ])
+            ->first(),
+    );
 @endphp
 
 @if ($leaderboard)
@@ -46,7 +51,7 @@
             </table>
         @else
             <hr />
-            <p class="pt-3 text-center text-muted">There are no entries yet.</p>
+            <p class="text-muted pt-3 text-center">There are no entries yet.</p>
         @endif
 
         <div class="p-3">

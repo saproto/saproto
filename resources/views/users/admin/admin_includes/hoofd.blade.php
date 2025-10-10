@@ -5,7 +5,7 @@
 
     <div class="card-body p-5 text-center">
         <img
-            src="{{ $user->generatePhotoPath(800, 800) }}"
+            src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
             class="rounded-circle mw-100"
         />
     </div>

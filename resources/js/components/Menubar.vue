@@ -1,95 +1,194 @@
 <script setup lang="ts">
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
-import { computed, ref } from 'vue'
-import { Button } from '@/components/ui/button'
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from '@/components/ui/drawer'
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
+import { Link } from '@inertiajs/vue3'
 
-import {
-    Menubar,
-    MenubarMenu,
-    MenubarTrigger,
-    MenubarContent,
-    MenubarItem,
-} from '@/components/ui/menubar'
-
-import { Menu } from 'lucide-vue-next'
-import { Link, usePage } from '@inertiajs/vue3'
-
-const isDesktop = useMediaQuery('(min-width: 768px)')
-const [UseTemplate, GridForm] = createReusableTemplate()
-
-const isOpen = ref(false)
-const page = usePage()
-const menuitems = computed(() => page.props.menuitems)
-
-import { useCan } from '@/composables/useCan'
-const { can } = useCan()
+const components: { title: string; href: string; description: string }[] = [
+    {
+        title: 'Alert Dialog',
+        href: '/docs/components/alert-dialog',
+        description:
+            'A modal dialog that interrupts the user with important content and expects a response.',
+    },
+    {
+        title: 'Hover Card',
+        href: '/docs/components/hover-card',
+        description:
+            'For sighted users to preview content available behind a link.',
+    },
+    {
+        title: 'Progress',
+        href: '/docs/components/progress',
+        description:
+            'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+    },
+    {
+        title: 'Scroll-area',
+        href: '/docs/components/scroll-area',
+        description: 'Visually or semantically separates content.',
+    },
+    {
+        title: 'Tabs',
+        href: '/docs/components/tabs',
+        description:
+            'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+    },
+    {
+        title: 'Tooltip',
+        href: '/docs/components/tooltip',
+        description:
+            'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    },
+]
 </script>
 
 <template>
-    <!-- Menu Items -->
-    <UseTemplate>
-        <MenubarMenu v-for="menuitem in menuitems" :key="menuitem.menuname">
-            <MenubarTrigger>{{ menuitem.menuname }}</MenubarTrigger>
-            <MenubarContent class="w-full">
-                <MenubarItem
-                    v-for="child in menuitem.children"
-                    :key="child.menuname"
-                    class="w-full"
-                >
-                    {{ child.menuname }}
-                </MenubarItem>
-            </MenubarContent>
-        </MenubarMenu>
-
-        <MenubarMenu v-if="can('sysadmin')">
-            <Link :href="route('admin')">
-                <MenubarTrigger>Admin</MenubarTrigger>
-            </Link>
-        </MenubarMenu>
-    </UseTemplate>
-
-    <!-- Menubar -->
-    <Menubar
-        class="sticky top-0 z-50 flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-3 shadow dark:border-gray-700 dark:bg-gray-900 md:justify-start"
+    <nav
+        class="relative z-10 mx-auto flex max-w-max flex-1 items-center justify-center"
     >
-        <!-- Show full menu on desktop -->
-        <GridForm v-if="isDesktop" />
+        <NavigationMenu>
+            <NavigationMenuList>
+                <NavigationMenuItem>
+                    <NavigationMenuTrigger>For members</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                        <ul
+                            class="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]"
+                        >
+                            <li class="row-span-3">
+                                <NavigationMenuLink as-child>
+                                    <Link
+                                        class="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none select-none focus:shadow-md"
+                                        href="/"
+                                    >
+                                        Home
+                                    </Link>
 
-        <!-- Drawer hamburger on mobile -->
-        <Drawer v-else v-model:open="isOpen">
-            <MenubarMenu>
-                <DrawerTrigger as-child>
-                    <MenubarTrigger
-                        class="rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    <img
+                                        src="https://www.reka-ui.com/logo.svg"
+                                        class="h-6 w-6"
+                                    />
+                                    <div class="mt-4 mb-2 text-lg font-medium">
+                                        shadcn/ui
+                                    </div>
+                                    <p
+                                        class="text-muted-foreground text-sm leading-tight"
+                                    >
+                                        Beautifully designed components built
+                                        with Radix UI and Tailwind CSS.
+                                    </p>
+                                </NavigationMenuLink>
+                            </li>
+
+                            <li>
+                                <NavigationMenuLink as-child>
+                                    <a
+                                        href="/docs/introduction"
+                                        class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                                    >
+                                        <div
+                                            class="text-sm leading-none font-medium"
+                                        >
+                                            Introduction
+                                        </div>
+                                        <p
+                                            class="text-muted-foreground line-clamp-2 text-sm leading-snug"
+                                        >
+                                            Re-usable components built using
+                                            Radix UI and Tailwind CSS.
+                                        </p>
+                                    </a>
+                                </NavigationMenuLink>
+                            </li>
+                            <li>
+                                <NavigationMenuLink as-child>
+                                    <a
+                                        href="/docs/installation"
+                                        class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                                    >
+                                        <div
+                                            class="text-sm leading-none font-medium"
+                                        >
+                                            Installation
+                                        </div>
+                                        <p
+                                            class="text-muted-foreground line-clamp-2 text-sm leading-snug"
+                                        >
+                                            How to install dependencies and
+                                            structure your app.
+                                        </p>
+                                    </a>
+                                </NavigationMenuLink>
+                            </li>
+                            <li>
+                                <NavigationMenuLink as-child>
+                                    <a
+                                        href="/docs/typography"
+                                        class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                                    >
+                                        <div
+                                            class="text-sm leading-none font-medium"
+                                        >
+                                            Typography
+                                        </div>
+                                        <p
+                                            class="text-muted-foreground line-clamp-2 text-sm leading-snug"
+                                        >
+                                            Styles for headings, paragraphs,
+                                            lists...etc
+                                        </p>
+                                    </a>
+                                </NavigationMenuLink>
+                            </li>
+                        </ul>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                    <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                        <ul
+                            class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                        >
+                            <li
+                                v-for="component in components"
+                                :key="component.title"
+                            >
+                                <NavigationMenuLink as-child>
+                                    <a
+                                        :href="component.href"
+                                        class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                                    >
+                                        <div
+                                            class="text-sm leading-none font-medium"
+                                        >
+                                            {{ component.title }}
+                                        </div>
+                                        <p
+                                            class="text-muted-foreground line-clamp-2 text-sm leading-snug"
+                                        >
+                                            {{ component.description }}
+                                        </p>
+                                    </a>
+                                </NavigationMenuLink>
+                            </li>
+                        </ul>
+                    </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                    <NavigationMenuLink
+                        href="https://wiki.proto.utwente.nl"
+                        :class="navigationMenuTriggerStyle()"
                     >
-                        <Menu class="h-5 w-5" />
-                    </MenubarTrigger>
-                </DrawerTrigger>
-            </MenubarMenu>
-            <DrawerContent>
-                <DrawerHeader class="text-left">
-                    <DrawerTitle>Navigation</DrawerTitle>
-                    <DrawerDescription> </DrawerDescription>
-                </DrawerHeader>
-
-                <GridForm />
-
-                <DrawerFooter class="pt-2">
-                    <DrawerClose as-child>
-                        <Button variant="outline">Close</Button>
-                    </DrawerClose>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
-    </Menubar>
+                        Wiki
+                    </NavigationMenuLink>
+                </NavigationMenuItem>
+            </NavigationMenuList>
+        </NavigationMenu>
+    </nav>
 </template>

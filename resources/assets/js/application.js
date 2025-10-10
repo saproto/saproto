@@ -1,4 +1,7 @@
 window.global ||= window
+
+import.meta.glob(['../images/**'])
+
 // Vendors
 import SignaturePad from 'signature_pad'
 
@@ -7,6 +10,8 @@ import moment from 'moment/moment.js'
 
 global.moment = moment
 
+import ExifReader from 'exifreader'
+global.ExifReader = ExifReader
 //Temporarily disabled due to an import error: Uncaught ReferenceError: glMatrixArrayType is not defined
 // import quagga from 'quagga';
 // global.Quagga = quagga;
@@ -14,7 +19,7 @@ global.moment = moment
 import './countdown-timer'
 import './utilities'
 import './broto'
-import './nightMode'
+import './night'
 // Execute theme JavaScript
 if (new Date().getMonth() + 1 !== 12) {
     window[config.theme]?.()
@@ -95,7 +100,8 @@ if (customFileInputList.length) {
 }
 
 // Enable Swiper with default settings
-import Swiper, { Autoplay, Navigation } from 'swiper'
+import Swiper from 'swiper'
+import { Autoplay, Navigation } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/autoplay'
 import 'swiper/css/navigation'

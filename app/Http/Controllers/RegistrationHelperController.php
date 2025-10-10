@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipTypeEnum;
 use App\Models\Member;
 use App\Models\User;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,7 +18,7 @@ class RegistrationHelperController extends Controller
      *
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         $search = $request->input('query');
 
@@ -48,7 +49,7 @@ class RegistrationHelperController extends Controller
      *
      * @return View
      */
-    public function details(int $id)
+    public function details(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $user = User::query()->whereHas('member', static function ($q) {
             $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());

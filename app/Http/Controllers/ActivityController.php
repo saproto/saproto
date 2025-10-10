@@ -115,7 +115,7 @@ class ActivityController extends Controller
     /**
      * @return View
      */
-    public function checklist(Event $event)
+    public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
     {
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');

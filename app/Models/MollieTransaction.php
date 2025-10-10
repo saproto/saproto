@@ -112,6 +112,8 @@ class MollieTransaction extends Model
 
         $new_status = self::translateStatus($mollie->status);
 
+        $this->loadMissing(['orderlines.ticketPurchase', 'orderlines.product']);
+
         $this->status = $mollie->status;
 
         if ($new_status !== 'open') {

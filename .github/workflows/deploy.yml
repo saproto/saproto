@@ -10,13 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  call-phplint:
-    name: Fix php
-    uses: ./.github/workflows/fix_php.yml
-    secrets: inherit
-
   deploy:
-    needs: call-phplint
     name: Deploy
     runs-on: ubuntu-latest
     env:
@@ -55,6 +49,18 @@ jobs:
           VITE_PUSHER_HOST: ${{ secrets.PUSHER_HOST }}
           VITE_PUSHER_PORT: ${{ secrets.PUSHER_PORT }}
         run: npm run build
+
+      - name: Cache Playwright
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install playwright deps
+        run: npx playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage

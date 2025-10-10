@@ -76,7 +76,7 @@ class Withdrawal extends Model
         return $this->orderlines->where('user_id', $user->id);
     }
 
-    public function totalForUser(User $user): int
+    public function totalForUser(User $user): float
     {
         return OrderLine::query()->where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }

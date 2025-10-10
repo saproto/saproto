@@ -155,10 +155,10 @@
 
         <div class="col-md-5">
             <div class="card mb-3">
-                @if ($committee->image)
+                @if ($committee->hasMedia())
                     <img
                         class="card-img-top w-100"
-                        src="{{ $committee->image->generateImagePath(800, 300) }}"
+                        src="{{ $committee->getImageUrl() }}"
                     />
                 @endif
 

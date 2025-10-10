@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
@@ -16,11 +15,9 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property int $percentage
  * @property string|null $description
- * @property int|null $image_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool $active
- * @property-read StorageEntry|null $image
  * @property-read Collection<int, Product> $products
  * @property-read int|null $products_count
  *
@@ -31,7 +28,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|WallstreetEvent whereCreatedAt($value)
  * @method static Builder<static>|WallstreetEvent whereDescription($value)
  * @method static Builder<static>|WallstreetEvent whereId($value)
- * @method static Builder<static>|WallstreetEvent whereImageId($value)
  * @method static Builder<static>|WallstreetEvent whereName($value)
  * @method static Builder<static>|WallstreetEvent wherePercentage($value)
  * @method static Builder<static>|WallstreetEvent whereUpdatedAt($value)
@@ -41,14 +37,6 @@ use Illuminate\Support\Carbon;
 class WallstreetEvent extends Model
 {
     protected $table = 'wallstreet_drink_events';
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class);
-    }
 
     /**
      * @return BelongsToMany<Product, $this>

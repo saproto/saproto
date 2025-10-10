@@ -13,8 +13,33 @@ order: number;
 is_member_only: boolean;
 children: Array<App.Data.MenuItemData>;
 };
+export type PhotoAlbumData = {
+id: string | number;
+name: string;
+private: boolean;
+items: Array<App.Data.PhotoData> | null;
+};
+export type PhotoData = {
+id: number;
+private: boolean;
+date_taken: number;
+url: string;
+large_url: string;
+likes_count: number | null;
+liked_by_me: boolean | null;
+album: App.Data.PhotoAlbumData | null;
+};
 }
 declare namespace App.Enums {
+export enum CommitteeEnum { CARD = 'card', BLOCK = 'block' };
+export enum CompanyEnum { LARGE = 'large', SMALL = 'small' };
+export enum HeaderImageEnum { LARGE = 'large' };
 export enum IsAlfredThereEnum { THERE = 'there', AWAY = 'away', UNKNOWN = 'unknown', JUR = 'jur', TEXT_ONLY = 'text' };
 export enum MembershipTypeEnum { PENDING = 0, REGULAR = 1, PET = 2, LIFELONG = 3, HONORARY = 4, DONOR = 5 };
+export enum NarrowcastingEnum { LARGE = 'large', SMALL = 'small' };
+export enum NewsEnum { CARD = 'card', LARGE = 'large' };
+export enum PageEnum { LARGE = 'large' };
+export enum PhotoEnum { ORIGINAL = 'original', LARGE = 'large', MEDIUM = 'medium', SMALL = 'small' };
+export enum ProductEnum { LARGE = 'large', THUMB = 'thumb' };
+export enum StickerEnum { LARGE = 'large', SMALL = 'small' };
 }

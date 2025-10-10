@@ -7,10 +7,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], static function () {
         Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxFixtureController@valueApi']);
-        Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
         Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
-        Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
     });
     /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], static function () {
@@ -18,7 +16,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::group(['middleware' => ['auth:api'], 'as' => 'qr::'], static function () {
             Route::get('qr_auth_approve/{code}', ['as' => 'approve', 'uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['as' => 'info', 'uses' => 'QrAuthController@apiInfo']);
-            Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         });
         Route::group(['middleware' => ['web']], static function () {
             Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);

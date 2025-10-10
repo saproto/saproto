@@ -11,7 +11,7 @@
 @vite('node_modules/leaflet/dist/leaflet.css')
 
 @section('container')
-    <div class="card mb-3 mt-3">
+    <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <div>The Proto Sticker Tracker!</div>
@@ -190,7 +190,7 @@
                         </div>
                         <div class="mb-3">
                             <div
-                                class="d-inline-flex w-100 justify-content-between"
+                                class="d-inline-flex justify-content-between w-100"
                             >
                                 <label for="stickerImage" class="form-label">
                                     Upload Sticker Image
@@ -200,7 +200,7 @@
                                     'components.forms.checkbox',
                                     [
                                         'name' => 'today_checkbox',
-                                        'checked' => $cur_category->can_reply ?? true,
+                                        'checked' => true,
                                         'label' => 'Today',
                                     ]
                                 )

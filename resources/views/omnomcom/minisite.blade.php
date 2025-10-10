@@ -1,4 +1,5 @@
 @php
+    use App\Enums\ProductEnum;
     use App\Models\Product;
 @endphp
 
@@ -26,18 +27,19 @@
         <meta property="og:url" content="https://www.omnomcom.nl/" />
         <meta
             property="og:image"
-            content="{{ asset("images/subsites/omnomcom.jpg") }}"
+            content="{{ asset('images/subsites/omnomcom.jpg') }}"
         />
 
         <link
             rel="shortcut icon"
-            href="{{ asset("images/favicons/favicon" . mt_rand(1, 4) . ".png") }}"
+            href="{{ asset('images/favicons/favicon' . mt_rand(1, 4) . '.png') }}"
         />
 
         <style>
             * {
                 text-transform: uppercase;
             }
+
             html {
                 box-sizing: border-box;
                 font: 14px 'Varela Round';
@@ -187,13 +189,13 @@
                     @endphp
 
                     <div
-                        class="result d-none {{ $product->stock <= 0 ? "unavailable" : "" }}"
+                        class="result d-none {{ $product->stock <= 0 ? 'unavailable' : '' }}"
                     >
                         <div
                             class="result_image"
-                            @if ($product->image)
-                                style='background-image:url("{{ $product->image->generateImagePath(400, null) }}")'
-                            @endif
+                            style="
+                                background-image: url('{{ $product->getImageUrl(ProductEnum::THUMB) }}');
+                            "
                         ></div>
                         <div class="result_info">
                             <div class="result_name">{{ $product->name }}</div>
@@ -210,7 +212,7 @@
                                 </div>
                             </div>
                             <div class="result_category">
-                                {{ implode(", ", $product->categories->pluck("name")->toArray()) }}
+                                {{ implode(', ', $product->categories->pluck('name')->toArray()) }}
                             </div>
                         </div>
                     </div>
@@ -219,7 +221,7 @@
 
             <a href="https://www.proto.utwente.nl/">
                 <img
-                    src="{{ asset("images/logo/inverse.png") }}"
+                    src="{{ asset('images/logo/inverse.png') }}"
                     height="130px"
                     width="234.7px"
                     alt="{{ $product->name }}"

@@ -5,7 +5,7 @@
 @endsection
 
 @section('container')
-    <div class="card col-lg-8 mb-3 me-auto ms-auto">
+    <div class="card col-lg-8 ms-auto me-auto mb-3">
         <div class="card-header bg-dark mb-1 text-white">
             <span>
                 Dinnerform orderline overview for
@@ -46,7 +46,7 @@
                 )
             @else
                 <span
-                    class="badge btn badge float-end cursor-default bg-primary"
+                    class="badge btn badge bg-primary float-end cursor-default"
                 >
                     <i class="fas fa-check"></i>
                     Processed!
@@ -149,7 +149,7 @@
                     </tbody>
                 </table>
             @else
-                <div class="pb-3 text-center text-muted">
+                <div class="text-muted pb-3 text-center">
                     There are no orders yet!
                 </div>
             @endif

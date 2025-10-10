@@ -5,16 +5,9 @@ use App\Models\Event;
 use App\Models\Page;
 use App\Models\Photo;
 
-it('shows the opensearch page', function () {
-    $response = $this->get('/opensearch');
-    $response->assertSee('S.A. Proto');
-    $response->assertStatus(200);
-});
-
 it('shows the search page', function () {
-    $response = $this->get('/search');
-    $response->assertSee('Your search');
-    $response->assertStatus(200);
+    $routes = ['/search', '/opensearch'];
+    visit($routes)->assertNoSmoke();
 });
 
 it('shows an event on the search page', function () {

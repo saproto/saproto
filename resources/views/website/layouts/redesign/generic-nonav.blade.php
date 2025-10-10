@@ -3,7 +3,7 @@
 @section('body')
     <main
         role="main"
-        class="container-fluid border-top border-4 border-primary pt-3"
+        class="container-fluid border-top border-primary border-4 pt-3"
     >
         @include('website.announcements')
 

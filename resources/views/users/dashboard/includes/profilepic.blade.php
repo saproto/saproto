@@ -10,7 +10,7 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-5 d-flex align-items-center">
+                <div class="d-flex align-items-center col-5">
                     <h5 class="text-center">
                         This is you
                         <i class="far fa-hand-point-right ms-2"></i>
@@ -19,9 +19,9 @@
 
                 <div class="col-7 text-center">
                     <img
-                        src="{{ $user->generatePhotoPath(150, 150) }}"
-                        width="150px"
-                        height="150px"
+                        src="{{ $user->getFirstMediaUrl('profile_picture', 'preview') }}"
+                        width="100px"
+                        height="100px"
                         class="rounded-circle"
                     />
                 </div>

@@ -17,7 +17,12 @@ class MenuController extends Controller
 {
     public function index(): View
     {
-        $menuItems = MenuItem::query()->whereNull('parent')->with('children', 'page')->orderBy('order')->get();
+        $menuItems = MenuItem::query()
+            ->whereNull('parent')
+            ->with('page')
+            ->with('children')
+            ->orderBy('order')
+            ->get();
 
         return view('menu.list', ['menuItems' => $menuItems]);
     }
@@ -175,8 +180,10 @@ class MenuController extends Controller
         return Redirect::route('menu::list');
     }
 
-    /** @return array<string>|null */
-    private function getAllRoutes(Router $router): ?array
+    /**
+     * @return array<string>
+     */
+    private function getAllRoutes(Router $router): array
     {
         $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
 

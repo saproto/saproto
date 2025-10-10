@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,7 +47,8 @@ class OrderLineController extends Controller
         $orderlines = OrderLine::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->with('product:name,id', 'molliePayment:id,status')
+            ->with('product:name,id')
+            ->with('molliePayment:id,status')
             ->where('created_at', '>', Carbon::parse($date)->startOfMonth())
             ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
             ->get();
@@ -62,11 +64,13 @@ class OrderLineController extends Controller
 
         $outstandingAmount = $outstanding->sum('price');
 
-        $withdrawals = $user->withdrawals()->with('failedWithdrawals', function ($q) {
+        $withdrawals = $user->withdrawals()->with(['failedWithdrawals' => function ($q) {
             $q->where('user_id', Auth::user()->id);
-        })->withSum(['orderlines' => function ($q) {
+        }])->withSum(['orderlines' => function ($q) {
             $q->where('user_id', Auth::user()->id);
-        }], 'total_price')->take(6)->get();
+        }], 'total_price')
+            ->take(6)
+            ->get();
 
         $molliePayments = $user->mollieTransactions()->where('amount', '>', 0)->orderBy('created_at', 'desc')->take(6)->get();
         $payment_methods = MollieController::getPaymentMethods();
@@ -89,22 +93,39 @@ class OrderLineController extends Controller
     /**
      * @return View
      */
-    public function adminindex(Request $request)
+    public function adminindex(Request $request): \Illuminate\Contracts\View\View|Factory
     {
-        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
-            })->whereDate('created_at', (Carbon::today()));
-        } else {
-            $orderlines = OrderLine::query()->whereDate('created_at', Carbon::today());
-        }
+        $user = $request->has('user') ? User::query()->find($request->integer('user')) : null;
+        $products = $request->array('product');
+        $date = $request->date('date');
 
-        $orderlines = $orderlines->with('user', 'product')->orderBy('created_at', 'desc')->paginate(20);
+        $query = OrderLine::query()
+            ->when(Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin'), function ($orderlines) {
+                $orderlines->whereHas('product', static function ($products) {
+                    $products->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
+                });
+            })
+            ->when($user, function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->when($date, function ($query) use ($date) {
+                $query->whereDate('created_at', $date->format('Y-m-d'));
+            })
+            ->when($products, function ($query) use ($products) {
+                $query->whereIn('product_id', $products);
+            })
+            ->with('user')
+            ->with('product')
+            ->with('molliePayment')
+            ->with('cashier:id,name')
+            ->orderBy('created_at', 'desc')
+            ->simplePaginate(20)->withQueryString();
 
         return view('omnomcom.orders.adminhistory', [
-            'date' => Carbon::today()->format('d-m-Y'),
-            'orderlines' => $orderlines,
-            'user' => null,
+            'date' => $date,
+            'user' => $user?->name,
+            'orderlines' => $query,
+            'products' => Product::query()->whereIn('id', $products)->pluck('name'),
         ]);
     }
 
@@ -119,62 +140,6 @@ class OrderLineController extends Controller
         return view('omnomcom.orders.admin_includes.orderline-wizard', [
             'members' => $members,
             'products' => $products,
-        ]);
-    }
-
-    /**
-     * @return View
-     */
-    public function filterByDate(Request $request)
-    {
-        $date = $request->date('date')->format('d-m-Y');
-
-        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', Config::integer('omnomcom.alfred-account'));
-            })->where('created_at', '>', Carbon::parse($date)->startOfDay())
-                ->where('created_at', '<', Carbon::parse($date)->endOfDay());
-        } else {
-            $orderlines = OrderLine::query()->where('created_at', '>', Carbon::parse($date)->startOfDay())
-                ->where('created_at', '<', Carbon::parse($date)->endOfDay());
-        }
-
-        $orderlines = $orderlines->with('user', 'product')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20)
-            ->appends(['date' => $date]);
-
-        return view('omnomcom.orders.adminhistory', [
-            'date' => $date,
-            'orderlines' => $orderlines,
-            'user' => null,
-        ]);
-    }
-
-    /**
-     * @return View|RedirectResponse
-     */
-    public function filterByUser(Request $request)
-    {
-        $user = $request->input('user');
-
-        if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
-            $orderlines = OrderLine::query()->whereHas('product', static function ($query) {
-                $query->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
-            })->where('user_id', $user);
-        } else {
-            $orderlines = OrderLine::query()->where('user_id', $user);
-        }
-
-        $orderlines = $orderlines->with('user', 'product')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20)
-            ->appends(['user' => $user]);
-
-        return view('omnomcom.orders.adminhistory', [
-            'date' => null,
-            'user' => User::query()->findOrFail($user)->name,
-            'orderlines' => $orderlines,
         ]);
     }
 
@@ -261,7 +226,7 @@ class OrderLineController extends Controller
      *
      * @return View
      */
-    public function showPaymentStatistics(Request $request)
+    public function showPaymentStatistics(Request $request): \Illuminate\Contracts\View\View|Factory
     {
         if ($request->has('start') && $request->has('end')) {
             $start = $request->date('start')->toDateTimeString();

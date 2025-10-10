@@ -463,7 +463,7 @@
                                     </a>
                                     <a
                                         class="dropdown-item"
-                                        href="{{ route('photo::admin::index') }}"
+                                        href="{{ route('albums::admin::index') }}"
                                     >
                                         Photo Admin
                                     </a>
@@ -554,7 +554,7 @@
                                         </a>
                                         <a
                                             class="dropdown-item"
-                                            href="{{ route('photo::admin::index') }}"
+                                            href="{{ route('albums::admin::index') }}"
                                         >
                                             Photo Admin
                                         </a>
@@ -566,7 +566,7 @@
                                 <li class="nav-item">
                                     <a
                                         class="nav-link"
-                                        href="{{ route('photo::admin::index') }}"
+                                        href="{{ route('albums::admin::index') }}"
                                         role="button"
                                         aria-haspopup="false"
                                         aria-expanded="false"
@@ -661,7 +661,7 @@
                                         id="profile-picture"
                                         class="rounded-circle ms-2"
                                         alt="your profile picture"
-                                        src="{{ Auth::user()->load('photo')->generatePhotoPath() }}"
+                                        src="{{ Auth::user()->getFirstMediaUrl('profile_picture', 'preview') }}"
                                     />
                                 </a>
 
@@ -681,6 +681,13 @@
                                             href="{{ route('user::profile') }}"
                                         >
                                             My Profile
+                                        </a>
+
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ route('albums::liked::list') }}"
+                                        >
+                                            My Liked Photos
                                         </a>
                                     @else
                                         <a

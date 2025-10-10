@@ -10,6 +10,7 @@ use App\Http\Middleware\EnforceTFA;
 use App\Http\Middleware\EnforceWizard;
 use App\Http\Middleware\ForceDomain;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\LastSeenAt;
 use App\Http\Middleware\Member;
 use App\Http\Middleware\ProBoto;
 use App\Http\Middleware\TrustProxies;
@@ -61,6 +62,7 @@ class Kernel extends HttpKernel
             SubstituteBindings::class,
             AddLinkHeadersForPreloadedAssets::class,
             HandleInertiaRequests::class,
+            LastSeenAt::class,
         ],
         'api' => [
             'throttle:60,1',

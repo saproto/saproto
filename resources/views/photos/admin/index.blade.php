@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <form
                         method="post"
-                        action="{{ route('photo::admin::index') }}"
+                        action="{{ route('albums::admin::index') }}"
                         class="form-main"
                     >
                         {{ csrf_field() }}
@@ -45,7 +45,7 @@
 
                 <form
                     method="post"
-                    action="{{ route('photo::admin::create') }}"
+                    action="{{ route('albums::admin::create') }}"
                 >
                     {{ csrf_field() }}
                     <div class="card-body">
@@ -67,13 +67,21 @@
                                 'placeholder' => strtotime(Carbon::now()),
                             ]
                         )
-                        @include(
-                            'components.forms.checkbox',
-                            [
-                                'name' => 'private',
-                                'label' => 'Private album',
-                            ]
-                        )
+                        <div class="d-inline-flex align-content-center mt-2">
+                            @include(
+                                'components.forms.checkbox',
+                                [
+                                    'name' => 'private',
+                                    'label' => 'Private album',
+                                ]
+                            )
+                            <i
+                                class="fas fa-info-circle align-self-center ms-1"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="right"
+                                title="A private album can only be seen by members. Note: This can not be changed!"
+                            ></i>
+                        </div>
                     </div>
 
                     <div class="card-footer">
@@ -102,7 +110,7 @@
                                 @include(
                                     'website.home.cards.card-bg-image',
                                     [
-                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'url' => route('albums::admin::edit', ['id' => $album->id]),
                                         'img' => $album->thumb(),
                                         'html' => sprintf(
                                             '<sub>%s</sub><br>%s<strong>%s</strong>',
@@ -135,7 +143,7 @@
                                 @include(
                                     'website.home.cards.card-bg-image',
                                     [
-                                        'url' => route('photo::admin::edit', ['id' => $album->id]),
+                                        'url' => route('albums::admin::edit', ['id' => $album->id]),
                                         'img' => $album->thumb(),
                                         'html' => sprintf(
                                             '<sub>%s</sub><br>%s<strong>%s</strong>',

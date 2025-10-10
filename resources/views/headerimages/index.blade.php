@@ -1,3 +1,9 @@
+@php
+    use App\Models\HeaderImage;
+    use Illuminate\Pagination\LengthAwarePaginator;
+    /** @var LengthAwarePaginator<HeaderImage> $images */
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -52,7 +58,7 @@
                                 </td>
                                 <td>
                                     <img
-                                        src="{{ $image->image->generateImagePath(1500, 400) }}"
+                                        src="{{ $image->getImageUrl() }}"
                                         class="float-end rounded"
                                         height="100px"
                                     />

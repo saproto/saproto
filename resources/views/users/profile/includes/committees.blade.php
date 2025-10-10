@@ -38,7 +38,7 @@
 </div>
 
 @if (count($pastcommittees) > 0)
-    <div class="card mb-3 mt-3">
+    <div class="card mt-3 mb-3">
         <div class="card-header bg-dark text-white">
             Past committee memberships
         </div>

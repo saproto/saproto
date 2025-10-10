@@ -72,7 +72,9 @@
             @if ($user->photo)
                 <img
                     id="photo"
-                    src="data:image/webp;base64,{{ $user->photo->getBase64(450, 450) }}"
+                    {{-- Todo: fix the membership cards with the new laravel media library --}}
+                    {{-- src="data:image/webp;base64,{{ $user->photo->getBase64(450, 450) }}" --}}
+                    src="{{ $user->getFirstMediaUrl('profile_picture') }}"
                 />
             @else
                 <img

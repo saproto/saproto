@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use App\Enums\PageEnum;
 use Database\Factories\PageFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * App\Models\Page.
@@ -23,11 +26,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $updated_at
  * @property bool $is_member_only
  * @property Carbon|null $deleted_at
- * @property int|null $featured_image_id
  * @property bool $show_attachments
- * @property-read StorageEntry|null $featuredImage
- * @property-read Collection<int, StorageEntry> $files
- * @property-read int|null $files_count
  *
  * @method static PageFactory factory($count = null, $state = [])
  * @method static Builder<static>|Page newModelQuery()
@@ -37,7 +36,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Page whereContent($value)
  * @method static Builder<static>|Page whereCreatedAt($value)
  * @method static Builder<static>|Page whereDeletedAt($value)
- * @method static Builder<static>|Page whereFeaturedImageId($value)
  * @method static Builder<static>|Page whereId($value)
  * @method static Builder<static>|Page whereIsMemberOnly($value)
  * @method static Builder<static>|Page whereShowAttachments($value)
@@ -47,35 +45,48 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Page withTrashed()
  * @method static Builder<static>|Page withoutTrashed()
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin \Eloquent
  */
-class Page extends Model
+class Page extends Model implements HasMedia
 {
     /** @use HasFactory<PageFactory>*/
     use HasFactory;
 
-    use SoftDeletes;
+    use InteractsWithMedia;
 
     protected $table = 'pages';
 
     protected $guarded = ['id'];
 
-    protected $with = ['featuredImage'];
+    protected $with = ['media'];
 
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function featuredImage(): BelongsTo
+    public function registerMediaCollections(): void
     {
-        return $this->belongsTo(StorageEntry::class, 'featured_image_id');
+        $this->addMediaCollection('files')
+            ->acceptsMimeTypes(['application/pdf'])
+            ->useDisk(App::environment('local') ? 'local' : 'stack');
+
+        $this->addMediaCollection('images')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg', 'image/webp'])
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public');
     }
 
-    /**
-     * @return BelongsToMany<StorageEntry, $this>
-     */
-    public function files(): BelongsToMany
+    public function registerMediaConversions(?Media $media = null): void
     {
-        return $this->belongsToMany(StorageEntry::class, 'pages_files', 'page_id', 'file_id');
+        $this->addMediaConversion(PageEnum::LARGE->value)
+            ->performOnCollections('images')
+            ->nonQueued()
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+    }
+
+    public function getImageUrl(PageEnum $pageEnum = PageEnum::LARGE): string
+    {
+        return $this->getFirstMediaUrl('images', $pageEnum->value);
     }
 
     public function getUrl(): string

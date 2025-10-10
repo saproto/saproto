@@ -27,10 +27,9 @@ services:
             - mailpit
             - soketi
             - redis
-            - selenium
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
-        image: 'mariadb:10'
+        image: 'mariadb:10.6'
         ports:
             - '${SAIL_SQL_PORT:-3306}:3306'
         environment:
@@ -93,14 +92,6 @@ services:
             test: [ "CMD", "redis-cli", "ping" ]
             retries: 3
             timeout: 5s
-        networks:
-            - sail
-    selenium:
-        image: selenium/standalone-chromium
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        volumes:
-            - '/dev/shm:/dev/shm'
         networks:
             - sail
 networks:

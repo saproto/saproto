@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Committee;
-use App\Models\StorageEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Override;
@@ -28,7 +27,6 @@ class CommitteeFactory extends Factory
             'allow_anonymous_email' => fake()->unique()->safeEmail(),
             'is_society' => fake()->boolean(),
             'is_active' => fake()->boolean(),
-            'image_id' => StorageEntry::factory(),
         ];
     }
 }

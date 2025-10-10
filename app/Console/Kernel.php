@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\AchievementsCron;
 use App\Console\Commands\AddSysadmin;
+use App\Console\Commands\BackupPhotosToStack;
 use App\Console\Commands\BirthdayCron;
 use App\Console\Commands\CheckUtwenteAccounts;
 use App\Console\Commands\ClearSessionTable;
@@ -78,6 +79,7 @@ class Kernel extends ConsoleKernel
         TempAdminCleanup::class,
         SyncUTAccounts::class,
         GoogleSync::class,
+        BackupPhotosToStack::class,
     ];
 
     /**
@@ -87,12 +89,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('proto:emailcron')->everyMinute();
-        $schedule->command('proto:spotifyupdate')->everyTenMinutes();
+        $schedule->command('proto:spotifyupdate')->everyFourHours();
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:gsync')->at('00:01');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
+        $schedule->command('proto:backup-photos-to-stack')->daily()->at('01:15');
         $schedule->command('proto:endmemberships')->hourly()->at('02:00');
         $schedule->command('proto:syncutaccounts')->daily()->at('03:00');
         $schedule->command('proto:feecron')->daily()->at('03:30');

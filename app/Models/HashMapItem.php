@@ -43,7 +43,7 @@ class HashMapItem extends Model
      * @param  Builder<HashMapItem>  $query
      * @return Builder<HashMapItem>
      */
-    public function scopeKey(Builder $query, string $key): Builder
+    protected function scopeKey(Builder $query, string $key): Builder
     {
         return $query->where('key', '=', $key);
     }
@@ -52,7 +52,7 @@ class HashMapItem extends Model
      * @param  Builder<HashMapItem>  $query
      * @return Builder<HashMapItem>
      */
-    public function scopeSubkey(Builder $query, string $subkey): Builder
+    protected function scopeSubkey(Builder $query, string $subkey): Builder
     {
         return $query->where('subkey', '=', $subkey);
     }

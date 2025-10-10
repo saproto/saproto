@@ -8,14 +8,6 @@
     <div class="row justify-content-center">
         <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
             <div class="card mb-3">
-                @if ($page->featuredImage)
-                    <img
-                        class="card-img-top w-100"
-                        alt="featured image"
-                        src="{{ $page->featuredImage->generateImagePath('1000', '200') }}"
-                    />
-                @endif
-
                 <div class="card-header">
                     <h3 class="card-title m-0">
                         @yield('page-title')
@@ -34,15 +26,15 @@
                 <div class="card-body">
                     {!! $parsedContent !!}
 
-                    @if ($page->files->count() > 0 && $page->show_attachments)
+                    @if ($page->hasMedia('files') && $page->show_attachments)
                         <hr />
 
                         <p>
                             <strong>Attachments</strong>
 
-                            @foreach ($page->files as $file)
+                            @foreach ($page->getMedia('files') as $file)
                                 <a
-                                    href="{{ $file->generatePath() }}"
+                                    href="{{ $file->getFullUrl() }}"
                                     target="_blank"
                                     class="card-link"
                                 >
@@ -50,7 +42,7 @@
                                         class="fas fa-paperclip"
                                         aria-hidden="true"
                                     ></i>
-                                    {{ $file->original_filename }}
+                                    {{ $file->name }}
                                 </a>
                             @endforeach
                         </p>

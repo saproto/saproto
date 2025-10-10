@@ -32,6 +32,7 @@ use App\Http\Controllers\IsAlfredThereController;
 use App\Http\Controllers\JobofferController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\LeaderboardEntryController;
+use App\Http\Controllers\LikedPhotosController;
 use App\Http\Controllers\MemberCardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\MollieController;
@@ -43,7 +44,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ParticipationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PhotoAdminController;
-use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\PhotoAlbumController;
+use App\Http\Controllers\PrivateMediaController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilePictureController;
@@ -72,6 +74,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
+use App\Models\Photo;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -593,7 +596,6 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('store', 'store')->name('store');
             Route::get('edit/{id}', 'edit')->name('edit');
             Route::post('update/{id}', 'update')->name('update');
-            Route::post('edit/{id}/image', 'featuredImage')->name('image');
             Route::get('delete/{id}', 'destroy')->name('delete');
 
             Route::prefix('/edit/{id}/file')->name('file::')->group(function () {
@@ -752,13 +754,7 @@ Route::middleware('forcedomain')->group(function () {
                     Route::post('store/single', 'store')->name('store');
                     Route::get('delete/{id}', 'destroy')->name('delete');
                     Route::get('', 'adminindex')->name('adminlist');
-
-                    Route::prefix('filter')->name('filter::')->group(function () {
-                        Route::get('name/{name?}', 'filterByUser')->name('name');
-                        Route::get('date/{date?}', 'filterByDate')->name('date');
-                    });
                 });
-
             });
 
             // Routes related to Payment Statistics
@@ -889,14 +885,30 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('dismiss/{id}', 'dismiss')->name('dismiss');
     });
 
+    /* --- Legacy routes related to photos --- */
+    Route::prefix('photos')->group(function () {
+        Route::get('/photo/{photo}', fn (Photo $photo) => Redirect::route('albums::album::show', ['album' => $photo->album, 'photo' => $photo->id]));
+        Route::get('{album}', fn ($album) => Redirect::route('albums::album::list', ['album' => $album]));
+    });
+
     /* --- Routes related to photos --- */
-    Route::prefix('photos')->name('photo::')->group(function () {
+    Route::prefix('albums')->name('albums::')->group(function () {
+
+        Route::controller(LikedPhotosController::class)->prefix('liked')->name('liked::')->middleware(['auth', 'member'])->group(function () {
+            Route::get('', 'show')->name('list');
+            Route::get('viewer', 'photo')->name('show');
+        });
+
         // Public routes
-        Route::controller(PhotoController::class)->group(function () {
-            Route::get('', 'index')->name('albums');
-            Route::get('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('likes');
-            Route::get('/photo/{photo}', 'photo')->name('view');
-            Route::get('{album}', 'show')->name('album::list');
+        Route::controller(PhotoAlbumController::class)->group(function () {
+            Route::get('', 'index')->name('index');
+
+            Route::prefix('{album}')->name('album::')->group(function () {
+                Route::get('', 'show')->name('list');
+                Route::get('viewer', 'photo')->name('show');
+            });
+
+            Route::post('/like/{photo}', 'toggleLike')->middleware(['auth'])->name('like');
         });
 
         /* --- Routes related to the photo admin. (Protography only) --- */
@@ -913,9 +925,9 @@ Route::middleware('forcedomain')->group(function () {
         });
     });
 
-    /* --- Fetching images: Public --- */
-    Route::controller(FileController::class)->prefix('image')->name('image::')->group(function () {
-        Route::get('{id}/{hash}/{name?}', 'getImage')->name('get');
+    /* --- Fetching media: Private --- */
+    Route::controller(PrivateMediaController::class)->middleware(['auth', 'member'])->prefix('media')->name('media::')->group(function () {
+        Route::get('{id}/{conversion?}', 'show')->name('show');
     });
 
     /* --- Fetching files: Public   --- */

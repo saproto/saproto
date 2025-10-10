@@ -104,10 +104,10 @@
         </div>
     </div>
     <div id="info-row" class="row d-flex text-black">
-        <div class="col-9 h-100 mt-3" style="padding: 0">
-            <div id="activities" class="d-flex h-100 mb-3 flex-row gap-2">
+        <div class="col-9 mt-3 h-100" style="padding: 0">
+            <div id="activities" class="d-flex mb-3 h-100 flex-row gap-2">
                 <div
-                    class="notice protubecard protubebackground flex-grow-1 font-weight-bold p-2"
+                    class="notice protubecard protubebackground font-weight-bold flex-grow-1 p-2"
                 >
                     <div id="event-loader" class="font-size-lg">
                         Loading events
@@ -115,7 +115,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 h-100 mt-3" style="padding: 0 0 0 8px">
+        <div class="col-3 mt-3 h-100" style="padding: 0 0 0 8px">
             <div
                 id="protopeners"
                 class="box protubecard protubebackground h-100 p-3"
@@ -404,11 +404,12 @@
             updateClock()
 
             const everySecond = 1000
-            const everyMinute = 60 * 1000
             const everyFiveMinutes = 5 * 60 * 1000
             setInterval(updateTimetable, everyFiveMinutes)
             setInterval(updateActivities, everyFiveMinutes)
-            setInterval(updateProtopeners, everyMinute)
+            setTimeout(() => {
+                setInterval(updateProtopeners, everyFiveMinutes)
+            }, everyFiveMinutes / 2)
             setInterval(updateClock, everySecond)
         })
     </script>

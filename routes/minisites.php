@@ -40,9 +40,5 @@ foreach ($domains['static'] as $domain) {
             Route::get('{id}/{hash}', [FileController::class, 'get']);
             Route::get('{id}/{hash}/{name}', [FileController::class, 'get']);
         });
-        Route::group(['prefix' => 'image'], static function () {
-            Route::get('{id}/{hash}', [FileController::class, 'getImage']);
-            Route::get('{id}/{hash}/{name}', [FileController::class, 'getImage']);
-        });
     });
 }

@@ -29,12 +29,52 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('app/private'),
+            'serve' => true,
+            'throw' => false,
+            'report' => false,
         ],
 
-    ],
+        'public' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+        'stack' => [
+            'driver' => 'sftp',
+            'host' => env('SFTP_HOST'),
+            'port' => env('SFTP_PORT', 22),
+            'username' => env('SFTP_USERNAME'),
+            'password' => env('SFTP_PASSWORD'),
+            'root' => env('SFTP_ROOT', 'photo_storage'),
+        ],
 
+        'stack_backup' => [
+            'driver' => 'sftp',
+            'host' => env('SFTP_HOST'),
+            'port' => env('SFTP_PORT', 22),
+            'username' => env('SFTP_USERNAME'),
+            'password' => env('SFTP_PASSWORD'),
+            'root' => env('SFTP_ROOT_BACKUP', 'laravel_backup'),
+        ],
+    ],
+    /*
+     |--------------------------------------------------------------------------
+     | Symbolic Links
+     |--------------------------------------------------------------------------
+     |
+     | Here you may configure the symbolic links that will be created when the
+     | `storage:link` Artisan command is executed. The array keys should be
+     | the locations of the links and the values should be their targets.
+     |
+     */
+
+    'links' => [
+        public_path('storage') => storage_path('app/public'),
+    ],
 ];

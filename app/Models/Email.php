@@ -12,7 +12,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Email Model.
@@ -36,8 +41,6 @@ use Illuminate\Support\Facades\DB;
  * @property int $time
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, StorageEntry> $attachments
- * @property-read int|null $attachments_count
  * @property-read Collection<int, Event> $events
  * @property-read int|null $events_count
  * @property-read Collection<int, EmailList> $lists
@@ -67,16 +70,27 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|Email whereToUser($value)
  * @method static Builder<static>|Email whereUpdatedAt($value)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin \Eloquent
  */
-class Email extends Model
+class Email extends Model implements HasMedia
 {
     /** @use HasFactory<EmailFactory>*/
     use HasFactory;
 
+    use InteractsWithMedia;
+
     protected $table = 'emails';
 
     protected $guarded = ['id'];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'public' : 'stack');
+    }
 
     /**
      * @return BelongsToMany<EmailList, $this>
@@ -92,14 +106,6 @@ class Email extends Model
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'emails_events', 'email_id', 'event_id');
-    }
-
-    /**
-     * @return BelongsToMany<StorageEntry, $this>
-     */
-    public function attachments(): BelongsToMany
-    {
-        return $this->belongsToMany(StorageEntry::class, 'emails_files', 'email_id', 'file_id');
     }
 
     /**
@@ -168,17 +174,22 @@ class Email extends Model
         }
 
         if ($this->to_event) {
-            $user_ids = [];
-            foreach ($this->events as $event) {
-                if ($event != null) {
-                    $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                    if ($this->to_backup && $event->activity) {
-                        $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
-                    }
-                }
-            }
-
-            return User::query()->whereIn('id', $user_ids)->orderBy('name')->get();
+            return User::query()->whereHas('activities', function ($q) {
+                $q->whereHas('event', function ($q) {
+                    $q->whereHas('emails', function ($q) {
+                        $q->where('emails.id', $this->id);
+                    });
+                });
+            })
+                ->when($this->to_backup, function ($query) {
+                    $query->orWhereHas('backupActivities', function ($q) {
+                        $q->whereHas('event', function ($q) {
+                            $q->whereHas('emails', function ($q) {
+                                $q->where('emails.id', $this->id);
+                            });
+                        });
+                    });
+                })->orderBy('name')->get();
         }
 
         return collect();

@@ -41,7 +41,7 @@
     "type": "project",
     "minimum-stability": "stable",
     "require": {
-        "abcaeffchen/sephpa": "^2.1.2",
+        "abcaeffchen/sephpa": "^3.0.2",
         "alaouy/youtube": "2.2.5",
         "ext-calendar": "*",
         "ext-curl": "*",
@@ -79,7 +79,9 @@
         "socialiteproviders/saml2": "^4.7",
         "google/apiclient": "^2.18.0",
         "ably/ably-php": "^1.1",
-        "anhskohbo/no-captcha": "^3.7"
+        "anhskohbo/no-captcha": "^3.7",
+        "spatie/laravel-medialibrary": "^11.13",
+        "league/flysystem-sftp-v3": "^3.30"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
@@ -87,16 +89,13 @@
         "itsgoingd/clockwork": "^5.1",
         "laravel/tinker": "^2.6",
         "larastan/larastan": "^3.4",
-        "symfony/css-selector": "~4.0",
-        "symfony/dom-crawler": "~4.0",
         "laravel/sail": "^1.16",
         "laravel/pint": "^1.10",
         "driftingly/rector-laravel": "^2.0.2",
-        "pestphp/pest": "^3.0",
         "mockery/mockery": "^1.6",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "laravel/dusk": "^8.2",
-        "beyondcode/expose": "^3.0"
+        "pestphp/pest-plugin-laravel": "^4.0.0",
+        "beyondcode/expose": "^3.0",
+        "pestphp/pest-plugin-browser": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -112,11 +111,12 @@
         }
     },
     "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup",
         "fix": [
-            "./vendor/bin/rector process && ./vendor/bin/pint && npx eslint resources/ --fix && npx prettier --write resources/"
+            "./vendor/bin/rector process && ./vendor/bin/pint --parallel && npx eslint resources/ --fix && npx prettier --write resources/"
         ],
         "pint": [
-            "./vendor/bin/pint"
+            "./vendor/bin/pint --parallel"
         ],
         "rector": [
             "vendor/bin/rector process"
@@ -157,5 +157,12 @@
             "php-http/discovery": true,
             "pestphp/pest-plugin": true
         }
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive",
+            "Gmail",
+            "Directory"
+        ]
     }
 }

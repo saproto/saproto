@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\ProductEnum;
 use App\Http\Controllers\WallstreetController;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,16 +12,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Product Model.
  *
  * @property int $id
  * @property int $account_id
- * @property int|null $image_id
  * @property string $name
  * @property float $price
  * @property int $calories
+ * @property int|null $barcode
  * @property string|null $supplier_id
  * @property int $stock
  * @property int $preferred_stock
@@ -35,7 +41,6 @@ use Illuminate\Support\Carbon;
  * @property-read FinancialAccount|null $account
  * @property-read Collection<int, ProductCategory> $categories
  * @property-read int|null $categories_count
- * @property-read StorageEntry|null $image
  * @property-read mixed $image_url
  * @property-read Collection<int, OrderLine> $orderlines
  * @property-read int|null $orderlines_count
@@ -50,7 +55,6 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Product whereCalories($value)
  * @method static Builder<static>|Product whereCreatedAt($value)
  * @method static Builder<static>|Product whereId($value)
- * @method static Builder<static>|Product whereImageId($value)
  * @method static Builder<static>|Product whereIsAlcoholic($value)
  * @method static Builder<static>|Product whereIsVisible($value)
  * @method static Builder<static>|Product whereIsVisibleWhenNoStock($value)
@@ -63,19 +67,43 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Product whereSupplierId($value)
  * @method static Builder<static>|Product whereUpdatedAt($value)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
+ * @method static Builder<static>|Product whereBarcode($value)
+ *
  * @mixin \Eloquent
  */
-class Product extends Model
+class Product extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(ProductEnum::LARGE->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 1080)
+            ->format('webp');
+
+        $this->addMediaConversion(ProductEnum::THUMB->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 400)
+            ->format('webp');
+    }
+
     protected $table = 'products';
 
     protected $guarded = ['id'];
 
     protected $hidden = ['created_at', 'updated_at'];
-
-    protected $appends = ['image_url'];
-
-    protected $with = ['image:id,hash'];
 
     /**
      * @return BelongsTo<FinancialAccount, $this>
@@ -85,20 +113,9 @@ class Product extends Model
         return $this->belongsTo(FinancialAccount::class);
     }
 
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
+    public function getImageUrl(ProductEnum $productEnum = ProductEnum::LARGE): string
     {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
-    }
-
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function imageUrl(): Attribute
-    {
-        return Attribute::make(get: fn () => $this->image?->generateImagePath(null, null));
+        return $this->getFirstMediaUrl('default', $productEnum->value);
     }
 
     /**

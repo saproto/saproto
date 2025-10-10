@@ -2,18 +2,24 @@
 
 namespace App\Models;
 
+use App;
+use App\Enums\CommitteeEnum;
 use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Committee Model.
@@ -25,12 +31,10 @@ use Illuminate\Support\Facades\DB;
  * @property int $public
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int|null $image_id
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property int $is_active
  * @property-read string $email
- * @property-read StorageEntry|null $image
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
@@ -42,7 +46,6 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|Committee whereCreatedAt($value)
  * @method static Builder<static>|Committee whereDescription($value)
  * @method static Builder<static>|Committee whereId($value)
- * @method static Builder<static>|Committee whereImageId($value)
  * @method static Builder<static>|Committee whereIsActive($value)
  * @method static Builder<static>|Committee whereIsSociety($value)
  * @method static Builder<static>|Committee whereName($value)
@@ -50,20 +53,23 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder<static>|Committee whereSlug($value)
  * @method static Builder<static>|Committee whereUpdatedAt($value)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin \Eloquent
  */
-class Committee extends Model
+class Committee extends Model implements HasMedia
 {
     /** @use HasFactory<CommitteeFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'committees';
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['image_id'];
-
-    protected $with = ['image'];
+    protected $with = ['media'];
 
     public function getPublicId(): string
     {
@@ -73,6 +79,34 @@ class Committee extends Model
     public static function fromPublicId(string $public_id): Committee
     {
         return self::query()->where('slug', $public_id)->firstOrFail();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('default')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        // 800x300
+        // 450x300
+        $this->addMediaConversion(CommitteeEnum::CARD->value)
+            ->nonQueued()
+            ->fit(Fit::Crop, 800, 300)
+            ->format('webp');
+
+        $this->addMediaConversion(CommitteeEnum::BLOCK->value)
+            ->nonQueued()
+            ->fit(Fit::Crop, 450, 300)
+            ->format('webp');
+    }
+
+    public function getImageUrl(CommitteeEnum $committeeEnum = CommitteeEnum::CARD): string
+    {
+        return $this->getFirstMediaUrl('default', $committeeEnum->value);
     }
 
     /**
@@ -90,14 +124,6 @@ class Committee extends Model
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderByPivot('created_at', 'desc');
-    }
-
-    /**
-     * @return BelongsTo<StorageEntry, $this>
-     */
-    public function image(): BelongsTo
-    {
-        return $this->belongsTo(StorageEntry::class, 'image_id');
     }
 
     /**
@@ -175,7 +201,7 @@ class Committee extends Model
             ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
             ->orderBy('created_at', 'desc')
             ->orderBy('deleted_at', 'desc')
-            ->with('user.photo')
+            ->with('user.media')
             ->get();
 
         foreach ($memberships as $membership) {

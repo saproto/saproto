@@ -45,7 +45,7 @@ class EmailCron extends Command
     {
         // Send admin created e-mails.
         $emails = Email::query()
-            ->with(['events'])
+            ->with('events')
             ->where('sent', false)
             ->where('ready', true)
             ->where('time', '<', Carbon::now()->timestamp)
@@ -71,7 +71,7 @@ class EmailCron extends Command
                         $email->sender_name,
                         $email->subject,
                         $email->parseBodyFor($recipient),
-                        $email->attachments,
+                        $email->getMedia(),
                         $email->destinationForBody(),
                         $recipient->id,
                         $email->events,

@@ -12,6 +12,8 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int|null $user_id
+ * @property float|null $duration_played
+ * @property float|null $duration
  * @property string $video_id
  * @property string $video_title
  * @property string|null $spotify_id
@@ -31,6 +33,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|PlayedVideo whereUserId($value)
  * @method static Builder<static>|PlayedVideo whereVideoId($value)
  * @method static Builder<static>|PlayedVideo whereVideoTitle($value)
+ * @method static Builder<static>|PlayedVideo whereDuration($value)
+ * @method static Builder<static>|PlayedVideo whereDurationPlayed($value)
  *
  * @mixin \Eloquent
  */

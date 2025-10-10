@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
+use App\Enums\PhotoEnum;
 use Database\Factories\PhotoFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Override;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * Photo model.
@@ -21,15 +26,13 @@ use Override;
  * @property int $id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $file_id
  * @property int $album_id
  * @property int $date_taken
  * @property bool $private
  * @property-read PhotoAlbum|null $album
- * @property-read StorageEntry|null $file
  * @property-read Collection<int, PhotoLikes> $likes
  * @property-read int|null $likes_count
- * @property-read mixed $url
+ * @property-read bool|null $liked_by_me
  *
  * @method static PhotoFactory factory($count = null, $state = [])
  * @method static Builder<static>|Photo newModelQuery()
@@ -38,23 +41,27 @@ use Override;
  * @method static Builder<static>|Photo whereAlbumId($value)
  * @method static Builder<static>|Photo whereCreatedAt($value)
  * @method static Builder<static>|Photo whereDateTaken($value)
- * @method static Builder<static>|Photo whereFileId($value)
  * @method static Builder<static>|Photo whereId($value)
  * @method static Builder<static>|Photo wherePrivate($value)
  * @method static Builder<static>|Photo whereUpdatedAt($value)
  *
+ * @property-read MediaCollection<int, Media> $media
+ * @property-read int|null $media_count
+ *
  * @mixin \Eloquent
  */
-class Photo extends Model
+class Photo extends Model implements HasMedia
 {
     /** @use HasFactory<PhotoFactory>*/
     use HasFactory;
+
+    use InteractsWithMedia;
 
     protected $table = 'photos';
 
     protected $guarded = ['id'];
 
-    protected $with = ['file'];
+    protected $with = ['media'];
 
     #[Override]
     protected static function booted(): void
@@ -74,6 +81,35 @@ class Photo extends Model
         });
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('private')
+            ->useDisk(App::environment('local') ? 'local' : 'stack')
+            ->storeConversionsOnDisk('local')
+            ->singleFile();
+
+        $this->addMediaCollection('public')
+            ->useDisk(App::environment('local') ? 'public' : 'stack')
+            ->storeConversionsOnDisk('public')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion(PhotoEnum::LARGE->value)
+            ->fit(Fit::Max, 1920, 1920)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::MEDIUM->value)
+            ->fit(Fit::Max, 750, 750)
+            ->format('webp');
+
+        $this->addMediaConversion(PhotoEnum::SMALL->value)
+            ->nonQueued()
+            ->fit(Fit::Max, 420, 420)
+            ->format('webp');
+    }
+
     /**
      * @return BelongsTo<PhotoAlbum, $this>
      */
@@ -90,91 +126,9 @@ class Photo extends Model
         return $this->hasMany(PhotoLikes::class);
     }
 
-    /**
-     * @return HasOne<StorageEntry, $this>
-     */
-    public function file(): HasOne
+    public function getUrl(PhotoEnum $photoEnum = PhotoEnum::ORIGINAL): string
     {
-        return $this->hasOne(StorageEntry::class, 'id', 'file_id');
-    }
-
-    private function getAdjacentPhoto(bool $next = true): ?Photo
-    {
-        if ($next) {
-            $ord = 'DESC';
-            $comp = '<';
-        } else {
-            $ord = 'ASC';
-            $comp = '>';
-        }
-
-        return self::query()->where(function ($query) use ($comp) {
-            $query->where('date_taken', $comp, $this->date_taken)
-                ->orWhere(function ($query) use ($comp) {
-                    $query->where('date_taken', '=', $this->date_taken)
-                        ->where('id', $comp, $this->id);
-                });
-        })
-            ->where('album_id', $this->album_id)
-            ->orderBy('date_taken', $ord)
-            ->orderBy('id', $ord)
-            ->first();
-    }
-
-    public function getNextPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto();
-    }
-
-    public function getPreviousPhoto(): ?Photo
-    {
-        return $this->getAdjacentPhoto(false);
-    }
-
-    public function getAlbumPageNumber(int $paginateLimit): float|int
-    {
-        $photoIndex = 1;
-        $photos = self::query()->where('album_id', $this->album_id)
-            ->orderBy('date_taken', 'desc')->orderBy('id', 'desc')
-            ->get();
-        foreach ($photos as $photoItem) {
-            if ($this->id == $photoItem->id) {
-                return ceil($photoIndex / $paginateLimit);
-            }
-
-            $photoIndex++;
-        }
-
-        return 1;
-    }
-
-    public function thumbnail(): string
-    {
-        return $this->file->generateImagePath(800, 300);
-    }
-
-    /**
-     * @return Attribute<string, never>
-     */
-    protected function url(): Attribute
-    {
-        return Attribute::make(get: fn () => $this->file->generatePath());
-    }
-
-    #[Override]
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::deleting(static function ($photo) {
-            /* @var Photo $photo */
-            $photo->file->delete();
-            if ($photo->id == $photo->album->thumb_id) {
-                $album = $photo->album;
-                $album->thumb_id = null;
-                $album->save();
-            }
-        });
+        return $this->getFirstMediaUrl($this->private ? 'private' : 'public', $photoEnum->value);
     }
 
     protected function casts(): array

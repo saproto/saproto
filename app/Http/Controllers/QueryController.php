@@ -118,31 +118,32 @@ class QueryController extends Controller
         }
 
         $eventCategories = EventCategory::query()->withCount(['events' => static function ($query) use ($start, $end) {
-            $query->where('start', '>=', $start)->where('end', '<=', $end);
+            $query->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
         }])->get()->sortBy('name');
 
         foreach ($eventCategories as $category) {
             /** @var EventCategory $category */
             /** @phpstan-ignore-next-line */
             $category->spots = Activity::query()->whereHas('event', static function ($query) use ($category, $start, $end) {
-                $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
+                $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
             })->where('participants', '>', 0)
                 ->sum('participants');
             /** @phpstan-ignore-next-line */
             $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
                 $query->whereHas('event', static function ($query) use ($category, $start, $end) {
-                    $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
+                    $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
                 })->where('participants', '>', 0);
             })->count();
             /** @phpstan-ignore-next-line */
             $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
-                $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end);
+                $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
             })->sum('attendees');
         }
 
         $events = Event::query()->selectRaw('YEAR(FROM_UNIXTIME(start)) AS year, start, COUNT(*) AS total')
             ->whereNull('deleted_at')
             ->groupBy(DB::raw('YEAR(FROM_UNIXTIME(start)), MONTH(FROM_UNIXTIME(start))'))
+            ->whereNotLike('title', '%cancel%')
             ->get();
 
         $totalEvents = Event::query()->where('start', '>=', $start)->where('end', '<=', $end)->count();

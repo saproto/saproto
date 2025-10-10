@@ -1,3 +1,7 @@
+@php
+    use App\Enums\PageEnum;
+@endphp
+
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
@@ -42,7 +46,7 @@
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                        {{ route('page::show', '') }}/
+                                        {{ str_replace('/_', '', route('page::show', ['slug' => '_'])) }}/
                                     </span>
                                 </div>
                                 <input
@@ -107,51 +111,6 @@
             <div class="col-md-3">
                 <form
                     method="post"
-                    action="{{ route('page::image', ['id' => $item->id]) }}"
-                    enctype="multipart/form-data"
-                >
-                    @csrf
-
-                    <div class="card mb-3">
-                        @if ($item->featuredImage)
-                            <img
-                                src="{!! $item->featuredImage->generateImagePath(700, null) !!}"
-                                width="100%;"
-                                class="card-img-top"
-                            />
-                        @endif
-
-                        <div class="card-header bg-dark text-white">
-                            Featured image
-                        </div>
-
-                        <div class="card-body">
-                            <div class="custom-file">
-                                <input
-                                    id="image"
-                                    type="file"
-                                    class="form-control"
-                                    name="image"
-                                />
-                                <label class="form-label" for="image">
-                                    Upload featured image
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="card-footer">
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-block float-end"
-                            >
-                                Replace featured image
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <form
-                    method="post"
                     action="{{ route('page::file::create', ['id' => $item->id]) }}"
                     enctype="multipart/form-data"
                 >
@@ -162,7 +121,7 @@
                             Attachments
                         </div>
 
-                        @if ($item->files->count() > 0)
+                        @if ($item->hasMedia('files') || $item->hasMedia('images'))
                             <table class="table-hover table-sm table">
                                 <thead>
                                     <tr class="bg-dark text-white">
@@ -171,39 +130,58 @@
                                     </tr>
                                 </thead>
 
-                                @foreach ($item->files as $file)
+                                @foreach ($item->getMedia('files') as $file)
                                     <tr>
                                         <td class="ellipsis ps-3">
                                             <a
-                                                href="{{ $file->generatePath() }}"
+                                                href="{{ $file->getFullUrl() }}"
                                                 target="_blank"
                                             >
-                                                {{ $file->original_filename }}
+                                                {{ $file->name }}
                                             </a>
                                         </td>
                                         <td>
-                                            @if (str_starts_with($file->mime, 'image'))
-                                                <a
-                                                    class="pageEdit_insertImage"
-                                                    href="#"
-                                                    rel="{{ $file->generateImagePath(1000, null) }}"
-                                                >
-                                                    <i
-                                                        class="fas fa-image fa-fw me-2"
-                                                    ></i>
-                                                </a>
-                                            @else
-                                                <a
-                                                    class="pageEdit_insertLink"
-                                                    href="#"
-                                                    role="button"
-                                                    rel="{{ $file->generatePath() }}"
-                                                >
-                                                    <i
-                                                        class="fas fa-link fa-fw me-2"
-                                                    ></i>
-                                                </a>
-                                            @endif
+                                            <a
+                                                class="pageEdit_insertLink"
+                                                href="#"
+                                                role="button"
+                                                rel="{{ $file->getFullUrl() }}"
+                                            >
+                                                <i
+                                                    class="fas fa-link fa-fw me-2"
+                                                ></i>
+                                            </a>
+                                            <a
+                                                href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
+                                            >
+                                                <i
+                                                    class="fas fa-trash text-danger"
+                                                ></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                @foreach ($item->getMedia('images') as $file)
+                                    <tr>
+                                        <td class="ellipsis ps-3">
+                                            <a
+                                                href="{{ $file->getFullUrl(PageEnum::LARGE->value) }}"
+                                                target="_blank"
+                                            >
+                                                {{ $file->name }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a
+                                                class="pageEdit_insertImage"
+                                                href="#"
+                                                rel="{{ $file->getFullUrl(PageEnum::LARGE->value) }}"
+                                            >
+                                                <i
+                                                    class="fas fa-image fa-fw me-2"
+                                                ></i>
+                                            </a>
                                             <a
                                                 href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                             >
@@ -220,13 +198,12 @@
                         <div class="card-body">
                             <div class="custom-file">
                                 <input
-                                    id="files"
+                                    id="file"
                                     type="file"
                                     class="form-control"
-                                    name="files[]"
-                                    multiple
+                                    name="file"
                                 />
-                                <label class="form-label" for="files">
+                                <label class="form-label" for="file">
                                     Upload a file
                                 </label>
                             </div>

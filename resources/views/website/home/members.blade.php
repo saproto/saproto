@@ -72,12 +72,12 @@
                     class="card-body overflow-hidden"
                     style="max-height: calc(100vh - 250px)"
                 >
-                    @if ($weekly->featuredImage)
+                    @if ($weekly->hasMedia())
                         <img
                             width="500px"
                             height="300px"
-                            src="{{ $weekly->featuredImage ? $weekly->featuredImage->generateImagePath(500, 300) : null }}"
-                            class="img-fluid img-thumbnail w-50 d-block mx-auto mb-3"
+                            src="{{ $weekly->getImageUrl() }}"
+                            class="img-fluid img-thumbnail d-block mx-auto mb-3 w-50"
                             alt="Featured image"
                         />
                     @endif
@@ -93,7 +93,7 @@
                     </a>
                 </div>
             @else
-                <p class="card-text mb-4 ms-4 mt-4 text-left">
+                <p class="card-text ms-4 mt-4 mb-4 text-left">
                     Weekly update is coming soon...
                 </p>
             @endif
@@ -140,8 +140,8 @@
                             [
                                 'height' => $newsitem->is_weekly ? 80 : 120,
                                 'url' => $newsitem->url,
-                                'img' => $newsitem->featuredImage
-                                    ? $newsitem->featuredImage->generateImagePath(600, 300)
+                                'img' => $newsitem->hasMedia()
+                                    ? $newsitem->getImageUrl()
                                     : ($newsitem->is_weekly
                                         ? url('images/weekly-cover.png')
                                         : null),
@@ -150,14 +150,14 @@
                                     $newsitem->title,
                                     Carbon::parse($newsitem->published_at)->diffForHumans(),
                                 ),
-                                'photo_pop' => $newsitem->featuredImage,
+                                'photo_pop' => $newsitem->is_weekly || $newsitem->hasMedia(),
                                 'leftborder' => 'info',
                             ]
                         )
                     </div>
                 @endforeach
             @else
-                <p class="card-text mb-4 ms-1 mt-3 text-left">
+                <p class="card-text ms-1 mt-3 mb-4 text-left">
                     No recent news. It's
                     <a
                         href="https://en.wikipedia.org/wiki/Silly_season"

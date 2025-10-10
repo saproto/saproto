@@ -21,7 +21,7 @@
                 @can('publishalbums')
                     <a
                         class="btn btn-warning btn-block mb-3 text-white"
-                        href="{{ route('photo::admin::unpublish', ['id' => $album->id]) }}"
+                        href="{{ route('albums::admin::unpublish', ['id' => $album->id]) }}"
                     >
                         This album is published so editing is limited, click
                         here to unpublish the album.
@@ -37,13 +37,22 @@
                 @endcan
             @else
                 @can('publishalbums')
-                    <a
-                        class="btn btn-danger btn-block mb-3 text-white"
-                        href="{{ route('photo::admin::publish', ['id' => $album->id]) }}"
-                    >
-                        This album is not yet published, click here to publish
-                        the album.
-                    </a>
+                    @if ($album->thumbPhoto)
+                        <a
+                            class="btn btn-danger btn-block mb-3 text-white"
+                            href="{{ route('albums::admin::publish', ['id' => $album->id]) }}"
+                        >
+                            This album is not yet published, click here to
+                            publish the album.
+                        </a>
+                    @else
+                        <div
+                            class="btn btn-warning disabled btn-block mb-3 text-white"
+                        >
+                            This album is not yet published, but you need to set
+                            a thumbnail to publish it!
+                        </div>
+                    @endif
                 @else
                     <span
                         class="btn btn-warning btn-block mb-3 cursor-default text-white"
@@ -56,7 +65,7 @@
 
             <a
                 class="btn btn-info btn-block mb-3 text-white"
-                href="{{ route('photo::album::list', ['album' => $album->id]) }}"
+                href="{{ route('albums::album::list', ['album' => $album->id]) }}"
             >
                 Preview album
             </a>
@@ -90,14 +99,10 @@
                                     'format' => 'date',
                                 ]
                             )
-                            @include(
-                                'components.forms.checkbox',
-                                [
-                                    'name' => 'private',
-                                    'checked' => $album->private,
-                                    'label' => 'Private album',
-                                ]
-                            )
+                            <p class="mt-2">
+                                Private album:
+                                {{ $album->private ? '✅' : '❌' }}
+                            </p>
                         </div>
 
                         <div class="card-footer">
@@ -129,9 +134,7 @@
                         {{ date('d-m-Y', $album->date_taken) }}
                         <br />
                         <b>Private album:</b>
-                        <i
-                            class="fa fa-{{ $album->private ? 'check' : 'times' }}"
-                        ></i>
+                        {{ $album->private ? '✅' : '❌' }}
                     </div>
                 @endif
             </div>
@@ -173,7 +176,7 @@
                             </button>
                             <a
                                 class="btn btn-danger"
-                                href="{{ route('photo::admin::delete', ['id' => $album->id]) }}"
+                                href="{{ route('albums::admin::delete', ['id' => $album->id]) }}"
                             >
                                 Delete Album
                             </a>
@@ -262,7 +265,7 @@
             <div class="card mb-3">
                 <form
                     method="POST"
-                    action="{{ route('photo::admin::action', ['id' => $album->id]) }}"
+                    action="{{ route('albums::admin::action', ['id' => $album->id]) }}"
                 >
                     {{ csrf_field() }}
 
@@ -304,15 +307,17 @@
                                             <i class="fa fa-image"></i>
                                             Set thumbnail
                                         </button>
-                                        <button
-                                            {{ $attr }}
-                                            name="action"
-                                            value="private"
-                                            class="btn btn-warning"
-                                        >
-                                            <i class="fa fa-eye"></i>
-                                            Toggle private
-                                        </button>
+                                        @if (! $album->private)
+                                            <button
+                                                {{ $attr }}
+                                                name="action"
+                                                value="private"
+                                                class="btn btn-warning"
+                                            >
+                                                <i class="fa fa-eye"></i>
+                                                Toggle private
+                                            </button>
+                                        @endif
                                     </div>
 
                                     <div
@@ -423,74 +428,79 @@
                 window.addEventListener('drop', dropFiles)
             }
 
-            function dropFiles(e) {
-                console.log(e)
+            async function dropFiles(e) {
                 e.stopPropagation()
                 e.preventDefault()
                 dropArea.classList.add('opacity-25')
 
-                let files = e.dataTransfer.files
+                toggleRunning()
+
+                const files = e.dataTransfer.files
                 if (files.length) {
                     let fileQueue = []
+
                     for (const file of files) {
                         if (
                             ['image/png', 'image/jpg', 'image/jpeg'].includes(
                                 file.type
                             )
                         ) {
-                            let fr = new FileReader()
-                            fr.onload = async () => {
-                                file.id = fileId++
-                                fileQueue.push(file)
-                                await uploadFiles(fileQueue)
-                            }
-                            fr.readAsDataURL(file)
+                            file.id = fileId++
+                            const loadedFile = await readFile(file)
+                            fileQueue.push(loadedFile)
                         }
                     }
+
+                    await uploadFiles(fileQueue)
+                    toggleRunning()
                 }
+            }
+
+            function readFile(file) {
+                return new Promise((resolve, reject) => {
+                    const fr = new FileReader()
+                    fr.onload = () => resolve(file)
+                    fr.onerror = reject
+                    fr.readAsDataURL(file)
+                })
             }
 
             async function uploadFiles(fileQueue) {
                 while (fileQueue.length) {
-                    let file = fileQueue.shift()
-                    let formData = new FormData()
+                    const file = fileQueue.shift()
+
+                    const formData = new FormData()
                     formData.append('file', file)
-                    toggleRunning()
-                    await post(
-                        '{{ route('photo::admin::upload', ['id' => $album->id], false) }}',
-                        formData,
-                        {
-                            parse: false,
+
+                    const tags = await window.ExifReader.load(file)
+                    const imageDate = tags['DateTimeOriginal']?.description
+                    if (imageDate) {
+                        formData.append('date', imageDate)
+                    }
+
+                    try {
+                        const response = await post(
+                            '{{ route('albums::admin::upload', ['id' => $album->id], false) }}',
+                            formData,
+                            { parse: false }
+                        )
+                        const text = await response.text()
+
+                        const node = document.getElementById('photo-view')
+                        node.innerHTML = text + node.innerHTML
+                    } catch (err) {
+                        let errText
+                        switch (err.status) {
+                            case 413:
+                                errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
+                                break
+                            default:
+                                errText = `Error ${err.status}: ${err.statusText}`
+                                break
                         }
-                    )
-                        .then((response) => {
-                            response.text().then((text) => {
-                                document.getElementById(
-                                    'photo-view'
-                                ).innerHTML += text
-                                document
-                                    .getElementById('error-bar')
-                                    .classList.add('d-none')
-                                document.querySelector(
-                                    '#error-bar ul'
-                                ).innerHTML = ''
-                                toggleRunning()
-                            })
-                        })
-                        .catch((err) => {
-                            let errText
-                            switch (err.status) {
-                                case 413:
-                                    errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
-                                    break
-                                default:
-                                    errText = `Error ${err.status}: ${err.statusText}`
-                                    break
-                            }
-                            console.error(errText, err)
-                            uploadError(file, errText)
-                            toggleRunning()
-                        })
+                        console.error(errText, err)
+                        uploadError(file, errText)
+                    }
                 }
             }
 

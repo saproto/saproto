@@ -76,7 +76,7 @@
                                     <strong>
                                         {{ $ticket->product->name }}
                                     </strong>
-                                    <span class="badge float-end bg-primary">
+                                    <span class="badge bg-primary float-end">
                                         {{ $ticket->sold() }} sold /
                                         {{ $ticket->product->stock }} available
                                     </span>

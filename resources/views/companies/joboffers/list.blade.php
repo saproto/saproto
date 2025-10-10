@@ -16,9 +16,9 @@
                                 style="height: 120px"
                             >
                                 <div class="col d-block">
-                                    @if ($company->image)
+                                    @if ($company->hasMedia())
                                         <img
-                                            src="{{ $company->image->generateImagePath(null, null) }}"
+                                            src="{{ $company->getImageUrl() }}"
                                             style="
                                                 max-width: 70%;
                                                 max-height: 100px;
