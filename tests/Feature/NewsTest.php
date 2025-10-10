@@ -25,7 +25,7 @@ it('shows members an empty news page', function () {
     $response->assertStatus(200);
 });
 
-it('lets admins create news', function ($article) {
+it('lets admins create news', function (array $article) {
     /** @var Member $member */
     $member = Member::factory()->create();
     $member->user->assignRole('board');

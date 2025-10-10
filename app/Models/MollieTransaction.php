@@ -77,15 +77,11 @@ class MollieTransaction extends Model
 
     public static function translateStatus(string $status): string
     {
-        if ($status === 'open' || $status === 'pending' || $status === 'draft') {
+        if (in_array($status, ['open', 'pending', 'draft'], true)) {
             return 'open';
         }
 
-        if ($status === 'expired' ||
-            $status === 'canceled' ||
-            $status === 'failed' ||
-            $status === 'charged_back' ||
-            $status === 'refunded') {
+        if (in_array($status, ['expired', 'canceled', 'failed', 'charged_back', 'refunded'], true)) {
             return 'failed';
         }
 
