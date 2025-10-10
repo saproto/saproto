@@ -12,6 +12,11 @@
 *.cache
 tmp
 
+#js route information
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+
 # Local files
 /personal
 public/storage

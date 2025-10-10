@@ -79,8 +79,11 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Spatie\Permission\Middleware\RoleMiddleware;
 
 require __DIR__.'/minisites.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/settings.php';
 /* Route block convention:
  *
  * Route::controller(C::class)->prefix('section')->name('section::')->middleware(['some:middleware'])->group( function () {
@@ -136,8 +139,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('login', 'loginIndex')->name('show');
         Route::post('login', 'login')->middleware(['throttle:5,1'])->name('post');
 
-        Route::get('logout', 'logout')->name('logout');
-        Route::get('logout/redirect', 'logoutAndRedirect')->name('logout::redirect');
+//        Route::post('logout', 'logout')->name('logout');
 
         Route::prefix('password')->name('password::')->group(function () {
             Route::get('reset/{token}', [UserPasswordController::class, 'resetPasswordIndex'])->name('reset::token');
@@ -817,7 +819,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(WithdrawalController::class)->group(function () {
             // Public routes
             Route::get('mywithdrawal/{id}', 'showForUser')->middleware(['auth'])->name('mywithdrawal');
-            Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
+            Route::get('unwithdrawable', ['middleware' => [RoleMiddleware::using('finadmin')], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
 
             // Finadmin only
             Route::prefix('withdrawals')->middleware(['permission:finadmin'])->name('withdrawal::')->group(function () {

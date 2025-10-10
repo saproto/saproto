@@ -4,6 +4,8 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import eslintPlugin from '@nabla/vite-plugin-eslint';
 import path from 'path';
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
+
 
 /**
  * https://vitejs.dev/config/
@@ -40,6 +42,7 @@ export default defineConfig({
             ],
             refresh: true,
         }),
+        wayfinder(),
         vue({
             template: {
                 transformAssetUrls: {

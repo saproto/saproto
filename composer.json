@@ -68,7 +68,6 @@
         "willvincent/feeds": "^2.4",
         "setasign/tfpdf": "^1.33",
         "inertiajs/inertia-laravel": "^2.0",
-        "tightenco/ziggy": "^2.4",
         "spatie/laravel-data": "^4.15",
         "spatie/laravel-typescript-transformer": "^2.5",
         "spatie/enum": "^3.13",
@@ -82,7 +81,9 @@
         "ably/ably-php": "^1.1",
         "anhskohbo/no-captcha": "^3.7",
         "spatie/laravel-medialibrary": "^11.13",
-        "league/flysystem-sftp-v3": "^3.30"
+        "league/flysystem-sftp-v3": "^3.30",
+        "laravel/wayfinder": "^0.1.12",
+        "laravel/fortify": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",
