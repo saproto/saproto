@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import AppLogoIcon from '@/components/AppLogoIcon.vue'
 </script>
 
 <template>
   <div
-    class="flex aspect-square size-8 items-center justify-center rounded-md border border-sidebar-border/70 dark:border-sidebar-border"
+    class="border-sidebar-border/70 dark:border-sidebar-border flex aspect-square size-8 items-center justify-center rounded-md border"
   >
     <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
   </div>

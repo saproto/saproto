@@ -20,14 +20,14 @@
         @endif
 
         @if (Auth::check())
-{{--            <a--}}
-{{--                id="logout-button"--}}
-{{--                href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}"--}}
-{{--                class="btn btn-lg btn-block bg-omnomcom rounded-0 ellipsis mt-4 px-2 py-2 text-start"--}}
-{{--            >--}}
-{{--                Log out--}}
-{{--                <strong>{{ Auth::user()->calling_name }}</strong>--}}
-{{--            </a>--}}
+            {{-- <a --}}
+            {{-- id="logout-button" --}}
+            {{-- href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}" --}}
+            {{-- class="btn btn-lg btn-block bg-omnomcom rounded-0 ellipsis mt-4 px-2 py-2 text-start" --}}
+            {{-- > --}}
+            {{-- Log out --}}
+            {{-- <strong>{{ Auth::user()->calling_name }}</strong> --}}
+            {{-- </a> --}}
         @endif
 
         <div id="reload-button" class="btn btn-block px-4 py-2">

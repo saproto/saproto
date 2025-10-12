@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Data\AuthUserData;
-use App\Data\MenuItemData;
-use App\Models\MenuItem;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Override;
@@ -40,7 +38,6 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => $request->session()->get('flash_message'),
             ],
-            'menuitems' => fn (): array => MenuItemData::collect(MenuItem::query()->whereNull('parent')->orderBy('order')->get()->toArray()),
         ]);
     }
 }

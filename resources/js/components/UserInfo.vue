@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useInitials } from '@/composables/useInitials';
-import { computed } from 'vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useInitials } from '@/composables/useInitials'
+import { computed } from 'vue'
 
 interface Props {
-    user: App.Data.AuthUserData;
-    showEmail?: boolean;
+    user: App.Data.AuthUserData
+    showEmail?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     showEmail: false,
-});
+})
 
-const { getInitials } = useInitials();
+const { getInitials } = useInitials()
 
 // Compute whether we should show the avatar image
-const showAvatar = computed(
-    () => props.user.avatar && props.user.avatar !== '',
-);
+const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
 </script>
 
 <template>
@@ -36,7 +34,7 @@ const showAvatar = computed(
     <span class="truncate font-medium">{{ user.name }}</span>
     <span
       v-if="showEmail"
-      class="truncate text-xs text-muted-foreground"
+      class="text-muted-foreground truncate text-xs"
     >{{
       user.email
     }}</span>

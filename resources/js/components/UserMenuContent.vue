@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import UserInfo from '@/components/UserInfo.vue';
+import UserInfo from '@/components/UserInfo.vue'
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
-import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
-import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Settings } from 'lucide-vue-next';
+} from '@/components/ui/dropdown-menu'
+import { logout } from '@/routes'
+// import { edit } from '@/routes/profile'
+import { Link, router } from '@inertiajs/vue3'
+import { LogOut, Settings } from 'lucide-vue-next'
 
 interface Props {
-    user: App.Data.AuthUserData;
+    user: App.Data.AuthUserData
 }
 
 const handleLogout = () => {
-    router.flushAll();
-};
+    router.flushAll()
+}
 
-defineProps<Props>();
+defineProps<Props>()
 </script>
 
 <template>
@@ -36,7 +36,7 @@ defineProps<Props>();
     <DropdownMenuItem :as-child="true">
       <Link
         class="block w-full"
-        :href="edit()"
+        :href="'/edit/setting'"
         prefetch
         as="button"
       >

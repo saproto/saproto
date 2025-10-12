@@ -1,73 +1,172 @@
 <script setup lang="ts">
-import AppLogo from '@/components/AppLogo.vue';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import AppLogo from '@/components/AppLogo.vue'
+import AppLogoIcon from '@/components/AppLogoIcon.vue'
+import Breadcrumbs from '@/components/Breadcrumbs.vue'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu'
 import {
     NavigationMenu,
+    NavigationMenuContent,
     NavigationMenuItem,
+    NavigationMenuLink,
     NavigationMenuList,
+    NavigationMenuTrigger,
     navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
+} from "@/components/ui/navigation-menu"
 import {
     Sheet,
     SheetContent,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from '@/components/ui/sheet';
+} from '@/components/ui/sheet'
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from '@/components/ui/tooltip';
-import UserMenuContent from '@/components/UserMenuContent.vue';
-import { getInitials } from '@/composables/useInitials';
-import { toUrl, urlIsActive } from '@/lib/utils';
-import { index } from '@/routes';
-import type { BreadcrumbItem, NavItem } from '@/types';
-import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, LucideGithub, LayoutGrid, Menu, Search } from 'lucide-vue-next';
-import { computed } from 'vue';
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group'
+} from '@/components/ui/tooltip'
+import UserMenuContent from '@/components/UserMenuContent.vue'
+import { getInitials } from '@/composables/useInitials'
+import { toUrl, urlIsActive } from '@/lib/utils'
+import { index } from '@/routes'
+import type { BreadcrumbItem, NavItem } from '@/types'
+import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3'
+import {
+    BookOpen,
+    Contact,
+    LayoutGrid,
+    Menu,
+    Search, LucideTextQuote, Mail,
+} from 'lucide-vue-next'
+import { computed } from 'vue'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+} from '@/components/ui/input-group'
+// import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController'
 
 interface Props {
-    breadcrumbs?: BreadcrumbItem[];
+    breadcrumbs?: BreadcrumbItem[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
-});
+})
 
-const page = usePage();
-const auth = computed(() => page.props.auth);
+const page = usePage()
+const auth = computed(() => page.props.auth)
 
 const isCurrentRoute = computed(
     () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        urlIsActive(url, page.url),
-);
+        urlIsActive(url, page.url)
+)
 
 const activeItemStyles = computed(
     () => (url: NonNullable<InertiaLinkProps['href']>) =>
         isCurrentRoute.value(toUrl(url))
             ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
-            : '',
-);
+            : ''
+)
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: index(),
+        title: 'For members',
+        // href: ProfileController.edit(),
+        href: '',
         icon: LayoutGrid,
+        children: [
+            {
+                title: 'Quotes',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+            {
+                title: 'Good ideas',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+            {
+                title: 'Achievements',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+            {
+                title: 'Sticker tracker',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+            {
+                title: 'Mental Health',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+            {
+                title: 'Other',
+                href: index(),
+                icon: LucideTextQuote,
+            },
+        ]
     },
-];
+    {
+        title: 'Education',
+        // href: ProfileController.edit(),
+        href: '',
+        icon: LayoutGrid,
+        children: [
+            {
+                title: 'Study Material',
+                href: index(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Educational Committee',
+                href: index(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Educational Feedback',
+                href: index(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Books',
+                href: index(),
+                icon: LayoutGrid,
+            }
+        ]
+    },
+    {
+        title: 'Companies',
+        // href: ProfileController.edit(),
+        href: '',
+        icon: LayoutGrid,
+        children: [
+            {
+                title: 'Sponsors',
+                href: index(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Job Offers',
+                href: index(),
+                icon: LayoutGrid,
+            },
+            {
+                title: 'Contact for Companies',
+                href: index(),
+                icon: LayoutGrid,
+            },
+        ]
+    },
+]
 
 const rightNavItems: NavItem[] = [
     {
@@ -76,16 +175,16 @@ const rightNavItems: NavItem[] = [
         icon: BookOpen,
     },
     {
-        title: 'Github',
+        title: 'Contact',
         href: 'https://github.com/saproto/saproto',
-        icon: LucideGithub,
+        icon: Mail,
     },
-];
+]
 </script>
 
 <template>
-  <div>
-    <div class="border-b border-sidebar-border/80">
+  <div class="sticky top-0 z-40 bg-background">
+    <div class="border-sidebar-border/80 border-b">
       <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
         <!-- Mobile Menu -->
         <div class="lg:hidden">
@@ -119,7 +218,7 @@ const rightNavItems: NavItem[] = [
                     v-for="item in mainNavItems"
                     :key="item.title"
                     :href="item.href"
-                    class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
+                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
                     :class="activeItemStyles(item.href)"
                   >
                     <component
@@ -161,34 +260,117 @@ const rightNavItems: NavItem[] = [
 
         <!-- Desktop Menu -->
         <div class="hidden h-full lg:flex lg:flex-1">
-          <NavigationMenu class="ml-10 flex h-full items-stretch">
-            <NavigationMenuList
-              class="flex h-full items-stretch space-x-2"
-            >
+          <NavigationMenu class="ml-10 flex h-full">
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Association</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul class="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[minmax(0,.75fr)_minmax(0,1fr)]">
+                    <li class="row-span-3">
+                      <NavigationMenuLink as-child>
+                        <a
+                          class="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                          href="/"
+                        >
+                          <img
+                            src="https://www.reka-ui.com/logo.svg"
+                            class="h-6 w-6"
+                          >
+                          <div class="mb-2 mt-4 text-lg font-medium">
+                            Photos
+                          </div>
+                          <p class="text-sm leading-tight text-muted-foreground">
+                            Explore our events through photos!
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+
+                    <li>
+                      <NavigationMenuLink as-child>
+                        <a
+                          href="/docs/introduction"
+                          class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div class="text-sm font-medium leading-none">About Proto</div>
+                          <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            What is Proto and what do we do?
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink as-child>
+                        <a
+                          href="/docs/installation"
+                          class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div class="text-sm font-medium leading-none">Board</div>
+                          <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Meet the lovely people running the association.
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink as-child>
+                        <a
+                          href="/docs/typography"
+                          class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div class="text-sm font-medium leading-none">Committees</div>
+                          <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            See the committees that organize all the fun events!
+                          </p>
+                        </a>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
               <NavigationMenuItem
                 v-for="(item, index) in mainNavItems"
                 :key="index"
-                class="relative flex h-full items-center"
               >
-                <Link
-                  :class="[
-                    navigationMenuTriggerStyle(),
-                    activeItemStyles(item.href),
-                    'h-9 cursor-pointer px-3',
-                  ]"
-                  :href="item.href"
+                <NavigationMenuTrigger>{{ item.title }}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                    <li
+                      v-for="child in item.children"
+                      :key="child.title"
+                    >
+                      <NavigationMenuLink as-child>
+                        <Link
+                          :href="child.href"
+                          class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div class="text-sm font-medium leading-none">
+                            {{ child.title }}
+                          </div>
+                          <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            {{ child.description }}
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/events"
+                  :class="navigationMenuTriggerStyle()"
                 >
-                  <component
-                    :is="item.icon"
-                    v-if="item.icon"
-                    class="mr-2 h-4 w-4"
-                  />
-                  {{ item.title }}
-                </Link>
-                <div
-                  v-if="isCurrentRoute(item.href)"
-                  class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"
-                />
+                  Calendar
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink
+                  href="/events"
+                  :class="navigationMenuTriggerStyle()"
+                >
+                  Admin
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -196,24 +378,14 @@ const rightNavItems: NavItem[] = [
 
         <div class="ml-auto flex items-center space-x-2">
           <div class="relative flex items-center space-x-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              class="group h-9 w-9 cursor-pointer"
-            >
-              <Search
-                class="size-5 opacity-80 group-hover:opacity-100"
-              />
-            </Button>
-
-              <InputGroup>
-                  <InputGroupInput placeholder="Type to search..." />
-                  <InputGroupAddon align="inline-end">
-                      <InputGroupButton variant="secondary">
-                          <Search/>
-                      </InputGroupButton>
-                  </InputGroupAddon>
-              </InputGroup>
+            <InputGroup>
+              <InputGroupInput placeholder="Type to search..." />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton variant="secondary">
+                  <Search />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
 
             <div class="hidden space-x-1 lg:flex">
               <template
@@ -258,7 +430,7 @@ const rightNavItems: NavItem[] = [
               <Button
                 variant="ghost"
                 size="icon"
-                class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
+                class="focus-within:ring-primary relative size-10 w-auto rounded-full p-1 focus-within:ring-2"
               >
                 <Avatar
                   class="size-8 overflow-hidden rounded-full"
@@ -289,7 +461,7 @@ const rightNavItems: NavItem[] = [
 
     <div
       v-if="props.breadcrumbs.length > 1"
-      class="flex w-full border-b border-sidebar-border/70"
+      class="border-sidebar-border/70 flex w-full border-b"
     >
       <div
         class="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl"

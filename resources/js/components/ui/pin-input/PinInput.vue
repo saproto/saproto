@@ -1,16 +1,21 @@
 <script setup lang="ts" generic="Type extends 'text' | 'number' = 'text'">
-import type { PinInputRootEmits, PinInputRootProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
-import { PinInputRoot, useForwardPropsEmits } from "reka-ui"
-import { cn } from "@/lib/utils"
+import type { PinInputRootEmits, PinInputRootProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
+import { PinInputRoot, useForwardPropsEmits } from 'reka-ui'
+import { cn } from '@/lib/utils'
 
-const props = withDefaults(defineProps<PinInputRootProps<Type> & { class?: HTMLAttributes["class"] }>(), {
-  modelValue: () => [],
-})
+const props = withDefaults(
+    defineProps<
+        PinInputRootProps<Type> & { class?: HTMLAttributes['class'] }
+    >(),
+    {
+        modelValue: () => [],
+    }
+)
 const emits = defineEmits<PinInputRootEmits<Type>>()
 
-const delegatedProps = reactiveOmit(props, "class")
+const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
@@ -18,7 +23,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 <template>
   <PinInputRoot
     v-bind="forwarded"
-    :class="cn('flex gap-2 items-center', props.class)"
+    :class="cn('flex items-center gap-2', props.class)"
   >
     <slot />
   </PinInputRoot>

@@ -82,8 +82,6 @@ use Illuminate\Support\Facades\View;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
 require __DIR__.'/minisites.php';
-require __DIR__.'/auth.php';
-require __DIR__.'/settings.php';
 /* Route block convention:
  *
  * Route::controller(C::class)->prefix('section')->name('section::')->middleware(['some:middleware'])->group( function () {
