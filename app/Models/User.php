@@ -518,7 +518,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     public function hasDiet(): bool
     {
-        return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
+        return str_replace(["\r", "\n", ' '], '', $this->diet) !== '';
     }
 
     /**
@@ -578,10 +578,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return array<string, Collection<int, Member>> */
     public function getMemberships(): array
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get();
-
-        return $memberships;
+        return ['pending' => Member::withTrashed()->where('user_id', '=', $this->id)->whereNull('deleted_at')->whereMembershipType(MembershipTypeEnum::PENDING)->get(), 'previous' => Member::withTrashed()->where('user_id', '=', $this->id)->whereNotNull('deleted_at')->get()];
     }
 
     public function getCalendarAlarm(): ?float

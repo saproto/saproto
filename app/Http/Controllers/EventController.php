@@ -363,7 +363,7 @@ class EventController extends Controller
 
         $account = Account::query()->findOrFail($request->input('account'));
 
-        if (count($activity->users) == 0 || $activity->price == 0) {
+        if (count($activity->users) === 0 || $activity->price == 0) {
             $activity->closed = true;
             $activity->closed_account = $account->id;
             $activity->save();

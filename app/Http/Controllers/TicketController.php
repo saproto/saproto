@@ -420,7 +420,7 @@ class TicketController extends Controller
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
-        if (Config::boolean('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0) {
+        if (Config::boolean('omnomcom.mollie.use_fees') && $prepaid_tickets !== []) {
             $available_methods = MollieController::getPaymentMethods();
             $requested_method = $request->get('method');
             $payment_method = $available_methods->filter(static fn ($method): bool => $method->id === $requested_method);

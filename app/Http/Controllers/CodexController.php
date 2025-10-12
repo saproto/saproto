@@ -110,7 +110,7 @@ class CodexController extends Controller
                 $query->where('codex_codices.id', $codex->id);
             });
         }])->orderBy('type')->get();
-        if (count($categories) == 0 || count($textCategories) == 0) {
+        if (count($categories) === 0 || count($textCategories) === 0) {
             Session::flash('flash_message', 'You need to add at least one song and one text to the codex first!');
 
             return Redirect::route('codex.index');

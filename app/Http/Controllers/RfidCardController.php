@@ -48,7 +48,7 @@ class RfidCardController extends Controller
         }
 
         $uid = $request->input('card');
-        if (strlen($uid) == 0) {
+        if ((string) $uid === '') {
             return ['ok' => false, 'text' => 'Empty card UID provided. Did you scan your card properly?'];
         }
 
