@@ -34,8 +34,9 @@ import { toUrl, urlIsActive } from '@/lib/utils';
 import { index } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
+import { BookOpen, LucideGithub, LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group'
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -70,14 +71,14 @@ const mainNavItems: NavItem[] = [
 
 const rightNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
+        title: 'Wiki',
+        href: 'https://wiki.proto.utwente.nl',
+        icon: BookOpen,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        title: 'Github',
+        href: 'https://github.com/saproto/saproto',
+        icon: LucideGithub,
     },
 ];
 </script>
@@ -204,6 +205,15 @@ const rightNavItems: NavItem[] = [
                 class="size-5 opacity-80 group-hover:opacity-100"
               />
             </Button>
+
+              <InputGroup>
+                  <InputGroupInput placeholder="Type to search..." />
+                  <InputGroupAddon align="inline-end">
+                      <InputGroupButton variant="secondary">
+                          <Search/>
+                      </InputGroupButton>
+                  </InputGroupAddon>
+              </InputGroup>
 
             <div class="hidden space-x-1 lg:flex">
               <template
