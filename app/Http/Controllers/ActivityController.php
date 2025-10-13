@@ -7,14 +7,13 @@ use App\Models\ActivityParticipation;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\HelpingCommittee;
-use Exception;
-use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Illuminate\View\Factory;
 
 class ActivityController extends Controller
 {
@@ -39,7 +38,7 @@ class ActivityController extends Controller
             return Redirect::route('event::edit', ['event' => $event]);
         }
 
-        if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
+        if ($newNoShow > $activity->no_show_fee && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
             return Redirect::route('event::edit', ['event' => $event]);
@@ -114,10 +113,7 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['event' => $event]);
     }
 
-    /**
-     * @return View
-     */
-    public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
+    public function checklist(Event $event): View|Factory
     {
         if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
             abort(403, 'You may not see this page.');
@@ -169,10 +165,9 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
      */
-    public function updateHelp(Request $request, $id)
+    public function updateHelp(Request $request, int $id)
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
@@ -189,12 +184,9 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param  int  $id
      * @return RedirectResponse
-     *
-     * @throws Exception
      */
-    public function deleteHelp(Request $request, $id)
+    public function deleteHelp(Request $request, int $id)
     {
         /** @var HelpingCommittee $help */
         $help = HelpingCommittee::query()->findOrFail($id);
