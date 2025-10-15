@@ -189,7 +189,16 @@ class Email extends Model implements HasMedia
                             });
                         });
                     });
-                })->orderBy('name')->get();
+                })
+                ->orWhereHas('tickets', function ($q) {
+                    $q->whereHas('event', function ($q) {
+                        $q->whereHas('emails', function ($q) {
+                            $q->where('emails.id', $this->id);
+                        });
+                    });
+                })
+
+                ->orderBy('name')->get();
         }
 
         return collect();
