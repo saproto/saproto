@@ -16,11 +16,10 @@ use App\Models\Withdrawal;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -44,8 +43,8 @@ class WithdrawalController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'date' => 'required|date',
-            'max' => 'required|numeric|min:1',
+            'date' => ['required', 'date'],
+            'max' => ['required', 'numeric', 'min:1'],
         ]);
 
         $max = $request->integer('max');
@@ -73,7 +72,7 @@ class WithdrawalController extends Controller
             }
 
             // only add the tickets to the withdrawal if the ticket can not be bought anymore
-            if ($orderline->product->ticket && Carbon::now()->timestamp <= $orderline->product->ticket->available_to) {
+            if ($orderline->product->ticket && Date::now()->timestamp <= $orderline->product->ticket->available_to) {
                 continue;
             }
 
@@ -96,7 +95,7 @@ class WithdrawalController extends Controller
 
         $withdrawal->recalculateTotals();
 
-        return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
+        return to_route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
     public function show(int $id): View
@@ -136,7 +135,7 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => $accounts,
-            'title' => 'Accounts of withdrawal of '.Carbon::parse($withdrawal->date)->format('d-m-Y'),
+            'title' => 'Accounts of withdrawal of '.Date::parse($withdrawal->date)->format('d-m-Y'),
             'total' => $withdrawal->total(),
         ]);
     }
@@ -147,13 +146,13 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::query()->findOrFail($id);
 
         $request->validate([
-            'date' => 'required|date',
-            'max' => 'required|numeric|min:1',
+            'date' => ['required', 'date'],
+            'max' => ['required', 'numeric', 'min:1'],
         ]);
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
-            return Redirect::back();
+            return back();
         }
 
         $withdrawal->date = $request->date('date')->format('Y-m-d');
@@ -161,7 +160,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', 'Withdrawal updated.');
 
-        return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
+        return to_route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
     /**
@@ -175,7 +174,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be deleted.');
 
-            return Redirect::back();
+            return back();
         }
 
         foreach ($withdrawal->orderlines as $orderline) {
@@ -193,7 +192,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', 'Withdrawal deleted.');
 
-        return Redirect::route('omnomcom::withdrawal::index');
+        return to_route('omnomcom::withdrawal::index');
     }
 
     public static function deleteFrom(int $id, int $user_id): RedirectResponse
@@ -204,7 +203,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var User $user */
@@ -219,7 +218,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', "Orderlines for $user->name removed from this withdrawal.");
 
-        return Redirect::back();
+        return back();
     }
 
     public static function markFailed(Request $request, int $id, int $user_id): RedirectResponse
@@ -230,7 +229,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var User $user */
@@ -239,7 +238,7 @@ class WithdrawalController extends Controller
         if (FailedWithdrawal::query()->where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
             Session::flash('flash_message', 'This withdrawal has already been marked as failed.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var Product $product */
@@ -253,7 +252,7 @@ class WithdrawalController extends Controller
             $total,
             null,
             null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', Carbon::parse($withdrawal->date)->format('d-m-Y')),
+            sprintf('Overdue payment due to the failed withdrawal from %s.', Date::parse($withdrawal->date)->format('d-m-Y')),
             sprintf('failed_withdrawal_by_%u', Auth::user()->id)
         ));
 
@@ -267,13 +266,10 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', "Withdrawal for $user->name marked as failed. User e-mailed.");
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public static function markLoss(int $id, int $user_id)
+    public static function markLoss(int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::query()->findOrFail($id);
@@ -281,7 +277,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var User $user */
@@ -299,7 +295,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', "Withdrawal for $user->name marked as loss.");
 
-        return Redirect::back();
+        return back();
     }
 
     public static function export(int $id): RedirectResponse|\Illuminate\Http\Response
@@ -310,13 +306,13 @@ class WithdrawalController extends Controller
         if (! $withdrawal->orderlines()->exists()) {
             Session::flash('flash_message', 'Cannot export! This withdrawal is empty.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($withdrawal->users()->whereDoesntHave('bank')->exists()) {
             Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
 
-            return Redirect::back();
+            return back();
         }
 
         $debitCollectionData = [
@@ -337,7 +333,7 @@ class WithdrawalController extends Controller
         } catch (SephpaInputException $sephpaInputException) {
             Session::flash('flash_message', "Error creating the withdrawal. Error: {$sephpaInputException->getMessage()}");
 
-            return Redirect::back();
+            return back();
         }
 
         $i = 1;
@@ -355,7 +351,7 @@ class WithdrawalController extends Controller
                     /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => Carbon::parse($user->bank->created_at)->format('Y-m-d'),
+                    'dtOfSgntr' => Date::parse($user->bank->created_at)->format('Y-m-d'),
                     'bic' => $user->bank->bic,
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,
@@ -366,7 +362,7 @@ class WithdrawalController extends Controller
             } catch (SephpaInputException $e) {
                 Session::flash('flash_message', "Error creating the withdrawal. user {$user->id}: Error: {$e->getMessage()}");
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -375,7 +371,7 @@ class WithdrawalController extends Controller
         } catch (Exception $exception) {
             Session::flash('flash_message', "Error creating the xml file. Error: {$exception->getMessage()}");
 
-            return Redirect::back();
+            return back();
         }
 
         $headers = [
@@ -397,7 +393,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
 
-            return Redirect::back();
+            return back();
         }
 
         $withdrawal->closed = true;
@@ -405,7 +401,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function showForUser(int $id): View
@@ -429,7 +425,7 @@ class WithdrawalController extends Controller
         if ($withdrawal->closed) {
             Session::flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
 
-            return Redirect::back();
+            return back();
         }
 
         foreach ($withdrawal->users()->get() as $user) {
@@ -438,7 +434,7 @@ class WithdrawalController extends Controller
 
         Session::flash('flash_message', 'All e-mails have been queued.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function unwithdrawable(): View

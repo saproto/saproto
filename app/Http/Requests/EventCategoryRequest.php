@@ -24,8 +24,8 @@ class EventCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:5|unique:event_categories',
-            'icon' => 'required|string|min:5|starts_with:fa',
+            'name' => ['required', 'string', 'min:5', 'unique:event_categories'],
+            'icon' => ['required', 'string', 'min:5', 'starts_with:fa'],
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Activity;
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -23,15 +23,15 @@ class ActivityFactory extends Factory
             'no_show_fee' => fake()->randomFloat(),
             'participants' => fake()->randomNumber(),
             'attendees' => null,
-            'registration_start' => Carbon::now(),
-            'registration_end' => Carbon::now()->addDay(),
-            'deregistration_end' => Carbon::now()->addHour(),
+            'registration_start' => Date::now(),
+            'registration_end' => Date::now()->addDay(),
+            'deregistration_end' => Date::now()->addHour(),
             'comment' => fake()->word(),
             'redirect_url' => null,
             'closed' => false,
             'hide_participants' => false,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
 
             'event_id' => Event::factory(),
         ];

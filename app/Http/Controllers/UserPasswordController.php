@@ -10,9 +10,8 @@ use Google\Service\Exception;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use nickurt\PwnedPasswords\PwnedPasswords;
@@ -39,7 +38,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**
@@ -49,7 +48,7 @@ class UserPasswordController extends Controller
      */
     public function resetPasswordIndex(string $token): RedirectResponse|View
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
+        PasswordReset::query()->where('valid_to', '<', Date::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
@@ -57,7 +56,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-        return Redirect::route('login::password::reset');
+        return to_route('login::password::reset');
     }
 
     /**
@@ -65,31 +64,31 @@ class UserPasswordController extends Controller
      */
     public function resetPassword(Request $request): RedirectResponse
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
+        PasswordReset::query()->where('valid_to', '<', Date::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
                 Session::flash('flash_message', "Your passwords don't match.");
 
-                return Redirect::back();
+                return back();
             }
 
             if (strlen($request->password) < 10) {
                 Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
 
-                return Redirect::back();
+                return back();
             }
 
             $reset->user->setPassword($request->password);
             PasswordReset::query()->where('token', $request->token)->delete();
             Session::flash('flash_message', 'Your password has been changed.');
 
-            return Redirect::route('login::show');
+            return to_route('login::show');
         }
 
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-        return Redirect::route('login::password::reset');
+        return to_route('login::password::reset');
     }
 
     /**
@@ -116,7 +115,7 @@ class UserPasswordController extends Controller
             $this->syncGooglePassword($user, $pass);
             Session::flash('flash_message', 'Your password was successfully synchronized.');
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         Session::flash('flash_message', 'Password incorrect.');
@@ -164,7 +163,7 @@ class UserPasswordController extends Controller
     public function forgotUsername(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => ['required', 'email'],
         ]);
 
         $user = User::whereEmail($request->get('email'))->first();
@@ -174,7 +173,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**
@@ -220,7 +219,7 @@ class UserPasswordController extends Controller
             $user->setPassword($pass_new1);
             Session::flash('flash_message', 'Your password has been changed.');
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         Session::flash('flash_message', 'Old password incorrect.');

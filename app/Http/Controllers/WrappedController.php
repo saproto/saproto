@@ -11,14 +11,15 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
     public function index(): JsonResponse
     {
-        $from = Carbon::now()->startOfYear();
-        $to = Carbon::now()->endOfYear();
+        $from = Date::now()->startOfYear();
+        $to = Date::now()->endOfYear();
         $purchases = $this->getPurchases($from, $to);
 
         return response()->json([
@@ -38,8 +39,7 @@ class WrappedController extends Controller
         return OrderLine::query()->where('user_id', Auth::id())
             ->with('product')
             ->where('created_at', '>', $from)
-            ->where('created_at', '<', $to)
-            ->orderBy('created_at', 'DESC')
+            ->where('created_at', '<', $to)->latest()
             ->get();
     }
 

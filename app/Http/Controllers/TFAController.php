@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -29,7 +28,7 @@ class TFAController extends Controller
             Session::flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
         }
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
@@ -47,20 +46,19 @@ class TFAController extends Controller
             } else {
                 Session::flash('flash_message', 'Invalid code supplied, could not disable 2FA!');
 
-                return Redirect::back();
+                return back();
             }
         }
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      */
-    public function adminDestroy(Request $request, $id)
+    public function adminDestroy(Request $request, $id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
         $user->tfa_totp_key = null;
@@ -68,6 +66,6 @@ class TFAController extends Controller
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
 
-        return Redirect::back();
+        return back();
     }
 }

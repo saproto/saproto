@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddWizardBooleanToUsers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class AddWizardBooleanToUsers extends Migration
             $table->dropColumn('wizard');
         });
     }
-}
+};

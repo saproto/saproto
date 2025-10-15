@@ -13,11 +13,11 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -68,7 +68,7 @@ class MollieController extends Controller
                 'You cannot complete a purchase using this cap. Please try to increase the maximum amount you wish to pay!'
             );
 
-            return Redirect::back();
+            return back();
         }
 
         foreach ($unpaid_orderlines as $orderline) {
@@ -86,7 +86,7 @@ class MollieController extends Controller
             if ($selected_method->count() === 0) {
                 Session::flash('flash_message', 'The selected payment method is unavailable, please select a different method');
 
-                return Redirect::back();
+                return back();
             }
 
             $selected_method = $selected_method->first();
@@ -97,7 +97,7 @@ class MollieController extends Controller
             ) {
                 Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -132,14 +132,14 @@ class MollieController extends Controller
     /**
      * @return View|RedirectResponse
      */
-    public function monthly(string $month)
+    public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         try {
-            $month = Carbon::parse($month);
+            $month = Date::parse($month);
         } catch (InvalidFormatException) {
             Session::flash('flash_message', 'Invalid date: '.$month);
 
-            return Redirect::back();
+            return back();
         }
 
         $start = $month->copy()->startOfMonth();
@@ -220,10 +220,10 @@ class MollieController extends Controller
 
             Session::flash('flash_message', $flash_message);
 
-            return Redirect::route('event::show', ['event' => Event::getPublicId($event_id)]);
+            return to_route('event::show', ['event' => Event::getPublicId($event_id)]);
         }
 
-        return Redirect::route('omnomcom::orders::index');
+        return to_route('omnomcom::orders::index');
     }
 
     /**
@@ -312,7 +312,7 @@ class MollieController extends Controller
      */
     public static function getTotalForMonth(string $month): mixed
     {
-        $month = Carbon::parse($month);
+        $month = Date::parse($month);
         $start = $month->copy()->startOfMonth();
         if ($start->isWeekend()) {
             $start->nextWeekday();

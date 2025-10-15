@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class RenameProtomailToProtousername extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,4 +26,4 @@ class RenameProtomailToProtousername extends Migration
             $table->renameColumn('proto_username', 'proto_mail');
         });
     }
-}
+};

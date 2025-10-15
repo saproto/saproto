@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddFeaturedImageIdToPages extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class AddFeaturedImageIdToPages extends Migration
             $table->dropColumn('featured_image_id');
         });
     }
-}
+};

@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
 class RegistrationHelperController extends Controller
@@ -52,7 +52,7 @@ class RegistrationHelperController extends Controller
     public function details(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $user = User::query()->whereHas('member', static function ($q) {
-            $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
+            $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Date::now()->subDay());
         })->findOrFail($id);
         /** @var User $user */
         $memberships = $user->getMemberships();

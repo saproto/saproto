@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 use Override;
 
@@ -58,7 +59,7 @@ class StorageEntry extends Model
     public function createFromData(string $data, string $mime, string $name, ?string $customPath = null): void
     {
         $this->hash = $this->generateHash();
-        $this->filename = Carbon::now()->format('Y\/F\/d').'/'.$this->hash;
+        $this->filename = Date::now()->format('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
@@ -73,7 +74,7 @@ class StorageEntry extends Model
 
     private function generateHash(): string
     {
-        return sha1(Carbon::now()->timestamp.mt_rand(1, 99999999999));
+        return sha1(Date::now()->timestamp.mt_rand(1, 99999999999));
     }
 
     public function generatePath(): string

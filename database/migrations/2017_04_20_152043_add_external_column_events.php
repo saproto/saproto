@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddExternalColumnEvents extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class AddExternalColumnEvents extends Migration
             $table->dropColumn('is_external');
         });
     }
-}
+};

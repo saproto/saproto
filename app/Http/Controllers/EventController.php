@@ -17,11 +17,11 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -44,19 +44,19 @@ class EventController extends Controller
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
             })
-            ->where('start', '>', Carbon::now()->timestamp)
+            ->where('start', '>', Date::now()->timestamp)
             ->get();
 
         $data = [[], [], []];
 
-        $data[0] = $events->where('start', '>', Carbon::now()->timestamp)
-            ->where('start', '<=', Carbon::now()->addWeek()->timestamp);
+        $data[0] = $events->where('start', '>', Date::now()->timestamp)
+            ->where('start', '<=', Date::now()->addWeek()->timestamp);
 
         $data[1] = $events
-            ->where('start', '>', Carbon::now()->addWeek()->timestamp)
-            ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
+            ->where('start', '>', Date::now()->addWeek()->timestamp)
+            ->where('start', '<=', Date::now()->addMonth()->timestamp);
 
-        $data[2] = $events->where('start', '>', Carbon::now()->addMonth()->timestamp);
+        $data[2] = $events->where('start', '>', Date::now()->addMonth()->timestamp);
 
         $years = $this->getAvailableYears();
 
@@ -153,7 +153,7 @@ class EventController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -165,7 +165,7 @@ class EventController extends Controller
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
 
-        return Redirect::route('event::show', ['event' => $event]);
+        return to_route('event::show', ['event' => $event]);
     }
 
     /**
@@ -177,11 +177,9 @@ class EventController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, Event $event)
+    public function update(StoreEventRequest $request, Event $event): RedirectResponse
     {
         $event->title = $request->title;
         $event->start = $request->date('start')->timestamp;
@@ -200,7 +198,7 @@ class EventController extends Controller
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
 
-            return Redirect::back();
+            return back();
         }
 
         $file = $request->file('image');
@@ -212,7 +210,7 @@ class EventController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -236,7 +234,7 @@ class EventController extends Controller
             Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -253,10 +251,10 @@ class EventController extends Controller
                 $query->whereHas('Category', static function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->timestamp)
-            ->where('start', '<', Carbon::create($year, 12, 31, 23, 59, 59)->timestamp)
+            })->where('start', '>', Date::create($year, 1, 1, 0, 0, 1)->timestamp)
+            ->where('start', '<', Date::create($year, 12, 31, 23, 59, 59)->timestamp)
             ->get()
-            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start, date_default_timezone_get())->month);
+            ->groupBy(fn (Event $event) => Date::createFromTimestamp($event->start, date_default_timezone_get())->month);
 
         $years = $this->getAvailableYears();
 
@@ -273,7 +271,7 @@ class EventController extends Controller
      */
     private function getAvailableYears(): Collection
     {
-        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
+        return Cache::remember('event::availableyears', Date::now()->diff(Date::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
     }
 
     /**
@@ -286,7 +284,7 @@ class EventController extends Controller
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
 
-            return Redirect::back();
+            return back();
         }
 
         Session::flash('flash_message', "The event '".$event->title."' has been deleted.");
@@ -297,7 +295,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return Redirect::route('event::index');
+        return to_route('event::index');
     }
 
     /**
@@ -305,20 +303,20 @@ class EventController extends Controller
      */
     public function forceLogin(Event $event)
     {
-        return Redirect::route('event::show', ['event' => $event]);
+        return to_route('event::show', ['event' => $event]);
     }
 
     /**
      * @return RedirectResponse|View
      */
-    public function admin(Event $event)
+    public function admin(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         $event->load(['tickets.purchases.user', 'tickets.purchases.orderline.molliePayment', 'tickets.product']);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('event.admin', ['event' => $event]);
@@ -327,22 +325,19 @@ class EventController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function scan(Event $event)
+    public function scan(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('event.scan', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function finclose(Request $request, int $id)
+    public function finclose(Request $request, int $id): RedirectResponse
     {
         /** @var Activity $activity */
         $activity = Activity::query()->findOrFail($id);
@@ -350,13 +345,13 @@ class EventController extends Controller
         if ($activity->event && ! $activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($activity->closed) {
             Session::flash('flash_message', 'This activity is already closed.');
 
-            return Redirect::back();
+            return back();
         }
 
         $activity->attendees = $request->input('attendees');
@@ -370,7 +365,7 @@ class EventController extends Controller
 
             Session::flash('flash_message', 'This activity is now closed. It either was free or had no participants, so no orderlines or products were created.');
 
-            return Redirect::back();
+            return back();
         }
 
         $product = Product::query()->create([
@@ -390,13 +385,10 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'This activity has been closed and the relevant orderlines were added.');
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function linkAlbum(Request $request, Event $event)
+    public function linkAlbum(Request $request, Event $event): RedirectResponse
     {
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($request->album_id);
@@ -406,13 +398,10 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The album '.$album->name.' has been linked to this activity!');
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function unlinkAlbum(int $album)
+    public function unlinkAlbum(int $album): RedirectResponse
     {
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($album);
@@ -421,7 +410,7 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The album '.$album->name.' has been unlinked from an activity!');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -433,9 +422,9 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
-            ->where('end', '>', Carbon::today()->timestamp)
+            ->where('end', '>', Date::today()->timestamp)
             ->unless($noFutureLimit, static function ($query) {
-                $query->where('start', '<', Carbon::now()->addMonth()->timestamp);
+                $query->where('start', '<', Date::now()->addMonth()->timestamp);
             })
             ->whereNull('publication')
             ->orderBy('start')
@@ -520,7 +509,7 @@ class EventController extends Controller
             Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function toggleRelevantOnly(): RedirectResponse
@@ -533,7 +522,7 @@ class EventController extends Controller
             Session::flash('flash_message', 'From now on your calendar will sync all events.');
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function icalCalendar(?string $personal_key = null): \Illuminate\Http\Response
@@ -571,7 +560,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
-            ->where('start', '>', Carbon::now()->subMonths(6)->timestamp)
+            ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->with('committee.users')
             ->withCount('tickets')
             ->get();
@@ -622,9 +611,9 @@ CALSCALE:GREGORIAN
             $calendar .= 'BEGIN:VEVENT
 '.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->created_at)->timestamp))."\r\n".
-                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
-                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Date::parse($event->created_at)->timestamp))."\r\n".
+                sprintf('DTSTART:%s', Date::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', Date::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -633,7 +622,7 @@ CALSCALE:GREGORIAN
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->updated_at)->timestamp))."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Date::parse($event->updated_at)->timestamp))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
@@ -641,7 +630,7 @@ CALSCALE:GREGORIAN
 '.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Date::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
@@ -675,9 +664,9 @@ CALSCALE:GREGORIAN
     {
         $event = Event::query()->findOrFail($request->input('id'));
 
-        $oldStart = Carbon::createFromTimestamp($event->start, date_default_timezone_get());
+        $oldStart = Date::createFromTimestamp($event->start, date_default_timezone_get());
 
-        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
+        $newDate = Date::createFromFormat('Y-m-d', $request->input('newDate'))
             ->setHour($oldStart->hour)
             ->setMinute($oldStart->minute)
             ->setSecond($oldStart->second)

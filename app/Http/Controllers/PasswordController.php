@@ -7,10 +7,9 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Permission;
@@ -31,15 +30,15 @@ class PasswordController extends Controller
     public function postAuth(Request $request)
     {
         if (AuthController::verifyCredentials(Auth::user()->email, $request->password)) {
-            $request->session()->put('passwordstore-verify', Carbon::now()->addMinutes(10)->timestamp);
+            $request->session()->put('passwordstore-verify', Date::now()->addMinutes(10)->timestamp);
             Session::flash('flash_message', 'You can access this tool for 10 minutes.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         Session::flash('flash_message', 'Wrong password.');
 
-        return Redirect::route('passwordstore::auth');
+        return to_route('passwordstore::auth');
     }
 
     /**
@@ -80,7 +79,7 @@ class PasswordController extends Controller
         if (! Auth::user()->can($permission->name)) {
             Session::flash('flash_message', 'You are not allowed to set this permission for a password.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($request->get('type') == 'password') {
@@ -94,7 +93,7 @@ class PasswordController extends Controller
             ]);
             Session::flash('flash_message', 'Password saved.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         if ($request->get('type') == 'note') {
@@ -108,12 +107,12 @@ class PasswordController extends Controller
             ]);
             Session::flash('flash_message', 'Note saved.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         Session::flash('flash_message', 'Invalid input.');
 
-        return Redirect::route('passwordstore::index');
+        return to_route('passwordstore::index');
     }
 
     /**
@@ -131,7 +130,7 @@ class PasswordController extends Controller
         if (! $password->canAccess(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to edit this entry.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         return view('passwordstore.edit', ['password' => $password, 'type' => ($password->password == null ? 'note' : 'password')]);
@@ -153,7 +152,7 @@ class PasswordController extends Controller
         if (! $password->canAccess(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to edit this entry.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         $permission = Permission::findOrFail($request->get('permission_id'));
@@ -161,7 +160,7 @@ class PasswordController extends Controller
         if (! Auth::user()->can($permission->name)) {
             Session::flash('flash_message', 'You are not allowed to set this permission for a password.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($request->get('type') == 'password') {
@@ -176,7 +175,7 @@ class PasswordController extends Controller
             $password->save();
             Session::flash('flash_message', 'Password saved.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         if ($request->get('type') == 'note') {
@@ -191,12 +190,12 @@ class PasswordController extends Controller
             $password->save();
             Session::flash('flash_message', 'Note saved.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         Session::flash('flash_message', 'Invalid input.');
 
-        return Redirect::route('passwordstore::index');
+        return to_route('passwordstore::index');
     }
 
     /**
@@ -215,14 +214,14 @@ class PasswordController extends Controller
         if (! $password->canAccess(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to delete this entry.');
 
-            return Redirect::route('passwordstore::index');
+            return to_route('passwordstore::index');
         }
 
         $password->delete();
 
         Session::flash('flash_message', 'Password entry deleted.');
 
-        return Redirect::route('passwordstore::index');
+        return to_route('passwordstore::index');
     }
 
     private function extraVerification(Request $request): bool
@@ -232,7 +231,7 @@ class PasswordController extends Controller
         }
 
         $verify = $request->session()->get('passwordstore-verify');
-        if ($verify < Carbon::now()->timestamp) {
+        if ($verify < Date::now()->timestamp) {
             $request->session()->forget('passwordstore-verify');
 
             return false;
@@ -248,6 +247,6 @@ class PasswordController extends Controller
     {
         Session::flash('flash_message', 'You need to enter your password again, in order to access this feature.');
 
-        return Redirect::route('passwordstore::auth');
+        return to_route('passwordstore::auth');
     }
 }

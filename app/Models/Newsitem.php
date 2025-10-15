@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -119,7 +120,7 @@ class Newsitem extends Model implements HasMedia
 
     public function isPublished(): bool
     {
-        return Carbon::parse($this->published_at)->isPast();
+        return Date::parse($this->published_at)->isPast();
     }
 
     /**

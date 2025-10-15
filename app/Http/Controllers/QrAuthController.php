@@ -7,8 +7,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
@@ -72,7 +72,7 @@ class QrAuthController extends Controller
             abort(404);
         }
 
-        $qrAuthRequest->approved_at = Carbon::now();
+        $qrAuthRequest->approved_at = Date::now();
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();
@@ -92,7 +92,7 @@ class QrAuthController extends Controller
             abort(403);
         }
 
-        $qrAuthRequest->approved_at = Carbon::now();
+        $qrAuthRequest->approved_at = Date::now();
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();

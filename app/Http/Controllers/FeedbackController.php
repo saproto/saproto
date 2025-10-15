@@ -13,11 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -50,8 +49,7 @@ class FeedbackController extends Controller
     private function getFeedbackQuery(FeedbackCategory $category): Builder
     {
         return Feedback::query()
-            ->where('feedback_category_id', $category->id)
-            ->orderBy('created_at', 'desc')
+            ->where('feedback_category_id', $category->id)->latest()
             ->with('votes')
             ->when($category->review, fn ($query) => $query->where('reviewed', true))
             ->withSum(['votes as user_vote' => function ($q) {
@@ -66,7 +64,7 @@ class FeedbackController extends Controller
         $mostVotedID = FeedbackVote::query()
             ->whereHas('feedback', static function ($query) use ($category) {
                 $query->where('feedback_category_id', $category->id)
-                    ->where('created_at', '>', Carbon::now()->subMonth());
+                    ->where('created_at', '>', Date::now()->subMonth());
             })
             ->groupBy('feedback_id')
             ->selectRaw('feedback_id, sum(vote) as votes')
@@ -118,10 +116,10 @@ class FeedbackController extends Controller
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to view archived feedback.');
 
-            return Redirect::back();
+            return back();
         }
 
-        $feedback = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->orderBy('created_at', 'desc');
+        $feedback = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->latest();
 
         return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category' => $category]);
     }
@@ -139,7 +137,7 @@ class FeedbackController extends Controller
             Session::flash('flash_message', "{$categoryTitle} added.");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function reply(int $id, Request $request): RedirectResponse
@@ -150,7 +148,7 @@ class FeedbackController extends Controller
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', "You are not allowed to reply to this {$categoryTitle}.");
 
-            return Redirect::back();
+            return back();
         }
 
         $reply = $request->input('reply');
@@ -168,7 +166,7 @@ class FeedbackController extends Controller
         $acceptText = $accepted ? 'accepted' : 'rejected';
         Session::flash('flash_message', "You have {$acceptText} this {$categoryTitle} with a reply.");
 
-        return Redirect::back();
+        return back();
     }
 
     public function archive(int $id): RedirectResponse
@@ -179,7 +177,7 @@ class FeedbackController extends Controller
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', "You are not allowed to archive this {$categoryTitle}.");
 
-            return Redirect::back();
+            return back();
         }
 
         if ($feedback->trashed()) {
@@ -190,7 +188,7 @@ class FeedbackController extends Controller
             Session::flash('flash_message', 'Feedback archived.');
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function restore(int $id): RedirectResponse
@@ -198,14 +196,14 @@ class FeedbackController extends Controller
         if (! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to restore this feedback.');
 
-            return Redirect::back();
+            return back();
         }
 
         $feedback = Feedback::onlyTrashed()->findOrFail($id);
         $feedback->restore();
         Session::flash('flash_message', 'Feedback restored.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function delete(int $id): RedirectResponse
@@ -214,20 +212,20 @@ class FeedbackController extends Controller
         if (! Auth::user()->can('board') && Auth::user()->id != $feedback->user->id) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback.');
 
-            return Redirect::back();
+            return back();
         }
 
         if (! Auth::user()->can('board') && $feedback->reply) {
             Session::flash('flash_message', 'You are not allowed to delete this feedback as it has already received a reply.');
 
-            return Redirect::back();
+            return back();
         }
 
         $feedback->votes()->delete();
         $feedback->forceDelete();
         Session::flash('flash_message', 'Feedback deleted.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function archiveAll(string $category): RedirectResponse
@@ -238,7 +236,7 @@ class FeedbackController extends Controller
             $item->delete();
         }
 
-        return Redirect::route('feedback::archived', ['category' => $category->url]);
+        return to_route('feedback::archived', ['category' => $category->url]);
     }
 
     public function vote(Request $request): JsonResponse
@@ -266,14 +264,14 @@ class FeedbackController extends Controller
         if ($feedback->category->reviewer_id !== Auth::user()->id && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Feedback may only be approved by the dedicated reviewer!');
 
-            return Redirect::back();
+            return back();
         }
 
         $feedback->reviewed = true;
         $feedback->save();
         Session::flash('flash_message', 'Feedback Approved to be public!');
 
-        return Redirect::back();
+        return back();
     }
 
     public function categoryAdmin(Request $request): View
@@ -290,13 +288,13 @@ class FeedbackController extends Controller
         if (FeedbackCategory::query()->where('url', $newUrl)->first()) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($request->has('reviewed') && ! $request->input('user_id')) {
             Session::flash('flash_message', 'You need to enter a reviewer to have this as a reviewed category!');
 
-            return Redirect::back();
+            return back();
         }
 
         $category = FeedbackCategory::query()->create([
@@ -310,7 +308,7 @@ class FeedbackController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function categoryUpdate(Request $request, int $id): RedirectResponse
@@ -320,13 +318,13 @@ class FeedbackController extends Controller
         if (FeedbackCategory::query()->where('url', $newUrl)->first() && FeedbackCategory::query()->where('url', $newUrl)->first()->id !== $id) {
             Session::flash('flash_message', 'This category-url already exists! Try a different name!');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($request->has('can_review') && ! $request->input('user_id')) {
             Session::flash('flash_message', 'You need to enter a reviewer to have this as a reviewed category!');
 
-            return Redirect::back();
+            return back();
         }
 
         $category = FeedbackCategory::query()->findOrFail($id);
@@ -341,7 +339,7 @@ class FeedbackController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->title.' has been updated.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -359,6 +357,6 @@ class FeedbackController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->title.' has been deleted.');
 
-        return Redirect::route('feedback::category::admin', ['category' => null]);
+        return to_route('feedback::category::admin', ['category' => null]);
     }
 }

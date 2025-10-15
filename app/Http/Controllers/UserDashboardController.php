@@ -13,10 +13,9 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -80,7 +79,7 @@ class UserDashboardController extends Controller
         if ($auth_check == null || ($auth_check->id != $user->id && ! $auth_check->can('board'))) {
             Session::flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($new_email !== $user->email) {
@@ -90,10 +89,10 @@ class UserDashboardController extends Controller
             if ($validator->fails()) {
 
                 if ($user->id == Auth::id()) {
-                    return Redirect::route('user::dashboard::show')->withErrors($validator);
+                    return to_route('user::dashboard::show')->withErrors($validator);
                 }
 
-                return Redirect::route('user::admin::details', ['id' => $user->id])->withErrors($validator);
+                return to_route('user::admin::details', ['id' => $user->id])->withErrors($validator);
             }
 
             $email = [
@@ -125,10 +124,10 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'E-mail address changed.');
         if ($user->id == Auth::id()) {
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
-        return Redirect::route('user::admin::details', ['id' => $user->id]);
+        return to_route('user::admin::details', ['id' => $user->id]);
     }
 
     /**
@@ -149,7 +148,7 @@ class UserDashboardController extends Controller
                 'phone' => 'required|regex:(\+[0-9]{8,16})',
             ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
             if ($validator->fails()) {
-                return Redirect::route('user::dashboard::show')->withErrors($validator);
+                return to_route('user::dashboard::show')->withErrors($validator);
             }
         }
 
@@ -173,7 +172,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Changes saved.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
@@ -188,7 +187,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Your diet and allergy information has been updated.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /** @return View */
@@ -294,7 +293,7 @@ class UserDashboardController extends Controller
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
 
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
         return view('users.dashboard.completeprofile');
@@ -311,7 +310,7 @@ class UserDashboardController extends Controller
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
 
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
         if (! $request->has('phone_verified') || ! $request->has('birthdate_verified')) {
@@ -323,14 +322,14 @@ class UserDashboardController extends Controller
                 'phone' => 'required|regex:(\+[0-9]{8,16})',
             ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
             if ($validator->fails()) {
-                return Redirect::back()->withErrors($validator);
+                return back()->withErrors($validator);
             }
 
             Session::flash('flash_userdata', $userdata);
 
             return view(
                 'users.dashboard.completeprofile_verify',
-                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+                ['userdata' => $userdata, 'age' => Date::instance(new DateTime($userdata['birthdate']))->age]
             );
         }
 
@@ -341,17 +340,17 @@ class UserDashboardController extends Controller
             'phone_verified' => 'required|regex:(\+[0-9]{8,16})',
         ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return back()->withErrors($validator);
         }
 
-        $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
+        $userdata['birthdate'] = Date::parse($userdata['birthdate_verified'])->format('Y-m-d');
         $userdata['phone'] = $userdata['phone_verified'];
         $user->fill($userdata);
         $user->save();
 
         Session::flash('flash_message', 'Completed profile.');
 
-        return Redirect::route('becomeamember');
+        return to_route('becomeamember');
     }
 
     /**
@@ -363,7 +362,7 @@ class UserDashboardController extends Controller
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
 
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
         return view('users.dashboard.membershipform', ['user' => $user]);
@@ -378,7 +377,7 @@ class UserDashboardController extends Controller
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
 
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
         if ($user->member?->membership_type === MembershipTypeEnum::PENDING) {
@@ -402,7 +401,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Thanks for signing the membership form!');
 
-        return Redirect::route('becomeamember');
+        return to_route('becomeamember');
     }
 
     /** @return View */
@@ -438,7 +437,7 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'Profile cleared.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /** @return RedirectResponse */
@@ -450,6 +449,6 @@ class UserDashboardController extends Controller
 
         Session::flash('flash_message', 'New personal key generated.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 }

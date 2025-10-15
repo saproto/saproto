@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class Productdefaultrank extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class Productdefaultrank extends Migration
             $table->unsignedInteger('rank')->nullable(false)->default(1)->change();
         });
     }
-}
+};

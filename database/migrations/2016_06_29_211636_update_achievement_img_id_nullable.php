@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateAchievementImgIdNullable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class UpdateAchievementImgIdNullable extends Migration
             $table->integer('img_file_id')->nullable(false)->change();
         });
     }
-}
+};

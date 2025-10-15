@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -25,7 +24,7 @@ class AliasController extends Controller
             return view('aliases.index', ['aliases' => $aliases]);
         }
 
-        return Redirect::route('alias::create');
+        return to_route('alias::create');
     }
 
     /** @return View */
@@ -61,13 +60,10 @@ class AliasController extends Controller
             Session::flash('flash_message', 'No action performed.');
         }
 
-        return Redirect::route('alias::index');
+        return to_route('alias::index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $from = $request->input('from');
         $into = $request->input('into');
@@ -82,15 +78,13 @@ class AliasController extends Controller
             Session::flash('flash_message', 'No such alias ('.$from.').');
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(Request $request, mixed $id_or_alias)
+    public function destroy(Request $request, mixed $id_or_alias): RedirectResponse
     {
         $alias = Alias::query()->find($id_or_alias);
 
@@ -98,7 +92,7 @@ class AliasController extends Controller
             $alias->delete();
             Session::flash('flash_message', 'Entry deleted.');
 
-            return Redirect::back();
+            return back();
         }
 
         $affected = DB::table('alias')->where('alias', $id_or_alias)->delete();
@@ -108,6 +102,6 @@ class AliasController extends Controller
             Session::flash('flash_message', 'No such alias ('.$id_or_alias.').');
         }
 
-        return Redirect::back();
+        return back();
     }
 }

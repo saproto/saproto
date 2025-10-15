@@ -9,10 +9,9 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class TempAdminController extends Controller
@@ -26,9 +25,9 @@ class TempAdminController extends Controller
             ->with('user')
             ->with('creator')
             ->where('end_at', '>', DB::raw('NOW()'))
-            ->orderBy('end_at', 'desc')
+            ->latest('end_at')
             ->get();
-        $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
+        $pastTempadmins = Tempadmin::query()->where('end_at', '<=', DB::raw('NOW()'))->latest('end_at')->take(10)->get();
 
         return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
@@ -55,7 +54,7 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($tempAdminUser->id, $tempAdminUser->isTempadminLaterToday());
 
-        return Redirect::route('tempadmins.index');
+        return to_route('tempadmins.index');
     }
 
     /**
@@ -77,67 +76,59 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
-        return Redirect::route('tempadmins.index');
+        return to_route('tempadmins.index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function make(int $id)
+    public function make(int $id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
 
         $tempAdmin = new Tempadmin;
         $tempAdmin->created_by = Auth::user()->id;
-        $tempAdmin->start_at = Carbon::today();
-        $tempAdmin->end_at = Carbon::tomorrow();
+        $tempAdmin->start_at = Date::today();
+        $tempAdmin->end_at = Date::tomorrow();
         $tempAdmin->user()->associate($user);
         $tempAdmin->save();
 
         ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function end(int $id)
+    public function end(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
 
         foreach ($user->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                $tempadmin->end_at = Carbon::now()->subSeconds(1);
+            if (Date::now()->between(Date::parse($tempadmin->start_at), Date::parse($tempadmin->end_at))) {
+                $tempadmin->end_at = Date::now()->subSeconds(1);
                 $tempadmin->save();
             }
         }
 
         ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function endId(int $id)
+    public function endId(int $id): RedirectResponse
     {
         /** @var Tempadmin $tempadmin */
         $tempadmin = Tempadmin::query()->findOrFail($id);
 
-        if (Carbon::parse($tempadmin->start_at)->isFuture()) {
+        if (Date::parse($tempadmin->start_at)->isFuture()) {
             $tempadmin->delete();
         } else {
-            $tempadmin->end_at = Carbon::now()->subSeconds(1);
+            $tempadmin->end_at = Date::now()->subSeconds(1);
             $tempadmin->save();
         }
 
         ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 }

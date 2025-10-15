@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Date;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -154,7 +155,7 @@ class Product extends Model implements HasMedia
             return $this->price;
         }
 
-        return WallstreetPrice::query()->where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->orderby('created_at', 'desc')->first()->price ?? $this->price;
+        return WallstreetPrice::query()->where('product_id', $this->id)->where('wallstreet_drink_id', $active->id)->latest()->first()->price ?? $this->price;
     }
 
     /**
@@ -184,8 +185,8 @@ class Product extends Model implements HasMedia
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'payed_with_cash' => ($withCash === true ? Carbon::now()->toDateTimeString() : null),
-            'payed_with_bank_card' => ($withBankCard === true ? Carbon::now()->toDateTimeString() : null),
+            'payed_with_cash' => ($withCash === true ? Date::now()->toDateTimeString() : null),
+            'payed_with_bank_card' => ($withBankCard === true ? Date::now()->toDateTimeString() : null),
             'description' => $description == '' ? null : $description,
             'authenticated_by' => $auth_method,
         ]);

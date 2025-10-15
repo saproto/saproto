@@ -7,8 +7,8 @@ use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
 class BirthdayCron extends Command
@@ -43,8 +43,8 @@ class BirthdayCron extends Command
     public function handle(): int
     {
         $users = User::query()
-            ->whereMonth('birthdate', Carbon::now()->month)
-            ->whereDay('birthdate', Carbon::now()->day)
+            ->whereMonth('birthdate', Date::now()->month)
+            ->whereDay('birthdate', Date::now()->day)
             ->whereHas('member', static function ($q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })

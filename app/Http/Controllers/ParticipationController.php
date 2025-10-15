@@ -46,7 +46,7 @@ class ParticipationController extends Controller
             $data['committees_activities_id'] = $helpingCommittee->id;
             ActivityParticipation::query()->create($data);
 
-            return Redirect::back();
+            return back();
         }
 
         abort_if($event->activity->isParticipating(Auth::user()), 403, 'You are already subscribed for '.$event->title.'.');
@@ -66,13 +66,10 @@ class ParticipationController extends Controller
             return Redirect::to($event->activity->redirect_url);
         }
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function createFor(Event $event, Request $request)
+    public function createFor(Event $event, Request $request): RedirectResponse
     {
         abort_if(! $event->activity, 403, $event->title.' does not have a signup.');
         abort_if($event->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
@@ -100,15 +97,13 @@ class ParticipationController extends Controller
 
         Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $helping->committee->name ?? null))->onQueue('high'));
 
-        return Redirect::back();
+        return back();
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function destroy(ActivityParticipation $participation)
+    public function destroy(ActivityParticipation $participation): RedirectResponse
     {
         $participation->load(['activity', 'activity.event', 'user']);
 
@@ -120,7 +115,7 @@ class ParticipationController extends Controller
             Session::flash('flash_message', $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.');
             $participation->activity->event->updateUniqueUsersCount();
 
-            return Redirect::back();
+            return back();
         }
 
         abort_if($participation->activity->closed, 403, 'This activity is closed, you cannot change participation anymore.');
@@ -141,7 +136,7 @@ class ParticipationController extends Controller
 
         $participation->activity->event->updateUniqueUsersCount();
 
-        return Redirect::back();
+        return back();
     }
 
     /**

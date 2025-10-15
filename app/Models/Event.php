@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -143,7 +144,7 @@ class Event extends Model implements HasMedia
         }
 
         throw new HttpResponseException(
-            redirect()->route('event::show', $model->getRouteKey())
+            to_route('event::show', $model->getRouteKey())
         );
     }
 
@@ -237,7 +238,7 @@ class Event extends Model implements HasMedia
 
     public function isPublished(): bool
     {
-        return $this->publication < Carbon::now()->timestamp;
+        return $this->publication < Date::now()->timestamp;
     }
 
     /**
@@ -306,12 +307,12 @@ class Event extends Model implements HasMedia
 
     public function current(): bool
     {
-        return $this->start < Carbon::now()->timestamp && $this->end > Carbon::now()->timestamp;
+        return $this->start < Date::now()->timestamp && $this->end > Date::now()->timestamp;
     }
 
     public function over(): bool
     {
-        return $this->end < Carbon::now()->timestamp;
+        return $this->end < Date::now()->timestamp;
     }
 
     /**
@@ -322,12 +323,12 @@ class Event extends Model implements HasMedia
      */
     public function generateTimespanText(string $long_format, string $short_format, string $combiner): string
     {
-        return Carbon::createFromTimestamp($this->start, date_default_timezone_get())->format($long_format).' '.$combiner.' '.(
+        return Date::createFromTimestamp($this->start, date_default_timezone_get())->format($long_format).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
-                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($short_format)
+                Date::createFromTimestamp($this->end, date_default_timezone_get())->format($short_format)
                 :
-                Carbon::createFromTimestamp($this->end, date_default_timezone_get())->format($long_format)
+                Date::createFromTimestamp($this->end, date_default_timezone_get())->format($long_format)
         );
     }
 
@@ -360,7 +361,7 @@ class Event extends Model implements HasMedia
             return true;
         }
 
-        if (Carbon::now()->timestamp > $this->end) {
+        if (Date::now()->timestamp > $this->end) {
             return false;
         }
 
@@ -423,7 +424,7 @@ class Event extends Model implements HasMedia
 
     public function shouldShowDietInfo(): bool
     {
-        return $this->involves_food && $this->end > Carbon::now()->subWeek()->timestamp;
+        return $this->involves_food && $this->end > Date::now()->subWeek()->timestamp;
     }
 
     /**
@@ -431,7 +432,7 @@ class Event extends Model implements HasMedia
      */
     protected function isFuture(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::now()->timestamp < $this->start);
+        return Attribute::make(get: fn (): bool => Date::now()->timestamp < $this->start);
     }
 
     /**
