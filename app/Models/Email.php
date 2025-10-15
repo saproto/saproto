@@ -225,20 +225,6 @@ class Email extends Model implements HasMedia
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
-    public function getEventName(): string
-    {
-        $events = [];
-        if (! $this->to_event) {
-            return '';
-        }
-
-        foreach ($this->events as $event) {
-            $events[] = $event->title;
-        }
-
-        return implode(', ', $events);
-    }
-
     public static function getListUnsubscribeFooter(int $user_id, int $email_id): string
     {
         $footer = [];
