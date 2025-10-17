@@ -730,7 +730,7 @@ Route::middleware('forcedomain')->group(function () {
     /* --- Routes related to the OmNomCom --- */
     Route::prefix('omnomcom')->name('omnomcom::')->group(function () {
         /* --- Pubic routes --- */
-        Route::get('minisite', ['uses' => 'OmNomController@miniSite']);
+        Route::get('minisite', [OmNomController::class, 'miniSite']);
 
         /* --- Routes related to OmNomCom stores --- */
         Route::prefix('store')->name('store::')->group(function () {
@@ -817,7 +817,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::controller(WithdrawalController::class)->group(function () {
             // Public routes
             Route::get('mywithdrawal/{id}', 'showForUser')->middleware(['auth'])->name('mywithdrawal');
-            Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
+            Route::get('unwithdrawable', [WithdrawalController::class, 'unwithdrawable'])->name('unwithdrawable')->middleware(['permission:finadmin']);
 
             // Finadmin only
             Route::prefix('withdrawals')->middleware(['permission:finadmin'])->name('withdrawal::')->group(function () {

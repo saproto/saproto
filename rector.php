@@ -46,9 +46,9 @@ try {
         ->withConfiguredRule(WhereToWhereLikeRector::class, [
             WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false
         ])
-//        ->withConfiguredRule(RouteActionCallableRector::class, [
-//            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
-//        ])
+        ->withConfiguredRule(RouteActionCallableRector::class, [
+            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
+        ])
         ->withRules([
             ResponseHelperCallToJsonResponseRector::class,
         ])
