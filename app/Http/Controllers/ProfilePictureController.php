@@ -12,7 +12,8 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 class ProfilePictureController extends Controller
 {
     /**
-     * @return RedirectResponse|string
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function update(Request $request): RedirectResponse
     {
