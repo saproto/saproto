@@ -60,7 +60,7 @@ use Override;
  * @method static Builder<static>|OrderLine whereUpdatedAt($value)
  * @method static Builder<static>|OrderLine whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class OrderLine extends Model
 {

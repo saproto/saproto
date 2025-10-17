@@ -31,7 +31,7 @@ use stdClass;
  * @method static Builder<static>|Account whereName($value)
  * @method static Builder<static>|Account whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Account extends Model
 {

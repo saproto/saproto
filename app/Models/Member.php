@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Database\Factories\MemberFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -63,7 +62,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Member extends Model implements HasMedia
 {

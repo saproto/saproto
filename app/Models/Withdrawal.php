@@ -43,7 +43,7 @@ use Override;
  * @method static Builder<static>|Withdrawal whereTotalUsersAssociated($value)
  * @method static Builder<static>|Withdrawal whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Withdrawal extends Model
 {

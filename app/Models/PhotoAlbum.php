@@ -49,7 +49,7 @@ use Override;
  * @method static Builder<static>|PhotoAlbum whereThumbId($value)
  * @method static Builder<static>|PhotoAlbum whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class PhotoAlbum extends Model
 {

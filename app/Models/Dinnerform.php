@@ -58,7 +58,7 @@ use Override;
  * @method static Builder<static>|Dinnerform whereUrl($value)
  * @method static Builder<static>|Dinnerform whereVisibleHomePage($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Dinnerform extends Model
 {

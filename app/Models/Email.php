@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Enums\MembershipTypeEnum;
 use Database\Factories\EmailFactory;
 use Exception;
@@ -73,7 +74,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Email extends Model implements HasMedia
 {
@@ -101,7 +102,7 @@ class Email extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsToMany<Event, $this>
+     * @return BelongsToMany<Event, $this, Pivot>
      */
     public function events(): BelongsToMany
     {

@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Crypt;
  * @method static Builder<static>|EmailList whereIsMemberOnly($value)
  * @method static Builder<static>|EmailList whereName($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class EmailList extends Model
 {

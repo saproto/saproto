@@ -36,7 +36,7 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder<static>|PasswordEntry whereUrl($value)
  * @method static Builder<static>|PasswordEntry whereUsername($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class PasswordEntry extends Model
 {

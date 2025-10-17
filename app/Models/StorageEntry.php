@@ -35,7 +35,7 @@ use Override;
  * @method static Builder<static>|StorageEntry whereOriginalFilename($value)
  * @method static Builder<static>|StorageEntry whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class StorageEntry extends Model
 {

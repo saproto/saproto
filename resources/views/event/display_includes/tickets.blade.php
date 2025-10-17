@@ -1,9 +1,10 @@
+@php use App\Models\Event; @endphp
 @php
-    /**@var \App\Models\Event $event */
+    /**@var Event $event */
 @endphp
 
 @if ($event->tickets->count() > 0)
-    <?php $has_unpaid_tickets = false; ?>
+        <?php $has_unpaid_tickets = false; ?>
 
     @if ($event->hasBoughtTickets(Auth::user()))
         <div class="card mb-3">
@@ -35,7 +36,7 @@
                                             Download PDF
                                         </a>
                                     @else
-                                        <?php $has_unpaid_tickets = true; ?>
+                                            <?php $has_unpaid_tickets = true; ?>
 
                                         <a
                                             class="card-link text-danger"

@@ -44,7 +44,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Achievement whereTier($value)
  * @method static Builder<static>|Achievement whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Achievement extends Model
 {

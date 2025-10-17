@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|FinancialAccount whereName($value)
  * @method static Builder<static>|FinancialAccount whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class FinancialAccount extends Model
 {

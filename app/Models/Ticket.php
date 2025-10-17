@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Date;
  * @method static Builder<static>|Ticket whereProductId($value)
  * @method static Builder<static>|Ticket whereShowParticipants($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Ticket extends Model
 {

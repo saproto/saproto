@@ -30,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|FeedbackVote whereUserId($value)
  * @method static Builder<static>|FeedbackVote whereVote($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class FeedbackVote extends Model
 {

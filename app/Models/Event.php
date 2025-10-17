@@ -95,7 +95,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Event withTrashed()
  * @method static Builder<static>|Event withoutTrashed()
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Event extends Model implements HasMedia
 {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Enums\NewsEnum;
 use Database\Factories\NewsitemFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,7 +61,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Newsitem extends Model implements HasMedia
 {
@@ -111,7 +112,7 @@ class Newsitem extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsToMany<Event, $this>
+     * @return BelongsToMany<Event, $this, Pivot>
      */
     public function events(): BelongsToMany
     {

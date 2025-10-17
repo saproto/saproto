@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App;
+use Illuminate\Support\Facades\App;
 use App\Enums\CompanyEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -56,7 +56,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Company extends Model implements HasMedia
 {

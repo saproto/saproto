@@ -33,7 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|StockMutation whereUpdatedAt($value)
  * @method static Builder<static>|StockMutation whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class StockMutation extends Model
 {

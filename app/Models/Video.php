@@ -40,7 +40,7 @@ use Override;
  * @method static Builder<static>|Video whereYoutubeUserId($value)
  * @method static Builder<static>|Video whereYoutubeUserName($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Video extends Model
 {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -70,7 +71,7 @@ use Illuminate\Support\Facades\Date;
  * @method static Builder<static>|Activity whereRegistrationStart($value)
  * @method static Builder<static>|Activity whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Activity extends Validatable
 {
