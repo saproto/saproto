@@ -6,7 +6,7 @@ namespace App\Console\Commands;
 
 use App\Models\Tempadmin;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 class TempAdminCleanup extends Command
 {
@@ -31,7 +31,7 @@ class TempAdminCleanup extends Command
     {
         $this->info('Cleaning up Temp Protube Admin users...');
 
-        $tempAdmins = Tempadmin::query()->where('end_at', '<', Carbon::now()->startOfDay())->get();
+        $tempAdmins = Tempadmin::query()->where('end_at', '<', Date::now()->startOfDay())->get();
         $tempAdmins->each(function (Tempadmin $tempAdmin) {
             $tempAdmin->delete();
         });

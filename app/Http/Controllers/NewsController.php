@@ -10,11 +10,11 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -32,7 +32,7 @@ class NewsController extends Controller
 
     public function index(): View
     {
-        $newsitems = Newsitem::all()->whereNotNull('published_at')->where('published_at', '<=', Carbon::now())->sortByDesc('published_at');
+        $newsitems = Newsitem::all()->whereNotNull('published_at')->where('published_at', '<=', Date::now())->sortByDesc('published_at');
 
         return view('news.list', ['newsitems' => $newsitems]);
     }
@@ -87,7 +87,7 @@ class NewsController extends Controller
     public function create(Request $request): View
     {
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get();
+        $upcomingEvents = Event::query()->where('start', '>', Date::now()->timestamp)->where('secret', false)->orderBy('start')->get();
 
         return view('news.edit', ['item' => null, 'new' => true, 'is_weekly' => $request->boolean('is_weekly'), 'upcomingEvents' => $upcomingEvents, 'events' => [], 'lastWeekly' => $lastWeekly]);
     }
@@ -95,7 +95,7 @@ class NewsController extends Controller
     public function edit(int $id): View
     {
         $newsitem = Newsitem::query()->findOrFail($id);
-        $upcomingEvents = Event::query()->where('start', '>', Carbon::now()->timestamp)->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
+        $upcomingEvents = Event::query()->where('start', '>', Date::now()->timestamp)->where('secret', false)->orderBy('start')->get()->merge($newsitem->events()->get());
         $events = $newsitem->events()->pluck('id')->toArray();
         $lastWeekly = Newsitem::query()->where('is_weekly', true)->orderBy('published_at', 'desc')->first();
 
@@ -131,7 +131,7 @@ class NewsController extends Controller
             $newsitem->published_at = $request->date('published_at')->toDateTimeString();
         } else {
             $newsitem->is_weekly = true;
-            $newsitem->title = 'Weekly update for week '.Carbon::now()->format('W').' of '.Carbon::now()->format('Y').'.';
+            $newsitem->title = 'Weekly update for week '.Date::now()->format('W').' of '.Date::now()->format('Y').'.';
             $newsitem->published_at = null;
         }
 
@@ -176,7 +176,7 @@ class NewsController extends Controller
 
         Artisan::call('proto:newslettercron', ['id' => $newsitem->id]);
 
-        $newsitem->published_at = Carbon::now()->toDateTimeString();
+        $newsitem->published_at = Date::now()->toDateTimeString();
 
         $newsitem->save();
 
@@ -208,7 +208,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->getImageUrl();
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = Carbon::parse($newsitem->published_at)->timestamp;
+                $returnItem->published_at = Date::parse($newsitem->published_at)->timestamp;
 
                 $return[] = $returnItem;
             }

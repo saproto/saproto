@@ -8,16 +8,15 @@ use App\Models\MollieTransaction;
 use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
-use Carbon\Exceptions\InvalidFormatException;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -133,8 +132,8 @@ class MollieController extends Controller
     public function monthly(string $month): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         try {
-            $month = Carbon::parse($month);
-        } catch (InvalidFormatException) {
+            $month = Date::parse($month);
+        } catch (Exception) {
             Session::flash('flash_message', 'Invalid date: '.$month);
 
             return back();
@@ -310,7 +309,7 @@ class MollieController extends Controller
      */
     public static function getTotalForMonth(string $month): mixed
     {
-        $month = Carbon::parse($month);
+        $month = Date::parse($month);
         $start = $month->copy()->startOfMonth();
         if ($start->isWeekend()) {
             $start->nextWeekday();

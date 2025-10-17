@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Spatie\Permission\Models\Permission;
 
 /**
@@ -59,6 +60,6 @@ class PasswordEntry extends Model
 
     public function age(): int
     {
-        return (int) $this->updated_at->diffInMonths(Carbon::now(), true);
+        return (int) $this->updated_at->diffInMonths(Date::now(), true);
     }
 }

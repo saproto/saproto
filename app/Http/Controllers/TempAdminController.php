@@ -9,8 +9,8 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -85,8 +85,8 @@ class TempAdminController extends Controller
 
         $tempAdmin = new Tempadmin;
         $tempAdmin->created_by = Auth::user()->id;
-        $tempAdmin->start_at = Carbon::today();
-        $tempAdmin->end_at = Carbon::tomorrow();
+        $tempAdmin->start_at = Date::today();
+        $tempAdmin->end_at = Date::tomorrow();
         $tempAdmin->user()->associate($user);
         $tempAdmin->save();
 
@@ -101,8 +101,8 @@ class TempAdminController extends Controller
         $user = User::query()->findOrFail($id);
 
         foreach ($user->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                $tempadmin->end_at = Carbon::now()->subSeconds(1);
+            if (Date::now()->between(Date::parse($tempadmin->start_at), Date::parse($tempadmin->end_at))) {
+                $tempadmin->end_at = Date::now()->subSeconds(1);
                 $tempadmin->save();
             }
         }
@@ -120,10 +120,10 @@ class TempAdminController extends Controller
         /** @var Tempadmin $tempadmin */
         $tempadmin = Tempadmin::query()->findOrFail($id);
 
-        if (Carbon::parse($tempadmin->start_at)->isFuture()) {
+        if (Date::parse($tempadmin->start_at)->isFuture()) {
             $tempadmin->delete();
         } else {
-            $tempadmin->end_at = Carbon::now()->subSeconds(1);
+            $tempadmin->end_at = Date::now()->subSeconds(1);
             $tempadmin->save();
         }
 

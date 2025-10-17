@@ -9,7 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -161,7 +161,7 @@ class NarrowcastingController extends Controller
      */
     public function clear()
     {
-        foreach (NarrowcastingItem::query()->where('campaign_end', '<', Carbon::now()->timestamp)->get() as $item) {
+        foreach (NarrowcastingItem::query()->where('campaign_end', '<', Date::now()->timestamp)->get() as $item) {
             $item->delete();
         }
 
@@ -175,7 +175,7 @@ class NarrowcastingController extends Controller
     {
         $data = [];
         foreach (
-            NarrowcastingItem::query()->where('campaign_start', '<', Carbon::now()->timestamp)->where('campaign_end', '>', Carbon::now()->timestamp)->get() as $item) {
+            NarrowcastingItem::query()->where('campaign_start', '<', Date::now()->timestamp)->where('campaign_end', '>', Date::now()->timestamp)->get() as $item) {
             if ($item->youtube_id) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,

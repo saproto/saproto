@@ -11,14 +11,15 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
     public function index(): JsonResponse
     {
-        $from = Carbon::now()->startOfYear();
-        $to = Carbon::now()->endOfYear();
+        $from = Date::now()->startOfYear();
+        $to = Date::now()->endOfYear();
         $purchases = $this->getPurchases($from, $to);
 
         return new JsonResponse([

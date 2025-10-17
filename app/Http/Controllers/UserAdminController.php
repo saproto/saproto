@@ -13,8 +13,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -151,7 +151,7 @@ class UserAdminController extends Controller
         }
 
         $member = $user->member;
-        $member->created_at = Carbon::now();
+        $member->created_at = Date::now();
         $member->membership_type = MembershipTypeEnum::REGULAR;
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
@@ -202,7 +202,7 @@ class UserAdminController extends Controller
             return back();
         }
 
-        $user->member->until = Carbon::parse('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->until = Date::parse('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");

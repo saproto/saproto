@@ -15,10 +15,10 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -47,7 +47,7 @@ class OmNomController extends Controller
 
         if ($store_slug === 'tipcie') {
             $minors = User::query()
-                ->where('birthdate', '>', Carbon::now()->subYears(18)->format('Y-m-d'))
+                ->where('birthdate', '>', Date::now()->subYears(18)->format('Y-m-d'))
                 ->whereHas('member', static function (Builder $q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
@@ -240,9 +240,9 @@ class OmNomController extends Controller
                 }
 
                 if ($product->is_alcoholic && $store['alcohol_time_constraint']) {
-                    $alcoholStart = Carbon::today()->setTime(Config::integer('omnomcom.alcohol-start-hour'), 0);
-                    $alcoholEnd = Carbon::today()->setTime(Config::integer('omnomcom.alcohol-end-hour'), 0)->addDay(); // add a day to fix the slot going over 00:00
-                    if (! Carbon::now()->between($alcoholStart, $alcoholEnd)) {
+                    $alcoholStart = Date::today()->setTime(Config::integer('omnomcom.alcohol-start-hour'), 0);
+                    $alcoholEnd = Date::today()->setTime(Config::integer('omnomcom.alcohol-end-hour'), 0)->addDay(); // add a day to fix the slot going over 00:00
+                    if (! Date::now()->between($alcoholStart, $alcoholEnd)) {
                         $result->message = "You can't buy alcohol at the moment! Come back between {$alcoholStart->format('H:i')} and {$alcoholEnd->format('H:i')}.";
 
                         return json_encode($result);
@@ -275,7 +275,7 @@ class OmNomController extends Controller
 
                 $totalSpent = OrderLine::query()
                     ->where('user_id', $user->id)
-                    ->whereLike('created_at', sprintf('%s %%', Carbon::now()->format('Y-m-d')))
+                    ->whereLike('created_at', sprintf('%s %%', Date::now()->format('Y-m-d')))
                     ->whereHas('product.categories', function (Builder $query) use ($categories) {
                         $query->whereIn('product_categories.id', $categories);
                     })
@@ -289,7 +289,7 @@ class OmNomController extends Controller
 
             if ($user->show_omnomcom_calories) {
                 $result->message .= $user->show_omnomcom_total ? '<br>and ' : 'You have ';
-                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->whereLike('orderlines.created_at', sprintf('%s %%', Carbon::now()->format('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
+                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->whereLike('orderlines.created_at', sprintf('%s %%', Date::now()->format('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
             }
 
             if ($result->message !== '') {

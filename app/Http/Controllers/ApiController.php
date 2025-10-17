@@ -19,10 +19,10 @@ use App\Models\User;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Random\RandomException;
 
 class ApiController extends Controller
@@ -117,15 +117,15 @@ class ApiController extends Controller
 
         $random = random_int(1, 100);
         if ($random <= $numbers[0]) { // $numbers[0]% chance the album is from within the last year
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYear()->timestamp, Date::now()->timestamp]);
         } elseif ($random <= $numbers[1]) { // $numbers[1] - $numbers[0]% chance the album is from one year ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(2)->timestamp, Date::now()->subYear()->timestamp]);
         } elseif ($random <= $numbers[2]) {// $numbers[2] - $numbers[1]% chance the album is from two years ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(3)->timestamp, Date::now()->subYears(2)->timestamp]);
         } elseif ($random <= $numbers[3]) {// $numbers[3] - $numbers[2]% chance the album is from three years ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(4)->timestamp, Date::now()->subYears(3)->timestamp]);
         } else {// 100 - $numbers[3]% chance the album is older than 4 years
-            $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
+            $query = (clone $privateQuery)->where('date_taken', '<=', Date::now()->subYears(4)->timestamp);
         }
 
         $album = $query->inRandomOrder()->first();
@@ -144,7 +144,7 @@ class ApiController extends Controller
         return [
             'photos' => $album->items->map(fn (Photo $item): string => $item->getUrl(PhotoEnum::LARGE)),
             'album_name' => $album->name,
-            'date_taken' => Carbon::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
+            'date_taken' => Date::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
         ];
     }
 
@@ -178,7 +178,7 @@ class ApiController extends Controller
         foreach ($activityParticipations as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
-                'date' => $activity_participation->activity?->event ? Carbon::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
+                'date' => $activity_participation->activity?->event ? Date::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,

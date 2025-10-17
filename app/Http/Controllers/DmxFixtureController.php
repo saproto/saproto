@@ -8,8 +8,8 @@ use App\Models\DmxOverride;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -94,7 +94,7 @@ class DmxFixtureController extends Controller
     public function valueApi(): array
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), Carbon::now()->subWeek()->startOfWeek()->toDateTimeString(), Carbon::now()->addWeek()->startOfWeek()->toDateTimeString());
+        $events = CalendarController::returnGoogleCalendarEvents(Config::string('proto.google-calendar.smartxp-id'), Date::now()->subWeek()->startOfWeek()->toDateTimeString(), Date::now()->addWeek()->startOfWeek()->toDateTimeString());
 
         // Determine if any event is currently going on.
         $current_event = null;
@@ -113,7 +113,7 @@ class DmxFixtureController extends Controller
         $channel_values = [];
 
         // Now we fill the preset channels.
-        $preset_colors = (Carbon::now()->format('G') > 6 && Carbon::now()->format('G') < 20 ? [...Config::array('dmx.colors')[$preset], 50] : [0, 0, 0, 0]);
+        $preset_colors = (Date::now()->format('G') > 6 && Date::now()->format('G') < 20 ? [...Config::array('dmx.colors')[$preset], 50] : [0, 0, 0, 0]);
         foreach (DmxFixture::query()->where('follow_timetable', true)->get() as $fixture) {
             $channel_values = self::setFixtureChannels($fixture, $channel_values, $preset_colors);
         }

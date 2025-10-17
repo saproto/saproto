@@ -5,10 +5,11 @@ use App\Models\Event;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 use function PHPUnit\Framework\assertTrue;
 
-$t0 = Carbon::create(2000, 1, 1, 12, 0, 0, 0);
+$t0 = Date::create(2000, 1, 1, 12, 0, 0, 0);
 
 dataset('models', [
     'model' => [
@@ -54,7 +55,7 @@ dataset('times', [
 
 it('rejects participations before the signup opening', function (Carbon $time, Event $event, User $user) use ($t0) {
     if ($time->isBefore($t0)) {
-        Carbon::withTestNow($time, function () use ($user, $event) {
+        Date::withTestNow($time, function () use ($user, $event) {
             $response = $this->actingAs($user)->get(
                 route('event::addparticipation', ['event' => $event]));
             $response->assertStatus(403);
@@ -70,7 +71,7 @@ it('rejects participations before the signup opening', function (Carbon $time, E
 
 it('allows participation when open', function (Carbon $time, Event $event, User $user) use ($t0) {
     if ($time->isAfter($t0) || $time->equalTo($t0)) {
-        Carbon::withTestNow($time, function () use ($user, $event) {
+        Date::withTestNow($time, function () use ($user, $event) {
             $response = $this->actingAs($user)->get(
                 route('event::addparticipation', ['event' => $event]));
             $response->assertRedirect();

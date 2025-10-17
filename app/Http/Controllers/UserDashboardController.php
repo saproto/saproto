@@ -13,8 +13,8 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -327,7 +327,7 @@ class UserDashboardController extends Controller
 
             return view(
                 'users.dashboard.completeprofile_verify',
-                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+                ['userdata' => $userdata, 'age' => Date::instance(new DateTime($userdata['birthdate']))->age]
             );
         }
 
@@ -341,7 +341,7 @@ class UserDashboardController extends Controller
             return back()->withErrors($validator);
         }
 
-        $userdata['birthdate'] = Carbon::parse($userdata['birthdate_verified'])->format('Y-m-d');
+        $userdata['birthdate'] = Date::parse($userdata['birthdate_verified'])->format('Y-m-d');
         $userdata['phone'] = $userdata['phone_verified'];
         $user->fill($userdata);
         $user->save();

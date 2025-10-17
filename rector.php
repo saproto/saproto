@@ -11,7 +11,6 @@ use RectorLaravel\Rector\MethodCall\ConvertEnumerableToArrayToAllRector;
 use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
 use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\WhereToWhereLikeRector;
-use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use RectorLaravel\Rector\StaticCall\RouteActionCallableRector;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\LaravelSetProvider;
@@ -53,7 +52,6 @@ try {
             ResponseHelperCallToJsonResponseRector::class,
         ])
         ->withSkip([
-            CarbonToDateFacadeRector::class,
             EloquentOrderByToLatestOrOldestRector::class,
             ConvertEnumerableToArrayToAllRector::class,
             RenameClassRector::class,

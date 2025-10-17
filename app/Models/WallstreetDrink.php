@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Class WallstreetDrink.
@@ -48,7 +49,7 @@ class WallstreetDrink extends Model
 
     public function isCurrent(): bool
     {
-        return $this->start_time <= Carbon::now()->timestamp && $this->end_time >= Carbon::now()->timestamp;
+        return $this->start_time <= Date::now()->timestamp && $this->end_time >= Date::now()->timestamp;
     }
 
     /**
@@ -67,8 +68,8 @@ class WallstreetDrink extends Model
         $productIDs = $this->products()->pluck('id');
 
         return OrderLine::query()
-            ->where('created_at', '>=', Carbon::createFromTimestamp($this->start_time, date_default_timezone_get()))
-            ->where('created_at', '<=', Carbon::createFromTimestamp($this->end_time, date_default_timezone_get()))
+            ->where('created_at', '>=', Date::createFromTimestamp($this->start_time, date_default_timezone_get()))
+            ->where('created_at', '<=', Date::createFromTimestamp($this->end_time, date_default_timezone_get()))
             ->whereHas('product', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($productIDs) {
                 $q->whereIn('id', $productIDs);
             });
