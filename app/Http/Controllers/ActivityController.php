@@ -120,7 +120,7 @@ class ActivityController extends Controller
     {
         abort_if(! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user()), 403, 'You may not see this page.');
 
-        abort_unless($event->activity, 404, 'This event has no activity.');
+        abort_if($event->activity===null, 404, 'This event has no activity.');
 
         return view('event.checklist', ['event' => $event]);
     }
