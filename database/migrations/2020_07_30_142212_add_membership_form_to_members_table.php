@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddMembershipFormToMembersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class AddMembershipFormToMembersTable extends Migration
             $table->string('pending')->after('is_donator')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class AddMembershipFormToMembersTable extends Migration
             $table->dropColumn('pending');
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddNewsletterFieldToEvents extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddNewsletterFieldToEvents extends Migration
             $table->boolean('include_in_newsletter')->nullable(false)->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddNewsletterFieldToEvents extends Migration
             $table->dropColumn('include_in_newsletter');
         });
     }
-}
+};

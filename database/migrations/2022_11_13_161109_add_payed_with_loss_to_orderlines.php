@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPayedWithLossToOrderlines extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddPayedWithLossToOrderlines extends Migration
             $table->boolean('payed_with_loss')->after('payed_with_withdrawal');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddPayedWithLossToOrderlines extends Migration
             $table->dropColumn('payed_with_loss');
         });
     }
-}
+};

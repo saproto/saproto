@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class MoveSecretToEvent extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class MoveSecretToEvent extends Migration
             $table->boolean('secret')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -32,4 +31,4 @@ class MoveSecretToEvent extends Migration
             $table->dropColumn('secret');
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class SessionsBackInDatabase extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class SessionsBackInDatabase extends Migration
             $table->integer('last_activity');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class SessionsBackInDatabase extends Migration
     {
         Schema::drop('sessions');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateJobsForLaravel53 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,7 +21,6 @@ class UpdateJobsForLaravel53 extends Migration
             $table->longText('exception')->after('payload');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -37,4 +36,4 @@ class UpdateJobsForLaravel53 extends Migration
             $table->dropColumn('exception');
         });
     }
-}
+};

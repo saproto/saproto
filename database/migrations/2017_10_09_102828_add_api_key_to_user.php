@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddApiKeyToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddApiKeyToUser extends Migration
             $table->string('personal_key', 64)->nullable(true)->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddApiKeyToUser extends Migration
             $table->dropColumn('personal_key');
         });
     }
-}
+};

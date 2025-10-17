@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDiscordIdColumnToUsers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddDiscordIdColumnToUsers extends Migration
             $table->string('discord_id')->nullable();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddDiscordIdColumnToUsers extends Migration
             $table->dropColumn('discord_id');
         });
     }
-}
+};

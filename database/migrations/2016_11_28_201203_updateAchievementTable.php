@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateAchievementTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class UpdateAchievementTable extends Migration
             $table->text('fa_icon')->nullable()->after('desc');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -26,4 +25,4 @@ class UpdateAchievementTable extends Migration
             $table->integer('img_file_id')->nullable();
         });
     }
-}
+};

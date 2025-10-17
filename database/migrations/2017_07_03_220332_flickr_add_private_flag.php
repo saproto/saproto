@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class FlickrAddPrivateFlag extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class FlickrAddPrivateFlag extends Migration
             $table->boolean('private')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class FlickrAddPrivateFlag extends Migration
             $table->dropColumn('private');
         });
     }
-}
+};

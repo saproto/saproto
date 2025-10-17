@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddMembercardAttributesToCompanies extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class AddMembercardAttributesToCompanies extends Migration
             $table->text('membercard_long')->nullable();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -28,4 +27,4 @@ class AddMembercardAttributesToCompanies extends Migration
             $table->dropColumn('membercard_long');
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RegistrationMigration extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class RegistrationMigration extends Migration
             $table->boolean('receive_sms')->default(false)->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -33,4 +32,4 @@ class RegistrationMigration extends Migration
             $table->boolean('receive_sms')->default(true)->change();
         });
     }
-}
+};

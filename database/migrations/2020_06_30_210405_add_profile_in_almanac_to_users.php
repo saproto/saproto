@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProfileInAlmanacToUsers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddProfileInAlmanacToUsers extends Migration
             $table->boolean('profile_in_almanac')->after('show_achievements')->default(1);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddProfileInAlmanacToUsers extends Migration
             $table->dropColumn('profile_in_almanac');
         });
     }
-}
+};

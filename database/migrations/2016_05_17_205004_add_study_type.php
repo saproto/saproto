@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStudyType extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class AddStudyType extends Migration
             $table->boolean('utwente')->default(true);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class AddStudyType extends Migration
             $table->dropColumn('utwente');
         });
     }
-}
+};

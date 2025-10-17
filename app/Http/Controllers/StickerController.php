@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -63,7 +62,7 @@ class StickerController extends Controller
             'lat' => ['required', 'numeric', 'min:-90', 'max:90'],
             'lng' => ['required', 'numeric', 'min:-180', 'max:180'],
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'stick_date' => 'required_if:today_checkbox,on|date',
+            'stick_date' => ['required_if:today_checkbox,on', 'date'],
         ]);
 
         $lat = number_format((float) $validated['lat'], 4, '.', '');
@@ -92,14 +91,14 @@ class StickerController extends Controller
                 Session::flash('flash_message', $e->getMessage());
                 $sticker->delete();
 
-                return Redirect::back();
+                return back();
             }
         }
 
-        StickerPlacedEvent::dispatch($sticker);
+        event(new StickerPlacedEvent($sticker));
         Session::flash('message', 'Sticker added successfully');
 
-        return Redirect::back();
+        return back();
     }
 
     public function show(Sticker $sticker): void {}
@@ -113,15 +112,15 @@ class StickerController extends Controller
         if (Auth::user()->id != $sticker->user?->id && ! Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to delete this sticker');
 
-            return Redirect::back();
+            return back();
         }
 
-        StickerRemovedEvent::dispatch($sticker);
+        event(new StickerRemovedEvent($sticker));
 
         $sticker->delete();
         Session::flash('flash_message', 'Sticker deleted successfully');
 
-        return Redirect::back();
+        return back();
     }
 
     public function admin(): View
@@ -147,9 +146,9 @@ class StickerController extends Controller
             'report_reason' => $validated['report_reason'],
         ]);
 
-        StickerRemovedEvent::dispatch($sticker);
+        event(new StickerRemovedEvent($sticker));
 
-        return Redirect::back()->with('flash_message', 'Sticker reported successfully. It will not be visible for other users until the board has reviewed it.');
+        return back()->with('flash_message', 'Sticker reported successfully. It will not be visible for other users until the board has reviewed it.');
     }
 
     public function unreport(Sticker $sticker): RedirectResponse
@@ -159,8 +158,8 @@ class StickerController extends Controller
             'report_reason' => null,
         ]);
 
-        StickerPlacedEvent::dispatch($sticker);
+        event(new StickerPlacedEvent($sticker));
 
-        return Redirect::back()->with('flash_message', 'Sticker succesfully unreported. It will be visible for other users again.');
+        return back()->with('flash_message', 'Sticker succesfully unreported. It will be visible for other users again.');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\ActivityController;
@@ -76,7 +77,6 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
 use App\Models\Photo;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -888,8 +888,8 @@ Route::middleware('forcedomain')->group(function () {
 
     /* --- Legacy routes related to photos --- */
     Route::prefix('photos')->group(function () {
-        Route::get('/photo/{photo}', fn (Photo $photo) => Redirect::route('albums::album::show', ['album' => $photo->album, 'photo' => $photo->id]));
-        Route::get('{album}', fn ($album) => Redirect::route('albums::album::list', ['album' => $album]));
+        Route::get('/photo/{photo}', fn (Photo $photo) => to_route('albums::album::show', ['album' => $photo->album, 'photo' => $photo->id]));
+        Route::get('{album}', fn ($album) => to_route('albums::album::list', ['album' => $album]));
     });
 
     /* --- Routes related to photos --- */
@@ -1081,9 +1081,9 @@ Route::middleware('forcedomain')->group(function () {
     });
 
     /* --- Route related to the december theme --- */
-    Route::get('/december/toggle', function () {
+    Route::get('/december/toggle', function (): RedirectResponse {
         Cookie::queue('disable-december', Cookie::get('disable-december') === 'disabled' ? 'enabled' : 'disabled', 43800);
 
-        return Redirect::back();
+        return back();
     })->name('december::toggle');
 });

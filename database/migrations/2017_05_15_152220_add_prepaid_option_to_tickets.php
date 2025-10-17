@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddPrepaidOptionToTickets extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,6 @@ class AddPrepaidOptionToTickets extends Migration
             $table->boolean('payment_complete')->nullable(false)->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -30,4 +29,4 @@ class AddPrepaidOptionToTickets extends Migration
             $table->dropColumn('payment_complete');
         });
     }
-}
+};

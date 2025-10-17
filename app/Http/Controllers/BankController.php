@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -23,7 +22,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank != null) {
-            return Redirect::route('user::bank::edit');
+            return to_route('user::bank::edit');
         }
 
         if ($request->wizard) {
@@ -45,26 +44,26 @@ class BankController extends Controller
         if (in_array(SepaUtilities::checkIBAN($request->input('iban')), ['', '0'], true) || SepaUtilities::checkIBAN($request->input('iban')) === false) {
             Session::flash('flash_message', 'Your IBAN is not valid.');
 
-            return Redirect::back();
+            return back();
         }
 
         if (in_array(SepaUtilities::checkBIC($request->input('bic')), ['', '0'], true) || SepaUtilities::checkBIC($request->input('bic')) === false) {
             Session::flash('flash_message', 'Your BIC is not valid.');
 
-            return Redirect::back();
+            return back();
         }
 
         if (! SepaUtilities::crossCheckIbanBic($request->input('iban'), $request->input('bic'))) {
             Session::flash('flash_message', 'Your IBAN and BIC do not match.');
 
-            return Redirect::back();
+            return back();
         }
 
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
 
-            return Redirect::back();
+            return back();
         }
 
         $bank = Bank::query()->create([
@@ -80,10 +79,10 @@ class BankController extends Controller
         Session::flash('flash_message', 'New withdrawal authorization added.');
 
         if (Session::get('wizard')) {
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /** @return RedirectResponse|View */
@@ -92,7 +91,7 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::create');
+            return to_route('user::bank::create');
         }
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => false]);
@@ -108,14 +107,14 @@ class BankController extends Controller
         $user = Auth::user();
 
         if ($user->bank == null) {
-            return Redirect::route('user::bank::create');
+            return to_route('user::bank::create');
         }
 
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
 
-            return Redirect::back();
+            return back();
         }
 
         $bank = Bank::query()->create([
@@ -130,7 +129,7 @@ class BankController extends Controller
 
         Session::flash('flash_message', 'New withdrawal authorization added.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
@@ -145,26 +144,26 @@ class BankController extends Controller
         if ($user->bank == null) {
             Session::flash('flash_message', "You don't have a bank authorization to revoke.");
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
 
-            return Redirect::back();
+            return back();
         }
 
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**

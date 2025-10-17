@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -56,13 +55,13 @@ class JobofferController extends Controller
         if ($description == null && $redirect_url == null) {
             Session::flash('flash_message', 'Please enter a description or redirect url.');
 
-            return Redirect::back();
+            return back();
         }
 
         $joboffer = Joboffer::query()->create($request->all());
         $joboffer->save();
 
-        return Redirect::route('joboffers::admin');
+        return to_route('joboffers::admin');
     }
 
     /**
@@ -103,22 +102,21 @@ class JobofferController extends Controller
 
         Session::flash('flash_message', 'Job offer has been updated.');
 
-        return Redirect::route('joboffers::admin');
+        return to_route('joboffers::admin');
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $joboffer = Joboffer::query()->findOrFail($id);
         $joboffer->delete();
 
         Session::flash('flash_message', 'The job offer has been deleted.');
 
-        return Redirect::back();
+        return back();
     }
 }

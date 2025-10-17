@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailListFunctionality extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,6 @@ class AddEmailListFunctionality extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -34,4 +33,4 @@ class AddEmailListFunctionality extends Migration
         Schema::drop('mailinglists');
         Schema::drop('users_mailinglists');
     }
-}
+};

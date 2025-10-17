@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveObsoleteTool extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,6 @@ class RemoveObsoleteTool extends Migration
     {
         Schema::drop('pastries');
     }
-
     /**
      * Reverse the migrations.
      */
@@ -28,4 +27,4 @@ class RemoveObsoleteTool extends Migration
             $table->timestamps();
         });
     }
-}
+};

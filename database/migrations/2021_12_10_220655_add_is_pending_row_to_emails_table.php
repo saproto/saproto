@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsPendingRowToEmailsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddIsPendingRowToEmailsTable extends Migration
             $table->boolean('to_pending')->default(false)->after('to_member');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddIsPendingRowToEmailsTable extends Migration
             $table->dropColumn('to_pending');
         });
     }
-}
+};

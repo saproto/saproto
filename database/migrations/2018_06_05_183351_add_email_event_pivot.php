@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailEventPivot extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,6 @@ class AddEmailEventPivot extends Migration
             $table->boolean('to_event')->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -35,4 +34,4 @@ class AddEmailEventPivot extends Migration
     {
         Schema::drop('emails_events');
     }
-}
+};

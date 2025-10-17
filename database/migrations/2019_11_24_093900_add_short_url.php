@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddShortUrl extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,6 @@ class AddShortUrl extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -28,4 +27,4 @@ class AddShortUrl extends Migration
     {
         Schema::drop('short_url');
     }
-}
+};

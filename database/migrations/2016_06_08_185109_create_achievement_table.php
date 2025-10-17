@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAchievementTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,6 @@ class CreateAchievementTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -36,4 +35,4 @@ class CreateAchievementTable extends Migration
         Schema::drop('achievement');
         Schema::drop('achievements_users');
     }
-}
+};

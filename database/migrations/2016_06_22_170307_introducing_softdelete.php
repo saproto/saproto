@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class IntroducingSoftdelete extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -40,7 +40,6 @@ class IntroducingSoftdelete extends Migration
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -75,4 +74,4 @@ class IntroducingSoftdelete extends Migration
             $table->dropColumn('deleted_at');
         });
     }
-}
+};

@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -46,7 +45,7 @@ class PhotoAdminController extends Controller
 
         $album->save();
 
-        return Redirect::route('albums::admin::edit', ['id' => $album->id]);
+        return to_route('albums::admin::edit', ['id' => $album->id]);
     }
 
     /**
@@ -76,7 +75,7 @@ class PhotoAdminController extends Controller
         $album->date_taken = $request->date('date')->timestamp;
         $album->save();
 
-        return Redirect::route('albums::admin::edit', ['id' => $id]);
+        return to_route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -85,8 +84,8 @@ class PhotoAdminController extends Controller
     public function upload(Request $request, int $id)
     {
         $request->validate([
-            'file' => 'required|image|max:5120', // max 5MB
-            'date' => 'nullable|date',
+            'file' => ['required', 'image', 'max:5120'], // max 5MB
+            'date' => ['nullable', 'date'],
         ]);
 
         $album = PhotoAlbum::query()->findOrFail($id);
@@ -183,7 +182,7 @@ class PhotoAdminController extends Controller
             $album->save();
         }
 
-        return Redirect::route('albums::admin::edit', ['id' => $id]);
+        return to_route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -197,7 +196,7 @@ class PhotoAdminController extends Controller
         $album->items->each->delete();
         $album->delete();
 
-        return Redirect::route('albums::admin::index');
+        return to_route('albums::admin::index');
     }
 
     /**
@@ -210,14 +209,14 @@ class PhotoAdminController extends Controller
         if (! $album->items()->exists() || $album->thumb_id === null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
 
-            return Redirect::back();
+            return back();
         }
 
         $album->published = true;
         $album->save();
         Cache::forget('home.albums');
 
-        return Redirect::route('albums::admin::edit', ['id' => $id]);
+        return to_route('albums::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -230,6 +229,6 @@ class PhotoAdminController extends Controller
         $album->save();
         Cache::forget('home.albums');
 
-        return Redirect::route('albums::admin::edit', ['id' => $id]);
+        return to_route('albums::admin::edit', ['id' => $id]);
     }
 }

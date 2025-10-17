@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserProfilePictureColumn extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class UserProfilePictureColumn extends Migration
             $table->integer('image_id')->nullable()->after('remember_token')->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class UserProfilePictureColumn extends Migration
             $table->dropColumn('image_id');
         });
     }
-}
+};

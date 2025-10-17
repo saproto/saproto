@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStudyFieldsToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class AddStudyFieldsToUser extends Migration
             $table->boolean('did_study_create')->after('utwente_department')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class AddStudyFieldsToUser extends Migration
             $table->dropColumn('did_study_create');
         });
     }
-}
+};

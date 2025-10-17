@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropNationalityGenderStudyhistory extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class DropNationalityGenderStudyhistory extends Migration
         Schema::drop('pages_studies');
         Schema::drop('studies');
     }
-
     /**
      * Reverse the migrations.
      */
@@ -55,4 +54,4 @@ class DropNationalityGenderStudyhistory extends Migration
             $table->boolean('utwente')->default(true);
         });
     }
-}
+};

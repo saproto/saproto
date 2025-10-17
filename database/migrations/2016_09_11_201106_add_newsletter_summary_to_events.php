@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddNewsletterSummaryToEvents extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,6 @@ class AddNewsletterSummaryToEvents extends Migration
             $table->dropColumn('receive_newsletter');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -30,4 +29,4 @@ class AddNewsletterSummaryToEvents extends Migration
             $table->boolean('receive_newsletter')->default(false);
         });
     }
-}
+};

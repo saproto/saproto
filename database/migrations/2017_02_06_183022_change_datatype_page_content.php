@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeDatatypePageContent extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class ChangeDatatypePageContent extends Migration
             $table->string('content', 16777215)->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class ChangeDatatypePageContent extends Migration
             $table->string('content', 65535)->change();
         });
     }
-}
+};

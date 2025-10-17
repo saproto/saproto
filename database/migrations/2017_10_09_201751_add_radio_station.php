@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRadioStation extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class AddRadioStation extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -26,4 +25,4 @@ class AddRadioStation extends Migration
     {
         Schema::drop('radiostations');
     }
-}
+};

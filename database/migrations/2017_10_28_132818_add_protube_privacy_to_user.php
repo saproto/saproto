@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProtubePrivacyToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddProtubePrivacyToUser extends Migration
             $table->boolean('keep_protube_history')->after('receive_sms')->default(true);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddProtubePrivacyToUser extends Migration
             $table->dropColumn('keep_protube_history');
         });
     }
-}
+};

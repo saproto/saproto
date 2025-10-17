@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAlertedColumnToAchievementsUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class AddAlertedColumnToAchievementsUsersTable extends Migration
 
         AchievementOwnership::query()->where('alerted', false)->update(['alerted' => true]);
     }
-
     /**
      * Reverse the migrations.
      */
@@ -28,4 +27,4 @@ class AddAlertedColumnToAchievementsUsersTable extends Migration
             $table->dropColumn('alerted');
         });
     }
-}
+};

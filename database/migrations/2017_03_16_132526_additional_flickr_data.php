@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AdditionalFlickrData extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,6 @@ class AdditionalFlickrData extends Migration
             $table->integer('event_id')->nullable()->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -36,4 +35,4 @@ class AdditionalFlickrData extends Migration
             $table->dropColumn('event_id');
         });
     }
-}
+};

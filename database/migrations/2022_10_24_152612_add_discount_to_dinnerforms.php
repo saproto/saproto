@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDiscountToDinnerforms extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class AddDiscountToDinnerforms extends Migration
             $table->float('regular_discount')->after('helper_discount');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -29,4 +28,4 @@ class AddDiscountToDinnerforms extends Migration
             $table->renameColumn('helper_discount', 'discount');
         });
     }
-}
+};

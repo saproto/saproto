@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddSortFieldToCompaniesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddSortFieldToCompaniesTable extends Migration
             $table->integer('sort');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddSortFieldToCompaniesTable extends Migration
             $table->dropColumn('sort');
         });
     }
-}
+};

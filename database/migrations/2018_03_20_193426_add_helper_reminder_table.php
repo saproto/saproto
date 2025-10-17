@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddHelperReminderTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,6 @@ class AddHelperReminderTable extends Migration
             $table->integer('committee_id')->nullable(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddHelperReminderTable extends Migration
     {
         Schema::drop('committees_helper_reminders');
     }
-}
+};

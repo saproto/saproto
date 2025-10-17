@@ -16,7 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -130,13 +129,13 @@ class SearchController extends Controller
         if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
             Session::flash('flash_message', 'You cannot use special characters in your search query.');
 
-            return Redirect::back();
+            return back();
         }
 
         if (strlen($query) < 3) {
             Session::flash('flash_message', 'Please make your search term more than three characters.');
 
-            return Redirect::back();
+            return back();
         }
 
         $terms = explode(' ', $query);
@@ -160,7 +159,7 @@ class SearchController extends Controller
         if (isset($result->error)) {
             Session::flash('flash_message', 'Something went wrong while searching the UT LDAP server.'.($result->error ? ' '.$result->error : ''));
 
-            return Redirect::back();
+            return back();
         }
 
         return view('search.ldapsearch', [

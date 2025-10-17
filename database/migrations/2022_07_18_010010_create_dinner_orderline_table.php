@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDinnerOrderlineTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,7 +28,6 @@ class CreateDinnerOrderlineTable extends Migration
             $table->boolean('closed');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -40,4 +39,4 @@ class CreateDinnerOrderlineTable extends Migration
             $table->dropColumn('closed');
         });
     }
-}
+};

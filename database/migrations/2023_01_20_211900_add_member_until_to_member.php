@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddMemberUntilToMember extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddMemberUntilToMember extends Migration
             $table->bigInteger('until')->after('is_pending')->nullable();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddMemberUntilToMember extends Migration
             $table->dropColumn('until');
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoundboardSoundsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class AddSoundboardSoundsTable extends Migration
             $table->text('name');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -26,4 +25,4 @@ class AddSoundboardSoundsTable extends Migration
     {
         Schema::drop('soundboard_sounds');
     }
-}
+};

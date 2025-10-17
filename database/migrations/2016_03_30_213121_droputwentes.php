@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class Droputwentes extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,6 @@ class Droputwentes extends Migration
     {
         Schema::drop('utwentes');
     }
-
     /**
      * Reverse the migrations.
      */
@@ -31,4 +30,4 @@ class Droputwentes extends Migration
             $table->timestamps();
         });
     }
-}
+};

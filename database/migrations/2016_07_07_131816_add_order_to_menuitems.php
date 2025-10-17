@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddOrderToMenuitems extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddOrderToMenuitems extends Migration
             $table->integer('order');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddOrderToMenuitems extends Migration
             $table->dropColumn('order');
         });
     }
-}
+};

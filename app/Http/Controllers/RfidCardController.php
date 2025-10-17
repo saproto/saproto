@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -102,16 +101,15 @@ class RfidCardController extends Controller
 
         Session::flash('flash_message', 'Your RFID card has been updated.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): RedirectResponse
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
@@ -123,6 +121,6 @@ class RfidCardController extends Controller
 
         Session::flash('flash_message', 'Your RFID card has been deleted.');
 
-        return Redirect::back();
+        return back();
     }
 }

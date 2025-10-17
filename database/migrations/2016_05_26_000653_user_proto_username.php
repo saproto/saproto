@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserProtoUsername extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class UserProtoUsername extends Migration
             $table->string('proto_username')->nullable()->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class UserProtoUsername extends Migration
             $table->dropColumn('proto_username');
         });
     }
-}
+};

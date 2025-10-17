@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddPrintFile extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddPrintFile extends Migration
             $table->boolean('is_print_file')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddPrintFile extends Migration
             $table->dropColumn('is_print_file');
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ConvertEventsActivitiesDatetimeToInt extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,6 @@ class ConvertEventsActivitiesDatetimeToInt extends Migration
             $table->integer('registration_end')->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -35,4 +34,4 @@ class ConvertEventsActivitiesDatetimeToInt extends Migration
             $table->datetime('registration_end')->change();
         });
     }
-}
+};

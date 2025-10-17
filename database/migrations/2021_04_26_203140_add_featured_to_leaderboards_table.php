@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFeaturedToLeaderboardsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddFeaturedToLeaderboardsTable extends Migration
             $table->boolean('featured')->after('name');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddFeaturedToLeaderboardsTable extends Migration
             $table->dropColumn('featured');
         });
     }
-}
+};

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeUserThemeToEnum extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,6 @@ class ChangeUserThemeToEnum extends Migration
             $table->integer('theme')->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -38,4 +37,4 @@ class ChangeUserThemeToEnum extends Migration
             $i++;
         }
     }
-}
+};

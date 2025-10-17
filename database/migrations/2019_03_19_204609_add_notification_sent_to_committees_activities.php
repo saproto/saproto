@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddNotificationSentToCommitteesActivities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class AddNotificationSentToCommitteesActivities extends Migration
 
         DB::table('committees_activities')->where('notification_sent', '=', 0)->update(['notification_sent' => 1]);
     }
-
     /**
      * Reverse the migrations.
      */
@@ -28,4 +27,4 @@ class AddNotificationSentToCommitteesActivities extends Migration
             $table->dropColumn('notification_sent');
         });
     }
-}
+};

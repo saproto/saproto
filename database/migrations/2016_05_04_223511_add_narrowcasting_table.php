@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNarrowcastingTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,7 +21,6 @@ class AddNarrowcastingTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -29,4 +28,4 @@ class AddNarrowcastingTable extends Migration
     {
         Schema::drop('narrowcasting');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MoveSettingsToUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class MoveSettingsToUsersTable extends Migration
             $table->boolean('pref_calendar_relevant_only')->after('pref_calendar_alarm')->nullable(false)->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class MoveSettingsToUsersTable extends Migration
             $table->dropColumn('pref_calendar_relevant_only');
         });
     }
-}
+};

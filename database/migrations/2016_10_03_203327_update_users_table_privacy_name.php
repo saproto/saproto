@@ -4,7 +4,7 @@ use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateUsersTablePrivacyName extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,7 +31,6 @@ class UpdateUsersTablePrivacyName extends Migration
             $table->dropColumn('name_last');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -58,4 +57,4 @@ class UpdateUsersTablePrivacyName extends Migration
             $table->dropColumn('calling_name');
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AssociateHelpingWithEvents extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class AssociateHelpingWithEvents extends Migration
             $table->dropColumn('organizing_commitee');
         });
     }
-
     /**
      * This is a one-way migration!
      */
@@ -33,4 +32,4 @@ class AssociateHelpingWithEvents extends Migration
             $table->integer('organizing_commitee')->nullable()->default(null);
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddAttachmentButtonToPages extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddAttachmentButtonToPages extends Migration
             $table->boolean('show_attachments')->default(true);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddAttachmentButtonToPages extends Migration
             $table->dropColumn('show_attachments');
         });
     }
-}
+};

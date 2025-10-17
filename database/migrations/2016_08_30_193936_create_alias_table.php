@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAliasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class CreateAliasTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class CreateAliasTable extends Migration
     {
         Schema::drop('alias');
     }
-}
+};

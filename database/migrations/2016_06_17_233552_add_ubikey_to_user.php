@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUbikeyToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddUbikeyToUser extends Migration
             $table->string('tfa_yubikey_identity')->nullable()->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddUbikeyToUser extends Migration
             $table->dropColumn('tfa_yubikey_identity');
         });
     }
-}
+};

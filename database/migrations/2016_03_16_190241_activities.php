@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Activities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -67,7 +67,6 @@ class Activities extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -78,4 +77,4 @@ class Activities extends Migration
         Schema::drop('committees_events');
         Schema::drop('activities_users');
     }
-}
+};

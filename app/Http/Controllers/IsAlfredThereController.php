@@ -9,7 +9,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class IsAlfredThereController extends Controller
@@ -56,7 +55,7 @@ class IsAlfredThereController extends Controller
         $unix = HashMapItem::query()->updateOrCreate(['key' => self::$HashMapUnixKey], ['value' => $unix]);
 
         try {
-            IsAlfredThereEvent::dispatch($status->value, $text->value, $unix->value);
+            event(new IsAlfredThereEvent($status->value, $text->value, $unix->value));
         } catch (Exception) {
             // if the websocket server is not running, we don't care about the error
             // the webpage will then revert to polling anyway
@@ -64,7 +63,7 @@ class IsAlfredThereController extends Controller
 
         Cache::forget('isalfredthere.status');
 
-        return Redirect::back();
+        return back();
     }
 
     /** @return array{

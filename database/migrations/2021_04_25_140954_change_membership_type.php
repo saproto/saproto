@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeMembershipType extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,6 @@ class ChangeMembershipType extends Migration
             $table->renameColumn('is_donator', 'is_donor');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -35,4 +34,4 @@ class ChangeMembershipType extends Migration
             $table->renameColumn('is_donor', 'is_donator');
         });
     }
-}
+};

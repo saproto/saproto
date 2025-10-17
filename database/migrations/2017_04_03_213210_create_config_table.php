@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConfigTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,6 @@ class CreateConfigTable extends Migration
             $table->string('value')->nullable(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -26,4 +25,4 @@ class CreateConfigTable extends Migration
     {
         Schema::drop('hashmap');
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class PlayedvideosAddSpotifyid extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class PlayedvideosAddSpotifyid extends Migration
             $table->text('spotify_name')->after('spotify_id')->nullable()->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class PlayedvideosAddSpotifyid extends Migration
             $table->dropColumn('spotify_name');
         });
     }
-}
+};

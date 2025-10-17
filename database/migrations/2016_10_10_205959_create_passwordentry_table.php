@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePasswordentryTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,6 @@ class CreatePasswordentryTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -30,4 +29,4 @@ class CreatePasswordentryTable extends Migration
     {
         Schema::drop('passwordstore');
     }
-}
+};

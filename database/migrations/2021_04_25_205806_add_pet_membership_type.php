@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPetMembershipType extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddPetMembershipType extends Migration
             $table->boolean('is_pet')->after('updated_at');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddPetMembershipType extends Migration
             $table->dropColumn('is_pet');
         });
     }
-}
+};

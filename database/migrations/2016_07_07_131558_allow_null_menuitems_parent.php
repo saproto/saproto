@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AllowNullMenuitemsParent extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AllowNullMenuitemsParent extends Migration
             $table->integer('parent')->nullable()->default(null)->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -23,4 +22,4 @@ class AllowNullMenuitemsParent extends Migration
     {
         // We can't undo this :(
     }
-}
+};

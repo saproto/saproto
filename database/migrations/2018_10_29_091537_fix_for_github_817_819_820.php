@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixForGithub817819820 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,6 @@ class FixForGithub817819820 extends Migration
             $table->boolean('is_educational')->after('is_external')->default(false)->nullable(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -33,4 +32,4 @@ class FixForGithub817819820 extends Migration
             $table->dropColumn('is_educational');
         });
     }
-}
+};

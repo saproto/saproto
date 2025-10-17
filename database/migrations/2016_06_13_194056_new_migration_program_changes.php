@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class NewMigrationProgramChanges extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,7 +31,6 @@ class NewMigrationProgramChanges extends Migration
             $table->dropColumn('withdrawal_type');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -55,4 +54,4 @@ class NewMigrationProgramChanges extends Migration
             $table->dropColumn('is_first');
         });
     }
-}
+};

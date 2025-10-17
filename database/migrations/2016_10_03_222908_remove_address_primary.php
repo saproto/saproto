@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveAddressPrimary extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class RemoveAddressPrimary extends Migration
             $table->dropColumn('is_primary');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class RemoveAddressPrimary extends Migration
             $table->boolean('is_primary');
         });
     }
-}
+};

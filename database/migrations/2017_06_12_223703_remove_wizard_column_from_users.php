@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveWizardColumnFromUsers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class RemoveWizardColumnFromUsers extends Migration
             $table->dropColumn('wizard');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class RemoveWizardColumnFromUsers extends Migration
             $table->boolean('wizard')->default(false);
         });
     }
-}
+};

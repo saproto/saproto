@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForceSyncForEvents extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddForceSyncForEvents extends Migration
             $table->boolean('force_calendar_sync')->after('secret')->nullable(false)->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddForceSyncForEvents extends Migration
             $table->dropColumn('force_calendar_sync');
         });
     }
-}
+};

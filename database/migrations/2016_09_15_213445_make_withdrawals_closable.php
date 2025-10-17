@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class MakeWithdrawalsClosable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class MakeWithdrawalsClosable extends Migration
             $table->boolean('closed')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class MakeWithdrawalsClosable extends Migration
             $table->dropColumn('closed');
         });
     }
-}
+};

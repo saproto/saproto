@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddHideParticipantsToActivity extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddHideParticipantsToActivity extends Migration
             $table->boolean('hide_participants')->default(false)->after('participants');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddHideParticipantsToActivity extends Migration
             $table->dropColumn('hide_participants');
         });
     }
-}
+};

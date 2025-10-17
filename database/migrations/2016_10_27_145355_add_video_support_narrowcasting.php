@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddVideoSupportNarrowcasting extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class AddVideoSupportNarrowcasting extends Migration
             $table->integer('image_id')->nullable()->default(null)->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -27,4 +26,4 @@ class AddVideoSupportNarrowcasting extends Migration
             $table->integer('image_id')->nullable(false)->change();
         });
     }
-}
+};

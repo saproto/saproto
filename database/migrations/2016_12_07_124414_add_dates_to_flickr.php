@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddDatesToFlickr extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddDatesToFlickr extends Migration
             $table->integer('date_update');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -26,4 +25,4 @@ class AddDatesToFlickr extends Migration
             $table->dropColumn('date_update');
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddEventDestinationToEmail extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddEventDestinationToEmail extends Migration
             $table->integer('to_event')->after('to_list')->default(0);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddEventDestinationToEmail extends Migration
             $table->dropColumn('to_event');
         });
     }
-}
+};

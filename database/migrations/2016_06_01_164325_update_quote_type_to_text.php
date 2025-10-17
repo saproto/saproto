@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateQuoteTypeToText extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class UpdateQuoteTypeToText extends Migration
             $table->text('quote')->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class UpdateQuoteTypeToText extends Migration
             $table->string('quote')->change();
         });
     }
-}
+};

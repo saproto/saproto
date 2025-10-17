@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -74,7 +73,7 @@ class ProtubeController extends Controller
 
         Session::flash('flash_message', 'Changes saved.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function clearHistory(): RedirectResponse
@@ -85,6 +84,6 @@ class ProtubeController extends Controller
 
         Session::flash('flash_message', 'History cleared.');
 
-        return Redirect::back();
+        return back();
     }
 }

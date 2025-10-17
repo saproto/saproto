@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameIsPrizeToExcludeFromAllAchievements extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class RenameIsPrizeToExcludeFromAllAchievements extends Migration
             $table->renameColumn('isPrize', 'excludeFromAllAchievements');
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class RenameIsPrizeToExcludeFromAllAchievements extends Migration
             $table->renameColumn('excludeFromAllAchievements', 'isPrize');
         });
     }
-}
+};

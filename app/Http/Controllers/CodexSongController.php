@@ -6,7 +6,6 @@ use App\Models\CodexSong;
 use App\Models\CodexSongCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -19,7 +18,7 @@ class CodexSongController extends Controller
         if (! CodexSongCategory::query()->count()) {
             Session::flash('flash_message', 'You need to add a song category first!');
 
-            return Redirect::route('codex.index');
+            return to_route('codex.index');
         }
 
         $categories = CodexSongCategory::query()->orderBy('name')->get();
@@ -32,7 +31,7 @@ class CodexSongController extends Controller
         $song = new CodexSong;
         $this->saveSong($song, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function show(CodexSong $codexSong): void {}
@@ -50,24 +49,24 @@ class CodexSongController extends Controller
     {
         $this->saveSong($codexSong, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function destroy(CodexSong $codexSong): RedirectResponse
     {
         $codexSong->delete();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     private function saveSong(CodexSong $song, Request $request): void
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'lyrics' => 'required|string',
-            'youtube' => 'nullable|string|max:255',
-            'category' => 'required|integer',
+            'title' => ['required', 'string', 'max:255'],
+            'artist' => ['required', 'string', 'max:255'],
+            'lyrics' => ['required', 'string'],
+            'youtube' => ['nullable', 'string', 'max:255'],
+            'category' => ['required', 'integer'],
         ]);
         $song->title = $validated['title'];
         $song->artist = $validated['artist'];

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftdeletesToPages extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddSoftdeletesToPages extends Migration
             $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddSoftdeletesToPages extends Migration
             $table->dropColumn('deleted_at');
         });
     }
-}
+};

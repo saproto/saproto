@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class MoveTotpToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,6 @@ class MoveTotpToUser extends Migration
             $table->string('tfa_totp_key')->nullable()->default(null);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -32,4 +31,4 @@ class MoveTotpToUser extends Migration
             $table->dropColumn('tfa_totp_key');
         });
     }
-}
+};

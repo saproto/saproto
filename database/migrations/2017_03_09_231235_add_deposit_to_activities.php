@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddDepositToActivities extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddDepositToActivities extends Migration
             $table->float('no_show_fee', 8, 2)->after('price')->default(0.0);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddDepositToActivities extends Migration
             $table->dropColumn('no_show_fee');
         });
     }
-}
+};

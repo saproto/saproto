@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsMemberOnlyToPages extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,6 @@ class AddIsMemberOnlyToPages extends Migration
             $table->boolean('is_member_only')->default(false);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -24,4 +23,4 @@ class AddIsMemberOnlyToPages extends Migration
             $table->dropColumn('is_member_only');
         });
     }
-}
+};

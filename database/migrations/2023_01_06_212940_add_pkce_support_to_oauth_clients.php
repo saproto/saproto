@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPKCESupportToOauthClients extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddPKCESupportToOauthClients extends Migration
             $table->string('secret', 100)->nullable()->change();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddPKCESupportToOauthClients extends Migration
             $table->string('secret', 100)->change();
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCaloriesToProducts extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,6 @@ class AddCaloriesToProducts extends Migration
             $table->integer('calories')->after('price')->default(0);
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -25,4 +24,4 @@ class AddCaloriesToProducts extends Migration
             $table->dropColumn('calories');
         });
     }
-}
+};
