@@ -6,8 +6,8 @@ use App\Mail\ManualEmail;
 use App\Models\Email;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
 class EmailCron extends Command
@@ -48,7 +48,7 @@ class EmailCron extends Command
             ->with('events')
             ->where('sent', false)
             ->where('ready', true)
-            ->where('time', '<', Carbon::now()->timestamp)
+            ->where('time', '<', Date::now()->timestamp)
             ->get();
 
         $this->info('There are '.$emails->count().' queued e-mails.');

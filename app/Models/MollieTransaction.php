@@ -41,7 +41,7 @@ use Mollie\Api\Resources\Payment;
  * @method static Builder<static>|MollieTransaction whereUpdatedAt($value)
  * @method static Builder<static>|MollieTransaction whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class MollieTransaction extends Model
 {

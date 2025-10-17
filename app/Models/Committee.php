@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App;
 use App\Enums\CommitteeEnum;
 use Database\Factories\CommitteeFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,8 +11,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -56,7 +57,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Committee extends Model implements HasMedia
 {
@@ -115,12 +116,12 @@ class Committee extends Model implements HasMedia
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query
                     ->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+                    ->orWhere('committees_users.deleted_at', '>', Date::now());
             })
-            ->where('committees_users.created_at', '<', Carbon::now())
+            ->where('committees_users.created_at', '<', Date::now())
             ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderByPivot('created_at', 'desc');
@@ -147,10 +148,10 @@ class Committee extends Model implements HasMedia
      */
     public function pastEvents(): Builder
     {
-        return $this->organizedEvents()->where('end', '<', Carbon::now()->timestamp)
+        return $this->organizedEvents()->where('end', '<', Date::now()->timestamp)
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Date::now()->timestamp)
                         ->orWhereNull('publication');
                 });
             })->reorder('start', 'desc');
@@ -163,11 +164,11 @@ class Committee extends Model implements HasMedia
     {
         return $this
             ->organizedEvents()
-            ->where('end', '>', Carbon::now()->timestamp)
+            ->where('end', '>', Date::now()->timestamp)
             ->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Date::now()->timestamp)
                         ->orWhereNull('publication');
                 });
             });
@@ -180,16 +181,16 @@ class Committee extends Model implements HasMedia
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
 
-        return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
+        return Event::getEventBlockQuery()->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
             $q->whereIn('id', $activityIds);
         })
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
-                    $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->where('secret', false)->orWhere('publication', '<', Date::now()->timestamp)
                         ->orWhereNull('publication');
                 });
             })
-            ->where('end', '<', Carbon::now()->timestamp)
+            ->where('end', '<', Date::now()->timestamp)
             ->reorder('start', 'desc');
     }
 
@@ -207,10 +208,10 @@ class Committee extends Model implements HasMedia
         foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
-            } elseif (Carbon::parse($membership->created_at)->timestamp < Carbon::now()->timestamp &&
-                (! $membership->deleted_at || Carbon::parse($membership->deleted_at)->timestamp > Carbon::now()->timestamp)) {
+            } elseif (Date::parse($membership->created_at)->timestamp < Date::now()->timestamp &&
+                (! $membership->deleted_at || Date::parse($membership->deleted_at)->timestamp > Date::now()->timestamp)) {
                 $members['members']['current'][] = $membership;
-            } elseif (Carbon::parse($membership->created_at)->timestamp > Carbon::now()->timestamp) {
+            } elseif (Date::parse($membership->created_at)->timestamp > Date::now()->timestamp) {
                 $members['members']['future'][] = $membership;
             } else {
                 $members['members']['past'][] = $membership;

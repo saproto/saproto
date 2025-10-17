@@ -13,8 +13,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -47,12 +47,12 @@ class UserAdminController extends Controller
 
         if ($search) {
             $users = $users->where(static function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
-                    ->orWhere('email', 'LIKE', "%{$search}%")
-                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
-                    ->orWhereHas('member', static function ($q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%{$search}%");
+                $q->whereLike('name', "%{$search}%")
+                    ->orWhereLike('calling_name', "%{$search}%")
+                    ->orWhereLike('email', "%{$search}%")
+                    ->orWhereLike('utwente_username', "%{$search}%")
+                    ->orWhereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
+                        $q->whereLike('proto_username', "%{$search}%");
                     });
             });
         }
@@ -100,9 +100,7 @@ class UserAdminController extends Controller
             foreach ($user->roles as $role) {
                 /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
-                    if (! Auth::user()->can($permission->name)) {
-                        abort(403, 'You may not impersonate this person.');
-                    }
+                    abort_unless(Auth::user()->can($permission->name), 403, 'You may not impersonate this person.');
                 }
             }
         }
@@ -153,7 +151,7 @@ class UserAdminController extends Controller
         }
 
         $member = $user->member;
-        $member->created_at = Carbon::now();
+        $member->created_at = Date::now();
         $member->membership_type = MembershipTypeEnum::REGULAR;
         $member->proto_username = Member::createProtoUsername($user->name);
         $member->save();
@@ -204,7 +202,7 @@ class UserAdminController extends Controller
             return back();
         }
 
-        $user->member->until = Carbon::parse('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->until = Date::parse('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
@@ -231,9 +229,7 @@ class UserAdminController extends Controller
 
     public function setMembershipType(Request $request, int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only board members can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only board members can do this.');
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -257,9 +253,7 @@ class UserAdminController extends Controller
 
     public function toggleNda(int $id): RedirectResponse
     {
-        if (! Auth::user()->can('board')) {
-            abort(403, 'Only board members can do this.');
-        }
+        abort_unless(Auth::user()->can('board'), 403, 'Only board members can do this.');
 
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -364,9 +358,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
-            abort(403);
-        }
+        abort_if($user->id != $member->user_id && ! $user->can('registermembers'), 403);
 
         $form = $member->membershipForm;
 
@@ -402,9 +394,7 @@ class UserAdminController extends Controller
 
     public function destroyMemberForm(int $id): RedirectResponse
     {
-        if ((! Auth::check() || ! Auth::user()->can('board'))) {
-            abort(403);
-        }
+        abort_if(! Auth::check() || ! Auth::user()->can('board'), 403);
 
         $member = Member::query()->where('membership_form_id', '=', $id)->first();
         $user = $member->user;

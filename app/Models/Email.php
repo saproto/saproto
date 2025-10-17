@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\App;
@@ -73,7 +74,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Email extends Model implements HasMedia
 {
@@ -101,7 +102,7 @@ class Email extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsToMany<Event, $this>
+     * @return BelongsToMany<Event, $this, Pivot>
      */
     public function events(): BelongsToMany
     {
@@ -175,24 +176,24 @@ class Email extends Model implements HasMedia
 
         if ($this->to_event) {
             return User::query()->whereHas('activities', function ($q) {
-                $q->whereHas('event', function ($q) {
-                    $q->whereHas('emails', function ($q) {
+                $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                         $q->where('emails.id', $this->id);
                     });
                 });
             })
                 ->when($this->to_backup, function ($query) {
-                    $query->orWhereHas('backupActivities', function ($q) {
-                        $q->whereHas('event', function ($q) {
-                            $q->whereHas('emails', function ($q) {
+                    $query->orWhereHas('backupActivities', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                        $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                            $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                                 $q->where('emails.id', $this->id);
                             });
                         });
                     });
                 })
-                ->orWhereHas('tickets', function ($q) {
-                    $q->whereHas('event', function ($q) {
-                        $q->whereHas('emails', function ($q) {
+                ->orWhereHas('tickets', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                        $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                             $q->where('emails.id', $this->id);
                         });
                     });

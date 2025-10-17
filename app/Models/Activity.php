@@ -6,11 +6,13 @@ use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Activity Model.
@@ -69,7 +71,7 @@ use Illuminate\Support\Facades\Config;
  * @method static Builder<static>|Activity whereRegistrationStart($value)
  * @method static Builder<static>|Activity whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Activity extends Validatable
 {
@@ -265,7 +267,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return Carbon::now()->timestamp >= $this->registration_start && Carbon::now()->timestamp < $this->registration_end;
+        return Date::now()->timestamp >= $this->registration_start && Date::now()->timestamp < $this->registration_end;
     }
 
     /**
@@ -277,7 +279,7 @@ class Activity extends Validatable
             return true;
         }
 
-        return ! ($this->closed || $this->participants == 0 || Carbon::now()->timestamp < $this->registration_start);
+        return ! ($this->closed || $this->participants == 0 || Date::now()->timestamp < $this->registration_start);
     }
 
     /**
@@ -289,7 +291,7 @@ class Activity extends Validatable
             return false;
         }
 
-        return Carbon::now()->timestamp < $this->deregistration_end;
+        return Date::now()->timestamp < $this->deregistration_end;
     }
 
     /**
@@ -297,7 +299,7 @@ class Activity extends Validatable
      */
     public function hasStarted(): bool
     {
-        return $this->event->start < Carbon::now()->timestamp;
+        return $this->event->start < Date::now()->timestamp;
     }
 
     /**

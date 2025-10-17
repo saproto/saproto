@@ -6,12 +6,12 @@ use App\Data\PhotoAlbumData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
 use App\Models\PhotoLikes;
-use Config;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -74,7 +74,7 @@ class PhotoAlbumController extends Controller
         if ($like) {
             $like->delete();
 
-            return response()->json(['likes_count' => $photo->likes()->count(), 'liked_by_me' => false]);
+            return new JsonResponse(['likes_count' => $photo->likes()->count(), 'liked_by_me' => false]);
         }
 
         PhotoLikes::query()->create([
@@ -82,6 +82,6 @@ class PhotoAlbumController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return response()->json(['likes_count' => $photo->likes()->count(), 'liked_by_me' => true]);
+        return new JsonResponse(['likes_count' => $photo->likes()->count(), 'liked_by_me' => true]);
     }
 }

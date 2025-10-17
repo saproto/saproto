@@ -34,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|AchievementOwnership whereUpdatedAt($value)
  * @method static Builder<static>|AchievementOwnership whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class AchievementOwnership extends Model
 {

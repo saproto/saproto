@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\SpotifyController;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use SpotifyWebAPI\SpotifyWebAPI;
 use SpotifyWebAPI\SpotifyWebAPIException;
@@ -92,7 +92,7 @@ class SpotifySync extends Command
             ->selectRaw('spotify_id, count(*) as count')
             ->whereNotNull('spotify_id')
             ->where('spotify_id', '!=', '')
-            ->where('created_at', '>', Carbon::now()->subYear()->format('Y-m-d'))
+            ->where('created_at', '>', Date::now()->subYear()->format('Y-m-d'))
             ->groupBy('video_title')
             ->orderBy('count', 'desc')
             ->limit($this->spotifyUpdateLimit)
@@ -106,7 +106,7 @@ class SpotifySync extends Command
             ->selectRaw('spotify_id, count(*) as count')
             ->whereNotNull('spotify_id')
             ->where('spotify_id', '!=', '')
-            ->where('created_at', '>', Carbon::now()->subMonth()->format('Y-m-d'))
+            ->where('created_at', '>', Date::now()->subMonth()->format('Y-m-d'))
             ->groupBy('video_title')
             ->orderBy('count', 'desc')
             ->limit($this->spotifyUpdateLimit)

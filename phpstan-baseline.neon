@@ -32,21 +32,9 @@ parameters:
 			path: app/Http/Controllers/QueryController.php
 
 		-
-			message: '#^Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable\:\:\$id\.$#'
-			identifier: property.notFound
-			count: 3
-			path: app/Http/Controllers/StickerController.php
-
-		-
 			message: '#^Expression on left side of \?\? is not nullable\.$#'
 			identifier: nullCoalesce.expr
 			count: 2
-			path: app/Http/Controllers/StickerController.php
-
-		-
-			message: '#^Parameter \#1 \$model of method Illuminate\\Database\\Eloquent\\Relations\\BelongsTo\<App\\Models\\User,App\\Models\\Sticker\>\:\:associate\(\) expects App\\Models\\User\|int\|string\|null, Illuminate\\Contracts\\Auth\\Authenticatable\|null given\.$#'
-			identifier: argument.type
-			count: 1
 			path: app/Http/Controllers/StickerController.php
 
 		-

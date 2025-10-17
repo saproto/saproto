@@ -9,8 +9,8 @@ use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -243,7 +243,7 @@ class AchievementController extends Controller
                 'description' => $description,
             ]);
             if (! empty($achievedOn)) {
-                $relation->created_at = Carbon::parse($achievedOn);
+                $relation->created_at = Date::parse($achievedOn);
             }
 
             $relation->save();

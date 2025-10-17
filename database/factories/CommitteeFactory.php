@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Committee;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -22,8 +22,8 @@ class CommitteeFactory extends Factory
             'slug' => fake()->slug(),
             'description' => fake()->text(),
             'public' => true,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
             'allow_anonymous_email' => fake()->unique()->safeEmail(),
             'is_society' => fake()->boolean(),
             'is_active' => fake()->boolean(),

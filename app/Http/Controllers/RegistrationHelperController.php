@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
 class RegistrationHelperController extends Controller
@@ -28,13 +28,13 @@ class RegistrationHelperController extends Controller
         });
 
         if ($search) {
-            $users = $users->where(static function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
-                    ->orWhere('email', 'LIKE', "%{$search}%")
-                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
-                    ->orWhereHas('member', static function ($q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%{$search}%");
+            $users = $users->where(static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
+                $q->whereLike('name', "%{$search}%")
+                    ->orWhereLike('calling_name', "%{$search}%")
+                    ->orWhereLike('email', "%{$search}%")
+                    ->orWhereLike('utwente_username', "%{$search}%")
+                    ->orWhereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
+                        $q->whereLike('proto_username', "%{$search}%");
                     });
             });
         }
@@ -52,7 +52,7 @@ class RegistrationHelperController extends Controller
     public function details(int $id): \Illuminate\Contracts\View\View|Factory
     {
         $user = User::query()->whereHas('member', static function ($q) {
-            $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Carbon::now()->subDay());
+            $q->whereMembershipType(MembershipTypeEnum::PENDING)->orWhere('updated_at', '>', Date::now()->subDay());
         })->findOrFail($id);
         /** @var User $user */
         $memberships = $user->getMemberships();

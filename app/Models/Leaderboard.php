@@ -40,7 +40,7 @@ use Override;
  * @method static Builder<static>|Leaderboard wherePointsName($value)
  * @method static Builder<static>|Leaderboard whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Leaderboard extends Model
 {

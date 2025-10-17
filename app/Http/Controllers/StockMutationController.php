@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\StockMutation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -27,7 +27,7 @@ class StockMutationController extends Controller
             $search = $rq->get('product_name');
             $mutations = $mutations
                 ->join('products', 'products.id', '=', 'stock_mutations.product_id', 'inner')
-                ->where('products.name', 'like', "%{$search}%");
+                ->whereLike('products.name', "%{$search}%");
         }
 
         // Find mutations by authoring User
@@ -35,18 +35,18 @@ class StockMutationController extends Controller
             $search = $rq->get('author_name');
             $mutations = $mutations
                 ->join('users', 'users.id', '=', 'stock_mutations.user_id', 'inner')
-                ->where('users.name', 'like', "%{$search}%");
+                ->whereLike('users.name', "%{$search}%");
         }
 
         // Find mutations before given date
         if ($rq->has('before')) {
-            $before = Carbon::parse($rq->input('before'));
+            $before = Date::parse($rq->input('before'));
             $mutations = $mutations->where('stock_mutations.created_at', '<=', $before);
         }
 
         // Find mutations made after given date
         if ($rq->has('after')) {
-            $after = Carbon::parse($rq->input('after'));
+            $after = Date::parse($rq->input('after'));
             $mutations = $mutations->where('stock_mutations.created_at', '>', $after);
         }
 

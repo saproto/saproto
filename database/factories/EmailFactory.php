@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Email;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -33,9 +33,9 @@ class EmailFactory extends Factory
             'to_backup' => false,
             'ready' => true,
             'sent' => false,
-            'time' => Carbon::now()->timestamp,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'time' => Date::now()->timestamp,
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ];
     }
 }

@@ -1,5 +1,9 @@
 @php
-    /** @var \App\Models\Event $event*/
+    use App\Models\Event;
+@endphp
+
+@php
+    /** @var Event $event*/
 @endphp
 
 @if ($event->mayViewEvent(Auth::user()))

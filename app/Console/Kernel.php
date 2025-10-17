@@ -37,7 +37,7 @@ use App\Console\Commands\VerifyPersonalDetailsEmailCron;
 use App\Models\WallstreetDrink;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 class Kernel extends ConsoleKernel
@@ -109,6 +109,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:reviewfeedbackcron')->daily()->at('16:00');
         $schedule->command('proto:reviewstickerscron')->daily()->at('16:10');
 
-        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->timestamp)->where('end_time', '>=', Carbon::now()->timestamp)->exists());
+        $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(static fn (): bool => WallstreetDrink::query()->where('start_time', '<=', Date::now()->timestamp)->where('end_time', '>=', Date::now()->timestamp)->exists());
     }
 }

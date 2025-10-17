@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Carbon\CarbonInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\View\View;
 
 class SmartXpScreenController extends Controller
@@ -45,8 +45,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.timetable-id'),
-            Carbon::today()->toIso8601String(),
-            Carbon::tomorrow()->toIso8601String()
+            Date::today()->toIso8601String(),
+            Date::tomorrow()->toIso8601String()
         );
     }
 
@@ -68,8 +68,8 @@ class SmartXpScreenController extends Controller
     {
         return CalendarController::returnGoogleCalendarEvents(
             Config::string('proto.google-calendar.protopeners-id'),
-            Carbon::today()->toIso8601String(),
-            Carbon::tomorrow()->toIso8601String()
+            Date::today()->toIso8601String(),
+            Date::tomorrow()->toIso8601String()
         );
     }
 
@@ -96,7 +96,7 @@ class SmartXpScreenController extends Controller
             'weekend' => [],
         ];
 
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Carbon::now()->previous(CarbonInterface::MONDAY)->toIso8601String()).'&timeMax='.urlencode(Carbon::now()->next(CarbonInterface::MONDAY)->toIso8601String());
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.Config::string('proto.google-calendar.smartxp-id').'/events?singleEvents=true&orderBy=startTime&key='.Config::string('app-proto.google-key-private').'&timeMin='.urlencode(Date::now()->previous(CarbonInterface::MONDAY)->toIso8601String()).'&timeMax='.urlencode(Date::now()->next(CarbonInterface::MONDAY)->toIso8601String());
 
         try {
             $data = json_decode(str_replace('$', '', file_get_contents($url)));
@@ -118,18 +118,18 @@ class SmartXpScreenController extends Controller
                 $type = str_replace($key, $value, $type);
             }
 
-            $current = Carbon::parse($start_time)->timestamp < Carbon::now()->timestamp && Carbon::parse($end_time)->timestamp > Carbon::now()->timestamp;
+            $current = Date::parse($start_time)->timestamp < Date::now()->timestamp && Date::parse($end_time)->timestamp > Date::now()->timestamp;
             if ($current) {
                 $occupied = true;
             }
 
-            $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], Carbon::parse($start_time)->format('l')));
+            $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], Date::parse($start_time)->format('l')));
             $roster[$day][] = (object) [
                 'title' => $name,
-                'start' => Carbon::parse($start_time)->timestamp,
-                'end' => Carbon::parse($end_time)->timestamp,
+                'start' => Date::parse($start_time)->timestamp,
+                'end' => Date::parse($end_time)->timestamp,
                 'type' => $type[1] ?? 'Other',
-                'over' => Carbon::parse($end_time)->timestamp < Carbon::now()->timestamp,
+                'over' => Date::parse($end_time)->timestamp < Date::now()->timestamp,
                 'current' => $current,
             ];
         }

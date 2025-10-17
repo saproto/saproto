@@ -21,7 +21,7 @@ class BankFactory extends Factory
     {
         return [
             'iban' => fake()->iban(),
-            'bic' => fake()->swiftBicNumber,
+            'bic' => fake()->swiftBicNumber(),
             'machtigingid' => 'PROTOX'.fake()->randomNumber(5, true).'X'.fake()->randomNumber(5, true),
         ];
     }

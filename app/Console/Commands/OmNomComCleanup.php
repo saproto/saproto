@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\OrderLine;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class OmNomComCleanup extends Command
@@ -46,7 +46,7 @@ class OmNomComCleanup extends Command
 
         $affected = DB::table($orderlinesTable)
             ->whereIn('user_id', $users)
-            ->where('created_at', '<', Carbon::now()->subYears(7)->format('Y-m-d'))
+            ->where('created_at', '<', Date::now()->subYears(7)->format('Y-m-d'))
             ->update(['user_id' => null]);
 
         $this->info("Found and anonymised {$affected} orderlines.");

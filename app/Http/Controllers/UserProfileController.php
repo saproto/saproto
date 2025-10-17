@@ -20,9 +20,7 @@ class UserProfileController extends Controller
     {
         $user = $id == null ? Auth::user() : User::fromPublicId($id);
 
-        if ($user == null) {
-            abort(404);
-        }
+        abort_if($user == null, 404);
 
         $pastCommittees = $this->getPastMemberships($user, false);
         $pastSocieties = $this->getPastMemberships($user, true);

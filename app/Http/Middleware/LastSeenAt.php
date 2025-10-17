@@ -4,9 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Symfony\Component\HttpFoundation\Response;
 
 class LastSeenAt
@@ -21,7 +21,7 @@ class LastSeenAt
         if (Auth::check()) {
             $id = Auth::id();
             $cacheKey = "last-seen-at::user::{$id}";
-            $now = Carbon::now();
+            $now = Date::now();
             $lastSeen = Cache::get($cacheKey);
             if (! $lastSeen || $now->diffInHours($lastSeen) >= 12) {
                 Cache::put($cacheKey, $now);

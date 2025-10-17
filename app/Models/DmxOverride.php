@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 
 /**
  * DmxOverride Model.
@@ -41,19 +41,19 @@ class DmxOverride extends Model
     /** @return Collection<int, DmxOverride> */
     public static function getActiveSorted(): Collection
     {
-        return self::query()->where('start', '<', Carbon::now()->timestamp)->where('end', '>', Carbon::now()->timestamp)->get()->sortBy('window_size');
+        return self::query()->where('start', '<', Date::now()->timestamp)->where('end', '>', Date::now()->timestamp)->get()->sortBy('window_size');
     }
 
     /** @return Collection<int, DmxOverride> */
     public static function getUpcomingSorted(): Collection
     {
-        return self::query()->where('start', '>', Carbon::now()->timestamp)->get()->sortByDesc('start');
+        return self::query()->where('start', '>', Date::now()->timestamp)->get()->sortByDesc('start');
     }
 
     /** @return Collection<int, DmxOverride> */
     public static function getPastSorted(): Collection
     {
-        return self::query()->where('end', '<', Carbon::now()->timestamp)->get()->sortByDesc('start');
+        return self::query()->where('end', '<', Date::now()->timestamp)->get()->sortByDesc('start');
     }
 
     /** @return array<int, int> */
@@ -84,12 +84,12 @@ class DmxOverride extends Model
 
     public function active(): bool
     {
-        return $this->start < Carbon::now()->timestamp && Carbon::now()->timestamp < $this->end;
+        return $this->start < Date::now()->timestamp && Date::now()->timestamp < $this->end;
     }
 
     public function justOver(): bool
     {
-        return Carbon::now()->timestamp > $this->end && Carbon::now()->timestamp < $this->end. 600;
+        return Date::now()->timestamp > $this->end && Date::now()->timestamp < $this->end. 600;
     }
 
     /** @return string[] */

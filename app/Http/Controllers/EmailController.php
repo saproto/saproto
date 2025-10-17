@@ -11,8 +11,8 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -39,15 +39,15 @@ class EmailController extends Controller
         $searchTerm = $request->input('searchterm');
 
         if ($description) {
-            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('description', '%'.$searchTerm.'%');
         }
 
         if ($subject) {
-            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('subject', '%'.$searchTerm.'%');
         }
 
         if ($body) {
-            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('body', '%'.$searchTerm.'%');
         }
 
         return view('emailadmin.overview', [
@@ -191,7 +191,7 @@ class EmailController extends Controller
             $email->save();
             Session::flash('flash_message', 'The e-mail has been put on hold.');
         } else {
-            if ($email->time - Carbon::now()->timestamp < 5 * 60) {
+            if ($email->time - Date::now()->timestamp < 5 * 60) {
                 Session::flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
 
                 return to_route('email::index');

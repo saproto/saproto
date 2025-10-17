@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App;
 use App\Enums\CompanyEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -56,7 +56,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Company extends Model implements HasMedia
 {

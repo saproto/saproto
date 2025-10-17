@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Codex;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -21,8 +21,8 @@ class CodexFactory extends Factory
             'name' => fake()->name(),
             'export' => fake()->word(),
             'description' => fake()->text(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ];
     }
 }

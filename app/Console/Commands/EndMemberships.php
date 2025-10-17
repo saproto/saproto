@@ -7,7 +7,7 @@ use App\Mail\MembershipEndedForBoard;
 use App\Models\Member;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 
 class EndMemberships extends Command
@@ -45,7 +45,7 @@ class EndMemberships extends Command
     {
         $deleted = [];
         foreach (Member::query()->whereNotNull('until')->get() as $member) {
-            if ($member->until < Carbon::now()->timestamp) {
+            if ($member->until < Date::now()->timestamp) {
                 (new UserAdminController)->endMembership($member->user->id);
                 $this->info("Membership from $member->proto_username ended!");
                 $deleted[] = $member;

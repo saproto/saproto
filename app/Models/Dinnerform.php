@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -57,7 +58,7 @@ use Override;
  * @method static Builder<static>|Dinnerform whereUrl($value)
  * @method static Builder<static>|Dinnerform whereVisibleHomePage($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Dinnerform extends Model
 {
@@ -108,7 +109,7 @@ class Dinnerform extends Model
     /** @return string A timespan string with format 'D H:i'. */
     public function generateTimespanText(): string
     {
-        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.Date::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open. */

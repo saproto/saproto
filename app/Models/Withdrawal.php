@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -42,7 +43,7 @@ use Override;
  * @method static Builder<static>|Withdrawal whereTotalUsersAssociated($value)
  * @method static Builder<static>|Withdrawal whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Withdrawal extends Model
 {
@@ -112,7 +113,7 @@ class Withdrawal extends Model
      */
     protected function withdrawalId(): Attribute
     {
-        return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.Carbon::parse($this->date)->format('dmY'));
+        return Attribute::make(get: fn (): string => 'PROTO-'.$this->id.'-'.Date::parse($this->date)->format('dmY'));
     }
 
     public function recalculateTotals(): void

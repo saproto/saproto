@@ -7,7 +7,7 @@ use App\Models\DinnerformOrderline;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -24,8 +24,8 @@ class DinnerformOrderlineFactory extends Factory
             'description' => fake()->text(),
             'price' => fake()->randomFloat(),
             'closed' => false,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
             'helper' => fake()->boolean(),
             'user_id' => User::factory()->has(Member::factory()),
             'dinnerform_id' => Dinnerform::factory(),

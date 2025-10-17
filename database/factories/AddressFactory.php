@@ -20,11 +20,11 @@ class AddressFactory extends Factory
     public function definition()
     {
         return [
-            'street' => fake()->streetName,
-            'number' => fake()->buildingNumber,
-            'zipcode' => fake()->postcode,
-            'city' => fake()->city,
-            'country' => fake()->country,
+            'street' => fake()->streetName(),
+            'number' => fake()->buildingNumber(),
+            'zipcode' => fake()->postcode(),
+            'city' => fake()->city(),
+            'country' => fake()->country(),
         ];
     }
 }

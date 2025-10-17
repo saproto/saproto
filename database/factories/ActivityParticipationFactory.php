@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Activity;
 use App\Models\ActivityParticipation;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -35,8 +35,8 @@ class ActivityParticipationFactory extends Factory
     {
         $activity = Activity::query()->find($attributes['activity_id']);
 
-        $start = Carbon::parse($activity->registration_start);
-        $end = Carbon::parse($activity->event->start);
+        $start = Date::parse($activity->registration_start);
+        $end = Date::parse($activity->event->start);
 
         $date = fake()->dateTimeBetween($start, $end);
 
@@ -50,8 +50,8 @@ class ActivityParticipationFactory extends Factory
     {
         $activity = Activity::query()->find($attributes['activity_id']);
 
-        $start = Carbon::parse($attributes['created_at']);
-        $end = Carbon::parse($activity->event->start);
+        $start = Date::parse($attributes['created_at']);
+        $end = Date::parse($activity->event->start);
 
         $date = fake()->dateTimeBetween($start, $end);
 

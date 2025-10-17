@@ -1,9 +1,13 @@
+@php
+    use App\Models\Event;
+@endphp
+
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">Sign-up details</div>
 
     @if ($event != null)
         @php
-            /** @var \App\Models\Event $event */
+            /** @var Event $event */
         @endphp
 
         <form

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 return [
 
@@ -58,8 +58,8 @@ return [
         ],
         (object) [
             'name' => 'easter',
-            'start' => Carbon::createFromTimestamp(easter_date(), date_default_timezone_get())->format('M-d-Y'),
-            'end' => Carbon::createFromTimestamp(easter_date(), date_default_timezone_get())->format('M-d-Y').' +1 day',
+            'start' => Date::createFromTimestamp(easter_date(), date_default_timezone_get())->format('M-d-Y'),
+            'end' => Date::createFromTimestamp(easter_date(), date_default_timezone_get())->format('M-d-Y').' +1 day',
         ],
         (object) [
             'name' => 'dies',

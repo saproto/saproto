@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|ShortUrl whereUpdatedAt($value)
  * @method static Builder<static>|ShortUrl whereUrl($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class ShortUrl extends Model
 {

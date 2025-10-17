@@ -11,10 +11,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Override;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -59,7 +61,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Newsitem extends Model implements HasMedia
 {
@@ -110,7 +112,7 @@ class Newsitem extends Model implements HasMedia
     }
 
     /**
-     * @return BelongsToMany<Event, $this>
+     * @return BelongsToMany<Event, $this, Pivot>
      */
     public function events(): BelongsToMany
     {
@@ -119,7 +121,7 @@ class Newsitem extends Model implements HasMedia
 
     public function isPublished(): bool
     {
-        return Carbon::parse($this->published_at)->isPast();
+        return Date::parse($this->published_at)->isPast();
     }
 
     /**

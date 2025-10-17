@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Ticket Model.
@@ -41,7 +41,7 @@ use Illuminate\Support\Collection;
  * @method static Builder<static>|Ticket whereProductId($value)
  * @method static Builder<static>|Ticket whereShowParticipants($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Ticket extends Model
 {
@@ -110,7 +110,7 @@ class Ticket extends Model
 
     public function isOnSale(): bool
     {
-        return Carbon::now()->timestamp > $this->available_from && Carbon::now()->timestamp < $this->available_to;
+        return Date::now()->timestamp > $this->available_from && Date::now()->timestamp < $this->available_to;
     }
 
     public function isAvailable(User $user): bool

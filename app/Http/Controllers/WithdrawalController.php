@@ -16,9 +16,9 @@ use App\Models\Withdrawal;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -72,7 +72,7 @@ class WithdrawalController extends Controller
             }
 
             // only add the tickets to the withdrawal if the ticket can not be bought anymore
-            if ($orderline->product->ticket && Carbon::now()->timestamp <= $orderline->product->ticket->available_to) {
+            if ($orderline->product->ticket && Date::now()->timestamp <= $orderline->product->ticket->available_to) {
                 continue;
             }
 
@@ -135,7 +135,7 @@ class WithdrawalController extends Controller
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => $accounts,
-            'title' => 'Accounts of withdrawal of '.Carbon::parse($withdrawal->date)->format('d-m-Y'),
+            'title' => 'Accounts of withdrawal of '.Date::parse($withdrawal->date)->format('d-m-Y'),
             'total' => $withdrawal->total(),
         ]);
     }
@@ -252,7 +252,7 @@ class WithdrawalController extends Controller
             $total,
             null,
             null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', Carbon::parse($withdrawal->date)->format('d-m-Y')),
+            sprintf('Overdue payment due to the failed withdrawal from %s.', Date::parse($withdrawal->date)->format('d-m-Y')),
             sprintf('failed_withdrawal_by_%u', Auth::user()->id)
         ));
 
@@ -351,7 +351,7 @@ class WithdrawalController extends Controller
                     /** @phpstan-ignore-next-line */
                     'instdAmt' => number_format($user->orderlines_total, 2, '.', ''),
                     'mndtId' => $user->bank->machtigingid,
-                    'dtOfSgntr' => Carbon::parse($user->bank->created_at)->format('Y-m-d'),
+                    'dtOfSgntr' => Date::parse($user->bank->created_at)->format('Y-m-d'),
                     'bic' => $user->bank->bic,
                     'dbtr' => $user->name,
                     'iban' => $user->bank->iban,

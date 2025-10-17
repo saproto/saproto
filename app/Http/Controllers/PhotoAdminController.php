@@ -91,7 +91,7 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::query()->findOrFail($id);
 
         if ($album->published) {
-            return response()->json([
+            return new JsonResponse([
                 'message' => 'album already published! Unpublish to add more photos!',
             ], 500);
         }
@@ -117,7 +117,7 @@ class PhotoAdminController extends Controller
         } catch (Exception $exception) {
             $photo->delete();
 
-            return response()->json([
+            return new JsonResponse([
                 'message' => $exception->getMessage(),
             ], 500);
         }
@@ -134,9 +134,7 @@ class PhotoAdminController extends Controller
         if ($photos) {
             $album = PhotoAlbum::query()->findOrFail($id);
 
-            if ($album->published && ! Auth::user()->can('publishalbums')) {
-                abort(403, 'Unauthorized action.');
-            }
+            abort_if($album->published && ! Auth::user()->can('publishalbums'), 403, 'Unauthorized action.');
 
             switch ($action) {
                 case 'remove':

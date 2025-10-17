@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App;
 use App\Enums\HeaderImageEnum;
 use Database\Factories\HeaderImageFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Override;
 use Spatie\Image\Enums\Fit;
@@ -41,7 +41,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class HeaderImage extends Model implements HasMedia
 {

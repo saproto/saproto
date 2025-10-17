@@ -148,7 +148,7 @@ class ParticipationController extends Controller
 
         $participation->update(['is_present' => ! $participation->is_present]);
 
-        return response()->json($participation->activity->getPresent());
+        return new JsonResponse($participation->activity->getPresent());
     }
 
     public static function processBackupQueue(Activity $activity): void

@@ -13,15 +13,16 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -40,23 +41,23 @@ class EventController extends Controller
         // if there is a category, get only the events that are in that category
         $events = Event::getEventBlockQuery()
             ->when($category, static function ($query) use ($category) {
-                $query->whereHas('Category', static function ($q) use ($category) {
+                $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
             })
-            ->where('start', '>', Carbon::now()->timestamp)
+            ->where('start', '>', Date::now()->timestamp)
             ->get();
 
         $data = [[], [], []];
 
-        $data[0] = $events->where('start', '>', Carbon::now()->timestamp)
-            ->where('start', '<=', Carbon::now()->addWeek()->timestamp);
+        $data[0] = $events->where('start', '>', Date::now()->timestamp)
+            ->where('start', '<=', Date::now()->addWeek()->timestamp);
 
         $data[1] = $events
-            ->where('start', '>', Carbon::now()->addWeek()->timestamp)
-            ->where('start', '<=', Carbon::now()->addMonth()->timestamp);
+            ->where('start', '>', Date::now()->addWeek()->timestamp)
+            ->where('start', '<=', Date::now()->addMonth()->timestamp);
 
-        $data[2] = $events->where('start', '>', Carbon::now()->addMonth()->timestamp);
+        $data[2] = $events->where('start', '>', Date::now()->addMonth()->timestamp);
 
         $years = $this->getAvailableYears();
 
@@ -248,13 +249,13 @@ class EventController extends Controller
         // if there is a category, get only the events that are in that category
         $eventsPerMonth = Event::getEventBlockQuery()
             ->unless(empty($category), static function ($query) use ($category) {
-                $query->whereHas('Category', static function ($q) use ($category) {
+                $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
-            })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->timestamp)
-            ->where('start', '<', Carbon::create($year, 12, 31, 23, 59, 59)->timestamp)
+            })->where('start', '>', Date::create($year, 1, 1, 0, 0, 1)->timestamp)
+            ->where('start', '<', Date::create($year, 12, 31, 23, 59, 59)->timestamp)
             ->get()
-            ->groupBy(fn (Event $event) => Carbon::createFromTimestamp($event->start, date_default_timezone_get())->month);
+            ->groupBy(fn (Event $event) => Date::createFromTimestamp($event->start, date_default_timezone_get())->month);
 
         $years = $this->getAvailableYears();
 
@@ -271,7 +272,7 @@ class EventController extends Controller
      */
     private function getAvailableYears(): Collection
     {
-        return Cache::remember('event::availableyears', Carbon::now()->diff(Carbon::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
+        return Cache::remember('event::availableyears', Date::now()->diff(Date::now()->endOfDay()), static fn () => collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events WHERE deleted_at IS NULL ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start'));
     }
 
     /**
@@ -422,9 +423,9 @@ class EventController extends Controller
         $noFutureLimit = $request->boolean('no_future_limit');
         /** @var Collection<int, Event> $events */
         $events = Event::getEventBlockQuery()
-            ->where('end', '>', Carbon::today()->timestamp)
+            ->where('end', '>', Date::today()->timestamp)
             ->unless($noFutureLimit, static function ($query) {
-                $query->where('start', '<', Carbon::now()->addMonth()->timestamp);
+                $query->where('start', '<', Date::now()->addMonth()->timestamp);
             })
             ->whereNull('publication')
             ->orderBy('start')
@@ -560,7 +561,7 @@ CALSCALE:GREGORIAN
 
         $relevant_only = $user?->pref_calendar_relevant_only;
         $events = Event::getEventBlockQuery($user)
-            ->where('start', '>', Carbon::now()->subMonths(6)->timestamp)
+            ->where('start', '>', Date::now()->subMonths(6)->timestamp)
             ->with('committee.users')
             ->withCount('tickets')
             ->get();
@@ -611,9 +612,9 @@ CALSCALE:GREGORIAN
             $calendar .= 'BEGIN:VEVENT
 '.
                 sprintf('UID:%s@proto.utwente.nl', $event->id)."\r\n".
-                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->created_at)->timestamp))."\r\n".
-                sprintf('DTSTART:%s', Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
-                sprintf('DTEND:%s', Carbon::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTSTAMP:%s', gmdate('Ymd\THis\Z', Date::parse($event->created_at)->timestamp))."\r\n".
+                sprintf('DTSTART:%s', Date::createFromTimestamp($event->start, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
+                sprintf('DTEND:%s', Date::createFromTimestamp($event->end, date_default_timezone_get())->format('Ymd\THis'))."\r\n".
                 sprintf('SUMMARY:%s', empty($status) ? $event->title : sprintf('[%s] %s', $status, $event->title))."\r\n".
                 sprintf('DESCRIPTION:%s', $info_text.' More information: '.route('event::show', ['event' => $event]))."\r\n".
                 sprintf('LOCATION:%s', $event->location)."\r\n".
@@ -622,7 +623,7 @@ CALSCALE:GREGORIAN
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email : 'board@proto.utwente.nl')
                 )."\r\n".
-                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Carbon::parse($event->updated_at)->timestamp))."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', Date::parse($event->updated_at)->timestamp))."\r\n".
                 sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
@@ -630,7 +631,7 @@ CALSCALE:GREGORIAN
 '.
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Carbon::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), Date::createFromTimestamp($event->start, date_default_timezone_get())->format('l F j, H:i:s'))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
@@ -664,9 +665,9 @@ CALSCALE:GREGORIAN
     {
         $event = Event::query()->findOrFail($request->input('id'));
 
-        $oldStart = Carbon::createFromTimestamp($event->start, date_default_timezone_get());
+        $oldStart = Date::createFromTimestamp($event->start, date_default_timezone_get());
 
-        $newDate = Carbon::createFromFormat('Y-m-d', $request->input('newDate'))
+        $newDate = Date::createFromFormat('Y-m-d', $request->input('newDate'))
             ->setHour($oldStart->hour)
             ->setMinute($oldStart->minute)
             ->setSecond($oldStart->second)

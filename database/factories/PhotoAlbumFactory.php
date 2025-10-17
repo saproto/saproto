@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Event;
 use App\Models\PhotoAlbum;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -25,8 +25,8 @@ class PhotoAlbumFactory extends Factory
             'thumb_id' => 0,
             'private' => fake()->boolean(),
             'published' => fake()->boolean(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
             'event_id' => Event::factory(),
         ];
     }

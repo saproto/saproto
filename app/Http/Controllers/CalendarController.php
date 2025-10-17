@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 
 class CalendarController extends Controller
 {
@@ -71,9 +71,9 @@ class CalendarController extends Controller
                 }
             }
 
-            $end = Carbon::parse($endTime)->timestamp;
-            $start = Carbon::parse($startTime)->timestamp;
-            $now = Carbon::now()->timestamp;
+            $end = Date::parse($endTime)->timestamp;
+            $start = Date::parse($startTime)->timestamp;
+            $now = Date::now()->timestamp;
             $results[] = [
                 'title' => trim($name),
                 'place' => isset($entry->location) ? trim($entry->location) : 'Unknown',

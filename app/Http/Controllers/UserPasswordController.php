@@ -10,8 +10,8 @@ use Google\Service\Exception;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use nickurt\PwnedPasswords\PwnedPasswords;
@@ -48,7 +48,7 @@ class UserPasswordController extends Controller
      */
     public function resetPasswordIndex(string $token): RedirectResponse|View
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
+        PasswordReset::query()->where('valid_to', '<', Date::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $token)->first();
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
@@ -64,7 +64,7 @@ class UserPasswordController extends Controller
      */
     public function resetPassword(Request $request): RedirectResponse
     {
-        PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
+        PasswordReset::query()->where('valid_to', '<', Date::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {

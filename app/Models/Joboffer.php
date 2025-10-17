@@ -30,7 +30,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Joboffer whereTitle($value)
  * @method static Builder<static>|Joboffer whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Joboffer extends Model
 {

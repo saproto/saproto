@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Product;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -16,15 +17,15 @@ class TIPCieController extends Controller
     {
         $date = $request->has('date') ? $request->date : null;
 
-        $startDate = ($date ? Carbon::parse($date)->addHours(6)->toDateTimeString() : Carbon::today()->toDateTimeString());
-        $endDate = ($date ? Carbon::parse($date)->addHours(30)->toDateTimeString() : Carbon::today()->toDateTimeString());
+        $startDate = ($date ? Date::parse($date)->addHours(6)->toDateTimeString() : Date::today()->toDateTimeString());
+        $endDate = ($date ? Date::parse($date)->addHours(30)->toDateTimeString() : Date::today()->toDateTimeString());
 
         /** @var Account $tipcieAccount */
         $tipcieAccount = Account::query()->findOrFail(Config::integer('omnomcom.tipcie-account'));
 
         $products = Product::query()
             ->where('account_id', $tipcieAccount->id)
-            ->whereHas('orderlines', function ($q) use ($startDate, $endDate) {
+            ->whereHas('orderlines', function (Builder $q) use ($startDate, $endDate) {
                 $q->where('created_at', '>=', $startDate)->where('created_at', '<', $endDate);
             })->withSum(['orderlines' => function ($q) use ($startDate, $endDate) {
                 $q->where('created_at', '>=', $startDate)->where('created_at', '<', $endDate);

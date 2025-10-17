@@ -4,7 +4,7 @@ use App\Models\HashMapItem;
 use App\Models\Newsitem;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,10 +22,10 @@ return new class extends Migration
         $text = HashMapItem::query()->where('key', 'newsletter_text')->first();
         if ($text) {
             $newsItem = new Newsitem([
-                'title' => 'Weekly newsletter of week '.Carbon::now()->weekOfYear.' of '.Carbon::now()->year,
+                'title' => 'Weekly newsletter of week '.Date::now()->weekOfYear.' of '.Date::now()->year,
                 'content' => $text->value,
                 'is_weekly' => true,
-                'publication' => Carbon::createFromTimestamp($lastSent->value, date_default_timezone_get())->toDateTimeString(),
+                'publication' => Date::createFromTimestamp($lastSent->value, date_default_timezone_get())->toDateTimeString(),
             ]);
 
             $newsItem->save();

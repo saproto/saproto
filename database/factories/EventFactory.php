@@ -6,7 +6,7 @@ use App\Models\Committee;
 use App\Models\Event;
 use App\Models\EventCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -32,8 +32,8 @@ class EventFactory extends Factory
             'involves_food' => fake()->boolean(),
             'secret' => fake()->boolean(),
             'force_calendar_sync' => fake()->boolean(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
             'unique_users_count' => fake()->randomNumber(),
             'committee_id' => Committee::factory(),
             'category_id' => EventCategory::factory(),

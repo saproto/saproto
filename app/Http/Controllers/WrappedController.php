@@ -11,17 +11,18 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
     public function index(): JsonResponse
     {
-        $from = Carbon::now()->startOfYear();
-        $to = Carbon::now()->endOfYear();
+        $from = Date::now()->startOfYear();
+        $to = Date::now()->endOfYear();
         $purchases = $this->getPurchases($from, $to);
 
-        return response()->json([
+        return new JsonResponse([
             'order_totals' => $this->orderTotals(),
             'purchases' => $purchases,
             'total_spent' => round($purchases->sum('total_price'), 2),
@@ -72,7 +73,7 @@ class WrappedController extends Controller
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereIn('id', static function (Builder $query) {
                     $query->select('event_id')
                         ->from('tickets')

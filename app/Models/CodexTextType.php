@@ -30,7 +30,7 @@ use Override;
  * @method static Builder<static>|CodexTextType whereType($value)
  * @method static Builder<static>|CodexTextType whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class CodexTextType extends Model
 {

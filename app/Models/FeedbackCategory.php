@@ -38,7 +38,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|FeedbackCategory whereUpdatedAt($value)
  * @method static Builder<static>|FeedbackCategory whereUrl($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class FeedbackCategory extends Model
 {

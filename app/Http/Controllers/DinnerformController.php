@@ -9,9 +9,9 @@ use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -173,7 +173,7 @@ class DinnerformController extends Controller
             ->findOrFail($id);
 
         $dinnerform->update([
-            'end' => Carbon::now(),
+            'end' => Date::now(),
         ]);
 
         return to_route('dinnerform::admin', ['id' => $dinnerform->id]);
@@ -205,7 +205,7 @@ class DinnerformController extends Controller
                 $dinnerformOrderline->price_with_discount,
                 null,
                 null,
-                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Carbon::parse($dinnerform->end)->format('d-m-Y')),
+                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Date::parse($dinnerform->end)->format('d-m-Y')),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed = true;

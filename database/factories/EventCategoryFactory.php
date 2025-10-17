@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\EventCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -20,8 +20,8 @@ class EventCategoryFactory extends Factory
         return [
             'name' => fake()->name(),
             'icon' => 'fa '.fake()->word(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ];
     }
 }
