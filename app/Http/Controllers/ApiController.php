@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\PhotoEnum;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
@@ -17,6 +16,7 @@ use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

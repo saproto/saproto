@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;

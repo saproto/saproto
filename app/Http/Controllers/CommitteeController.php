@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Mail\AnonymousEmail;
 use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

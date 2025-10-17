@@ -1,17 +1,17 @@
 <?php
 
-use App\Http\Controllers\DmxFixtureController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\QrAuthController;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\ExportController;
 use App\Http\Controllers\DiscordController;
+use App\Http\Controllers\DmxFixtureController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\SmartXpScreenController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\NarrowcastingController;
-use App\Http\Controllers\SearchController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OmNomController;
+use App\Http\Controllers\QrAuthController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SmartXpScreenController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\WallstreetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

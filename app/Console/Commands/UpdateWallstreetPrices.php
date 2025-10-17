@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Events\NewWallstreetEvent;
 use App\Events\NewWallstreetLossCalculation;
 use App\Events\NewWallstreetPrice;
@@ -12,6 +11,7 @@ use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Random\RandomException;
 

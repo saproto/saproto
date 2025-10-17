@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -14,6 +13,7 @@ use App\Models\PhotoAlbum;
 use App\Models\Product;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;

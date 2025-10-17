@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Account;
 use App\Models\Product;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;

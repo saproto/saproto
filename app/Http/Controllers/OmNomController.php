@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
@@ -12,6 +11,7 @@ use App\Models\RfidCard;
 use App\Models\User;
 use App\Services\ProTubeApiService;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

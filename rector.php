@@ -21,13 +21,13 @@ try {
         ->withSetProviders(LaravelSetProvider::class)
         ->withComposerBased(laravel: true/** other options */)
         ->withCache(
-        // ensure file system caching is used instead of in-memory
+            // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
 
             // specify a path that works locally as well as on CI job runners
             cacheClass: FileCacheStorage::class
         )
-        ->withImportNames(removeUnusedImports:true)
+        ->withImportNames(removeUnusedImports: true)
         ->withsets([
             LaravelSetList::LARAVEL_CODE_QUALITY,
             LaravelSetList::LARAVEL_CONTAINER_STRING_TO_FULLY_QUALIFIED_NAME,
@@ -41,10 +41,10 @@ try {
             LaravelSetList::LARAVEL_FACADE_ALIASES_TO_FULL_NAMES,
             LaravelSetList::LARAVEL_FACTORIES,
             LaravelSetList::LARAVEL_IF_HELPERS,
-            LaravelSetList::LARAVEL_TESTING
+            LaravelSetList::LARAVEL_TESTING,
         ])
         ->withConfiguredRule(WhereToWhereLikeRector::class, [
-            WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false
+            WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false,
         ])
         ->withConfiguredRule(RouteActionCallableRector::class, [
             RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',

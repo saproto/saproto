@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\FeeEmail;
 use App\Mail\FeeEmailForBoard;
@@ -11,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;

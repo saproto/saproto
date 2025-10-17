@@ -98,7 +98,7 @@ class MenuController extends Controller
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemAbove = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
-        abort_if($menuItemAbove===null, 400, 'Item is already top item.');
+        abort_if($menuItemAbove === null, 400, 'Item is already top item.');
 
         $this->switchMenuItems($menuItem, $menuItemAbove);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
@@ -113,7 +113,7 @@ class MenuController extends Controller
         $menuItem = MenuItem::query()->findOrFail($id);
         $menuItemBelow = MenuItem::query()->where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
-        abort_if($menuItemBelow===null, 400, 'Item is already bottom item.');
+        abort_if($menuItemBelow === null, 400, 'Item is already bottom item.');
 
         $this->switchMenuItems($menuItem, $menuItemBelow);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);

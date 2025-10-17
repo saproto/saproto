@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Photo;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 
 class BackupPhotosToStack extends Command
