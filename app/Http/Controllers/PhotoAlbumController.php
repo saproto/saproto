@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Config;
 use App\Data\PhotoAlbumData;
 use App\Models\Photo;
 use App\Models\PhotoAlbum;
@@ -12,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;

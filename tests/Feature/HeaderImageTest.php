@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
 use App\Models\HeaderImage;
 use App\Models\Member;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 it('lists the headerimages', function () {
     /** @var Member $member */
