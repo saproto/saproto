@@ -49,7 +49,7 @@ class LeaderboardEntryController extends Controller
         $entry->points = $request->points;
         $entry->save();
 
-        return response()->json(['points' => $entry->points]);
+        return new JsonResponse(['points' => $entry->points]);
     }
 
     /**

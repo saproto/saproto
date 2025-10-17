@@ -21,7 +21,7 @@ class WrappedController extends Controller
         $to = Carbon::now()->endOfYear();
         $purchases = $this->getPurchases($from, $to);
 
-        return response()->json([
+        return new JsonResponse([
             'order_totals' => $this->orderTotals(),
             'purchases' => $purchases,
             'total_spent' => round($purchases->sum('total_price'), 2),

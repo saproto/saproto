@@ -49,9 +49,9 @@ try {
 //        ->withConfiguredRule(RouteActionCallableRector::class, [
 //            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
 //        ])
-//        ->withRules([
-//            ResponseHelperCallToJsonResponseRector::class,
-//        ])
+        ->withRules([
+            ResponseHelperCallToJsonResponseRector::class,
+        ])
         ->withSkip([
             CarbonToDateFacadeRector::class,
             EloquentOrderByToLatestOrOldestRector::class,

@@ -33,7 +33,7 @@ class ApiController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            return response()->json([
+            return new JsonResponse([
                 'authenticated' => true,
                 'name' => $user->calling_name,
                 'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin() || $user->isTempadminLaterToday(),
@@ -41,7 +41,7 @@ class ApiController extends Controller
             ]);
         }
 
-        return response()->json(['authenticated' => false]);
+        return new JsonResponse(['authenticated' => false]);
     }
 
     public function protubePlayed(Request $request): void
@@ -88,14 +88,14 @@ class ApiController extends Controller
         $photosData = $this->randomDistributedAlbum($normal_distribution);
         $oldPhotosData = $this->randomDistributedAlbum($old_distribution);
         if (isset($photosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "photos": '.$photosData['error']], 500);
+            return new JsonResponse(['error' => 'Failed to retrieve "photos": '.$photosData['error']], 500);
         }
 
         if (isset($oldPhotosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "old_photos": '.$oldPhotosData['error']], 500);
+            return new JsonResponse(['error' => 'Failed to retrieve "old_photos": '.$oldPhotosData['error']], 500);
         }
 
-        return response()->json([
+        return new JsonResponse([
             'photos' => $photosData,
             'old_photos' => $oldPhotosData,
         ]);
@@ -281,13 +281,13 @@ class ApiController extends Controller
         $user = User::query()->firstWhere('discord_id', $userId);
 
         if (! $user) {
-            return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
+            return new JsonResponse(['error' => 'No Proto user found with this Discord account linked.'], 404);
         }
 
         if (! $user->is_member) {
-            return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
+            return new JsonResponse(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }
 
-        return response()->json(['name' => $user->calling_name]);
+        return new JsonResponse(['name' => $user->calling_name]);
     }
 }

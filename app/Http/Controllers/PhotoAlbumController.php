@@ -74,7 +74,7 @@ class PhotoAlbumController extends Controller
         if ($like) {
             $like->delete();
 
-            return response()->json(['likes_count' => $photo->likes()->count(), 'liked_by_me' => false]);
+            return new JsonResponse(['likes_count' => $photo->likes()->count(), 'liked_by_me' => false]);
         }
 
         PhotoLikes::query()->create([
@@ -82,6 +82,6 @@ class PhotoAlbumController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return response()->json(['likes_count' => $photo->likes()->count(), 'liked_by_me' => true]);
+        return new JsonResponse(['likes_count' => $photo->likes()->count(), 'liked_by_me' => true]);
     }
 }

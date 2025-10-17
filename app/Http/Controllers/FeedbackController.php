@@ -253,7 +253,7 @@ class FeedbackController extends Controller
             $vote->save();
         }
 
-        return response()->json([
+        return new JsonResponse([
             'voteScore' => $feedback->votes()->sum('vote'),
             'userVote' => $feedback->votes()->where('user_id', Auth::id())->sum('vote'),
         ]);

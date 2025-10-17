@@ -87,7 +87,7 @@ class QrAuthController extends Controller
 
         $qrAuthRequest->save();
 
-        return response()->json(['status' => 'ok'], 200);
+        return new JsonResponse(['status' => 'ok'], 200);
     }
 
     /**
@@ -100,7 +100,7 @@ class QrAuthController extends Controller
 
         abort_unless($qrAuthRequest, 404);
 
-        return response()->json(['description' => $qrAuthRequest->description], 200);
+        return new JsonResponse(['description' => $qrAuthRequest->description], 200);
     }
 
     public function isApproved(Request $request): string
