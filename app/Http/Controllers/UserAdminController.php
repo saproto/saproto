@@ -47,12 +47,12 @@ class UserAdminController extends Controller
 
         if ($search) {
             $users = $users->where(static function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('calling_name', 'LIKE', "%{$search}%")
-                    ->orWhere('email', 'LIKE', "%{$search}%")
-                    ->orWhere('utwente_username', 'LIKE', "%{$search}%")
+                $q->whereLike('name', "%{$search}%")
+                    ->orWhereLike('calling_name', "%{$search}%")
+                    ->orWhereLike('email', "%{$search}%")
+                    ->orWhereLike('utwente_username', "%{$search}%")
                     ->orWhereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
-                        $q->where('proto_username', 'LIKE', "%{$search}%");
+                        $q->whereLike('proto_username', "%{$search}%");
                     });
             });
         }

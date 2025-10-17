@@ -266,7 +266,7 @@ class SearchController extends Controller
                         continue;
                     }
 
-                    $query = $query->where($attr, 'LIKE', sprintf('%%%s%%', $term));
+                    $query = $query->whereLike($attr, sprintf('%%%s%%', $term));
                 }
             });
         }

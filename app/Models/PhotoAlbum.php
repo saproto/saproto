@@ -100,7 +100,7 @@ class PhotoAlbum extends Model
      * */
     protected function scopeName(Builder $query, string $name): Builder
     {
-        return $query->where('name', 'LIKE', '%'.$name.'%');
+        return $query->whereLike('name', '%'.$name.'%');
     }
 
     public function thumb(): ?string

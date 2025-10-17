@@ -275,7 +275,7 @@ class OmNomController extends Controller
 
                 $totalSpent = OrderLine::query()
                     ->where('user_id', $user->id)
-                    ->where('created_at', 'LIKE', sprintf('%s %%', Carbon::now()->format('Y-m-d')))
+                    ->whereLike('created_at', sprintf('%s %%', Carbon::now()->format('Y-m-d')))
                     ->whereHas('product.categories', function (Builder $query) use ($categories) {
                         $query->whereIn('product_categories.id', $categories);
                     })
@@ -289,7 +289,7 @@ class OmNomController extends Controller
 
             if ($user->show_omnomcom_calories) {
                 $result->message .= $user->show_omnomcom_total ? '<br>and ' : 'You have ';
-                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf('%s %%', Carbon::now()->format('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
+                $result->message .= sprintf('bought a total of <strong>%s calories</strong>', OrderLine::query()->where('orderlines.user_id', $user->id)->whereLike('orderlines.created_at', sprintf('%s %%', Carbon::now()->format('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
             }
 
             if ($result->message !== '') {

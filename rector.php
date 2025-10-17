@@ -43,9 +43,9 @@ try {
             LaravelSetList::LARAVEL_IF_HELPERS,
             LaravelSetList::LARAVEL_TESTING
         ])
-//        ->withConfiguredRule(WhereToWhereLikeRector::class, [
-//            WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false
-//        ])
+        ->withConfiguredRule(WhereToWhereLikeRector::class, [
+            WhereToWhereLikeRector::USING_POSTGRES_DRIVER => false
+        ])
 //        ->withConfiguredRule(RouteActionCallableRector::class, [
 //            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
 //        ])

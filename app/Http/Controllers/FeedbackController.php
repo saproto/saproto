@@ -106,7 +106,7 @@ class FeedbackController extends Controller
         $category = FeedbackCategory::query()->where('url', $category)->firstOrFail();
         $mostVoted = $this->getMostVoted($category);
         $unreviewed = $this->getUnreviewed($category);
-        $feedback = $this->getFeedbackQuery($category)->where('feedback', 'LIKE', "%{$searchTerm}%");
+        $feedback = $this->getFeedbackQuery($category)->whereLike('feedback', "%{$searchTerm}%");
 
         return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category' => $category, 'unreviewed' => $unreviewed]);
     }
