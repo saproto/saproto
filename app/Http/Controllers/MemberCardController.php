@@ -21,9 +21,7 @@ class MemberCardController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($id);
 
-        if (! $user->is_member) {
-            abort(403, 'Only members can have a member card printed.');
-        }
+        abort_unless($user->is_member, 403, 'Only members can have a member card printed.');
 
         $card = new PDF('L', [86, 54], 'en');
         $card->setDefaultFont('freeserif');

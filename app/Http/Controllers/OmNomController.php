@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Models\OrderLine;
 use App\Models\Product;
@@ -39,9 +40,7 @@ class OmNomController extends Controller
 
         $store = Config::array('omnomcom.stores')[$store_slug];
 
-        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
-            abort(403);
-        }
+        abort_if(! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles'])), 403);
 
         $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.media')->get();
         $minors = collect();
@@ -49,7 +48,7 @@ class OmNomController extends Controller
         if ($store_slug === 'tipcie') {
             $minors = User::query()
                 ->where('birthdate', '>', Carbon::now()->subYears(18)->format('Y-m-d'))
-                ->whereHas('member', static function ($q) {
+                ->whereHas('member', static function (Builder $q) {
                     $q->whereNot('membership_type', MembershipTypeEnum::PENDING)->whereNot('membership_type', MembershipTypeEnum::PET);
                 })
                 ->with('media')
@@ -63,12 +62,12 @@ class OmNomController extends Controller
     public function miniSite(): \Illuminate\Contracts\View\View|Factory
     {
         $products = Cache::remember('omnomcom.minisite', 60, fn () => Product::query()->where('is_visible', true)
-            ->where(function ($query) {
+            ->where(function (Builder $query) {
                 $query
                     ->where('is_visible_when_no_stock', true)
                     ->orWhere('stock', '>', 0);
             })
-            ->whereHas('categories', function ($query) {
+            ->whereHas('categories', function (Builder $query) {
                 $query->whereIn(
                     'product_categories.id',
                     Config::array(
@@ -89,15 +88,11 @@ class OmNomController extends Controller
     public function stock(Request $request)
     {
         $stores = Config::array('omnomcom.stores');
-        if (! array_key_exists($request->store, $stores)) {
-            abort(404);
-        }
+        abort_unless(array_key_exists($request->store, $stores), 404);
 
         $store = $stores[$request->store];
 
-        if (! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles']))) {
-            abort(403);
-        }
+        abort_if(! in_array($request->ip(), $store['addresses']) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store['roles'])), 403);
 
         $categories = ProductCategory::query()->whereIn('id', $store['categories'])->with('sortedProducts.media')->get();
 
@@ -281,7 +276,7 @@ class OmNomController extends Controller
                 $totalSpent = OrderLine::query()
                     ->where('user_id', $user->id)
                     ->where('created_at', 'LIKE', sprintf('%s %%', Carbon::now()->format('Y-m-d')))
-                    ->whereHas('product.categories', function ($query) use ($categories) {
+                    ->whereHas('product.categories', function (Builder $query) use ($categories) {
                         $query->whereIn('product_categories.id', $categories);
                     })
                     ->sum('total_price');

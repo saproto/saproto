@@ -136,7 +136,7 @@ class OrderLine extends Model
             ->whereNull('payed_with_bank_card')
             ->whereNull('payed_with_withdrawal')
             ->where('payed_with_loss', false)
-            ->where(function ($query) {
+            ->where(function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereDoesntHave('molliePayment')
                     ->orWhereHas('molliePayment', static function ($query) {
                         $query->whereNotIn('status', Config::array('omnomcom.mollie.paid_statuses'));

@@ -87,7 +87,7 @@ class Achievement extends Model
     public function currentOwners(bool $is_member = true): BelongsToMany
     {
         if ($is_member) {
-            return $this->users()->whereHas('member', static function ($query) {
+            return $this->users()->whereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereNot('membership_type', MembershipTypeEnum::PENDING);
             });
         }

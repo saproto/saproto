@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\BirthdayEmail;
 use App\Mail\BirthdayEmailForBoard;
@@ -45,7 +46,7 @@ class BirthdayCron extends Command
         $users = User::query()
             ->whereMonth('birthdate', Carbon::now()->month)
             ->whereDay('birthdate', Carbon::now()->day)
-            ->whereHas('member', static function ($q) {
+            ->whereHas('member', static function (Builder $q) {
                 $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
             })
             ->get();

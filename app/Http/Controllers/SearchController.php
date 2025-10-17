@@ -260,7 +260,7 @@ class SearchController extends Controller
         }
 
         foreach ($attributes as $attr) {
-            $query = $query->orWhere(static function ($query) use ($terms, $attr) {
+            $query = $query->orWhere(static function (\Illuminate\Contracts\Database\Query\Builder $query) use ($terms, $attr) {
                 foreach ($terms as $term) {
                     if (strlen(str_replace('%', '', $term)) < 3) {
                         continue;

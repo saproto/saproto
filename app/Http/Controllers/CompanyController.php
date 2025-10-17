@@ -195,9 +195,7 @@ class CompanyController extends Controller
     {
         $company = Company::query()->findOrFail($id);
 
-        if ($company->sort <= 0) {
-            abort(500);
-        }
+        abort_if($company->sort <= 0, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort - 1)->first();
 
@@ -217,9 +215,7 @@ class CompanyController extends Controller
     {
         $company = Company::query()->findOrFail($id);
 
-        if ($company->sort >= Company::query()->count() - 1) {
-            abort(500);
-        }
+        abort_if($company->sort >= Company::query()->count() - 1, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort + 1)->first();
 

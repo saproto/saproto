@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\PhotoEnum;
 use App\Models\AchievementOwnership;
 use App\Models\ActivityParticipation;
@@ -45,9 +46,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request): void
     {
-        if ($request->secret != Config::string('protube.protube_to_laravel_secret')) {
-            abort(403);
-        }
+        abort_if($request->secret != Config::string('protube.protube_to_laravel_secret'), 403);
 
         $user = User::query()->findOrFail($request->user_id);
         $youtubeId = $request->video_id;
@@ -110,7 +109,7 @@ class ApiController extends Controller
      */
     private function randomDistributedAlbum(array $numbers): array
     {
-        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
+        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function (Builder $query) {
             $query->where('private', false);
         })->with(['items' => function ($q) {
             $q->reorder()->inRandomOrder()->take(6);
@@ -264,7 +263,7 @@ class ApiController extends Controller
                 ];
             }
 
-            foreach (FeedbackVote::query()->with('feedback')->where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
+            foreach (FeedbackVote::query()->with('feedback')->where('user_id', $user->id)->whereHas('feedback', static function (Builder $q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
             })->get() as $feedbackVote) {
                 $data["liked_$category->url"][] = [

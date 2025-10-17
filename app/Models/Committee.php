@@ -115,7 +115,7 @@ class Committee extends Model implements HasMedia
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'committees_users')
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query
                     ->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
@@ -149,7 +149,7 @@ class Committee extends Model implements HasMedia
     {
         return $this->organizedEvents()->where('end', '<', Carbon::now()->timestamp)
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 });
@@ -166,7 +166,7 @@ class Committee extends Model implements HasMedia
             ->where('end', '>', Carbon::now()->timestamp)
             ->orderBy('start', 'desc')
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 });
@@ -180,11 +180,11 @@ class Committee extends Model implements HasMedia
     {
         $activityIds = HelpingCommittee::query()->where('committee_id', $this->id)->pluck('activity_id');
 
-        return Event::getEventBlockQuery()->whereHas('activity', function ($q) use ($activityIds) {
+        return Event::getEventBlockQuery()->whereHas('activity', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($activityIds) {
             $q->whereIn('id', $activityIds);
         })
             ->unless(Auth::user()?->can('board'), static function ($q) {
-                $q->where(function ($q) {
+                $q->where(function (\Illuminate\Contracts\Database\Query\Builder $q) {
                     $q->where('secret', false)->orWhere('publication', '<', Carbon::now()->timestamp)
                         ->orWhereNull('publication');
                 });

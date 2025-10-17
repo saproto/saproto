@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Http\Requests\StoreEventRequest;
 use App\Models\Account;
 use App\Models\Activity;
@@ -40,7 +41,7 @@ class EventController extends Controller
         // if there is a category, get only the events that are in that category
         $events = Event::getEventBlockQuery()
             ->when($category, static function ($query) use ($category) {
-                $query->whereHas('Category', static function ($q) use ($category) {
+                $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
             })
@@ -248,7 +249,7 @@ class EventController extends Controller
         // if there is a category, get only the events that are in that category
         $eventsPerMonth = Event::getEventBlockQuery()
             ->unless(empty($category), static function ($query) use ($category) {
-                $query->whereHas('Category', static function ($q) use ($category) {
+                $query->whereHas('Category', static function (Builder $q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', null);
                 });
             })->where('start', '>', Carbon::create($year, 1, 1, 0, 0, 1)->timestamp)

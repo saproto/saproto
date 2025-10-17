@@ -15,9 +15,7 @@ class FileController extends Controller
     {
         $entry = Cache::remember('file-entry:'.$id, 31536000, fn (): StorageEntry => StorageEntry::query()->findOrFail($id));
 
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
+        abort_if($hash != $entry->hash, 404);
 
         $file = Storage::disk('local')->get($entry->filename);
 

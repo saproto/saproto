@@ -68,9 +68,7 @@ class UserDashboardController extends Controller
                 foreach ($user->roles as $role) {
                     /** @var Permission $permission */
                     foreach ($role->permissions as $permission) {
-                        if (! Auth::user()->can($permission->name)) {
-                            abort(403, 'You can not change the email of this person!.');
-                        }
+                        abort_unless(Auth::user()->can($permission->name), 403, 'You can not change the email of this person!.');
                     }
                 }
             }
@@ -409,13 +407,9 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (! $user->completed_profile) {
-            abort(403, 'You have not yet completed your membership profile.');
-        }
+        abort_unless($user->completed_profile, 403, 'You have not yet completed your membership profile.');
 
-        if ($user->is_member) {
-            abort(403, 'You cannot clear your membership profile while your membership is active.');
-        }
+        abort_if($user->is_member, 403, 'You cannot clear your membership profile while your membership is active.');
 
         return view('users.dashboard.clearprofile', ['user' => $user]);
     }
@@ -425,13 +419,9 @@ class UserDashboardController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (! $user->completed_profile) {
-            abort(403, 'You have not yet completed your membership profile.');
-        }
+        abort_unless($user->completed_profile, 403, 'You have not yet completed your membership profile.');
 
-        if ($user->is_member) {
-            abort(403, 'You cannot clear your membership profile while your membership is active.');
-        }
+        abort_if($user->is_member, 403, 'You cannot clear your membership profile while your membership is active.');
 
         $user->clearMemberProfile();
 

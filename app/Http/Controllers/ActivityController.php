@@ -118,13 +118,9 @@ class ActivityController extends Controller
      */
     public function checklist(Event $event): \Illuminate\Contracts\View\View|Factory
     {
-        if (! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user())) {
-            abort(403, 'You may not see this page.');
-        }
+        abort_if(! Auth::check() || ! Auth::user()->can('board') && ! $event->isEventAdmin(Auth::user()), 403, 'You may not see this page.');
 
-        if (! $event->activity) {
-            abort(404, 'This event has no activity.');
-        }
+        abort_unless($event->activity, 404, 'This event has no activity.');
 
         return view('event.checklist', ['event' => $event]);
     }

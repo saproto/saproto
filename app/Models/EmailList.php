@@ -59,7 +59,7 @@ class EmailList extends Model
      */
     protected function scopeSubscribed(Builder $query, User $user): Builder
     {
-        return $query->whereHas('users', function ($q) use ($user) {
+        return $query->whereHas('users', function (\Illuminate\Contracts\Database\Query\Builder $q) use ($user) {
             $q->where('user_id', $user->id);
         });
     }

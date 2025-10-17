@@ -100,7 +100,7 @@ class OrderLineController extends Controller
 
         $query = OrderLine::query()
             ->when(Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin'), function ($orderlines) {
-                $orderlines->whereHas('product', static function ($products) {
+                $orderlines->whereHas('product', static function (\Illuminate\Contracts\Database\Query\Builder $products) {
                     $products->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
                 });
             })

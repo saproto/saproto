@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,9 +18,7 @@ return new class extends Migration
         $tableNames = config('permission.table_names');
         $columnNames = config('permission.column_names');
 
-        if (empty($tableNames)) {
-            throw new Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
-        }
+        throw_if(empty($tableNames), Exception::class, 'Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
 
         Schema::table($tableNames['permissions'], function (Blueprint $table) {
             $table->string('guard_name')->after('display_name');
@@ -67,7 +66,7 @@ return new class extends Migration
             );
         });
 
-        app('cache')
+        app(Factory::class)
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
     }
@@ -82,9 +81,7 @@ return new class extends Migration
     {
         $tableNames = config('permission.table_names');
 
-        if (empty($tableNames)) {
-            throw new Exception('Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');
-        }
+        throw_if(empty($tableNames), Exception::class, 'Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');
 
         Schema::drop($tableNames['model_has_roles']);
         Schema::drop($tableNames['model_has_permissions']);

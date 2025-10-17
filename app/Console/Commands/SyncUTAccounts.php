@@ -59,7 +59,7 @@ class SyncUTAccounts extends Command
         $this->info('Removing. '.$notFoundUtAccounts->count().'. accounts that have not been found');
 
         $removed = User::query()->whereHas('member', function ($member) {
-            $member->whereHas('UtAccount', function ($q) {
+            $member->whereHas('UtAccount', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                 $q->where('found', false);
             });
         })->pluck('name')->map(fn ($name): string => 'Did not find the ut account associated with the membership for: '.$name);

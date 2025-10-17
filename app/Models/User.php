@@ -276,7 +276,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })

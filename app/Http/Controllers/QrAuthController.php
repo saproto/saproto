@@ -23,18 +23,14 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        if ($qrAuthRequest == null) {
-            abort(404);
-        }
+        abort_if($qrAuthRequest == null, 404);
 
         return response((new DNS2D)->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
     public function generateRequest(Request $request): QrAuthRequest
     {
-        if (! $request->has('description')) {
-            abort(500, 'No description was provided.');
-        }
+        abort_unless($request->has('description'), 500, 'No description was provided.');
 
         $qrAuthRequest = new QrAuthRequest;
         $qrAuthRequest->description = $request->description;
@@ -53,9 +49,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        if (! $qrAuthRequest) {
-            abort(404);
-        }
+        abort_unless($qrAuthRequest, 404);
 
         return view('auth.qr.dialog', ['description' => $qrAuthRequest->description, 'code' => $qrAuthRequest->qr_token]);
     }
@@ -68,9 +62,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        if (! $qrAuthRequest) {
-            abort(404);
-        }
+        abort_unless($qrAuthRequest, 404);
 
         $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
@@ -88,9 +80,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        if (! $qrAuthRequest) {
-            abort(403);
-        }
+        abort_unless($qrAuthRequest, 403);
 
         $qrAuthRequest->approved_at = Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
@@ -108,9 +98,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('qr_token', '=', $code)->first();
 
-        if (! $qrAuthRequest) {
-            abort(404);
-        }
+        abort_unless($qrAuthRequest, 404);
 
         return response()->json(['description' => $qrAuthRequest->description], 200);
     }
@@ -119,9 +107,7 @@ class QrAuthController extends Controller
     {
         $qrAuthRequest = QrAuthRequest::query()->where('auth_token', '=', $request->code)->first();
 
-        if (! $qrAuthRequest) {
-            abort(404);
-        }
+        abort_unless($qrAuthRequest, 404);
 
         if ($qrAuthRequest->isApproved()) {
             return 'true';

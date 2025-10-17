@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Events\NewWallstreetEvent;
 use App\Events\NewWallstreetLossCalculation;
 use App\Events\NewWallstreetPrice;
@@ -119,7 +120,7 @@ class UpdateWallstreetPrices extends Command
             }
         }
 
-        $randomEventQuery = WallstreetEvent::query()->inRandomOrder()->whereHas('products', static function ($q) use ($currentDrink) {
+        $randomEventQuery = WallstreetEvent::query()->inRandomOrder()->whereHas('products', static function (Builder $q) use ($currentDrink) {
             $q->whereIn('products.id', $currentDrink->products->pluck('id'));
         })->where('active', true);
 

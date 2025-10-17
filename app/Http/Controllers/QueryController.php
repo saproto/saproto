@@ -130,12 +130,12 @@ class QueryController extends Controller
                 ->sum('participants');
             /** @phpstan-ignore-next-line */
             $category->signups = ActivityParticipation::query()->whereHas('activity', static function ($query) use ($category, $start, $end) {
-                $query->whereHas('event', static function ($query) use ($category, $start, $end) {
+                $query->whereHas('event', static function (\Illuminate\Contracts\Database\Query\Builder $query) use ($category, $start, $end) {
                     $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
                 })->where('participants', '>', 0);
             })->count();
             /** @phpstan-ignore-next-line */
-            $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function ($query) use ($category, $start, $end) {
+            $category->attendees = Activity::query()->where('participants', '>', 0)->whereHas('event', static function (\Illuminate\Contracts\Database\Query\Builder $query) use ($category, $start, $end) {
                 $query->where('category_id', $category->id)->where('start', '>=', $start)->where('end', '<=', $end)->whereNotLike('title', '%cancel%');
             })->sum('attendees');
         }

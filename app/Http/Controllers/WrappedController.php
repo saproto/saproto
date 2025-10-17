@@ -72,7 +72,7 @@ class WrappedController extends Controller
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereIn('id', static function (Builder $query) {
                     $query->select('event_id')
                         ->from('tickets')

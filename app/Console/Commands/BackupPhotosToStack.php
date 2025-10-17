@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Photo;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ class BackupPhotosToStack extends Command
      */
     public function handle(): void
     {
-        $photos = Photo::query()->withoutGlobalScopes()->whereHas('media')->whereHas('album', function ($q) {
+        $photos = Photo::query()->withoutGlobalScopes()->whereHas('media')->whereHas('album', function (Builder $q) {
             $q->withoutGlobalScopes();
         })->with(['album' => function ($q) {
             $q->withoutGlobalScopes();

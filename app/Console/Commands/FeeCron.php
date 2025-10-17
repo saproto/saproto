@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Enums\MembershipTypeEnum;
 use App\Mail\FeeEmail;
 use App\Mail\FeeEmailForBoard;
@@ -57,7 +58,7 @@ class FeeCron extends Command
 
         $usersToCharge = User::query()->whereHas('member', function ($q) {
             $q->whereNot('membership_type', MembershipTypeEnum::PENDING);
-        })->whereDoesntHave('orderlines', function ($q) use ($yearstart) {
+        })->whereDoesntHave('orderlines', function (Builder $q) use ($yearstart) {
             $q->whereIn('product_id', array_values(Config::array('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01');
         })->with('member.UtAccount');
 

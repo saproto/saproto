@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use App\Models\Account;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class TIPCieController extends Controller
 
         $products = Product::query()
             ->where('account_id', $tipcieAccount->id)
-            ->whereHas('orderlines', function ($q) use ($startDate, $endDate) {
+            ->whereHas('orderlines', function (Builder $q) use ($startDate, $endDate) {
                 $q->where('created_at', '>=', $startDate)->where('created_at', '<', $endDate);
             })->withSum(['orderlines' => function ($q) use ($startDate, $endDate) {
                 $q->where('created_at', '>=', $startDate)->where('created_at', '<', $endDate);

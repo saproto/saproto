@@ -175,24 +175,24 @@ class Email extends Model implements HasMedia
 
         if ($this->to_event) {
             return User::query()->whereHas('activities', function ($q) {
-                $q->whereHas('event', function ($q) {
-                    $q->whereHas('emails', function ($q) {
+                $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                         $q->where('emails.id', $this->id);
                     });
                 });
             })
                 ->when($this->to_backup, function ($query) {
-                    $query->orWhereHas('backupActivities', function ($q) {
-                        $q->whereHas('event', function ($q) {
-                            $q->whereHas('emails', function ($q) {
+                    $query->orWhereHas('backupActivities', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                        $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                            $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                                 $q->where('emails.id', $this->id);
                             });
                         });
                     });
                 })
-                ->orWhereHas('tickets', function ($q) {
-                    $q->whereHas('event', function ($q) {
-                        $q->whereHas('emails', function ($q) {
+                ->orWhereHas('tickets', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                    $q->whereHas('event', function (\Illuminate\Contracts\Database\Query\Builder $q) {
+                        $q->whereHas('emails', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                             $q->where('emails.id', $this->id);
                         });
                     });

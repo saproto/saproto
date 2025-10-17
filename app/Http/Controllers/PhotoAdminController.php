@@ -134,9 +134,7 @@ class PhotoAdminController extends Controller
         if ($photos) {
             $album = PhotoAlbum::query()->findOrFail($id);
 
-            if ($album->published && ! Auth::user()->can('publishalbums')) {
-                abort(403, 'Unauthorized action.');
-            }
+            abort_if($album->published && ! Auth::user()->can('publishalbums'), 403, 'Unauthorized action.');
 
             switch ($action) {
                 case 'remove':

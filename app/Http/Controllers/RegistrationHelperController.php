@@ -28,12 +28,12 @@ class RegistrationHelperController extends Controller
         });
 
         if ($search) {
-            $users = $users->where(static function ($q) use ($search) {
+            $users = $users->where(static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
                     ->orWhere('calling_name', 'LIKE', "%{$search}%")
                     ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('utwente_username', 'LIKE', "%{$search}%")
-                    ->orWhereHas('member', static function ($q) use ($search) {
+                    ->orWhereHas('member', static function (\Illuminate\Contracts\Database\Query\Builder $q) use ($search) {
                         $q->where('proto_username', 'LIKE', "%{$search}%");
                     });
             });

@@ -18,9 +18,7 @@ class LeaderboardEntryController extends Controller
     {
         $leaderboard = Leaderboard::query()->findOrFail($request->input('leaderboard_id'));
 
-        if (! $leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
 
         if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
             Session::flash('flash_message', 'There is already a entry for this user');
@@ -46,9 +44,7 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::query()->findOrFail($request->id);
 
-        if (! $entry->leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($entry->leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
 
         $entry->points = $request->points;
         $entry->save();
@@ -65,9 +61,7 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::query()->findOrFail($id);
 
-        if (! $entry->leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($entry->leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$entry->leaderboard->committee->name} can edit this leaderboard");
 
         $entry->delete();
         Session::flash('flash_message', 'The entry has been deleted.');
