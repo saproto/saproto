@@ -189,7 +189,16 @@ class Email extends Model implements HasMedia
                             });
                         });
                     });
-                })->orderBy('name')->get();
+                })
+                ->orWhereHas('tickets', function ($q) {
+                    $q->whereHas('event', function ($q) {
+                        $q->whereHas('emails', function ($q) {
+                            $q->where('emails.id', $this->id);
+                        });
+                    });
+                })
+
+                ->orderBy('name')->get();
         }
 
         return collect();
@@ -214,20 +223,6 @@ class Email extends Model implements HasMedia
         }
 
         return str_replace($variable_from, $variable_to, $this->body);
-    }
-
-    public function getEventName(): string
-    {
-        $events = [];
-        if (! $this->to_event) {
-            return '';
-        }
-
-        foreach ($this->events as $event) {
-            $events[] = $event->title;
-        }
-
-        return implode(', ', $events);
     }
 
     public static function getListUnsubscribeFooter(int $user_id, int $email_id): string
