@@ -143,7 +143,7 @@ class Event extends Model implements HasMedia
         }
 
         throw new HttpResponseException(
-            redirect()->route('event::show', $model->getRouteKey())
+            to_route('event::show', $model->getRouteKey())
         );
     }
 

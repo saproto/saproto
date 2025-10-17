@@ -72,9 +72,7 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 continue;
             }
@@ -93,9 +91,7 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
 
@@ -114,9 +110,7 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
 
@@ -149,21 +143,13 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
             }
 
-            NewWallstreetEvent::dispatch(
-                $currentDrink->id,
-                $randomEvent
-            );
+            event(new NewWallstreetEvent($currentDrink->id, $randomEvent));
         }
 
-        NewWallstreetLossCalculation::dispatch(
-            $currentDrink->id,
-            $currentDrink->loss()
-        );
+        event(new NewWallstreetLossCalculation($currentDrink->id, $currentDrink->loss()));
 
         return 0;
     }

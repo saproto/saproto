@@ -153,7 +153,7 @@ class EventController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -165,7 +165,7 @@ class EventController extends Controller
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
 
-        return Redirect::route('event::show', ['event' => $event]);
+        return to_route('event::show', ['event' => $event]);
     }
 
     /**
@@ -177,11 +177,9 @@ class EventController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws FileNotFoundException
      */
-    public function update(StoreEventRequest $request, Event $event)
+    public function update(StoreEventRequest $request, Event $event): RedirectResponse
     {
         $event->title = $request->title;
         $event->start = $request->date('start')->timestamp;
@@ -200,7 +198,7 @@ class EventController extends Controller
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
 
-            return Redirect::back();
+            return back();
         }
 
         $file = $request->file('image');
@@ -212,7 +210,7 @@ class EventController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -236,7 +234,7 @@ class EventController extends Controller
             Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -286,7 +284,7 @@ class EventController extends Controller
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
 
-            return Redirect::back();
+            return back();
         }
 
         Session::flash('flash_message', "The event '".$event->title."' has been deleted.");
@@ -297,7 +295,7 @@ class EventController extends Controller
 
         $event->delete();
 
-        return Redirect::route('event::index');
+        return to_route('event::index');
     }
 
     /**
@@ -305,20 +303,20 @@ class EventController extends Controller
      */
     public function forceLogin(Event $event)
     {
-        return Redirect::route('event::show', ['event' => $event]);
+        return to_route('event::show', ['event' => $event]);
     }
 
     /**
      * @return RedirectResponse|View
      */
-    public function admin(Event $event)
+    public function admin(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         $event->load(['tickets.purchases.user', 'tickets.purchases.orderline.molliePayment', 'tickets.product']);
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('event.admin', ['event' => $event]);
@@ -327,22 +325,19 @@ class EventController extends Controller
     /**
      * @return RedirectResponse|View
      */
-    public function scan(Event $event)
+    public function scan(Event $event): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('event.scan', ['event' => $event]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function finclose(Request $request, int $id)
+    public function finclose(Request $request, int $id): RedirectResponse
     {
         /** @var Activity $activity */
         $activity = Activity::query()->findOrFail($id);
@@ -350,13 +345,13 @@ class EventController extends Controller
         if ($activity->event && ! $activity->event->over()) {
             Session::flash('flash_message', 'You cannot close an activity before it has finished.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($activity->closed) {
             Session::flash('flash_message', 'This activity is already closed.');
 
-            return Redirect::back();
+            return back();
         }
 
         $activity->attendees = $request->input('attendees');
@@ -370,7 +365,7 @@ class EventController extends Controller
 
             Session::flash('flash_message', 'This activity is now closed. It either was free or had no participants, so no orderlines or products were created.');
 
-            return Redirect::back();
+            return back();
         }
 
         $product = Product::query()->create([
@@ -390,13 +385,10 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'This activity has been closed and the relevant orderlines were added.');
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function linkAlbum(Request $request, Event $event)
+    public function linkAlbum(Request $request, Event $event): RedirectResponse
     {
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($request->album_id);
@@ -406,13 +398,10 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The album '.$album->name.' has been linked to this activity!');
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function unlinkAlbum(int $album)
+    public function unlinkAlbum(int $album): RedirectResponse
     {
         /** @var PhotoAlbum $album */
         $album = PhotoAlbum::query()->findOrFail($album);
@@ -421,7 +410,7 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The album '.$album->name.' has been unlinked from an activity!');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -520,7 +509,7 @@ class EventController extends Controller
             Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function toggleRelevantOnly(): RedirectResponse
@@ -533,7 +522,7 @@ class EventController extends Controller
             Session::flash('flash_message', 'From now on your calendar will sync all events.');
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function icalCalendar(?string $personal_key = null): \Illuminate\Http\Response

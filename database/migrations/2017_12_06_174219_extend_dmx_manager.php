@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ExtendDmxManager extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -41,4 +41,4 @@ class ExtendDmxManager extends Migration
         Schema::drop('dmx_overrides');
         Schema::rename('dmx_channels', 'dmx_channel_names');
     }
-}
+};

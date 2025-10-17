@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CodexTextType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class CodexTextTypeController extends Controller
@@ -20,13 +19,13 @@ class CodexTextTypeController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'type' => 'required|string|max:255',
+            'type' => ['required', 'string', 'max:255'],
         ]);
         $type = new CodexTextType;
         $type->type = $validated['type'];
         $type->save();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function show(CodexTextType $codexTextType): void {}
@@ -39,12 +38,12 @@ class CodexTextTypeController extends Controller
     public function update(Request $request, CodexTextType $codexTextType): RedirectResponse
     {
         $validated = $request->validate([
-            'type' => 'required|string|max:255',
+            'type' => ['required', 'string', 'max:255'],
         ]);
         $codexTextType->type = $validated['type'];
         $codexTextType->save();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function destroy(CodexTextType $codexTextType): RedirectResponse
@@ -52,6 +51,6 @@ class CodexTextTypeController extends Controller
         $codexTextType->texts()->delete();
         $codexTextType->delete();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 }

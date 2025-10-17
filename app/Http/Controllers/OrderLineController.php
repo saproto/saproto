@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Mollie\Api\Exceptions\ApiException;
@@ -143,10 +142,7 @@ class OrderLineController extends Controller
         ]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function bulkStore(Request $request)
+    public function bulkStore(Request $request): RedirectResponse
     {
         $counter = count($request->input('user'));
         for ($i = 0; $i < $counter; $i++) {
@@ -160,15 +156,13 @@ class OrderLineController extends Controller
 
         Session::flash('flash_message', 'Your manual orders have been added.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
      * Store (a) simple orderline(s).
-     *
-     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $counter = count($request->input('user'));
         for ($u = 0; $u < $counter; $u++) {
@@ -182,16 +176,15 @@ class OrderLineController extends Controller
 
         Session::flash('flash_message', 'Your manual orders have been added.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): RedirectResponse
     {
         /** @var OrderLine $order */
         $order = OrderLine::query()->findOrFail($id);
@@ -199,7 +192,7 @@ class OrderLineController extends Controller
         if (! $order->canBeDeleted()) {
             Session::flash('flash_message', 'The orderline cannot be deleted.');
 
-            return Redirect::back();
+            return back();
         }
 
         $order->product->stock += $order->units;
@@ -218,7 +211,7 @@ class OrderLineController extends Controller
 
         Session::flash('flash_message', 'The orderline was deleted.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**

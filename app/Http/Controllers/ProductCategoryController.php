@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -35,7 +34,7 @@ class ProductCategoryController extends Controller
 
         Session::flash('flash_message', 'Category '.$category->name.' created.');
 
-        return Redirect::route('omnomcom::categories::index');
+        return to_route('omnomcom::categories::index');
     }
 
     /**
@@ -62,7 +61,7 @@ class ProductCategoryController extends Controller
 
         Session::flash('flash_message', 'Category '.$category->name.' saved.');
 
-        return Redirect::route('omnomcom::categories::index');
+        return to_route('omnomcom::categories::index');
     }
 
     /**
@@ -79,6 +78,6 @@ class ProductCategoryController extends Controller
         Session::flash('flash_message', 'Category '.$category->name.' deleted.');
         $category->delete();
 
-        return Redirect::route('omnomcom::categories::index');
+        return to_route('omnomcom::categories::index');
     }
 }

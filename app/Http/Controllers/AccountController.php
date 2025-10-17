@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -45,7 +44,7 @@ class AccountController extends Controller
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') created.');
 
-        return Redirect::route('omnomcom::accounts::index');
+        return to_route('omnomcom::accounts::index');
     }
 
     public function edit(int $id): View
@@ -62,7 +61,7 @@ class AccountController extends Controller
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') saved.');
 
-        return Redirect::route('omnomcom::accounts::index');
+        return to_route('omnomcom::accounts::index');
     }
 
     /**
@@ -78,13 +77,13 @@ class AccountController extends Controller
         if ($account->products->count() > 0) {
             Session::flash('flash_message', 'Could not delete account '.$account->account_number.' ('.$account->name.') since there are products associated with this account.');
 
-            return Redirect::back();
+            return back();
         }
 
         Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') deleted.');
         $account->delete();
 
-        return Redirect::route('omnomcom::accounts::index');
+        return to_route('omnomcom::accounts::index');
     }
 
     /**

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-class AddUuidToFailedJobs extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class AddUuidToFailedJobs extends Migration
             $table->dropColumn('uuid');
         });
     }
-}
+};

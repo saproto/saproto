@@ -6,7 +6,6 @@ use App\Models\CodexText;
 use App\Models\CodexTextType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -19,7 +18,7 @@ class CodexTextController extends Controller
         if (! CodexTextType::query()->count()) {
             Session::flash('flash_message', 'You need to add a text type first!');
 
-            return Redirect::route('codex.index');
+            return to_route('codex.index');
         }
 
         $textTypes = CodexTextType::query()->orderBy('type')->get();
@@ -32,7 +31,7 @@ class CodexTextController extends Controller
         $text = new CodexText;
         $this->saveText($text, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function show(CodexText $codexText): void {}
@@ -49,7 +48,7 @@ class CodexTextController extends Controller
     {
         $this->saveText($codexText, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function destroy(CodexText $codexText): RedirectResponse
@@ -57,15 +56,15 @@ class CodexTextController extends Controller
         $codexText->codices()->detach();
         $codexText->delete();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     private function saveText(CodexText $codexText, Request $request): void
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category' => 'required|integer',
-            'text' => 'required|string',
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'integer'],
+            'text' => ['required', 'string'],
         ]);
         $codexText->name = $validated['name'];
         $codexText->type_id = $validated['category'];

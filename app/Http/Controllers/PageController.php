@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -65,7 +64,7 @@ class PageController extends Controller
 
         Session::flash('flash_message', "Page $page->title has been created.");
 
-        return Redirect::route('page::list');
+        return to_route('page::list');
     }
 
     /**
@@ -126,7 +125,7 @@ class PageController extends Controller
 
         Session::flash('flash_message', 'Page '.$page->title.' has been saved.');
 
-        return Redirect::route('page::list');
+        return to_route('page::list');
     }
 
     /**
@@ -143,7 +142,7 @@ class PageController extends Controller
 
         $page->delete();
 
-        return Redirect::route('page::list');
+        return to_route('page::list');
     }
 
     /**
@@ -152,7 +151,7 @@ class PageController extends Controller
     public function addFile(Request $request, int $id)
     {
         $request->validate([
-            'file' => 'required|file|max:5120|mimes:pdf,jpg,png,jpeg', // max 5MB
+            'file' => ['required', 'file', 'max:5120', 'mimes:pdf,jpg,png,jpeg'], // max 5MB
         ]);
         $page = Page::query()->findOrFail($id);
 
@@ -168,10 +167,10 @@ class PageController extends Controller
         } catch (FileDoesNotExist|FileIsTooBig $e) {
             Session::flash('flash_message', $e->getMessage());
 
-            return Redirect::back();
+            return back();
         }
 
-        return Redirect::route('page::edit', ['id' => $id]);
+        return to_route('page::edit', ['id' => $id]);
     }
 
     /**
@@ -183,6 +182,6 @@ class PageController extends Controller
         $item = $page->media()->where('id', $file_id)->firstOrFail();
         $item->delete();
 
-        return Redirect::route('page::edit', ['id' => $id]);
+        return to_route('page::edit', ['id' => $id]);
     }
 }

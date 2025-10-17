@@ -37,7 +37,7 @@ class WallstreetController extends Controller
         if (! $activeDrink instanceof WallstreetDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
 
-            return Redirect::back();
+            return back();
         }
 
         $prices = $this->getLatestPrices($activeDrink);
@@ -114,7 +114,7 @@ class WallstreetController extends Controller
         $drink->save();
         Session::flash('flash_message', 'Wallstreet drink closed.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function addProducts(int $id, Request $request): RedirectResponse
@@ -139,7 +139,7 @@ class WallstreetController extends Controller
         $drink->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet drink.');
 
-        return Redirect::back();
+        return back();
     }
 
     public static function active(): ?WallstreetDrink
@@ -275,6 +275,6 @@ class WallstreetController extends Controller
         $event->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet Event.');
 
-        return Redirect::back();
+        return back();
     }
 }

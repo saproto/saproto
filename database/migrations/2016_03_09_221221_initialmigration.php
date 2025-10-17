@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class Initialmigration extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -128,4 +128,4 @@ class Initialmigration extends Migration
         Schema::drop('studies_users');
         Schema::drop('utwentes');
     }
-}
+};

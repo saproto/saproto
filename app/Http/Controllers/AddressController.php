@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Address;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -22,7 +22,7 @@ class AddressController extends Controller
         $user = Auth::user();
 
         if ($user->address) {
-            return Redirect::route('user::address::edit', ['id' => $user->id, 'wizard' => $request->wizard]);
+            return to_route('user::address::edit', ['id' => $user->id, 'wizard' => $request->wizard]);
         }
 
         if ($request->has('wizard')) {
@@ -48,7 +48,7 @@ class AddressController extends Controller
     /**
      * @return View|RedirectResponse
      */
-    public function edit(Request $request)
+    public function edit(Request $request): RedirectResponse|Factory|\Illuminate\Contracts\View\View
     {
         $user = Auth::user();
         $address = $user->address;
@@ -56,7 +56,7 @@ class AddressController extends Controller
         if ($address == null) {
             Session::flash('flash_message', "We don't have an address for you?");
 
-            return Redirect::back();
+            return back();
         }
 
         if ($request->has('wizard')) {
@@ -77,7 +77,7 @@ class AddressController extends Controller
         if ($address == null) {
             Session::flash('flash_message', "We don't have an address for you?");
 
-            return Redirect::back();
+            return back();
         }
 
         return self::saveAddressData($request, $address, $user);
@@ -94,24 +94,23 @@ class AddressController extends Controller
         if (! $user->address) {
             Session::flash('flash_message', "We don't have an address for you?");
 
-            return Redirect::back();
+            return back();
         }
 
         if ($user->is_member) {
             Session::flash('flash_message', "You are a member. You can't delete your address!");
 
-            return Redirect::back();
+            return back();
         }
 
         $user->address->delete();
 
         Session::flash('flash_message', 'Your address has been deleted.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
-    /** @return RedirectResponse */
-    public function toggleHidden()
+    public function toggleHidden(): RedirectResponse
     {
         $user = Auth::user();
 
@@ -120,7 +119,7 @@ class AddressController extends Controller
 
         Session::flash('flash_message', 'Your primary address is now '.($user->address_visible ? 'visible' : 'hidden').' for members.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -132,7 +131,7 @@ class AddressController extends Controller
         $addressdata['user_id'] = $user->id;
 
         if (! $address->validate($addressdata)) {
-            return Redirect::route('user::address::edit')->withErrors($address->errors());
+            return to_route('user::address::edit')->withErrors($address->errors());
         }
 
         $address->fill($addressdata);
@@ -141,9 +140,9 @@ class AddressController extends Controller
         $address->save();
 
         if (Session::get('wizard')) {
-            return Redirect::route('becomeamember');
+            return to_route('becomeamember');
         }
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 }

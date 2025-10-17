@@ -10,15 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 
 class LeaderboardEntryController extends Controller
 {
-    /**
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $leaderboard = Leaderboard::query()->findOrFail($request->input('leaderboard_id'));
 
@@ -29,7 +25,7 @@ class LeaderboardEntryController extends Controller
         if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
             Session::flash('flash_message', 'There is already a entry for this user');
 
-            return Redirect::back();
+            return back();
         }
 
         $entry = LeaderboardEntry::query()->create($request->all());
@@ -40,7 +36,7 @@ class LeaderboardEntryController extends Controller
 
         Session::flash('flash_message', 'Added new entry successfully.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -62,11 +58,10 @@ class LeaderboardEntryController extends Controller
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $entry = LeaderboardEntry::query()->findOrFail($id);
 
@@ -77,6 +72,6 @@ class LeaderboardEntryController extends Controller
         $entry->delete();
         Session::flash('flash_message', 'The entry has been deleted.');
 
-        return Redirect::back();
+        return back();
     }
 }

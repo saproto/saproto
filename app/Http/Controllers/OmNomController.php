@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use stdClass;
@@ -35,7 +34,7 @@ class OmNomController extends Controller
         if (! array_key_exists($store_slug, Config::array('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
 
-            return Redirect::route('homepage');
+            return to_route('homepage');
         }
 
         $store = Config::array('omnomcom.stores')[$store_slug];

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRedirectUrlToJoboffers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,4 +27,4 @@ class AddRedirectUrlToJoboffers extends Migration
             $table->text('description')->nullable(false)->change();
         });
     }
-}
+};

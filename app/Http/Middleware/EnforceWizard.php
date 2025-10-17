@@ -7,7 +7,6 @@ use Closure;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class EnforceWizard
 {
@@ -21,7 +20,7 @@ class EnforceWizard
     {
         if (Auth::check() && HashMapItem::key('wizard')->subkey((string) Auth::user()->id)->first() && ! $request->is('api/*')) {
             if (! $request->is('becomeamember')) {
-                return Redirect::route('becomeamember');
+                return to_route('becomeamember');
             }
 
             HashMapItem::key('wizard')->subkey((string) Auth::user()->id)->first()->delete();

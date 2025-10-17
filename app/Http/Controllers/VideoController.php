@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Youtube;
@@ -37,11 +36,9 @@ class VideoController extends Controller
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public static function store(Request $request)
+    public static function store(Request $request): RedirectResponse
     {
         $youtube_id = $request->youtube_id;
         $youtube_video = Youtube::getVideoInfo($youtube_id);
@@ -49,19 +46,19 @@ class VideoController extends Controller
         if ($youtube_video != null) {
             Session::flash('flash_message', 'This is an invalid YouTube video ID!');
 
-            return Redirect::back();
+            return back();
         }
 
         if (! $youtube_video->status->embeddable) {
             Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
 
-            return Redirect::back();
+            return back();
         }
 
         if (Video::query()->where('youtube_id', $youtube_video->id)->count() > 0) {
             Session::flash('flash_message', 'This video has already been added!');
 
-            return Redirect::back();
+            return back();
         }
 
         Video::query()->create([
@@ -77,7 +74,7 @@ class VideoController extends Controller
 
         Session::flash('flash_message', sprintf('The video %s has been added!', $youtube_video->snippet->title));
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -108,20 +105,18 @@ class VideoController extends Controller
 
         Session::flash('flash_message', sprintf('The video %s has been updated!', $video->title));
 
-        return Redirect::route('video::admin::index');
+        return to_route('video::admin::index');
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public static function destroy(Request $request)
+    public static function destroy(Request $request): RedirectResponse
     {
         $video = Video::query()->findOrFail($request->id);
         Session::flash('flash_message', sprintf('The video <strong>%s</strong> has been deleted!', $video->title));
         $video->delete();
 
-        return Redirect::back();
+        return back();
     }
 }

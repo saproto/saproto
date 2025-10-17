@@ -33,7 +33,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         return view('users.register');
@@ -47,11 +47,11 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
-            'create_without_ut_account' => 'nullable',
-            'name' => 'required_if:create_without_ut_account,true|string',
-            'calling_name' => 'required_if:create_without_ut_account,true|string',
-            'g-recaptcha-response' => 'required|captcha',
-            'privacy_policy_acceptance' => 'required|accepted',
+            'create_without_ut_account' => ['nullable'],
+            'name' => ['required_if:create_without_ut_account,true', 'string'],
+            'calling_name' => ['required_if:create_without_ut_account,true', 'string'],
+            'g-recaptcha-response' => ['required', 'captcha'],
+            'privacy_policy_acceptance' => ['required', 'accepted'],
         ]);
 
         // create with UT account, redirect to UT login
@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         Session::flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
 
-        return Redirect::route('homepage');
+        return to_route('homepage');
     }
 
     /**
@@ -108,7 +108,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::route('homepage');
+        return to_route('homepage');
     }
 
     /**
@@ -121,7 +121,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::route($request->route, $request->parameters);
+        return to_route($request->route, $request->parameters);
     }
 
     /* These are the static helper functions of the AuthController for more overview and modularity. */
@@ -197,7 +197,7 @@ class AuthController extends Controller
 
         Session::flash('flash_message', 'Invalid username or password provided.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**

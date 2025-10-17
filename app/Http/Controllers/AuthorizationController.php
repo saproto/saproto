@@ -7,7 +7,6 @@ use App\Services\ProTubeApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Permission;
@@ -28,7 +27,7 @@ class AuthorizationController extends Controller
         if ($id == Config::integer('proto.rootrole')) {
             Session::flash('flash_message', 'This role can only be manually added in the database.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var Role $role */
@@ -39,14 +38,14 @@ class AuthorizationController extends Controller
         if ($user->hasRole($role)) {
             Session::flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
 
-            return Redirect::back();
+            return back();
         }
 
         $user->assignRole($role);
 
         Session::flash('flash_message', $user->name.' has been granted role: <strong>'.$role->name.'</strong>.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -58,7 +57,7 @@ class AuthorizationController extends Controller
         if ($id == Config::integer('proto.rootrole')) {
             Session::flash('flash_message', 'This role can only be manually removed in the database.');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var Role $role */
@@ -73,12 +72,12 @@ class AuthorizationController extends Controller
             if (! $updatedAdmin) {
                 Session::flash('flash_message', 'Failed to remove ProTube admin status for '.$user->name.'.');
 
-                return Redirect::back();
+                return back();
             }
         }
 
         Session::flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
 
-        return Redirect::back();
+        return back();
     }
 }

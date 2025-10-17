@@ -6,7 +6,6 @@ use App\Models\DmxFixture;
 use App\Models\DmxOverride;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -43,7 +42,7 @@ class DmxOverrrideController extends Controller
 
         Session::flash('flash_message', 'Override created.');
 
-        return Redirect::route('dmx.overrides.edit', ['override' => $override]);
+        return to_route('dmx.overrides.edit', ['override' => $override]);
     }
 
     public function edit(DmxOverride $override): View
@@ -69,7 +68,7 @@ class DmxOverrrideController extends Controller
 
         Session::flash('flash_message', 'Override updated.');
 
-        return Redirect::route('dmx.overrides.edit', ['override' => $override]);
+        return to_route('dmx.overrides.edit', ['override' => $override]);
     }
 
     public function destroy(DmxOverride $override): RedirectResponse
@@ -77,6 +76,6 @@ class DmxOverrrideController extends Controller
         Session::flash('flash_message', 'The override has been deleted.');
         $override->delete();
 
-        return Redirect::route('dmx.overrides.index');
+        return to_route('dmx.overrides.index');
     }
 }
