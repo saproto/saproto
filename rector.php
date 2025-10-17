@@ -7,7 +7,6 @@ use Rector\Config\RectorConfig;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
-use RectorLaravel\Rector\MethodCall\ConvertEnumerableToArrayToAllRector;
 use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
 use RectorLaravel\Rector\MethodCall\ResponseHelperCallToJsonResponseRector;
 use RectorLaravel\Rector\MethodCall\WhereToWhereLikeRector;
@@ -53,7 +52,6 @@ try {
         ])
         ->withSkip([
             EloquentOrderByToLatestOrOldestRector::class,
-            ConvertEnumerableToArrayToAllRector::class,
             RenameClassRector::class,
             AddHasFactoryToModelsRector::class,
         ])
