@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('allow_anonymous_email')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

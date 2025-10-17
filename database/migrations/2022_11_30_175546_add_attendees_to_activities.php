@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('attendees')->after('hide_participants')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

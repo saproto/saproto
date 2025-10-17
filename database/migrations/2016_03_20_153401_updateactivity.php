@@ -22,6 +22,7 @@ return new class extends Migration
             $table->renameColumn('committees_events_id', 'committees_activities_id');
         });
     }
+
     /**
      * Reverse the migrations.
      */

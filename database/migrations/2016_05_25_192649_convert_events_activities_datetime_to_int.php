@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('registration_end')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

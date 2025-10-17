@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('omnomcom_sound_id')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

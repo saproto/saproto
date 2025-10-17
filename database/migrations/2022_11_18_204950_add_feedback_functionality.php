@@ -111,6 +111,7 @@ return new class extends Migration
             Schema::drop('quotes_users');
         }
     }
+
     /**
      * Reverse the migrations.
      */

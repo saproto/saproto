@@ -21,6 +21,7 @@ return new class extends Migration
             $row->save();
         }
     }
+
     /**
      * Reverse the migrations.
      */

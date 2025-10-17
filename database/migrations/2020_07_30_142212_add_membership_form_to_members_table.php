@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('pending')->after('is_donator')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

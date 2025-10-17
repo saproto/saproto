@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('signed_nda')->after('tfa_totp_key')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

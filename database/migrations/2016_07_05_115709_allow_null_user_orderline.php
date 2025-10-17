@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('user_id')->nullable()->default(null)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

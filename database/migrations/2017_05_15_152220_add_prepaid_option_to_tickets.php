@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('payment_complete')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

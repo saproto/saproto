@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('publication')->after('end')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

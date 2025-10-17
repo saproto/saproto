@@ -15,6 +15,7 @@ return new class extends Migration
             $table->dropColumn('proto_username');
         });
     }
+
     /**
      * Reverse the migrations.
      */

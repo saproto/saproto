@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dropColumn('slug');
         });
     }
+
     /**
      * Reverse the migrations.
      */

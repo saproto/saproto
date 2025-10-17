@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('correction_orderline_id');
         });
     }
+
     /**
      * Reverse the migrations.
      */

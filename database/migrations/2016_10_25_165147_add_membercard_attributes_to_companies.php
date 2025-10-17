@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('membercard_long')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

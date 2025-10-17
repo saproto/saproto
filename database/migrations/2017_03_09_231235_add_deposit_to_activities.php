@@ -14,6 +14,7 @@ return new class extends Migration
             $table->float('no_show_fee', 8, 2)->after('price')->default(0.0);
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('proto_username')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

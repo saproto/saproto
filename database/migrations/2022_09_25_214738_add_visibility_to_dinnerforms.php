@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('visible_home_page')->default(true);
         });
     }
+
     /**
      * Reverse the migrations.
      */

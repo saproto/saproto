@@ -15,6 +15,7 @@ return new class extends Migration
             $table->datetime('payed_with_bank_card')->after('payed_with_cash')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

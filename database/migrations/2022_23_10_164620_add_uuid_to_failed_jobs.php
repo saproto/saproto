@@ -23,6 +23,7 @@ return new class extends Migration
                 ->update(['uuid' => (string) Str::uuid()]);
         });
     }
+
     /**
      * Reverse the migrations.
      */

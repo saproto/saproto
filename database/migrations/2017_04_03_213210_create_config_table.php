@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('value')->nullable(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

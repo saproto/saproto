@@ -14,6 +14,7 @@ return new class extends Migration
             $table->integer('sort');
         });
     }
+
     /**
      * Reverse the migrations.
      */

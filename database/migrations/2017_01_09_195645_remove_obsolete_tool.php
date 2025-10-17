@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::drop('pastries');
     }
+
     /**
      * Reverse the migrations.
      */

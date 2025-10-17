@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('fa_icon')->nullable()->after('desc');
         });
     }
+
     /**
      * Reverse the migrations.
      */

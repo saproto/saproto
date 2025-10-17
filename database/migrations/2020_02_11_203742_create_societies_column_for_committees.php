@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('is_society')->after('allow_anonymous_email')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

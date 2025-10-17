@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('failed_at')->useCurrent();
         });
     }
+
     /**
      * Reverse the migrations.
      */

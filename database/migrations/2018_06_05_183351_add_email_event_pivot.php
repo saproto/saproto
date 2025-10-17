@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('to_event')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

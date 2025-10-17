@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('utwente')->default(true);
         });
     }
+
     /**
      * Reverse the migrations.
      */

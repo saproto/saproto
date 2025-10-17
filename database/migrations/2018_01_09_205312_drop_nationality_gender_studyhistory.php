@@ -19,6 +19,7 @@ return new class extends Migration
         Schema::drop('pages_studies');
         Schema::drop('studies');
     }
+
     /**
      * Reverse the migrations.
      */

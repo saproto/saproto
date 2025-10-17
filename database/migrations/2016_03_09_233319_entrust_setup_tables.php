@@ -55,6 +55,7 @@ return new class extends Migration
             $table->primary(['permission_id', 'role_id']);
         });
     }
+
     /**
      * Reverse the migrations.
      */

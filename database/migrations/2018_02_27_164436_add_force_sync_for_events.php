@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('force_calendar_sync')->after('secret')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

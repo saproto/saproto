@@ -18,6 +18,7 @@ return new class extends Migration
 
         AchievementOwnership::query()->where('alerted', false)->update(['alerted' => true]);
     }
+
     /**
      * Reverse the migrations.
      */

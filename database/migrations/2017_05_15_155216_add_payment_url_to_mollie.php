@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('payment_url')->nullable(true)->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

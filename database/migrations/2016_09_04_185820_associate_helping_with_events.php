@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dropColumn('organizing_commitee');
         });
     }
+
     /**
      * This is a one-way migration!
      */

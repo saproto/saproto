@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dropColumn('fb_id');
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('last_activity');
         });
     }
+
     /**
      * Reverse the migrations.
      */

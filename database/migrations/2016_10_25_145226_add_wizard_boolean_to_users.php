@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('wizard')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

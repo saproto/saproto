@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('secret', 100)->nullable()->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

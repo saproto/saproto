@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dropColumn('nicename');
         });
     }
+
     /**
      * Reverse the migrations.
      */

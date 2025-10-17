@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('is_featured')->after('location')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

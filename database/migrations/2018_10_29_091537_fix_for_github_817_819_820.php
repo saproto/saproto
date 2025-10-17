@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_educational')->after('is_external')->default(false)->nullable(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

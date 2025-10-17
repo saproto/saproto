@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('update_sequence')->default(0)->after('updated_at');
         });
     }
+
     /**
      * Reverse the migrations.
      */

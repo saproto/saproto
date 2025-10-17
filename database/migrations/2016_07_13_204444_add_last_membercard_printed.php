@@ -14,6 +14,7 @@ return new class extends Migration
             $table->date('card_printed_on')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

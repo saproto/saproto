@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('did_study_create')->after('utwente_department')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

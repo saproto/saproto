@@ -15,6 +15,7 @@ return new class extends Migration
             $table->float('discount')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->integer('img_file_id')->nullable()->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

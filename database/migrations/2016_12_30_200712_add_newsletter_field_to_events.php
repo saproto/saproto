@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('include_in_newsletter')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

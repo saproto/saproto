@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('to_active')->default(false)->after('to_event');
         });
     }
+
     /**
      * Reverse the migrations.
      */

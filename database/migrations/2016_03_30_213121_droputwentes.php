@@ -12,6 +12,7 @@ return new class extends Migration
     {
         Schema::drop('utwentes');
     }
+
     /**
      * Reverse the migrations.
      */

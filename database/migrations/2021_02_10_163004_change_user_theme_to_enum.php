@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('theme')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

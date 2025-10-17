@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('is_present')->after('user_id')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

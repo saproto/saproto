@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_donator')->nullable(false)->default(false)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

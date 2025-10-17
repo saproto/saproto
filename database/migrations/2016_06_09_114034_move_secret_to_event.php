@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('secret')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

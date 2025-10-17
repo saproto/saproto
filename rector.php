@@ -25,7 +25,7 @@ use RectorLaravel\Set\LaravelSetList;
 try {
     return RectorConfig::configure()
         ->withCache(
-        // ensure file system caching is used instead of in-memory
+            // ensure file system caching is used instead of in-memory
             cacheDirectory: '.tmp/rector',
 
             // specify a path that works locally as well as on CI job runners

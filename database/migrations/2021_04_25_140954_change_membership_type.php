@@ -20,6 +20,7 @@ return new class extends Migration
             $table->renameColumn('is_donator', 'is_donor');
         });
     }
+
     /**
      * Reverse the migrations.
      */

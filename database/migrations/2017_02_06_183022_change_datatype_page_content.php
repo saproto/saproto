@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('content', 16777215)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

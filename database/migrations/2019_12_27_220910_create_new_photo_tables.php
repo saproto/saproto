@@ -53,6 +53,7 @@ return new class extends Migration
             $table->boolean('migrated')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

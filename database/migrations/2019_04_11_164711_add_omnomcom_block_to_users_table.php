@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('disable_omnomcom')->after('keep_omnomcom_history')->default(0);
         });
     }
+
     /**
      * Reverse the migrations.
      */

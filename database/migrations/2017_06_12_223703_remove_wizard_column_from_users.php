@@ -14,6 +14,7 @@ return new class extends Migration
             $table->dropColumn('wizard');
         });
     }
+
     /**
      * Reverse the migrations.
      */

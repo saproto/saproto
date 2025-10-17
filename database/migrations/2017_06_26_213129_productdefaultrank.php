@@ -14,6 +14,7 @@ return new class extends Migration
             $table->unsignedInteger('rank')->nullable(false)->default(0)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

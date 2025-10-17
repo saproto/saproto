@@ -23,6 +23,7 @@ return new class extends Migration
             $table->index(['queue', 'reserved', 'reserved_at']);
         });
     }
+
     /**
      * Reverse the migrations.
      */

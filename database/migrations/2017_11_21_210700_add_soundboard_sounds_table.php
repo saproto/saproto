@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('name');
         });
     }
+
     /**
      * Reverse the migrations.
      */

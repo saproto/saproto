@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('isPrize')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

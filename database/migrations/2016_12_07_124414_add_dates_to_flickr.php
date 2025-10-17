@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('date_update');
         });
     }
+
     /**
      * Reverse the migrations.
      */

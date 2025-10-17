@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('show_birthday')->after('keep_protube_history')->nullable(false)->default(true);
         });
     }
+
     /**
      * Reverse the migrations.
      */

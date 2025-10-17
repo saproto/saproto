@@ -18,6 +18,7 @@ return new class extends Migration
 
         DB::table('committees_activities')->where('notification_sent', '=', 0)->update(['notification_sent' => 1]);
     }
+
     /**
      * Reverse the migrations.
      */

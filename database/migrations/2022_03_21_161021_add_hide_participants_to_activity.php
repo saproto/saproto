@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('hide_participants')->default(false)->after('participants');
         });
     }
+
     /**
      * Reverse the migrations.
      */

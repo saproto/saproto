@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('show_attachments')->default(true);
         });
     }
+
     /**
      * Reverse the migrations.
      */

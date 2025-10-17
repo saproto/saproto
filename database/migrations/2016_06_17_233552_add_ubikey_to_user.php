@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('tfa_yubikey_identity')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

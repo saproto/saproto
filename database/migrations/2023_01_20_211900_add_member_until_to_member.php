@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigInteger('until')->after('is_pending')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

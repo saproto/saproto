@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('tfa_totp_key')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

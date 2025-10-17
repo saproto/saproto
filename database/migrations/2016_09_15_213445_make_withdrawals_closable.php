@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('closed')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

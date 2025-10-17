@@ -28,10 +28,10 @@ class ConsoleOutput
         $component = '\Illuminate\Console\View\Components\\'.ucfirst($method);
 
         throw_unless(class_exists($component),
-        InvalidArgumentException::class,
-        sprintf(
-            'Console component [%s] not found.', $method
-        ));
+            InvalidArgumentException::class,
+            sprintf(
+                'Console component [%s] not found.', $method
+            ));
 
         return (new $component($this->output))->render(...$parameters);
     }

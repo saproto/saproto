@@ -14,6 +14,7 @@ return new class extends Migration
             $table->text('quote')->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

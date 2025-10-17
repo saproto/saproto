@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('hash');
         });
     }
+
     /**
      * Reverse the migrations.
      */

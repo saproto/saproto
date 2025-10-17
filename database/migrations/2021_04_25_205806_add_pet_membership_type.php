@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('is_pet')->after('updated_at');
         });
     }
+
     /**
      * Reverse the migrations.
      */

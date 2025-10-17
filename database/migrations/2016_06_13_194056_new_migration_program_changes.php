@@ -31,6 +31,7 @@ return new class extends Migration
             $table->dropColumn('withdrawal_type');
         });
     }
+
     /**
      * Reverse the migrations.
      */

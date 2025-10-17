@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('featured')->after('name');
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dropColumn('receive_newsletter');
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->dropColumn('name_last');
         });
     }
+
     /**
      * Reverse the migrations.
      */

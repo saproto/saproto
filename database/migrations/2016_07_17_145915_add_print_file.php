@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('is_print_file')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

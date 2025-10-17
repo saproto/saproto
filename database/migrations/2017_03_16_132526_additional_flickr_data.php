@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('event_id')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

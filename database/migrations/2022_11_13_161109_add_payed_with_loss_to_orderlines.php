@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('payed_with_loss')->after('payed_with_withdrawal');
         });
     }
+
     /**
      * Reverse the migrations.
      */

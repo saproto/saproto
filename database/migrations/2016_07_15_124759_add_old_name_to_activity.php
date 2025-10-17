@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('comment')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

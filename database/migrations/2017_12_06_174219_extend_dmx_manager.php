@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('end');
         });
     }
+
     /**
      * Reverse the migrations.
      */

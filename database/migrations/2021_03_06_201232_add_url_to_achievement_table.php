@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('page_content')->nullable()->after('page_name');
         });
     }
+
     /**
      * Reverse the migrations.
      */

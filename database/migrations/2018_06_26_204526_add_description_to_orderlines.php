@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('description')->nullable(true)->default(null)->after('payed_with_withdrawal');
         });
     }
+
     /**
      * Reverse the migrations.
      */

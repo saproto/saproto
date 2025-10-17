@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('image_id')->nullable()->after('remember_token')->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

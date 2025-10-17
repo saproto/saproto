@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('spotify_name')->after('spotify_id')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

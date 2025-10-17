@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('edu_username')->after('utwente_username')->nullable()->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

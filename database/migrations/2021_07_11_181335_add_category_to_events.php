@@ -16,6 +16,7 @@ return new class extends Migration
             $table->dropColumn('is_educational');
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->boolean('pref_calendar_relevant_only')->after('pref_calendar_alarm')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

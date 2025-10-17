@@ -15,6 +15,7 @@ return new class extends Migration
             $table->dropColumn('tfa_yubikey_identity');
         });
     }
+
     /**
      * Reverse the migrations.
      */

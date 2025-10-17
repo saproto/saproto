@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('show_omnomcom_calories')->after('show_omnomcom_total')->default(0);
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('closed_account')->nullable(true)->default(null)->after('closed');
         });
     }
+
     /**
      * Reverse the migrations.
      */

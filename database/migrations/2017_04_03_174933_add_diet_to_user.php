@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('involves_food')->after('location')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

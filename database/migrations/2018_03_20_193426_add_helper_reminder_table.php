@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('committee_id')->nullable(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

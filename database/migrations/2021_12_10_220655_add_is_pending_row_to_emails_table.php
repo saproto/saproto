@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('to_pending')->default(false)->after('to_member');
         });
     }
+
     /**
      * Reverse the migrations.
      */

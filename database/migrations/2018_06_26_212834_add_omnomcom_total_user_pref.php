@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('show_omnomcom_total')->after('show_birthday')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

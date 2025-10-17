@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('did_study_itech')->after('did_study_create')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

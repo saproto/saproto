@@ -15,6 +15,7 @@ return new class extends Migration
             $table->dropUnique('pages_slug_unique');
         });
     }
+
     /**
      * Reverse the migrations.
      */

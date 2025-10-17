@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('is_member_only')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

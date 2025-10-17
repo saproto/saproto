@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('discord_id')->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */

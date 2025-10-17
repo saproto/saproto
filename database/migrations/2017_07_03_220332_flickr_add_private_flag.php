@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('private')->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

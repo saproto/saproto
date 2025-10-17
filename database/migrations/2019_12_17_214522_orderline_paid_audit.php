@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('authenticated_by')->after('total_price')->nullable(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

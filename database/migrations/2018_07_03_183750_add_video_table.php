@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('video_date')->nullable(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

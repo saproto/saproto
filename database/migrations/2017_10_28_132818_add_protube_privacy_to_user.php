@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('keep_protube_history')->after('receive_sms')->default(true);
         });
     }
+
     /**
      * Reverse the migrations.
      */

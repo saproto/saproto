@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('exception')->after('payload');
         });
     }
+
     /**
      * Reverse the migrations.
      */

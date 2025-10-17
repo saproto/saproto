@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('participants')->nullable(false)->default(-1)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

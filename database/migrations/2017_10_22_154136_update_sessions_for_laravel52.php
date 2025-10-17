@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('user_agent');
         });
     }
+
     /**
      * Reverse the migrations.
      */

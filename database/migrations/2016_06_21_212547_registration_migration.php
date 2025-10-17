@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('receive_sms')->default(false)->change();
         });
     }
+
     /**
      * Reverse the migrations.
      */

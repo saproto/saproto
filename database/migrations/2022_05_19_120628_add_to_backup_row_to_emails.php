@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('to_backup')->default(false)->after('to_event');
         });
     }
+
     /**
      * Reverse the migrations.
      */

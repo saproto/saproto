@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('personal_key', 64)->nullable(true)->default(null);
         });
     }
+
     /**
      * Reverse the migrations.
      */

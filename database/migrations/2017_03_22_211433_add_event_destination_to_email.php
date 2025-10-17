@@ -14,6 +14,7 @@ return new class extends Migration
             $table->integer('to_event')->after('to_list')->default(0);
         });
     }
+
     /**
      * Reverse the migrations.
      */

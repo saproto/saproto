@@ -15,6 +15,7 @@ return new class extends Migration
             $table->boolean('profile_in_almanac')->after('show_achievements')->default(1);
         });
     }
+
     /**
      * Reverse the migrations.
      */

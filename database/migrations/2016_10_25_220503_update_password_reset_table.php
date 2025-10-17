@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('valid_to');
         });
     }
+
     /**
      * Reverse the migrations.
      */

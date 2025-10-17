@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('album_id');
         });
     }
+
     /**
      * Reverse the migrations.
      */

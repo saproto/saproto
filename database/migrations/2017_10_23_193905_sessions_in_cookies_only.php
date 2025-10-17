@@ -12,6 +12,7 @@ return new class extends Migration
     {
         Schema::drop('sessions');
     }
+
     /**
      * Reverse the migrations.
      */

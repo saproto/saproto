@@ -14,6 +14,7 @@ return new class extends Migration
             $table->boolean('is_external')->after('description')->nullable(false)->default(false);
         });
     }
+
     /**
      * Reverse the migrations.
      */

@@ -14,6 +14,7 @@ return new class extends Migration
             $table->unique('slug');
         });
     }
+
     /**
      * Reverse the migrations.
      */
