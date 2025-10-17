@@ -1,4 +1,7 @@
-@php use App\Models\Event; @endphp
+@php
+    use App\Models\Event;
+@endphp
+
 @php
     /** @var Event $event*/
 @endphp

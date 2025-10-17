@@ -1,4 +1,7 @@
-@php use App\Models\Event; @endphp
+@php
+    use App\Models\Event;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @php
@@ -28,16 +31,16 @@
                     <div class="card-body">
                         <table class="table">
                             <tbody>
-                            @foreach ($event->allUsers() as $user)
-                                @if ($user->hasDiet())
-                                    <tr>
-                                        <td>{{ $user->name }}</td>
-                                        <td>
-                                            {!! Markdown::convert($user->diet) !!}
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
+                                @foreach ($event->allUsers() as $user)
+                                    @if ($user->hasDiet())
+                                        <tr>
+                                            <td>{{ $user->name }}</td>
+                                            <td>
+                                                {!! Markdown::convert($user->diet) !!}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -94,127 +97,127 @@
                                         @if ($ticket->purchases->count() > 0)
                                             <table class="table">
                                                 <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>User</th>
-                                                    <th></th>
-                                                    @if ($event->shouldShowDietInfo())
-                                                        <th>Diet</th>
-                                                    @endif
-
-                                                    <th>Price</th>
-                                                    <th>
-                                                        Date of Purchase
-                                                    </th>
-                                                    <th>Ticket Scanned</th>
-                                                    @can('board')
+                                                    <tr>
                                                         <th></th>
-                                                    @endcan
-                                                </tr>
+                                                        <th>User</th>
+                                                        <th></th>
+                                                        @if ($event->shouldShowDietInfo())
+                                                            <th>Diet</th>
+                                                        @endif
+
+                                                        <th>Price</th>
+                                                        <th>
+                                                            Date of Purchase
+                                                        </th>
+                                                        <th>Ticket Scanned</th>
+                                                        @can('board')
+                                                            <th></th>
+                                                        @endcan
+                                                    </tr>
                                                 </thead>
 
                                                 <tbody>
-                                                @foreach ($ticket->purchases as $purchase)
-                                                    <tr>
-                                                        <td>
-                                                            {{ $purchase->id }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $purchase->user->name }}
-                                                        </td>
-                                                        <td>
-                                                            @if ($purchase->user->age() >= 18)
-                                                                <span
-                                                                    class="badge bg-success"
-                                                                >
+                                                    @foreach ($ticket->purchases as $purchase)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $purchase->id }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $purchase->user->name }}
+                                                            </td>
+                                                            <td>
+                                                                @if ($purchase->user->age() >= 18)
+                                                                    <span
+                                                                        class="badge bg-success"
+                                                                    >
                                                                         <i
                                                                             class="fas fa-check"
                                                                             aria-hidden="true"
                                                                         ></i>
                                                                         18+
                                                                     </span>
-                                                            @else
-                                                                <span
-                                                                    class="badge bg-danger"
-                                                                >
+                                                                @else
+                                                                    <span
+                                                                        class="badge bg-danger"
+                                                                    >
                                                                         <i
                                                                             class="fas fa-exclamation-triangle"
                                                                             aria-hidden="true"
                                                                         ></i>
                                                                         18-
                                                                     </span>
-                                                            @endif
-                                                        </td>
-                                                        @if ($event->shouldShowDietInfo())
-                                                            <td>
-                                                                @if ($purchase->user->hasDiet())
-                                                                    <span
-                                                                        class="badge bg-danger"
-                                                                    >
+                                                                @endif
+                                                            </td>
+                                                            @if ($event->shouldShowDietInfo())
+                                                                <td>
+                                                                    @if ($purchase->user->hasDiet())
+                                                                        <span
+                                                                            class="badge bg-danger"
+                                                                        >
                                                                             <i
                                                                                 class="fas fa-exclamation-triangle"
                                                                                 aria-hidden="true"
                                                                             ></i>
                                                                         </span>
-                                                                @else
-                                                                    <span
-                                                                        class="label label-success"
-                                                                    >
+                                                                    @else
+                                                                        <span
+                                                                            class="label label-success"
+                                                                        >
                                                                             <i
                                                                                 class="badge bg-check"
                                                                                 aria-hidden="true"
                                                                             ></i>
                                                                         </span>
-                                                                @endif
-                                                            </td>
-                                                        @endif
+                                                                    @endif
+                                                                </td>
+                                                            @endif
 
-                                                        <td>
-                                                            &euro;{{ number_format($purchase->orderline->total_price, 2) }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $purchase->created_at }}
-                                                        </td>
-                                                        <td
-                                                            class="events-scanned"
-                                                        >
-                                                            <a
-                                                                data-id="{{ $purchase->barcode }}"
-                                                                class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint"
-                                                                href="#"
-                                                            >
-                                                                {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
-                                                            </a>
-                                                        </td>
-                                                        @can('board')
-                                                            <td
-                                                                class="dontprint"
-                                                            >
-                                                                @if ($purchase->scanned)
-                                                                    Used
-                                                                @elseif ($purchase->orderline->isPayed())
-                                                                    Paid
-                                                                @else
-                                                                    @include(
-                                                                        'components.modals.confirm-modal',
-                                                                        [
-                                                                            'action' => route('omnomcom::orders::delete', [
-                                                                                'id' => $purchase->orderline->id,
-                                                                            ]),
-                                                                            'classes' => 'badge bg-danger',
-                                                                            'text' => 'Delete',
-                                                                            'title' => 'Confirm Delete',
-                                                                            'message' =>
-                                                                                'Are you sure you want to delete one ticket for ' .
-                                                                                $purchase->user->name .
-                                                                                '?',
-                                                                        ]
-                                                                    )
-                                                                @endif
+                                                            <td>
+                                                                &euro;{{ number_format($purchase->orderline->total_price, 2) }}
                                                             </td>
-                                                        @endcan
-                                                    </tr>
-                                                @endforeach
+                                                            <td>
+                                                                {{ $purchase->created_at }}
+                                                            </td>
+                                                            <td
+                                                                class="events-scanned"
+                                                            >
+                                                                <a
+                                                                    data-id="{{ $purchase->barcode }}"
+                                                                    class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint"
+                                                                    href="#"
+                                                                >
+                                                                    {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
+                                                                </a>
+                                                            </td>
+                                                            @can('board')
+                                                                <td
+                                                                    class="dontprint"
+                                                                >
+                                                                    @if ($purchase->scanned)
+                                                                        Used
+                                                                    @elseif ($purchase->orderline->isPayed())
+                                                                        Paid
+                                                                    @else
+                                                                        @include(
+                                                                            'components.modals.confirm-modal',
+                                                                            [
+                                                                                'action' => route('omnomcom::orders::delete', [
+                                                                                    'id' => $purchase->orderline->id,
+                                                                                ]),
+                                                                                'classes' => 'badge bg-danger',
+                                                                                'text' => 'Delete',
+                                                                                'title' => 'Confirm Delete',
+                                                                                'message' =>
+                                                                                    'Are you sure you want to delete one ticket for ' .
+                                                                                    $purchase->user->name .
+                                                                                    '?',
+                                                                            ]
+                                                                        )
+                                                                    @endif
+                                                                </td>
+                                                            @endcan
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         @else
