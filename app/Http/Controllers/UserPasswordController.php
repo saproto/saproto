@@ -12,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -37,7 +36,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**
@@ -55,7 +54,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-        return Redirect::route('login::password::reset');
+        return to_route('login::password::reset');
     }
 
     /**
@@ -70,7 +69,7 @@ class UserPasswordController extends Controller
         if (! $reset) {
             Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-            return Redirect::route('login::password::reset');
+            return to_route('login::password::reset');
         }
 
         $validated = $request->validate([
@@ -81,7 +80,7 @@ class UserPasswordController extends Controller
         PasswordReset::query()->where('token', $request->token)->delete();
         Session::flash('flash_message', 'Your password has been changed.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**
@@ -106,7 +105,7 @@ class UserPasswordController extends Controller
         $user->setPassword($validated['password']);
         $this->syncGooglePassword($user, $validated['password']);
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -149,7 +148,7 @@ class UserPasswordController extends Controller
     public function forgotUsername(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => ['required', 'email'],
         ]);
 
         $user = User::whereEmail($request->get('email'))->first();
@@ -157,7 +156,7 @@ class UserPasswordController extends Controller
 
         Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
 
-        return Redirect::route('login::show');
+        return to_route('login::show');
     }
 
     /**
@@ -186,6 +185,6 @@ class UserPasswordController extends Controller
         $this->syncGooglePassword($user, $validated['password']);
         Session::flash('flash_message', 'Your password has been changed.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 }

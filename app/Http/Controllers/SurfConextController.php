@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Socialite;
@@ -63,7 +62,7 @@ class SurfConextController extends Controller
 
         Session::flash('flash_message', 'The link with your university account has been deleted.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
@@ -104,7 +103,7 @@ class SurfConextController extends Controller
         if ($user->organization !== 'utwente.nl') {
             Session::flash('flash_message', 'We only support University of Twente accounts.');
 
-            return Redirect::back();
+            return back();
         }
 
         return match (Session::get(self::SESSION_FLASH_KEY)) {
@@ -125,7 +124,7 @@ class SurfConextController extends Controller
         if (empty($user)) {
             Session::flash('flash_message', 'This University of Twente account is not registered to a user.');
 
-            return Redirect::route('login::show');
+            return to_route('login::show');
         }
 
         return AuthController::loginUser($request, $user);
@@ -157,7 +156,7 @@ class SurfConextController extends Controller
 
         Session::flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
 
-        return Redirect::route('homepage');
+        return to_route('homepage');
     }
 
     /**
@@ -170,7 +169,7 @@ class SurfConextController extends Controller
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
             AuthController::loginUser($request, User::query()->where('utwente_username', $utUser->uid)->first());
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         $user = Auth::user();
@@ -180,7 +179,7 @@ class SurfConextController extends Controller
 
         Session::flash('flash_message', 'Successfully linked your University of Twente account.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
