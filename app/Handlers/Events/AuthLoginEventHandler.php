@@ -38,7 +38,7 @@ class AuthLoginEventHandler
         ];
 
         foreach ($committees as $committee) {
-            if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] || $user->signed_nda)) {
+            if ($committee['committee'] != null && $user->isInCommittee($committee['committee']) && (! $committee['nda'] || $user->signed_nda)) {
                 if (! $user->hasRole($committee['role'])) {
                     $user->assignRole($committee['role']);
                 }

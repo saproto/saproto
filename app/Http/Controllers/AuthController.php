@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PwnedPasswordNotification;
-use App\Models\HashMapItem;
 use App\Models\Member;
 use App\Models\User;
 use App\Rules\NotUtwenteEmail;
@@ -11,13 +9,10 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use nickurt\PwnedPasswords\PwnedPasswords;
 use PragmaRX\Google2FA\Exceptions\IncompatibleWithGoogleAuthenticatorException;
 use PragmaRX\Google2FA\Exceptions\InvalidCharactersException;
 use PragmaRX\Google2FA\Exceptions\SecretKeyTooShortException;
@@ -43,7 +38,7 @@ class AuthController extends Controller
      * Register a new account.
      * It is possible to register an account without a UT account, the user will automatically be redirected.
      */
-    public function register(Request $request): RedirectResponse|View
+    public function register(Request $request): View|RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail],
@@ -86,7 +81,7 @@ class AuthController extends Controller
     {
         // User is already logged in
         if (Auth::check()) {
-            self::postLoginRedirect();
+            return Redirect::intended();
         }
 
         // Catch a login form submission for two-factor authentication.
@@ -108,20 +103,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return to_route('homepage');
-    }
-
-    /**
-     * Log out the user and redirect arbitrarily.
-     */
-    public function logoutAndRedirect(Request $request): RedirectResponse
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return to_route($request->route, $request->parameters);
+        return to_route('homepage')->with('flash_message', 'You have been logged out.');
     }
 
     /* These are the static helper functions of the AuthController for more overview and modularity. */
@@ -141,15 +123,10 @@ class AuthController extends Controller
 
         if ($user == null) {
             $member = Member::query()->where('proto_username', $username)->first();
-            $user = ($member ? $member->user : null);
+            $user = $member?->user;
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if (HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords)->setPassword($password)->isPwnedPassword()) {
-                Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
-                HashMapItem::query()->create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => Date::now()->format('r')]);
-            }
-
             return $user;
         }
 
@@ -162,20 +139,12 @@ class AuthController extends Controller
      * @param  User  $user  The user to be logged in.
      * @return RedirectResponse
      */
-    public static function loginUser(User $user)
+    public static function loginUser(Request $request, User $user)
     {
         Auth::login($user, true);
 
-        return self::postLoginRedirect();
-    }
+        $request->session()->regenerate();
 
-    /**
-     * The login has been completed (successfully or not). Return where the user is supposed to be redirected.
-     *
-     * @return RedirectResponse
-     */
-    private static function postLoginRedirect()
-    {
         return Redirect::intended();
     }
 
@@ -186,13 +155,16 @@ class AuthController extends Controller
      */
     private function handleRegularLogin(Request $request)
     {
-        $username = $request->input('email');
-        $password = $request->input('password');
 
-        $user = self::verifyCredentials($username, $password);
+        $credentials = $request->validate([
+            'email' => ['required'],
+            'password' => ['required'],
+        ]);
+
+        $user = self::verifyCredentials($credentials['email'], $credentials['password']);
 
         if ($user) {
-            return self::continueLogin($user);
+            return self::continueLogin($request, $user);
         }
 
         Session::flash('flash_message', 'Invalid username or password provided.');
@@ -206,7 +178,7 @@ class AuthController extends Controller
      * @param  User  $user  The username to be logged in.
      * @return View|RedirectResponse
      */
-    public static function continueLogin(User $user)
+    public static function continueLogin(Request $request, User $user)
     {
         // Catch users that have 2FA enabled.
         if ($user->tfa_totp_key) {
@@ -215,7 +187,7 @@ class AuthController extends Controller
             return view('auth.2fa');
         }
 
-        return self::loginUser($user);
+        return self::loginUser($request, $user);
     }
 
     /**
@@ -234,7 +206,7 @@ class AuthController extends Controller
             // Verify if the response is valid.
             try {
                 if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                    return self::loginUser($user);
+                    return self::loginUser($request, $user);
                 }
 
                 Session::flash('flash_message', 'Your code is invalid. Please try again.');

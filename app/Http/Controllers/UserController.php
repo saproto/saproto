@@ -25,26 +25,10 @@ class UserController extends Controller
         /** @var User $user */
         $user = User::query()->findOrFail($request->id ?? Auth::id());
 
-        if ($user->hasUnpaidOrderlines()) {
-            Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
-
-            return to_route('omnomcom::orders::index');
-        }
-
-        if ($user->member) {
-            Session::flash('flash_message', 'An account cannot be deactivated while it still has an active membership.');
-
-            return back();
-        }
-
         if (Auth::id() == $user->id) {
-            $password = $request->input('password');
-            $auth_check = AuthController::verifyCredentials($user->email, $password);
-            if ($auth_check == null || $auth_check->id != $user->id) {
-                Session::flash('flash_message', 'You need to provide a valid password to deactivate your account.');
-
-                return back();
-            }
+            $request->validate(
+                ['password' => ['required', 'current_password']]
+            );
         } else {
             if (Auth::user()->cannot('board')) {
                 Session::flash('flash_message', "You cannot deactivate someone else's account.");
@@ -57,6 +41,18 @@ class UserController extends Controller
 
                 return back();
             }
+        }
+
+        if ($user->hasUnpaidOrderlines()) {
+            Session::flash('flash_message', 'An account cannot be deactivated while it has open payments!');
+
+            return to_route('omnomcom::orders::index');
+        }
+
+        if ($user->member) {
+            Session::flash('flash_message', 'An account cannot be deactivated while it still has an active membership.');
+
+            return back();
         }
 
         Address::query()->where('user_id', $user->id)->delete();
