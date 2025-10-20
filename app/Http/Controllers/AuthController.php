@@ -123,7 +123,7 @@ class AuthController extends Controller
 
         if ($user == null) {
             $member = Member::query()->where('proto_username', $username)->first();
-            $user = ($member?->user);
+            $user = $member?->user;
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
