@@ -31,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Tempadmin whereUpdatedAt($value)
  * @method static Builder<static>|Tempadmin whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Tempadmin extends Model
 {

@@ -13,7 +13,7 @@ use App\Models\OrderLine;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class AchievementsCron extends Command
@@ -60,8 +60,8 @@ class AchievementsCron extends Command
         $AmountOfSignupsThisMonth = Event::query()
             ->whereHas('activity')
             ->where('secret', false)
-            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
-            ->where('end', '<', Carbon::now()->timestamp)
+            ->where('start', '>', Date::now()->subMonth()->timestamp)
+            ->where('end', '<', Date::now()->timestamp)
             ->count();
 
         $youDandy = $this->categoryProducts([9]);
@@ -166,7 +166,7 @@ class AchievementsCron extends Command
      */
     private function notFirstOfMonth(): bool
     {
-        return Carbon::now()->day != 1;
+        return Date::now()->day != 1;
     }
 
     /**
@@ -192,7 +192,7 @@ class AchievementsCron extends Command
      */
     private function oldFart(User $user): bool
     {
-        return $user->is_member && $user->member->created_at < Carbon::now()->subYears(5);
+        return $user->is_member && $user->member->created_at < Date::now()->subYears(5);
     }
 
     /**
@@ -213,7 +213,7 @@ class AchievementsCron extends Command
         }
 
         $amount = $user->orderlines()
-            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->where('updated_at', '>', Date::now()->subMonths())
             ->sum('total_price');
 
         return $amount >= 250;
@@ -235,7 +235,7 @@ class AchievementsCron extends Command
                 if ($membership->deleted_at != null) {
                     $diff = $membership->deleted_at->diff($membership->created_at);
                 } else {
-                    $diff = Carbon::now()->diff($membership->created_at);
+                    $diff = Date::now()->diff($membership->created_at);
                 }
 
                 $days += $diff->days;
@@ -266,7 +266,7 @@ class AchievementsCron extends Command
     {
         $participated = ActivityParticipation::query()->where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::query()->WhereIn('id', $participated)->pluck('event_id');
-        $events = Event::query()->whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
+        $events = Event::query()->whereIn('id', $activities)->where('end', '<', Date::now()->timestamp);
 
         return $events->count() >= $n;
     }
@@ -289,8 +289,8 @@ class AchievementsCron extends Command
         $EventsParticipated = Event::query()
             ->whereHas('activity')
             ->where('secret', false)
-            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
-            ->where('end', '<', Carbon::now()->timestamp)
+            ->where('start', '>', Date::now()->subMonth()->timestamp)
+            ->where('end', '<', Date::now()->timestamp)
             ->whereIn('id', $activities)
             ->count();
 
@@ -315,11 +315,11 @@ class AchievementsCron extends Command
     private function percentageProducts(User $user, array $products, float $p): bool
     {
         $orders = OrderLine::query()
-            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->where('updated_at', '>', Date::now()->subMonths())
             ->where('user_id', $user->id)
             ->count();
         $bought = OrderLine::query()
-            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->where('updated_at', '>', Date::now()->subMonths())
             ->where('user_id', $user->id)
             ->whereIn('product_id', $products)
             ->count();

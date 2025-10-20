@@ -20,9 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (App::environment('production')) {
-            throw new Exception('You cannot seed your database outside the development environment.');
-        }
+        throw_if(App::environment('production'), Exception::class, 'You cannot seed your database outside the development environment.');
 
         $output = new ConsoleOutput;
 

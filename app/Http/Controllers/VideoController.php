@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Youtube;
@@ -69,7 +69,7 @@ class VideoController extends Controller
             'youtube_user_id' => $youtube_video->snippet->channelId,
             'youtube_user_name' => $youtube_video->snippet->channelTitle,
             'youtube_thumb_url' => $youtube_video->snippet->thumbnails->high->url,
-            'video_date' => Carbon::parse($youtube_video->snippet->publishedAt)->format('Y-m-d'),
+            'video_date' => Date::parse($youtube_video->snippet->publishedAt)->format('Y-m-d'),
         ])->save();
 
         Session::flash('flash_message', sprintf('The video %s has been added!', $youtube_video->snippet->title));

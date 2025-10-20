@@ -7,8 +7,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -40,7 +40,7 @@ use Override;
  * @method static Builder<static>|Video whereYoutubeUserId($value)
  * @method static Builder<static>|Video whereYoutubeUserName($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Video extends Model
 {
@@ -103,12 +103,12 @@ class Video extends Model
 
     public function getUnixTimeStamp(): string
     {
-        return Carbon::parse($this->video_date)->timestamp;
+        return Date::parse($this->video_date)->timestamp;
     }
 
     public function getFormDate(): string
     {
-        return Carbon::parse($this->video_date)->format('d-m-Y');
+        return Date::parse($this->video_date)->format('d-m-Y');
     }
 
     #[Override]

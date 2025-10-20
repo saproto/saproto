@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder<static>|HashMapItem whereSubkey($value)
  * @method static Builder<static>|HashMapItem whereValue($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class HashMapItem extends Model
 {

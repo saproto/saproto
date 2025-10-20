@@ -74,13 +74,9 @@ class PageController extends Controller
     {
         $page = Page::query()->where('slug', '=', $slug)->first();
 
-        if ($page == null) {
-            abort(404, 'Page not found.');
-        }
+        abort_if($page == null, 404, 'Page not found.');
 
-        if ($page->is_member_only && ! Auth::user()?->is_member) {
-            abort(403, 'You need to be a member of S.A. Proto to see this page.');
-        }
+        abort_if($page->is_member_only && ! Auth::user()?->is_member, 403, 'You need to be a member of S.A. Proto to see this page.');
 
         return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convert($page->content)]);
     }

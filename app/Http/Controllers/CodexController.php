@@ -6,6 +6,7 @@ use App\Libraries\PDF_TOC;
 use App\Models\Codex;
 use App\Models\CodexSongCategory;
 use App\Models\CodexTextType;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -91,7 +92,7 @@ class CodexController extends Controller
     public function show(Codex $codex): ?RedirectResponse
     {
         $categories = CodexSongCategory::query()->whereHas('songs', function ($q) use ($codex) {
-            $q->whereHas('codices', function ($q) use ($codex) {
+            $q->whereHas('codices', function (Builder $q) use ($codex) {
                 $q->where('codex', $codex->id);
             });
         })->with(['songs' => function ($query) use ($codex) {
@@ -101,7 +102,7 @@ class CodexController extends Controller
         }])->orderBy('id')->get();
 
         $textCategories = CodexTextType::query()->whereHas('texts', function ($q) use ($codex) {
-            $q->whereHas('codices', function ($q) use ($codex) {
+            $q->whereHas('codices', function (Builder $q) use ($codex) {
                 $q->where('codex_codices.id', $codex->id);
             });
         })->with(['texts' => function ($query) use ($codex) {

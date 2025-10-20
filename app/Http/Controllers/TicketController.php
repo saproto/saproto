@@ -13,9 +13,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -150,7 +150,7 @@ class TicketController extends Controller
         }
 
         if ($ticket) {
-            $ticket->scanned = Carbon::now()->toDateTimeString();
+            $ticket->scanned = Date::now()->toDateTimeString();
             $ticket->save();
             Session::flash('flash_message', 'Ticket has been scanned!');
         } else {
@@ -233,7 +233,7 @@ class TicketController extends Controller
                 ];
             }
 
-            $ticket->scanned = Carbon::now()->toDateTimeString();
+            $ticket->scanned = Date::now()->toDateTimeString();
             if ($unscan) {
                 $ticket->scanned = null;
             }

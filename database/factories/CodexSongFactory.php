@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\CodexSong;
 use App\Models\CodexSongCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Override;
 
 /**
@@ -24,8 +24,8 @@ class CodexSongFactory extends Factory
             'artist' => fake()->word(),
             'lyrics' => fake()->word(),
             'youtube' => fake()->word(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ];
     }
 }

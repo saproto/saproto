@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Enums\MembershipTypeEnum;
 use Database\Factories\MemberFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Override;
 use Spatie\MediaLibrary\HasMedia;
@@ -62,7 +62,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin Eloquent
+ * @mixin Model
  */
 class Member extends Model implements HasMedia
 {
@@ -150,7 +150,7 @@ class Member extends Model implements HasMedia
 
     public function getMembershipOrderline(): ?OrderLine
     {
-        $year_start = intval(Carbon::now()->format('n')) >= 9 ? intval(Carbon::now()->format('Y')) : intval(Carbon::now()->format('Y')) - 1;
+        $year_start = intval(Date::now()->format('n')) >= 9 ? intval(Date::now()->format('Y')) : intval(Date::now()->format('Y')) - 1;
 
         return OrderLine::query()
             ->whereIn('product_id', array_values(Config::array('omnomcom.fee')))

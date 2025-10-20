@@ -42,7 +42,7 @@ use Illuminate\Support\Carbon;
  *
  * @property-read mixed $parsed_url
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class MenuItem extends Model
 {

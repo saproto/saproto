@@ -7,6 +7,7 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,9 +34,9 @@ class CommitteeController extends Controller
         }
 
         $data = Committee::query()->where(function ($q) use ($showSociety) {
-            $q->where('is_society', $showSociety)->where(function ($q) {
-                $q->where('public', true)->orWhere(function ($q) {
-                    $q->whereHas('users', static function ($q) {
+            $q->where('is_society', $showSociety)->where(function (Builder $q) {
+                $q->where('public', true)->orWhere(function (Builder $q) {
+                    $q->whereHas('users', static function (Builder $q) {
                         $q->where('user_id', Auth::user()?->id);
                     });
                 });
@@ -49,9 +50,7 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user())) {
-            abort(404);
-        }
+        abort_if(! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user()), 404);
 
         $pastEvents = $committee->pastEvents()->take(6)->get();
         $upcomingEvents = $committee->upcomingEvents()->get();
@@ -213,7 +212,7 @@ class CommitteeController extends Controller
 
     public function endEdition(int $committeeID, string $edition): RedirectResponse
     {
-        $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function ($q) use ($committeeID) {
+        $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function (Builder $q) use ($committeeID) {
             $q->where('id', $committeeID);
         })->get();
         foreach ($memberships as $membership) {

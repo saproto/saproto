@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Response;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -14,9 +14,7 @@ class PrivateMediaController extends Controller
         $media = Media::query()->findOrFail($mediaId);
 
         $conversionPath = empty($conversion) ? null : $media->getPathRelativeToRoot($conversion);
-        if (! empty($conversionPath) && $media->conversions_disk === 'public' || $media->disk === 'public') {
-            abort(403, 'This is not a private media file.');
-        }
+        abort_if(! empty($conversionPath) && $media->conversions_disk === 'public' || $media->disk === 'public', 403, 'This is not a private media file.');
 
         if ($conversionPath && Storage::disk($media->conversions_disk)->exists($conversionPath)) {
             $path = $media->getPathRelativeToRoot($conversion);
@@ -32,9 +30,7 @@ class PrivateMediaController extends Controller
         }
 
         $path = $media->getPathRelativeToRoot();
-        if (! Storage::disk($media->disk)->exists($path)) {
-            abort(404, 'Media file not found.');
-        }
+        abort_unless(Storage::disk($media->disk)->exists($path), 404, 'Media file not found.');
 
         return Response::stream(function () use ($media, $path) {
             echo Storage::disk($media->disk)->get($path);

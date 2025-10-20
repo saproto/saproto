@@ -9,7 +9,7 @@
 
             @foreach ($orderlines as $orderline)
                 @if (date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
-                    <?php $current_date = \Illuminate\Support\Carbon::parse(
+                    <?php $current_date = \Illuminate\Support\Facades\Date::parse(
                         $orderline->created_at,
                     )->format('d-m-Y'); ?>
 

@@ -14,9 +14,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -48,11 +48,11 @@ class OrderLineController extends Controller
             ->orderBy('created_at', 'desc')
             ->with('product:name,id')
             ->with('molliePayment:id,status')
-            ->where('created_at', '>', Carbon::parse($date)->startOfMonth())
-            ->where('created_at', '<=', Carbon::parse($date)->endOfMonth())
+            ->where('created_at', '>', Date::parse($date)->startOfMonth())
+            ->where('created_at', '<=', Date::parse($date)->endOfMonth())
             ->get();
 
-        $selected_month = $date ?? Carbon::now()->format('Y-m');
+        $selected_month = $date ?? Date::now()->format('Y-m');
 
         $outstanding = Activity::query()
             ->whereHas('users', static function (Builder $query) {
@@ -100,7 +100,7 @@ class OrderLineController extends Controller
 
         $query = OrderLine::query()
             ->when(Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin'), function ($orderlines) {
-                $orderlines->whereHas('product', static function ($products) {
+                $orderlines->whereHas('product', static function (\Illuminate\Contracts\Database\Query\Builder $products) {
                     $products->where('account_id', '=', Config::integer('omnomcom.alfred-account'));
                 });
             })

@@ -137,9 +137,7 @@ class SurfConextController extends Controller
     {
         $email = Session::get(self::SESSION_FLASH_KEY_EMAIL);
 
-        if (empty($email)) {
-            throw new Exception('An error occurred while creating the account');
-        }
+        throw_if(empty($email), Exception::class, 'An error occurred while creating the account');
 
         // We're in a create new account attempt, do not log them in
         if ($this->accountAlreadyExists($utUser->uid)) {

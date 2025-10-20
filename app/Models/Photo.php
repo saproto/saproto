@@ -48,7 +48,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Photo extends Model implements HasMedia
 {
@@ -69,13 +69,13 @@ class Photo extends Model implements HasMedia
         /** @param Builder<$this> $query */
         static::addGlobalScope('private', function (Builder $query) {
             $query->unless(Auth::user()?->is_member, fn ($query) => $query->where('private', false)
-                ->whereHas('album', function ($query) {
+                ->whereHas('album', function (\Illuminate\Contracts\Database\Query\Builder $query) {
                     $query->where('private', false);
                 }));
         });
         /** @param Builder<$this> $query */
         static::addGlobalScope('published', function (Builder $query) {
-            $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->whereHas('album', function ($query) {
+            $query->unless(Auth::user()?->can('protography'), fn ($query) => $query->whereHas('album', function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->where('published', true);
             }));
         });

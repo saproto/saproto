@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App;
 use App\Enums\NarrowcastingEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\App;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -40,7 +40,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read MediaCollection<int, Media> $media
  * @property-read int|null $media_count
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class NarrowcastingItem extends Model implements HasMedia
 {

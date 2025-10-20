@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
@@ -30,7 +31,7 @@ use stdClass;
  * @method static Builder<static>|Account whereName($value)
  * @method static Builder<static>|Account whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class Account extends Model
 {
@@ -62,8 +63,8 @@ class Account extends Model
             )
             ->groupby('orderlines.product_id')
             ->where('accounts.id', '=', $this->id)
-            ->where('orderlines.created_at', '>=', Carbon::parse(strval($start))->toDateTimeString())
-            ->where('orderlines.created_at', '<', Carbon::parse(strval($end))->toDateTimeString())
+            ->where('orderlines.created_at', '>=', Date::parse(strval($start))->toDateTimeString())
+            ->where('orderlines.created_at', '<', Date::parse(strval($end))->toDateTimeString())
             ->get();
     }
 }
