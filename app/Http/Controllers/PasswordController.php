@@ -7,9 +7,9 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -31,7 +31,7 @@ class PasswordController extends Controller
     public function postAuth(Request $request)
     {
         if (Hash::check($request->password, Auth::user()->password)) {
-            $request->session()->put('passwordstore-verify', Carbon::now()->addMinutes(10)->timestamp);
+            $request->session()->put('passwordstore-verify', Date::now()->addMinutes(10)->timestamp);
             Session::flash('flash_message', 'You can access this tool for 10 minutes.');
 
             return to_route('passwordstore::index');
@@ -232,7 +232,7 @@ class PasswordController extends Controller
         }
 
         $verify = $request->session()->get('passwordstore-verify');
-        if ($verify < Carbon::now()->timestamp) {
+        if ($verify < Date::now()->timestamp) {
             $request->session()->forget('passwordstore-verify');
 
             return false;
