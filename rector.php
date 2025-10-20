@@ -16,6 +16,9 @@ use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
+use RectorLaravel\Rector\MethodCall\ConvertEnumerableToArrayToAllRector;
+use RectorLaravel\Rector\MethodCall\EloquentOrderByToLatestOrOldestRector;
+use RectorLaravel\Rector\StaticCall\CarbonToDateFacadeRector;
 use RectorLaravel\Set\LaravelLevelSetList;
 use RectorLaravel\Set\LaravelSetList;
 
@@ -68,6 +71,7 @@ try {
         )
         ->withSkip(
             [
+
                 DisallowedEmptyRuleFixerRector::class,
                 StringToClassConstantRector::class,
                 EncapsedStringsToSprintfRector::class,
@@ -77,6 +81,9 @@ try {
                 RenameClassRector::class,
                 DateFuncCallToCarbonRector::class,
                 AddHasFactoryToModelsRector::class,
+                CarbonToDateFacadeRector::class,
+                EloquentOrderByToLatestOrOldestRector::class,
+                ConvertEnumerableToArrayToAllRector::class,
                 __DIR__.'/app/Libraries',
             ]);
 } catch (InvalidConfigurationException $e) {

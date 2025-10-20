@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveYubikeyColumn extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,4 +25,4 @@ class RemoveYubikeyColumn extends Migration
             $table->string('tfa_yubikey_identity')->nullable()->default(null);
         });
     }
-}
+};

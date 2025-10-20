@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -65,7 +64,7 @@ class ProductController extends Controller
     {
 
         $request->validate([
-            'image' => 'nullable|image|max:5120', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120'], // max 5MB
         ]);
 
         $product = Product::query()->create($request->except('image', 'product_categories', 'barcode'));
@@ -83,7 +82,7 @@ class ProductController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -103,7 +102,7 @@ class ProductController extends Controller
 
         Session::flash('flash_message', 'The new product has been created!');
 
-        return Redirect::route('omnomcom::products::index', ['search' => $product->name]);
+        return to_route('omnomcom::products::index', ['search' => $product->name]);
     }
 
     /**
@@ -133,7 +132,7 @@ class ProductController extends Controller
         $product = Product::query()->findOrFail($id);
 
         $request->validate([
-            'image' => 'nullable|image|max:5120', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120'], // max 5MB
         ]);
 
         // Mutation logging point
@@ -182,7 +181,7 @@ class ProductController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
@@ -204,13 +203,10 @@ class ProductController extends Controller
 
         Session::flash('flash_message', 'The product has been updated.');
 
-        return Redirect::route('omnomcom::products::edit', ['id' => $product->id]);
+        return to_route('omnomcom::products::edit', ['id' => $product->id]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function bulkUpdate(Request $request)
+    public function bulkUpdate(Request $request): RedirectResponse
     {
         $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
 
@@ -223,7 +219,7 @@ class ProductController extends Controller
         foreach ($input as $lineRaw) {
             $line = explode(',', $lineRaw);
 
-            if (count($line) == 2) {
+            if (count($line) === 2) {
                 $product = Product::query()->find($line[0]);
 
                 if ($product) {
@@ -264,7 +260,7 @@ class ProductController extends Controller
         Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
         Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -277,7 +273,7 @@ class ProductController extends Controller
         if ($id == Config::integer('omnomcom.dinnerform-product') || $id == Config::integer('omnomcom.failed-withdrawal')) {
             Session::flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
 
-            return Redirect::back();
+            return back();
         }
 
         /** @var Product $product */
@@ -286,20 +282,20 @@ class ProductController extends Controller
         if ($product->orderlines->count() > 0) {
             Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($product->ticket) {
             Session::flash('flash_message', 'You cannot delete this product because there is still a ticket associated with it.');
 
-            return Redirect::back();
+            return back();
         }
 
         $product->delete();
 
         Session::flash('flash_message', 'The product has been deleted.');
 
-        return Redirect::route('omnomcom::products::index');
+        return to_route('omnomcom::products::index');
     }
 
     /** @return StreamedResponse A CSV file with all product info. */

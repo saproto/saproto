@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -52,7 +51,7 @@ class MenuController extends Controller
 
         Cache::forget('website.navbar');
 
-        return Redirect::route('menu::list');
+        return to_route('menu::list');
     }
 
     public function edit(Router $router, int $id): View
@@ -90,7 +89,7 @@ class MenuController extends Controller
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
         Cache::forget('website.navbar');
 
-        return Redirect::route('menu::list');
+        return to_route('menu::list');
     }
 
     public function orderUp(int $id): RedirectResponse
@@ -107,7 +106,7 @@ class MenuController extends Controller
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
         Cache::forget('website.navbar');
 
-        return Redirect::route('menu::list');
+        return to_route('menu::list');
     }
 
     public function orderDown(int $id): RedirectResponse
@@ -124,7 +123,7 @@ class MenuController extends Controller
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
         Cache::forget('website.navbar');
 
-        return Redirect::route('menu::list');
+        return to_route('menu::list');
     }
 
     private function switchMenuItems(MenuItem $item1, MenuItem $item2): void
@@ -161,7 +160,7 @@ class MenuController extends Controller
         if ($menuItem->children->count() > 0) {
             Session::flash('flash_message', "A menu item with children can't be removed.");
 
-            return Redirect::route('menu::list');
+            return to_route('menu::list');
         }
 
         $change = MenuItem::query()->where('parent', '=', $menuItem->parent)->get();
@@ -177,7 +176,7 @@ class MenuController extends Controller
         $menuItem->delete();
         Cache::forget('website.navbar');
 
-        return Redirect::route('menu::list');
+        return to_route('menu::list');
     }
 
     /**

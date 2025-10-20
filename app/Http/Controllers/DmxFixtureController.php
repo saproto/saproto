@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -45,7 +44,7 @@ class DmxFixtureController extends Controller
 
         Session::flash('flash_message', sprintf('The new fixture %s has been stored.', $fixture->name));
 
-        return Redirect::route('dmx.fixtures.edit', ['fixture' => $fixture]);
+        return to_route('dmx.fixtures.edit', ['fixture' => $fixture]);
     }
 
     /**
@@ -56,10 +55,7 @@ class DmxFixtureController extends Controller
         return view('dmx.edit', ['fixture' => $fixture]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request, DmxFixture $fixture)
+    public function update(Request $request, DmxFixture $fixture): RedirectResponse
     {
         $fixture->fill($request->except('channel_name', 'special_function'));
         $fixture->save();
@@ -78,7 +74,7 @@ class DmxFixtureController extends Controller
 
         Session::flash('flash_message', sprintf('The fixture %s has been updated.', $fixture->name));
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -89,7 +85,7 @@ class DmxFixtureController extends Controller
         Session::flash('flash_message', sprintf('The fixture %s has been deleted.', $fixture->name));
         $fixture->delete();
 
-        return Redirect::route('dmx.fixtures.index');
+        return to_route('dmx.fixtures.index');
     }
 
     /**

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNewPhotoTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -77,4 +77,4 @@ class CreateNewPhotoTables extends Migration
 
         Schema::rename('flickr_likes', 'photo_likes');
     }
-}
+};

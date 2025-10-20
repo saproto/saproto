@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -68,7 +67,7 @@ class NewsController extends Controller
         if (! $newsitem->published_at && ! Auth::user()?->can('board')) {
             Session::flash('flash_message', 'This weekly newsletter has not been published yet.');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('emails.newsletter', [
@@ -148,11 +147,11 @@ class NewsController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
-        return Redirect::route('news::edit', ['id' => $newsitem->id]);
+        return to_route('news::edit', ['id' => $newsitem->id]);
     }
 
     /**
@@ -167,7 +166,7 @@ class NewsController extends Controller
 
         $newsitem->delete();
 
-        return Redirect::route('news::admin');
+        return to_route('news::admin');
     }
 
     public function sendWeeklyEmail(int $id): RedirectResponse
@@ -186,7 +185,7 @@ class NewsController extends Controller
         Cache::forget('home.weekly');
         Session::flash('flash_message', 'Newsletter has been sent.');
 
-        return Redirect::route('news::admin');
+        return to_route('news::admin');
     }
 
     /**

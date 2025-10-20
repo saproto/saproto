@@ -31,7 +31,7 @@ class MenuItemData extends Data
             $menuItem->url,
             $menuItem->order,
             $menuItem->is_member_only,
-            $menuItem->children->map(fn (MenuItem $child): ?\App\Data\MenuItemData => MenuItemData::fromModel($child)),
+            $menuItem->children->map(fn (MenuItem $child): ?MenuItemData => MenuItemData::fromModel($child)),
         ) : null;
     }
 }

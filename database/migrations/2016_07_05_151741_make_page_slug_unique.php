@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class MakePageSlugUnique extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class MakePageSlugUnique extends Migration
             $table->dropUnique('pages_slug_unique');
         });
     }
-}
+};

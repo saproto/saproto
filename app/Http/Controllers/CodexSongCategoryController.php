@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CodexSongCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class CodexSongCategoryController extends Controller
@@ -20,14 +19,14 @@ class CodexSongCategoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255'],
         ]);
 
         $category = new CodexSongCategory;
         $category->name = $validated['name'];
         $category->save();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function show(CodexSongCategory $codexSongCategory): void {}
@@ -40,13 +39,13 @@ class CodexSongCategoryController extends Controller
     public function update(Request $request, CodexSongCategory $codexSongCategory): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255'],
         ]);
 
         $codexSongCategory->name = $validated['name'];
         $codexSongCategory->save();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function destroy(CodexSongCategory $codexSongCategory): RedirectResponse
@@ -54,6 +53,6 @@ class CodexSongCategoryController extends Controller
         $codexSongCategory->songs()->delete();
         $codexSongCategory->delete();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 }

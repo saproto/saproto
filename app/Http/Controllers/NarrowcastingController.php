@@ -10,7 +10,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -45,13 +44,13 @@ class NarrowcastingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
 
         if (! $request->has('image') && ! $request->has('youtube_id')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
 
-            return Redirect::back();
+            return back();
         }
 
         $narrowcasting = new NarrowcastingItem;
@@ -62,7 +61,7 @@ class NarrowcastingController extends Controller
 
         $youtube_id = $request->string('youtube_id');
 
-        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->slide_duration = -1;
         }
@@ -77,13 +76,13 @@ class NarrowcastingController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
+                return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
             }
         }
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
 
-        return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
+        return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
     }
 
     public function edit(int $id): View|Factory
@@ -100,7 +99,7 @@ class NarrowcastingController extends Controller
     {
 
         $request->validate([
-            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
 
         $narrowcasting = NarrowcastingItem::query()->findOrFail($id);
@@ -118,12 +117,12 @@ class NarrowcastingController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
         $youtube_id = $request->string('youtube_id');
-        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+        if ($request->has('youtube_id') && (string) $youtube_id !== '') {
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
@@ -136,7 +135,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
 
-        return Redirect::route('narrowcasting::edit', ['id' => $narrowcasting->id]);
+        return to_route('narrowcasting::edit', ['id' => $narrowcasting->id]);
     }
 
     /**
@@ -152,7 +151,7 @@ class NarrowcastingController extends Controller
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been deleted.");
         $narrowcasting->delete();
 
-        return Redirect::route('narrowcasting::index');
+        return to_route('narrowcasting::index');
     }
 
     /**
@@ -168,7 +167,7 @@ class NarrowcastingController extends Controller
 
         Session::flash('flash_message', 'All finished campaigns have been deleted.');
 
-        return Redirect::route('narrowcasting::index');
+        return to_route('narrowcasting::index');
     }
 
     /** @return list<array{slide_duration: int, image:string}|array{slide_duration: int, video: non-falsy-string}> Return a JSON object of all currently active campaigns. */

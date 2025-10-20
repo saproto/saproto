@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class TempAdminController extends Controller
@@ -55,7 +54,7 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($tempAdminUser->id, $tempAdminUser->isTempadminLaterToday());
 
-        return Redirect::route('tempadmins.index');
+        return to_route('tempadmins.index');
     }
 
     /**
@@ -77,13 +76,10 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
-        return Redirect::route('tempadmins.index');
+        return to_route('tempadmins.index');
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function make(int $id)
+    public function make(int $id): RedirectResponse
     {
         $user = User::query()->findOrFail($id);
 
@@ -96,13 +92,10 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function end(int $id)
+    public function end(int $id): RedirectResponse
     {
         /** @var User $user */
         $user = User::query()->findOrFail($id);
@@ -116,15 +109,13 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($user->id, $user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 
     /**
-     * @return RedirectResponse
-     *
      * @throws Exception
      */
-    public function endId(int $id)
+    public function endId(int $id): RedirectResponse
     {
         /** @var Tempadmin $tempadmin */
         $tempadmin = Tempadmin::query()->findOrFail($id);
@@ -138,6 +129,6 @@ class TempAdminController extends Controller
 
         ProTubeApiService::updateAdmin($tempadmin->user->id, $tempadmin->user->isTempadminLaterToday());
 
-        return Redirect::back();
+        return back();
     }
 }
