@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\PasswordReset;
 use App\Models\User;
+use Exception;
 use Google\Service\Directory;
 use Google\Service\Directory\User as GoogleUser;
-use Google\Service\Exception;
 use Google_Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
-use nickurt\PwnedPasswords\PwnedPasswords;
 
 class UserPasswordController extends Controller
 {
@@ -32,9 +32,7 @@ class UserPasswordController extends Controller
     public function requestPasswordReset(Request $request): RedirectResponse
     {
         $user = User::query()->where('email', $request->email)->first();
-        if ($user !== null) {
-            $user->sendPasswordResetEmail();
-        }
+        $user?->sendPasswordResetEmail();
 
         Session::flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
 
@@ -61,34 +59,28 @@ class UserPasswordController extends Controller
 
     /**
      * Reset the password of the user.
+     *
+     * @throws Exception
      */
     public function resetPassword(Request $request): RedirectResponse
     {
         PasswordReset::query()->where('valid_to', '<', Carbon::now()->timestamp)->delete();
         $reset = PasswordReset::query()->where('token', $request->token)->first();
-        if ($reset !== null) {
-            if ($request->password !== $request->password_confirmation) {
-                Session::flash('flash_message', "Your passwords don't match.");
+        if (! $reset) {
+            Session::flash('flash_message', 'This reset token does not exist or has expired.');
 
-                return back();
-            }
-
-            if (strlen($request->password) < 10) {
-                Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
-
-                return back();
-            }
-
-            $reset->user->setPassword($request->password);
-            PasswordReset::query()->where('token', $request->token)->delete();
-            Session::flash('flash_message', 'Your password has been changed.');
-
-            return to_route('login::show');
+            return to_route('login::password::reset');
         }
 
-        Session::flash('flash_message', 'This reset token does not exist or has expired.');
+        $validated = $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
 
-        return to_route('login::password::reset');
+        $reset->user->setPassword($validated['password']);
+        PasswordReset::query()->where('token', $request->token)->delete();
+        Session::flash('flash_message', 'Your password has been changed.');
+
+        return to_route('login::show');
     }
 
     /**
@@ -102,29 +94,22 @@ class UserPasswordController extends Controller
     /**
      * Synchronize the password of the user.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function syncPasswords(Request $request): View|RedirectResponse
     {
-        $pass = $request->get('password');
+        $validated = $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
         $user = Auth::user();
-        $user_verify = AuthController::verifyCredentials($user->email, $pass);
+        $user->setPassword($validated['password']);
+        $this->syncGooglePassword($user, $validated['password']);
 
-        if ($user_verify?->id === $user->id) {
-            $user->setPassword($pass);
-            $this->syncGooglePassword($user, $pass);
-            Session::flash('flash_message', 'Your password was successfully synchronized.');
-
-            return to_route('user::dashboard::show');
-        }
-
-        Session::flash('flash_message', 'Password incorrect.');
-
-        return view('auth.sync');
+        return back();
     }
 
     /**
-     * @throws Exception
+     * @throws \Google\Service\Exception
      * @throws \Google\Exception
      */
     private function syncGooglePassword(User $protoUser, string $password): void
@@ -167,9 +152,7 @@ class UserPasswordController extends Controller
         ]);
 
         $user = User::whereEmail($request->get('email'))->first();
-        if ($user) {
-            $user->sendForgotUsernameEmail();
-        }
+        $user?->sendForgotUsernameEmail();
 
         Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
 
@@ -186,44 +169,22 @@ class UserPasswordController extends Controller
 
     /**
      * Change the password of the user.
+     *
+     * @throws Exception
      */
     public function changePassword(Request $request): View|RedirectResponse
     {
+        $validated = $request->validate([
+            'old_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
         $user = Auth::user();
 
-        $pass_old = $request->get('old_password');
-        $pass_new1 = $request->get('new_password1');
-        $pass_new2 = $request->get('new_password2');
+        $user->setPassword($validated['password']);
+        $this->syncGooglePassword($user, $validated['password']);
+        Session::flash('flash_message', 'Your password has been changed.');
 
-        $user_verify = AuthController::verifyCredentials($user->email, $pass_old);
-
-        if ($user_verify?->id === $user->id) {
-            if ($pass_new1 !== $pass_new2) {
-                Session::flash('flash_message', 'The new passwords do not match.');
-
-                return view('auth.passchange');
-            }
-
-            if (strlen($pass_new1) < 10) {
-                Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
-
-                return view('auth.passchange');
-            }
-
-            if ((new PwnedPasswords)->setPassword($pass_new1)->isPwnedPassword()) {
-                Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
-
-                return view('auth.passchange');
-            }
-
-            $user->setPassword($pass_new1);
-            Session::flash('flash_message', 'Your password has been changed.');
-
-            return to_route('user::dashboard::show');
-        }
-
-        Session::flash('flash_message', 'Old password incorrect.');
-
-        return view('auth.passchange');
+        return to_route('user::dashboard::show');
     }
 }

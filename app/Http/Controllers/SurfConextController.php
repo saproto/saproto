@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -93,7 +94,7 @@ class SurfConextController extends Controller
      *
      * @throws Exception
      */
-    public function callback(): RedirectResponse
+    public function callback(Request $request): RedirectResponse
     {
         // Attributes: uid, email, last_name, first_name, organization
         /** @phpstan-ignore-next-line  */
@@ -106,9 +107,9 @@ class SurfConextController extends Controller
         }
 
         return match (Session::get(self::SESSION_FLASH_KEY)) {
-            self::CREATE_ACCOUNT => $this->handleCreateNewAccount($user),
-            self::LINK_ACCOUNT => $this->handleLinkAccount($user),
-            self::LOGIN => $this->handleLoginUser($user),
+            self::CREATE_ACCOUNT => $this->handleCreateNewAccount($request, $user),
+            self::LINK_ACCOUNT => $this->handleLinkAccount($request, $user),
+            self::LOGIN => $this->handleLoginUser($request, $user),
             default => throw new Exception('Invalid action'),
         };
     }
@@ -116,7 +117,7 @@ class SurfConextController extends Controller
     /**
      * Process the response from SurfConext and log the user in
      */
-    protected function handleLoginUser(mixed $utUser): RedirectResponse
+    protected function handleLoginUser(Request $request, mixed $utUser): RedirectResponse
     {
         $user = User::query()->where('utwente_username', $utUser->uid)->first();
 
@@ -126,13 +127,13 @@ class SurfConextController extends Controller
             return to_route('login::show');
         }
 
-        return AuthController::loginUser($user);
+        return AuthController::loginUser($request, $user);
     }
 
     /**
      * Process the response from SurfConext and create a new account
      */
-    protected function handleCreateNewAccount(mixed $utUser): RedirectResponse
+    protected function handleCreateNewAccount(Request $request, mixed $utUser): RedirectResponse
     {
         $email = Session::get(self::SESSION_FLASH_KEY_EMAIL);
 
@@ -143,9 +144,7 @@ class SurfConextController extends Controller
         // We're in a create new account attempt, do not log them in
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
-            AuthController::loginUser(User::query()->where('utwente_username', $utUser->uid)->first());
-
-            return to_route('user::dashboard::show');
+            AuthController::loginUser($request, User::query()->where('utwente_username', $utUser->uid)->first());
         }
 
         User::register(
@@ -163,12 +162,12 @@ class SurfConextController extends Controller
     /**
      * Process the response from SurfConext and link the account
      */
-    protected function handleLinkAccount(mixed $utUser): RedirectResponse
+    protected function handleLinkAccount(Request $request, mixed $utUser): RedirectResponse
     {
         // We're in a link account attempt, but it already exists. Log them in instead
         if ($this->accountAlreadyExists($utUser->uid)) {
             Session::flash('flash_message', 'This University of Twente account is already registered to a user. We have logged you in.');
-            AuthController::loginUser(User::query()->where('utwente_username', $utUser->uid)->first());
+            AuthController::loginUser($request, User::query()->where('utwente_username', $utUser->uid)->first());
 
             return to_route('user::dashboard::show');
         }
