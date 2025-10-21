@@ -591,7 +591,6 @@ Route::middleware('forcedomain')->group(function () {
             Route::post('store', [NewsController::class, 'store'])->name('store');
             Route::get('edit/{id}', [NewsController::class, 'edit'])->name('edit');
             Route::post('update/{id}', [NewsController::class, 'update'])->name('update');
-            //            Route::post('edit/{id}/image', [NewsController::class,'featuredImage'])->name('image');
             Route::get('delete/{id}', [NewsController::class, 'destroy'])->name('delete');
             Route::get('sendWeekly/{id}', [NewsController::class, 'sendWeeklyEmail'])->name('sendWeekly');
         });
@@ -674,7 +673,6 @@ Route::middleware('forcedomain')->group(function () {
         Route::prefix('categories')->middleware(['permission:board'])->name('category::')->group(function () {
             Route::get('admin', [FeedbackController::class, 'categoryAdmin'])->name('admin');
             Route::post('store', [FeedbackController::class, 'categoryStore'])->name('store');
-            //            Route::get('edit/{id}', [FeedbackController::class,'categoryEdit'])->name('edit');
             Route::post('edit/{id}', [FeedbackController::class, 'categoryUpdate'])->name('update');
             Route::get('delete/{id}', [FeedbackController::class, 'categoryDestroy'])->name('delete');
         });
