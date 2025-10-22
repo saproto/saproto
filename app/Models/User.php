@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Date;
@@ -200,7 +199,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     use HasRoles;
     use InteractsWithMedia;
-    use Notifiable;
     use SoftDeletes;
 
     protected $table = 'users';
