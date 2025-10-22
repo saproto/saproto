@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Route;
 use Override;
 
@@ -146,7 +147,7 @@ class Announcement extends Model
      */
     protected function showByTime(): Attribute
     {
-        return Attribute::make(get: fn (): bool => Carbon::parse($this->display_from)->timestamp < Carbon::now()->timestamp && Carbon::parse($this->display_till)->timestamp > Carbon::now()->timestamp);
+        return Attribute::make(get: fn (): bool => Date::parse($this->display_from)->timestamp < Date::now()->timestamp && Date::parse($this->display_till)->timestamp > Date::now()->timestamp);
     }
 
     public function showForUser(?User $user = null): bool

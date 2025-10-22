@@ -16,12 +16,13 @@ use App\Models\PhotoLikes;
 use App\Models\PlayedVideo;
 use App\Models\RfidCard;
 use App\Models\User;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Random\RandomException;
 
 class ApiController extends Controller
@@ -32,7 +33,7 @@ class ApiController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            return response()->json([
+            return new JsonResponse([
                 'authenticated' => true,
                 'name' => $user->calling_name,
                 'admin' => $user->hasPermissionTo('protube', 'web') || $user->isTempadmin() || $user->isTempadminLaterToday(),
@@ -40,14 +41,12 @@ class ApiController extends Controller
             ]);
         }
 
-        return response()->json(['authenticated' => false]);
+        return new JsonResponse(['authenticated' => false]);
     }
 
     public function protubePlayed(Request $request): void
     {
-        if ($request->secret != Config::string('protube.protube_to_laravel_secret')) {
-            abort(403);
-        }
+        abort_if($request->secret != Config::string('protube.protube_to_laravel_secret'), 403);
 
         $user = User::query()->findOrFail($request->user_id);
         $youtubeId = $request->video_id;
@@ -89,14 +88,14 @@ class ApiController extends Controller
         $photosData = $this->randomDistributedAlbum($normal_distribution);
         $oldPhotosData = $this->randomDistributedAlbum($old_distribution);
         if (isset($photosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "photos": '.$photosData['error']], 500);
+            return new JsonResponse(['error' => 'Failed to retrieve "photos": '.$photosData['error']], 500);
         }
 
         if (isset($oldPhotosData['error'])) {
-            return response()->json(['error' => 'Failed to retrieve "old_photos": '.$oldPhotosData['error']], 500);
+            return new JsonResponse(['error' => 'Failed to retrieve "old_photos": '.$oldPhotosData['error']], 500);
         }
 
-        return response()->json([
+        return new JsonResponse([
             'photos' => $photosData,
             'old_photos' => $oldPhotosData,
         ]);
@@ -110,7 +109,7 @@ class ApiController extends Controller
      */
     private function randomDistributedAlbum(array $numbers): array
     {
-        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function ($query) {
+        $privateQuery = PhotoAlbum::query()->where('private', false)->where('published', true)->whereHas('items', static function (Builder $query) {
             $query->where('private', false);
         })->with(['items' => function ($q) {
             $q->reorder()->inRandomOrder()->take(6);
@@ -118,15 +117,15 @@ class ApiController extends Controller
 
         $random = random_int(1, 100);
         if ($random <= $numbers[0]) { // $numbers[0]% chance the album is from within the last year
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYear()->timestamp, Date::now()->timestamp]);
         } elseif ($random <= $numbers[1]) { // $numbers[1] - $numbers[0]% chance the album is from one year ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(2)->timestamp, Date::now()->subYear()->timestamp]);
         } elseif ($random <= $numbers[2]) {// $numbers[2] - $numbers[1]% chance the album is from two years ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(3)->timestamp, Date::now()->subYears(2)->timestamp]);
         } elseif ($random <= $numbers[3]) {// $numbers[3] - $numbers[2]% chance the album is from three years ago
-            $query = (clone $privateQuery)->whereBetween('date_taken', [Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
+            $query = (clone $privateQuery)->whereBetween('date_taken', [Date::now()->subYears(4)->timestamp, Date::now()->subYears(3)->timestamp]);
         } else {// 100 - $numbers[3]% chance the album is older than 4 years
-            $query = (clone $privateQuery)->where('date_taken', '<=', Carbon::now()->subYears(4)->timestamp);
+            $query = (clone $privateQuery)->where('date_taken', '<=', Date::now()->subYears(4)->timestamp);
         }
 
         $album = $query->inRandomOrder()->first();
@@ -145,7 +144,7 @@ class ApiController extends Controller
         return [
             'photos' => $album->items->map(fn (Photo $item): string => $item->getUrl(PhotoEnum::LARGE)),
             'album_name' => $album->name,
-            'date_taken' => Carbon::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
+            'date_taken' => Date::createFromTimestamp($album->date_taken, date_default_timezone_get())->format('d-m-Y'),
         ];
     }
 
@@ -179,7 +178,7 @@ class ApiController extends Controller
         foreach ($activityParticipations as $activity_participation) {
             $data['activities'][] = [
                 'name' => $activity_participation->activity?->event?->title,
-                'date' => $activity_participation->activity?->event ? Carbon::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
+                'date' => $activity_participation->activity?->event ? Date::createFromTimestamp($activity_participation->activity->event->start, date_default_timezone_get())->format('Y-m-d') : null,
                 'was_present' => $activity_participation->is_present,
                 'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
                 'backup' => $activity_participation->backup,
@@ -264,7 +263,7 @@ class ApiController extends Controller
                 ];
             }
 
-            foreach (FeedbackVote::query()->with('feedback')->where('user_id', $user->id)->whereHas('feedback', static function ($q) use ($category) {
+            foreach (FeedbackVote::query()->with('feedback')->where('user_id', $user->id)->whereHas('feedback', static function (Builder $q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
             })->get() as $feedbackVote) {
                 $data["liked_$category->url"][] = [
@@ -282,13 +281,13 @@ class ApiController extends Controller
         $user = User::query()->firstWhere('discord_id', $userId);
 
         if (! $user) {
-            return response()->json(['error' => 'No Proto user found with this Discord account linked.'], 404);
+            return new JsonResponse(['error' => 'No Proto user found with this Discord account linked.'], 404);
         }
 
         if (! $user->is_member) {
-            return response()->json(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
+            return new JsonResponse(['error' => 'Failed to verify Proto membership. Please visit the Proto website to confirm your membership is approved.'], 403);
         }
 
-        return response()->json(['name' => $user->calling_name]);
+        return new JsonResponse(['name' => $user->calling_name]);
     }
 }

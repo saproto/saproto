@@ -6,9 +6,9 @@ use App\Libraries\PDF_TOC;
 use App\Models\Codex;
 use App\Models\CodexSongCategory;
 use App\Models\CodexTextType;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -40,7 +40,7 @@ class CodexController extends Controller
         $codex = new Codex;
         $this->saveCodex($codex, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function edit(Codex $codex): View
@@ -57,7 +57,7 @@ class CodexController extends Controller
     {
         $this->saveCodex($codex, $request);
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     public function destroy(Codex $codex): RedirectResponse
@@ -66,19 +66,19 @@ class CodexController extends Controller
         $codex->texts()->detach();
         $codex->delete();
 
-        return Redirect::route('codex.index');
+        return to_route('codex.index');
     }
 
     private function saveCodex(Codex $codex, Request $request): void
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'export' => 'required|string|max:255',
-            'description' => 'required|string',
-            'songids' => 'nullable|array',
-            'songids.*' => 'integer',
-            'textids' => 'nullable|array',
-            'textids.*' => 'integer',
+            'name' => ['required', 'string', 'max:255'],
+            'export' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'songids' => ['nullable', 'array'],
+            'songids.*' => ['integer'],
+            'textids' => ['nullable', 'array'],
+            'textids.*' => ['integer'],
         ]);
 
         $codex->name = $validated['name'];
@@ -92,7 +92,7 @@ class CodexController extends Controller
     public function show(Codex $codex): ?RedirectResponse
     {
         $categories = CodexSongCategory::query()->whereHas('songs', function ($q) use ($codex) {
-            $q->whereHas('codices', function ($q) use ($codex) {
+            $q->whereHas('codices', function (Builder $q) use ($codex) {
                 $q->where('codex', $codex->id);
             });
         })->with(['songs' => function ($query) use ($codex) {
@@ -102,7 +102,7 @@ class CodexController extends Controller
         }])->orderBy('id')->get();
 
         $textCategories = CodexTextType::query()->whereHas('texts', function ($q) use ($codex) {
-            $q->whereHas('codices', function ($q) use ($codex) {
+            $q->whereHas('codices', function (Builder $q) use ($codex) {
                 $q->where('codex_codices.id', $codex->id);
             });
         })->with(['texts' => function ($query) use ($codex) {
@@ -113,7 +113,7 @@ class CodexController extends Controller
         if (count($categories) === 0 || count($textCategories) === 0) {
             Session::flash('flash_message', 'You need to add at least one song and one text to the codex first!');
 
-            return Redirect::route('codex.index');
+            return to_route('codex.index');
         }
 
         $A6 = [105, 148];

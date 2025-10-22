@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaymentUrlToMollie extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,4 +24,4 @@ class AddPaymentUrlToMollie extends Migration
             $table->dropColumn('payment_url');
         });
     }
-}
+};

@@ -8,7 +8,6 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -21,7 +20,7 @@ class CompanyController extends Controller
      *
      * @return RedirectResponse|View
      */
-    public function index()
+    public function index(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
     {
         $companies = Company::query()->with('media')->where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -30,7 +29,7 @@ class CompanyController extends Controller
 
         Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -38,7 +37,7 @@ class CompanyController extends Controller
      *
      * @return RedirectResponse|View
      */
-    public function indexMembercard()
+    public function indexMembercard(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
     {
         $companies = Company::query()->where('on_membercard', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
@@ -47,7 +46,7 @@ class CompanyController extends Controller
 
         Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -80,7 +79,7 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
 
         $company = new Company;
@@ -105,13 +104,13 @@ class CompanyController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
 
-        return Redirect::route('companies::admin');
+        return to_route('companies::admin');
     }
 
     /**
@@ -156,7 +155,7 @@ class CompanyController extends Controller
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
 
         $company = Company::query()->findOrFail($id);
@@ -180,13 +179,13 @@ class CompanyController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         }
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
 
-        return Redirect::route('companies::admin');
+        return to_route('companies::admin');
     }
 
     /**
@@ -196,9 +195,7 @@ class CompanyController extends Controller
     {
         $company = Company::query()->findOrFail($id);
 
-        if ($company->sort <= 0) {
-            abort(500);
-        }
+        abort_if($company->sort <= 0, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort - 1)->first();
 
@@ -208,7 +205,7 @@ class CompanyController extends Controller
         $company->sort--;
         $company->save();
 
-        return Redirect::route('companies::admin');
+        return to_route('companies::admin');
     }
 
     /**
@@ -218,9 +215,7 @@ class CompanyController extends Controller
     {
         $company = Company::query()->findOrFail($id);
 
-        if ($company->sort >= Company::query()->count() - 1) {
-            abort(500);
-        }
+        abort_if($company->sort >= Company::query()->count() - 1, 500);
 
         $companyAbove = Company::query()->where('sort', $company->sort + 1)->first();
 
@@ -230,7 +225,7 @@ class CompanyController extends Controller
         $company->sort++;
         $company->save();
 
-        return Redirect::route('companies::admin');
+        return to_route('companies::admin');
     }
 
     /**
@@ -246,6 +241,6 @@ class CompanyController extends Controller
         Session::flash('flash_message', "The company '".$company->name."' has been deleted.");
         $company->delete();
 
-        return Redirect::route('companies::admin');
+        return to_route('companies::admin');
     }
 }

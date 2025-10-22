@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class AddDietToUser extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,4 +30,4 @@ class AddDietToUser extends Migration
             $table->dropColumn('involves_food');
         });
     }
-}
+};

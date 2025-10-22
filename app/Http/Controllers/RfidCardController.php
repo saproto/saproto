@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -78,9 +77,7 @@ class RfidCardController extends Controller
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if (($rfid->user->id != Auth::id()) && (! Auth::user()->can('board'))) {
-            abort(403);
-        }
+        abort_if(($rfid->user->id != Auth::id()) && (! Auth::user()->can('board')), 403);
 
         return view('users.rfid.edit', ['card' => $rfid]);
     }
@@ -93,36 +90,31 @@ class RfidCardController extends Controller
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if ($rfid->user->id != Auth::id()) {
-            abort(403);
-        }
+        abort_if($rfid->user->id != Auth::id(), 403);
 
         $rfid->name = $request->input('name');
         $rfid->save();
 
         Session::flash('flash_message', 'Your RFID card has been updated.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      *
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $id): RedirectResponse
     {
         /** @var RfidCard $rfid */
         $rfid = RfidCard::query()->findOrFail($id);
-        if ($rfid->user->id != Auth::id()) {
-            abort(403);
-        }
+        abort_if($rfid->user->id != Auth::id(), 403);
 
         $rfid->delete();
 
         Session::flash('flash_message', 'Your RFID card has been deleted.');
 
-        return Redirect::back();
+        return back();
     }
 }

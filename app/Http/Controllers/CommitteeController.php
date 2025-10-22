@@ -7,6 +7,7 @@ use App\Models\Committee;
 use App\Models\CommitteeMembership;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -34,9 +34,9 @@ class CommitteeController extends Controller
         }
 
         $data = Committee::query()->where(function ($q) use ($showSociety) {
-            $q->where('is_society', $showSociety)->where(function ($q) {
-                $q->where('public', true)->orWhere(function ($q) {
-                    $q->whereHas('users', static function ($q) {
+            $q->where('is_society', $showSociety)->where(function (Builder $q) {
+                $q->where('public', true)->orWhere(function (Builder $q) {
+                    $q->whereHas('users', static function (Builder $q) {
                         $q->where('user_id', Auth::user()?->id);
                     });
                 });
@@ -50,9 +50,7 @@ class CommitteeController extends Controller
     {
         $committee = Committee::fromPublicId($id);
 
-        if (! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user())) {
-            abort(404);
-        }
+        abort_if(! $committee->public && ! Auth::user()?->can('board') && ! $committee->isMember(Auth::user()), 404);
 
         $pastEvents = $committee->pastEvents()->take(6)->get();
         $upcomingEvents = $committee->upcomingEvents()->get();
@@ -81,7 +79,7 @@ class CommitteeController extends Controller
 
         Session::flash('flash_message', 'Your new committee has been added!');
 
-        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
+        return to_route('committee::show', ['id' => $committee->getPublicId()]);
     }
 
     public function edit(int $id): View
@@ -100,7 +98,7 @@ class CommitteeController extends Controller
         if ($committee->slug === Config::string('proto.rootcommittee') && $request->slug != $committee->slug) {
             Session::flash('flash_message', "This committee is protected. You cannot change it's e-mail alias.");
 
-            return Redirect::back();
+            return back();
         }
 
         // Update the committee with the request data
@@ -114,14 +112,14 @@ class CommitteeController extends Controller
         // Redirect back with a message
         Session::flash('flash_message', 'Changes have been saved.');
 
-        return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
+        return to_route('committee::edit', ['new' => false, 'id' => $id]);
     }
 
     public function image(int $id, Request $request): RedirectResponse
     {
         $committee = Committee::query()->findOrFail($id);
         $request->validate([
-            'image' => 'nullable|image|max:5120|mimes:jpeg,png,jpg', // max 5MB
+            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,jpg'], // max 5MB
         ]);
         if ($request->has('image')) {
             try {
@@ -131,13 +129,13 @@ class CommitteeController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         } else {
             $committee->getFirstMedia()->delete();
         }
 
-        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
+        return to_route('committee::show', ['id' => $committee->getPublicId()]);
     }
 
     /* Committee membership tools below. */
@@ -147,12 +145,12 @@ class CommitteeController extends Controller
         Committee::query()->findOrFail($request->committee_id);
 
         $request->validate([
-            'start' => 'required|date',
-            'end' => 'nullable|date',
-            'role' => 'required|string',
-            'edition' => 'nullable|string',
-            'committee_id' => 'required|integer',
-            'user_id' => 'required|integer|exists:users,id',
+            'start' => ['required', 'date'],
+            'end' => ['nullable', 'date'],
+            'role' => ['required', 'string'],
+            'edition' => ['nullable', 'string'],
+            'committee_id' => ['required', 'integer'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
         ]);
 
         $membership = new CommitteeMembership;
@@ -167,7 +165,7 @@ class CommitteeController extends Controller
 
         Session::flash('flash_message', 'You have added '.$membership->user->name.' to '.$membership->committee->name.'.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function editMembershipForm(int $id): View
@@ -182,10 +180,10 @@ class CommitteeController extends Controller
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         $validated = $request->validate([
-            'start' => 'required|date',
-            'end' => 'nullable|date',
-            'role' => 'required|string',
-            'edition' => 'nullable|string',
+            'start' => ['required', 'date'],
+            'end' => ['nullable', 'date'],
+            'role' => ['required', 'string'],
+            'edition' => ['nullable', 'string'],
         ]);
 
         $membership->role = $validated['role'];
@@ -194,7 +192,7 @@ class CommitteeController extends Controller
         $membership->deleted_at = $request->date('end');
         $membership->save();
 
-        return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
+        return to_route('committee::edit', ['id' => $membership->committee->id]);
     }
 
     /**
@@ -209,12 +207,12 @@ class CommitteeController extends Controller
 
         $membership->forceDelete();
 
-        return Redirect::route('committee::edit', ['id' => $committee_id]);
+        return to_route('committee::edit', ['id' => $committee_id]);
     }
 
     public function endEdition(int $committeeID, string $edition): RedirectResponse
     {
-        $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function ($q) use ($committeeID) {
+        $memberships = CommitteeMembership::query()->where('edition', $edition)->whereHas('committee', static function (Builder $q) use ($committeeID) {
             $q->where('id', $committeeID);
         })->get();
         foreach ($memberships as $membership) {
@@ -223,7 +221,7 @@ class CommitteeController extends Controller
 
         Session::flash('flash_message', 'all members from the edition ended!');
 
-        return Redirect::back();
+        return back();
     }
 
     public function showAnonMailForm(string $id): View|RedirectResponse
@@ -233,7 +231,7 @@ class CommitteeController extends Controller
         if (! $committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('committee.anonmail', ['committee' => $committee]);
@@ -249,7 +247,7 @@ class CommitteeController extends Controller
         if (! $committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
 
-            return Redirect::back();
+            return back();
         }
 
         $name = $committee->name;
@@ -266,6 +264,6 @@ class CommitteeController extends Controller
 
         Session::flash('flash_message', sprintf('Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.', $committee->name));
 
-        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
+        return to_route('committee::show', ['id' => $committee->getPublicId()]);
     }
 }

@@ -9,8 +9,8 @@ use App\Models\WallstreetPrice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -37,7 +37,7 @@ class WallstreetController extends Controller
         if (! $activeDrink instanceof WallstreetDrink) {
             Session::flash('flash_message', 'There is no active drink to show the marquee screen for!');
 
-            return Redirect::back();
+            return back();
         }
 
         $prices = $this->getLatestPrices($activeDrink);
@@ -110,11 +110,11 @@ class WallstreetController extends Controller
     {
         /** @var WallstreetDrink $drink */
         $drink = WallstreetDrink::query()->findOrFail($id);
-        $drink->end_time = Carbon::now()->timestamp;
+        $drink->end_time = Date::now()->timestamp;
         $drink->save();
         Session::flash('flash_message', 'Wallstreet drink closed.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function addProducts(int $id, Request $request): RedirectResponse
@@ -139,12 +139,12 @@ class WallstreetController extends Controller
         $drink->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet drink.');
 
-        return Redirect::back();
+        return back();
     }
 
     public static function active(): ?WallstreetDrink
     {
-        return WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->timestamp)->where('end_time', '>=', Carbon::now()->timestamp)->first();
+        return WallstreetDrink::query()->where('start_time', '<=', Date::now()->timestamp)->where('end_time', '>=', Date::now()->timestamp)->first();
     }
 
     /**
@@ -275,6 +275,6 @@ class WallstreetController extends Controller
         $event->products()->detach($productId);
         Session::flash('flash_message', 'Product removed from Wallstreet Event.');
 
-        return Redirect::back();
+        return back();
     }
 }

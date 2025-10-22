@@ -7,9 +7,8 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -51,7 +50,7 @@ class AnnouncementController extends Controller
 
         Session::flash('flash_message', 'Announcement created.');
 
-        return Redirect::route('announcement::edit', ['id' => $announcement->id]);
+        return to_route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
@@ -91,7 +90,7 @@ class AnnouncementController extends Controller
 
         Session::flash('flash_message', 'Announcement updated.');
 
-        return Redirect::route('announcement::edit', ['id' => $announcement->id]);
+        return to_route('announcement::edit', ['id' => $announcement->id]);
     }
 
     /**
@@ -108,7 +107,7 @@ class AnnouncementController extends Controller
 
         Session::flash('flash_message', 'Announcement deleted.');
 
-        return Redirect::route('announcement::index');
+        return to_route('announcement::index');
     }
 
     /**
@@ -118,28 +117,27 @@ class AnnouncementController extends Controller
      */
     public function clear()
     {
-        Announcement::query()->where('display_till', '<', Carbon::now()->format('Y-m-d'))->delete();
+        Announcement::query()->where('display_till', '<', Date::now()->format('Y-m-d'))->delete();
 
         Session::flash('flash_message', 'Announcements cleared.');
 
-        return Redirect::route('announcement::index');
+        return to_route('announcement::index');
     }
 
     /**
      * @param  int  $id
-     * @return RedirectResponse
      */
-    public function dismiss($id)
+    public function dismiss($id): RedirectResponse
     {
         /** @var Announcement $announcement */
         $announcement = Announcement::query()->find($id);
 
         if ($announcement == null || ! $announcement->is_dismissable) {
-            return Redirect::back();
+            return back();
         }
 
         $announcement->dismissForUser(Auth::user());
 
-        return Redirect::back();
+        return back();
     }
 }

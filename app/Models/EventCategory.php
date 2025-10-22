@@ -31,7 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EventCategory whereName($value)
  * @method static Builder<static>|EventCategory whereUpdatedAt($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class EventCategory extends Model
 {

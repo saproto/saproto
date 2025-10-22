@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -19,7 +18,7 @@ class LeaderboardController extends Controller
      *
      * @return RedirectResponse|View
      */
-    public function index()
+    public function index(): Factory|\Illuminate\Contracts\View\View|RedirectResponse
     {
         $leaderboards = Leaderboard::query()->with('entries.user')->orderBy('created_at', 'desc')->get();
         if (! $leaderboards->isEmpty()) {
@@ -28,7 +27,7 @@ class LeaderboardController extends Controller
 
         Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -77,7 +76,7 @@ class LeaderboardController extends Controller
 
         Session::flash('flash_message', "Your leaderboard '".$leaderboard->name."' has been added.");
 
-        return Redirect::route('leaderboards::edit', ['id' => $leaderboard->id]);
+        return to_route('leaderboards::edit', ['id' => $leaderboard->id]);
     }
 
     /**
@@ -89,25 +88,18 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::query()->with('entries.user')->findOrFail($id);
 
-        if (! $leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
 
         $entries = $leaderboard->entries->sortByDesc('points');
 
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
-    /**
-     * @return RedirectResponse
-     */
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         $leaderboard = Leaderboard::query()->findOrFail($id);
 
-        if (! $leaderboard->canEdit(Auth::user())) {
-            abort(403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
-        }
+        abort_unless($leaderboard->canEdit(Auth::user()), 403, "Only the board or member of the {$leaderboard->committee->name} can edit this leaderboard");
 
         $leaderboard->name = $request->input('name');
         $leaderboard->description = $request->input('description');
@@ -133,7 +125,7 @@ class LeaderboardController extends Controller
 
         Session::flash('flash_message', 'Leaderboard has been updated.');
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -146,6 +138,6 @@ class LeaderboardController extends Controller
         Session::flash('flash_message', "The leaderboard '".$leaderboard->name."' has been deleted.");
         $leaderboard->delete();
 
-        return Redirect::route('leaderboards::admin');
+        return to_route('leaderboards::admin');
     }
 }

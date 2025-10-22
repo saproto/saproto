@@ -41,7 +41,7 @@ class CheckUtwenteAccounts extends Command
     {
         $users = User::query()->whereNotNull('utwente_username')->select(['id', 'utwente_username', 'name'])->get();
 
-        $userSns = implode('', $users->pluck('utwente_username')->map(fn ($username): string => '(cn='.strtolower($username).')')->toArray());
+        $userSns = implode('', $users->pluck('utwente_username')->map(fn ($username): string => '(cn='.strtolower($username).')')->all());
         $this->info('Checking '.$users->count().' UTwente accounts.');
 
         $unlinked = [];

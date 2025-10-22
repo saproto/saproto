@@ -35,7 +35,7 @@ class ShortUrlController extends Controller
             Session::flash('flash_message', 'A shortlink with this URL already exists!');
         }
 
-        return Redirect::route('short_urls.index');
+        return to_route('short_urls.index');
     }
 
     public function edit(ShortUrl $short_url): View
@@ -52,7 +52,7 @@ class ShortUrlController extends Controller
             Session::flash('flash_message', 'A shortlink with this URL already exists!');
         }
 
-        return Redirect::route('short_urls.index');
+        return to_route('short_urls.index');
     }
 
     public function destroy(ShortUrl $short_url): RedirectResponse
@@ -61,7 +61,7 @@ class ShortUrlController extends Controller
 
         Session::flash('flash_message', 'Short URL deleted!');
 
-        return Redirect::route('short_urls.index');
+        return to_route('short_urls.index');
     }
 
     public function qrCode(int $id): Response

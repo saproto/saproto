@@ -11,9 +11,8 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -40,15 +39,15 @@ class EmailController extends Controller
         $searchTerm = $request->input('searchterm');
 
         if ($description) {
-            $filteredEmails = $filteredEmails->orWhere('description', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('description', '%'.$searchTerm.'%');
         }
 
         if ($subject) {
-            $filteredEmails = $filteredEmails->orWhere('subject', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('subject', '%'.$searchTerm.'%');
         }
 
         if ($body) {
-            $filteredEmails = $filteredEmails->orWhere('body', 'LIKE', '%'.$searchTerm.'%');
+            $filteredEmails = $filteredEmails->orWhereLike('body', '%'.$searchTerm.'%');
         }
 
         return view('emailadmin.overview', [
@@ -73,14 +72,14 @@ class EmailController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'time' => 'required|date',
+            'time' => ['required', 'date'],
         ]);
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) {
             Session::flash('flash_message', 'Sender address is not a valid e-mail address.');
 
-            return Redirect::back();
+            return back();
         }
 
         $email = Email::query()->create([
@@ -94,7 +93,7 @@ class EmailController extends Controller
         $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->has('toBackup'));
         Session::flash('flash_message', 'Your e-mail has been saved.');
 
-        return Redirect::route('email::index');
+        return to_route('email::index');
     }
 
     /**
@@ -126,7 +125,7 @@ class EmailController extends Controller
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         return view('emailadmin.editmail', ['email' => $email]);
@@ -138,7 +137,7 @@ class EmailController extends Controller
     public function update(Request $request, int $id)
     {
         $request->validate([
-            'time' => 'required|date',
+            'time' => ['required', 'date'],
         ]);
 
         /** @var Email $email */
@@ -147,14 +146,14 @@ class EmailController extends Controller
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         $senderAddress = $request->input('sender_address');
         if (! filter_var($senderAddress.'@test.com', FILTER_VALIDATE_EMAIL)) { // test.com just as a test
             Session::flash('flash_message', 'Sender address is not a valid e-mail address.');
 
-            return Redirect::back();
+            return back();
         }
 
         $email->fill([
@@ -170,7 +169,7 @@ class EmailController extends Controller
 
         Session::flash('flash_message', 'Your e-mail has been saved.');
 
-        return Redirect::route('email::index');
+        return to_route('email::index');
     }
 
     /**
@@ -184,7 +183,7 @@ class EmailController extends Controller
         if ($email->sent) {
             Session::flash('flash_message', 'This e-mail has been sent and can thus not be edited.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         if ($email->ready) {
@@ -192,18 +191,18 @@ class EmailController extends Controller
             $email->save();
             Session::flash('flash_message', 'The e-mail has been put on hold.');
         } else {
-            if ($email->time - Carbon::now()->timestamp < 5 * 60) {
+            if ($email->time - Date::now()->timestamp < 5 * 60) {
                 Session::flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
 
-                return Redirect::route('email::index');
+                return to_route('email::index');
             }
 
             $email->ready = true;
             $email->save();
-            Session::flash('flash_message', 'The e-mail has been queued for deliver at the specified time.');
+            Session::flash('flash_message', 'The e-mail has been queued for delivery at the specified time.');
         }
 
-        return Redirect::route('email::index');
+        return to_route('email::index');
     }
 
     /**
@@ -218,7 +217,7 @@ class EmailController extends Controller
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         if ($request->has('attachment')) {
@@ -228,17 +227,17 @@ class EmailController extends Controller
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 Session::flash('flash_message', $e->getMessage());
 
-                return Redirect::back();
+                return back();
             }
         } else {
             Session::flash('flash_message', 'Do not forget the attachment.');
 
-            return Redirect::route('email::edit', ['id' => $email->id]);
+            return to_route('email::edit', ['id' => $email->id]);
         }
 
         Session::flash('flash_message', 'Attachment uploaded.');
 
-        return Redirect::route('email::edit', ['id' => $email->id]);
+        return to_route('email::edit', ['id' => $email->id]);
     }
 
     /**
@@ -253,14 +252,14 @@ class EmailController extends Controller
         if ($email->sent || $email->ready) {
             Session::flash('flash_message', 'You can currently not edit this e-mail. Please make sure it is in draft mode.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         $email->deleteMedia($file_id);
 
         Session::flash('flash_message', 'Attachment deleted.');
 
-        return Redirect::route('email::edit', ['id' => $email->id]);
+        return to_route('email::edit', ['id' => $email->id]);
     }
 
     /**
@@ -284,7 +283,7 @@ class EmailController extends Controller
             Session::flash('flash_message', $user->name.' was already unsubscribed from '.$list->name);
         }
 
-        return Redirect::route('homepage');
+        return to_route('homepage');
     }
 
     /**
@@ -299,13 +298,13 @@ class EmailController extends Controller
         if ($email->sent) {
             Session::flash('flash_message', 'This e-mail has been sent and can thus not be deleted.');
 
-            return Redirect::route('email::index');
+            return to_route('email::index');
         }
 
         $email->delete();
         Session::flash('flash_message', 'The e-mail has been deleted.');
 
-        return Redirect::route('email::index');
+        return to_route('email::index');
     }
 
     /** @param array<int> $lists

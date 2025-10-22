@@ -28,7 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|EmailListSubscription whereUpdatedAt($value)
  * @method static Builder<static>|EmailListSubscription whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class EmailListSubscription extends Model
 {

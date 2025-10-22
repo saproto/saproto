@@ -6,7 +6,6 @@ use App\Models\WelcomeMessage;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -44,7 +43,7 @@ class WelcomeController extends Controller
             Session::flash('flash_message', 'Welcome Message updated');
         }
 
-        return Redirect::route('welcomeMessages.index');
+        return to_route('welcomeMessages.index');
     }
 
     /**
@@ -55,6 +54,6 @@ class WelcomeController extends Controller
         $welcomeMessage->delete();
         Session::flash('flash_message', 'Welcome Message removed');
 
-        return Redirect::route('welcomeMessages.index');
+        return to_route('welcomeMessages.index');
     }
 }

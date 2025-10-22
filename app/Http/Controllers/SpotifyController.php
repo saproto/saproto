@@ -43,15 +43,13 @@ class SpotifyController extends Controller
         /** @phpstan-ignore-next-line */
         $spotify_user = $api->me()->id;
         $right_user = Config::string('app-proto.spotify-user');
-        if ($spotify_user != $right_user) {
-            abort(404, "You authenticated as the wrong user. (Authenticated as {$spotify_user} but should authenticate as {$right_user}.)");
-        }
+        abort_if($spotify_user != $right_user, 404, "You authenticated as the wrong user. (Authenticated as {$spotify_user} but should authenticate as {$right_user}.)");
 
         self::setSession($session);
         self::setApi($api);
         \Illuminate\Support\Facades\Session::flash('flash_message', 'Successfully saved Spotify credentials.');
 
-        return Redirect::route('homepage');
+        return to_route('homepage');
     }
 
     public static function setSession(SpotifySession $session): void

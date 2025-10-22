@@ -11,7 +11,8 @@ use App\Models\WallstreetDrink;
 use App\Models\WallstreetEvent;
 use App\Models\WallstreetPrice;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Support\Facades\Date;
 use Random\RandomException;
 
 class UpdateWallstreetPrices extends Command
@@ -51,7 +52,7 @@ class UpdateWallstreetPrices extends Command
     {
         // get the wallstreet drink that is currently active
 
-        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', Carbon::now()->timestamp)->where('end_time', '>=', Carbon::now()->timestamp)->first();
+        $currentDrink = WallstreetDrink::query()->where('start_time', '<=', Date::now()->timestamp)->where('end_time', '>=', Date::now()->timestamp)->first();
         if ($currentDrink === null) {
             $this->info('No active wallstreet drink found');
 
@@ -72,14 +73,12 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 continue;
             }
 
-            $newOrderlines = OrderLine::query()->where('created_at', '>=', Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
+            $newOrderlines = OrderLine::query()->where('created_at', '>=', Date::now()->subMinute())->where('product_id', $product->id)->sum('units');
             // heighten the price if there are new orders and the price is not the actual price
             if ($newOrderlines > 0) {
                 $delta = $newOrderlines * $currentDrink->price_increase;
@@ -93,9 +92,7 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 $this->info($product->id.' has '.$newOrderlines.' new orderlines, increasing price by '.$delta.' to '.$newPriceObject->price);
 
@@ -114,9 +111,7 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
 
                 $this->info($product->id.' has no new orderlines, lowering price by '.$currentDrink->price_decrease.' to '.$newPriceObject->price);
 
@@ -125,7 +120,7 @@ class UpdateWallstreetPrices extends Command
             }
         }
 
-        $randomEventQuery = WallstreetEvent::query()->inRandomOrder()->whereHas('products', static function ($q) use ($currentDrink) {
+        $randomEventQuery = WallstreetEvent::query()->inRandomOrder()->whereHas('products', static function (Builder $q) use ($currentDrink) {
             $q->whereIn('products.id', $currentDrink->products->pluck('id'));
         })->where('active', true);
 
@@ -149,21 +144,13 @@ class UpdateWallstreetPrices extends Command
 
                 $newPriceObject->save();
 
-                NewWallstreetPrice::dispatch(
-                    $newPriceObject
-                );
+                event(new NewWallstreetPrice($newPriceObject));
             }
 
-            NewWallstreetEvent::dispatch(
-                $currentDrink->id,
-                $randomEvent
-            );
+            event(new NewWallstreetEvent($currentDrink->id, $randomEvent));
         }
 
-        NewWallstreetLossCalculation::dispatch(
-            $currentDrink->id,
-            $currentDrink->loss()
-        );
+        event(new NewWallstreetLossCalculation($currentDrink->id, $currentDrink->loss()));
 
         return 0;
     }

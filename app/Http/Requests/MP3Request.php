@@ -22,7 +22,7 @@ class MP3Request extends FormRequest
     public function rules(): array
     {
         return [
-            'sound' => 'required|mimes:audio/mpeg,mp3,mpga|max:200',
+            'sound' => ['required', 'mimes:audio/mpeg,mp3,mpga', 'max:200'],
         ];
     }
 }

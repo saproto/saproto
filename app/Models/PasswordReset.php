@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder<static>|PasswordReset whereToken($value)
  * @method static Builder<static>|PasswordReset whereValidTo($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class PasswordReset extends Model
 {

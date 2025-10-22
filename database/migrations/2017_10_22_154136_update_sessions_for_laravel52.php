@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateSessionsForLaravel52 extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,4 +28,4 @@ class UpdateSessionsForLaravel52 extends Migration
             $table->dropColumn('user_agent');
         });
     }
-}
+};

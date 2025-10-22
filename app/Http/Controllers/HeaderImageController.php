@@ -6,7 +6,6 @@ use App\Models\HeaderImage;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -30,9 +29,9 @@ class HeaderImageController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title' => 'required|max:255',
-            'user' => 'required|integer',
-            'image' => 'required|image:jpeg,png,jpg|max:5120',
+            'title' => ['required', 'max:255'],
+            'user' => ['required', 'integer'],
+            'image' => ['required', 'image:jpeg,png,jpg', 'max:5120'],
         ]);
 
         $header = HeaderImage::query()->create([
@@ -50,11 +49,11 @@ class HeaderImageController extends Controller
                 Session::flash('flash_message', $e->getMessage());
                 $header->delete();
 
-                return Redirect::back();
+                return back();
             }
         }
 
-        return Redirect::route('headerimages.index');
+        return to_route('headerimages.index');
     }
 
     public function destroy(HeaderImage $headerimage): RedirectResponse
@@ -62,6 +61,6 @@ class HeaderImageController extends Controller
         $headerimage->delete();
         Session::flash('flash_message', 'Header image deleted.');
 
-        return Redirect::route('headerimages.index');
+        return to_route('headerimages.index');
     }
 }

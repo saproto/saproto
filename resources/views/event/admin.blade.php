@@ -1,7 +1,11 @@
+@php
+    use App\Models\Event;
+@endphp
+
 @extends('website.layouts.redesign.generic')
 
 @php
-    /** @var \App\Models\Event $event */
+    /** @var Event $event */
 @endphp
 
 @section('page-title')

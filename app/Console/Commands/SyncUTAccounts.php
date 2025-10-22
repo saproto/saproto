@@ -9,8 +9,8 @@ use App\Models\User;
 use App\Models\UtAccount;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -59,7 +59,7 @@ class SyncUTAccounts extends Command
         $this->info('Removing. '.$notFoundUtAccounts->count().'. accounts that have not been found');
 
         $removed = User::query()->whereHas('member', function ($member) {
-            $member->whereHas('UtAccount', function ($q) {
+            $member->whereHas('UtAccount', function (\Illuminate\Contracts\Database\Query\Builder $q) {
                 $q->where('found', false);
             });
         })->pluck('name')->map(fn ($name): string => 'Did not find the ut account associated with the membership for: '.$name);
@@ -196,8 +196,8 @@ class SyncUTAccounts extends Command
             'givenname' => $student['givenname'],
             'surname' => $student['sn'],
             'found' => true,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ];
     }
 

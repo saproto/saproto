@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory;
-use Illuminate\Support\Facades\Redirect;
 use Override;
 
 class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
@@ -27,7 +26,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
         }
 
         if ($this->auth->guest()) {
-            return Redirect::route('login::show');
+            return to_route('login::show');
         }
 
         return $next($request);

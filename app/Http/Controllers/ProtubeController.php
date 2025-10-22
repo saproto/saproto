@@ -6,10 +6,9 @@ use App\Models\PlayedVideo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -30,7 +29,7 @@ class ProtubeController extends Controller
     {
         $user_count = PlayedVideo::query()->where('user_id', Auth::user()->id)->count();
         $history = PlayedVideo::query()
-            ->where('created_at', '>', Carbon::now()->subWeek()->format('Y-m-d'))
+            ->where('created_at', '>', Date::now()->subWeek()->format('Y-m-d'))
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -56,7 +55,7 @@ class ProtubeController extends Controller
                 DB::raw('count(*) as played_count'),
             ])
             ->when($since, function ($query) use ($since) {
-                $query->where('created_at', '>', Carbon::parse($since)->format('Y-m-d'));
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
             })
             ->when($user, function ($query) use ($user) {
                 $query->where('user_id', $user->id);
@@ -74,7 +73,7 @@ class ProtubeController extends Controller
 
         Session::flash('flash_message', 'Changes saved.');
 
-        return Redirect::back();
+        return back();
     }
 
     public function clearHistory(): RedirectResponse
@@ -85,6 +84,6 @@ class ProtubeController extends Controller
 
         Session::flash('flash_message', 'History cleared.');
 
-        return Redirect::back();
+        return back();
     }
 }

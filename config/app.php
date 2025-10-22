@@ -65,8 +65,7 @@ use Milon\Barcode\BarcodeServiceProvider;
 use Milon\Barcode\Facades\DNS1DFacade;
 use Milon\Barcode\Facades\DNS2DFacade;
 use Mollie\Laravel\Facades\Mollie;
-use nickurt\PwnedPasswords\Facade;
-use nickurt\PwnedPasswords\ServiceProvider;
+use Sentry\Laravel\ServiceProvider;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spipu\Html2Pdf\Html2Pdf;
@@ -247,7 +246,6 @@ return [
         MarkdownServiceProvider::class,
         HashidsServiceProvider::class,
         ServiceProvider::class,
-        Sentry\Laravel\ServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
@@ -314,8 +312,6 @@ return [
         'Mollie' => Mollie::class,
 
         'Hashids' => Hashids::class,
-
-        'PwnedPasswords' => Facade::class,
 
     ],
 

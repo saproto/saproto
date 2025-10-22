@@ -29,7 +29,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|LeaderboardEntry whereUpdatedAt($value)
  * @method static Builder<static>|LeaderboardEntry whereUserId($value)
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class LeaderboardEntry extends Model
 {

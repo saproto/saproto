@@ -7,8 +7,8 @@ use App\Models\Withdrawal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 
 class OmnomcomWithdrawalNotification extends Mailable
 {
@@ -45,7 +45,7 @@ class OmnomcomWithdrawalNotification extends Mailable
     {
         return $this
             ->from('treasurer@'.Config::string('proto.emaildomain'), Config::string('proto.treasurer'))
-            ->subject('S.A. Proto Withdrawal Announcement for '.Carbon::parse($this->withdrawal->date)->format('d-m-Y'))
+            ->subject('S.A. Proto Withdrawal Announcement for '.Date::parse($this->withdrawal->date)->format('d-m-Y'))
             ->view('emails.omnomcom.withdrawalnotification');
     }
 }

@@ -9,10 +9,9 @@ use Carbon\CarbonImmutable;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -31,7 +30,7 @@ class DinnerformController extends Controller
         if (! $dinnerform->isCurrent() && ! $order) {
             Session::flash('flash_message', 'This dinnerform is closed and you have not ordered anything.');
 
-            return Redirect::back();
+            return back();
         }
 
         return view('dinnerform.show', ['dinnerform' => $dinnerform, 'order' => $order]);
@@ -61,7 +60,7 @@ class DinnerformController extends Controller
         if ($request->input('end') < $request->input('start')) {
             Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
 
-            return Redirect::back();
+            return back();
         }
 
         $dinnerform = Dinnerform::query()->create([
@@ -79,7 +78,7 @@ class DinnerformController extends Controller
 
         Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
 
-        return Redirect::route('dinnerform::create');
+        return to_route('dinnerform::create');
     }
 
     public function edit(int $id): View|RedirectResponse
@@ -88,7 +87,7 @@ class DinnerformController extends Controller
         if ($dinnerformCurrent->closed) {
             Session::flash('flash_message', 'You cannot update a closed dinnerform!');
 
-            return Redirect::back();
+            return back();
         }
 
         $dinnerformList = Dinnerform::query()
@@ -106,14 +105,14 @@ class DinnerformController extends Controller
         $dinnerform = Dinnerform::query()->findOrFail($id);
 
         $request->validate([
-            'start' => 'required|date_format:Y-m-d\TH:i',
-            'end' => 'required|date_format:Y-m-d\TH:i|after:start',
+            'start' => ['required', 'date_format:Y-m-d\TH:i'],
+            'end' => ['required', 'date_format:Y-m-d\TH:i', 'after:start'],
         ]);
 
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'You cannot update a closed dinnerform!');
 
-            return Redirect::back();
+            return back();
         }
 
         $start = CarbonImmutable::parse($request->input('start'))->timestamp;
@@ -143,7 +142,7 @@ class DinnerformController extends Controller
             Session::flash('flash_message', "Your dinnerform for '".$dinnerform->restaurant."' has been saved.");
         }
 
-        return Redirect::route('dinnerform::edit', ['id' => $dinnerform->id]);
+        return to_route('dinnerform::edit', ['id' => $dinnerform->id]);
     }
 
     /**
@@ -159,7 +158,7 @@ class DinnerformController extends Controller
             Session::flash('flash_message', 'The dinnerform is already closed and can not be deleted!');
         }
 
-        return Redirect::route('dinnerform::create');
+        return to_route('dinnerform::create');
     }
 
     /**
@@ -174,10 +173,10 @@ class DinnerformController extends Controller
             ->findOrFail($id);
 
         $dinnerform->update([
-            'end' => Carbon::now(),
+            'end' => Date::now(),
         ]);
 
-        return Redirect::route('dinnerform::admin', ['id' => $dinnerform->id]);
+        return to_route('dinnerform::admin', ['id' => $dinnerform->id]);
     }
 
     public function process(int $id): RedirectResponse
@@ -185,7 +184,7 @@ class DinnerformController extends Controller
         if (! Auth::user()->can('finadmin')) {
             Session::flash('flash_message', 'You are not allowed to process dinnerforms!');
 
-            return Redirect::back();
+            return back();
         }
 
         $dinnerform = Dinnerform::query()->findOrFail($id);
@@ -196,7 +195,7 @@ class DinnerformController extends Controller
         if ($dinnerform->closed) {
             Session::flash('flash_message', 'This dinnerform has already been processed!');
 
-            return Redirect::back();
+            return back();
         }
 
         foreach ($dinnerformOrderlines as $dinnerformOrderline) {
@@ -206,7 +205,7 @@ class DinnerformController extends Controller
                 $dinnerformOrderline->price_with_discount,
                 null,
                 null,
-                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Carbon::parse($dinnerform->end)->format('d-m-Y')),
+                sprintf("Dinnerform from %s, ordered at $dinnerform->restaurant", Date::parse($dinnerform->end)->format('d-m-Y')),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed = true;
@@ -216,6 +215,6 @@ class DinnerformController extends Controller
         $dinnerform->closed = true;
         $dinnerform->save();
 
-        return Redirect::route('dinnerform::create')->with('flash_message', "All orderlines of $dinnerform->restaurant have been processed!");
+        return to_route('dinnerform::create')->with('flash_message', "All orderlines of $dinnerform->restaurant have been processed!");
     }
 }

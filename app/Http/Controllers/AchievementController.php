@@ -9,9 +9,8 @@ use Exception;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
@@ -66,7 +65,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', "Achievement '".$achievement->name."' has been created.");
         }
 
-        return Redirect::route('achievement::edit', ['id' => $achievement->id]);
+        return to_route('achievement::edit', ['id' => $achievement->id]);
     }
 
     public function update(int $id, Request $request): RedirectResponse
@@ -89,7 +88,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', "Achievement '".$achievement->name."' has been updated.");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -102,13 +101,13 @@ class AchievementController extends Controller
         if (count($achievement->users) > 0) {
             Session::flash('flash_message', "Achievement '".$achievement->name."' has users associated with it. You cannot remove it.");
 
-            return Redirect::route('achievement::index');
+            return to_route('achievement::index');
         }
 
         $achievement->delete();
         Session::flash('flash_message', "Achievement '".$achievement->name."' has been removed.");
 
-        return Redirect::route('achievement::index');
+        return to_route('achievement::index');
     }
 
     public function achieve(string $page_name): View|RedirectResponse
@@ -117,14 +116,14 @@ class AchievementController extends Controller
         if (! $user->is_member) {
             Session::flash('flash_message', 'You need to be a member to receive this achievement');
 
-            return Redirect::back();
+            return back();
         }
 
         $achievement = Achievement::query()->where('has_page', '=', true)->where('page_name', '=', $page_name)->firstOrFail();
         if ($achievement->is_archived) {
             Session::flash('flash_message', 'You can no longer earn this achievement');
 
-            return Redirect::back();
+            return back();
         }
 
         if ($this->giveAchievement($achievement, $user, null, null)) {
@@ -147,7 +146,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', "$user->name already has this achievement");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     public function give(Request $request): RedirectResponse
@@ -174,7 +173,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', "Achievement $achievement->name had already been achieved by all users!");
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -193,7 +192,7 @@ class AchievementController extends Controller
             }
         }
 
-        return Redirect::back();
+        return back();
     }
 
     /**
@@ -205,7 +204,7 @@ class AchievementController extends Controller
         $achievement = Achievement::query()->findOrFail($achievement_id);
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
 
-        return Redirect::back();
+        return back();
     }
 
     public function icon(int $id, Request $request): RedirectResponse
@@ -220,7 +219,7 @@ class AchievementController extends Controller
 
         Session::flash('flash_message', 'Achievement Icon set');
 
-        return Redirect::route('achievement::edit', ['id' => $id]);
+        return to_route('achievement::edit', ['id' => $id]);
     }
 
     /**
@@ -244,7 +243,7 @@ class AchievementController extends Controller
                 'description' => $description,
             ]);
             if (! empty($achievedOn)) {
-                $relation->created_at = Carbon::parse($achievedOn);
+                $relation->created_at = Date::parse($achievedOn);
             }
 
             $relation->save();

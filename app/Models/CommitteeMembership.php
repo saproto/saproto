@@ -41,7 +41,7 @@ use Override;
  * @method static Builder<static>|CommitteeMembership withTrashed()
  * @method static Builder<static>|CommitteeMembership withoutTrashed()
  *
- * @mixin \Eloquent
+ * @mixin Model
  */
 class CommitteeMembership extends Model
 {

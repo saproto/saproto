@@ -25,6 +25,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -236,7 +237,7 @@ class User extends Authenticatable implements HasMedia
         return ! (
             $this->password ||
             $this->edu_username ||
-            Carbon::parse($this->created_at)->timestamp > Carbon::now()->subHour()->timestamp ||
+            Date::parse($this->created_at)->timestamp > Date::now()->subHour()->timestamp ||
             Member::withTrashed()->where('user_id', $this->id)->first() ||
             Bank::query()->where('user_id', $this->id)->first() ||
             Address::query()->where('user_id', $this->id)->first() ||
@@ -280,11 +281,11 @@ class User extends Authenticatable implements HasMedia
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Committee::class, 'committees_users')
-            ->where(static function ($query) {
+            ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+                    ->orWhere('committees_users.deleted_at', '>', Date::now());
             })
-            ->where('committees_users.created_at', '<', Carbon::now())
+            ->where('committees_users.created_at', '<', Date::now())
             ->withPivot(['id', 'role', 'edition'])
             ->withTimestamps()
             ->orderByPivot('created_at', 'desc');
@@ -445,12 +446,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function setPassword(string $password): void
     {
-        // Update Laravel Password
-        $this->password = Hash::make($password);
-        $this->save();
-
-        // Remove breach notification flag
-        HashMapItem::query()->where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
+        $this->update(['password' => Hash::make($password)]);
     }
 
     public function hasUnpaidOrderlines(): bool
@@ -463,7 +459,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function isTempadmin(): bool
     {
-        return $this->tempadmin()->where('start_at', '<', Carbon::now())->where('end_at', '>', Carbon::now())->exists();
+        return $this->tempadmin()->where('start_at', '<', Date::now())->where('end_at', '>', Date::now())->exists();
     }
 
     /**
@@ -471,7 +467,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function isTempadminLaterToday(): bool
     {
-        return $this->tempadmin()->where('start_at', '<', Carbon::now()->endOfDay())->where('end_at', '<', Carbon::now())->exists();
+        return $this->tempadmin()->where('start_at', '<', Date::now()->endOfDay())->where('end_at', '<', Date::now())->exists();
     }
 
     /**
@@ -479,7 +475,7 @@ class User extends Authenticatable implements HasMedia
      */
     public function age(): int
     {
-        return Carbon::parse($this->birthdate)->age;
+        return Date::parse($this->birthdate)->age;
     }
 
     public function isInCommittee(Committee $committee): bool
@@ -547,7 +543,7 @@ class User extends Authenticatable implements HasMedia
     public function isFirstYear(): bool
     {
         return $this->is_member
-            && Carbon::createFromTimestamp($this->member->created_at, date_default_timezone_get())->age < 1
+            && Date::createFromTimestamp($this->member->created_at, date_default_timezone_get())->age < 1
             && $this->did_study_create;
     }
 
@@ -670,7 +666,7 @@ class User extends Authenticatable implements HasMedia
         $reset = PasswordReset::query()->create([
             'email' => $this->email,
             'token' => Str::random(128),
-            'valid_to' => Carbon::now()->addHour()->timestamp,
+            'valid_to' => Date::now()->addHour()->timestamp,
         ]);
 
         Mail::to($this)->queue((new PasswordResetEmail($this, $reset->token))->onQueue('high'));

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddImageToCommittee extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,4 +25,4 @@ class AddImageToCommittee extends Migration
             $table->dropColumn('image_id');
         });
     }
-}
+};

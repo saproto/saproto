@@ -49,7 +49,7 @@ class DiscordController extends Controller
         } catch (ClientException|GuzzleException) {
             Session::flash('flash_message', 'Something went wrong when trying to link this Discord account. Try again later.');
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         $userData = Http::withToken($accessTokenData->access_token)->get($apiURLBase);
@@ -58,7 +58,7 @@ class DiscordController extends Controller
         if (User::query()->firstWhere('discord_id', $userData->id)) {
             session()->flash('flash_message', 'This Discord account is already linked to a user!');
 
-            return Redirect::route('user::dashboard::show');
+            return to_route('user::dashboard::show');
         }
 
         $user = Auth::user();
@@ -67,7 +67,7 @@ class DiscordController extends Controller
 
         session()->flash('flash_message', 'Successfully linked Discord!');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 
     public function discordUnlink(): RedirectResponse
@@ -78,6 +78,6 @@ class DiscordController extends Controller
 
         session()->flash('flash_message', 'Discord account has been unlinked.');
 
-        return Redirect::route('user::dashboard::show');
+        return to_route('user::dashboard::show');
     }
 }
