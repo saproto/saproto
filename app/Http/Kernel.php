@@ -17,7 +17,6 @@ use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\Utwente;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode;
@@ -87,6 +86,5 @@ class Kernel extends HttpKernel
         'role_or_permission' => RoleOrPermissionMiddleware::class,
         'proboto' => ProBoto::class,
         'substitutebindings' => SubstituteBindings::class,
-        'password.confirm' => RequirePassword::class,
     ];
 }

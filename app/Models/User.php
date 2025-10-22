@@ -11,6 +11,8 @@ use Database\Factories\UserFactory;
 use Eloquent;
 use Exception;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -188,7 +190,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements HasMedia
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, HasMedia
 {
     use CanResetPassword;
     use HasApiTokens;
@@ -209,9 +211,7 @@ class User extends Authenticatable implements HasMedia
 
     protected $appends = ['is_member'];
 
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet',   'two_factor_secret',
-        'two_factory_recovery_codes',
-        'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'tfa_totp_key', 'updated_at', 'diet'];
 
     public function getPublicId(): ?string
     {
@@ -681,8 +681,6 @@ class User extends Authenticatable implements HasMedia
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
             'deleted_at' => 'datetime',
             'phone_visible' => 'boolean',
             'address_visible' => 'boolean',
