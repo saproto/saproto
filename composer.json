@@ -81,8 +81,7 @@
         "anhskohbo/no-captcha": "^3.7",
         "spatie/laravel-medialibrary": "^11.13",
         "league/flysystem-sftp-v3": "^3.30",
-        "laravel/wayfinder": "^0.1.12",
-        "laravel/fortify": "*"
+        "laravel/wayfinder": "^0.1.12"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.0",

@@ -29,7 +29,6 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
@@ -201,7 +200,6 @@ class User extends Authenticatable implements HasMedia
     use InteractsWithMedia;
     use Notifiable;
     use SoftDeletes;
-    use TwoFactorAuthenticatable;
 
     protected $table = 'users';
 

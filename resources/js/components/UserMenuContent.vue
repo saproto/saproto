@@ -6,10 +6,10 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { logout } from '@/routes'
 // import { edit } from '@/routes/profile'
 import { Link, router } from '@inertiajs/vue3'
 import { LogOut, Settings } from 'lucide-vue-next'
+import AuthController from '@/actions/App/Http/Controllers/AuthController'
 
 interface Props {
     user: App.Data.AuthUserData
@@ -49,7 +49,7 @@ defineProps<Props>()
   <DropdownMenuItem :as-child="true">
     <Link
       class="block w-full"
-      :href="logout()"
+      :href="AuthController.logout().url"
       as="button"
       data-test="logout-button"
       @click="handleLogout"
