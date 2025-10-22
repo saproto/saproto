@@ -44,6 +44,7 @@ import {
     Search,
     LucideTextQuote,
     Mail,
+    ChevronDown
 } from 'lucide-vue-next'
 import { computed } from 'vue'
 import {
@@ -52,6 +53,15 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from '@/components/ui/input-group'
+import {
+    SidebarGroup, SidebarGroupLabel,
+} from '@/components/ui/sidebar'
+
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 // import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController'
 
 interface Props {
@@ -212,20 +222,55 @@ const rightNavItems: NavItem[] = [
                                 class="flex h-full flex-1 flex-col justify-between space-y-4 py-6"
                             >
                                 <nav class="-mx-3 space-y-1">
-                                    <Link
-                                        v-for="item in mainNavItems"
-                                        :key="item.title"
-                                        :href="item.href"
-                                        class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
-                                        :class="activeItemStyles(item.href)"
-                                    >
-                                        <component
-                                            :is="item.icon"
-                                            v-if="item.icon"
-                                            class="h-5 w-5"
-                                        />
-                                        {{ item.title }}
-                                    </Link>
+                                    <Collapsible>
+                                        <SidebarGroup>
+                                            <SidebarGroupLabel asChild>
+                                                <CollapsibleTrigger>
+                                                    Association
+                                                    <ChevronDown class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                                                </CollapsibleTrigger>
+                                            </SidebarGroupLabel>
+                                            <CollapsibleContent>
+                                                <Link
+                                                    class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium">
+<!--                                                    :key="child.title"-->
+<!--                                                    :href="child.href"-->
+<!--
+<!--                                                    <component-->
+<!--                                                        :is="child.icon"-->
+<!--                                                        v-if="child.icon"-->
+<!--                                                        class="h-5 w-5"-->
+<!--                                                    />-->
+                                                    hallo
+                                                </Link>
+                                            </CollapsibleContent>
+                                        </SidebarGroup>
+                                    </Collapsible>
+                                <Collapsible v-for="item in mainNavItems">
+                                    <SidebarGroup>
+                                        <SidebarGroupLabel asChild>
+                                            <CollapsibleTrigger>
+                                                {{ item.title }}
+                                                <ChevronDown class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                                            </CollapsibleTrigger>
+                                        </SidebarGroupLabel>
+                                        <CollapsibleContent>
+                                            <Link
+                                                v-for="child in item.children"
+                                                :key="child.title"
+                                                :href="child.href"
+                                                class="hover:bg-accent flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium"
+                                            >
+                                                <component
+                                                    :is="child.icon"
+                                                    v-if="child.icon"
+                                                    class="h-5 w-5"
+                                                />
+                                                {{ child.title }}
+                                            </Link>
+                                        </CollapsibleContent>
+                                    </SidebarGroup>
+                                </Collapsible>
                                 </nav>
                                 <div class="flex flex-col space-y-4">
                                     <a
@@ -363,7 +408,7 @@ const rightNavItems: NavItem[] = [
                                 }}</NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <ul
-                                        class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]"
+                                        class="grid w-[200px] grid-cols-1 gap-3 p-4"
                                     >
                                         <li
                                             v-for="child in item.children"
@@ -372,7 +417,7 @@ const rightNavItems: NavItem[] = [
                                             <NavigationMenuLink as-child>
                                                 <Link
                                                     :href="child.href"
-                                                    class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none"
+                                                    class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block rounded-md p-1 leading-none no-underline transition-colors outline-none select-none"
                                                 >
                                                     <div
                                                         class="text-sm leading-none font-medium"

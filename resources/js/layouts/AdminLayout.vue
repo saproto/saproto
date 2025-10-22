@@ -18,8 +18,5 @@ import AppSidebar from '@/components/AppSidebar.vue'
                 <slot />
             </main>
         </SidebarProvider>
-        <main class="mx-auto w-full max-w-screen-xl p-4">
-            <slot />
-        </main>
     </div>
 </template>
