@@ -1,7 +1,3 @@
-@php
-    $unique = str()->random();
-@endphp
-
 <a
     href="#"
     class="confirm-modal-button {{ $classes ?? null }}"
@@ -10,16 +6,19 @@
     data-confirm-title="{{ $title ?? 'Confirm Action' }}"
     data-confirm-message="{{ $message ?? 'Are you sure?' }}"
     data-confirm-btn-text="{{ $confirm ?? $text }}"
+    data-form-method="{{ $method ?? 'GET' }}"
+    data-confirm-btn-variant="confirm-button btn {{ $confirmButtonVariant ?? 'btn-danger' }}"
     data-bs-toggle="modal"
-    data-bs-target="#confirm-modal-{{ $unique }}"
+    data-bs-target="#confirm-modal"
 >
     {!! $text !!}
 </a>
 
+@once
 @push('modals')
     <div
         class="modal fade"
-        id="confirm-modal-{{ $unique }}"
+        id="confirm-modal"
         tabindex="-1"
         role="dialog"
     >
@@ -28,7 +27,8 @@
                 <input
                     type="hidden"
                     name="_method"
-                    value="{{ $method ?? 'GET' }}"
+                    id="confirm-form-method"
+                    value=""
                 />
                 @csrf
                 <div class="modal-content">
@@ -51,8 +51,9 @@
                             Cancel
                         </button>
                         <button
+                            id="submit-button"
                             type="submit"
-                            class="confirm-button btn {{ $confirmButtonVariant ?? 'btn-danger' }}"
+                            class="confirm-button btn"
                         >
                             Confirm
                         </button>
@@ -62,7 +63,9 @@
         </div>
     </div>
 @endpush
+@endonce
 
+@once
 @push('javascript')
     <script nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.confirm-modal-button').forEach((el) =>
@@ -72,6 +75,13 @@
                 )
                 modal.querySelector('.modal-title').innerHTML =
                     el.getAttribute('data-confirm-title')
+
+                modal.querySelector('#submit-button').classList =
+                    el.getAttribute('data-confirm-btn-variant')
+
+                modal.querySelector('#confirm-form-method').value =
+                    el.getAttribute('data-form-method')
+
                 modal.querySelector('.modal-body').innerHTML = el.getAttribute(
                     'data-confirm-message'
                 )
@@ -95,3 +105,4 @@
         )
     </script>
 @endpush
+@endonce

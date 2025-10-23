@@ -47,7 +47,7 @@
                             <tr>
                                 <th>Sum</th>
                                 <td>
-                                    &euro;{{ number_format($withdrawal->total(), 2) }}
+                                    &euro;{{ number_format($withdrawal->sum_associated_orderlines, 2) }}
                                 </td>
                             </tr>
                             <tr>
