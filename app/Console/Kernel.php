@@ -81,7 +81,7 @@ class Kernel extends ConsoleKernel
         SyncUTAccounts::class,
         GoogleSync::class,
         BackupPhotosToStack::class,
-        RefreshWithdrawalTotals::class
+        RefreshWithdrawalTotals::class,
     ];
 
     /**

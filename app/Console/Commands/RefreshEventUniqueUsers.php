@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Event;
-use App\Models\Withdrawal;
 use Illuminate\Console\Command;
 
 class RefreshEventUniqueUsers extends Command
@@ -27,7 +26,7 @@ class RefreshEventUniqueUsers extends Command
      */
     public function handle(): void
     {
-        $query=Event::query()
+        $query = Event::query()
             ->with('activity.users')
             ->with('tickets');
 
