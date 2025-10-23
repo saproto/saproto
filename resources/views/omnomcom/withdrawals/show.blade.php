@@ -38,11 +38,15 @@
                             </tr>
                             <tr>
                                 <th>Users</th>
-                                <td>{{ $withdrawal->total_users_associated }}</td>
+                                <td>
+                                    {{ $withdrawal->total_users_associated }}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Orderlines</th>
-                                <td>{{ $withdrawal->total_orderlines_associated }}</td>
+                                <td>
+                                    {{ $withdrawal->total_orderlines_associated }}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Sum</th>
