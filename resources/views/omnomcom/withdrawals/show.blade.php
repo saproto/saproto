@@ -38,11 +38,11 @@
                             </tr>
                             <tr>
                                 <th>Users</th>
-                                <td>{{ $withdrawal->users_count }}</td>
+                                <td>{{ $withdrawal->total_users_associated }}</td>
                             </tr>
                             <tr>
                                 <th>Orderlines</th>
-                                <td>{{ $withdrawal->orderlines_count }}</td>
+                                <td>{{ $withdrawal->total_orderlines_associated }}</td>
                             </tr>
                             <tr>
                                 <th>Sum</th>
@@ -96,7 +96,7 @@
                                     'title' => 'Confirm Send',
                                     'message' =>
                                         'Are you sure you want to send an email to all ' .
-                                        $withdrawal->users_count .
+                                        $withdrawal->total_users_associated .
                                         ' users associated with this withdrawal?',
                                     'confirm' => 'Send',
                                 ]
