@@ -101,10 +101,7 @@ class WithdrawalController extends Controller
     public function show(int $id): View
     {
         $withdrawal = Withdrawal::query()
-            ->withCount(['orderlines', 'users'])
-            ->with(['failedWithdrawals' => function ($q) {
-                $q->where('user_id', Auth::user()->id);
-            }])
+            ->with('failedWithdrawals')
             ->findOrFail($id);
 
         $userLines = OrderLine::query()
