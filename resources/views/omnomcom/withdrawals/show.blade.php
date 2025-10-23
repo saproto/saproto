@@ -96,7 +96,7 @@
                                     'title' => 'Confirm Send',
                                     'message' =>
                                         'Are you sure you want to send an email to all ' .
-                                        $withdrawal->users()->count() .
+                                        $withdrawal->users_count .
                                         ' users associated with this withdrawal?',
                                     'confirm' => 'Send',
                                 ]
