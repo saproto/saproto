@@ -26,9 +26,13 @@ class RefreshWithdrawalTotals extends Command
      */
     public function handle(): void
     {
-        Withdrawal::query()->chunk(25, static function ($withdrawals) {
+        $query = Withdrawal::query();
+        $bar = $this->output->createProgressBar($query->count());
+        $bar->start();
+        $query->chunk(25, static function ($withdrawals) use ($bar) {
             foreach ($withdrawals as $withdrawal) {
                 $withdrawal->recalculateTotals();
+                $bar->advance();
             }
         });
     }
