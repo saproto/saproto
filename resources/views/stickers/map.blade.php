@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
@@ -315,7 +315,7 @@
         .cluster-icon-{{ $stickerType['id'] }} {
             background:
                 linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-                url("{{ $stickerType['tiny_image'] }}");
+                url({{$stickerType['id']==1?'images/logo/markers/light.png':$stickerType['tiny_image']}});
             border-radius: 50%;
             background-size: contain;
             display: flex;
