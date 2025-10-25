@@ -6,6 +6,7 @@ use App\Enums\StickerTypeEnum;
 use Database\Factories\StickerTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\App;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
@@ -44,6 +45,14 @@ class StickerType extends Model implements HasMedia
             ->nonQueued()
             ->fit(Fit::Crop, 40, 40)
             ->format('webp');
+    }
+
+    /**
+     * @return HasMany<Sticker, $this>
+     */
+    public function stickers(): HasMany
+    {
+        return $this->hasMany(Sticker::class);
     }
 
     public function getImageUrl(StickerTypeEnum $headerImageEnum = StickerTypeEnum::LARGE): string

@@ -22,12 +22,15 @@ class StickerController extends Controller
 {
     public function index(Request $request): View
     {
-        $stickerTypes = StickerType::all()
+        $stickerTypes = StickerType::query()
+            ->withCount('stickers')
+            ->get()
             ->map(fn ($item): array => [
                 'id' => $item->id,
                 'title' => $item->title,
                 'image' => $item->getImageUrl(),
                 'tiny_image' => $item->getImageUrl(StickerTypeEnum::TINY),
+                'count'=>$item->stickers_count,
             ]);
 
         $stickers = Sticker::query()

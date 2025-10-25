@@ -16,18 +16,18 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>The Proto Sticker Tracker!</div>
                 <div>
-                    In total
                     <span id="sticker-amount"></span>
                     stickers placed!
                 </div>
                 <div>
-                    <div class="dropdown">
+                    <div class="dropdown" style="z-index: 1001">
                         <div
                             class="btn btn-secondary dropdown-toggle"
                             data-bs-toggle="dropdown"
                             role="button"
                             aria-haspopup="true"
                             aria-expanded="false"
+
                         >
                             Filter by type
                         </div>
@@ -44,7 +44,7 @@
                                     class="dropdown-item"
                                     href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
                                 >
-                                    {{ $stickerType['title'] }}
+                                    {{ $stickerType['title'] }} ({{$stickerType['count']}})
                                 </a>
                             @endforeach
                         </ul>
@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
@@ -440,7 +440,7 @@
 
             locationButton.addTo(map)
 
-            const types = {!! json_encode($stickerTypes) !!}
+            const types = {!! json_encode($stickerTypes) !!};
 
             const markerClusterGroups = new Map()
 
@@ -487,7 +487,17 @@
                 )
 
                 let stickerAmount = document.getElementById('sticker-amount')
-                stickerAmount.textContent = sum
+
+                const url = new URL(window.location.href)
+                let currentId = url.searchParams.get('type') ?? null
+                if(currentId === null) {
+                    stickerAmount.textContent = `In total ${sum}`
+                    return
+                }
+                let match = types.filter(type => {
+                    return type['id'] == currentId
+                })
+                stickerAmount.textContent = `${sum} ${match[0]['title']}`
             }
             updateMarkerCount()
 
@@ -520,10 +530,10 @@
 
                 if (marker.image) {
                     const img = document.createElement('img')
+                    img.loading = 'lazy'
                     img.src = marker.image
                     img.style.width = '100%'
                     popupContent.appendChild(img)
-                    img.loading = 'lazy'
                 }
 
                 const detailsDiv = document.createElement('div')
