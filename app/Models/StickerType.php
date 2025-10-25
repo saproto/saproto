@@ -16,6 +16,7 @@ class StickerType extends Model implements HasMedia
 {
     /** @use HasFactory<StickerTypeFactory>*/
     use HasFactory;
+
     use InteractsWithMedia;
 
     protected $with = ['media'];
