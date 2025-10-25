@@ -30,7 +30,7 @@ class StickerController extends Controller
                 'title' => $item->title,
                 'image' => $item->getImageUrl(),
                 'tiny_image' => $item->getImageUrl(StickerTypeEnum::TINY),
-                'count'=>$item->stickers_count,
+                'count' => $item->stickers_count,
             ]);
 
         $stickers = Sticker::query()
