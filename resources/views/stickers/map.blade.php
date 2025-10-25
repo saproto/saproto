@@ -456,7 +456,6 @@
             locationButton.addTo(map)
 
             const types = {!! json_encode($stickerTypes) !!}
-            console.log(types)
 
             const markerClusterGroups = new Map()
 
@@ -488,7 +487,6 @@
             var tempMarker
 
             const placedMarkers = {!! json_encode($stickers) !!}
-            console.log(placedMarkers)
             placedMarkers.forEach((marker) => {
                 addMarkerToMap(marker)
             })
