@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StickerType;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -10,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class StickerTypeController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'title' => ['required', 'string', 'min:1', 'max:20'],
@@ -36,7 +37,7 @@ class StickerTypeController extends Controller
         return back();
     }
 
-    public function update(Request $request, StickerType $stickerType)
+    public function update(Request $request, StickerType $stickerType): RedirectResponse
     {
         $request->validate([
             'title' => ['required', 'string', 'min:1', 'max:20'],

@@ -312,20 +312,6 @@
             overflow: hidden;
         }
 
-        /*.cluster-icon {*/
-        /*    background:*/
-        /*        linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),*/
-        /*        url('images/logo/markers/light.png');*/
-        /*    border-radius: 50%;*/
-        /*    background-size: contain;*/
-        /*    display: flex;*/
-        /*    align-items: center;*/
-        /*    justify-content: center;*/
-        /*    color: white;*/
-        /*    font-weight: bold;*/
-        /*    font-size: 1.5em;*/
-        /*}*/
-
         @foreach($stickerTypes as $stickerType)
         .cluster-icon-{{ $stickerType['id'] }} {
             background:

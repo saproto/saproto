@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StickerTypeEnum;
+use Database\Factories\StickerTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -13,6 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StickerType extends Model implements HasMedia
 {
+    /** @use HasFactory<StickerTypeFactory>*/
     use HasFactory;
     use InteractsWithMedia;
 
