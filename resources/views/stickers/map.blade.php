@@ -27,7 +27,6 @@
                             role="button"
                             aria-haspopup="true"
                             aria-expanded="false"
-
                         >
                             Filter by type
                         </div>
@@ -44,7 +43,8 @@
                                     class="dropdown-item"
                                     href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
                                 >
-                                    {{ $stickerType['title'] }} ({{$stickerType['count']}})
+                                    {{ $stickerType['title'] }}
+                                    ({{ $stickerType['count'] }})
                                 </a>
                             @endforeach
                         </ul>
@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')
@@ -440,7 +440,7 @@
 
             locationButton.addTo(map)
 
-            const types = {!! json_encode($stickerTypes) !!};
+            const types = {!! json_encode($stickerTypes) !!}
 
             const markerClusterGroups = new Map()
 
@@ -490,11 +490,11 @@
 
                 const url = new URL(window.location.href)
                 let currentId = url.searchParams.get('type') ?? null
-                if(currentId === null) {
+                if (currentId === null) {
                     stickerAmount.textContent = `In total ${sum}`
                     return
                 }
-                let match = types.filter(type => {
+                let match = types.filter((type) => {
                     return type['id'] == currentId
                 })
                 stickerAmount.textContent = `${sum} ${match[0]['title']}`
