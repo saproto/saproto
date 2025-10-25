@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-    
+
 @endpush
 
 @push('stylesheet')
@@ -466,7 +466,7 @@
                         iconUrl: `${type.tiny_image}`,
                         iconSize: [40, 40], // size of the icon
                         iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                        popupAnchor: [20, -20], // point from which the popup should open relative to the iconAnchor
+                        popupAnchor: [0, -20], // point from which the popup should open relative to the iconAnchor
                     })
                 )
             })
@@ -577,9 +577,10 @@
 
                 popupContent.appendChild(controlsDiv)
 
+                const offset = marker.stickerType===1?[5, -55]:[0,-20];
                 markerInstance.bindTooltip(marker.user, {
                     direction: 'top',
-                    offset: [5, -55],
+                    offset: offset,
                 })
                 markerInstance.bindPopup(popupContent).openPopup()
             }
