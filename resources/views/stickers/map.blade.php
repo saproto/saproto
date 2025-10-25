@@ -35,18 +35,17 @@
                         <ul class="dropdown-menu dropdown">
                             <a
                                 class="dropdown-item"
-                                href="{{ route("stickers.index") }}"
+                                href="{{ route('stickers.index') }}"
                             >
                                 All stickers
                             </a>
                             @foreach ($stickerTypes as $stickerType)
-                                    <a
-                                        class="dropdown-item"
-                                        href="{{ route("stickers.index", ['type'=>$stickerType['id']]) }}"
-                                    >
-                                        {{ $stickerType['title'] }}
-                                    </a>
-
+                                <a
+                                    class="dropdown-item"
+                                    href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
+                                >
+                                    {{ $stickerType['title'] }}
+                                </a>
                             @endforeach
                         </ul>
                     </div>
@@ -297,7 +296,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')
@@ -461,7 +460,6 @@
 
             const otherMarkerIcons = new Map()
 
-
             types.forEach((type) => {
                 const markers = L.markerClusterGroup({
                     animateAddingMarkers: true,
@@ -476,12 +474,15 @@
                 })
                 map.addLayer(markers)
                 markerClusterGroups.set(type.id, markers)
-                otherMarkerIcons.set(type.id, L.icon({
-                    iconUrl: `${type.tiny_image}`,
-                    iconSize: [40, 40], // size of the icon
-                    iconAnchor: [20,20], // point of the icon which will correspond to marker's location
-                    popupAnchor: [20, -20], // point from which the popup should open relative to the iconAnchor
-                }))
+                otherMarkerIcons.set(
+                    type.id,
+                    L.icon({
+                        iconUrl: `${type.tiny_image}`,
+                        iconSize: [40, 40], // size of the icon
+                        iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+                        popupAnchor: [20, -20], // point from which the popup should open relative to the iconAnchor
+                    })
+                )
             })
 
             var tempMarker
@@ -506,9 +507,12 @@
 
             function addMarkerToMap(marker) {
                 const markerInstance = L.marker([marker.lat, marker.lng], {
-                    icon: marker.stickerType===1? markerIcons[
-                        Math.floor(Math.random() * markerIcons.length)
-                    ]:otherMarkerIcons.get(marker.stickerType),
+                    icon:
+                        marker.stickerType === 1
+                            ? markerIcons[
+                                  Math.floor(Math.random() * markerIcons.length)
+                              ]
+                            : otherMarkerIcons.get(marker.stickerType),
                 })
                 bindMarkerPopup(marker, markerInstance)
                 markerInstances.set(marker.id, markerInstance)
