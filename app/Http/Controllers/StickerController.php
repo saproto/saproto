@@ -79,7 +79,7 @@ class StickerController extends Controller
             'lng' => ['required', 'numeric', 'min:-180', 'max:180'],
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'stick_date' => ['required_if:today_checkbox,on', 'date'],
-            'type'=>['required','integer','exists:sticker_types,id'],
+            'type' => ['required', 'integer', 'exists:sticker_types,id'],
         ]);
 
         $lat = number_format((float) $validated['lat'], 4, '.', '');
