@@ -47,6 +47,7 @@ class StickerPlacedEvent implements ShouldBroadcastNow
             'image' => $this->sticker->getImageUrl(),
             'is_owner' => false,
             'date' => $this->sticker->created_at->format('Y-m-d'),
+            'stickerType' => $this->sticker->sticker_type_id,
         ];
     }
 }
