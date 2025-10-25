@@ -296,7 +296,7 @@
 @endsection
 
 @push('head')
-
+    
 @endpush
 
 @push('stylesheet')
@@ -577,7 +577,7 @@
 
                 popupContent.appendChild(controlsDiv)
 
-                const offset = marker.stickerType===1?[5, -55]:[0,-20];
+                const offset = marker.stickerType === 1 ? [5, -55] : [0, -20]
                 markerInstance.bindTooltip(marker.user, {
                     direction: 'top',
                     offset: offset,
