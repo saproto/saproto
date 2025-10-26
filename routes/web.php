@@ -445,7 +445,7 @@ Route::middleware('forcedomain')->group(function () {
     });
     Route::middleware(['auth', 'member'])->group(function () {
 
-        Route::middleware('permission:board')->prefix('stickers')->middleware('permission:board')->group(function () {
+        Route::middleware('permission:board')->prefix('stickers')->group(function () {
             Route::post('unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport');
             Route::get('admin', [StickerController::class, 'admin'])->name('stickers.admin');
             Route::resource('stickerType', StickerTypeController::class)->only(['store', 'update']);

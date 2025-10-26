@@ -3,6 +3,7 @@
 use App\Models\StickerType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -17,8 +18,8 @@ return new class extends Migration
 
         StickerType::query()->insert([
             'title' => 'Proto',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'created_at' => Date::now(),
+            'updated_at' => Date::now(),
         ]);
 
         Schema::table('stickers', function (Blueprint $table) {

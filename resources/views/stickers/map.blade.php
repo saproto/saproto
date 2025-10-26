@@ -236,7 +236,7 @@
                                 )
                             </div>
 
-                            {{-- Sticker Types } --}}
+                            {{-- Sticker Types --}}
                             <label for="category">Type of Sticker</label>
 
                             <select
