@@ -41,11 +41,12 @@ class ActivityParticipationFactory extends Factory
 
         try {
             $date = fake()->dateTimeBetween($start, $end);
-        } catch(Exception $e ) {
-            echo "\nWarning, error occured: ". $e->getMessage(). "\n";
-            echo "When creating participation for activity: '" . $activity->event->title . "' (" . $activity->event->id . ")\n" ;
+        } catch (Exception $e) {
+            echo "\nWarning, error occured: ".$e->getMessage()."\n";
+            echo "When creating participation for activity: '".$activity->event->title."' (".$activity->event->id.")\n";
             $date = $end;
         }
+
         return $date->format('Y-m-d H:i:s');
     }
 
