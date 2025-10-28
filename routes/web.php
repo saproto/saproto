@@ -58,6 +58,7 @@ use App\Http\Controllers\ShortUrlController;
 use App\Http\Controllers\SmartXpScreenController;
 use App\Http\Controllers\SpotifyController;
 use App\Http\Controllers\StickerController;
+use App\Http\Controllers\StickerTypeController;
 use App\Http\Controllers\StockMutationController;
 use App\Http\Controllers\SurfConextController;
 use App\Http\Controllers\TempAdminController;
@@ -444,9 +445,10 @@ Route::middleware('forcedomain')->group(function () {
     });
     Route::middleware(['auth', 'member'])->group(function () {
 
-        Route::middleware('permission:board')->group(function () {
-            Route::post('stickers/unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport')->middleware('permission:board');
-            Route::get('stickers/admin', [StickerController::class, 'admin'])->name('stickers.admin')->middleware('permission:board');
+        Route::middleware('permission:board')->prefix('stickers')->group(function () {
+            Route::post('unreport/{sticker}', [StickerController::class, 'unreport'])->name('stickers.unreport');
+            Route::get('admin', [StickerController::class, 'admin'])->name('stickers.admin');
+            Route::resource('stickerType', StickerTypeController::class)->only(['store', 'update']);
         });
 
         Route::post('stickers/report/{sticker}', [StickerController::class, 'report'])->name('stickers.report');

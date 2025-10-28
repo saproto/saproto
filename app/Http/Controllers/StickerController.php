@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StickerTypeEnum;
 use App\Events\StickerPlacedEvent;
 use App\Events\StickerRemovedEvent;
 use App\Models\Sticker;
+use App\Models\StickerType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,13 +20,29 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class StickerController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $stickerTypes = StickerType::query()
+            ->withCount('stickers')
+            ->get()
+            ->map(fn ($item): array => [
+                'id' => $item->id,
+                'title' => $item->title,
+                'image' => $item->getImageUrl(),
+                'tiny_image' => $item->getImageUrl(StickerTypeEnum::TINY),
+                'count' => $item->stickers_count,
+            ]);
+
         $stickers = Sticker::query()
             ->whereNull('reporter_id')
             ->with('user')
             ->with('media')
-            ->get()
+            ->when($request->has('type'), function ($query) use ($request) {
+                return $query->where('sticker_type_id', $request->integer('type'));
+            })
+            ->get();
+
+        $stickers = $stickers
             ->map(fn ($item): array => [
                 'id' => $item->id,
                 'lat' => $item->lat,
@@ -33,9 +51,10 @@ class StickerController extends Controller
                 'image' => $item->getImageUrl(),
                 'is_owner' => Auth::user()->id === $item->user?->id,
                 'date' => $item->created_at->format('d-m-Y'),
+                'stickerType' => $item->sticker_type_id,
             ]);
 
-        return view('stickers.map', ['stickers' => $stickers]);
+        return view('stickers.map', ['stickers' => $stickers, 'stickerTypes' => $stickerTypes]);
     }
 
     public function overviewMap(): View
@@ -63,6 +82,7 @@ class StickerController extends Controller
             'lng' => ['required', 'numeric', 'min:-180', 'max:180'],
             'sticker' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'stick_date' => ['required_if:today_checkbox,on', 'date'],
+            'type' => ['required', 'integer', 'exists:sticker_types,id'],
         ]);
 
         $lat = number_format((float) $validated['lat'], 4, '.', '');
@@ -80,6 +100,7 @@ class StickerController extends Controller
         ]);
 
         $sticker->user()->associate(Auth::user());
+        $sticker->stickerType()->associate($request->integer('type'));
         $sticker->save();
 
         if ($request->has('sticker')) {
@@ -132,7 +153,7 @@ class StickerController extends Controller
             ->whereNotNull('reporter_id')
             ->get();
 
-        return view('stickers.admin', ['reported' => $reported]);
+        return view('stickers.admin', ['reported' => $reported, 'stickerTypes' => StickerType::all()]);
     }
 
     public function report(Request $request, Sticker $sticker): RedirectResponse
