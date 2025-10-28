@@ -37,6 +37,12 @@ class ActivityController extends Controller
             return to_route('event::edit', ['event' => $event]);
         }
 
+        if ($newRegistrationEnd < $event->start) {
+            Session::flash('flash_message', 'You cannot let the event sign-up end before the event starts.');
+
+            return to_route('event::edit', ['event' => $event]);
+        }
+
         if ($newNoShow > $activity->no_show_fee && $activity->users->count() > 0) {
             Session::flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 

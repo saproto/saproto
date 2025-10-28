@@ -177,9 +177,6 @@ class EventController extends Controller
         return view('event.edit', ['event' => $event]);
     }
 
-    /**
-     * @throws FileNotFoundException
-     */
     public function update(StoreEventRequest $request, Event $event): RedirectResponse
     {
         $event->title = $request->title;
