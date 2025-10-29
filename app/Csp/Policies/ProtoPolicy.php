@@ -90,8 +90,6 @@ class ProtoPolicy extends Policy
                 'https://www.proto.utwente.nl',
                 'https://www.staging.proto.utwente.nl',
                 'https://static.saproto.com',
-                'https://metis.proto.utwente.nl:3001',
-                'wss://metis.proto.utwente.nl:3001',
                 'ws://localhost:3000',
                 'https://discordapp.com/api/guilds/600338792766767289/widget.json',
                 'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
