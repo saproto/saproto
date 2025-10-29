@@ -24,6 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int $user_id
  * @property int $file_id
  * @property int|null $reporter_id
+ * @property int $sticker_type_id
  * @property string|null $report_reason
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -84,6 +85,14 @@ class Sticker extends Model implements HasMedia
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return BelongsTo<StickerType, $this>
+     */
+    public function stickerType(): BelongsTo
+    {
+        return $this->belongsTo(StickerType::class);
     }
 
     /**

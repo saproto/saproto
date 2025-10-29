@@ -16,9 +16,39 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>The Proto Sticker Tracker!</div>
                 <div>
-                    In total
                     <span id="sticker-amount"></span>
                     stickers placed!
+                </div>
+                <div>
+                    <div class="dropdown" style="z-index: 1001">
+                        <div
+                            class="btn btn-secondary dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            Filter by type
+                        </div>
+
+                        <ul class="dropdown-menu dropdown">
+                            <a
+                                class="dropdown-item"
+                                href="{{ route('stickers.index') }}"
+                            >
+                                All stickers
+                            </a>
+                            @foreach ($stickerTypes as $stickerType)
+                                <a
+                                    class="dropdown-item"
+                                    href="{{ route('stickers.index', ['type' => $stickerType['id']]) }}"
+                                >
+                                    {{ $stickerType['title'] }}
+                                    ({{ $stickerType['count'] }})
+                                </a>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
                 @can('board')
                     <a
@@ -205,6 +235,25 @@
                                     ]
                                 )
                             </div>
+
+                            {{-- Sticker Types --}}
+                            <label for="category">Type of Sticker</label>
+
+                            <select
+                                class="form-select form-select-m mb-3"
+                                aria-label="type"
+                                name="type"
+                            >
+                                @foreach ($stickerTypes as $stickerType)
+                                    <option
+                                        value="{{ $stickerType['id'] }}"
+                                        {{ $stickerType['id'] === 1 ? 'selected' : '' }}
+                                    >
+                                        {{ $stickerType['title'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+
                             <input
                                 class="form-control"
                                 type="file"
@@ -262,10 +311,11 @@
             overflow: hidden;
         }
 
-        .cluster-icon {
+        @foreach($stickerTypes as $stickerType)
+        .cluster-icon-{{ $stickerType['id'] }} {
             background:
                 linear-gradient(0, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-                url('images/logo/markers/light.png');
+                url({{ $stickerType['id']==1?'images/logo/markers/light.png':$stickerType['tiny_image'] }});
             border-radius: 50%;
             background-size: contain;
             display: flex;
@@ -275,6 +325,8 @@
             font-weight: bold;
             font-size: 1.5em;
         }
+        @endforeach
+
 
         .results {
             color: black;
@@ -297,7 +349,7 @@
                     updateMarkerCount()
                 })
                 .listen('StickerRemovedEvent', (marker) => {
-                    removeMarkerFromMap(marker.id)
+                    removeMarkerFromMap(marker.id, marker.stickerType)
                     updateMarkerCount()
                 })
                 .error((error) => {
@@ -308,7 +360,7 @@
                 })
 
             const url = new URL(window.location.href)
-            let currentZoom = url.searchParams.get('zoom') ?? 18
+            let currentZoom = url.searchParams.get('zoom') ?? 1
             let currentLat = url.searchParams.get('lat') ?? 52.23888875842265
             let currentLng = url.searchParams.get('lng') ?? 6.85738688030243
 
@@ -351,7 +403,6 @@
                     popupAnchor: [5, -55], // point from which the popup should open relative to the iconAnchor
                 })
             })
-
             var locationButton = L.control({ position: 'topright' })
 
             locationButton.onAdd = function (map) {
@@ -389,47 +440,88 @@
 
             locationButton.addTo(map)
 
-            const markers = L.markerClusterGroup({
-                animateAddingMarkers: true,
-                iconCreateFunction: (cluster) => {
-                    const childCount = cluster.getChildCount()
-                    return new L.DivIcon({
-                        html: '<div><span>' + childCount + '</span></div>',
-                        className: 'cluster-icon',
-                        iconSize: [40, 40],
+            const types = {!! json_encode($stickerTypes) !!}
+
+            const markerClusterGroups = new Map()
+
+            const otherMarkerIcons = new Map()
+
+            types.forEach((type) => {
+                const markers = L.markerClusterGroup({
+                    animateAddingMarkers: true,
+                    iconCreateFunction: (cluster) => {
+                        const childCount = cluster.getChildCount()
+                        return new L.DivIcon({
+                            html: '<div><span>' + childCount + '</span></div>',
+                            className: `cluster-icon-${type['id']}`,
+                            iconSize: [40, 40],
+                        })
+                    },
+                })
+                map.addLayer(markers)
+                markerClusterGroups.set(type.id, markers)
+                otherMarkerIcons.set(
+                    type.id,
+                    L.icon({
+                        iconUrl: `${type.tiny_image}`,
+                        iconSize: [40, 40], // size of the icon
+                        iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
+                        popupAnchor: [0, -20], // point from which the popup should open relative to the iconAnchor
                     })
-                },
+                )
             })
-            map.addLayer(markers)
 
             var tempMarker
 
             const placedMarkers = {!! json_encode($stickers) !!}
-
             placedMarkers.forEach((marker) => {
                 addMarkerToMap(marker)
             })
 
             function updateMarkerCount() {
+                const sum = types.reduce(
+                    (accumulator, type) =>
+                        accumulator +
+                        markerClusterGroups.get(type['id']).getLayers().length,
+                    0
+                )
+
                 let stickerAmount = document.getElementById('sticker-amount')
-                stickerAmount.textContent = markers.getLayers().length
+
+                const url = new URL(window.location.href)
+                let currentId = url.searchParams.get('type') ?? null
+                if (currentId === null) {
+                    stickerAmount.textContent = `In total ${sum}`
+                    return
+                }
+                let match = types.filter((type) => {
+                    return type['id'] == currentId
+                })
+                stickerAmount.textContent = `${sum} ${match[0]['title']}`
             }
             updateMarkerCount()
 
             function addMarkerToMap(marker) {
                 const markerInstance = L.marker([marker.lat, marker.lng], {
-                    icon: markerIcons[
-                        Math.floor(Math.random() * markerIcons.length)
-                    ],
+                    icon:
+                        marker.stickerType === 1
+                            ? markerIcons[
+                                  Math.floor(Math.random() * markerIcons.length)
+                              ]
+                            : otherMarkerIcons.get(marker.stickerType),
                 })
                 bindMarkerPopup(marker, markerInstance)
                 markerInstances.set(marker.id, markerInstance)
-                markers.addLayer(markerInstance)
+                const layer = markerClusterGroups.get(marker['stickerType'])
+                if (!layer) {
+                    window.location.reload()
+                }
+                layer.addLayer(markerInstance)
             }
 
-            function removeMarkerFromMap(markerId) {
+            function removeMarkerFromMap(markerId, stickerType) {
                 const markerInstance = markerInstances.get(markerId)
-                markers.removeLayer(markerInstance)
+                markerClusterGroups.get(stickerType).removeLayer(markerInstance)
                 markerInstances.delete(markerId)
             }
 
@@ -438,10 +530,10 @@
 
                 if (marker.image) {
                     const img = document.createElement('img')
+                    img.loading = 'lazy'
                     img.src = marker.image
                     img.style.width = '100%'
                     popupContent.appendChild(img)
-                    img.loading = 'lazy'
                 }
 
                 const detailsDiv = document.createElement('div')
@@ -485,9 +577,10 @@
 
                 popupContent.appendChild(controlsDiv)
 
+                const offset = marker.stickerType === 1 ? [5, -55] : [0, -20]
                 markerInstance.bindTooltip(marker.user, {
                     direction: 'top',
-                    offset: [5, -55],
+                    offset: offset,
                 })
                 markerInstance.bindPopup(popupContent).openPopup()
             }

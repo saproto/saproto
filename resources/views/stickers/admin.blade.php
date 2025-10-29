@@ -6,7 +6,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Reported stickers
+    Sticker admin
 @endsection
 
 @php
@@ -91,6 +91,110 @@
                                 </td>
                             </tr>
                         @endforeach
+                    </table>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-dark mb-1 text-white">
+                    Sticker Types
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table-hover table-sm table">
+                        <thead>
+                            <tr class="bg-dark text-white">
+                                <th scope="col" class="col-1">Title</th>
+                                <th scope="col" class="col-1">Image</th>
+                                <th scope="col" class="col-1">Controls</th>
+                            </tr>
+                        </thead>
+
+                        @foreach ($stickerTypes as $stickerType)
+                            <tr>
+                                <form
+                                    method="post"
+                                    enctype="multipart/form-data"
+                                    action="{{ route('stickerType.update', ['stickerType' => $stickerType]) }}"
+                                >
+                                    {{ csrf_field() }}
+                                    <input
+                                        type="hidden"
+                                        name="_method"
+                                        value="PATCH"
+                                    />
+                                    <td>
+                                        <input
+                                            id="title"
+                                            type="text"
+                                            class="form-control-sm"
+                                            name="title"
+                                            value="{{ $stickerType->title }}"
+                                        />
+                                    </td>
+                                    <td>
+                                        <img
+                                            src="{{ $stickerType->getImageUrl() }}"
+                                            class="img-fluid"
+                                            alt="The image for {{ $stickerType->title }}"
+                                            width="100"
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            id="image"
+                                            type="file"
+                                            class="form-control-sm"
+                                            name="image"
+                                            accept="image/*"
+                                        />
+                                        <button
+                                            class="btn btn-warning badge m-1"
+                                            type="submit"
+                                            @disabled($stickerType->id === 1)
+                                        >
+                                            Update
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                        @endforeach
+
+                        <tr>
+                            <form
+                                method="post"
+                                enctype="multipart/form-data"
+                                action="{{ route('stickerType.store') }}"
+                            >
+                                {{ csrf_field() }}
+                                <td>
+                                    <input
+                                        id="title"
+                                        type="text"
+                                        class="form-control-sm"
+                                        name="title"
+                                        value=""
+                                        placeholder="A new sticker type"
+                                    />
+                                </td>
+                                <td>Upload an image</td>
+                                <td>
+                                    <input
+                                        id="image"
+                                        type="file"
+                                        class="form-control-sm"
+                                        name="image"
+                                        accept="image/jpg, image/jpeg, image/png"
+                                    />
+                                    <button
+                                        class="btn btn-success badge m-1"
+                                        type="submit"
+                                    >
+                                        Create!
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
                     </table>
                 </div>
             </div>
