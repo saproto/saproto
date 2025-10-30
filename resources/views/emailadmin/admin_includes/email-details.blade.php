@@ -1,3 +1,8 @@
+@php
+    use App\Models\EmailList;
+    use App\Models\Withdrawal;
+@endphp
+
 <form
     method="post"
     action="{{ $email == null ? route('email::store') : route('email::update', ['id' => $email->id]) }}"
@@ -213,12 +218,40 @@
                             class="form-control"
                             {{ $email?->to_list ? '' : 'disabled="disabled"' }}
                         >
-                            @foreach (App\Models\EmailList::all() as $list)
+                            @foreach (EmailList::all() as $list)
                                 <option
                                     value="{{ $list->id }}"
                                     @selected($email?->hasRecipientList($list))
                                 >
                                     {{ $list->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        @include(
+                            'components.forms.checkbox',
+                            [
+                                'type' => 'radio',
+                                'id' => 'destination_type_withdrawals',
+                                'name' => 'destinationType',
+                                'checked' => $email?->to_withdrawal,
+                                'value' => 'withdrawals',
+                                'label' => 'These withdrawals:',
+                            ]
+                        )
+
+                        <select
+                            multiple
+                            name="withdrawalSelect[]"
+                            id="withdrawalSelect"
+                            class="form-control"
+                            {{ $email?->to_withdrawal ? '' : 'disabled="disabled"' }}
+                        >
+                            @foreach (Withdrawal::query()->orderByDesc('id')->get() as $withdrawal)
+                                <option
+                                    @selected($email?->withdrawals->filter(fn ($item) => $item->id === $withdrawal->id)->isNotEmpty())
+                                    value="{{ $withdrawal->id }}">
+                                    {{ $withdrawal->id }}
                                 </option>
                             @endforeach
                         </select>
@@ -256,16 +289,18 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
+        const withdrawalSelect = document.getElementById('withdrawalSelect')
         const destinationSelectList = Array.from(
             document.getElementsByName('destinationType')
         )
         const backupToggle = document.getElementById('backupDiv')
         const toggleList = {
-            event: [false, true, false],
-            members: [true, true, true],
-            active: [true, true, true],
-            pending: [true, true, true],
-            lists: [true, false, true],
+            event: [false, true, false, true],
+            members: [true, true, true, true],
+            active: [true, true, true, true],
+            pending: [true, true, true, true],
+            lists: [true, false, true, true],
+            withdrawals: [true, true, true, false],
         }
 
         destinationSelectList.forEach((el) => {
@@ -276,6 +311,8 @@
 
                 if (toggle[2]) backupToggle.classList.add('d-none')
                 else backupToggle.classList.remove('d-none')
+
+                withdrawalSelect.disabled = toggle[3]
             })
         })
     </script>
