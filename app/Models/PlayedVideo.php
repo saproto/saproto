@@ -49,7 +49,7 @@ class PlayedVideo extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->distinct();
     }
 
     public static function generateYoutubeThumbnail(string $youtube_id): string

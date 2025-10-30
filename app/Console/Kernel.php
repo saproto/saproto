@@ -32,6 +32,7 @@ use App\Console\Commands\SyncWikiAccounts;
 use App\Console\Commands\TempAdminCleanup;
 use App\Console\Commands\TestEmail;
 use App\Console\Commands\TestIBANs;
+use App\Console\Commands\UpdatePlayedVideos;
 use App\Console\Commands\UpdateWallstreetPrices;
 use App\Console\Commands\UserCleanup;
 use App\Console\Commands\VerifyPersonalDetailsEmailCron;
@@ -82,6 +83,7 @@ class Kernel extends ConsoleKernel
         GoogleSync::class,
         BackupPhotosToStack::class,
         RefreshWithdrawalTotals::class,
+        UpdatePlayedVideos::class,
     ];
 
     /**

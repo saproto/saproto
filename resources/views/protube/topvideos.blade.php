@@ -42,7 +42,7 @@
                         @elseif ($period == 'month')
                             Last Months
                         @elseif ($period == 'week')
-                            Last Weeks
+                            Last 5 years
                         @endif
                         Top 10
                     </div>

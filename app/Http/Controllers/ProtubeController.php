@@ -19,7 +19,7 @@ class ProtubeController extends Controller
         $data = (object) [
             'alltime' => $this->getTopVideos(),
             'month' => $this->getTopVideos(since: '-1 month'),
-            'week' => $this->getTopVideos(since: '-1 week'),
+            'week' => $this->getTopVideos(since: '-5 years'),
         ];
 
         return view('protube.topvideos', ['data' => $data]);

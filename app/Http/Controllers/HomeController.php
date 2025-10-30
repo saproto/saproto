@@ -11,6 +11,7 @@ use App\Models\Event;
 use App\Models\HeaderImage;
 use App\Models\Newsitem;
 use App\Models\PhotoAlbum;
+use App\Models\PlayedVideo;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\WelcomeMessage;
@@ -19,13 +20,97 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     /** Display the homepage. */
-    public function show(): \Illuminate\Contracts\View\View|Factory
+    public function show()
     {
+
+        $since = '5 years ago';
+
+        //mean/median per users
+        return PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                'user_id',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->when($since, function ($query) use ($since) {
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+            })
+            ->groupBy('user_id')
+            ->orderBy('played_count', 'desc')
+            ->get()->median('played_count');
+
+        //total songs
+        return PlayedVideo::query()
+            ->when($since, function ($query) use ($since) {
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+            })
+            ->count();
+
+        //unique users
+        return PlayedVideo::distinct('user_id')
+            ->when($since, function ($query) use ($since) {
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+            })
+            ->count();
+
+
+
+        //top 5 played by an individual user.
+        return PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                'user_id',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->with('user:id,name')
+            ->when($since, function ($query) use ($since) {
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+            })
+            ->groupBy('video_id')
+            ->groupBy('user_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->limit(10)->get();
+
+
+        //top videos over the past 5 years
+        return PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                'spotify_id',
+                'spotify_name',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->when($since, function ($query) use ($since) {
+                $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+            })
+            ->groupBy('video_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->limit(10)->get();
+
+        //top 10 contributors
+        return PlayedVideo::query()
+            ->with('user:name,id')
+        ->select([
+            'user_id',
+            DB::raw('count(*) as played_count'),
+        ])
+        ->when($since, function ($query) use ($since) {
+            $query->where('created_at', '>', Date::parse($since)->format('Y-m-d'));
+        })->groupBy('user_id')
+        ->orderBy('played_count', 'desc')
+        ->orderBy('created_at')
+        ->limit(10)->get();
         $companies =
             Cache::remember('home.companies', 3600, fn () => Company::query()
                 ->where('in_logo_bar', true)
