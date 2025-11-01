@@ -106,7 +106,8 @@ class QueryController extends Controller
         ]);
     }
 
-    public function protubeStatistics(Request $request){
+    public function protubeStatistics(Request $request)
+    {
 
         if ($request->missing('start') || $request->missing('end')) {
             $year_start = intval(Date::now()->format('n')) >= 9 ? intval(Date::now()->format('Y')) : intval(Date::now()->format('Y')) - 1;
@@ -117,7 +118,7 @@ class QueryController extends Controller
             $end = $request->date('end')->addDay(); // Add one day to make it inclusive.
         }
 
-        //mean/median per users
+        // mean/median per users
         $playedPerUsers = PlayedVideo::query()
             ->select([
                 'video_id',
@@ -136,8 +137,7 @@ class QueryController extends Controller
         $totalPlayed = round($playedPerUsers->sum('played_count'), 2);
         $uniqueUsers = round($playedPerUsers->count(), 2);
 
-
-        //top videos over the past 5 years
+        // top videos over the past 5 years
         $topVideos = PlayedVideo::query()
             ->select([
                 'video_id',
@@ -153,8 +153,7 @@ class QueryController extends Controller
             ->orderBy('created_at')
             ->limit(10)->get();
 
-
-        //top 5 played by an individual user.
+        // top 5 played by an individual user.
         $topVideosByIndividualUser = PlayedVideo::query()
             ->select([
                 'video_title',
@@ -170,8 +169,7 @@ class QueryController extends Controller
             ->orderBy('created_at')
             ->limit(10)->get();
 
-
-        //top 10 contributors
+        // top 10 contributors
         $topUsers = PlayedVideo::query()
             ->with('user:name,id')
             ->select([
@@ -185,7 +183,7 @@ class QueryController extends Controller
             ->orderBy('created_at')
             ->limit(10)->get();
 
-        return view('queries.protube_statistics', ['start' => $start, 'end' => $end, 'medianPerUser'=>$medianPerUser, 'averagePerUser'=>$averagePerUser, 'totalPlayed'=>$totalPlayed, 'uniqueUsers'=>$uniqueUsers, 'topVideos'=>$topVideos, 'topVideosByIndividualUsers'=>$topVideosByIndividualUser, 'topUsers'=>$topUsers]);
+        return view('queries.protube_statistics', ['start' => $start, 'end' => $end, 'medianPerUser' => $medianPerUser, 'averagePerUser' => $averagePerUser, 'totalPlayed' => $totalPlayed, 'uniqueUsers' => $uniqueUsers, 'topVideos' => $topVideos, 'topVideosByIndividualUsers' => $topVideosByIndividualUser, 'topUsers' => $topUsers]);
     }
 
     public function activityStatistics(Request $request): View

@@ -55,124 +55,112 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                   Totals
-                </div>
+                <div class="card-header">Totals</div>
                 <div class="card-body">
-                    There were a total of <b>{{$totalPlayed}}</b> video's played! <br>
-                    This was done by <b>{{$uniqueUsers}}</b> unique users!
+                    There were a total of
+                    <b>{{ $totalPlayed }}</b>
+                    video's played!
+                    <br />
+                    This was done by
+                    <b>{{ $uniqueUsers }}</b>
+                    unique users!
                 </div>
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                    User statistics
-                </div>
+                <div class="card-header">User statistics</div>
                 <div class="card-body">
-                    The average user played <b>{{$averagePerUser}}</b> video's!<br>
-                    The median user played <b>{{$medianPerUser}}</b> video's!<br>
+                    The average user played
+                    <b>{{ $averagePerUser }}</b>
+                    video's!
+                    <br />
+                    The median user played
+                    <b>{{ $medianPerUser }}</b>
+                    video's!
+                    <br />
                 </div>
             </div>
 
             <div class="card mb-3">
-                <div class="card-header">
-                    Top contributors
-                </div>
+                <div class="card-header">Top contributors</div>
                 <div class="card-body">
                     <table class="table-hover table-sm table">
                         <thead>
-                        <tr class="bg-dark text-white">
-                            <td>User</td>
-                            <td>Videos played</td>
-                        </tr>
+                            <tr class="bg-dark text-white">
+                                <td>User</td>
+                                <td>Videos played</td>
+                            </tr>
                         </thead>
 
                         @foreach ($topUsers as $topUser)
                             <tr
-                                class="{{ $topUser?->user===null ? 'text-muted' : null }}"
+                                class="{{ $topUser?->user === null ? 'text-muted' : null }}"
                             >
-                                <td
-                                    class="hidden-sm hidden-xs"
-                                >
+                                <td class="hidden-sm hidden-xs">
                                     {{ $topUser->user?->name }}
                                 </td>
                                 <td>
-                                    {{$topUser->played_count}}
+                                    {{ $topUser->played_count }}
                                 </td>
                             </tr>
-
                         @endforeach
                     </table>
                 </div>
             </div>
 
-
             <div class="card mb-3">
-                <div class="card-header">
-                    Top videos
-                </div>
+                <div class="card-header">Top videos</div>
                 <div class="card-body">
                     <table class="table-hover table-sm table">
                         <thead>
-                        <tr class="bg-dark text-white">
-                            <td>Video</td>
-                            <td>times played</td>
-                        </tr>
+                            <tr class="bg-dark text-white">
+                                <td>Video</td>
+                                <td>times played</td>
+                            </tr>
                         </thead>
 
                         @foreach ($topVideos as $topVideo)
-                            <tr
-                            >
-                                <td
-                                    class="hidden-sm hidden-xs"
-                                >
+                            <tr>
+                                <td class="hidden-sm hidden-xs">
                                     {{ $topVideo->video_title }}
                                 </td>
                                 <td>
-                                    {{$topVideo->played_count}}
+                                    {{ $topVideo->played_count }}
                                 </td>
                             </tr>
-
                         @endforeach
                     </table>
                 </div>
             </div>
 
-        <div class="card mb-3">
-            <div class="card-header">
-                Top videos by an individual user
-            </div>
-            <div class="card-body">
-                <table class="table-hover table-sm table">
-                    <thead>
-                    <tr class="bg-dark text-white">
-                        <td>Video</td>
-                        <td>times played</td>
-                        <td>by user</td>
-                    </tr>
-                    </thead>
+            <div class="card mb-3">
+                <div class="card-header">Top videos by an individual user</div>
+                <div class="card-body">
+                    <table class="table-hover table-sm table">
+                        <thead>
+                            <tr class="bg-dark text-white">
+                                <td>Video</td>
+                                <td>times played</td>
+                                <td>by user</td>
+                            </tr>
+                        </thead>
 
-                    @foreach ($topVideosByIndividualUsers as $topVideoByIndividualUser)
-                        <tr
-                        >
-                            <td
-                                class="hidden-sm hidden-xs"
-                            >
-                                {{ $topVideoByIndividualUser->video_title }}
-                            </td>
-                            <td>
-                                {{$topVideoByIndividualUser->played_count}}
-                            </td>
-                            <td>
-                                {{$topVideoByIndividualUser->user?->name}}
-                            </td>
-                        </tr>
-
-                    @endforeach
-                </table>
+                        @foreach ($topVideosByIndividualUsers as $topVideoByIndividualUser)
+                            <tr>
+                                <td class="hidden-sm hidden-xs">
+                                    {{ $topVideoByIndividualUser->video_title }}
+                                </td>
+                                <td>
+                                    {{ $topVideoByIndividualUser->played_count }}
+                                </td>
+                                <td>
+                                    {{ $topVideoByIndividualUser->user?->name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-
     </div>
 @endsection
