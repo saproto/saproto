@@ -8,6 +8,7 @@ use App\Models\ActivityParticipation;
 use App\Models\Event;
 use App\Models\EventCategory;
 use App\Models\Member;
+use App\Models\PlayedVideo;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -103,6 +104,86 @@ class QueryController extends Controller
             'active' => $count_active,
             'count_per_type' => $count_per_type,
         ]);
+    }
+
+    public function protubeStatistics(Request $request): Response|View|\Illuminate\Http\Response
+    {
+
+        if ($request->missing('start') || $request->missing('end')) {
+            $year_start = intval(Date::now()->format('n')) >= 9 ? intval(Date::now()->format('Y')) : intval(Date::now()->format('Y')) - 1;
+            $start = Date::parse("{$year_start}-09-01 00:00:01");
+            $end = Date::now();
+        } else {
+            $start = $request->date('start');
+            $end = $request->date('end')->addDay(); // Add one day to make it inclusive.
+        }
+
+        // mean/median per users
+        $playedPerUsers = PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                'user_id',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->groupBy('user_id')
+            ->orderBy('played_count', 'desc')
+            ->get();
+
+        $medianPerUser = round($playedPerUsers->median('played_count'), 2);
+        $averagePerUser = round($playedPerUsers->avg('played_count'), 2);
+        $totalPlayed = round($playedPerUsers->sum('played_count'), 2);
+        $uniqueUsers = round($playedPerUsers->count(), 2);
+
+        // top videos over the past 5 years
+        $topVideos = PlayedVideo::query()
+            ->select([
+                'video_id',
+                'video_title',
+                'spotify_id',
+                'spotify_name',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->groupBy('video_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->limit(10)->get();
+
+        // top 5 played by an individual user.
+        $topVideosByIndividualUser = PlayedVideo::query()
+            ->select([
+                'video_title',
+                'user_id',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->with('user:id,name')
+            ->groupBy('video_id')
+            ->groupBy('user_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->limit(10)->get();
+
+        // top 10 contributors
+        $topUsers = PlayedVideo::query()
+            ->with('user:name,id')
+            ->select([
+                'user_id',
+                DB::raw('count(*) as played_count'),
+            ])
+            ->where('created_at', '>', $start->format('Y-m-d'))
+            ->where('created_at', '<', $end->format('Y-m-d'))
+            ->groupBy('user_id')
+            ->orderBy('played_count', 'desc')
+            ->orderBy('created_at')
+            ->limit(10)->get();
+
+        return view('queries.protube_statistics', ['start' => $start, 'end' => $end, 'medianPerUser' => $medianPerUser, 'averagePerUser' => $averagePerUser, 'totalPlayed' => $totalPlayed, 'uniqueUsers' => $uniqueUsers, 'topVideos' => $topVideos, 'topVideosByIndividualUsers' => $topVideosByIndividualUser, 'topUsers' => $topUsers]);
     }
 
     public function activityStatistics(Request $request): View

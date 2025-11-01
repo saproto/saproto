@@ -1004,7 +1004,7 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/activity_overview', [QueryController::class, 'activityOverview'])->name('activity_overview');
         Route::get('/activity_statistics', [QueryController::class, 'activityStatistics'])->name('activity_statistics');
         Route::get('/membership_totals', [QueryController::class, 'membershipTotals'])->name('membership_totals');
-        Route::get('/new_membership_totals', [QueryController::class, 'newMembershipTotals'])->name('new_membership_totals');
+        Route::get('/protube_statistics', [QueryController::class, 'protubeStatistics'])->name('protube_statistics');
     });
 
     /* --- Routes related to the mini-sites --- */
