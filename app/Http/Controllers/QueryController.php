@@ -106,7 +106,7 @@ class QueryController extends Controller
         ]);
     }
 
-    public function protubeStatistics(Request $request)
+    public function protubeStatistics(Request $request): Response|View|\Illuminate\Http\Response
     {
 
         if ($request->missing('start') || $request->missing('end')) {
