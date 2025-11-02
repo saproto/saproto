@@ -109,8 +109,9 @@ class PhotoAdminController extends Controller
         ]);
 
         try {
+            $extension = $request->file('file')->extension();
             $photo->addMediaFromRequest('file')
-                ->usingFileName($album->id.'_'.$photo->id)
+                ->usingFileName($album->id.'_'.$photo->id.".".$extension)
                 ->toMediaCollection($album->private ? 'private' : 'public');
 
             return html_entity_decode(view('photos.includes.selectablephoto', ['photo' => $photo]));
