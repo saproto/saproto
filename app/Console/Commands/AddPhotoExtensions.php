@@ -27,7 +27,7 @@ class AddPhotoExtensions extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $photos = Photo::query()->withoutGlobalScopes()->whereHas('media')->whereHas('album', function (Builder $q) {
             $q->withoutGlobalScopes();

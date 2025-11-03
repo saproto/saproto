@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
-use phpDocumentor\Reflection\Location;
 
 class WrappedController extends Controller
 {
@@ -44,8 +43,8 @@ class WrappedController extends Controller
             ->get();
     }
 
-    /** @return Collection<int, OrderLine> */
-    public function orderTotals(): Collection
+    /** @return \Illuminate\Support\Collection<(int|string), \Illuminate\Support\Collection<(int|string), mixed>>*/
+    public function orderTotals(): \Illuminate\Support\Collection
     {
         $totals = OrderLine::query()
             ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
