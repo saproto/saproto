@@ -306,7 +306,7 @@ class EmailController extends Controller
     }
 
     /**
-     * @param array<int> $lists
+     * @param  array<int>  $lists
      * @param  array<int>  $events
      * @param  array<int>  $withdrawals
      */
