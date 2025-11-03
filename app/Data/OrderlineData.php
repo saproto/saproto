@@ -11,7 +11,7 @@ class OrderlineData extends Data
         public int $id,
         public int $product_id,
         public int $units,
-        public int $total_price,
+        public float $total_price,
         public string $created_at,
         public ProductData $product,
     ) {}

@@ -7,10 +7,11 @@ use App\Models\Activity;
 use App\Models\Event;
 use App\Models\OrderLine;
 use App\Models\TicketPurchase;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 
@@ -20,32 +21,33 @@ class WrappedController extends Controller
     {
         $from = Date::now()->startOfYear();
         $to = Date::now()->endOfYear();
-        $purchases = $this->getPurchases($from, $to);
 
         return new JsonResponse([
             'order_totals' => $this->orderTotals(),
-            'purchases' => OrderlineData::collect($purchases),
-            'total_spent' => round($purchases->sum('total_price'), 2),
+            'purchases' => OrderlineData::collect($this->getPurchases($from, $to, Auth::user())->get()),
+            'total_spent' => round($this->getPurchases($from, $to)->sum('total_price'), 2),
             'events' => $this->eventList(),
             'user' => auth()->user(),
         ], 200, [], JSON_NUMERIC_CHECK);
     }
 
     /**
-     * @return Collection<int, OrderLine>
+     * @return \Illuminate\Database\Eloquent\Builder<OrderLine>
      */
-    public function getPurchases(Carbon $from, Carbon $to)
+    public function getPurchases(Carbon $from, Carbon $to, ?User $user = null)
     {
-        return OrderLine::query()->where('user_id', Auth::id())
+        return OrderLine::query()
+            ->when($user !== null, function (\Illuminate\Database\Eloquent\Builder $query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
             ->with('product.media')
             ->where('created_at', '>', $from)
             ->where('created_at', '<', $to)
-            ->orderBy('created_at', 'DESC')
-            ->get();
+            ->orderBy('created_at', 'DESC');
     }
 
-    /** @return \Illuminate\Support\Collection<(int|string), \Illuminate\Support\Collection<(int|string), mixed>>*/
-    public function orderTotals(): \Illuminate\Support\Collection
+    /** @return Collection<(int|string), Collection<(int|string), mixed>>*/
+    public function orderTotals(): Collection
     {
         $totals = OrderLine::query()
             ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
@@ -60,7 +62,7 @@ class WrappedController extends Controller
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, array{
+     * @return Collection<int, array{
      *     title: string,
      *     start: int,
      *     location: string,
@@ -69,10 +71,11 @@ class WrappedController extends Controller
      *     image_url: string|null
      * }>
      */
-    public function eventList(): \Illuminate\Support\Collection
+    public function eventList(): Collection
     {
         $events = Event::query()
             ->whereBetween('start', [now()->startOfYear()->timestamp, now()->endOfYear()->timestamp])
+            ->whereNotLike('title', '%cancel%')
             ->where(static function (\Illuminate\Contracts\Database\Query\Builder $query) {
                 $query->whereIn('id', static function (Builder $query) {
                     $query->select('event_id')
