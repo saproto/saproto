@@ -21,9 +21,6 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\MediaCannotBeDeleted;
 
 class EmailController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\View\View|Factory
-     */
     public function index(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.overview', [
@@ -62,9 +59,6 @@ class EmailController extends Controller
         ]);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\View|Factory
-     */
     public function create(): \Illuminate\Contracts\View\View|Factory
     {
         return view('emailadmin.editmail', ['email' => null]);
