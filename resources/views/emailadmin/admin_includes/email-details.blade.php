@@ -250,7 +250,8 @@
                             @foreach (Withdrawal::query()->orderByDesc('id')->get() as $withdrawal)
                                 <option
                                     @selected($email?->withdrawals->filter(fn ($item) => $item->id === $withdrawal->id)->isNotEmpty())
-                                    value="{{ $withdrawal->id }}">
+                                    value="{{ $withdrawal->id }}"
+                                >
                                     {{ $withdrawal->id }}
                                 </option>
                             @endforeach
