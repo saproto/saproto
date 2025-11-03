@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\OrderlineData;
 use App\Models\Activity;
 use App\Models\Event;
 use App\Models\OrderLine;
@@ -23,7 +24,7 @@ class WrappedController extends Controller
 
         return new JsonResponse([
             'order_totals' => $this->orderTotals(),
-            'purchases' => $purchases,
+            'purchases' => OrderlineData::collect($purchases),
             'total_spent' => round($purchases->sum('total_price'), 2),
             'events' => $this->eventList(),
             'user' => auth()->user(),
@@ -36,7 +37,7 @@ class WrappedController extends Controller
     public function getPurchases(Carbon $from, Carbon $to)
     {
         return OrderLine::query()->where('user_id', Auth::id())
-            ->with('product')
+            ->with('product.media')
             ->where('created_at', '>', $from)
             ->where('created_at', '<', $to)
             ->orderBy('created_at', 'DESC')

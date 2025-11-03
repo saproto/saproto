@@ -42,7 +42,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property-read FinancialAccount|null $account
  * @property-read Collection<int, ProductCategory> $categories
  * @property-read int|null $categories_count
- * @property-read mixed $image_url
  * @property-read Collection<int, OrderLine> $orderlines
  * @property-read int|null $orderlines_count
  * @property-read Ticket|null $ticket
