@@ -18,6 +18,15 @@ export const prepareStats = async (
         .map((x) => x.units * x.product.calories)
         .reduce((a, b) => a + b)
     const stats: statsType = {
+        images:{
+            cookieMonster: cookieMonster,
+            beugel: beugel,
+            lemonade: lemonade,
+            spilledBeer: spilledBeer,
+            tosti: tosti,
+            unicorn: unicorn,
+            unicornBw: unicornBw,
+        },
         activities: {
             amount: events.length,
             spent:
@@ -149,72 +158,57 @@ export const prepareStats = async (
     stats.willToLives.percentile = Math.round(
         ((otherWills.length - percentileCountWills) / otherWills.length) * 100
     )
-    // await preloadImages(stats)
+    await preloadImages(stats)
     return stats
 }
 
 const preloadImages = async (stats: statsType) => {
-    await preloadImage(cookieMonster)
-    await preloadImage(beugel)
-    await preloadImage(lemonade)
-    await preloadImage(spilledBeer)
-    await preloadImage(tosti)
-    await preloadImage(unicorn)
-    await preloadImage(unicornBw)
+    stats.images.cookieMonster = await fetchImageAsBase64(stats.images.cookieMonster)
+    stats.images.beugel = await fetchImageAsBase64(stats.images.beugel)
+    stats.images.lemonade = await fetchImageAsBase64(stats.images.lemonade)
+    stats.images.spilledBeer = await fetchImageAsBase64(stats.images.spilledBeer)
+    stats.images.tosti = await fetchImageAsBase64(stats.images.tosti)
+    stats.images.unicorn = await fetchImageAsBase64(stats.images.unicorn)
+    stats.images.unicornBw = await fetchImageAsBase64(stats.images.unicornBw)
     //Activities
     for (const activity of stats.activities.all) {
-        if (activity.image_url) {
-            const src = activity.image_url
-            let fetched = true
-            const blob = await fetch(src)
-                .then((response) => response.blob())
-                .catch(() => {
-                    fetched = false
-                })
-            if (fetched && blob) {
-                activity.image_url = await new Promise((resolve) => {
-                    const reader = new FileReader()
-                    reader.onload = function () {
-                        resolve(reader.result)
-                    }
-                    reader.readAsDataURL(blob)
-                })
-
-                await preloadImage(src)
-            }
-        }
+       activity.image_url = await fetchImageAsBase64(activity.image_url)
     }
     //MostBought
     for (const product of stats.mostBought.items.slice(0, 5)) {
-        if (product[0].image_url) {
-            let fetched = true
-            const blob = await fetch(product[0].image_url)
-                .then((response) => response.blob())
-                .catch(() => {
-                    fetched = false
-                })
-
-            if (fetched && blob) {
-                product[0].image_url = await new Promise((resolve) => {
-                    const reader = new FileReader()
-                    reader.onload = function () {
-                        resolve(reader.result)
-                    }
-                    reader.readAsDataURL(blob)
-                })
-
-                await preloadImage(product[0].image_url)
-            }
-        }
+        product[0].image_url = await fetchImageAsBase64(product[0].image_url)
     }
 }
 
-const images = []
-const preloadImage = (src: string) =>
-    new Promise((resolve, reject) => {
-        const img = new Image()
-        img.onload = resolve
-        img.onerror = reject
-        img.src = src
-        images.push(img)
+export const blobToBase64 = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            resolve(reader.result as string)
+        }
+
+        reader.onerror = (error) => {
+            reject(error)
+        }
+        reader.readAsDataURL(blob)
     })
+}
+
+const fetchImageAsBase64 = async (url: string): Promise<string> => {
+    if(!url){
+        return url
+    }
+    try {
+        const response = await fetch(url)
+        if (!response.ok) {
+            console.warn(`Failed to fetch image (${response.status}): ${url}`)
+            return url
+        }
+
+        const blob = await response.blob()
+        return await blobToBase64(blob)
+    } catch (error) {
+        console.warn(`Error fetching image: ${url}`, error)
+        return url
+    }
+}

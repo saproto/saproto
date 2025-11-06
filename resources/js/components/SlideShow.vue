@@ -19,14 +19,23 @@ const props = defineProps<{
 }>()
 
 const stats = props.data
-const currentSlide: Ref<number> = ref(0)
-const touched = ref(false)
-const held = ref(false)
-let touchTimeout: number
-const transition = ref('slide-left')
-const slide = ref(null)
-const slideElement = ref()
-const sharing = ref(false)
+const currentSlide = ref(0);
+const touched = ref(false);
+const held = ref(false);
+let touchTimeout: number;
+const transition = ref('slide-left');
+const slide = ref<HTMLDivElement | null>(null)
+
+type SlideComponent = typeof TotalSpent
+    | typeof MostBought
+    | typeof Calories
+    | typeof Drinks
+    | typeof WillToLive
+    | typeof DaysAtProto
+    | typeof Activities;
+
+const slideElement = ref<SlideComponent>()
+const sharing = ref(false);
 
 let allSlides: Array<[Component, number]|true> = [
     [TotalSpent, 10],
@@ -41,9 +50,11 @@ let allSlides: Array<[Component, number]|true> = [
 const slides = allSlides.filter((x) => x !== true)
 
 const shareSlide = async () => {
+    if(!slide.value) return
     sharing.value = true
     setTimeout(async () => {
         try {
+            if(!slide.value) return
             const canvas = await html2canvas(slide.value, {
                 backgroundColor: null,
             })
@@ -153,7 +164,7 @@ const startTouch = () => {
 const stopTouch = () => {
     touchEvent(false)
 }
-
+// @ts-ignore
 const { lengthX } = useSwipe(slideElement, {
     passive: true,
     onSwipeStart() {
@@ -161,11 +172,13 @@ const { lengthX } = useSwipe(slideElement, {
         slideElement.value?.$el.classList.remove('slide-transition')
     },
     onSwipe() {
+        if(!slideElement.value) return
         const el = slideElement.value.$el
         const parent = slide.value
+        if(!parent) return
         let moveVal = -lengthX.value
         let rotateVal =
-            (-lengthX.value / parent.getBoundingClientRect()?.width??1) * 40
+            (-lengthX.value / parent.getBoundingClientRect()?.width) * 40
         if (currentSlide.value === 0) {
             moveVal = Math.min(0, moveVal)
             rotateVal = Math.min(40, rotateVal)
@@ -181,6 +194,7 @@ const { lengthX } = useSwipe(slideElement, {
         }
     },
     onSwipeEnd() {
+        if(!slide.value) return
         const el = slideElement.value?.$el
         const slideWidth = slide.value.getBoundingClientRect().width / 2
         el.classList.add('slide-transition')
@@ -201,40 +215,28 @@ const { lengthX } = useSwipe(slideElement, {
 
 <template>
     <div id="slideshow" @click="pageClick">
-        <div>
-            <h1>
-                {{ $page.props.auth.user.calling_name }}'s
-                <span class="omnomcom">OmNomCom</span> Wrapped
-            </h1>
-        </div>
+        <div><h1>{{ $page.props.auth.user.calling_name }}'s <span class="omnomcom">OmNomCom</span> Wrapped</h1></div>
 
         <div id="progress">
-            <div v-for="(thisSlide, i) in slides" :key="`slide${i}`" class="bar">
-                <div
-                    class="progress-bar"
-                    :class="{
-                        playing: currentSlide === i && !touched,
-                        ended: currentSlide > i,
-                        tostart: currentSlide < i,
-                    }"
-                    :style="{ animationDuration: thisSlide[1] + 's' }"
-                    @animationend="nextSlide()"
-                />
+            <div v-for="(slide, i) in slides" class="bar">
+                <div class="progress-bar"
+                     :class="{ playing: currentSlide === i && !touched, ended: currentSlide > i, tostart: currentSlide < i}"
+                     :style="{ animationDuration: slide[1]+'s'}" @animationend="nextSlide()"></div>
             </div>
         </div>
 
         <div id="slide-holder" ref="slide">
             <Transition :name="transition">
                 <component
-                    :is="slides[currentSlide][0]"
-                    :ref="slideElement"
                     class="slide"
+                    :is="slides[currentSlide][0]"
                     :data="data"
                     :time="slides[currentSlide][1]"
-                    :no-animation="sharing"
+                    ref="slideElement"
                     @click="slideClick"
                     @mousedown="startTouch"
                     @mouseup="stopTouch"
+                    :no-animation="sharing"
                 />
             </Transition>
         </div>

@@ -2,7 +2,7 @@
     <div class="slide">
         <h1>This year you attended</h1>
         <span class="flex justify-around">
-            <img :src="spilledBeer" style="width: 10rem" alt="spilled beer" />
+            <img :src="props.data.images.spilledBeer" style="width: 10rem" alt="spilled beer" />
             <span class="color text-4xl">
                 <span class="dynamic">{{ stats.amount }}</span>
                 drinks</span
@@ -24,9 +24,9 @@
             per drink!
         </h2>
         <h2 class="flex justify-between mb-3">
-            <img :src="beugel" style="height: 1.5em" />
+            <img :src="props.data.images.beugel" style="height: 1.5em" />
             = <span class="dynamic" style="color: lawngreen">Alcoholic</span>
-            <img :src="lemonade" style="height: 1.5em" />
+            <img :src="props.data.images.lemonade" style="height: 1.5em" />
             = <span class="dynamic color">Non-Alcoholic</span>
         </h2>
         <br />
@@ -38,8 +38,8 @@
                         (stats.alcoholic /
                             (stats.alcoholic + stats.nonAlcoholic)) *
                             100
-                            ? lemonade
-                            : beugel
+                            ? props.data.images.lemonade
+                            : props.data.images.beugel
                     "
                     style="width: 2.5rem"
                 />
@@ -49,9 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import spilledBeer from '@/../assets/images/spilledbeer.png'
-import beugel from '@/../assets/images/beugel.webp'
-import lemonade from '@/../assets/images/lemonade.png'
 import { statsType } from '@/pages/Wrapped/types'
 
 const props = defineProps<{

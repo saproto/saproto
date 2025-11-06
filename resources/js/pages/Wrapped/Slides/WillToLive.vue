@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import unicorn from '@/../assets/images/unicorn.png'
-import unicornBw from '@/../assets/images/unicorn_bw.png'
 import { statsType } from '@/pages/Wrapped/types.ts'
 
 const props = defineProps<{
@@ -34,11 +32,11 @@ const stats = props.data.willToLives
         <div class="container">
             <div
                 class="grayscale"
-                :style="`background-image: url(${unicornBw})`"
+                :style="`background-image: url(${props.data.images.unicornBw})`"
             />
             <div
                 class="color"
-                :style="`background-image: url(${unicorn}); animation-iteration-count: ${stats.percentage}; animation-duration: ${4 / stats.percentage}s`"
+                :style="`background-image: url(${props.data.images.unicorn}); animation-iteration-count: ${stats.percentage}; animation-duration: ${4 / stats.percentage}s`"
             />
         </div>
     </div>

@@ -13,12 +13,11 @@
         <h1 class="total">
             €<span class="dynamic">{{ stats.total.toFixed(2) }}</span>
         </h1>
-        <img :src="cookieMonster" />
+        <img :src="props.data.images.cookieMonster" />
     </div>
 </template>
 
 <script setup lang="ts">
-import cookieMonster from '@/../assets/images/cookiemonster.png'
 import { statsType } from '@/pages/Wrapped/types'
 
 const props = defineProps<{

@@ -15,7 +15,7 @@
             <img
                 v-for="n in stats.tostis"
                 :key="n"
-                :src="tosti"
+                :src="props.data.images.tosti"
                 :style="`animation-delay: ${noAnimation ? -4 : (n - 1) * (4 / stats.tostis)}s`"
             />
         </div>
@@ -23,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import tosti from '@/../assets/images/tosti.png'
 import { statsType } from '@/pages/Wrapped/types'
 
 const props = defineProps<{
