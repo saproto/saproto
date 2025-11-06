@@ -24,10 +24,6 @@ export interface statsType {
         items: [ProductData, number][]
         percentile: number
     }
-    december: {
-        complete: boolean
-        items: number
-    }
     totalSpent: {
         amount: number
         total: number

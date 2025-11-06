@@ -101,7 +101,25 @@ body {
 .slide h2,
 .slide h3,
 .slide h4 {
-    font-weight: 300;
+    font-weight: 300
+}
+
+#slideshow button {
+    background: white;
+    color: black;
+    border: 0;
+    border-radius: 1em;
+    font-size: 1.5em;
+    padding: 0.1em 0.5em;
+    margin-bottom: 0.2em;
+    cursor: pointer;
+}
+
+#slideshow div h1 {
+    font-size: 2em;
+}
+#slideshow div h2 {
+    font-size: 1.5em;
 }
 
 .omnomcom {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Component, ref } from 'vue'
+import { Ref, ref } from 'vue'
+import type { Component } from 'vue'
 import html2canvas from 'html2canvas'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
 import MostBought from '@/pages/Wrapped/Slides/MostBought.vue'
@@ -8,8 +9,6 @@ import Drinks from '@/pages/Wrapped/Slides/Drinks.vue'
 import WillToLive from '@/pages/Wrapped/Slides/WillToLive.vue'
 import DaysAtProto from '@/pages/Wrapped/Slides/DaysAtProto.vue'
 import Activities from '@/pages/Wrapped/Slides/Activities.vue'
-import NoStreepDecember from '@/pages/Wrapped/Slides/NoStreepDecember.vue'
-// import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types'
 import { ArrowUp } from 'lucide-vue-next';
@@ -26,7 +25,7 @@ const held = ref(false)
 let touchTimeout: number
 const transition = ref('slide-left')
 const slide = ref(null)
-const slideElement = ref(null)
+const slideElement = ref()
 const sharing = ref(false)
 
 let allSlides: Array<[Component, number]|true> = [
@@ -36,7 +35,6 @@ let allSlides: Array<[Component, number]|true> = [
     stats.drinks.amount <= 0 || [Drinks, 10],
     stats.willToLives.amount <= 0 || [WillToLive, 10],
     [DaysAtProto, 10],
-    [NoStreepDecember, 10],
     stats.activities.amount <= 0 || [Activities, 10],
 ]
 
@@ -51,9 +49,10 @@ const shareSlide = async () => {
             })
             canvas.toBlob(async (blob) => {
                 if (navigator.share && blob) {
+                    const year =new Date().getFullYear();
                     const imgFile = new File(
                         [blob],
-                        'OmNomComWrapped2022.png',
+                        `OmNomComWrapped${year}.png`,
                         { type: 'image/png' }
                     )
                     await navigator.share({
@@ -228,7 +227,7 @@ const { lengthX } = useSwipe(slideElement, {
             <Transition :name="transition">
                 <component
                     :is="slides[currentSlide][0]"
-                    ref="slideElement"
+                    :ref="slideElement"
                     class="slide"
                     :data="data"
                     :time="slides[currentSlide][1]"
@@ -247,6 +246,11 @@ const { lengthX } = useSwipe(slideElement, {
 </template>
 
 <style scoped>
+#share{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #slideshow {
     position: fixed;
     width: 100vw;
@@ -260,21 +264,6 @@ const { lengthX } = useSwipe(slideElement, {
     align-items: center;
     gap: 0.5em;
     padding-bottom: 0.5em;
-}
-
-#slideshow button {
-    background: white;
-    color: black;
-    border: 0;
-    border-radius: 1em;
-    font-size: 1.5em;
-    padding: 0.1em 0.5em;
-    margin-bottom: 0.2em;
-    cursor: pointer;
-}
-
-#slideshow div h1 {
-    font-size: 1.8em;
 }
 
 #prev,

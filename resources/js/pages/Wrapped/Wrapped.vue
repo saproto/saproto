@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import './main.css'
+import './wrapped.css'
 import { computed, ref } from 'vue'
 import SlideShow from '@/components/SlideShow.vue'
 import { prepareStats } from '@/lib/stats'

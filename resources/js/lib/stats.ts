@@ -47,10 +47,6 @@ export const prepareStats = async (
             items: [],
             percentile: 0,
         },
-        december: {
-            complete: true,
-            items: 0,
-        },
         totalSpent: {
             amount: orders.map((x) => x.total_price).reduce((a, b) => a + b),
             total: total_spent,
@@ -132,15 +128,6 @@ export const prepareStats = async (
         )
     }
 
-    //NoStreepDecember
-    for (const order of orders) {
-        const month = order.created_at.substring(5, 7)
-        if (month === '12') {
-            stats.december.complete = false
-            stats.december.items += order.units
-        }
-    }
-
     //WillToLive
     const willToLives = orders
         .filter((x) => x.product.id === 987)
@@ -162,7 +149,7 @@ export const prepareStats = async (
     stats.willToLives.percentile = Math.round(
         ((otherWills.length - percentileCountWills) / otherWills.length) * 100
     )
-    await preloadImages(stats)
+    // await preloadImages(stats)
     return stats
 }
 
