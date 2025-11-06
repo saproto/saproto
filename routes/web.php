@@ -74,6 +74,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\WallstreetController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\WrappedController;
 use App\Models\Photo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cookie;
@@ -1030,6 +1031,9 @@ Route::middleware('forcedomain')->group(function () {
         Route::get('/', fn () => inertia('Welcome'))->name('index');
         Route::get('/admin', fn () => inertia('admin/Admin'))->name('admin');
     });
+
+    /* Routes related to Wrapped */
+    Route::get('wrapped', [WrappedController::class, 'index'])->middleware('auth')->name('wrapped');
 
     /* --- Route related to the december theme --- */
     Route::get('/december/toggle', function (): RedirectResponse {
