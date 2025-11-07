@@ -38,9 +38,10 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
     $media = $photo->getFirstMedia('*');
     $hashedPath = md5($media->id.config('app.key'));
     $disk = $private ? 'local' : 'public';
+    $fileName = $album->id.'_'.$photo->id;
 
     Storage::disk('stack')->assertExists("{$hashedPath}/{$media->file_name}");
-    Storage::disk($disk)->assertExists("{$hashedPath}/conversions/{$media->file_name}-small.webp");
+    Storage::disk($disk)->assertExists("{$hashedPath}/conversions/{$fileName}-small.webp");
 
     /*
      * Test that a photo is moved when executing the action
@@ -60,7 +61,7 @@ it('uploads a photo to an unpublished album with correct custom path and disk, a
     $hashedPath = md5($media->id.config('app.key'));
 
     Storage::disk('stack')->assertExists("{$hashedPath}/{$media->file_name}");
-    Storage::disk('local')->assertExists("{$hashedPath}/conversions/{$media->file_name}-small.webp");
-    Storage::disk('public')->assertMissing("{$hashedPath}/conversions/{$media->file_name}-small.webp");
+    Storage::disk('local')->assertExists("{$hashedPath}/conversions/{$fileName}-small.webp");
+    Storage::disk('public')->assertMissing("{$hashedPath}/conversions/{$fileName}-small.webp");
 
 })->with('privacy_states');

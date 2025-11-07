@@ -81,5 +81,5 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], static function
         Route::get('toggle_event', [WallstreetController::class, 'toggleEvent'])->name('toggle_event')->middleware(['permission:tipcie']);
     });
     /* Routes related to the OmNomCom Wrapped API */
-    Route::get('wrapped')->middleware('auth:api')->uses([WrappedController::class, 'index'])->name('wrapped');
+    Route::get('wrapped', [WrappedController::class, 'index'])->middleware('auth:api')->name('wrapped');
 });

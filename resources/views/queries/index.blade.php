@@ -65,6 +65,20 @@
                                 </a>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>ProTube statistics</td>
+                            <td>
+                                Generates ProTube statistics between two dates.
+                            </td>
+                            <td>
+                                <a
+                                    href="{{ route('queries::protube_statistics') }}"
+                                >
+                                    <i class="fas fa-running"></i>
+                                </a>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>

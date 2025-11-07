@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\AchievementsCron;
+use App\Console\Commands\AddPhotoExtensions;
 use App\Console\Commands\AddSysadmin;
 use App\Console\Commands\BackupPhotosToStack;
 use App\Console\Commands\BirthdayCron;
@@ -81,6 +82,7 @@ class Kernel extends ConsoleKernel
         SyncUTAccounts::class,
         GoogleSync::class,
         BackupPhotosToStack::class,
+        AddPhotoExtensions::class,
         RefreshWithdrawalTotals::class,
     ];
 
