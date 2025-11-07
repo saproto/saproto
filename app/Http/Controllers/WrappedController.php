@@ -9,26 +9,27 @@ use App\Models\OrderLine;
 use App\Models\TicketPurchase;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class WrappedController extends Controller
 {
-    public function index(): JsonResponse
+    public function index(): Response
     {
         $from = Date::now()->startOfYear();
         $to = Date::now()->endOfYear();
 
-        return new JsonResponse([
-            'order_totals' => $this->orderTotals(),
-            'purchases' => OrderlineData::collect($this->getPurchases($from, $to, Auth::user())->get()),
-            'total_spent' => round($this->getPurchases($from, $to)->sum('total_price'), 2),
-            'events' => $this->eventList(),
-            'user' => auth()->user(),
-        ], 200, [], JSON_NUMERIC_CHECK);
+        return Inertia::render('Wrapped/Wrapped',
+            [
+                'order_totals' => $this->orderTotals(),
+                'purchases' => OrderlineData::collect($this->getPurchases($from, $to, Auth::user())->get()),
+                'total_spent' => round($this->getPurchases($from, $to)->sum('total_price'), 2),
+                'events' => $this->eventList(),
+            ]);
     }
 
     /**
