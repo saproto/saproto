@@ -59,7 +59,8 @@ const shareSlide = async () => {
                 backgroundColor: null,
             })
             canvas.toBlob(async (blob) => {
-                if (navigator.share && blob) {
+                if(!blob) return;
+                if (navigator.share) {
                     const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
@@ -72,7 +73,7 @@ const shareSlide = async () => {
                         files: [imgFile],
                         // url: window.location.href,
                     })
-                } else if (blob) {
+                } else {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
                     link.download = 'OmNomComWrapped2022.png'
