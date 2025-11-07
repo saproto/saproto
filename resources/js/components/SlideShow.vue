@@ -59,7 +59,7 @@ const shareSlide = async () => {
                 backgroundColor: null,
             })
             canvas.toBlob(async (blob) => {
-                if(!blob) return;
+                if (!blob) return
                 if (navigator.share) {
                     const year = new Date().getFullYear()
                     const imgFile = new File(
