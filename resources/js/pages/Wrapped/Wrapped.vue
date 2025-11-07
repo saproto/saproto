@@ -3,7 +3,7 @@ import './wrapped.css'
 import { computed, ref } from 'vue'
 import SlideShow from '@/pages/Wrapped/Components/SlideShow.vue'
 import { prepareStats } from '@/lib/stats'
-import { usePage } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import { statsType } from '@/pages/Wrapped/types'
 
 const page = usePage()
@@ -34,6 +34,7 @@ loadData()
 </script>
 
 <template>
+    <Head title="Wrapped" />
     <Transition>
         <main v-if="loaded">
             <SlideShow :data="data" />
