@@ -1,7 +1,7 @@
 import ProductData = App.Data.ProductData
 
 export interface statsType {
-    images:{
+    images: {
         cookieMonster: string
         beugel: string
         lemonade: string

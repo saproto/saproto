@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
 import type { Component } from 'vue'
 import html2canvas from 'html2canvas'
 import TotalSpent from '@/pages/Wrapped/Slides/TotalSpent.vue'
@@ -11,33 +11,33 @@ import DaysAtProto from '@/pages/Wrapped/Slides/DaysAtProto.vue'
 import Activities from '@/pages/Wrapped/Slides/Activities.vue'
 import { useSwipe } from '@vueuse/core'
 import { statsType } from '@/pages/Wrapped/types'
-import { ArrowUp } from 'lucide-vue-next';
-
+import { ArrowUp } from 'lucide-vue-next'
 
 const props = defineProps<{
     data: statsType
 }>()
 
 const stats = props.data
-const currentSlide = ref(0);
-const touched = ref(false);
-const held = ref(false);
-let touchTimeout: number;
-const transition = ref('slide-left');
+const currentSlide = ref(0)
+const touched = ref(false)
+const held = ref(false)
+let touchTimeout: number
+const transition = ref('slide-left')
 const slide = ref<HTMLDivElement | null>(null)
 
-type SlideComponent = typeof TotalSpent
+type SlideComponent =
+    | typeof TotalSpent
     | typeof MostBought
     | typeof Calories
     | typeof Drinks
     | typeof WillToLive
     | typeof DaysAtProto
-    | typeof Activities;
+    | typeof Activities
 
 const slideElement = ref<SlideComponent>()
-const sharing = ref(false);
+const sharing = ref(false)
 
-let allSlides: Array<[Component, number]|true> = [
+let allSlides: Array<[Component, number] | true> = [
     [TotalSpent, 10],
     [MostBought, 10],
     [Calories, 10],
@@ -50,17 +50,17 @@ let allSlides: Array<[Component, number]|true> = [
 const slides = allSlides.filter((x) => x !== true)
 
 const shareSlide = async () => {
-    if(!slide.value) return
+    if (!slide.value) return
     sharing.value = true
     setTimeout(async () => {
         try {
-            if(!slide.value) return
+            if (!slide.value) return
             const canvas = await html2canvas(slide.value, {
                 backgroundColor: null,
             })
             canvas.toBlob(async (blob) => {
                 if (navigator.share && blob) {
-                    const year =new Date().getFullYear();
+                    const year = new Date().getFullYear()
                     const imgFile = new File(
                         [blob],
                         `OmNomComWrapped${year}.png`,
@@ -72,7 +72,7 @@ const shareSlide = async () => {
                         files: [imgFile],
                         // url: window.location.href,
                     })
-                } else if(blob) {
+                } else if (blob) {
                     const dataUrl = URL.createObjectURL(blob)
                     const link = document.createElement('a')
                     link.download = 'OmNomComWrapped2022.png'
@@ -164,7 +164,7 @@ const startTouch = () => {
 const stopTouch = () => {
     touchEvent(false)
 }
-// @ts-ignore
+// @ts-expect-error some weird error on the wrong type of the slideElement component
 const { lengthX } = useSwipe(slideElement, {
     passive: true,
     onSwipeStart() {
@@ -172,10 +172,10 @@ const { lengthX } = useSwipe(slideElement, {
         slideElement.value?.$el.classList.remove('slide-transition')
     },
     onSwipe() {
-        if(!slideElement.value) return
+        if (!slideElement.value) return
         const el = slideElement.value.$el
         const parent = slide.value
-        if(!parent) return
+        if (!parent) return
         let moveVal = -lengthX.value
         let rotateVal =
             (-lengthX.value / parent.getBoundingClientRect()?.width) * 40
@@ -194,7 +194,7 @@ const { lengthX } = useSwipe(slideElement, {
         }
     },
     onSwipeEnd() {
-        if(!slide.value) return
+        if (!slide.value) return
         const el = slideElement.value?.$el
         const slideWidth = slide.value.getBoundingClientRect().width / 2
         el.classList.add('slide-transition')
@@ -215,40 +215,52 @@ const { lengthX } = useSwipe(slideElement, {
 
 <template>
     <div id="slideshow" @click="pageClick">
-        <div><h1>{{ $page.props.auth.user.calling_name }}'s <span class="omnomcom">OmNomCom</span> Wrapped</h1></div>
+        <div>
+            <h1>
+                {{ $page.props.auth.user.calling_name }}'s
+                <span class="omnomcom">OmNomCom</span> Wrapped
+            </h1>
+        </div>
 
         <div id="progress">
-            <div v-for="(slide, i) in slides" class="bar">
-                <div class="progress-bar"
-                     :class="{ playing: currentSlide === i && !touched, ended: currentSlide > i, tostart: currentSlide < i}"
-                     :style="{ animationDuration: slide[1]+'s'}" @animationend="nextSlide()"></div>
+            <div v-for="(otherSlide, i) in slides" :key="i" class="bar">
+                <div
+                    class="progress-bar"
+                    :class="{
+                        playing: currentSlide === i && !touched,
+                        ended: currentSlide > i,
+                        tostart: currentSlide < i,
+                    }"
+                    :style="{ animationDuration: otherSlide[1] + 's' }"
+                    @animationend="nextSlide()"
+                />
             </div>
         </div>
 
         <div id="slide-holder" ref="slide">
             <Transition :name="transition">
                 <component
-                    class="slide"
                     :is="slides[currentSlide][0]"
+                    ref="slideElement"
+                    class="slide"
                     :data="data"
                     :time="slides[currentSlide][1]"
-                    ref="slideElement"
+                    :no-animation="sharing"
                     @click="slideClick"
                     @mousedown="startTouch"
                     @mouseup="stopTouch"
-                    :no-animation="sharing"
                 />
             </Transition>
         </div>
         <button id="share" @click="shareSlide()">
-            <ArrowUp></ArrowUp>
+            <ArrowUp />
             Share this slide
         </button>
     </div>
 </template>
 
 <style scoped>
-#share{
+#share {
     display: flex;
     justify-content: center;
     align-items: center;

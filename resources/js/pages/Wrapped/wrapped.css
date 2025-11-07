@@ -101,7 +101,7 @@ body {
 .slide h2,
 .slide h3,
 .slide h4 {
-    font-weight: 300
+    font-weight: 300;
 }
 
 #slideshow button {

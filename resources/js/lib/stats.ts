@@ -18,7 +18,7 @@ export const prepareStats = async (
         .map((x) => x.units * x.product.calories)
         .reduce((a, b) => a + b)
     const stats: statsType = {
-        images:{
+        images: {
             cookieMonster: cookieMonster,
             beugel: beugel,
             lemonade: lemonade,
@@ -163,16 +163,20 @@ export const prepareStats = async (
 }
 
 const preloadImages = async (stats: statsType) => {
-    stats.images.cookieMonster = await fetchImageAsBase64(stats.images.cookieMonster)
+    stats.images.cookieMonster = await fetchImageAsBase64(
+        stats.images.cookieMonster
+    )
     stats.images.beugel = await fetchImageAsBase64(stats.images.beugel)
     stats.images.lemonade = await fetchImageAsBase64(stats.images.lemonade)
-    stats.images.spilledBeer = await fetchImageAsBase64(stats.images.spilledBeer)
+    stats.images.spilledBeer = await fetchImageAsBase64(
+        stats.images.spilledBeer
+    )
     stats.images.tosti = await fetchImageAsBase64(stats.images.tosti)
     stats.images.unicorn = await fetchImageAsBase64(stats.images.unicorn)
     stats.images.unicornBw = await fetchImageAsBase64(stats.images.unicornBw)
     //Activities
     for (const activity of stats.activities.all) {
-       activity.image_url = await fetchImageAsBase64(activity.image_url)
+        activity.image_url = await fetchImageAsBase64(activity.image_url)
     }
     //MostBought
     for (const product of stats.mostBought.items.slice(0, 5)) {
@@ -195,7 +199,7 @@ export const blobToBase64 = (blob: Blob): Promise<string> => {
 }
 
 const fetchImageAsBase64 = async (url: string): Promise<string> => {
-    if(!url){
+    if (!url) {
         return url
     }
     try {

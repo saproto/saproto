@@ -2,18 +2,20 @@
     <div class="slide">
         <h1>This year you attended</h1>
         <span class="flex justify-around">
-            <img :src="props.data.images.spilledBeer" style="width: 10rem" alt="spilled beer" />
+            <img
+                :src="props.data.images.spilledBeer"
+                style="width: 10rem"
+                alt="spilled beer"
+            />
             <span class="color text-4xl">
                 <span class="dynamic">{{ stats.amount }}</span>
                 drinks</span
             >
         </span>
-        <h2>
-            On average you consumed
-        </h2>
+        <h2>On average you consumed</h2>
         <h2 style="margin-top: 0">
             <span class="color"
-            ><span class="dynamic">{{
+                ><span class="dynamic">{{
                     (
                         (stats.alcoholic + stats.nonAlcoholic) /
                         stats.amount
@@ -23,7 +25,7 @@
             >
             per drink!
         </h2>
-        <h2 class="flex justify-between mb-3">
+        <h2 class="mb-3 flex justify-between">
             <img :src="props.data.images.beugel" style="height: 1.5em" />
             = <span class="dynamic" style="color: lawngreen">Alcoholic</span>
             <img :src="props.data.images.lemonade" style="height: 1.5em" />
@@ -79,7 +81,8 @@ const stats = props.data.drinks
     grid-template-rows: repeat(10, 1fr);
 }
 
-h1, h2{
+h1,
+h2 {
     margin-top: 1.2rem;
 }
 </style>
