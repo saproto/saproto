@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import './wrapped.css'
 import { computed, ref } from 'vue'
-import SlideShow from '@/components/SlideShow.vue'
+import SlideShow from '@/pages/Wrapped/Components/SlideShow.vue'
 import { prepareStats } from '@/lib/stats'
 import { usePage } from '@inertiajs/vue3'
 import { statsType } from '@/pages/Wrapped/types'

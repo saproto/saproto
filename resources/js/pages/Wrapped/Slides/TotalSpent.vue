@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { statsType } from '@/pages/Wrapped/types'
+
+const props = defineProps<{
+    data: statsType
+}>()
+const stats = props.data.totalSpent
+</script>
 <template>
     <div class="slide">
         <h1>You spent a total of</h1>
@@ -16,15 +24,6 @@
         <img :src="props.data.images.cookieMonster" />
     </div>
 </template>
-
-<script setup lang="ts">
-import { statsType } from '@/pages/Wrapped/types'
-
-const props = defineProps<{
-    data: statsType
-}>()
-const stats = props.data.totalSpent
-</script>
 
 <style scoped>
 .slide {

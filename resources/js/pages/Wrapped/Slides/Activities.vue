@@ -1,3 +1,15 @@
+<script setup lang="ts">
+const delay = 1
+
+import { statsType } from '@/pages/Wrapped/types.ts'
+
+const props = defineProps<{
+    data: statsType
+}>()
+
+const stats = props.data.activities
+</script>
+
 <template>
     <div class="slide">
         <h2>You paid for a total of</h2>
@@ -35,18 +47,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-const delay = 1
-
-import { statsType } from '@/pages/Wrapped/types.ts'
-
-const props = defineProps<{
-    data: statsType
-}>()
-
-const stats = props.data.activities
-</script>
 
 <style scoped>
 .slide {

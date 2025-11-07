@@ -1,10 +1,10 @@
-import cookieMonster from '@/../assets/images/cookiemonster.png'
-import beugel from '@/../assets/images/beugel.webp'
-import lemonade from '@/../assets/images/lemonade.png'
-import spilledBeer from '@/../assets/images/spilledbeer.png'
-import tosti from '@/../assets/images/tosti.png'
-import unicorn from '@/../assets/images/unicorn.png'
-import unicornBw from '@/../assets/images/unicorn_bw.png'
+import cookieMonster from '../../assets/images/wrapped/cookiemonster.png'
+import beugel from '../../assets/images/wrapped/beugel.webp'
+import lemonade from '../../assets/images/wrapped/lemonade.png'
+import spilledBeer from '../../assets/images/wrapped/spilledbeer.png'
+import tosti from '../../assets/images/wrapped/tosti.png'
+import unicorn from '../../assets/images/wrapped/unicorn.png'
+import unicornBw from '../../assets/images/wrapped/unicorn_bw.png'
 import OrderlineData = App.Data.OrderlineData
 import ProductData = App.Data.ProductData
 import { statsType } from '@/pages/Wrapped/types'

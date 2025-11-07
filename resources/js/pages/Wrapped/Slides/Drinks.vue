@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import { statsType } from '@/pages/Wrapped/types'
+
+const props = defineProps<{
+    data: statsType
+}>()
+const stats = props.data.drinks
+</script>
 <template>
     <div class="slide">
         <h1>This year you attended</h1>
@@ -49,15 +57,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { statsType } from '@/pages/Wrapped/types'
-
-const props = defineProps<{
-    data: statsType
-}>()
-const stats = props.data.drinks
-</script>
 
 <style scoped>
 .slide {

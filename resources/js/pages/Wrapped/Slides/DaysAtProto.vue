@@ -1,3 +1,34 @@
+<script setup lang="ts">
+import { statsType } from '@/pages/Wrapped/types'
+
+const props = defineProps<{
+    data: statsType
+}>()
+const stats = props.data.days
+const omnomcomdays = props.data.omnomcomdays
+const year = new Date().getFullYear()
+const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
+const months: [string, number][] = [
+    ['January', 31],
+    ['February', isLeapYear ? 29 : 28],
+    ['March', 31],
+    ['April', 30],
+    ['May', 31],
+    ['June', 30],
+    ['July', 31],
+    ['August', 31],
+    ['September', 30],
+    ['October', 31],
+    ['November', 30],
+    ['December', 31],
+]
+
+function isActive(month: number, day: number) {
+    return omnomcomdays.has(
+        `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    )
+}
+</script>
 <template>
     <div class="slide">
         <h1>
@@ -28,36 +59,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { statsType } from '@/pages/Wrapped/types'
-
-const props = defineProps<{
-    data: statsType
-}>()
-const stats = props.data.days
-const omnomcomdays = props.data.omnomcomdays
-const months: [string, number][] = [
-    ['January', 31],
-    ['February', 28],
-    ['March', 31],
-    ['April', 30],
-    ['May', 31],
-    ['June', 30],
-    ['July', 31],
-    ['August', 31],
-    ['September', 30],
-    ['October', 31],
-    ['November', 30],
-    ['December', 31],
-]
-
-function isActive(month: number, day: number) {
-    return omnomcomdays.has(
-        `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-    )
-}
-</script>
 
 <style scoped>
 .slide {

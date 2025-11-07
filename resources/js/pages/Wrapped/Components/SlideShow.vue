@@ -10,7 +10,7 @@ import WillToLive from '@/pages/Wrapped/Slides/WillToLive.vue'
 import DaysAtProto from '@/pages/Wrapped/Slides/DaysAtProto.vue'
 import Activities from '@/pages/Wrapped/Slides/Activities.vue'
 import { useSwipe } from '@vueuse/core'
-import { statsType } from '@/pages/Wrapped/types'
+import { statsType } from '@/pages/Wrapped/types.ts'
 import { ArrowUp } from 'lucide-vue-next'
 
 const props = defineProps<{

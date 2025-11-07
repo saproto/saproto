@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { statsType } from '@/pages/Wrapped/types'
+
+const props = defineProps<{
+    data: statsType
+    noAnimation?: boolean
+}>()
+const stats = props.data.calories
+const columns = Math.round(Math.sqrt(stats.tostis / 2))
+</script>
+
 <template>
     <div class="slide">
         <h1>You consumed a total of</h1>
@@ -21,17 +32,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { statsType } from '@/pages/Wrapped/types'
-
-const props = defineProps<{
-    data: statsType
-    noAnimation?: boolean
-}>()
-const stats = props.data.calories
-const columns = Math.round(Math.sqrt(stats.tostis / 2))
-</script>
 
 <style scoped>
 .slide {
