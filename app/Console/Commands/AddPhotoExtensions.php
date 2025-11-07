@@ -40,7 +40,7 @@ class AddPhotoExtensions extends Command
 
         $photos
             ->chunkById(200, function ($photos) use ($bar) {
-                dump($photos->first()->id);
+                $this->info("{$photos->first()->id}");
                 foreach ($photos as $photo) {
                     foreach ($photo->media as $media) {
                         $disk = $media->disk;
