@@ -46,6 +46,7 @@ class EmailCron extends Command
         // Send admin created e-mails.
         $emails = Email::query()
             ->with('events')
+            ->with('withdrawals')
             ->where('sent', false)
             ->where('ready', true)
             ->where('time', '<', Date::now()->timestamp)

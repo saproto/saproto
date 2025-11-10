@@ -34,6 +34,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property bool $to_pending
  * @property bool $to_list
  * @property bool $to_event
+ * @property bool $to_withdrawal
  * @property bool $to_backup
  * @property bool $to_active
  * @property int|null $sent_to
@@ -43,6 +44,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Event> $events
+ * @property-read Collection<int, Withdrawal> $withdrawals
  * @property-read int|null $events_count
  * @property-read Collection<int, EmailList> $lists
  * @property-read int|null $lists_count
@@ -65,6 +67,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @method static Builder<static>|Email whereToActive($value)
  * @method static Builder<static>|Email whereToBackup($value)
  * @method static Builder<static>|Email whereToEvent($value)
+ * @method static Builder<static>|Email whereToWithdrawal($value)
  * @method static Builder<static>|Email whereToList($value)
  * @method static Builder<static>|Email whereToMember($value)
  * @method static Builder<static>|Email whereToPending($value)
@@ -110,6 +113,14 @@ class Email extends Model implements HasMedia
     }
 
     /**
+     * @return BelongsToMany<Withdrawal, $this, Pivot>
+     */
+    public function withdrawals(): BelongsToMany
+    {
+        return $this->belongsToMany(Withdrawal::class, 'emails_withdrawals', 'email_id', 'withdrawal_id');
+    }
+
+    /**
      * @throws Exception
      */
     public function destinationForBody(): string
@@ -142,6 +153,10 @@ class Email extends Model implements HasMedia
             return 'event';
         }
 
+        if ($this->to_withdrawal) {
+            return 'withdrawal';
+        }
+
         throw new Exception('Email has no destination');
     }
 
@@ -171,6 +186,12 @@ class Email extends Model implements HasMedia
         if ($this->to_list) {
             return User::query()->whereHas('lists', function ($q) {
                 $q->whereIn('users_mailinglists.list_id', $this->lists->pluck('id')->toArray());
+            })->orderBy('name')->get();
+        }
+
+        if ($this->to_withdrawal) {
+            return User::query()->whereHas('withdrawals', function ($q) {
+                $q->whereIn('withdrawals.id', $this->withdrawals->pluck('id')->toArray());
             })->orderBy('name')->get();
         }
 
@@ -246,6 +267,7 @@ class Email extends Model implements HasMedia
             'to_list' => 'boolean',
             'to_event' => 'boolean',
             'to_backup' => 'boolean',
+            'to_withdrawal' => 'boolean',
             'to_active' => 'boolean',
             'ready' => 'boolean',
         ];
