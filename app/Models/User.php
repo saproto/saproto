@@ -442,7 +442,8 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      */
     public function setPassword(string $password): void
     {
-        $this->update(['password' => Hash::make($password)]);
+        $this->password = Hash::make($password);
+        $this->save();
     }
 
     public function hasUnpaidOrderlines(): bool
